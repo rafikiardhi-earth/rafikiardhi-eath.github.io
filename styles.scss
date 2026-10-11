@@ -1,0 +1,56 @@
+/*-- scss:defaults --*/
+// Earth palette: deep soil brown, field green, warm sand
+$primary:        #3f5e3a;
+$body-color:     #2b2622;
+$body-bg:        #fbf8f3;
+$link-color:     #3f5e3a;
+$navbar-bg:      #2f2a25;
+$navbar-fg:      #f3ece2;
+$footer-bg:      #f1ebe1;
+$font-family-sans-serif: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+$headings-font-family:   "Source Serif 4", Georgia, serif;
+$headings-color:         #2f2a25;
+
+/*-- scss:rules --*/
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&family=Source+Serif+4:wght@500;700&display=swap');
+
+body { font-size: 1.06rem; line-height: 1.65; }
+
+.hero {
+  padding: 3.5rem 0 2.5rem;
+  border-bottom: 1px solid #e4dccf;
+  margin-bottom: 2.5rem;
+}
+.hero h1 { font-size: 2.6rem; margin-bottom: .6rem; }
+.hero .lead { font-size: 1.25rem; color: #5a5149; max-width: 46rem; }
+.hero .tagline {
+  text-transform: uppercase; letter-spacing: .14em;
+  font-size: .8rem; color: #8a6a45; font-weight: 600;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 640px) { grid-template-columns: 1fr; }
+  gap: 1.25rem;
+  margin: 1.5rem 0 2.5rem;
+}
+.card-item {
+  background: #fff;
+  border: 1px solid #e4dccf;
+  border-left: 4px solid $primary;
+  border-radius: 6px;
+  padding: 1.1rem 1.25rem;
+}
+.card-item h3 { font-size: 1.15rem; margin-top: 0; }
+.card-item p { margin-bottom: 0; color: #4a423b; font-size: .98rem; }
+
+.btn-earth {
+  display: inline-block;
+  background: $primary; color: #fff !important;
+  padding: .6rem 1.2rem; border-radius: 4px;
+  text-decoration: none; font-weight: 600;
+}
+.btn-earth:hover { background: #2f4a2b; }
+
+.regions { color: #5a5149; }

@@ -1,0 +1,22 @@
+---
+title: "Publications"
+---
+
+A full, current list is on [ORCID](https://orcid.org/[YOUR-ORCID-ID]) and [Google Scholar]([YOUR-SCHOLAR-LINK]).
+
+## Selected publications
+
+<!-- Add 5–8 papers, newest first. Format:
+Author A, **Flynn T**, Author C (Year). Title. *Journal*, volume, pages. [doi](https://doi.org/...)
+-->
+
+- [Authors] (Year). [Title]. *Geoderma*. [doi](https://doi.org/)
+- [Authors] (Year). [Title]. *Science of the Total Environment*. [doi](https://doi.org/)
+- [Authors] (Year). [Title]. *Communications Earth & Environment*. [doi](https://doi.org/)
+- [Authors] (Year). [Title]. *Regional Environmental Change*. [doi](https://doi.org/)
+- [Authors] (Year). [Title]. *Catena*. [doi](https://doi.org/)
+
+## Preprints and software
+
+- [Preprint title]. *EarthArXiv*. [doi](https://doi.org/)
+- [Software name]: [one-line description]. [Repository link]

@@ -1,0 +1,44 @@
+---
+title: ""
+pagetitle: "RafikiArdhi — Environmental Analytics"
+---
+
+::: {.hero}
+[Environmental analytics]{.tagline}
+
+# Evidence for decisions about land, soil and water
+
+[RafikiArdhi turns field data, remote sensing and terrain into maps, models and uncertainty estimates that land managers, researchers and development programmes can act on.]{.lead}
+
+[Get in touch](contact.qmd){.btn-earth}
+:::
+
+## What we do
+
+::: {.cards}
+::: {.card-item}
+### Soil and landscape mapping
+Depth-consistent digital soil maps, soil property surfaces and functional domains, from plot to national scale.
+:::
+
+::: {.card-item}
+### Hydrology and runoff
+Hydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes.
+:::
+
+::: {.card-item}
+### Geostatistics and uncertainty
+Variograms, kriging, mixed models and uncertainty propagation, so every map comes with an honest error estimate.
+:::
+
+::: {.card-item}
+### Decision support
+Turning model output and its uncertainty into clear, policy-ready classes and priorities.
+:::
+:::
+
+## Where we work
+
+[Southern, East and Central Africa · the Caribbean · the western United States. Work is delivered remotely or with local partners in the field.]{.regions}
+
+[See all services →](services.qmd)
