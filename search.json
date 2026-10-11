@@ -1,0 +1,121 @@
+[
+  {
+    "objectID": "contact.html",
+    "href": "contact.html",
+    "title": "Contact",
+    "section": "",
+    "text": "For projects, collaborations or technical review, email:\ntrevan@rafikiardhi.earth\nPlease include a few lines on the project, the area and the timeline. You’ll get a reply with questions or a short proposed scope.\nRafikiArdhi LLC Carbondale, Colorado, USA\nORCID · LinkedIn · ResearchGate"
+  },
+  {
+    "objectID": "publications.html",
+    "href": "publications.html",
+    "title": "Publications",
+    "section": "",
+    "text": "A full, current list is on ORCID and Google Scholar."
+  },
+  {
+    "objectID": "publications.html#selected-publications",
+    "href": "publications.html#selected-publications",
+    "title": "Publications",
+    "section": "Selected publications",
+    "text": "Selected publications\n\n\n[Authors] (Year). [Title]. Geoderma. doi\n[Authors] (Year). [Title]. Science of the Total Environment. doi\n[Authors] (Year). [Title]. Communications Earth & Environment. doi\n[Authors] (Year). [Title]. Regional Environmental Change. doi\n[Authors] (Year). [Title]. Catena. doi"
+  },
+  {
+    "objectID": "publications.html#preprints-and-software",
+    "href": "publications.html#preprints-and-software",
+    "title": "Publications",
+    "section": "Preprints and software",
+    "text": "Preprints and software\n\n[Preprint title]. EarthArXiv. doi\n[Software name]: [one-line description]. [Repository link]"
+  },
+  {
+    "objectID": "services.html",
+    "href": "services.html",
+    "title": "Services",
+    "section": "",
+    "text": "RafikiArdhi works with research groups, government agencies, development programmes, NGOs and engineering teams. Each engagement starts with a short written scope: what will be delivered, by when, and on what terms."
+  },
+  {
+    "objectID": "services.html#soil-and-landscape-mapping",
+    "href": "services.html#soil-and-landscape-mapping",
+    "title": "Services",
+    "section": "Soil and landscape mapping",
+    "text": "Soil and landscape mapping\n\nDigital soil mapping of soil properties by depth, with uncertainty\nUpdating existing regional maps with new survey data\nSoil functional and fertility domains for planning\nSoil sampling design for mapping and monitoring"
+  },
+  {
+    "objectID": "services.html#hydrology-and-runoff-parameters",
+    "href": "services.html#hydrology-and-runoff-parameters",
+    "title": "Services",
+    "section": "Hydrology and runoff parameters",
+    "text": "Hydrology and runoff parameters\n\nHydrologic soil group (HSG) mapping from geology and terrain, as class probabilities\nCurve number and potential maximum retention surfaces with uncertainty, ready for hydrological models\nSoil-water flux modelling along slopes and catenas"
+  },
+  {
+    "objectID": "services.html#geostatistics-and-data-analysis",
+    "href": "services.html#geostatistics-and-data-analysis",
+    "title": "Services",
+    "section": "Geostatistics and data analysis",
+    "text": "Geostatistics and data analysis\n\nVariogram analysis, kriging and regression kriging\nMixed models for nested and repeated soil data\nCross-validation and model checking\nAnalysis of existing datasets, including troubleshooting problem data"
+  },
+  {
+    "objectID": "services.html#decision-support",
+    "href": "services.html#decision-support",
+    "title": "Services",
+    "section": "Decision support",
+    "text": "Decision support\n\nCombining several sources of uncertainty into a single, readable decision map\nPrioritisation of areas for management, restoration or further sampling\nPlain-language summaries for non-specialist decision makers"
+  },
+  {
+    "objectID": "services.html#review-and-training",
+    "href": "services.html#review-and-training",
+    "title": "Services",
+    "section": "Review and training",
+    "text": "Review and training\n\nIndependent technical review of reports, models and maps\nShort courses and workshops in digital soil mapping and geostatistics in R\n\n\nThe scientific work is provided as environmental science and analysis. Where a project requires a licensed professional engineer, RafikiArdhi works alongside the engineering team.\nDiscuss a project →"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Evidence for decisions about land, soil and water",
+    "section": "",
+    "text": "Environmental analytics\n\n\nRafikiArdhi turns field data, remote sensing and terrain into maps, models and uncertainty estimates that land managers, researchers and development programmes can act on.\nGet in touch"
+  },
+  {
+    "objectID": "index.html#what-we-do",
+    "href": "index.html#what-we-do",
+    "title": "Evidence for decisions about land, soil and water",
+    "section": "What we do",
+    "text": "What we do\n\n\nSoil and landscape mapping\nDepth-consistent digital soil maps, soil property surfaces and functional domains, from plot to national scale.\n\n\nHydrology and runoff\nHydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes.\n\n\nGeostatistics and uncertainty\nVariograms, kriging, mixed models and uncertainty propagation, so every map comes with an honest error estimate.\n\n\nDecision support\nTurning model output and its uncertainty into clear, policy-ready classes and priorities."
+  },
+  {
+    "objectID": "index.html#where-we-work",
+    "href": "index.html#where-we-work",
+    "title": "Evidence for decisions about land, soil and water",
+    "section": "Where we work",
+    "text": "Where we work\nSouthern, East and Central Africa · the Caribbean · the western United States. Work is delivered remotely or with local partners in the field.\nSee all services →"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "Founder and principal scientist\nTrevan Flynn holds a PhD in soil science, with a focus on quantitative pedology. His work aims to improve our understanding of multidimensional soil resilience and soil multifunctionality, and to advance soil knowledge and decision-support systems in resource-poor regions.\nHe has lived and worked across Africa, including Southern Africa, the Democratic Republic of the Congo and Mozambique, from national-scale soil mapping to extension work with smallholder farmers on heavily leached soils. He speaks Kiswahili.\nHis research has been funded through EU Horizon 2020, EU LIFE and the Australian Research Council, and he has assembled international consortia for World Bank proposals. He has taught crop and soil science at university level and introduced a course in digital soil mapping and remote sensing in agriculture at Stellenbosch University.\nHe publishes with a global network of collaborators in journals including Geoderma, Science of the Total Environment, Catena, Pedosphere, Regional Environmental Change and Communications Earth & Environment."
+  },
+  {
+    "objectID": "about.html#trevan-flynn-phd",
+    "href": "about.html#trevan-flynn-phd",
+    "title": "About",
+    "section": "",
+    "text": "Founder and principal scientist\nTrevan Flynn holds a PhD in soil science, with a focus on quantitative pedology. His work aims to improve our understanding of multidimensional soil resilience and soil multifunctionality, and to advance soil knowledge and decision-support systems in resource-poor regions.\nHe has lived and worked across Africa, including Southern Africa, the Democratic Republic of the Congo and Mozambique, from national-scale soil mapping to extension work with smallholder farmers on heavily leached soils. He speaks Kiswahili.\nHis research has been funded through EU Horizon 2020, EU LIFE and the Australian Research Council, and he has assembled international consortia for World Bank proposals. He has taught crop and soil science at university level and introduced a course in digital soil mapping and remote sensing in agriculture at Stellenbosch University.\nHe publishes with a global network of collaborators in journals including Geoderma, Science of the Total Environment, Catena, Pedosphere, Regional Environmental Change and Communications Earth & Environment."
+  },
+  {
+    "objectID": "about.html#the-name",
+    "href": "about.html#the-name",
+    "title": "About",
+    "section": "The name",
+    "text": "The name\nRafiki ardhi is Swahili for “friend of the land”. Rafiki was also the name of his first dog."
+  },
+  {
+    "objectID": "about.html#approach",
+    "href": "about.html#approach",
+    "title": "About",
+    "section": "Approach",
+    "text": "Approach\nWe build on existing knowledge rather than replacing it. Every map is updated, not reset; every estimate carries its uncertainty; and every result is explained in terms the decision maker can use."
+  }
+]
