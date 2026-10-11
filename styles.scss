@@ -1,9 +1,9 @@
 /*-- scss:defaults --*/
-// Earth palette: deep soil brown, field green, warm sand
-$primary:        #3f5e3a;
+// Palette: logo red, soil charcoal, warm sand
+$primary:        #a30d0d;
 $body-color:     #2b2622;
 $body-bg:        #fbf8f3;
-$link-color:     #3f5e3a;
+$link-color:     #a30d0d;
 $navbar-bg:      #2f2a25;
 $navbar-fg:      #f3ece2;
 $footer-bg:      #f1ebe1;
@@ -51,6 +51,8 @@ body { font-size: 1.06rem; line-height: 1.65; }
   padding: .6rem 1.2rem; border-radius: 4px;
   text-decoration: none; font-weight: 600;
 }
-.btn-earth:hover { background: #2f4a2b; }
+.btn-earth:hover { background: #7f0a0a; }
 
 .regions { color: #5a5149; }
+
+.navbar-brand img { max-height: 42px; margin-right: .5rem; }
