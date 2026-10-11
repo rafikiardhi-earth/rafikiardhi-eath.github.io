@@ -1,27 +1,18 @@
-# RafikiArdhi website
+# RafikiArdhi
 
-A Quarto website, published free on GitHub Pages at rafikiardhi.earth.
+**Environmental analytics for soil, water and landscape decisions.**
 
-## Edit
+This repository holds the website of RafikiArdhi LLC, published at **[rafikiardhi.earth](https://rafikiardhi.earth)**.
 
-- Pages are the `.qmd` files: `index.qmd` (home), `services.qmd`, `about.qmd`, `publications.qmd`, `contact.qmd`.
-- Fill in every `[BRACKETED]` placeholder (ORCID, Scholar, LinkedIn, papers).
-- Colours and fonts are in `styles.scss`; navigation is in `_quarto.yml`.
-- Preview locally in RStudio (open the folder as a project, then Build → Render Website) or run `quarto preview`.
+RafikiArdhi turns field data, remote sensing and terrain into maps, models and uncertainty estimates for land managers, researchers and development programmes, working across Africa, the Caribbean and the western United States.
 
-## Publish (one time)
+*Rafiki ardhi* is Swahili for "friend of the land".
 
-1. Create a GitHub repository, e.g. `rafikiardhi-site`, and push this folder to its `main` branch.
-2. In the repository: Settings → Actions → General → Workflow permissions → select **Read and write permissions**.
-3. Push any change to `main`. The workflow in `.github/workflows/publish.yml` builds the site and pushes it to a `gh-pages` branch.
-4. Settings → Pages → Source: **Deploy from a branch**, branch `gh-pages`, folder `/ (root)`.
-5. The site is live at `https://<your-username>.github.io/rafikiardhi-site/` within a few minutes.
+## Contact
 
-## Connect rafikiardhi.earth
+Trevan Flynn, PhD, Founder and Principal Scientist
+[trevan@rafikiardhi.earth](mailto:trevan@rafikiardhi.earth)
 
-1. At your registrar's DNS settings, add:
-   - Four `A` records for `@` pointing to `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   - A `CNAME` record for `www` pointing to `<your-username>.github.io`
-2. In GitHub: Settings → Pages → Custom domain → `rafikiardhi.earth`, then tick **Enforce HTTPS** once it becomes available (can take up to an hour).
+---
 
-The `CNAME` file in this folder keeps the custom domain set after every publish.
+© 2026 RafikiArdhi LLC. All rights reserved. The content of this website may not be reused without permission.
