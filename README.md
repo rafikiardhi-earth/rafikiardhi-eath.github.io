@@ -11,7 +11,7 @@ RafikiArdhi turns field data, remote sensing and terrain into maps, models and u
 ## Contact
 
 Trevan Flynn, PhD, Founder and Principal Scientist
-[trevan@rafikiardhi.earth](mailto:tflynn@rafikiardhi.earth)
+[tflynn@rafikiardhi.earth](mailto:tflynn@rafikiardhi.earth)
 
 ---
 
