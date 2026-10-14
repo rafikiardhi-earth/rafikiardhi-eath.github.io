@@ -10,18 +10,18 @@ A full, current list is on [ORCID](https://orcid.org/0000-0002-5187-9946) and [G
 Author A, **Flynn T**, Author C (Year). Title. *Journal*, volume, pages. [doi](https://doi.org/...)
 -->
 
-- [Flynn, T., Rasaei, Z., Rostecki, R.] (2026). [Smoothing Earth's surface: The complexity of soil texture class transitions]. *Science of the Total Environment*. [doi](https://doi.org/10.1016/j.scitotenv.2026.181621)
-- [Qasha, V., Manyevere, A., Flynn, T., Mashamaite, V.] (2026). [Active ecological restoration drives rapid soil chemistry and carbon change in Mistbelt Afromontane forests]. *Trees Forests and People*. [doi](https://doi.org/10.1016/j.tfp.2026.101321)
-- [Rasaei, Z., Sarmadian, F., Jafari, A., Flynn, T.] (2025). [Can environmental clustering reveal soil profile patterns? A depth-based approach at field scale]. *Catena*. [doi](https://doi.org/10.1016/j.catena.2025.109695)
-- [Rasaei, Z., Sarmadian, F., Jafari, A., Flynn, T.] (2025). [Digital mapping of soil salinity: Overcoming the challenges of zero-inflated and skewed sample distributions]. *Pedosphere*. [doi](https://doi.org/10.1016/j.pedsph.2025.08.007)
-- [Francos, N., Sharififar, A., Flynn, T., ... McBratney, A] (2025). [The global pedogenon map: Combining and spatialising the factors of soil formation]. *Geoderma*. [doi](https://doi.org/10.1016/j.geoderma.2025.117462)
-- [Sharififar, A., Borrelli, P., Evangelista, S., Field, D., Flynn, T., ... Jae Yang] (2025). [Soil policy principles and a policymaking framework using the soil security concept]. *Environmental Science & Policy*. [doi](https://doi.org/10.1016/j.envsci.2025.104057)
-- [Flynn, T., Rostecki, R., Rebi, A., Raza, T] (2024). [Accessing global soil raster images and equal-area splines to estimate soil organic carbon stocks on the regional scale]. *Pedosphere*. [doi](https://doi.org/10.1016/j.pedsph.2024.07.004)
-- [Flynn, T., Rostecki, R.] (2024). [Spatial downscaling of global soil texture classes into 30 m images at the province scale]. *Geomatica*. [doi](https://doi.org/10.1016/j.geomat.2024.100028)
-- [Flynn, T., Clarke, C., Rostecki, R., Rebi, A] (2024). [A comparison of country-scale subsoil predictions between a numeric and a taxonomic soil classification system]. *Geoderma Regional*. [doi](https://doi.org/10.1016/j.geodrs.2024.e00902)
+- Flynn, T., Rasaei, Z., Rostecki, R. (2026). Smoothing Earth's surface: The complexity of soil texture class transitions. *Science of the Total Environment*. [doi](https://doi.org/10.1016/j.scitotenv.2026.181621)
+- Qasha, V., Manyevere, A., Flynn, T., Mashamaite, V. (2026). Active ecological restoration drives rapid soil chemistry and carbon change in Mistbelt Afromontane forests. *Trees Forests and People*. [doi](https://doi.org/10.1016/j.tfp.2026.101321)
+- Rasaei, Z., Sarmadian, F., Jafari, A., Flynn, T. (2025). Can environmental clustering reveal soil profile patterns? A depth-based approach at field scale. *Catena*. [doi](https://doi.org/10.1016/j.catena.2025.109695)
+- Rasaei, Z., Sarmadian, F., Jafari, A., Flynn, T. (2025). Digital mapping of soil salinity: Overcoming the challenges of zero-inflated and skewed sample distributions. *Pedosphere*. [doi](https://doi.org/10.1016/j.pedsph.2025.08.007)
+- Francos, N., Sharififar, A., Flynn, T., ... McBratney, A. (2025). The global pedogenon map: Combining and spatialising the factors of soil formation. *Geoderma*. [doi](https://doi.org/10.1016/j.geoderma.2025.117462)
+- Sharififar, A., Borrelli, P., Evangelista, S., Field, D., Flynn, T., ... Yang, J. (2025). Soil policy principles and a policymaking framework using the soil security concept. *Environmental Science & Policy*. [doi](https://doi.org/10.1016/j.envsci.2025.104057)
+- Flynn, T., Rostecki, R., Rebi, A., Raza, T] (2024). Accessing global soil raster images and equal-area splines to estimate soil organic carbon stocks on the regional scale. *Pedosphere*. [doi](https://doi.org/10.1016/j.pedsph.2024.07.004)
+- Flynn, T., Rostecki, R. (2024). Spatial downscaling of global soil texture classes into 30 m images at the province scale. *Geomatica*. [doi](https://doi.org/10.1016/j.geomat.2024.100028)
+- Flynn, T., Clarke, C., Rostecki, R., Rebi, A. (2024). A comparison of country-scale subsoil predictions between a numeric and a taxonomic soil classification system. *Geoderma Regional*. [doi](https://doi.org/10.1016/j.geodrs.2024.e00902)
 
 ## Preprints and software
 
-- [Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands]. *EarthArXiv*. [doi](https://doi.org/10.31223/X5JN5T)
-- [Soil-informed multivariate decision support to assess urban ecosystem service potential]. *EarthArXiv*. [doi](https://doi.org/10.31223/X50763)
-- [Thermodynamic pedodiversity patterns reveal higher-order soil organization in indigenous agroecosystems of the U.S. Southwest]. *EcoEvoRxiv*. [doi](https://doi.org/10.32942/X2H66M)
+- Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands. *EarthArXiv* under review at *Regional Environmental Change*. [doi](https://doi.org/10.31223/X5JN5T)
+- Soil-informed multivariate decision support to assess urban ecosystem service potential (in press). *Nature Springer* in preprint at *EarthArXiv*. [doi](https://doi.org/10.31223/X50763)
+- Thermodynamic pedodiversity patterns reveal higher-order soil organization in indigenous agroecosystems of the U.S. Southwest. *EcoEvoRxiv* under review at *Scientific Reports*. [doi](https://doi.org/10.32942/X2H66M)
