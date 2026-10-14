@@ -39,6 +39,6 @@ Turning model output and its uncertainty into clear, policy-ready classes and pr
 
 ## Where we work
 
-[Southern, East and Central Africa · the Caribbean · the western United States. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
+[Southern, East and Central Africa · the Caribbean and Latin America · the Western United States. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
 
 [See all services →](services.qmd)
