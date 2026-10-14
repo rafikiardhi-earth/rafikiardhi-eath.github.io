@@ -6,7 +6,7 @@ This repository holds the website of RafikiArdhi LLC, published at **[rafikiardh
 
 RafikiArdhi turns field data, remote sensing and terrain into maps, models and uncertainty estimates for land managers, researchers and development programmes, working across Africa, the Caribbean and the western United States.
 
-*Rafiki ardhi* is Swahili for "friend of the land".
+*Rafiki ardhi* "friend of the land".
 
 ## Contact
 
