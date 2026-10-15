@@ -12,7 +12,7 @@ website:
   description: "Environmental analytics for soil, water and landscape decisions."
   page-navigation: false
   navbar:
-    logo: logo-small.png
+    logo: images/logo-small.png
     logo-alt: "RafikiArdhi logo"
     left:
       - href: index.qmd
