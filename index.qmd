@@ -26,6 +26,7 @@ Depth-consistent digital soil maps, soil property surfaces and functional domain
 ### Hydrology and runoff
 Hydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes. 
 ![Variable soil flow fitted through one curve.](images/holo-flux.jpg)
+![Hopi Land.](images/hopi-land.jpg)
 :::
 
 ::: {.card-item}
