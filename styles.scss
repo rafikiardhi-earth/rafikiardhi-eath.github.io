@@ -17,10 +17,14 @@ $headings-color:         #2f2a25;
 body { font-size: 1.06rem; line-height: 1.65; }
 
 .hero {
-  padding: 3.5rem 0 2.5rem;
-  border-bottom: 1px solid #e4dccf;
+  padding: 3.5rem 2rem 2.5rem;
   margin-bottom: 2.5rem;
+  border-radius: 8px;
+  background:
+    linear-gradient(90deg, rgba(251,248,243,.95) 0%, rgba(251,248,243,.85) 55%, rgba(251,248,243,.35) 100%),
+    url("/images/bgd.jpg") center / cover no-repeat;
 }
+
 .hero h1 { font-size: 2.6rem; margin-bottom: .6rem; }
 .hero .lead { font-size: 1.25rem; color: #5a5149; max-width: 46rem; }
 .hero .tagline {
