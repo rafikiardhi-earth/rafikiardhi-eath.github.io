@@ -18,22 +18,22 @@ pagetitle: "RafikiArdhi — Environmental Analytics"
 ::: {.cards}
 ::: {.card-item}
 ### Soil and landscape mapping
-Depth-consistent digital soil maps, soil property surfaces and functional domains, from plot to national scale.
+Depth-consistent digital soil maps, soil property surfaces and functional domains, from plot to national scale. (images/physpline.jpg)
 :::
 
 ::: {.card-item}
 ### Hydrology and runoff
-Hydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes.
+Hydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes. (images/holo-flux.jpg)
 :::
 
 ::: {.card-item}
 ### Geostatistics and uncertainty
-Variograms, kriging, mixed models and uncertainty propagation, so every map comes with an honest error estimate.
+Variograms, kriging, mixed models and uncertainty propagation, so every map comes with an honest error estimate. (images/soilgrids-isda.jpg)
 :::
 
 ::: {.card-item}
 ### Decision support
-Turning model output and its uncertainty into clear, policy-ready classes and priorities.
+Turning model output and its uncertainty into clear, policy-ready classes and priorities. (images/triangle-texas.jpg)
 :::
 :::
 
