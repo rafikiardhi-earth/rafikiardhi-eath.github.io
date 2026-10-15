@@ -21,7 +21,7 @@ body { font-size: 1.06rem; line-height: 1.65; }
   margin-bottom: 2.5rem;
   border-radius: 8px;
   background:
-    linear-gradient(90deg, rgba(251,248,243,.95) 55%, rgba(251,248,243,.85) 75%, rgba(251,248,243,.35) 100%),
+    linear-gradient(90deg, rgba(251,248,243,.95) 0%, rgba(251,248,243,.85) 25%, rgba(251,248,243,.35) 100%),
     url("/images/bgd.jpg") center / cover no-repeat;
 }
 
