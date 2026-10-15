@@ -43,6 +43,12 @@ RafikiArdhi takes on environmental problems where existing methods fall short. W
 
 Clients get the solution, and the expertise to apply it to their own data and decisions.
 
+## Example: making GIS depth-aware
+
+GIS platforms treat soil as a stack of flat layers, so properties jump at every layer boundary and anything between the standard depths is lost. We built a physics-informed depth spline that runs inside Google Earth Engine, turning a spatially explicit platform into one that is also depth-aware. Each pixel carries a continuous, physically consistent profile, so properties can be read at any depth or integrated over the whole profile, and new layers such as moisture or temperature can be added to the same framework.
+
+![Soil organic carbon from the depth spline: maps at six standard depths (left) and the whole-profile total from integrating each pixel's continuous profile (right).](images/soc-depth-spline.jpg){fig-alt="Six small maps of soil organic carbon across a watershed at depths from 0–20 cm to 100–150 cm, decreasing with depth, beside one larger map of the depth-integrated total showing high values in the north and along drainage lines."}
+
 ## Where we work
 
 [Southern, East and Central Africa · the Caribbean and Latin America · the Western United States. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
