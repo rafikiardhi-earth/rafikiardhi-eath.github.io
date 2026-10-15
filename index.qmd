@@ -18,22 +18,26 @@ pagetitle: "RafikiArdhi — Environmental Analytics"
 ::: {.cards}
 ::: {.card-item}
 ### Soil and landscape mapping
-Depth-consistent digital soil maps, soil property surfaces and functional domains, from plot to national scale. ![Soil texture with depth](images/physpline.jpg)
+Depth-consistent digital soil maps, soil property surfaces and functional domains, from plot to national scale. 
+![Soil texture with depth.](images/physpline.jpg)
 :::
 
 ::: {.card-item}
 ### Hydrology and runoff
-Hydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes. ![Variable soil flow fitted through one curve](images/holo-flux.jpg)
+Hydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes. 
+![Variable soil flow fitted through one curve.](images/holo-flux.jpg)
 :::
 
 ::: {.card-item}
 ### Geostatistics and uncertainty
-Variograms, kriging, mixed models and uncertainty propagation, so every map comes with an honest error estimate. ![Uncertainty](images/soilgrids-isda.jpg)
+Variograms, kriging, mixed models and uncertainty propagation, so every map comes with an honest error estimate. 
+![Uncertainty.](images/soilgrids-isda.jpg)
 :::
 
 ::: {.card-item}
 ### Decision support
-Turning model output and its uncertainty into clear, policy-ready classes and priorities. ![Flooding and drought hotspots](images/triangle-texas.jpg)
+Turning model output and its uncertainty into clear, policy-ready classes and priorities. 
+![Flooding and drought hotspots.](images/triangle-texas.jpg)
 :::
 :::
 
