@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#161412">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>WRB Soil Key | RafikiArdhi</title>
+<meta name="description" content="Step-by-step key to the 32 WRB 2022 Reference Soil Groups. Answer questions about your profile and reach a Reference Soil Group.">
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
+  --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f; --warn: #e0a440; --good: #5cc28f;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    color-scheme: light;
+    --bg: #f7f5f0; --surface: #fffdf9; --surface-2: #efebe2; --ink: #1f1c17; --ink-2: #57514a; --ink-3: #8a8379;
+    --line: #ddd6ca; --accent: #8a4b22; --accent-ink: #ffffff; --accent-soft: #f3e6da; --warn: #9a6400; --good: #1f7a4d;
+  }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+.app { max-width: 560px; margin: 0 auto; min-height: 100%; display: flex; flex-direction: column; padding: 0 16px calc(24px + env(safe-area-inset-bottom)); }
+header { display: flex; align-items: center; justify-content: space-between; padding: 14px 0 10px; }
+header .brand { font-weight: 700; letter-spacing: .02em; }
+header .brand span { color: var(--accent); }
+header button { background: none; border: 1px solid var(--line); color: var(--ink-2); border-radius: 999px; padding: 6px 12px; font: inherit; font-size: .85rem; cursor: pointer; }
+.progress { height: 4px; background: var(--surface-2); border-radius: 4px; overflow: hidden; margin: 4px 0 6px; }
+.progress div { height: 100%; background: var(--accent); transition: width .25s ease; }
+.step { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin-top: 14px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 18px; margin-top: 10px; }
+h1 { font-size: 1.45rem; line-height: 1.25; margin: 6px 0 12px; }
+h2 { font-size: 1.1rem; margin: 0 0 8px; }
+p { margin: 0 0 10px; color: var(--ink-2); }
+.answers { display: grid; gap: 10px; margin-top: 18px; }
+.answers button {
+  width: 100%; min-height: 54px; border-radius: 12px; font: inherit; font-weight: 600; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+}
+.answers button.yes { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.answers button.unsure { background: transparent; color: var(--ink-2); font-weight: 500; }
+details { margin-top: 16px; border-top: 1px solid var(--line); padding-top: 12px; }
+summary { cursor: pointer; color: var(--accent); font-weight: 600; font-size: .95rem; list-style: none; }
+summary::-webkit-details-marker { display: none; }
+summary::before { content: "＋ "; }
+details[open] summary::before { content: "－ "; }
+details ul { margin: 10px 0 0; padding-left: 20px; color: var(--ink-2); font-size: .93rem; }
+details li { margin-bottom: 6px; }
+.nav { display: flex; justify-content: space-between; margin-top: 14px; }
+.nav button { background: none; border: none; color: var(--ink-2); font: inherit; font-size: .95rem; cursor: pointer; padding: 8px 0; }
+.result .rsg { font-size: 2rem; font-weight: 700; margin: 2px 0 4px; }
+.result .code { display: inline-block; font-size: .8rem; font-weight: 700; letter-spacing: .08em; color: var(--accent-ink); background: var(--accent); border-radius: 6px; padding: 2px 8px; }
+.flag { border: 1px solid var(--warn); background: color-mix(in srgb, var(--warn) 12%, transparent); border-radius: 12px; padding: 12px 14px; margin-top: 14px; font-size: .93rem; }
+.flag strong { color: var(--warn); }
+.trail { margin-top: 14px; font-size: .9rem; }
+.trail div { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px solid var(--line); color: var(--ink-2); }
+.trail span.a { font-weight: 600; white-space: nowrap; }
+.trail span.a.y { color: var(--good); } .trail span.a.u { color: var(--warn); }
+.primary { width: 100%; min-height: 50px; border-radius: 12px; border: none; background: var(--accent); color: var(--accent-ink); font: inherit; font-weight: 700; margin-top: 16px; cursor: pointer; }
+.secondary { width: 100%; min-height: 46px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; margin-top: 10px; cursor: pointer; }
+.foot { margin-top: auto; padding-top: 22px; font-size: .78rem; color: var(--ink-3); }
+.foot a { color: var(--accent); }
+.intro li { color: var(--ink-2); margin-bottom: 6px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand">Rafiki<span>Ardhi</span> · WRB key</div>
+    <button id="restart" hidden>Start over</button>
+  </header>
+  <div class="progress" aria-hidden="true"><div id="bar" style="width:0%"></div></div>
+  <main id="view"></main>
+  <div class="foot">
+    Simplified field key to the Reference Soil Groups of the World Reference Base for Soil Resources, 4th edition (IUSS Working Group WRB, 2022). It does not replace the full key and diagnostic definitions in the WRB text, and it stops at the Reference Soil Group (no qualifiers). <a href="https://wrb.isric.org/documents.html">WRB documents</a>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* Each node: a question in WRB key order. yes -> result code or next node id; no -> next node id.
+   Groups that need the same diagnostic (mollic group, argic group) are asked as a short sub-sequence,
+   keeping the published key order. Thresholds are simplified; see the WRB 2022 Chapters 3 and 4. */
+const RSG = {
+  HS: ["Histosols", "Soils with thick organic layers, such as peats and mucks."],
+  AT: ["Anthrosols", "Soils profoundly changed by long, intensive human use such as irrigation, adding materials or wet cultivation."],
+  TC: ["Technosols", "Soils with many artefacts or technical hard material, such as urban, mine and industrial soils."],
+  CR: ["Cryosols", "Soils with permafrost close to the surface."],
+  LP: ["Leptosols", "Thin soils over hard rock, or soils dominated by coarse fragments."],
+  SN: ["Solonetz", "Soils with a dense subsoil rich in exchangeable sodium."],
+  VR: ["Vertisols", "Heavy clay soils that shrink and crack when dry and swell when wet."],
+  SC: ["Solonchaks", "Soils with high concentrations of soluble salts."],
+  GL: ["Gleysols", "Soils saturated by groundwater, or under water or in tidal areas, long enough to develop reducing conditions."],
+  AN: ["Andosols", "Light, porous soils from volcanic material, rich in allophane or aluminium–humus complexes."],
+  PZ: ["Podzols", "Soils with a subsoil accumulation of humus and/or iron and aluminium oxides, often under a bleached layer."],
+  PT: ["Plinthosols", "Soils with iron accumulations that harden on exposure (plinthite) or have already hardened."],
+  PL: ["Planosols", "Soils with stagnant water perched above an abrupt change to a much finer subsoil."],
+  ST: ["Stagnosols", "Soils with stagnant (perched) water and a structural or moderate textural difference."],
+  NT: ["Nitisols", "Deep, well-drained red tropical soils with strong nutty structure and shiny ped faces."],
+  FR: ["Ferralsols", "Deeply weathered tropical soils dominated by kaolinite and iron and aluminium oxides."],
+  CH: ["Chernozems", "Very dark, humus-rich topsoils over secondary carbonates, typical of steppes."],
+  KS: ["Kastanozems", "Dark, humus-rich topsoils with secondary carbonates, typical of drier steppes."],
+  PH: ["Phaeozems", "Dark, humus-rich topsoils with high base saturation and no shallow carbonates."],
+  UM: ["Umbrisols", "Dark, humus-rich but acid topsoils with low base saturation."],
+  DU: ["Durisols", "Soils with secondary silica accumulation, often cemented (duripan)."],
+  GY: ["Gypsisols", "Soils with secondary gypsum accumulation."],
+  CL: ["Calcisols", "Soils with secondary carbonate accumulation."],
+  RT: ["Retisols", "Soils where coarser, paler material tongues into a finer, more strongly coloured clay-enriched subsoil."],
+  AC: ["Acrisols", "Clay-enriched subsoil with low-activity clays and low base saturation."],
+  LX: ["Lixisols", "Clay-enriched subsoil with low-activity clays and high base saturation."],
+  AL: ["Alisols", "Clay-enriched subsoil with high-activity clays and low base saturation."],
+  LV: ["Luvisols", "Clay-enriched subsoil with high-activity clays and high base saturation."],
+  CM: ["Cambisols", "Moderately developed soils with a subsurface horizon showing alteration (colour, structure or weathering)."],
+  FL: ["Fluvisols", "Young soils in river, lake or marine deposits, still showing their layering."],
+  AR: ["Arenosols", "Deep sandy soils with little development."],
+  RG: ["Regosols", "Soils with little or no profile development that do not fit any other group."]
+};
+
+const Q = [
+  { id: "HS", step: "Organic soils", q: "Is there a thick layer of organic material (peat or muck) near the surface?",
+    help: ["Roughly 40 cm or more of organic material within the upper 100 cm, or at least 10 cm of it directly over rock or rubble.",
+           "Organic material: very dark, light when dry, made mostly of plant remains; roughly 20% organic carbon or more."] },
+  { id: "AT", step: "Human-influenced soils", q: "Has long, intensive human use built or reshaped a thick topsoil?",
+    help: ["About 50 cm or more of a human-made horizon: hortic (long manuring and garden use), irragric (irrigation sediment), plaggic (sod or manure additions), pretic (ancient dark earths) or terric (added mineral material).",
+           "Or a puddled, wet-rice layer (anthraquic) over an iron/manganese-enriched subsoil (hydragric)."] },
+  { id: "TC", step: "Human-influenced soils", q: "Does the soil contain many artefacts, or sit on a sealed or technical surface?",
+    help: ["About 20% or more artefacts (bricks, glass, plastics, mine spoil, ash) by volume in the upper 100 cm.",
+           "Or a geomembrane or continuous technical hard material (such as asphalt or concrete) starting within about 5 cm."] },
+  { id: "CR", step: "Root limitations", q: "Is there permafrost within the upper 100 cm?",
+    help: ["A cryic horizon: perennially frozen soil (ice-cemented or visible ice), starting within 100 cm of the surface."] },
+  { id: "LP", step: "Root limitations", q: "Is the soil very shallow over hard rock, or made up mostly of stones and gravel?",
+    help: ["Continuous hard rock (or technical hard material) starting within 25 cm of the surface.",
+           "Or less than about 20% fine earth (by volume) averaged over the upper 75 cm."] },
+  { id: "SN", step: "Root limitations", q: "Is there a dense, sodium-rich subsoil within 100 cm?",
+    help: ["A natric horizon: clay-enriched subsoil, often with columnar or prismatic structure and rounded tops, starting within 100 cm.",
+           "Exchangeable sodium about 15% of CEC or more (or Na + Mg above Ca + exchange acidity) in that horizon."] },
+  { id: "VR", step: "Root limitations", q: "Is it a heavy clay that cracks when dry, with polished, grooved ped faces?",
+    help: ["A vertic horizon (slickensides and/or wedge-shaped aggregates) starting within 100 cm.",
+           "About 30% clay or more from the surface down to the vertic horizon; wide cracks open and close with the seasons."] },
+  { id: "SC", step: "Root limitations", q: "Is the soil strongly salty near the surface?",
+    help: ["A salic horizon starting within 50 cm: high soluble salt content (electrical conductivity of the saturation extract roughly 15 dS/m or more, lower in alkaline soils).",
+           "Field signs: salt crusts or efflorescences, salt-tolerant vegetation."] },
+  { id: "GL", step: "Iron and aluminium chemistry", q: "Is the soil saturated by groundwater near the surface, or permanently under water or tidal?",
+    help: ["Gleyic properties (grey, green or blue reduced colours, rusty mottles along roots or pores) in a layer at least 25 cm thick starting within about 40 cm, with reducing conditions.",
+           "Or the soil is under water or in a tidal zone."] },
+  { id: "AN", step: "Iron and aluminium chemistry", q: "Is it a light, fluffy, volcanic soil (andic or vitric properties)?",
+    help: ["Andic or vitric properties in layers totalling about 30 cm within 100 cm, starting within 25 cm.",
+           "Andic lab cues: Al(ox) + ½Fe(ox) ≥ 2%, bulk density ≤ 0.9 g/cm³, phosphate retention ≥ 85%. Field cue: smeary, greasy feel, positive NaF test."] },
+  { id: "PZ", step: "Iron and aluminium chemistry", q: "Is there a subsoil accumulation of dark humus and/or reddish iron and aluminium (spodic horizon)?",
+    help: ["A spodic horizon starting within 200 cm, often under a bleached, ash-grey (albic) layer.",
+           "Typical of acid, sandy soils under heath or coniferous forest."] },
+  { id: "PT", step: "Iron and aluminium chemistry", q: "Are there iron-rich mottles that harden irreversibly, or an ironstone layer or concretions, near the surface?",
+    help: ["A plinthic, petroplinthic or pisoplinthic horizon starting within 50 cm (or within 100 cm under a bleached or stagnic layer).",
+           "Plinthite: red, iron-rich mottles in a lighter matrix that harden on repeated wetting and drying."] },
+  { id: "PL", step: "Iron and aluminium chemistry", q: "Is there an abrupt change to a much finer subsoil, with signs of perched water above it?",
+    help: ["An abrupt textural difference (clay roughly doubling over a short distance) within 75 cm.",
+           "Stagnic properties (pale, bleached ped surfaces with rusty interiors) and reducing conditions in the layer directly above it."] },
+  { id: "ST", step: "Iron and aluminium chemistry", q: "Does water perch in the upper soil, leaving bleached and rusty mottled patterns?",
+    help: ["Stagnic properties with reducing conditions in a substantial part of the soil starting within about 60 cm.",
+           "Typical pattern: pale, bleached zones along cracks and ped faces with rusty or dark concentrations inside peds."] },
+  { id: "NT", step: "Iron and aluminium chemistry", q: "Is there a deep, clayey, red subsoil with strong nutty blocks and shiny ped faces (nitic horizon)?",
+    help: ["A nitic horizon starting within 100 cm: at least 30% clay, moderate to strong angular blocky or nutty structure with shiny ped faces, gradual clay change with depth.",
+           "Common on basic rocks in the humid tropics."] },
+  { id: "FR", step: "Iron and aluminium chemistry", q: "Is there a deeply weathered subsoil with very low-activity clays (ferralic horizon)?",
+    help: ["A ferralic horizon starting within 150 cm.",
+           "Lab cues: CEC (pH 7) below about 16 cmol(+)/kg clay, few weatherable minerals, little silt, weak structure that breaks to fine granules."] },
+  { id: "MO", step: "Dark topsoils", q: "Is there a thick, dark, humus-rich mineral topsoil (mollic or umbric horizon)?",
+    help: ["Dark colour: moist value and chroma of 3 or less, at least 0.6% organic carbon, usually 20 cm or more thick.",
+           "Mollic = base saturation 50% or more; umbric = below 50%."], yes: "CH", no: "DU" },
+  { id: "CH", step: "Dark topsoils", q: "Is the dark topsoil very dark (chernic), with secondary carbonates starting close below it?",
+    help: ["A chernic horizon (moist chroma 2 or less, very dark, granular, 1% organic carbon or more).",
+           "A calcic horizon or secondary carbonates starting within about 50 cm below the dark layer; base saturation 50% or more above them."], no: "KS" },
+  { id: "KS", step: "Dark topsoils", q: "Are there secondary carbonates below the dark (mollic) topsoil?",
+    help: ["A calcic horizon or secondary carbonates (white powdery coatings, nodules, soft masses) starting within about 70 cm below the mollic horizon.",
+           "Base saturation 50% or more above them."], no: "PH" },
+  { id: "PH", step: "Dark topsoils", q: "Is base saturation high (50% or more) through the profile, with no shallow carbonates?",
+    help: ["A mollic horizon with base saturation (pH 7) of 50% or more down to about 100 cm (or to rock).",
+           "If the dark topsoil is acid (low base saturation), answer No."], no: "UM" },
+  { id: "UM", step: "Dark topsoils", q: "Is it a dark, humus-rich topsoil with low base saturation (umbric)?",
+    help: ["An umbric horizon, or a dark topsoil whose base saturation is below 50%.",
+           "If none of the dark-topsoil groups fit, answer No to continue the key."] },
+  { id: "DU", step: "Accumulations", q: "Is there a layer cemented or enriched by secondary silica within 100 cm?",
+    help: ["A duric horizon (silica nodules, 'durinodes') or petroduric horizon (duripan) starting within 100 cm."] },
+  { id: "GY", step: "Accumulations", q: "Is there a layer of secondary gypsum within 100 cm?",
+    help: ["A gypsic or petrogypsic horizon starting within 100 cm: visible gypsum crystals, pseudomycelia or cemented gypsum, usually 5% gypsum or more."] },
+  { id: "CL", step: "Accumulations", q: "Is there a layer of secondary carbonate (lime) accumulation within 100 cm?",
+    help: ["A calcic or petrocalcic horizon starting within 100 cm: white soft masses, nodules or a hardpan; fizzes strongly with dilute acid; usually 15% CaCO₃ equivalent or more."] },
+  { id: "AR0", step: "Clay-enriched subsoils", q: "Is there a clay-enriched subsoil (argic horizon) within 100 cm?",
+    help: ["Clearly more clay than the layer above: roughly 1.4 times more (or 6–8 percentage points more, depending on the clay content above), often with clay coatings on ped faces.",
+           "If there is no clear clay increase, answer No."], yes: "RT", no: "CM" },
+  { id: "RT", step: "Clay-enriched subsoils", q: "Does paler, coarser material tongue down into the clay-enriched subsoil (retic properties)?",
+    help: ["Bleached, coarser-textured material interfingering into the argic horizon in vertical tongues or wedges.",
+           "Typical of cool, humid forest soils."], no: "ACT" },
+  { id: "ACT", step: "Clay-enriched subsoils", q: "Does the clay in the subsoil have low activity?",
+    help: ["CEC (pH 7) below about 24 cmol(+)/kg clay in much of the argic horizon.",
+           "Typical of strongly weathered, kaolinitic soils in warm climates."], yes: "BSL", no: "BSH" },
+  { id: "BSL", step: "Clay-enriched subsoils", q: "Is the base saturation low (below 50%) in most of the subsoil?",
+    help: ["Base saturation (pH 7) below 50% in most of the layer between about 50 and 100 cm.",
+           "Yes → Acrisols; No → Lixisols."], yes: "=AC", no: "=LX" },
+  { id: "BSH", step: "Clay-enriched subsoils", q: "Is the base saturation low (below 50%) in most of the subsoil?",
+    help: ["Base saturation (pH 7) below 50% in most of the layer between about 50 and 100 cm; often high exchangeable aluminium.",
+           "Yes → Alisols; No → Luvisols."], yes: "=AL", no: "=LV" },
+  { id: "CM", step: "Little development", q: "Is there a subsurface horizon showing alteration (colour, structure or weathering) but no clay enrichment?",
+    help: ["A cambic horizon starting within 50 cm and extending to at least 25 cm.",
+           "Signs: redder or browner colour than below, soil structure instead of rock or sediment structure, removal of carbonates."] },
+  { id: "FL", step: "Little development", q: "Is the soil in recent river, lake or marine deposits that still show their layering?",
+    help: ["Fluvic material (visible stratification, or organic carbon that varies irregularly with depth) at least 25 cm thick, starting within about 25 cm.",
+           "Typical of floodplains, deltas and coastal flats."] },
+  { id: "AR", step: "Little development", q: "Is the soil sandy throughout?",
+    help: ["Loamy sand or coarser texture (weighted average) down to 100 cm or to rock, with less than about 40% coarse fragments.",
+           "Feels gritty and does not hold together in a ribbon."] }
+];
+// default flow: yes -> RSG with same code; no -> next question in order
+const ORDER = Q.map(q => q.id), byId = Object.fromEntries(Q.map(q => [q.id, q]));
+// Results are written "=CODE"; anything else is the id of the next question.
+const nextOf = id => { const i = ORDER.indexOf(id); return i >= 0 && i < ORDER.length - 1 ? ORDER[i + 1] : "=RG"; };
+const yesOf = q => q.yes || "=" + q.id;
+const noOf = q => q.no || (q.id === "AR" ? "=RG" : nextOf(q.id));
+byId.UM.no = "DU";
+
+let path = []; // [{id, ans}]
+const $ = id => document.getElementById(id);
+const view = $("view");
+const total = 26;
+
+function render() {
+  const cur = currentNode();
+  $("restart").hidden = path.length === 0 && cur === "START";
+  $("bar").style.width = (cur.startsWith("=") ? 100 : Math.min(95, path.length / total * 100)) + "%";
+  if (cur === "START") return intro();
+  if (cur.startsWith("=")) return result(cur.slice(1));
+  question(byId[cur]);
+}
+function currentNode() {
+  if (!path.started) return "START";
+  let node = "HS";
+  for (const p of path) {
+    const q = byId[p.id];
+    node = p.ans === "y" ? yesOf(q) : noOf(q);
+  }
+  return node;
+}
+function intro() {
+  view.innerHTML = `<div class="card">
+    <h1>Find the WRB Reference Soil Group</h1>
+    <p>Answer one question at a time about your profile. The questions follow the order of the WRB 2022 key, so the first group that fits is the answer.</p>
+    <ul class="intro"><li>Tap <b>How to check</b> for the criteria and field signs.</li><li>Choose <b>Not sure</b> when you can't tell. The key carries on, and the result lists what to check.</li><li>Have your field description and, if you have them, lab data (texture, organic carbon, CEC, base saturation) to hand.</li></ul>
+    <button class="primary" id="go">Start</button></div>`;
+  $("go").onclick = () => { path.started = true; render(); };
+}
+function question(q) {
+  const n = path.length + 1;
+  view.innerHTML = `<div class="step">${q.step} · Question ${n}</div>
+    <div class="card">
+      <h1>${q.q}</h1>
+      <div class="answers">
+        <button class="yes" data-a="y">Yes</button>
+        <button data-a="n">No</button>
+        <button class="unsure" data-a="u">Not sure</button>
+      </div>
+      <details><summary>How to check</summary><ul>${q.help.map(h => `<li>${h}</li>`).join("")}</ul></details>
+    </div>
+    <div class="nav"><button id="back" ${path.length ? "" : "hidden"}>← Back</button><span></span></div>`;
+  view.querySelectorAll("[data-a]").forEach(b => b.onclick = () => { path.push({ id: q.id, ans: b.dataset.a }); render(); window.scrollTo(0, 0); });
+  const back = $("back"); if (back) back.onclick = () => { path.pop(); render(); };
+}
+function result(code) {
+  const [name, desc] = RSG[code];
+  const unsure = path.filter(p => p.ans === "u");
+  // groups that would have been assigned if an unsure answer had been Yes
+  const alts = unsure.map(p => { const q = byId[p.id], y = yesOf(q); return { q, to: y.startsWith("=") ? RSG[y.slice(1)][0] : null }; });
+  view.innerHTML = `<div class="step">Result</div>
+    <div class="card result">
+      <span class="code">${code}</span>
+      <div class="rsg">${name}</div>
+      <p>${desc}</p>
+      ${unsure.length ? `<div class="flag"><strong>Provisional.</strong> You weren't sure about ${unsure.length} question${unsure.length > 1 ? "s" : ""} earlier in the key, so check ${unsure.length > 1 ? "these" : "this"} first:<ul style="margin:8px 0 0; padding-left:18px">${alts.map(a => `<li>${a.q.q}${a.to ? ` If yes, the soil would key out as <b>${a.to}</b> instead.` : " If yes, the key would follow a different branch from that point."}</li>`).join("")}</ul></div>` : ""}
+      <div class="trail"><h2 style="margin-top:14px">Your answers</h2>${path.map(p => `<div><span>${byId[p.id].q}</span><span class="a ${p.ans}">${p.ans === "y" ? "Yes" : p.ans === "n" ? "No" : "Not sure"}</span></div>`).join("")}</div>
+      <button class="primary" id="again">Classify another profile</button>
+      <button class="secondary" id="back2">← Change last answer</button>
+    </div>`;
+  $("again").onclick = () => { path = []; path.started = true; render(); window.scrollTo(0, 0); };
+  $("back2").onclick = () => { path.pop(); render(); };
+}
+$("restart").onclick = () => { path = []; render(); };
+render();
+</script>
+</body>
+</html>
