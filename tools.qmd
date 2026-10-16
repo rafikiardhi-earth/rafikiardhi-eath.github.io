@@ -1,6 +1,7 @@
 ---
 title: "Tools"
 page-layout: full
+anchor-sections: false
 ---
 
 ```{=html}
@@ -22,6 +23,11 @@ page-layout: full
   --good: #1f7a4d;
   --warn: #9a6400;
   --radius: 10px;
+}
+body.quarto-dark .rk-tools {
+  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1;
+  --ink-3: #8f887d; --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f;
+  --s1: #3987e5; --s2: #d95926; --obs: #5d564d; --good: #5cc28f; --warn: #e0a440;
 }
 .rk-tools a { color: var(--accent); }
 .rk-tools .rk-wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }

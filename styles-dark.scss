@@ -1,0 +1,128 @@
+/*-- scss:defaults --*/
+
+// RafikiArdhi dark palette (same as the Tools page in dark mode)
+$ra-bg:        #161412;
+$ra-surface:   #1f1c19;
+$ra-surface-2: #2a2622;
+$ra-ink:       #f0ece4;
+$ra-ink-2:     #c4bdb1;
+$ra-ink-3:     #8f887d;
+$ra-line:      #3a352f;
+$ra-accent:    #d98b56;
+$ra-accent-lt: #e8a575;
+$ra-accent-sf: #3a2a1f;
+$ra-accent-ink:#1a1410;
+
+// Bootstrap / Darkly overrides
+$primary:          $ra-accent;
+$secondary:        $ra-surface-2;
+$body-color:       $ra-ink;
+$body-bg:          $ra-bg;
+$link-color:       $ra-accent;
+$link-hover-color: $ra-accent-lt;
+$border-color:     $ra-line;
+$text-muted:       $ra-ink-3;
+$headings-color:   $ra-ink;
+
+$input-bg:           $ra-surface-2;
+$input-color:        $ra-ink;
+$input-border-color: $ra-line;
+$card-bg:            $ra-surface;
+$card-border-color:  $ra-line;
+$table-color:        $ra-ink;
+$table-border-color: $ra-line;
+$dropdown-bg:        $ra-surface;
+$dropdown-link-color: $ra-ink-2;
+
+$navbar-bg: $ra-surface;
+$navbar-fg: $ra-ink-2;
+$navbar-hl: $ra-accent;
+$footer-bg: $ra-bg;
+$footer-fg: $ra-ink-3;
+
+$font-family-sans-serif: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+$headings-font-family:   "Source Serif 4", Georgia, serif;
+
+$code-color:    $ra-accent-lt;
+$code-block-bg: $ra-surface-2;
+
+/*-- scss:rules --*/
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600&family=Source+Serif+4:wght@500;700&display=swap');
+
+body { font-size: 1.06rem; line-height: 1.65; }
+
+// Navbar
+.navbar {
+  border-bottom: 1px solid $ra-line;
+  box-shadow: none;
+}
+.navbar-brand img { max-height: 42px; margin-right: .5rem; }
+.navbar-title { font-weight: 700; color: $ra-ink !important; }
+.navbar .nav-link.active,
+.navbar .nav-link:hover { color: $ra-accent !important; }
+
+// Home page hero
+.hero {
+  padding: 3.5rem 2rem 2.5rem;
+  margin-bottom: 2.5rem;
+  border-radius: 10px;
+  background:
+    linear-gradient(90deg, rgba(22,20,18,.82) 0%, rgba(22,20,18,.55) 55%, rgba(22,20,18,.25) 100%),
+    url("/images/bgd.jpg") center / cover no-repeat;
+}
+.hero h1 { font-size: 2.6rem; margin-bottom: .6rem; }
+.hero .lead { font-size: 1.25rem; color: $ra-ink-2; max-width: 46rem; }
+.hero .tagline {
+  text-transform: uppercase; letter-spacing: .14em;
+  font-size: .8rem; color: $ra-accent; font-weight: 600;
+}
+
+// Service cards
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  @media (max-width: 640px) { grid-template-columns: 1fr; }
+  gap: 1.25rem;
+  margin: 1.5rem 0 2.5rem;
+}
+.card-item {
+  background: $ra-surface;
+  border: 1px solid $ra-line;
+  border-left: 4px solid $ra-accent;
+  border-radius: 10px;
+  padding: 1.1rem 1.25rem;
+}
+.card-item h3 { font-size: 1.15rem; margin-top: 0; }
+.card-item p { margin-bottom: 0; color: $ra-ink-2; font-size: .98rem; }
+
+// Buttons
+.btn-earth {
+  display: inline-block;
+  background: $ra-accent; color: $ra-accent-ink !important;
+  padding: .6rem 1.2rem; border-radius: 8px;
+  text-decoration: none; font-weight: 600;
+}
+.btn-earth:hover { background: $ra-accent-lt; }
+.btn { font-weight: 600; }
+.btn-primary { color: $ra-accent-ink; }
+
+.regions { color: $ra-ink-2; }
+
+// General content
+a { text-underline-offset: 2px; }
+hr { border-color: $ra-line; opacity: 1; }
+blockquote {
+  border-left: 3px solid $ra-accent;
+  background: $ra-accent-sf;
+  padding: .75rem 1rem;
+  border-radius: 0 8px 8px 0;
+  color: $ra-ink-2;
+}
+table { font-variant-numeric: tabular-nums; }
+.table > thead { background: $ra-surface-2; }
+.table { --bs-table-bg: transparent; }
+
+.nav-footer {
+  border-top: 1px solid $ra-line;
+  font-size: .9rem;
+}
