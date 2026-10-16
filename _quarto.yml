@@ -24,6 +24,8 @@ website:
         text: Tools
       - href: wrb-key.qmd
         text: Soil key
+      - href: wrb-key.html
+        text: (mobile)
       - href: about.qmd
         text: About
       - href: publications.qmd
