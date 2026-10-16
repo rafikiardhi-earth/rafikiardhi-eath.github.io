@@ -67,6 +67,23 @@ details li { margin-bottom: 6px; }
 .secondary { width: 100%; min-height: 46px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; margin-top: 10px; cursor: pointer; }
 .foot { margin-top: auto; padding-top: 22px; font-size: .78rem; color: var(--ink-3); }
 .foot a { color: var(--accent); }
+.modes { display: grid; gap: 10px; margin-top: 16px; }
+.modes button { text-align: left; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: inherit; cursor: pointer; }
+.modes button b { display: block; font-size: 1.02rem; }
+.modes button span { color: var(--ink-2); font-size: .9rem; }
+.fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+.fgrid.one { grid-template-columns: 1fr; }
+.fld label { display: block; font-size: .82rem; color: var(--ink-2); margin-bottom: 3px; }
+.fld select, .fld input { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 9px 10px; }
+.sec { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 22px 0 6px; }
+.hcard { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-top: 10px; }
+.hcard .hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: 700; }
+.hcard .hd button { background: none; border: none; color: var(--ink-3); font: inherit; font-size: .85rem; cursor: pointer; }
+.row2 { display: flex; gap: 10px; margin-top: 12px; }
+.row2 button { flex: 1; }
+.chk { display: grid; grid-template-columns: 22px 1fr; gap: 8px; padding: 8px 0; border-bottom: 1px solid var(--line); font-size: .9rem; }
+.chk .s { font-weight: 700; } .chk .s.y { color: var(--good); } .chk .s.n { color: var(--ink-3); } .chk .s.u { color: var(--warn); }
+.chk .t { color: var(--ink-2); } .chk .t b { color: var(--ink); font-weight: 600; }
 .intro li { color: var(--ink-2); margin-bottom: 6px; }
 </style>
 </head>
@@ -83,6 +100,202 @@ details li { margin-bottom: 6px; }
   </div>
 </div>
 
+<script>
+// Simplified WRB 2022 key engine for the RafikiArdhi WRB key.
+// Every threshold lives in WRB_T so it can be checked against WRB 2022 Chapters 3 and 4.
+(function (root) {
+  const WRB_T = {
+    histicOrganicCm: 40,          // Histosols: organic material within 100 cm
+    leptoRockCm: 25,              // Leptosols: continuous rock starting within
+    leptoCoarsePct: 80,           // Leptosols: coarse fragments averaged over 0-75 cm (i.e. < 20% fine earth)
+    natricESP: 15,                // Solonetz: exchangeable sodium percentage
+    vertisolClayPct: 30,          // Vertisols: clay from surface down to the vertic horizon
+    salicEC: 15,                  // Solonchaks: EC of saturation extract (dS/m)
+    salicDepthCm: 50,
+    planoDepthCm: 75,             // Planosols: abrupt textural difference within
+    nitisolClayPct: 30,
+    ferralicCECclay: 16,          // cmol(+)/kg clay
+    ferralicDepthCm: 150, ferralicThickCm: 30,
+    darkValue: 3, darkChroma: 3, darkOC: 0.6, darkThickCm: 20,
+    chernicChroma: 2, chernicOC: 1,
+    baseSat: 50,
+    carbonatePresentPct: 1,       // secondary carbonates detected (CaCO3 equivalent)
+    chernoCarbBelowCm: 50, kastanoCarbBelowCm: 70,
+    gypsicPct: 5, calcicPct: 15, accumThickCm: 15, accumDepthCm: 100,
+    argicDepthCm: 100,
+    // clay increase to the horizon below: upper < 10% -> +4 points; 10-50% -> ratio 1.4; >= 50% -> +20 points
+    argicLowClay: 10, argicLowAdd: 4, argicRatio: 1.4, argicHighClay: 50, argicHighAdd: 20,
+    lowActivityCECclay: 24,
+    arenoCoarsePct: 40
+  };
+
+  const yn = v => v === "y" ? true : v === "n" ? false : null;
+  const has = v => v !== null && v !== undefined && v !== "" && isFinite(v);
+
+  // weighted mean of field f over [z1,z2] using horizons that have it; null if none
+  function wmean(hz, f, z1, z2) {
+    let s = 0, w = 0;
+    hz.forEach(h => { const o = Math.max(0, Math.min(h.bottom, z2) - Math.max(h.top, z1)); if (o > 0 && has(h[f])) { s += h[f] * o; w += o; } });
+    return w > 0 ? { v: s / w, cover: w / (z2 - z1) } : null;
+  }
+
+  function classify(site, horizons, T = WRB_T) {
+    const hz = horizons.filter(h => has(h.top) && has(h.bottom) && h.bottom > h.top).sort((a, b) => a.top - b.top);
+    const depth = hz.length ? hz[hz.length - 1].bottom : 0;
+    const out = [];
+    const add = (code, ok, note) => out.push({ code, ok, note });
+
+    // HS
+    add("HS", has(site.organicCm) ? site.organicCm >= T.histicOrganicCm : null, has(site.organicCm) ? `${site.organicCm} cm organic material` : "organic layer thickness not given");
+    add("AT", yn(site.anthric), "field observation");
+    add("TC", yn(site.artefacts), "field observation");
+    add("CR", yn(site.permafrost), "field observation");
+    // LP: rock within 25 cm, or < 20% fine earth (coarse fragments >= 80%) over 0-75 cm
+    {
+      let ok = site.rock === "none" ? false : has(site.rock) ? site.rock <= T.leptoRockCm : null;
+      const note = [];
+      if (has(site.rock)) note.push(`rock at ${site.rock} cm`); else if (site.rock === "none") note.push("no rock within 100 cm");
+      const cf = wmean(hz, "cf", 0, 75);
+      if (cf) { note.push(`coarse fragments ${cf.v.toFixed(0)}% (0–75 cm)`); if (cf.v >= T.leptoCoarsePct) ok = true; }
+      add("LP", ok, note.join("; ") || "rock depth and coarse fragments not given");
+    }
+    // SN: horizon starting within 100 cm with ESP >= threshold and more clay than the one above
+    {
+      const cand = hz.filter((h, i) => h.top < 100 && has(h.esp));
+      let ok = cand.length ? false : yn(site.sodic), note = cand.length ? "" : "field observation (no ESP data)";
+      cand.forEach(h => { const i = hz.indexOf(h), up = hz[i - 1]; const clayUp = !up || (has(h.clay) && has(up.clay) && h.clay > up.clay);
+        if (h.esp >= T.natricESP && clayUp) { ok = true; note = `ESP ${h.esp}% at ${h.top} cm`; } });
+      if (ok === false && cand.length) note = `max ESP ${Math.max(...cand.map(h => h.esp))}%`;
+      add("SN", ok, note);
+    }
+    // VR
+    {
+      const s = yn(site.slickensides); let ok = s, note = "slickensides / wedge-shaped aggregates";
+      if (s === true) {
+        const top = hz.filter(h => h.top < 100);
+        if (!top.length || top.some(h => !has(h.clay))) ok = null, note = "slickensides present but clay not given";
+        else { ok = top.every(h => h.clay >= T.vertisolClayPct); note = `clay ${Math.min(...top.map(h => h.clay))}–${Math.max(...top.map(h => h.clay))}% above 100 cm`; }
+      }
+      add("VR", ok, note);
+    }
+    // SC
+    {
+      const c = hz.filter(h => h.top < T.salicDepthCm && has(h.ec));
+      add("SC", c.length ? c.some(h => h.ec >= T.salicEC) : yn(site.saline), c.length ? `max EC ${Math.max(...c.map(h => h.ec))} dS/m within ${T.salicDepthCm} cm` : "field observation (no EC data)");
+    }
+    add("GL", yn(site.gleyic), "field observation");
+    add("AN", yn(site.andic), "field observation");
+    add("PZ", yn(site.spodic), "field observation");
+    add("PT", yn(site.plinthic), "field observation");
+    // PL: stagnic + abrupt textural difference within 75 cm
+    {
+      const st = yn(site.stagnic); let ok = st, note = "stagnic properties";
+      if (st === true) {
+        let abrupt = null;
+        for (let i = 1; i < hz.length; i++) {
+          const a = hz[i - 1], b = hz[i]; if (b.top > T.planoDepthCm) break;
+          if (!has(a.clay) || !has(b.clay)) continue;
+          const at = a.clay >= 20 ? b.clay - a.clay >= 20 : b.clay >= 2 * a.clay;
+          abrupt = abrupt || at; if (at) note = `clay ${a.clay}→${b.clay}% at ${b.top} cm`;
+        }
+        ok = abrupt; if (abrupt === false) note = "no abrupt clay increase within 75 cm"; if (abrupt === null) note = "stagnic, but clay not given";
+      }
+      add("PL", ok, note);
+    }
+    add("ST", yn(site.stagnic), "field observation");
+    // NT
+    {
+      const n = yn(site.nitic); let ok = n, note = "nitic structure and shiny ped faces";
+      if (n === true) { const c = hz.filter(h => h.top < 100 && has(h.clay)); ok = c.length ? c.some(h => h.clay >= T.nitisolClayPct) : null; note = c.length ? `max clay ${Math.max(...c.map(h => h.clay))}%` : "clay not given"; }
+      add("NT", ok, note);
+    }
+    // FR
+    {
+      const c = hz.filter(h => h.top < T.ferralicDepthCm && has(h.cec) && has(h.clay) && h.clay > 0);
+      let ok = c.length ? false : yn(site.ferralic), note = c.length ? "" : "field judgement (no CEC data)";
+      if (c.length) {
+        const v = c.map(h => ({ h, r: h.cec / (h.clay / 100) }));
+        const low = v.filter(x => x.r < T.ferralicCECclay), thick = low.reduce((s, x) => s + (x.h.bottom - x.h.top), 0);
+        ok = thick >= T.ferralicThickCm;
+        note = `lowest CEC ${Math.min(...v.map(x => x.r)).toFixed(1)} cmol/kg clay`;
+      }
+      add("FR", ok, note);
+    }
+    // Dark topsoil group
+    {
+      let dark = null, darkBottom = 0, dk = [];
+      if (hz.length && hz[0].top === 0) {
+        for (const h of hz) {
+          if (!has(h.value) || !has(h.chroma) || !has(h.oc)) { if (!dk.length) dark = null; break; }
+          if (h.value <= T.darkValue && h.chroma <= T.darkChroma && h.oc >= T.darkOC && h.top === (dk.length ? dk[dk.length - 1].bottom : 0)) dk.push(h); else break;
+        }
+        const thick = dk.reduce((s, h) => s + h.bottom - h.top, 0);
+        if (dk.length || has(hz[0].value)) dark = thick >= T.darkThickCm;
+        darkBottom = dk.length ? dk[dk.length - 1].bottom : 0;
+      }
+      const bsDark = dk.length && dk.every(h => has(h.bs)) ? Math.min(...dk.map(h => h.bs)) : null;
+      const mollic = dark && bsDark !== null ? bsDark >= T.baseSat : null;
+      const carbTop = hz.find(h => has(h.caco3) && h.caco3 >= T.carbonatePresentPct && h.top >= darkBottom);
+      const carbKnown = hz.some(h => has(h.caco3));
+      const chernic = dark && dk.every(h => h.chroma <= T.chernicChroma && h.oc >= T.chernicOC);
+      const notDark = `dark topsoil ${dark === null ? "not assessed (colour or organic carbon missing)" : `${darkBottom} cm thick`}`;
+      const g = (ok, note) => dark === false ? false : (dark === null ? null : ok);
+      add("CH", g(mollic === null ? null : mollic && chernic && (carbKnown ? !!carbTop && carbTop.top <= darkBottom + T.chernoCarbBelowCm : null)), dark ? `chernic ${chernic ? "yes" : "no"}; carbonates ${carbTop ? "from " + carbTop.top + " cm" : carbKnown ? "none" : "not given"}` : notDark);
+      add("KS", g(mollic === null ? null : mollic && (carbKnown ? !!carbTop && carbTop.top <= darkBottom + T.kastanoCarbBelowCm : null)), dark ? `mollic ${mollic === null ? "?" : mollic ? "yes" : "no"} (BS ${bsDark ?? "?"}%)` : notDark);
+      const bs100 = hz.filter(h => h.top < 100); const bsAll = bs100.every(h => has(h.bs)) ? bs100.every(h => h.bs >= T.baseSat) : null;
+      add("PH", g(mollic === null ? null : mollic && (bsAll === null ? null : bsAll)), dark ? `base saturation ${bsAll === null ? "not given for all horizons" : bsAll ? "≥ 50% to 100 cm" : "< 50% somewhere above 100 cm"}` : notDark);
+      add("UM", g(true), dark ? "dark topsoil with low base saturation" : notDark);
+    }
+    add("DU", yn(site.duric), "field observation");
+    const accum = (f, thr) => { const c = hz.filter(h => h.top < T.accumDepthCm && has(h[f])); return c.length ? c.some(h => h[f] >= thr && h.bottom - h.top >= T.accumThickCm) : null; };
+    const gy = accum("gypsum", T.gypsicPct), cl = accum("caco3", T.calcicPct);
+    add("GY", gy !== null ? gy : yn(site.gypsic), gy !== null ? "gypsum % within 100 cm" : "field observation (no gypsum data)");
+    add("CL", cl !== null ? cl : yn(site.calcic), cl !== null ? "CaCO₃ equivalent % within 100 cm" : "field observation (no CaCO₃ data)");
+    // Argic group
+    {
+      let argic = null, aH = null, note = "clay not given for consecutive horizons";
+      for (let i = 1; i < hz.length; i++) {
+        const a = hz[i - 1], b = hz[i]; if (b.top > T.argicDepthCm) break;
+        if (!has(a.clay) || !has(b.clay)) continue;
+        const ok = a.clay < T.argicLowClay ? b.clay - a.clay >= T.argicLowAdd : a.clay < T.argicHighClay ? b.clay / a.clay >= T.argicRatio : b.clay - a.clay >= T.argicHighAdd;
+        if (argic === null) argic = false;
+        if (ok) { argic = true; aH = b; note = `clay ${a.clay}→${b.clay}% at ${b.top} cm`; break; }
+        note = "no qualifying clay increase within 100 cm";
+      }
+      const R = (ok, n) => argic === false ? false : argic === null ? null : ok;
+      add("RT", R(yn(site.retic)), argic ? `${note}; retic properties ${site.retic === "y" ? "yes" : site.retic === "n" ? "no" : "?"}` : note);
+      const act = aH && has(aH.cec) && aH.clay > 0 ? aH.cec / (aH.clay / 100) : null;
+      const lowAct = act === null ? null : act < T.lowActivityCECclay;
+      const lowBS = aH && has(aH.bs) ? aH.bs < T.baseSat : null;
+      const detail = argic ? `${note}; CEC ${act === null ? "?" : act.toFixed(1)} cmol/kg clay; BS ${aH && has(aH.bs) ? aH.bs : "?"}%` : note;
+      const both = (x, y) => x === null || y === null ? null : x && y;
+      add("AC", R(both(lowAct, lowBS)), detail);
+      add("LX", R(both(lowAct, lowBS === null ? null : !lowBS)), detail);
+      add("AL", R(both(lowAct === null ? null : !lowAct, lowBS)), detail);
+      add("LV", R(both(lowAct === null ? null : !lowAct, lowBS === null ? null : !lowBS)), detail);
+    }
+    add("CM", yn(site.cambic), "field observation");
+    add("FL", yn(site.fluvic), "field observation");
+    // AR: loamy sand or coarser (silt + 2 clay < 30) and < 40% coarse fragments, 0-100 cm
+    {
+      const zb = Math.min(100, depth || 100);
+      const fine = hz.map(h => ({ ...h, fx: has(h.clay) && has(h.sand) ? (100 - h.sand - h.clay) + 2 * h.clay : null }));
+      const fx = wmean(fine, "fx", 0, zb), cf = wmean(hz, "cf", 0, zb);
+      add("AR", fx ? fx.v < 30 && (!cf || cf.v < T.arenoCoarsePct) : null, fx ? `silt + 2×clay ${fx.v.toFixed(0)} (sandy if < 30)` : "sand and clay not given");
+    }
+    // Resolve in key order
+    const unsure = [];
+    for (const r of out) {
+      if (r.ok === true) return { code: r.code, trail: out.slice(0, out.indexOf(r) + 1), unsure };
+      if (r.ok === null) unsure.push(r);
+    }
+    return { code: "RG", trail: out, unsure };
+  }
+  root.WRBEngine = { classify, WRB_T };
+  if (typeof module !== 'undefined') module.exports = root.WRBEngine;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
 <script>
 "use strict";
 /* Each node: a question in WRB key order. yes -> result code or next node id; no -> next node id.
@@ -232,8 +445,9 @@ const total = 26;
 
 function render() {
   const cur = currentNode();
-  $("restart").hidden = path.length === 0 && cur === "START";
+  $("restart").hidden = !formMode && path.length === 0 && cur === "START";
   $("bar").style.width = (cur.startsWith("=") ? 100 : Math.min(95, path.length / total * 100)) + "%";
+  if (formMode) return formResult ? showFormResult() : formView();
   if (cur === "START") return intro();
   if (cur.startsWith("=")) return result(cur.slice(1));
   question(byId[cur]);
@@ -250,10 +464,14 @@ function currentNode() {
 function intro() {
   view.innerHTML = `<div class="card">
     <h1>Find the WRB Reference Soil Group</h1>
-    <p>Answer one question at a time about your profile. The questions follow the order of the WRB 2022 key, so the first group that fits is the answer.</p>
-    <ul class="intro"><li>Tap <b>How to check</b> for the criteria and field signs.</li><li>Choose <b>Not sure</b> when you can't tell. The key carries on, and the result lists what to check.</li><li>Have your field description and, if you have them, lab data (texture, organic carbon, CEC, base saturation) to hand.</li></ul>
-    <button class="primary" id="go">Start</button></div>`;
+    <p>Two ways to work through the WRB 2022 key. Both follow its order, so the first group that fits is the answer.</p>
+    <div class="modes">
+      <button id="go"><b>Step by step</b><span>Answer one yes/no question at a time. Best in the field.</span></button>
+      <button id="goform"><b>Enter profile data</b><span>Fill in field observations and lab data for each horizon, and the app decides.</span></button>
+    </div>
+    <ul class="intro" style="margin-top:16px"><li>Choose <b>Not sure</b> or leave a box empty when you don't know. The key carries on and tells you what to check.</li></ul></div>`;
   $("go").onclick = () => { path.started = true; render(); };
+  $("goform").onclick = () => { formMode = true; render(); };
 }
 function question(q) {
   const n = path.length + 1;
@@ -289,7 +507,101 @@ function result(code) {
   $("again").onclick = () => { path = []; path.started = true; render(); window.scrollTo(0, 0); };
   $("back2").onclick = () => { path.pop(); render(); };
 }
-$("restart").onclick = () => { path = []; render(); };
+
+/* ---------------- form mode ---------------- */
+let formMode = false, formResult = null;
+const SITE_Q = [
+  ["Organic soils and human influence", [
+    ["organicCm", "num", "Organic layer (peat/muck) thickness within 100 cm (cm)"],
+    ["anthric", "yn", "Thick human-made topsoil (≥ 50 cm of hortic, irragric, plaggic, pretic or terric; or wet-rice puddling)?"],
+    ["artefacts", "yn", "≥ 20% artefacts in the upper 100 cm, or sealed / technical surface?"],
+    ["permafrost", "yn", "Permafrost within 100 cm?"]]],
+  ["Root limitations", [
+    ["rock", "rock", "Continuous hard rock within 100 cm?"],
+    ["slickensides", "yn", "Slickensides or wedge-shaped aggregates within 100 cm (shrink–swell cracking)?"],
+    ["saline", "yn", "Strongly salty near the surface (used if no EC data)?"],
+    ["sodic", "yn", "Dense, sodium-rich (natric) subsoil within 100 cm (used if no ESP data)?"]]],
+  ["Water and iron–aluminium features", [
+    ["gleyic", "yn", "Groundwater gleying (gleyic properties) starting within ~40 cm, or under water / tidal?"],
+    ["andic", "yn", "Andic or vitric (volcanic) properties near the surface?"],
+    ["spodic", "yn", "Spodic horizon (humus / Fe–Al accumulation) within 200 cm?"],
+    ["plinthic", "yn", "Plinthite, ironstone or iron concretions (plinthic / petroplinthic / pisoplinthic) within 50 cm?"],
+    ["stagnic", "yn", "Perched-water mottling (stagnic properties) starting within ~60 cm?"],
+    ["nitic", "yn", "Nitic structure: strong nutty blocks with shiny ped faces?"],
+    ["ferralic", "yn", "Ferralic horizon (used if no CEC data)?"]]],
+  ["Accumulations and development", [
+    ["duric", "yn", "Secondary silica (duric / petroduric) within 100 cm?"],
+    ["gypsic", "yn", "Secondary gypsum layer within 100 cm (used if no gypsum data)?"],
+    ["calcic", "yn", "Secondary carbonate (calcic) layer within 100 cm (used if no CaCO₃ data)?"],
+    ["retic", "yn", "Paler, coarser material tonguing into a clay-enriched subsoil (retic)?"],
+    ["cambic", "yn", "Subsoil horizon showing alteration (cambic) within 50 cm?"],
+    ["fluvic", "yn", "Fluvic stratification (river, lake or marine layering) near the surface?"]]]
+];
+const HZ_F = [
+  ["top", "Top (cm)"], ["bottom", "Bottom (cm)"], ["clay", "Clay %"], ["sand", "Sand %"],
+  ["cf", "Coarse fragments % vol"], ["oc", "Organic C %"], ["value", "Munsell value (moist)", "v"], ["chroma", "Munsell chroma (moist)", "c"],
+  ["cec", "CEC pH 7 (cmol/kg soil)"], ["bs", "Base saturation %"], ["esp", "ESP %"], ["ec", "EC (dS/m)"],
+  ["caco3", "CaCO₃ equiv. %"], ["gypsum", "Gypsum %"]
+];
+let F = { site: {}, hz: [{ top: 0, bottom: 20 }, { top: 20, bottom: 50 }, { top: 50, bottom: 100 }] };
+const EXAMPLE = { site: { organicCm: 0, anthric: "n", artefacts: "n", permafrost: "n", rock: "none", slickensides: "n", saline: "n", sodic: "n", gleyic: "n", andic: "n", spodic: "n", plinthic: "n", stagnic: "n", nitic: "n", duric: "n", gypsic: "n", calcic: "n", retic: "n", cambic: "n", fluvic: "n" },
+  hz: [{ top: 0, bottom: 15, clay: 12, sand: 70, cf: 5, oc: 1.1, value: 4, chroma: 3, cec: 4, bs: 65 },
+       { top: 15, bottom: 35, clay: 14, sand: 66, cf: 5, oc: 0.6, value: 5, chroma: 4, cec: 3.5, bs: 60 },
+       { top: 35, bottom: 110, clay: 28, sand: 52, cf: 8, oc: 0.3, value: 4, chroma: 6, cec: 5, bs: 70 }] };
+const ynSel = (k, v) => `<select data-site="${k}"><option value="" ${!v ? "selected" : ""}>Not sure</option><option value="y" ${v === "y" ? "selected" : ""}>Yes</option><option value="n" ${v === "n" ? "selected" : ""}>No</option></select>`;
+function formView() {
+  const site = F.site;
+  let h = `<div class="step">Enter profile data</div><div class="card"><h1 style="font-size:1.25rem">Field observations</h1>
+    <p>Leave anything you don't know as <b>Not sure</b>.</p>`;
+  SITE_Q.forEach(([sec, qs]) => {
+    h += `<div class="sec">${sec}</div><div class="fgrid one">`;
+    qs.forEach(([k, type, lab]) => {
+      if (type === "num") h += `<div class="fld"><label>${lab}</label><input type="number" inputmode="decimal" data-site="${k}" value="${site[k] ?? ""}" placeholder="Not recorded"></div>`;
+      else if (type === "rock") {
+        const mode = site.rock === "none" ? "n" : (site.rock === "y" || typeof site.rock === "number") ? "y" : "";
+        h += `<div class="fld"><label>${lab}</label><select data-rock><option value="" ${!mode ? "selected" : ""}>Not sure</option><option value="y" ${mode === "y" ? "selected" : ""}>Yes</option><option value="n" ${mode === "n" ? "selected" : ""}>No</option></select>
+          ${mode === "y" ? `<input type="number" inputmode="decimal" data-site="rock" value="${typeof site.rock === "number" ? site.rock : ""}" placeholder="Depth to rock (cm)" style="margin-top:6px">` : ""}</div>`;
+      } else h += `<div class="fld"><label>${lab}</label>${ynSel(k, site[k])}</div>`;
+    });
+    h += `</div>`;
+  });
+  h += `</div><div class="sec">Horizons (lab data)</div>`;
+  F.hz.forEach((z, i) => {
+    h += `<div class="hcard"><div class="hd">Horizon ${i + 1}${F.hz.length > 1 ? `<button data-del="${i}">Remove</button>` : ""}</div><div class="fgrid">`;
+    HZ_F.forEach(([k, lab, sel]) => {
+      if (sel) { const opts = sel === "v" ? [1, 2, 2.5, 3, 4, 5, 6, 7, 8] : [0, 1, 2, 3, 4, 6, 8];
+        h += `<div class="fld"><label>${lab}</label><select data-hz="${i}" data-k="${k}"><option value="">–</option>${opts.map(o => `<option ${z[k] == o ? "selected" : ""}>${o}</option>`).join("")}</select></div>`; }
+      else h += `<div class="fld"><label>${lab}</label><input type="number" inputmode="decimal" step="any" data-hz="${i}" data-k="${k}" value="${z[k] ?? ""}"></div>`;
+    });
+    h += `</div></div>`;
+  });
+  h += `<div class="row2"><button class="secondary" id="addhz" style="margin:0">+ Add horizon</button><button class="secondary" id="ex" style="margin:0">Load example</button></div>
+    <button class="primary" id="classify">Classify</button><div class="nav"><button id="fback">← Back</button><span></span></div>`;
+  view.innerHTML = h;
+  view.querySelectorAll("[data-site]").forEach(e => e.oninput = () => { const v = e.value, k = e.dataset.site; F.site[k] = e.type === "number" ? (v === "" ? (k === "rock" ? "y" : "") : +v) : v; });
+  const rk = view.querySelector("[data-rock]"); rk.onchange = () => { F.site.rock = rk.value === "n" ? "none" : rk.value === "y" ? (typeof F.site.rock === "number" ? F.site.rock : "y") : ""; formView(); };
+  view.querySelectorAll("[data-hz]").forEach(e => e.oninput = () => { const v = e.value; F.hz[+e.dataset.hz][e.dataset.k] = v === "" ? "" : +v; });
+  view.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { F.hz.splice(+b.dataset.del, 1); formView(); });
+  $("addhz").onclick = () => { const last = F.hz[F.hz.length - 1]; F.hz.push({ top: last && last.bottom !== "" ? last.bottom : "", bottom: "" }); formView(); };
+  $("ex").onclick = () => { F = JSON.parse(JSON.stringify(EXAMPLE)); formView(); };
+  $("classify").onclick = () => { formResult = WRBEngine.classify(F.site, F.hz); render(); window.scrollTo(0, 0); };
+  $("fback").onclick = () => { formMode = false; render(); };
+}
+function showFormResult() {
+  const r = formResult, [name, desc] = RSG[r.code];
+  const sym = ok => ok === true ? ["✓", "y"] : ok === false ? ["✗", "n"] : ["?", "u"];
+  view.innerHTML = `<div class="step">Result</div><div class="card result">
+    <span class="code">${r.code}</span><div class="rsg">${name}</div><p>${desc}</p>
+    ${r.unsure.length ? `<div class="flag"><strong>Provisional.</strong> ${r.unsure.length} group${r.unsure.length > 1 ? "s" : ""} earlier in the key couldn't be checked with the data given. If any of these apply, the soil would key out there instead:<ul style="margin:8px 0 0; padding-left:18px">${r.unsure.map(u => `<li><b>${RSG[u.code][0]}</b>: ${u.note}</li>`).join("")}</ul></div>` : ""}
+    <h2 style="margin-top:16px">How the key ran</h2>
+    ${r.trail.map(t => { const [g, c] = sym(t.ok); return `<div class="chk"><span class="s ${c}">${g}</span><span class="t"><b>${RSG[t.code][0]}</b> · ${t.note}</span></div>`; }).join("")}
+    <button class="primary" id="edit">Edit the data</button>
+    <button class="secondary" id="new">Classify another profile</button></div>`;
+  $("edit").onclick = () => { formResult = null; render(); };
+  $("new").onclick = () => { formResult = null; F = { site: {}, hz: [{ top: 0, bottom: 20 }, { top: 20, bottom: 50 }, { top: 50, bottom: 100 }] }; render(); window.scrollTo(0, 0); };
+}
+
+$("restart").onclick = () => { path = []; formMode = false; formResult = null; render(); };
 render();
 </script>
 </body>
