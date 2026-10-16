@@ -1114,11 +1114,19 @@ const famHelp = name => { for (const [re, f] of FAMHELP) if (re.test(name)) retu
    Rule-based: it only recognises the book's horizon names and common field terms, never guesses. */
 /* ---- Your own words for the book's horizons (Describe the profile) ----
    Add a line: [["word or phrase", "another phrase"], "Horizon name exactly as in the book"].
+   Use phrases for everyday words ("red structureless", "blocky subsoil"): single colour, family and field words
+   (red, yellow, luvic, carbonates, blocky...) are skipped on their own because the app already reads them for the family.
    A word can point to several horizons: [["word"], ["Horizon one", "Horizon two"]] (or list it on two lines);
    the app then keeps the forms for each possibility and lets the user choose.
    Matching ignores capitals; whole words only. The app tells the user which words it translated. */
 const SA_SYNONYMS = [
-  [["cambic", "weakly developed b", "weakly developed subsoil", "weakly developed horizon"], "Neocutanic"]
+  [["cambic", "weakly developed b", "weakly developed subsoil", "weakly developed horizon"], "Neocutanic"],
+  [["calcareous cambic", "weakly developed calcareous b", "weakly developed calcareous subsoil", "weakly developed with carbonates"], "Neocarbonate"],
+  [["argillic", "kandic", "bt horizon", "blocky subsoil", "blocky b", "clay skins"], ["Pedocutanic", "Prismacutanic"]],
+  [["prismatic subsoil", "prismatic b", "columnar subsoil", "columnar b"], "Prismacutanic"],
+  [["latosol", "oxic"], ["Red Apedal", "Yellow-Brown Apedal"]],
+  [["rhodic", "red structureless", "red structureless b", "red massive b"], "Red Apedal"],
+  [["xanthic", "yellow structureless", "yellow-brown structureless", "yellow massive b"], "Yellow-Brown Apedal"]
 ];
 function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
   // [canonical horizon, pattern]; longer names first so "red apedal" is not read as "red"
@@ -1154,6 +1162,14 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
     ["Humic", /\bhumic\b/],
     ["Orthic", /\borthic\b/]
   ];
+  // blank out the book's own horizon names, so synonyms and colour words aren't read inside them
+  const blankHz = str => { let m = str; for (const [, re] of HZ_WORDS) m = m.replace(new RegExp(re.source, "g"), x => " ".repeat(x.length)); return m; };
+  // single words that already mean something else (colours, family answers, field clues) can't be synonyms on their own
+  const RESERVED = new Set(["red", "reddish", "maroon", "brown", "brownish", "yellow", "grey", "gray", "dark", "black", "bleached", "chromic",
+    "luvic", "aluvic", "dystrophic", "mesotrophic", "eutrophic", "acid", "acidic", "leached", "calcareous", "carbonate", "carbonates", "lime",
+    "wet", "wetness", "mottled", "mottles", "gleyed", "firm", "friable", "thick", "thin", "blocky", "structured", "massive", "structureless",
+    "a", "b", "c", "e", "horizon", "subsoil", "topsoil", "soil", "sand", "sandy", "clay", "clayey", "rock"]);
+  const WARNED = new Set();
   const WET_HZ = ["Gley", "Gleyic", "Unconsolidated Material with Wetness", "Soft Plinthic"];
   const NEG = "(?:no|not|without|absent|lacks?|lacking|free of|none|nil)";
   const negated = (t, w) => new RegExp(`\\b${NEG}\\s+(?:\\w+[\\s,]+){0,3}?${w}`).test(t) || new RegExp(`${w}\\w*\\s+(?:is |are )?(?:absent|not (?:present|seen|observed))`).test(t);
@@ -1165,27 +1181,34 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
     // your own words -> the book's horizon names (see SA_SYNONYMS); a word may point to several horizons
     const synNotes = [], seen = new Set();
     let variants = [base];
-    SYNONYMS.forEach(([words, name]) => words.forEach(w => {
+    // longest phrases first, so "red structureless b" wins over "red structureless"
+    const flat = [];
+    SYNONYMS.forEach(([words, name]) => words.forEach(w => flat.push([w, name])));
+    flat.sort((x, y) => y[0].length - x[0].length);
+    flat.forEach(([w]) => {
       const esc = w.toLowerCase().trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
       const re = new RegExp(`\\b${esc}\\b`, "g"), test = new RegExp(`\\b${esc}\\b`);
-      if (!test.test(base) || seen.has(w.toLowerCase())) return;
+      if (RESERVED.has(w.toLowerCase().trim())) { if (!WARNED.has(w) && typeof console !== "undefined") WARNED.add(w) && console.warn(`SA_SYNONYMS: "${w}" is skipped; it is also a colour, family or field word. Use a phrase instead, e.g. "${w} structureless".`); return; }
+      if (seen.has(w.toLowerCase()) || !variants.some(v => test.test(blankHz(v)))) return;
       seen.add(w.toLowerCase());
       // collect every horizon this word is listed under
       const names = [];
       SYNONYMS.forEach(([ws, n]) => { if (ws.some(x => x.toLowerCase().trim() === w.toLowerCase().trim())) (Array.isArray(n) ? n : [n]).forEach(k => { if (!names.includes(k)) names.push(k); }); });
-      variants = variants.flatMap(v => names.map(n => v.replace(re, " " + n.toLowerCase() + " "))).slice(0, 16);
+      variants = variants.flatMap(v => names.map(n => { const b = blankHz(v); return v.replace(re, (x, at) => b.slice(at, at + x.length).trim() ? " " + n.toLowerCase() + " " : x); })).slice(0, 16);
       synNotes.push(`Read "${w}" as ${names.map(n => n.toLowerCase()).join(" or ")}. Check it meets the book's definition.`);
-    }));
-    const rs = variants.map(v => parseCore(v, synNotes));
+    });
+    const rs = variants.map(v => parseCore(v, synNotes, base));
     if (rs.length === 1) return rs[0];
     const m = { ...rs[0] }, all = [];
     rs.forEach(r => r.candidates.forEach(f => { if (!all.includes(f)) all.push(f); }));
     m.candidates = all;
-    const n = Math.max(...rs.map(r => r.subs.length));
-    m.subs = Array.from({ length: n }, (_, i) => [...new Set(rs.map(r => r.subs[i]).filter(Boolean))].join(" or "));
+    const good = rs.filter(r => r.candidates.length).length ? rs.filter(r => r.candidates.length) : rs;
+    const k = Math.max(...good.map(r => r.subs.length));
+    m.subs = Array.from({ length: k }, (_, i) => [...new Set(good.map(r => r.subs[i]).filter(Boolean))].join(" or "));
     return m;
   }
-  function parseCore(t, synNotes) {
+  function parseCore(t, synNotes, orig) {
+    orig = orig || t;
     let masked = t;
     const hits = [];
     for (const [name, re] of HZ_WORDS) {
@@ -1204,40 +1227,41 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
     const reversedCue = /\b(?:under|below|beneath|underlying|overlain by)\b/.test(t) && !/\b(?:over|on top of|overlying|then|followed by)\b/.test(t);
 
     const H = {};
+    const o = orig, om = blankHz(orig);
     // wetness
     const wetWords = "(?:signs of wetness|wetness|mottl\\w*|gley\\w*|waterlog\\w*|wet\\b|redox)";
-    if (/\b(?:well|freely|excessively)[- ]drained\b/.test(t) || negated(t, wetWords) || /\bnot wet\b|\bdry throughout\b/.test(t)) H.wet = false;
-    else if (new RegExp(`\\b${wetWords}`).test(t)) H.wet = true;
+    if (/\b(?:well|freely|excessively)[- ]drained\b/.test(o) || negated(o, wetWords) || /\bnot wet\b|\bdry throughout\b/.test(o)) H.wet = false;
+    else if (new RegExp(`\\b${wetWords}`).test(o)) H.wet = true;
     // colours
-    const topCol = t.match(/\b(dark|black|chromic|bleached|grey|gray|red)\s+(?:(?:orthic|melanic|humic|vertic)\s+)?(?:a\b|a horizon|topsoil|surface)/);
+    const topCol = o.match(/\b(dark|black|chromic|bleached|grey|gray|red)\s+(?:(?:orthic|melanic|humic|vertic)\s+)?(?:a\b|a horizon|topsoil|surface)/);
     if (topCol) H.topColour = { dark: "dark", black: "dark", chromic: "chromic", bleached: "grey", grey: "grey", gray: "grey", red: "red" }[topCol[1]];
-    if (/\bchromic\b/.test(t) && !H.topColour) H.topColour = "chromic";
-    const subCol = masked.match(/\b(red|maroon|reddish|brown|brownish|yellow|grey|gray)\b(?!\s*(?:a\b|a horizon|topsoil|surface))/);
+    if (/\bchromic\b/.test(o) && !H.topColour) H.topColour = "chromic";
+    const subCol = om.match(/\b(red|maroon|reddish|brown|brownish|yellow|grey|gray)\b(?!\s*(?:a\b|a horizon|topsoil|surface))/);
     if (subCol) H.colour = { red: "red", maroon: "red", reddish: "red", brown: "brown", brownish: "brown", yellow: "yellow", grey: "grey", gray: "grey" }[subCol[1]];
     // base status
-    if (/\b(?:dystrophic|acid(?:ic)?|strongly leached|leached|low base)\b/.test(t)) H.base = "dystrophic";
-    else if (/\bmesotrophic\b/.test(t)) H.base = "mesotrophic";
-    else if (/\b(?:eutrophic|base[- ]rich|high base)\b/.test(t)) H.base = "eutrophic";
-    if (H.base === "dystrophic" && !/\bdystrophic\b/.test(t)) H.baseInferred = true;
+    if (/\b(?:dystrophic|acid(?:ic)?|strongly leached|leached|low base)\b/.test(o)) H.base = "dystrophic";
+    else if (/\bmesotrophic\b/.test(o)) H.base = "mesotrophic";
+    else if (/\b(?:eutrophic|base[- ]rich|high base)\b/.test(o)) H.base = "eutrophic";
+    if (H.base === "dystrophic" && !/\bdystrophic\b/.test(o)) H.baseInferred = true;
     // texture contrast
-    if (/\baluvic\b|\bno (?:clear |marked )?(?:clay increase|textural contrast)\b/.test(t)) H.luvic = false;
-    else if (/\bluvic\b|\bclay increase\b|\btextural contrast\b|\bclay[- ]enriched\b/.test(t)) H.luvic = true;
+    if (/\baluvic\b|\bno (?:clear |marked )?(?:clay increase|textural contrast)\b/.test(o)) H.luvic = false;
+    else if (/\bluvic\b|\bclay increase\b|\btextural contrast\b|\bclay[- ]enriched\b/.test(o)) H.luvic = true;
     // calcareous
-    if (/\bnon[- ]?calcareous\b|\bnot calcareous\b|\bdoes ?n[o']t fizz\b|\bno (?:fizz|effervescence|lime|free carbonates?)\b/.test(t)) H.calc = false;
-    else if (/\bcalcareous\b|\bfizz\w*\b|\beffervesc\w*\b|\bfree lime\b/.test(t)) H.calc = true;
-    H.sepiolite = yesNo(t, "sepiolite");
-    H.vertic = yesNo(t, "vertic propert") ?? (/\bslickensides?\b|\bswelling clay\b/.test(t) ? !negated(t, "slickensides?") : null);
-    H.lamellae = yesNo(t, "lamellae");
-    H.ortstein = yesNo(t, "ortstein");
-    H.blackCutans = yesNo(t, "black cutans");
-    if (/\bthick humic\b/.test(t)) H.humicThick = true; else if (/\bthin humic\b/.test(t)) H.humicThick = false;
-    const dec = t.match(/\b(fibric|hemic|sapric)\b/); if (dec) H.decomp = dec[1];
-    const lit = t.match(/\b(saprolith\w*|saprolite|geolithic|gleylithic)\b/); if (lit) H.lithic = lit[1].startsWith("sapro") ? "saprolithic" : lit[1];
-    if (/\bfractured rock\b/.test(t)) H.rock = "fractured"; else if (/\bsolid rock\b/.test(t)) H.rock = "solid";
-    if (/\bfirm\b/.test(t)) H.firm = true; else if (/\bfriable\b/.test(t)) H.firm = false;
+    if (/\bnon[- ]?calcareous\b|\bnot calcareous\b|\bdoes ?n[o']t fizz\b|\bno (?:fizz|effervescence|lime|free carbonates?)\b/.test(o)) H.calc = false;
+    else if (/\bcalcareous\b|\bfizz\w*\b|\beffervesc\w*\b|\bfree lime\b/.test(o)) H.calc = true;
+    H.sepiolite = yesNo(o, "sepiolite");
+    H.vertic = yesNo(o, "vertic propert") ?? (/\bslickensides?\b|\bswelling clay\b/.test(o) ? !negated(o, "slickensides?") : null);
+    H.lamellae = yesNo(o, "lamellae");
+    H.ortstein = yesNo(o, "ortstein");
+    H.blackCutans = yesNo(o, "black cutans");
+    if (/\bthick humic\b/.test(o)) H.humicThick = true; else if (/\bthin humic\b/.test(o)) H.humicThick = false;
+    const dec = o.match(/\b(fibric|hemic|sapric)\b/); if (dec) H.decomp = dec[1];
+    const lit = o.match(/\b(saprolith\w*|saprolite|geolithic|gleylithic)\b/); if (lit) H.lithic = lit[1].startsWith("sapro") ? "saprolithic" : lit[1];
+    if (/\bfractured rock\b/.test(o)) H.rock = "fractured"; else if (/\bsolid rock\b/.test(o)) H.rock = "solid";
+    if (/\bfirm\b/.test(o)) H.firm = true; else if (/\bfriable\b/.test(o)) H.firm = false;
     // thickness of a single subsoil to 1.5 m
-    H.thick = /\b(?:continu\w*|extend\w*|goes|runs|persists?)\s+(?:down\s+)?(?:to|beyond|past|below)\s+(?:at least\s+)?(?:1[.,]5\s*m|150\s*cm|depth|the base)\b|\bdeeper than (?:1[.,]5\s*m|150\s*cm)\b|(?<!(?:observ\w*|augered|dug|described|pit|profile|hole|was)\s+)\bto\s+(?:at least\s+)?(?:1[.,]5\s*m|150\s*cm)\b|\bthroughout the profile\b|\bthick (?:neocutanic|neocarbonate|red apedal|yellow[- ]brown apedal|albic|regic)\b/.test(t);
-    const dep = t.match(/\b(?:observ\w*|augered|dug|described|pit|profile|hole)\s+(?:was\s+)?(?:to|down to|at)\s+(\d+(?:[.,]\d+)?)\s*(cm|m)\b/);
+    H.thick = /\b(?:continu\w*|extend\w*|goes|runs|persists?)\s+(?:down\s+)?(?:to|beyond|past|below)\s+(?:at least\s+)?(?:1[.,]5\s*m|150\s*cm|depth|the base)\b|\bdeeper than (?:1[.,]5\s*m|150\s*cm)\b|(?<!(?:observ\w*|augered|dug|described|pit|profile|hole|was)\s+)\bto\s+(?:at least\s+)?(?:1[.,]5\s*m|150\s*cm)\b|\bthroughout the profile\b|\bthick (?:neocutanic|neocarbonate|red apedal|yellow[- ]brown apedal|albic|regic)\b/.test(o);
+    const dep = o.match(/\b(?:observ\w*|augered|dug|described|pit|profile|hole)\s+(?:was\s+)?(?:to|down to|at)\s+(\d+(?:[.,]\d+)?)\s*(cm|m)\b/);
     if (dep) { const v = parseFloat(dep[1].replace(",", ".")); H.depthCm = dep[2] === "m" ? Math.round(v * 100) : Math.round(v); }
 
     // candidate forms
