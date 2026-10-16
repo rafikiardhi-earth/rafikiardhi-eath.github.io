@@ -595,7 +595,7 @@ body.quarto-dark .rk-tools {
     <p>Taxonomic indices treat every class as equally different and ignore where soils sit and how they change with depth. Our approach measures pedodiversity from continuous soil properties in three dimensions, as the organisation of energy across the soil system.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Pedodiversity%20analysis">Get in touch →</a>
   </div>
-  <p class="refs">Ibáñez, J.J., De-Alba, S., Bermúdez, F.F., García-Álvarez, A. (1995). Pedodiversity: concepts and measures. Catena 24, 215–232. Hill, M.O. (1973). Ecology 54, 427–432. Thermodynamic approach: Flynn, T. (2026). Thermodynamic pedodiversity patterns reveal agroecosystem patterns in indigenous lands of the U.S. Southwest. Research Square, <a href="https://doi.org/10.21203/rs.3.rs-9187606/v1">doi:10.21203/rs.3.rs-9187606/v1</a>.</p>
+  <p class="refs">Ibáñez, J.J., De-Alba, S., Bermúdez, F.F., García-Álvarez, A. (1995). Pedodiversity: concepts and measures. Catena 24, 215–232. Hill, M.O. (1973). Ecology 54, 427–432. Thermodynamic approach: Flynn, T. (2026). Thermodynamic pedodiversity patterns reveal agroecosystem patterns in indigenous lands of the U.S. Southwest. Research Square, <a href="https://doi.org/10.32942/X2H66M/v1">doi:10.32942/X2H66M/v1</a>.</p>
 </section>
 
 </main>
