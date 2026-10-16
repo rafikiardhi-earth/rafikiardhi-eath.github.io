@@ -1305,7 +1305,6 @@ function render() {
   if (st === "thick") return thickQ();
   if (st === "s2") return s2Q();
   if (st === "family") return familyQ();
-  if (st === "browse") return browse();
   if (st === "describe") return describeQ();
   if (st === "topsoilonly" || st === "notinkey") return special();
 }
@@ -1316,12 +1315,10 @@ function intro() {
     <div class="modes">
       <button id="sgo"><b>Identify the soil form</b><span>Topsoil, then subsoil horizons, then family.</span></button>
       <button id="sdesc"><b>Describe the profile</b><span>Type it in your own words, e.g. “orthic A over a neocutanic B, no signs of wetness”.</span></button>
-      <button id="sbrowse"><b>Browse all 135 forms</b><span>Already know the form? Go straight to its family table.</span></button>
     </div>
     <ul class="intro" style="margin-top:14px"><li>This covers natural soils (Section A). For soils strongly altered by people (Anthrosols, Technosols), use Section B of the book.</li><li>Horizon descriptions here are short summaries. Always check the full definitions in the book.</li><li>The ARC also publishes an official app, <a href="https://play.google.com/store/apps/details?id=arc.ict.digitalsoilclassification" target="_blank" rel="noopener">Digital Soil Classification</a> (Android).</li></ul>`);
   $("sdepth").oninput = e => { S.depth = e.target.value; };
   $("sgo").onclick = () => { push(); setStage("top"); };
-  $("sbrowse").onclick = () => { push(); setStage("browse"); };
   $("sdesc").onclick = () => { push(); setStage("describe"); };
 }
 function topQ() {
@@ -1475,23 +1472,6 @@ function special() {
     ? `<h1>“${S.top} soil”${depthTxt()}</h1><p>When only the topsoil can be observed, the soil takes the name of its topsoil, with the observation depth stated.</p>`
     : `<h1>Sequence not in the key</h1><p>${S.note}.</p><p>If you're confident about a topsoil and two subsoil horizons that don't appear together in the key, the book lets you propose a provisional new form. It asks for a complete record (description, lab results, where the soil occurs and a photo) to be submitted to the classification working group.</p><p>Before that, re-check the horizon calls against the full definitions, as a misidentified horizon is the more common cause.</p>`) + `<button class="primary" id="snew">Start again</button>` + navBack();
   $("snew").onclick = () => { const d = S.depth; reset(); S.depth = d; setStage("top"); };
-  bindBack();
-}
-function browse() {
-  let h = `<div class="step">All soil forms</div>` + card(`<h1>Browse soil forms</h1><div class="fld"><input id="sq" placeholder="Search by name, code or horizon" autocomplete="off"></div><div id="slist" style="margin-top:10px"></div>`) + navBack();
-  view().innerHTML = h;
-  const draw = q => {
-    q = (q || "").toLowerCase();
-    let out = "";
-    TOPS.forEach(t => {
-      const rs = FORMS.filter(f => f.t === t && (!q || (f.name + " " + f.code + " " + seqTxt(f)).toLowerCase().includes(q)));
-      if (!rs.length) return;
-      out += `<div class="sec">${t} topsoil</div>` + rs.map(f => `<div class="chk" style="grid-template-columns: 44px 1fr; cursor:pointer" data-f="${f.code}"><span class="s y">${f.code}</span><span class="t"><b>${f.name}</b> · ${seqTxt(f)}</span></div>`).join("");
-    });
-    $("slist").innerHTML = out || "<p>No forms match.</p>";
-    $("slist").querySelectorAll("[data-f]").forEach(e => e.onclick = () => { push(); S.cond = false; chooseForm(FORMS.find(f => f.code === e.dataset.f)); });
-  };
-  $("sq").oninput = e => draw(e.target.value); draw("");
   bindBack();
 }
 $("sa-restart").onclick = () => { reset(); render(); };
