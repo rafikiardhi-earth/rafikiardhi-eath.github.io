@@ -189,7 +189,7 @@ page-layout: full
     <p>Our holomorphic spline treats the profile as one continuous system: much faster on large datasets, with uncertainty at every depth and boundary-aware profiles linked to water and heat flux.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Advanced%20profile%20harmonisation">Get in touch →</a>
   </div>
-  <p class="refs">Method: Flynn, T., Rasaei, Z., Kostecki, R. (2025). Bayes' inference and nearest neighbor splines to harmonise soil texture classes to international depth standards. <a href="https://doi.org/10.2139/ssrn.5078983">doi:10.2139/ssrn.5078983</a>. Open R implementation: rafikisol package.</p>
+  <p class="refs">Method: Flynn, T., Rasaei, Z., Kostecki, R. (2026). Smoothing Earth's surface: The complexity of soil texture class transitions. <a href="https://doi.org/10.2139/ssrn.5078983">doi:10.1016/j.scitotenv.2026.181621</a>. Open R implementation: rafikisol package.</p>
 </section>
 
 <!-- ============ CARBON ============ -->
