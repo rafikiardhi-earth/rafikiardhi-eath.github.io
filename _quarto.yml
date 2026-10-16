@@ -2,7 +2,6 @@ project:
   type: website
   output-dir: _site
   resources:
-    - tools.html
     - CNAME
     - images/
 
@@ -20,7 +19,7 @@ website:
         text: Home
       - href: services.qmd
         text: Services
-      - href: tools.html
+      - href: tools.qmd
         text: Tools
       - href: about.qmd
         text: About
