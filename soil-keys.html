@@ -1446,12 +1446,26 @@ const famHelp = name => { for (const [re, f] of FAMHELP) if (re.test(name)) retu
    Matching ignores capitals; whole words only. The app tells the user which words it translated. */
 const SA_SYNONYMS = [
   [["cambic", "weakly developed b", "weakly developed subsoil", "weakly developed horizon"], "Neocutanic"],
-  [["calcareous cambic", "weakly developed calcareous b", "weakly developed calcareous subsoil", "weakly developed with carbonates"], "Neocarbonate"],
+  [["lithocutanic", "saprolite", "weathered rock"], "Lithic"],
+  [["greens", "blues", "green", "blue", "redox morphology"], "Gley"],
+  [["calcareous cambic", "weakly developed calcareous b", "weakly developed calcareous subsoil", "weakly developed with carbonates", "effervescence"], "Neocarbonate"],
   [["argillic", "kandic", "bt horizon", "blocky subsoil", "blocky b", "clay skins"], ["Pedocutanic", "Prismacutanic"]],
   [["prismatic subsoil", "prismatic b", "columnar subsoil", "columnar b"], "Prismacutanic"],
-  [["latosol", "oxic"], ["Red Apedal", "Yellow-Brown Apedal"]],
+  [["latosol", "ferric","oxic", "sandy", "oxisol"], ["Red Apedal", "Yellow-Brown Apedal"]],
   [["rhodic", "red structureless", "red structureless b", "red massive b"], "Red Apedal"],
-  [["xanthic", "yellow structureless", "yellow-brown structureless", "yellow massive b"], "Yellow-Brown Apedal"]
+  [["xanthic", "yellow structureless", "yellow-brown structureless", "yellow massive b"], "Yellow-Brown Apedal"],
+  [["nodules", "mottles", "oxidation", "redox", "hydromorphology"], "Soft Plinthic],
+  [["concretions", "hardpan"], ["Hard Plinthic", "Hard Carbonate", "Dorbank", "Podzol with placic pan"]], 
+  [["plinthite", "Ferromanganese"], ["Soft Plinthic", "Hard Plinthic"]],
+  [["podsol", "podosol", "spodic", "sombric", "fe", "al", "soc", "fluvic acid"], "Podzol"],
+  [["white"], "Soft Plinthic"],
+  [["shallow", "ochric", "crust", "other"], "Orthic"],
+  [["mollic", "mollisol", "chernozem"], "Melanic"],
+  [["umbric", "acidic", "well-drained", "well drained"], "Humic"],
+  [["dark", "pachic", "deep"], ["Malanic", "Humic"]],
+  [["cracks", "crack", "slickensides", "clayey", "shrink", "swell", "flocculate"], "Vertic"],
+  [["E", "episaturated", "perched"], "Albic"],
+  [["bleached", "pale", "light-coloured", "light-colored"], ["Orthic", "Albic"]]
 ];
 function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
   // [canonical horizon, pattern]; longer names first so "red apedal" is not read as "red"
