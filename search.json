@@ -116,7 +116,7 @@
     "href": "tools.html#free-tools",
     "title": "Tools",
     "section": "Free tools",
-    "text": "Free tools\n\n\nphySpline: profile harmonisation\nConverts soil profiles sampled at any depths to standard depth intervals (for example GlobalSoilMap 0–5, 5–15, 15–30 cm) with a physics-informed spline, so profiles from different surveys can be compared and mapped together.\nrafikisol on GitHub →\n\n\nCarbon stocks\nSoil organic carbon stocks for many profiles at once, from carbon concentration, bulk density, coarse fragments and layer thickness, summed over the depth you choose.\nOnline version coming soon."
+    "text": "Free tools\n\n\nphySpline: profile harmonisation\nConverts soil profiles sampled at any depths to standard depth intervals (for example GlobalSoilMap 0–5, 5–15, 15–30 cm) with a physics-informed spline, so profiles from different surveys can be compared and mapped together. Classes are estimated along a continuous ordered gradient, so the harmoniser can identify transitional classes that were not described in the original horizons.\nrafikisol on GitHub →\n\n\nCarbon stocks\nSoil organic carbon stocks for many profiles at once, from carbon concentration, bulk density, coarse fragments and layer thickness, summed over the depth you choose.\nOnline version coming soon."
   },
   {
     "objectID": "tools.html#advanced-tools",
