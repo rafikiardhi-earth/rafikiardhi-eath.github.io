@@ -2,6 +2,7 @@ project:
   type: website
   output-dir: _site
   resources:
+    - wrb-key.html
     - CNAME
     - images/
 
@@ -21,6 +22,8 @@ website:
         text: Services
       - href: tools.qmd
         text: Tools
+      - href: wrb-key.html
+        text: Soil classification
       - href: about.qmd
         text: About
       - href: publications.qmd
