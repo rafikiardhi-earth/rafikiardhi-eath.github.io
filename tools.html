@@ -346,6 +346,9 @@ body.quarto-dark .rk-tools {
   --s1: #3987e5; --s2: #d95926; --obs: #5d564d; --good: #5cc28f; --warn: #e0a440;
 }
 .rk-tools a { color: var(--accent); }
+.rk-tools td.diag { font-weight: 700; background: var(--accent-soft); }
+.rk-tools [data-ev] { flex:0 0 auto; border:1px solid var(--line); background:var(--surface); color:var(--ink-2); padding:6px 12px; border-radius:999px; font: inherit; font-size:.88rem; cursor:pointer; }
+.rk-tools [data-ev][aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 .rk-tools .rk-wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
 .rk-tools .rk-hero { padding: 36px 0 20px; }
 .rk-tools .rk-hero h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.15; margin: 0 0 12px; letter-spacing: -.01em; }
@@ -448,6 +451,8 @@ body.quarto-dark .rk-tools {
     <button role="tab" data-tab="texture" aria-selected="false">Texture class</button>
     <button role="tab" data-tab="munsell" aria-selected="false">Munsell colour</button>
     <button role="tab" data-tab="sampling" aria-selected="false">Sampling density</button>
+    <button role="tab" data-tab="eval" aria-selected="false">Model evaluation</button>
+    <button role="tab" data-tab="pedodiv" aria-selected="false">Pedodiversity</button>
   </div>
 </nav>
 
@@ -653,28 +658,61 @@ body.quarto-dark .rk-tools {
 <!-- ============ TEXTURE ============ -->
 <section class="tool" id="tab-texture">
   <h2>Texture class</h2>
-  <p class="lede">Find the USDA texture class from particle-size fractions.</p>
+  <p class="lede">Classify particle-size fractions on the USDA, European or Australian texture triangle, one sample at a time or a whole file at once, then download the triangle or the classified data.</p>
+  <div class="rk-card">
+    <div class="rk-grid">
+      <div><label for="t-sys">Texture system</label>
+        <select id="t-sys"><option value="usda">USDA</option><option value="hypres">European (HYPRES / EU Soil Map)</option><option value="au">Australian</option></select></div>
+    </div>
+    <p class="hint" id="t-sys-note"></p>
+  </div>
   <div class="two">
-    <div class="rk-card">
-      <h3>Inputs</h3>
-      <div class="rk-grid">
-        <div><label for="t-sand">Sand (%)</label><input type="number" id="t-sand" value="45" min="0" max="100"></div>
-        <div><label for="t-silt">Silt (%)</label><input type="number" id="t-silt" value="30" min="0" max="100"></div>
-        <div><label for="t-clay">Clay (%)</label><input type="number" id="t-clay" value="25" min="0" max="100"></div>
+    <div>
+      <div class="rk-card">
+        <h3>One sample</h3>
+        <div class="rk-grid">
+          <div><label for="t-sand">Sand (%)</label><input type="number" id="t-sand" value="45" min="0" max="100"></div>
+          <div><label for="t-silt">Silt (%)</label><input type="number" id="t-silt" value="30" min="0" max="100"></div>
+          <div><label for="t-clay">Clay (%)</label><input type="number" id="t-clay" value="25" min="0" max="100"></div>
+        </div>
+        <div class="msg" id="t-msg" role="status"></div>
+        <div class="big" id="t-class" style="margin-top:14px">–</div>
+        <div class="rk-row"><button class="rk-btn" id="t-to-water">Use in water retention →</button></div>
       </div>
-      <div class="msg" id="t-msg" role="status"></div>
-      <div class="big" id="t-class" style="margin-top:14px">–</div>
-      <div class="rk-row"><button class="rk-btn" id="t-to-water">Use in water retention →</button></div>
+      <div class="rk-card">
+        <h3>Many samples</h3>
+        <textarea id="t-data" spellcheck="false" aria-label="Particle-size data as CSV" style="min-height:120px"></textarea>
+        <div class="rk-row">
+          <label class="file-label">Upload CSV<input type="file" id="t-file" accept=".csv,.txt,.tsv"></label>
+          <button class="rk-btn" id="t-ex">Load example</button>
+          <button class="rk-btn primary" id="t-run">Classify</button>
+        </div>
+        <p class="hint">Columns must be named <b>sand</b>, <b>silt</b> and <b>clay</b> (in %, any order). An <b>id</b> column is optional and any other columns are kept. Rows that don't add to 100% are rescaled and flagged.</p>
+        <div class="msg" id="t-batch-msg" role="status"></div>
+      </div>
     </div>
     <div class="rk-card">
-      <div class="chart-box"><svg class="chart" id="t-tri" role="img" aria-label="USDA texture triangle"></svg></div>
+      <div class="chart-box"><svg class="chart" id="t-tri" role="img" aria-label="Texture triangle"></svg><div class="tip" id="t-tip"></div></div>
+      <div class="rk-row" style="justify-content:flex-end">
+        <button class="rk-btn" id="t-svg">Download SVG</button>
+        <button class="rk-btn" id="t-png">Download PNG</button>
+      </div>
     </div>
+  </div>
+  <div class="rk-card" id="t-res" hidden="">
+    <div class="rk-row" style="margin-top:0; justify-content:space-between">
+      <h3 style="margin:0" id="t-res-title">Classified samples</h3>
+      <button class="rk-btn" id="t-dl">Download CSV</button>
+    </div>
+    <div class="stats" id="t-summary" style="margin-top:10px"></div>
+    <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:12px" id="t-table"></div>
   </div>
   <div class="advanced">
     <strong>Texture across a site or catchment?</strong>
-    <p>We produce continuous texture surfaces with depth and across landscapes, with uncertainty, from sparse profile data.</p>
+    <p>We produce continuous texture surfaces with depth and across landscapes, with uncertainty, and convert between particle-size systems.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Continuous%20texture%20mapping">Get in touch →</a>
   </div>
+  <p class="refs">Class boundaries: USDA-NRCS Soil Survey Manual; HYPRES / European Soil Database texture classes; Australian triangle as implemented in the soiltexture R package (Moeys; coordinates from B. Minasny). Fractions must be measured on the particle-size limits of the chosen system.</p>
 </section>
 
 <!-- ============ MUNSELL ============ -->
@@ -735,6 +773,145 @@ body.quarto-dark .rk-tools {
     <p>Random sampling ignores the fact that nearby soils are alike. We design optimised and stratified sampling schemes and management zones that reach the same precision with fewer samples.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Sampling%20design">Get in touch →</a>
   </div>
+</section>
+
+<!-- ============ MODEL EVALUATION ============ -->
+<section class="tool" id="tab-eval">
+  <h2>Model evaluation</h2>
+  <p class="lede">Check how well a soil map or model matches independent observations: accuracy and agreement for continuous predictions, prediction-interval coverage, class accuracy, and the confusion index for class probabilities.</p>
+  <div role="tablist" aria-label="Evaluation type" style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px">
+    <button type="button" role="tab" data-ev="cont" aria-selected="true">Continuous</button>
+    <button type="button" role="tab" data-ev="cat" aria-selected="false">Classes</button>
+    <button type="button" role="tab" data-ev="ci" aria-selected="false">Confusion index</button>
+  </div>
+
+  <div class="ev-panel" id="ev-cont">
+    <div class="rk-card">
+      <h3>Observed and predicted values</h3>
+      <textarea id="ev-cont-data" spellcheck="false" aria-label="Observed and predicted values as CSV"></textarea>
+      <div class="rk-row">
+        <label class="file-label">Upload CSV<input type="file" id="ev-cont-file" accept=".csv,.txt,.tsv"></label>
+        <button class="rk-btn" id="ev-cont-ex">Load example</button>
+        <button class="rk-btn primary" id="ev-cont-run">Evaluate</button>
+      </div>
+      <p class="hint">Columns named <b>obs</b> and <b>pred</b>. Add <b>sd</b> (prediction standard deviation) for a coverage curve, or <b>lower</b> and <b>upper</b> for the coverage of your own intervals.</p>
+      <div id="ev-bounds-box" style="display:none; max-width:220px; margin-top:8px"><label for="ev-bounds-level">Your interval's nominal level (%)</label><input type="number" id="ev-bounds-level" value="90" min="1" max="99.9" step="any"></div>
+      <div class="msg" id="ev-cont-msg" role="status"></div>
+    </div>
+    <div id="ev-cont-res" hidden="">
+      <div class="rk-card"><div class="stats" id="ev-cont-stats"></div></div>
+      <div class="two">
+        <div class="rk-card">
+          <h3>Observed vs predicted</h3>
+          <div class="legend"><span><i style="background:var(--s1); height:8px; width:8px; border-radius:50%"></i>Sites</span><span><i style="background:var(--ink-3)"></i>1:1 line</span></div>
+          <div class="chart-box"><svg class="chart" id="ev-scatter" role="img" aria-label="Observed against predicted"></svg><div class="tip" id="ev-scatter-tip"></div></div>
+        </div>
+        <div class="rk-card" id="ev-picp-card" hidden="">
+          <h3>Prediction interval coverage (PICP)</h3>
+          <div class="legend"><span><i style="background:var(--s2)"></i>PICP</span><span><i style="background:var(--ink-3)"></i>Ideal (1:1)</span></div>
+          <div class="chart-box"><svg class="chart" id="ev-picp" role="img" aria-label="Prediction interval coverage"></svg><div class="tip" id="ev-picp-tip"></div></div>
+          <p class="hint">Points below the line mean the intervals are too narrow (overconfident); above means too wide.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ev-panel" id="ev-cat" hidden="">
+    <div class="rk-card">
+      <h3>Observed and predicted classes</h3>
+      <textarea id="ev-cat-data" spellcheck="false" aria-label="Observed and predicted classes as CSV"></textarea>
+      <div class="rk-row">
+        <label class="file-label">Upload CSV<input type="file" id="ev-cat-file" accept=".csv,.txt,.tsv"></label>
+        <button class="rk-btn" id="ev-cat-ex">Load example</button>
+        <button class="rk-btn primary" id="ev-cat-run">Evaluate</button>
+      </div>
+      <p class="hint">Columns named <b>obs</b> and <b>pred</b>, one site per row.</p>
+      <div class="msg" id="ev-cat-msg" role="status"></div>
+    </div>
+    <div class="rk-card" id="ev-cat-res" hidden="">
+      <div class="stats" id="ev-cat-stats"></div>
+      <h3 style="margin-top:16px">Confusion matrix</h3>
+      <p class="hint" style="margin-top:0">Rows are observed classes, columns are predicted. Producer's accuracy: share of each observed class predicted correctly. User's accuracy: share of each predicted class that is correct.</p>
+      <div class="rk-table-wrap" id="ev-cat-table"></div>
+    </div>
+  </div>
+
+  <div class="ev-panel" id="ev-ci" hidden="">
+    <div class="rk-card">
+      <h3>Class probabilities</h3>
+      <textarea id="ev-ci-data" spellcheck="false" aria-label="Class probabilities as CSV"></textarea>
+      <div class="rk-row">
+        <label class="file-label">Upload CSV<input type="file" id="ev-ci-file" accept=".csv,.txt,.tsv"></label>
+        <button class="rk-btn" id="ev-ci-ex">Load example</button>
+        <button class="rk-btn primary" id="ev-ci-run">Calculate</button>
+      </div>
+      <p class="hint">First column is the site id, then one column of probability per class.</p>
+      <div class="msg" id="ev-ci-msg" role="status"></div>
+    </div>
+    <div class="rk-card" id="ev-ci-res" hidden="">
+      <div class="rk-row" style="margin-top:0; justify-content:space-between"><div class="stats" id="ev-ci-stats" style="flex:1"></div></div>
+      <div class="rk-row" style="justify-content:flex-end"><button class="rk-btn" id="ev-ci-dl">Download CSV</button></div>
+      <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:8px" id="ev-ci-table"></div>
+      <p class="hint">CI = 1 − (P1 − P2), where P1 and P2 are the two highest class probabilities. 0 means one class clearly wins; 1 means the top two are tied.</p>
+    </div>
+  </div>
+
+  <div class="advanced">
+    <strong>Need uncertainty for a whole map?</strong>
+    <p>We build bootstrapped maps with prediction intervals, confusion indices and independent validation, so users know where a map can be trusted and where it can't.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Map%20uncertainty%20and%20validation">Get in touch →</a>
+  </div>
+  <p class="refs">Lin, L.I. (1989). Biometrics 45, 255–268. Malone, B.P., McBratney, A.B., Minasny, B. (2011). Geoderma 160, 614–626. Burrough, P.A., van Gaans, P.F.M., Hootsmans, R. (1997). Geoderma 77, 115–135. Open R implementation: rafikisol package.</p>
+</section>
+
+<!-- ============ PEDODIVERSITY ============ -->
+<section class="tool" id="tab-pedodiv">
+  <h2>Pedodiversity</h2>
+  <p class="lede">Measure the taxonomic diversity of soils in an area: how many soil classes there are, and how evenly the area is shared between them. Compare several sites at once.</p>
+  <div class="rk-card">
+    <h3>Your soil classes</h3>
+    <textarea id="pd-data" spellcheck="false" aria-label="Soil classes as CSV"></textarea>
+    <div class="rk-row">
+      <label class="file-label">Upload CSV<input type="file" id="pd-file" accept=".csv,.txt,.tsv"></label>
+      <button class="rk-btn" id="pd-ex">Load example</button>
+      <button class="rk-btn primary" id="pd-run">Calculate</button>
+    </div>
+    <p class="hint">A column named <b>class</b> is required (any classification: soil orders, reference soil groups, series, map units). Add <b>area</b> or <b>count</b> to weight each row; without one, every row counts once (for example, one row per profile). Add <b>site</b> to compare several areas.</p>
+    <div class="msg" id="pd-msg" role="status"></div>
+  </div>
+  <div id="pd-res" hidden="">
+    <div class="rk-card" id="pd-sites-card" hidden="">
+      <div class="rk-row" style="margin-top:0; justify-content:space-between">
+        <h3 style="margin:0">Indices by site</h3>
+        <button class="rk-btn" id="pd-dl">Download CSV</button>
+      </div>
+      <div class="rk-table-wrap" style="margin-top:10px" id="pd-table"></div>
+    </div>
+    <div class="two">
+      <div class="rk-card">
+        <div class="rk-row" style="margin-top:0; justify-content:space-between">
+          <h3 style="margin:0" id="pd-site-title">Indices</h3>
+          <select id="pd-site" style="width:auto; min-width:140px" aria-label="Site to show" hidden=""></select>
+        </div>
+        <div class="stats" id="pd-stats" style="margin-top:10px"></div>
+      </div>
+      <div class="rk-card">
+        <h3>Share of each class</h3>
+        <div id="pd-bars"></div>
+      </div>
+    </div>
+    <div class="rk-card">
+      <h3>Reading the indices</h3>
+      <p style="margin:0 0 6px; color:var(--ink-2); font-size:.93rem"><b>Richness</b> counts classes. <b>Shannon (H′)</b> rises with both more classes and more even shares. <b>Evenness (J′)</b> is Shannon relative to its maximum for that many classes, from 0 (one class dominates) to 1 (all equal). <b>Simpson</b> is the chance that two random points fall in different classes.</p>
+      <p style="margin:0; color:var(--ink-2); font-size:.93rem"><b>Hill numbers</b> give the "effective number of classes": N1 weights classes by their share, N2 counts only the common ones. <b>Dominance</b> is the share of the most common class.</p>
+    </div>
+  </div>
+  <div class="advanced">
+    <strong>Diversity is more than counting classes</strong>
+    <p>Taxonomic indices treat every class as equally different and ignore where soils sit and how they change with depth. Our approach measures pedodiversity from continuous soil properties in three dimensions, as the organisation of energy across the soil system.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Pedodiversity%20analysis">Get in touch →</a>
+  </div>
+  <p class="refs">Ibáñez, J.J., De-Alba, S., Bermúdez, F.F., García-Álvarez, A. (1995). Pedodiversity: concepts and measures. Catena 24, 215–232. Hill, M.O. (1973). Ecology 54, 427–432. Thermodynamic approach: Flynn, T. (2026). Thermodynamic pedodiversity patterns reveal agroecosystem patterns in indigenous lands of the U.S. Southwest. Research Square, <a href="https://doi.org/10.21203/rs.3.rs-9187606/v1">doi:10.21203/rs.3.rs-9187606/v1</a>.</p>
 </section>
 
 </main>
@@ -856,6 +1033,223 @@ body.quarto-dark .rk-tools {
   root.PhySpline = { fitProfile, valueAt, intervalMean, solveLinear };
   if (typeof module !== 'undefined') module.exports = root.PhySpline;
 })(typeof window !== 'undefined' ? window : globalThis);
+// Evaluation statistics for the RafikiArdhi Tools page.
+(function (root) {
+  const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
+
+  function contStats(obs, pred) {
+    const n = obs.length, mo = mean(obs), mp = mean(pred);
+    let sse = 0, sae = 0, sst = 0, sxy = 0, sxx = 0, syy = 0;
+    for (let i = 0; i < n; i++) {
+      const e = pred[i] - obs[i];
+      sse += e * e; sae += Math.abs(e);
+      sst += (obs[i] - mo) ** 2;
+      sxy += (obs[i] - mo) * (pred[i] - mp); sxx += (obs[i] - mo) ** 2; syy += (pred[i] - mp) ** 2;
+    }
+    const r = sxy / Math.sqrt(sxx * syy);
+    // Lin's concordance with sample (n - 1) variances, as yardstick::ccc_vec(bias = FALSE)
+    const vx = sxx / (n - 1), vy = syy / (n - 1), cxy = sxy / (n - 1);
+    const ccc = 2 * cxy / (vx + vy + (mo - mp) ** 2);
+    return { n, me: mp - mo, mae: sae / n, rmse: Math.sqrt(sse / n), r2: r * r, nse: 1 - sse / sst, ccc };
+  }
+
+  // Regularised incomplete gamma (series / continued fraction) for an accurate normal CDF
+  function lgam(x) {
+    const g = [57.1562356658629235, -59.5979603554754912, 14.1360979747417471, -0.491913816097620199, 0.339946499848118887e-4,
+      0.465236289270485756e-4, -0.983744753048795646e-4, 0.158088703224912494e-3, -0.210264441724104883e-3, 0.217439618115212643e-3,
+      -0.164318106536763890e-3, 0.844182239838527433e-4, -0.261908384015814087e-4, 0.368991826595316234e-5];
+    let y = x, tmp = x + 5.24218750000000000; tmp = (x + 0.5) * Math.log(tmp) - tmp;
+    let ser = 0.999999999999997092; for (const c of g) ser += c / ++y;
+    return tmp + Math.log(2.5066282746310005 * ser / x);
+  }
+  function gammaQ(a, x) {
+    if (x <= 0) return 1;
+    const gln = lgam(a);
+    if (x < a + 1) { let ap = a, del = 1 / a, sum = del; for (let i = 0; i < 500; i++) { ap++; del *= x / ap; sum += del; if (Math.abs(del) < Math.abs(sum) * 1e-16) break; } return 1 - sum * Math.exp(-x + a * Math.log(x) - gln); }
+    let b = x + 1 - a, c = 1e300, d = 1 / b, h = d;
+    for (let i = 1; i < 500; i++) { const an = -i * (i - a); b += 2; d = an * d + b; if (Math.abs(d) < 1e-300) d = 1e-300; c = b + an / c; if (Math.abs(c) < 1e-300) c = 1e-300; d = 1 / d; const del = d * c; h *= del; if (Math.abs(del - 1) < 1e-16) break; }
+    return Math.exp(-x + a * Math.log(x) - gln) * h;
+  }
+  const pnorm = x => x < 0 ? 0.5 * gammaQ(0.5, x * x / 2) : 1 - 0.5 * gammaQ(0.5, x * x / 2);
+
+  // Inverse standard normal: Acklam's approximation plus one Halley refinement step
+  function qnorm(p) {
+    const x0 = qnorm0(p), e = pnorm(x0) - p, u = e * Math.sqrt(2 * Math.PI) * Math.exp(x0 * x0 / 2);
+    return x0 - u / (1 + x0 * u / 2);
+  }
+  function qnorm0(p) {
+    const a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+    const b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
+    const c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549671010139714e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+    const d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
+    const pl = 0.02425;
+    if (p < pl) { const q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    if (p > 1 - pl) { const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    const q = p - 0.5, r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+
+  // Prediction interval coverage probability (Malone et al. 2011 levels), normal intervals pred +/- z*sd
+  const PICP_LEVELS = [99, 97.5, 95, 90, 80, 60, 40, 20, 10, 5];
+  function picpNormal(obs, pred, sd, levels = PICP_LEVELS) {
+    return levels.map(cl => {
+      const z = qnorm(0.5 + cl / 200);
+      let k = 0;
+      for (let i = 0; i < obs.length; i++) if (Math.abs(obs[i] - pred[i]) <= z * sd[i]) k++;
+      return { cl, picp: 100 * k / obs.length };
+    });
+  }
+  function picpBounds(obs, lo, hi) {
+    let k = 0; for (let i = 0; i < obs.length; i++) if (obs[i] >= lo[i] && obs[i] <= hi[i]) k++;
+    return 100 * k / obs.length;
+  }
+
+  function catStats(obs, pred) {
+    const classes = [...new Set(obs.concat(pred))].sort();
+    const ix = new Map(classes.map((c, i) => [c, i])), K = classes.length, n = obs.length;
+    const M = Array.from({ length: K }, () => new Array(K).fill(0)); // rows = observed, cols = predicted
+    for (let i = 0; i < n; i++) M[ix.get(obs[i])][ix.get(pred[i])]++;
+    const rowT = M.map(r => r.reduce((s, v) => s + v, 0)), colT = classes.map((_, j) => M.reduce((s, r) => s + r[j], 0));
+    const diag = M.reduce((s, r, i) => s + r[i], 0);
+    const po = diag / n, pe = rowT.reduce((s, v, i) => s + v * colT[i], 0) / (n * n);
+    const kappa = pe === 1 ? NaN : (po - pe) / (1 - pe);
+    const producers = classes.map((_, i) => rowT[i] ? M[i][i] / rowT[i] : NaN); // reference-based
+    const users = classes.map((_, j) => colT[j] ? M[j][j] / colT[j] : NaN);     // map-based (consumer's)
+    return { classes, M, rowT, colT, n, accuracy: po, kappa, producers, users };
+  }
+
+  // Confusion index (Burrough et al. 1997): 1 - (P1 - P2); ties give CI = 1
+  function confusionIndex(p) {
+    const s = p.slice().sort((a, b) => b - a);
+    const p1 = s[0], p2 = s.length > 1 ? s[1] : 0;
+    return { p1, p2, ci: 1 - (p1 - p2) };
+  }
+
+  root.EvalStats = { contStats, picpNormal, picpBounds, catStats, confusionIndex, qnorm, PICP_LEVELS };
+  if (typeof module !== 'undefined') module.exports = root.EvalStats;
+})(typeof window !== 'undefined' ? window : globalThis);
+// Texture triangle systems. Polygon vertices from the soiltexture R package (Moeys), as % (clay, silt, sand);
+// USDA vertices adjusted to the official NRCS limits (27% and 12% clay, 7% clay, 52% sand).
+(function (root) {
+  const P = (clay, silt, sand) => clay.map((c, i) => [c * 100, silt[i] * 100, sand[i] * 100]);
+  const SYS = {
+    usda: {
+      name: "USDA", silt: "2–50 µm", sand: "50–2000 µm",
+      pts: P([0.550, 0.600, 0.350, 0.350, 0.400, 0.400, 0.400, 0.200, 0.200, 0.270, 0.270, 0.270, 0.270, 0.150, 0.100, 0.070, 0.070, 0.120, 0.120, 0.000, 0.000, 0.000, 0.000, 1.000, 0.000, 0.000],
+             [0.000, 0.400, 0.000, 0.200, 0.150, 0.400, 0.600, 0.000, 0.280, 0.280, 0.500, 0.530, 0.730, 0.000, 0.000, 0.410, 0.500, 0.800, 0.880, 0.150, 0.300, 0.500, 0.800, 0.000, 0.000, 1.000],
+             [0.450, 0.000, 0.650, 0.450, 0.450, 0.200, 0.000, 0.800, 0.520, 0.450, 0.230, 0.200, 0.000, 0.850, 0.900, 0.520, 0.430, 0.080, 0.000, 0.850, 0.700, 0.500, 0.200, 0.000, 1.000, 0.000]),
+      polys: [["C", "Clay", [24, 1, 5, 6, 2]], ["SiC", "Silty clay", [2, 6, 7]], ["SC", "Sandy clay", [1, 3, 4, 5]], ["CL", "Clay loam", [5, 4, 10, 11, 12, 6]],
+              ["SiCL", "Silty clay loam", [6, 12, 13, 7]], ["SCL", "Sandy clay loam", [3, 8, 9, 10, 4]], ["L", "Loam", [10, 9, 16, 17, 11]],
+              ["SiL", "Silt loam", [11, 17, 22, 23, 18, 19, 13, 12]], ["SL", "Sandy loam", [8, 14, 21, 22, 17, 16, 9]], ["Si", "Silt", [18, 23, 26, 19]],
+              ["LS", "Loamy sand", [14, 15, 20, 21]], ["S", "Sand", [15, 25, 20]]]
+    },
+    hypres: {
+      name: "European (HYPRES / EU Soil Map)", silt: "2–50 µm", sand: "50–2000 µm",
+      pts: P([1.000, 0.600, 0.600, 0.350, 0.350, 0.350, 0.180, 0.180, 0.000, 0.000, 0.000, 0.000],
+             [0.000, 0.000, 0.400, 0.000, 0.500, 0.650, 0.000, 0.170, 0.000, 0.350, 0.850, 1.000],
+             [0.000, 0.400, 0.000, 0.650, 0.150, 0.000, 0.820, 0.650, 1.000, 0.650, 0.150, 0.000]),
+      polys: [["VF", "Very fine", [2, 1, 3]], ["F", "Fine", [4, 2, 3, 6]], ["M", "Medium", [7, 4, 5, 11, 10, 8]], ["MF", "Medium fine", [11, 5, 6, 12]], ["C", "Coarse", [9, 7, 8, 10]]]
+    },
+    au: {
+      name: "Australian", silt: "2–20 µm", sand: "20–2000 µm",
+      pts: P([0.510, 0.300, 0.400, 0.750, 1.000, 0.400, 0.260, 0.260, 0.000, 0.000, 0.120, 0.085, 0.000, 0.000, 0.080, 0.100, 0.210, 0.170, 0.260],
+             [0.000, 0.070, 0.250, 0.250, 0.000, 0.600, 0.740, 0.250, 0.250, 1.000, 0.250, 0.040, 0.075, 0.000, 0.000, 0.130, 0.100, 0.000, 0.000],
+             [0.490, 0.630, 0.350, 0.000, 0.000, 0.000, 0.000, 0.490, 0.750, 0.000, 0.630, 0.875, 0.925, 1.000, 0.920, 0.770, 0.690, 0.830, 0.740]),
+      polys: [["C", "Clay", [1, 2, 3, 4, 5]], ["ZC", "Silty clay", [3, 6, 4]], ["ZCL", "Silty clay loam", [8, 7, 6, 3]], ["ZL", "Silty loam", [9, 10, 7, 8, 11]],
+              ["LS", "Loamy sand", [13, 9, 11, 12]], ["S", "Sand", [14, 13, 12, 15]], ["SL", "Sandy loam", [15, 16, 17, 18]], ["L", "Loam", [16, 11, 8, 17]],
+              ["SCL", "Sandy clay loam", [18, 17, 2, 19]], ["CL", "Clay loam", [17, 8, 3, 2]], ["SC", "Sandy clay", [19, 2, 1]]]
+    }
+  };
+  // polygon in (sand, clay) plane
+  Object.values(SYS).forEach(s => { s.polys = s.polys.map(([ab, name, ix]) => ({ ab, name, xy: ix.map(i => [s.pts[i - 1][2], s.pts[i - 1][0]]) })); });
+
+  function onSeg(p, a, b, eps) {
+    const cr = (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]);
+    const len = Math.hypot(b[0] - a[0], b[1] - a[1]);
+    if (Math.abs(cr) / (len || 1) > eps) return false;
+    return p[0] >= Math.min(a[0], b[0]) - eps && p[0] <= Math.max(a[0], b[0]) + eps && p[1] >= Math.min(a[1], b[1]) - eps && p[1] <= Math.max(a[1], b[1]) + eps;
+  }
+  function segDist(p, a, b) {
+    const dx = b[0] - a[0], dy = b[1] - a[1], L = dx * dx + dy * dy;
+    const t = L ? Math.max(0, Math.min(1, ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / L)) : 0;
+    return Math.hypot(p[0] - a[0] - t * dx, p[1] - a[1] - t * dy);
+  }
+  function inPoly(p, poly, eps = 1e-6) {
+    let inside = false;
+    for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) {
+      const a = poly[i], b = poly[j];
+      if (onSeg(p, a, b, eps)) return true;
+      if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < (b[0] - a[0]) * (p[1] - a[1]) / (b[1] - a[1]) + a[0]) inside = !inside;
+    }
+    return inside;
+  }
+  // USDA and HYPRES follow the published class rules exactly; Australian uses its polygons.
+  function usda(sand, silt, clay) {
+    if (silt + 1.5 * clay < 15) return "S";
+    if (silt + 2 * clay < 30) return "LS";
+    if ((clay >= 7 && clay < 20 && sand > 52) || (clay < 7 && silt < 50)) return "SL";
+    if (clay >= 7 && clay < 27 && silt >= 28 && silt < 50 && sand <= 52) return "L";
+    if (silt >= 80 && clay < 12) return "Si";
+    if ((silt >= 50 && clay >= 12 && clay < 27) || (silt >= 50 && silt < 80 && clay < 12)) return "SiL";
+    if (clay >= 20 && clay < 35 && silt < 28 && sand > 45) return "SCL";
+    if (clay >= 27 && clay < 40 && sand > 20 && sand <= 45) return "CL";
+    if (clay >= 27 && clay < 40 && sand <= 20) return "SiCL";
+    if (clay >= 35 && sand > 45) return "SC";
+    if (clay >= 40 && silt >= 40) return "SiC";
+    return "C";
+  }
+  function hypres(sand, silt, clay) {
+    if (clay >= 60) return "VF";
+    if (clay >= 35) return "F";
+    if (sand < 15) return "MF";
+    if (clay < 18 && sand > 65) return "C";
+    return "M";
+  }
+  function classify(sys, sand, silt, clay) {
+    const s = SYS[sys];
+    let ab;
+    if (sys === "usda") ab = usda(sand, silt, clay);
+    else if (sys === "hypres") ab = hypres(sand, silt, clay);
+    else {
+      const p = [sand, clay];
+      let hit = s.polys.find(q => inPoly(p, q.xy));
+      if (!hit) { // tiny gaps between published polygons: take the nearest class
+        let bd = Infinity;
+        s.polys.forEach(q => q.xy.forEach((a, i) => { const b = q.xy[(i + 1) % q.xy.length]; const d = segDist(p, a, b); if (d < bd) { bd = d; hit = q; } }));
+      }
+      ab = hit ? hit.ab : null;
+    }
+    const poly = s.polys.find(q => q.ab === ab);
+    return poly ? { ab, name: poly.name } : null;
+  }
+  root.TextureSys = { SYS, classify, inPoly };
+  if (typeof module !== 'undefined') module.exports = root.TextureSys;
+})(typeof window !== 'undefined' ? window : globalThis);
+// Taxonomic pedodiversity indices (Ibáñez et al. 1995; Hill 1973).
+(function (root) {
+  function pedodiv(weights) { // weights: {class: area or count}
+    const ent = Object.entries(weights).filter(([, w]) => w > 0);
+    const T = ent.reduce((s, [, w]) => s + w, 0), S = ent.length;
+    const p = ent.map(([, w]) => w / T);
+    const H = -p.reduce((s, q) => s + q * Math.log(q), 0);
+    const D = p.reduce((s, q) => s + q * q, 0);
+    return {
+      S, total: T,
+      shannon: H,
+      evenness: S > 1 ? H / Math.log(S) : NaN,
+      simpson: 1 - D,
+      hill1: Math.exp(H),
+      hill2: 1 / D,
+      bergerParker: Math.max(...p),
+      props: ent.map(([c, w], i) => ({ cls: c, w, p: p[i] })).sort((a, b) => b.p - a.p)
+    };
+  }
+  root.Pedodiv = { pedodiv };
+  if (typeof module !== 'undefined') module.exports = root.Pedodiv;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+
+
 
 </script>
 <script>
@@ -874,6 +1268,7 @@ function showTab(name, push) {
   if (name === "vg") drawVG();
   if (name === "texture") updTexture();
   if (name === "munsell") updMunsell();
+  if (name === "eval") drawEvCharts();
   if (name === "spline" && lastSpline) drawProfile();
 }
 tabs.forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab, true)));
@@ -1373,77 +1768,160 @@ function updHSG() {
 }
 ["h-rest", "h-wt", "h-ks", "h-unit"].forEach(id => $(id).addEventListener("input", updHSG));
 
-/* ============ TEXTURE (USDA) ============ */
-function usdaClass(sand, silt, clay) {
-  if (silt + 1.5 * clay < 15) return "Sand";
-  if (silt + 2 * clay < 30) return "Loamy sand";
-  if ((clay >= 7 && clay < 20 && sand > 52) || (clay < 7 && silt < 50)) return "Sandy loam";
-  if (clay >= 7 && clay < 27 && silt >= 28 && silt < 50 && sand <= 52) return "Loam";
-  if (silt >= 80 && clay < 12) return "Silt";
-  if ((silt >= 50 && clay >= 12 && clay < 27) || (silt >= 50 && silt < 80 && clay < 12)) return "Silt loam";
-  if (clay >= 20 && clay < 35 && silt < 28 && sand > 45) return "Sandy clay loam";
-  if (clay >= 27 && clay < 40 && sand > 20 && sand <= 45) return "Clay loam";
-  if (clay >= 27 && clay < 40 && sand <= 20) return "Silty clay loam";
-  if (clay >= 35 && sand > 45) return "Sandy clay";
-  if (clay >= 40 && silt >= 40) return "Silty clay";
-  return "Clay";
+/* ============ TEXTURE ============ */
+const T_EX = `id,sand,silt,clay
+A1,72,18,10
+A2,45,30,25
+A3,20,55,25
+A4,10,62,28
+A5,88,7,5
+A6,30,25,45
+A7,52,16,32
+A8,8,82,10
+A9,25,48,27
+A10,60,25,15`;
+const tSys = () => $("t-sys").value;
+let tBatch = null, tGeom = null;
+function tNote() {
+  const s = TextureSys.SYS[tSys()];
+  $("t-sys-note").innerHTML = `${s.name}: silt ${s.silt}, sand ${s.sand}, clay &lt; 2 µm. Enter fractions measured on these limits.` +
+    (tSys() === "au" ? " Australian silt (2–20 µm) is not the same as USDA silt (2–50 µm), so USDA data cannot be classified here without converting first." : "");
+  $("t-to-water").style.display = tSys() === "usda" ? "" : "none";
 }
-let triBuilt = null;
 function buildTriangle() {
   const svg = $("t-tri"); svg.innerHTML = "";
-  const W = 420, side = 360, h = side * Math.sqrt(3) / 2, ox = 40, oy = 22, H = oy + h + 52;
+  const S = TextureSys.SYS[tSys()];
+  const W = 440, side = 370, h = side * Math.sqrt(3) / 2, ox = 35, oy = 30, H = oy + h + 56;
   svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
   // sand corner bottom-left, silt bottom-right, clay top
   const P = (sand, clay) => { const silt = 100 - sand - clay; return [ox + side * (silt + clay / 2) / 100, oy + h * (1 - clay / 100)]; };
-  // class boundaries traced on a fine triangular lattice
-  const N = 200, s = 100 / N, cls = [];
-  for (let i = 0; i <= N; i++) { cls[i] = []; for (let j = 0; i + j <= N; j++) cls[i][j] = usdaClass(i * s, 100 - (i + j) * s, j * s); }
-  const cen = (a, b, c) => P((a[0] + b[0] + c[0]) / 3 * s, (a[1] + b[1] + c[1]) / 3 * s);
-  let d = "";
-  const seg = (p, q) => { d += `M${p[0].toFixed(1)},${p[1].toFixed(1)}L${q[0].toFixed(1)},${q[1].toFixed(1)}`; };
-  // the two sloping sand boundaries are drawn exactly below, not traced
-  const sloped = (a, b) => { const k = [a, b].sort().join("|"); return k === "Loamy sand|Sand" || k === "Loamy sand|Sandy loam"; };
-  for (let i = 0; i < N; i++) for (let j = 0; i + j < N; j++) {
-    // up triangle (i,j),(i+1,j),(i,j+1); down triangle (i+1,j),(i,j+1),(i+1,j+1)
-    const up = cen([i, j], [i + 1, j], [i, j + 1]);
-    if (i + j + 2 <= N) { const dn = cen([i + 1, j], [i, j + 1], [i + 1, j + 1]); if (cls[i + 1][j] !== cls[i][j + 1] && !sloped(cls[i + 1][j], cls[i][j + 1])) seg(up, dn); }
-    if (j > 0) { const dn = cen([i + 1, j - 1], [i, j], [i + 1, j]); if (cls[i][j] !== cls[i + 1][j] && !sloped(cls[i][j], cls[i + 1][j])) seg(up, dn); }
-    if (i > 0) { const dn = cen([i, j], [i - 1, j + 1], [i, j + 1]); if (cls[i][j] !== cls[i][j + 1] && !sloped(cls[i][j], cls[i][j + 1])) seg(up, dn); }
+  el("rect", { x: 0, y: 0, width: W, height: H, fill: "var(--surface)", "data-bg": "1" }, svg);
+  const title = el("text", { x: W / 2, y: 16, "text-anchor": "middle", fill: "var(--ink-2)", style: "font-size:12px; font-weight:600" }, svg); title.textContent = S.name + " texture triangle";
+  // light grid every 10%
+  const g = el("g", {}, svg);
+  for (let v = 10; v < 100; v += 10) {
+    [[P(100 - v, v), P(0, v)], [P(v, 0), P(v, 100 - v)], [P(0, 100 - v), P(100 - v, 0)]].forEach(([a, b]) => el("line", { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: "var(--line)", "stroke-width": 0.6, "stroke-dasharray": "2 3" }, g));
   }
-  // silt + 1.5 clay = 15 and silt + 2 clay = 30 (P takes sand, clay)
-  seg(P(85, 0), P(90, 10)); seg(P(70, 0), P(85, 15));
+  S.polys.forEach(q => {
+    const pts = q.xy.map(([sa, cl]) => P(sa, cl));
+    el("polygon", { points: pts.map(p => p.map(v => v.toFixed(1)).join(",")).join(" "), fill: "none", stroke: "var(--ink-3)", "stroke-width": 1.1, "stroke-linejoin": "round" }, svg);
+    // label at area centroid
+    let A = 0, cx = 0, cy = 0;
+    for (let i = 0; i < pts.length; i++) { const [x1, y1] = pts[i], [x2, y2] = pts[(i + 1) % pts.length], c = x1 * y2 - x2 * y1; A += c; cx += (x1 + x2) * c; cy += (y1 + y2) * c; }
+    A /= 2; const LBL = { hypres: { MF: [5, 18] } }, ov = (LBL[tSys()] || {})[q.ab], lp = ov ? P(ov[0], ov[1]) : [cx / (6 * A), cy / (6 * A)];
+    const t = el("text", { x: lp[0], y: lp[1] + 4, "text-anchor": "middle", fill: "var(--ink-2)", style: "font-size:" + (tSys() === "hypres" ? 12 : 10.5) + "px" }, svg);
+    t.textContent = tSys() === "hypres" ? q.name : q.ab;
+  });
   const A = P(100, 0), B = P(0, 0), C = P(0, 100);
-  el("path", { d: `M${A}L${B}L${C}Z`, fill: "var(--surface-2)", stroke: "var(--ink-3)", "stroke-width": 1.2 }, svg);
-  el("path", { d, stroke: "var(--ink-3)", "stroke-width": 1, fill: "none", "stroke-linecap": "round" }, svg);
-  // labels at class centroids
-  const acc = {};
-  for (let i = 0; i <= N; i += 2) for (let j = 0; i + j <= N; j += 2) { const c = cls[i][j]; (acc[c] = acc[c] || [0, 0, 0]); acc[c][0] += i * s; acc[c][1] += j * s; acc[c][2]++; }
-  const short = { "Sand": "S", "Loamy sand": "LS", "Sandy loam": "SL", "Loam": "L", "Silt loam": "SiL", "Silt": "Si", "Sandy clay loam": "SCL", "Clay loam": "CL", "Silty clay loam": "SiCL", "Sandy clay": "SC", "Silty clay": "SiC", "Clay": "C" };
-  const nudge = { "Sand": [-3, -1], "Loamy sand": [0, 0], "Silt": [0, 0] };
-  Object.keys(acc).forEach(c => { let [sa, cl] = [acc[c][0] / acc[c][2], acc[c][1] / acc[c][2]]; const nz = nudge[c] || [0, 0]; const p = P(sa + nz[0], cl + nz[1]); const t = el("text", { x: p[0], y: p[1] + 4, "text-anchor": "middle", style: "font-size:11px" }, svg); t.textContent = short[c]; });
-  // axis labels
-  [[A, "Sand", -8, 18, "middle"], [B, "Silt", 8, 18, "middle"], [C, "Clay", 0, -8, "middle"]].forEach(([p, l, dx, dy, an]) => { const t = el("text", { x: p[0] + dx, y: p[1] + dy, "text-anchor": an, style: "font-weight:600" }, svg); t.textContent = l; });
+  el("polygon", { points: [A, B, C].map(p => p.join(",")).join(" "), fill: "none", stroke: "var(--ink-2)", "stroke-width": 1.4 }, svg);
+  // axis ticks
+  for (let v = 0; v <= 100; v += 20) {
+    const a = P(100 - v, v), b = P(v, 0), c = P(0, 100 - v);
+    const t1 = el("text", { x: a[0] - 6, y: a[1] + 4, "text-anchor": "end", fill: "var(--ink-3)", style: "font-size:9px" }, svg); t1.textContent = v;
+    const t2 = el("text", { x: b[0], y: b[1] + 13, "text-anchor": "middle", fill: "var(--ink-3)", style: "font-size:9px" }, svg); t2.textContent = v;
+    const t3 = el("text", { x: c[0] + 6, y: c[1] + 4, fill: "var(--ink-3)", style: "font-size:9px" }, svg); t3.textContent = v;
+  }
+  const lab = (p, txt, dx, dy, an) => { const t = el("text", { x: p[0] + dx, y: p[1] + dy, "text-anchor": an, fill: "var(--ink)", style: "font-size:11.5px; font-weight:600" }, svg); t.textContent = txt; };
+  lab(P(50, 50), "Clay (%) ↑", -22, -6, "end"); lab(P(50, 0), "← Sand (%)", 0, 30, "middle"); lab(P(0, 50), "Silt (%) ↓", 22, -6, "start");
+  const batchG = el("g", {}, svg);
   const pt = el("circle", { r: 7, fill: "var(--s2)", stroke: "var(--surface)", "stroke-width": 2.5 }, svg);
-  triBuilt = { P, pt };
+  tGeom = { P, pt, batchG, W, H };
+  if (tBatch) drawBatchPoints();
+}
+function drawBatchPoints() {
+  const { P, batchG, W, H } = tGeom; batchG.innerHTML = "";
+  const pts = [];
+  tBatch.rows.forEach(r => { if (!r.ok) return; const p = P(r.sand, r.clay); pts.push([p[0], p[1], r]); el("circle", { cx: p[0], cy: p[1], r: 4, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 1.2, "fill-opacity": 0.9 }, batchG); });
+  const svg = $("t-tri"), tip = $("t-tip");
+  svg.onmousemove = svg.ontouchstart = ev => {
+    const p = ev.touches ? ev.touches[0] : ev, rect = svg.getBoundingClientRect();
+    const sx = (p.clientX - rect.left) * W / rect.width, sy = (p.clientY - rect.top) * H / rect.height;
+    let best = null, bd = 120;
+    pts.forEach(q => { const d = (q[0] - sx) ** 2 + (q[1] - sy) ** 2; if (d < bd) { bd = d; best = q; } });
+    if (!best) { tip.style.display = "none"; return; }
+    tip.style.display = "block"; tip.textContent = `${best[2].id}: ${best[2].cls}`;
+    tip.style.left = Math.min(rect.width - tip.offsetWidth - 4, best[0] * rect.width / W + 10) + "px"; tip.style.top = (best[1] * rect.height / H - 34) + "px";
+  };
+  svg.onmouseleave = svg.ontouchend = () => { tip.style.display = "none"; };
 }
 function updTexture() {
   const sa = num($("t-sand").value), si = num($("t-silt").value), cl = num($("t-clay").value), msg = $("t-msg");
   msg.className = "msg"; msg.textContent = "";
-  if (!triBuilt) buildTriangle();
-  if (![sa, si, cl].every(isFinite) || sa < 0 || si < 0 || cl < 0) { $("t-class").textContent = "–"; triBuilt.pt.setAttribute("visibility", "hidden"); return; }
+  if (!tGeom) buildTriangle();
+  if (![sa, si, cl].every(isFinite) || sa < 0 || si < 0 || cl < 0) { $("t-class").textContent = "–"; tGeom.pt.setAttribute("visibility", "hidden"); return; }
   const tot = sa + si + cl;
   if (tot <= 0) { $("t-class").textContent = "–"; return; }
-  if (Math.abs(tot - 100) > 0.5) { msg.textContent = `Fractions add to ${fmt(tot, 1)}%; rescaled to 100%.`; }
+  if (Math.abs(tot - 100) > 0.5) msg.textContent = `Fractions add to ${fmt(tot, 1)}%; rescaled to 100%.`;
   const s = sa / tot * 100, c = cl / tot * 100, l = si / tot * 100;
-  $("t-class").textContent = usdaClass(s, l, c);
-  const p = triBuilt.P(s, c); triBuilt.pt.setAttribute("cx", p[0]); triBuilt.pt.setAttribute("cy", p[1]); triBuilt.pt.setAttribute("visibility", "visible");
+  const r = TextureSys.classify(tSys(), s, l, c);
+  $("t-class").textContent = r ? r.name : "–";
+  const p = tGeom.P(s, c); tGeom.pt.setAttribute("cx", p[0]); tGeom.pt.setAttribute("cy", p[1]); tGeom.pt.setAttribute("visibility", "visible");
 }
+function runTextureBatch() {
+  const msg = $("t-batch-msg"); msg.className = "msg"; msg.textContent = "";
+  const P = parseCSV($("t-data").value), hdr = P.header.map(x => x.trim().toLowerCase());
+  const iS = hdr.indexOf("sand"), iL = hdr.indexOf("silt"), iC = hdr.indexOf("clay"), iId = hdr.indexOf("id");
+  if (iS < 0 || iL < 0 || iC < 0) { msg.className = "msg err"; msg.textContent = "Columns named sand, silt and clay are required."; return; }
+  if (P.rows.length > 50000) { msg.className = "msg err"; msg.textContent = "More than 50,000 rows. For large datasets, get in touch."; return; }
+  const rows = P.rows.map((r, k) => {
+    const sa = num(r[iS]), si = num(r[iL]), cl = num(r[iC]), id = iId >= 0 ? r[iId] : String(k + 1);
+    if (![sa, si, cl].every(isFinite) || sa < 0 || si < 0 || cl < 0 || sa + si + cl <= 0) return { raw: r, id, ok: false, cls: "", ab: "", note: "missing or invalid" };
+    const tot = sa + si + cl, f = 100 / tot;
+    const res = TextureSys.classify(tSys(), sa * f, si * f, cl * f);
+    return { raw: r, id, ok: true, sand: sa * f, silt: si * f, clay: cl * f, cls: res ? res.name : "", ab: res ? res.ab : "", note: Math.abs(tot - 100) > 0.5 ? `rescaled from ${+tot.toFixed(2)}%` : "" };
+  });
+  tBatch = { header: P.header, rows };
+  const ok = rows.filter(r => r.ok), counts = {};
+  ok.forEach(r => { counts[r.cls] = (counts[r.cls] || 0) + 1; });
+  const top = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  $("t-summary").innerHTML = `<div class="stat"><div class="k">Samples classified</div><div class="v">${ok.length}</div><div class="u">${TextureSys.SYS[tSys()].name}</div></div>` +
+    top.slice(0, 5).map(([c, n]) => `<div class="stat"><div class="k">${c}</div><div class="v">${n}</div><div class="u">${fmt(100 * n / ok.length, 0)}% of samples</div></div>`).join("");
+  setTable($("t-table"), ["id", "sand", "silt", "clay", "class", "note"], rows.slice(0, 500).map(r => r.ok ? [r.id, fmt(r.sand, 1), fmt(r.silt, 1), fmt(r.clay, 1), r.cls, r.note] : [r.id, "", "", "", "", r.note]), (i, j) => j === 5 && rows[i].note ? "part" : "");
+  const bad = rows.length - ok.length, resc = ok.filter(r => r.note).length;
+  const notes = []; if (bad) notes.push(`${bad} row${bad > 1 ? "s" : ""} could not be classified`); if (resc) notes.push(`${resc} rescaled to 100%`);
+  if (rows.length > 500) notes.push("table shows the first 500 rows; the download has all of them");
+  msg.textContent = notes.join(" · ");
+  $("t-res").hidden = false;
+  if (tGeom) drawBatchPoints();
+}
+function tTextureCSV() {
+  const sys = tSys(), hdr = tBatch.header.concat([`class_${sys}`, `class_${sys}_code`, "note"]);
+  return toCSV(hdr, tBatch.rows.map(r => r.raw.concat([r.cls, r.ab, r.note])));
+}
+function tExportSVG() {
+  const svg = $("t-tri").cloneNode(true), cs = getComputedStyle(document.querySelector(".rk-tools"));
+  const resolve = v => v.replace(/var\((--[a-z0-9-]+)\)/g, (_, n) => cs.getPropertyValue(n).trim() || "#000");
+  svg.querySelectorAll("*").forEach(n => { ["fill", "stroke"].forEach(a => { const v = n.getAttribute(a); if (v && v.includes("var(")) n.setAttribute(a, resolve(v)); }); });
+  svg.setAttribute("xmlns", NS); svg.setAttribute("font-family", getComputedStyle(document.body).fontFamily);
+  const vb = svg.getAttribute("viewBox").split(" ").map(Number); svg.setAttribute("width", vb[2]); svg.setAttribute("height", vb[3]);
+  return new XMLSerializer().serializeToString(svg);
+}
+function tDownloadBlob(name, blob) {
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+$("t-svg").addEventListener("click", () => tDownloadBlob(`texture_triangle_${tSys()}.svg`, new Blob([tExportSVG()], { type: "image/svg+xml" })));
+$("t-png").addEventListener("click", () => {
+  const txt = tExportSVG(), img = new Image(), url = URL.createObjectURL(new Blob([txt], { type: "image/svg+xml" }));
+  img.onload = () => {
+    const vb = $("t-tri").getAttribute("viewBox").split(" ").map(Number), k = 3, cv = document.createElement("canvas");
+    cv.width = vb[2] * k; cv.height = vb[3] * k; const ctx = cv.getContext("2d"); ctx.drawImage(img, 0, 0, cv.width, cv.height);
+    URL.revokeObjectURL(url); cv.toBlob(b => tDownloadBlob(`texture_triangle_${tSys()}.png`, b), "image/png");
+  };
+  img.src = url;
+});
+$("t-dl").addEventListener("click", () => tBatch && download(`texture_classes_${tSys()}.csv`, tTextureCSV()));
+$("t-sys").addEventListener("change", () => { tNote(); buildTriangle(); updTexture(); if (tBatch) runTextureBatch(); });
+$("t-ex").addEventListener("click", () => { $("t-data").value = T_EX; runTextureBatch(); });
+$("t-run").addEventListener("click", runTextureBatch);
+readFileInto($("t-file"), $("t-data"), runTextureBatch);
 ["t-sand", "t-silt", "t-clay"].forEach(id => $(id).addEventListener("input", updTexture));
 $("t-to-water").addEventListener("click", () => {
   const sa = num($("t-sand").value), si = num($("t-silt").value), cl = num($("t-clay").value), tot = sa + si + cl;
   if (!(tot > 0)) return;
   $("w-sand").value = +(sa / tot * 100).toFixed(1); $("w-clay").value = +(cl / tot * 100).toFixed(1); updWater(); showTab("water", true);
 });
+$("t-data").value = T_EX; tNote();
 
 /* ============ SAMPLING ============ */
 function lgamma(x) {
@@ -1564,11 +2042,229 @@ mHue.addEventListener("change", () => {
   mSel = { hue: mHue.value, v, c }; $("m-text").value = mSel.hue === "N" ? `N ${v}/` : `${mSel.hue} ${v}/${c}`; mRender();
 });
 
+/* ============ MODEL EVALUATION ============ */
+const EV_EX = {"cont": "id,obs,pred,sd\nS1,2.14,1.73,0.427\nS2,2.65,2.14,0.513\nS3,1.96,1.3,0.413\nS4,1.82,1.78,0.442\nS5,2.81,2.23,0.483\nS6,1.9,1.67,0.476\nS7,2.32,2.17,0.484\nS8,2.21,2.07,0.55\nS9,2.81,2.63,0.571\nS10,1.66,1.44,0.429\nS11,3.27,2.62,0.571\nS12,1.45,1.28,0.38\nS13,2.39,1.47,0.493\nS14,2.26,1.45,0.443\nS15,1.39,0.8,0.408\nS16,2.49,1.79,0.437\nS17,1.73,1.67,0.466\nS18,1.15,0.75,0.374\nS19,2.64,2.13,0.557\nS20,0.93,1.35,0.442\nS21,1.27,1.04,0.401\nS22,1.95,1.97,0.474\nS23,2.8,2.06,0.489\nS24,2.56,2.13,0.515\nS25,2.12,1.51,0.445\nS26,0.76,0.64,0.316\nS27,1.42,1.58,0.491\nS28,1.58,0.81,0.421\nS29,1.12,1.2,0.384\nS30,0.65,0.75,0.38\nS31,1.99,1.53,0.414\nS32,2.6,1.72,0.489\nS33,1.52,1.39,0.417\nS34,2.78,2.19,0.535\nS35,0.86,0.92,0.415\nS36,1.09,1.03,0.43\nS37,1.97,2.29,0.49\nS38,1.45,1.23,0.465\nS39,2.5,1.79,0.452\nS40,2.31,2.06,0.46", "cat": "id,obs,pred\nS1,SC,SC\nS2,SCL,SCL\nS3,C,LS\nS4,C,LS\nS5,SCL,SCL\nS6,LS,LS\nS7,SL,SL\nS8,SCL,SCL\nS9,SL,SL\nS10,LS,LS\nS11,SL,SC\nS12,SL,SL\nS13,SCL,SL\nS14,LS,LS\nS15,LS,LS\nS16,SC,SL\nS17,LS,SCL\nS18,LS,LS\nS19,SCL,SCL\nS20,SCL,SCL\nS21,C,C\nS22,SC,SC\nS23,SCL,SCL\nS24,SL,SL\nS25,SC,SC\nS26,SL,SL\nS27,LS,LS\nS28,SL,SL\nS29,SL,SC\nS30,C,C\nS31,SL,SL\nS32,SL,SL\nS33,SC,SC\nS34,LS,LS\nS35,SL,SL\nS36,SCL,SCL\nS37,C,C\nS38,LS,LS\nS39,SCL,SCL\nS40,SL,SL\nS41,SL,SC\nS42,SL,SL\nS43,SL,SL\nS44,SC,SL\nS45,SL,C\nS46,SCL,SCL\nS47,SC,SL\nS48,SC,SC\nS49,SL,SL\nS50,C,SL", "ci": "id,SL,SCL,SC,C\nS1,0.326,0.463,0.153,0.058\nS2,0.511,0.329,0.101,0.060\nS3,0.285,0.341,0.059,0.316\nS4,0.321,0.384,0.286,0.009\nS5,0.606,0.284,0.048,0.062\nS6,0.646,0.232,0.056,0.066\nS7,0.465,0.363,0.052,0.121\nS8,0.620,0.180,0.190,0.010\nS9,0.302,0.278,0.011,0.408\nS10,0.767,0.072,0.095,0.066\nS11,0.610,0.004,0.253,0.133\nS12,0.439,0.420,0.027,0.114\nS13,0.400,0.400,0.150,0.050"};
+document.querySelectorAll("[data-ev]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-ev]").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+  document.querySelectorAll(".ev-panel").forEach(p => p.hidden = p.id !== "ev-" + b.dataset.ev);
+  if (b.dataset.ev === "cont" && evLast) drawEvCharts();
+}));
+const evCols = P => { const h = P.header.map(x => x.trim().toLowerCase()); return n => h.indexOf(n); };
+const evStat = (k, v, u) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${u || ""}</div></div>`;
+readFileInto($("ev-cont-file"), $("ev-cont-data"), runEvCont);
+readFileInto($("ev-cat-file"), $("ev-cat-data"), runEvCat);
+readFileInto($("ev-ci-file"), $("ev-ci-data"), runEvCI);
+$("ev-cont-ex").addEventListener("click", () => { $("ev-cont-data").value = EV_EX.cont; runEvCont(); });
+$("ev-cat-ex").addEventListener("click", () => { $("ev-cat-data").value = EV_EX.cat; runEvCat(); });
+$("ev-ci-ex").addEventListener("click", () => { $("ev-ci-data").value = EV_EX.ci; runEvCI(); });
+$("ev-cont-run").addEventListener("click", runEvCont);
+$("ev-cat-run").addEventListener("click", runEvCat);
+$("ev-ci-run").addEventListener("click", runEvCI);
+$("ev-bounds-level").addEventListener("input", runEvCont);
+
+let evLast = null;
+function runEvCont() {
+  const msg = $("ev-cont-msg"); msg.className = "msg"; msg.textContent = "";
+  const P = parseCSV($("ev-cont-data").value), ix = evCols(P);
+  const io = ix("obs"), ip = ix("pred"), is = ix("sd"), il = ix("lower"), iu = ix("upper");
+  $("ev-bounds-box").style.display = il >= 0 && iu >= 0 ? "block" : "none";
+  if (io < 0 || ip < 0) { msg.className = "msg err"; msg.textContent = "Columns named obs and pred are required."; $("ev-cont-res").hidden = true; return; }
+  const id = [], obs = [], pred = [], sd = [], lo = [], hi = []; let skipped = 0;
+  P.rows.forEach((r, k) => {
+    const o = num(r[io]), p = num(r[ip]);
+    if (!isFinite(o) || !isFinite(p)) { skipped++; return; }
+    id.push(io === 0 || ip === 0 ? String(k + 1) : r[0]); obs.push(o); pred.push(p);
+    sd.push(is >= 0 ? num(r[is]) : NaN); lo.push(il >= 0 ? num(r[il]) : NaN); hi.push(iu >= 0 ? num(r[iu]) : NaN);
+  });
+  if (obs.length < 3) { msg.className = "msg err"; msg.textContent = "Need at least three complete rows."; $("ev-cont-res").hidden = true; return; }
+  const st = EvalStats.contStats(obs, pred);
+  const d = Math.max(...obs.map(Math.abs)) < 10 ? 3 : 2;
+  let html = evStat("Sites", st.n) + evStat("RMSE", fmt(st.rmse, d), "root mean square error") + evStat("MAE", fmt(st.mae, d), "mean absolute error") +
+    evStat("Bias (ME)", fmt(st.me, d), "mean of pred − obs") + evStat("R²", fmt(st.r2, 3), "squared Pearson r") +
+    evStat("Lin's CCC", fmt(st.ccc, 3), "agreement with 1:1") + evStat("NSE", fmt(st.nse, 3), "model efficiency");
+  let picp = null;
+  if (is >= 0 && sd.every(v => isFinite(v) && v >= 0)) picp = EvalStats.picpNormal(obs, pred, sd);
+  else if (is >= 0) msg.textContent = "Some sd values are missing or negative, so coverage was skipped.";
+  if (il >= 0 && iu >= 0 && lo.every(isFinite) && hi.every(isFinite)) {
+    const lev = num($("ev-bounds-level").value), cov = EvalStats.picpBounds(obs, lo, hi);
+    html += evStat(`Coverage of your intervals`, fmt(cov, 1) + "%", isFinite(lev) ? `nominal ${lev}%` : "");
+  }
+  $("ev-cont-stats").innerHTML = html;
+  if (skipped) msg.textContent = (msg.textContent ? msg.textContent + " " : "") + `${skipped} row${skipped > 1 ? "s" : ""} skipped because of missing values.`;
+  evLast = { id, obs, pred, picp };
+  $("ev-cont-res").hidden = false; $("ev-picp-card").hidden = !picp;
+  drawEvCharts();
+}
+function evHover(svg, tip, W, H, pts, label) {
+  const ring = el("circle", { r: 7, fill: "none", stroke: "var(--ink)", "stroke-width": 2, visibility: "hidden" }, svg);
+  const hit = el("rect", { x: 0, y: 0, width: W, height: H, fill: "transparent" }, svg);
+  const move = ev => {
+    const p = ev.touches ? ev.touches[0] : ev, rect = svg.getBoundingClientRect();
+    const sx = (p.clientX - rect.left) * W / rect.width, sy = (p.clientY - rect.top) * H / rect.height;
+    let best = -1, bd = 900;
+    pts.forEach((q, i) => { const dd = (q[0] - sx) ** 2 + (q[1] - sy) ** 2; if (dd < bd) { bd = dd; best = i; } });
+    if (best < 0) { ring.setAttribute("visibility", "hidden"); tip.style.display = "none"; return; }
+    ring.setAttribute("cx", pts[best][0]); ring.setAttribute("cy", pts[best][1]); ring.setAttribute("visibility", "visible");
+    tip.style.display = "block"; tip.textContent = label(best);
+    tip.style.left = Math.min(rect.width - tip.offsetWidth - 4, pts[best][0] * rect.width / W + 10) + "px"; tip.style.top = (pts[best][1] * rect.height / H - 34) + "px";
+  };
+  const leave = () => { ring.setAttribute("visibility", "hidden"); tip.style.display = "none"; };
+  hit.addEventListener("mousemove", move); hit.addEventListener("touchstart", move, { passive: true }); hit.addEventListener("touchmove", move, { passive: true });
+  hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
+}
+function evAxes(svg, W, H, m, X, Y, lo, hi, xl, yl, ticksX, ticksY) {
+  const g = el("g", { class: "grid" }, svg);
+  ticksX.forEach(v => { el("line", { x1: X(v), x2: X(v), y1: m.t, y2: H - m.b }, g); const t = el("text", { x: X(v), y: H - m.b + 16, "text-anchor": "middle" }, svg); t.textContent = v; });
+  ticksY.forEach(v => { el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v) }, g); const t = el("text", { x: m.l - 6, y: Y(v) + 4, "text-anchor": "end" }, svg); t.textContent = v; });
+  const a = el("text", { x: (m.l + W - m.r) / 2, y: H - 4, "text-anchor": "middle" }, svg); a.textContent = xl;
+  const b = el("text", { x: 4, y: 12 }, svg); b.textContent = yl;
+}
+function drawEvCharts() {
+  if (!evLast || $("ev-cont").hidden || !$("tab-eval").classList.contains("active")) return;
+  const { id, obs, pred, picp } = evLast;
+  // scatter
+  let svg = $("ev-scatter"); svg.innerHTML = "";
+  let W = Math.max(280, svg.clientWidth || 420), H = 320, m = { l: 46, r: 14, t: 22, b: 40 };
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const all = obs.concat(pred); let lo = Math.min(...all), hi = Math.max(...all); const pad = (hi - lo) * 0.06 || 1; lo -= pad; hi += pad;
+  const ticks = niceTicks(lo, hi, 5).filter(v => v >= lo && v <= hi);
+  const X = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r), Y = v => H - m.b - (v - lo) / (hi - lo) * (H - m.t - m.b);
+  evAxes(svg, W, H, m, X, Y, lo, hi, "Observed", "Predicted", ticks, ticks);
+  el("line", { x1: X(lo), y1: Y(lo), x2: X(hi), y2: Y(hi), stroke: "var(--ink-3)", "stroke-width": 1.5, "stroke-dasharray": "5 4" }, svg);
+  const pts = obs.map((o, i) => [X(o), Y(pred[i])]);
+  pts.forEach(p => el("circle", { cx: p[0], cy: p[1], r: 4.5, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 1.5, "fill-opacity": 0.85 }, svg));
+  evHover(svg, $("ev-scatter-tip"), W, H, pts, i => `${id[i]} · obs ${obs[i]} · pred ${pred[i]}`);
+  if (!picp) return;
+  // PICP
+  svg = $("ev-picp"); svg.innerHTML = "";
+  W = Math.max(280, svg.clientWidth || 420);
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const X2 = v => m.l + v / 100 * (W - m.l - m.r), Y2 = v => H - m.b - v / 100 * (H - m.t - m.b);
+  const t2 = [0, 20, 40, 60, 80, 100];
+  evAxes(svg, W, H, m, X2, Y2, 0, 100, "Confidence level (%)", "PICP (%)", t2, t2);
+  el("line", { x1: X2(0), y1: Y2(0), x2: X2(100), y2: Y2(100), stroke: "var(--ink-3)", "stroke-width": 1.5, "stroke-dasharray": "5 4" }, svg);
+  const sp = picp.slice().sort((a, b) => a.cl - b.cl);
+  el("path", { d: sp.map((q, i) => (i ? "L" : "M") + X2(q.cl).toFixed(1) + "," + Y2(q.picp).toFixed(1)).join(""), stroke: "var(--s2)", "stroke-width": 2, fill: "none" }, svg);
+  const pp = sp.map(q => [X2(q.cl), Y2(q.picp)]);
+  pp.forEach(p => el("circle", { cx: p[0], cy: p[1], r: 4.5, fill: "var(--s2)", stroke: "var(--surface)", "stroke-width": 2 }, svg));
+  evHover(svg, $("ev-picp-tip"), W, H, pp, i => `${sp[i].cl}% interval · ${fmt(sp[i].picp, 1)}% of sites inside`);
+}
+function runEvCat() {
+  const msg = $("ev-cat-msg"); msg.className = "msg"; msg.textContent = "";
+  const P = parseCSV($("ev-cat-data").value), ix = evCols(P), io = ix("obs"), ip = ix("pred");
+  if (io < 0 || ip < 0) { msg.className = "msg err"; msg.textContent = "Columns named obs and pred are required."; $("ev-cat-res").hidden = true; return; }
+  const o = [], p = []; let skipped = 0;
+  P.rows.forEach(r => { const a = (r[io] || "").trim(), b = (r[ip] || "").trim(); if (!a || !b) { skipped++; return; } o.push(a); p.push(b); });
+  if (o.length < 2) { msg.className = "msg err"; msg.textContent = "Need at least two complete rows."; $("ev-cat-res").hidden = true; return; }
+  const st = EvalStats.catStats(o, p);
+  $("ev-cat-stats").innerHTML = evStat("Sites", st.n) + evStat("Overall accuracy", fmt(100 * st.accuracy, 1) + "%") + evStat("Cohen's kappa", fmt(st.kappa, 3), "agreement beyond chance") + evStat("Classes", st.classes.length);
+  const pct = v => isFinite(v) ? fmt(100 * v, 0) + "%" : "–";
+  const header = ["Obs ↓ Pred →"].concat(st.classes, ["Total", "Producer's"]);
+  const rows = st.classes.map((c, i) => [c].concat(st.M[i], [st.rowT[i], pct(st.producers[i])]));
+  rows.push(["Total"].concat(st.colT, [st.n, ""]));
+  rows.push(["User's"].concat(st.users.map(pct), ["", ""]));
+  setTable($("ev-cat-table"), header, rows, (i, j) => (i < st.classes.length && j - 1 === i) ? "diag" : "");
+  if (skipped) msg.textContent = `${skipped} row${skipped > 1 ? "s" : ""} skipped because of missing values.`;
+  $("ev-cat-res").hidden = false;
+}
+let evCiOut = null;
+function runEvCI() {
+  const msg = $("ev-ci-msg"); msg.className = "msg"; msg.textContent = "";
+  const P = parseCSV($("ev-ci-data").value);
+  if (P.header.length < 3) { msg.className = "msg err"; msg.textContent = "Need an id column and at least two class columns."; $("ev-ci-res").hidden = true; return; }
+  const classes = P.header.slice(1); const out = []; let skipped = 0, badSum = 0;
+  P.rows.forEach(r => {
+    const pr = r.slice(1, classes.length + 1).map(num);
+    if (pr.length < 2 || pr.some(v => !isFinite(v) || v < 0)) { skipped++; return; }
+    const sum = pr.reduce((a, b) => a + b, 0); if (Math.abs(sum - 1) > 0.02 && Math.abs(sum - 100) > 2) badSum++;
+    const scale = Math.abs(sum - 100) <= 2 ? 100 : 1;
+    const q = pr.map(v => v / scale), res = EvalStats.confusionIndex(q);
+    const top = classes[q.indexOf(res.p1)], tied = q.filter(v => v === res.p1).length > 1;
+    out.push([r[0], tied ? top + " (tie)" : top, +res.p1.toFixed(4), +res.p2.toFixed(4), +res.ci.toFixed(4)]);
+  });
+  if (!out.length) { msg.className = "msg err"; msg.textContent = "No usable rows."; $("ev-ci-res").hidden = true; return; }
+  const cis = out.map(r => r[4]), mCI = cis.reduce((a, b) => a + b, 0) / cis.length;
+  $("ev-ci-stats").innerHTML = '<div class="stats">' + evStat("Sites", out.length) + evStat("Mean CI", fmt(mCI, 3)) + evStat("Sites with CI > 0.5", `${cis.filter(v => v > 0.5).length}`, "top two classes close") + "</div>";
+  evCiOut = { header: ["id", "most_likely", "P1", "P2", "CI"], rows: out };
+  setTable($("ev-ci-table"), evCiOut.header, out.map(r => [r[0], r[1], fmt(r[2], 3), fmt(r[3], 3), fmt(r[4], 3)]), (i, j) => j === 4 && out[i][4] > 0.5 ? "part" : "");
+  const notes = [];
+  if (skipped) notes.push(`${skipped} row${skipped > 1 ? "s" : ""} skipped (missing or negative values)`);
+  if (badSum) notes.push(`${badSum} row${badSum > 1 ? "s don't" : " doesn't"} sum to 1 (or 100%); check they are probabilities`);
+  if (notes.length) msg.textContent = notes.join(". ") + ".";
+  $("ev-ci-res").hidden = false;
+}
+$("ev-ci-dl").addEventListener("click", () => evCiOut && download("confusion_index.csv", toCSV(evCiOut.header, evCiOut.rows)));
+
+/* ============ PEDODIVERSITY ============ */
+const PD_EX = `site,class,area
+Upland,Lixisols,420
+Upland,Acrisols,310
+Upland,Ferralsols,150
+Upland,Cambisols,80
+Upland,Leptosols,25
+Upland,Fluvisols,15
+Valley,Fluvisols,520
+Valley,Gleysols,260
+Valley,Vertisols,140
+Valley,Cambisols,60
+Valley,Arenosols,20`;
+let pdOut = null;
+readFileInto($("pd-file"), $("pd-data"), runPedodiv);
+$("pd-ex").addEventListener("click", () => { $("pd-data").value = PD_EX; runPedodiv(); });
+$("pd-run").addEventListener("click", runPedodiv);
+$("pd-site").addEventListener("change", pdShow);
+function runPedodiv() {
+  const msg = $("pd-msg"); msg.className = "msg"; msg.textContent = "";
+  const P = parseCSV($("pd-data").value), h = P.header.map(x => x.trim().toLowerCase());
+  const iC = h.indexOf("class"), iW = ["area", "count", "weight"].map(n => h.indexOf(n)).find(i => i >= 0) ?? -1;
+  const iS = ["site", "group"].map(n => h.indexOf(n)).find(i => i >= 0) ?? -1;
+  if (iC < 0) { msg.className = "msg err"; msg.textContent = "A column named class is required."; $("pd-res").hidden = true; return; }
+  const sites = new Map(); let skipped = 0;
+  P.rows.forEach(r => {
+    const c = (r[iC] || "").trim(), w = iW >= 0 ? num(r[iW]) : 1, st = iS >= 0 ? ((r[iS] || "").trim() || "(blank)") : "All";
+    if (!c || !isFinite(w) || w < 0) { skipped++; return; }
+    if (!sites.has(st)) sites.set(st, {});
+    const m = sites.get(st); m[c] = (m[c] || 0) + w;
+  });
+  if (!sites.size) { msg.className = "msg err"; msg.textContent = "No usable rows."; $("pd-res").hidden = true; return; }
+  pdOut = [...sites.entries()].map(([site, w]) => ({ site, r: Pedodiv.pedodiv(w) })).filter(x => x.r.S > 0);
+  const multi = pdOut.length > 1;
+  $("pd-sites-card").hidden = !multi; $("pd-site").hidden = !multi;
+  const sel = $("pd-site"); sel.innerHTML = "";
+  pdOut.forEach((x, i) => { const o = document.createElement("option"); o.value = i; o.textContent = x.site; sel.appendChild(o); });
+  if (multi) setTable($("pd-table"), ["Site", "Richness", "Shannon H′", "Evenness J′", "Simpson", "Hill N1", "Hill N2", "Dominance"],
+    pdOut.map(x => [x.site, x.r.S, fmt(x.r.shannon, 3), fmt(x.r.evenness, 3), fmt(x.r.simpson, 3), fmt(x.r.hill1, 2), fmt(x.r.hill2, 2), fmt(100 * x.r.bergerParker, 1) + "%"]));
+  const notes = [];
+  if (skipped) notes.push(`${skipped} row${skipped > 1 ? "s" : ""} skipped (missing class or weight)`);
+  if (iW < 0) notes.push("no area or count column, so each row counts once");
+  msg.textContent = notes.join(" · ");
+  $("pd-res").hidden = false; pdShow();
+}
+function pdShow() {
+  if (!pdOut) return;
+  const x = pdOut[+$("pd-site").value || 0], r = x.r;
+  $("pd-site-title").textContent = pdOut.length > 1 ? "Indices for" : "Indices";
+  const st = (k, v, u) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${u}</div></div>`;
+  $("pd-stats").innerHTML = st("Richness", r.S, "number of classes") + st("Shannon H′", fmt(r.shannon, 3), "natural log") +
+    st("Evenness J′", fmt(r.evenness, 3), "0 to 1") + st("Simpson", fmt(r.simpson, 3), "1 − Σp²") +
+    st("Hill N1", fmt(r.hill1, 2), "effective classes") + st("Hill N2", fmt(r.hill2, 2), "effective common classes") +
+    st("Dominance", fmt(100 * r.bergerParker, 1) + "%", "largest class share");
+  const max = r.props[0].p;
+  $("pd-bars").innerHTML = r.props.map(q => `<div style="display:grid; grid-template-columns: minmax(70px, 34%) 1fr 48px; gap:8px; align-items:center; margin:5px 0; font-size:.85rem">
+    <div style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; color:var(--ink-2)" title="${q.cls}">${q.cls}</div>
+    <div style="height:12px; background:var(--surface-2); border-radius:4px"><div style="height:100%; width:${(100 * q.p / max).toFixed(1)}%; background:var(--s1); border-radius:4px"></div></div>
+    <div style="text-align:right; font-variant-numeric:tabular-nums; color:var(--ink)">${fmt(100 * q.p, 1)}%</div></div>`).join("");
+}
+$("pd-dl").addEventListener("click", () => pdOut && download("pedodiversity.csv", toCSV(["site", "richness", "shannon", "evenness", "simpson", "hill_N1", "hill_N2", "dominance"],
+  pdOut.map(x => [x.site, x.r.S, +x.r.shannon.toFixed(5), +x.r.evenness.toFixed(5), +x.r.simpson.toFixed(5), +x.r.hill1.toFixed(4), +x.r.hill2.toFixed(4), +x.r.bergerParker.toFixed(5)]))));
+
 /* ---------------- init ---------------- */
 $("sp-data").value = EX_CONT; spLastText = EX_CONT; spRefreshColumns();
 $("c-data").value = EX_CARBON;
+$("pd-data").value = PD_EX;
+$("ev-cont-data").value = EV_EX.cont; $("ev-cat-data").value = EV_EX.cat; $("ev-ci-data").value = EV_EX.ci;
 updWater(); vgLoad(); updHSG(); updSampling();
-let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); }, 150); });
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawEvCharts(); }, 150); });
 const start = location.hash.slice(1);
 if ([...tabs].some(b => b.dataset.tab === start)) showTab(start, false);
 })();
