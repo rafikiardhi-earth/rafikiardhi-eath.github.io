@@ -25,9 +25,9 @@ page-layout: full
 }
 .rk-tools a { color: var(--accent); }
 .rk-tools .rk-wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
-.rk-tools .hero { padding: 36px 0 20px; }
-.rk-tools .hero h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.15; margin: 0 0 12px; letter-spacing: -.01em; }
-.rk-tools .hero p { margin: 0 0 10px; color: var(--ink-2); max-width: 62ch; }
+.rk-tools .rk-hero { padding: 36px 0 20px; }
+.rk-tools .rk-hero h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.15; margin: 0 0 12px; letter-spacing: -.01em; }
+.rk-tools .rk-hero p { margin: 0 0 10px; color: var(--ink-2); max-width: 62ch; }
 .rk-tools .privacy { font-size: .9rem; color: var(--ink-3); }
 .rk-tools nav.rk-tabs { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
 .rk-tools nav.rk-tabs .rk-wrap { display: flex; gap: 6px; overflow-x: auto; padding-top: 10px; padding-bottom: 10px; scrollbar-width: none; }
@@ -103,13 +103,15 @@ page-layout: full
 .rk-tools { color: var(--ink); }
 .rk-tools nav.rk-tabs { position: static; background: transparent; }
 .rk-tools .rk-wrap { max-width: none; padding: 0; }
-.rk-tools .hero { padding: 0 0 12px; }
+.rk-tools .rk-hero { padding: 0 0 12px; }
 .rk-tools .rk-card h3, .rk-tools h2 { margin-top: 0; }
+.rk-tools h2 { border-bottom: none; padding-bottom: 0; margin-bottom: 6px; }
+.rk-tools section.tool { padding-top: 18px; }
 .rk-tools input, .rk-tools select, .rk-tools textarea { font-size: 16px; }
 
 </style>
 <div class="rk-tools">
-<div class="rk-wrap hero">
+<div class="rk-wrap rk-hero">
   <p>Free tools treat the soil horizon by horizon. Our advanced methods treat it as one connected system, continuous with depth and across the landscape, because that is how water, carbon and energy actually move.</p>
   <p class="privacy">Everything runs in your browser. Uploaded data never leaves your device.</p>
 </div>
@@ -122,6 +124,7 @@ page-layout: full
     <button role="tab" data-tab="vg" aria-selected="false">van Genuchten</button>
     <button role="tab" data-tab="hsg" aria-selected="false">Hydrologic soil group</button>
     <button role="tab" data-tab="texture" aria-selected="false">Texture class</button>
+    <button role="tab" data-tab="munsell" aria-selected="false">Munsell colour</button>
     <button role="tab" data-tab="sampling" aria-selected="false">Sampling density</button>
   </div>
 </nav>
@@ -189,7 +192,7 @@ page-layout: full
     <p>Our holomorphic spline treats the profile as one continuous system: much faster on large datasets, with uncertainty at every depth and boundary-aware profiles linked to water and heat flux.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Advanced%20profile%20harmonisation">Get in touch →</a>
   </div>
-  <p class="refs">Method: Flynn, T., Rasaei, Z., Kostecki, R. (2026). Smoothing Earth's surface: The complexity of soil texture class transitions. <a href="https://doi.org/10.2139/ssrn.5078983">doi:10.1016/j.scitotenv.2026.181621</a>. Open R implementation: rafikisol package.</p>
+  <p class="refs">Method: Flynn, T., Rasaei, Z., Kostecki, R. (2026). <i>Science of the Total Environment</i>. <a href="https://doi.org/10.1016/j.scitotenv.2026.181621">doi:10.1016/j.scitotenv.2026.181621</a>. Open R implementation: rafikisol package.</p>
 </section>
 
 <!-- ============ CARBON ============ -->
@@ -350,6 +353,36 @@ page-layout: full
     <p>We produce continuous texture surfaces with depth and across landscapes, with uncertainty, from sparse profile data.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Continuous%20texture%20mapping">Get in touch →</a>
   </div>
+</section>
+
+<!-- ============ MUNSELL ============ -->
+<section class="tool" id="tab-munsell">
+  <h2>Munsell soil colour</h2>
+  <p class="lede">See a Munsell notation as an on-screen colour, browse a soil chart page, and learn what the colour usually tells you about the soil.</p>
+  <div class="two">
+    <div class="rk-card">
+      <h3>Notation</h3>
+      <div class="rk-grid">
+        <div><label for="m-text">Type a notation</label><input type="text" id="m-text" value="10YR 5/4" placeholder="e.g. 7.5YR 4/6 or N 5"></div>
+        <div><label for="m-hue">Chart page (hue)</label><select id="m-hue"></select></div>
+      </div>
+      <div class="msg" id="m-msg" role="status"></div>
+      <div style="display:flex; gap:14px; align-items:center; margin-top:14px">
+        <div id="m-swatch" style="width:96px; height:96px; border-radius:10px; border:1px solid var(--line); flex:0 0 auto"></div>
+        <div>
+          <div class="big" id="m-name" style="margin:0">–</div>
+          <div class="hint" id="m-hex" style="margin:0"></div>
+        </div>
+      </div>
+      <div id="m-notes" style="margin-top:14px; color:var(--ink-2); font-size:.93rem"></div>
+    </div>
+    <div class="rk-card">
+      <h3 id="m-page-title">Chart page</h3>
+      <div id="m-page"></div>
+      <p class="hint">Rows are value (lightness), columns are chroma (strength). Tap a chip to select it.</p>
+    </div>
+  </div>
+  <p class="refs">Colours are computed from the Munsell renotation data (illuminant C) and converted to sRGB. Screens vary, so use this for learning, not in place of a physical chart. Chips that fall outside the sRGB range are left out.</p>
 </section>
 
 <!-- ============ SAMPLING ============ -->
@@ -518,6 +551,7 @@ function showTab(name, push) {
   if (push) history.replaceState(null, "", "#" + name);
   if (name === "vg") drawVG();
   if (name === "texture") updTexture();
+  if (name === "munsell") updMunsell();
   if (name === "spline" && lastSpline) drawProfile();
 }
 tabs.forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab, true)));
@@ -1131,6 +1165,82 @@ function updSampling() {
   setTable($("s-table"), ["Allowable error", "90%", "95%", "99%"], errs.map(er => [`±${er}%`].concat([0.9, 0.95, 0.99].map(c => sampleN(cv, er, c)))));
 }
 ["s-cv", "s-err", "s-conf", "s-area"].forEach(id => $(id).addEventListener("input", updSampling));
+
+/* ============ MUNSELL ============ */
+const MUNSELL = {"10R":{"2/1":"3a2e2d","2/2":"412b29","2/3":"472925","2/4":"4d2521","2/6":"571e1a","2/8":"611212","2.5/1":"463937","2.5/2":"4e3633","2.5/3":"55332e","2.5/4":"5b302a","2.5/6":"662921","2.5/8":"701e18","3/1":"524542","3/2":"5a423d","3/3":"613f38","3/4":"683c33","3/6":"733529","3/8":"7e2c1e","4/1":"6a5d5b","4/2":"735b55","4/3":"7b584f","4/4":"82554a","4/6":"8e4f3e","4/8":"9a4832","5/1":"837774","5/2":"8b756f","5/3":"947269","5/4":"9b6f62","5/6":"a96955","5/8":"b66248","6/1":"9d918e","6/2":"a58e88","6/3":"ae8c82","6/4":"b6897b","6/6":"c4846f","6/8":"d17d62","7/1":"b6aba8","7/2":"bfa9a2","7/3":"c8a69c","7/4":"d0a395","7/6":"e09e88","7/8":"ef9779","8/1":"d0c6c3","8/2":"d7c4be","8/3":"e2c1b6","8/4":"ecbeae","8/6":"fdb8a0"},"2.5YR":{"2/1":"392e2c","2/2":"402c27","2/3":"472922","2/4":"4c261d","2/6":"562011","2/8":"5f1700","2.5/1":"453936","2.5/2":"4d3730","2.5/3":"54342b","2.5/4":"5a3125","2.5/6":"642b18","2.5/8":"6d2305","3/1":"514541","3/2":"59423b","3/3":"604035","3/4":"663d2e","3/6":"713820","3/8":"79320f","4/1":"6a5d59","4/2":"725b52","4/3":"7a584b","4/4":"815644","4/6":"8c5136","4/8":"964b26","5/1":"837773","5/2":"8b756c","5/3":"937265","5/4":"9a705e","5/6":"a76b4e","5/8":"b3653d","6/1":"9d918c","6/2":"a68f85","6/3":"ae8c7e","6/4":"b58a76","6/6":"c38567","6/8":"cf8057","7/1":"b7aba6","7/2":"bfa99f","7/3":"c8a798","7/4":"d0a490","7/6":"df9f7f","7/8":"ec9a6f","8/1":"d0c6c1","8/2":"d8c4bb","8/3":"e2c1b1","8/4":"ecbea8","8/6":"fbb998"},"5YR":{"2/1":"392f2b","2/2":"3f2d25","2/3":"452a1e","2/4":"4a2817","2/6":"522303","2.5/1":"453a35","2.5/2":"4c372e","2.5/3":"523527","2.5/4":"573320","2.5/6":"602e0c","3/1":"514540","3/2":"584338","3/3":"5e4132","3/4":"633f2a","3/6":"6d3b19","3/8":"743700","4/1":"6a5e58","4/2":"715c4f","4/3":"795947","4/4":"7f573f","4/6":"88532f","4/8":"904f1b","5/1":"837771","5/2":"8a7569","5/3":"927361","5/4":"987158","5/6":"a46d46","5/8":"ae6931","6/1":"9d918b","6/2":"a58f82","6/3":"ac8d7a","6/4":"b38b71","6/6":"c0875e","6/8":"ca834b","7/1":"b7aba5","7/2":"bfa99c","7/3":"c7a793","7/4":"cea58a","7/6":"dba177","7/8":"e69d64","8/1":"d1c6bf","8/2":"d9c4b6","8/3":"e1c2ac","8/4":"e9c0a2","8/6":"f7bc90"},"7.5YR":{"2/1":"382f2a","2/2":"3e2d23","2/3":"432c1b","2/4":"472a12","2.5/1":"443a34","2.5/2":"4a382c","2.5/3":"503724","2.5/4":"54351b","2.5/6":"5c3100","3/1":"50463f","3/2":"574437","3/3":"5c422f","3/4":"604126","3/6":"683e11","4/1":"695e57","4/2":"705c4d","4/3":"775a44","4/4":"7c593a","4/6":"845628","4/8":"8b530f","5/1":"827870","5/2":"897667","5/3":"90745e","5/4":"967354","5/6":"a16f3f","5/8":"a96c27","6/1":"9c928a","6/2":"a49080","6/3":"aa8e76","6/4":"b18d6d","6/6":"bc8958","6/8":"c58641","7/1":"b6aca3","7/2":"beaa99","7/3":"c5a88f","7/4":"cba785","7/6":"d7a470","7/8":"e1a15a","8/1":"d0c6bd","8/2":"d8c5b3","8/3":"dfc3a8","8/4":"e6c29e","8/6":"f3be89","8/8":"febb71"},"10YR":{"2/1":"373029","2/2":"3c2e21","2/3":"402d18","2/4":"442c0d","2.5/1":"433a33","2.5/2":"48392a","2.5/3":"4d3821","2.5/4":"513716","3/1":"4f463e","3/2":"544535","3/3":"59442c","3/4":"5d4322","3/6":"634008","4/1":"685f56","4/2":"6e5d4b","4/3":"735c41","4/4":"785b36","4/6":"7f5921","4/8":"845700","5/1":"81786f","5/2":"877764","5/3":"8d765a","5/4":"92744f","5/6":"9b7237","5/8":"a2701b","6/1":"9b9288","6/2":"a1917d","6/3":"a79072","6/4":"ac8f67","6/6":"b68c50","6/8":"be8a36","7/1":"b5aca2","7/2":"bcab96","7/3":"c2aa8b","7/4":"c7a97f","7/6":"d1a768","7/8":"d9a450","8/1":"cfc7bc","8/2":"d6c6af","8/3":"dcc5a4","8/4":"e2c498","8/6":"ecc181","8/8":"f5bf68"},"2.5Y":{"2/1":"363028","2/2":"3a2f20","2/3":"3d2e16","2/4":"402e07","2.5/1":"413b33","2.5/2":"453a29","2.5/3":"49391f","2.5/4":"4d3912","3/1":"4d473e","3/2":"514634","3/3":"55452a","3/4":"59451f","3/6":"5e4301","4/1":"665f55","4/2":"6b5f49","4/3":"705e3f","4/4":"735d33","4/6":"795c1b","5/1":"80796e","5/2":"857862","5/3":"8a7757","5/4":"8e774b","5/6":"957530","5/8":"9a740f","6/1":"999387","6/2":"9e927a","6/3":"a3916f","6/4":"a89163","6/6":"b08f4a","6/8":"b68e2d","7/1":"b3ada0","7/2":"b9ac93","7/3":"beac88","7/4":"c3ab7c","7/6":"cba963","7/8":"d1a848","8/1":"cec7ba","8/2":"d3c7ac","8/3":"d8c6a0","8/4":"ddc694","8/6":"e5c47b","8/8":"edc361"},"5Y":{"2/1":"343028","2/2":"37301f","2/3":"3a3014","2/4":"3d2f04","2.5/1":"403c32","2.5/2":"433b29","2.5/3":"463b1e","2.5/4":"493a0f","3/1":"4b473e","3/2":"4f4733","3/3":"524729","3/4":"54461e","3/6":"594500","4/1":"646054","4/2":"686049","4/3":"6c5f3d","4/4":"6f5f30","4/6":"735e15","5/1":"7e796d","5/2":"817961","5/3":"857955","5/4":"887948","5/6":"8e782c","5/8":"927702","6/1":"989386","6/2":"9b9379","6/3":"9f936d","6/4":"a29361","6/6":"a89245","6/8":"ad9124","7/1":"b2ada0","7/2":"b6ad92","7/3":"b9ad85","7/4":"bcad78","7/6":"c2ad5e","7/8":"c7ac41","8/1":"ccc8b9","8/2":"d0c8ab","8/3":"d3c89e","8/4":"d6c891","8/6":"dcc876","8/8":"e2c759"},"10Y":{"2.5/1":"3d3c33","2.5/2":"3e3d2a","3/1":"49483e","3/2":"4a4934","4/1":"616155","4/2":"626149","5/1":"7b7a6e","5/2":"7c7b62","6/1":"959486","6/2":"969579","7/1":"afaea0","7/2":"b0af92","8/1":"cac9b9","8/2":"cbcaaa"},"5GY":{"2.5/1":"3a3d35","2.5/2":"383e2e","3/1":"464940","3/2":"444a38","4/1":"5e6257","4/2":"5c634d","5/1":"777b6f","5/2":"767c65","6/1":"919588","6/2":"8f977c","7/1":"acafa1","7/2":"aab194","8/1":"c6caba","8/2":"c5cbac"},"10GY":{"2.5/1":"373e38","2.5/2":"333f34","3/1":"424943","3/2":"3e4b3e","4/1":"5a625a","4/2":"556454","5/1":"737c73","5/2":"6e7e6c","6/1":"8c968c","6/2":"869984","7/1":"a6b0a5","7/2":"a0b39d","8/1":"c0cbbf","8/2":"b9ceb6"},"5G":{"2.5/1":"363e3a","2.5/2":"2f4038","3/1":"414a45","3/2":"3a4c43","4/1":"58635d","4/2":"50655a","5/1":"717c76","5/2":"687f73","6/1":"8a968f","6/2":"80998c","7/1":"a3b1a9","7/2":"99b4a5","8/1":"bdcbc3","8/2":"b2cfbe"},"10G":{"2.5/1":"353e3b","2.5/2":"2d403b","3/1":"404a47","3/2":"374c46","4/1":"57635f","4/2":"4e655e","5/1":"707c78","5/2":"667f77","6/1":"899692","6/2":"7e9990","7/1":"a2b1ac","7/2":"97b4aa","8/1":"bccbc6","8/2":"b0cfc4"},"5BG":{"2.5/1":"343e3d","2.5/2":"2b403f","3/1":"3f4a49","3/2":"354c4a","4/1":"576261","4/2":"4c6562","5/1":"6f7c7b","5/2":"647f7c","6/1":"899694","6/2":"7d9995","7/1":"a2b1ae","7/2":"96b4af","8/1":"bccbc8","8/2":"afcec8"},"10BG":{"2.5/1":"343e3f","2.5/2":"2a3f43","3/1":"3f4a4b","3/2":"344c4f","4/1":"576263","4/2":"4c6467","5/1":"707c7d","5/2":"657e80","6/1":"899697","6/2":"7e989a","7/1":"a3b0b0","7/2":"97b3b4","8/1":"bdcbcb","8/2":"b1cdce"},"5B":{"2.5/1":"343d41","2.5/2":"2b3f46","3/1":"3f494d","3/2":"354b52","4/1":"586265","4/2":"4e646a","5/1":"717b7e","5/2":"687d83","6/1":"8b9598","6/2":"81979d","7/1":"a5afb2","7/2":"9bb1b7","8/1":"bfcacc","8/2":"b6ccd1"},"10B":{"2.5/1":"363d42","2.5/2":"2e3e49","3/1":"41494e","3/2":"394a55","4/1":"5a6166","4/2":"53626d","5/1":"737b80","5/2":"6d7c86","6/1":"8d9499","6/2":"87969f","7/1":"a7afb3","7/2":"a1b0b8","8/1":"c2c9cd","8/2":"bbcad2"},"5PB":{"2.5/1":"393c43","2.5/2":"353c4b","3/1":"44484f","3/2":"404857","4/1":"5d6067","4/2":"59606e","5/1":"767a80","5/2":"737a86","6/1":"909499","6/2":"8d949f","7/1":"aaaeb3","7/2":"a7aeb9","8/1":"c5c8cd","8/2":"c1c8d3"},"N":{"2.5/0":"3c3c3c","3/0":"474848","4/0":"606060","5/0":"797979","6/0":"939393","7/0":"adadad","8/0":"c8c8c8"}};
+const M_GROUPS = [["Soil chart", ["10R", "2.5YR", "5YR", "7.5YR", "10YR", "2.5Y", "5Y"]], ["Gley 1", ["N", "10Y", "5GY", "10GY", "5G"]], ["Gley 2", ["10G", "5BG", "10BG", "5B", "10B", "5PB"]]];
+const mHue = $("m-hue");
+M_GROUPS.forEach(([g, hs]) => { const og = document.createElement("optgroup"); og.label = g; hs.forEach(h => { const o = document.createElement("option"); o.value = h; o.textContent = h === "N" ? "N (neutral)" : h; og.appendChild(o); }); mHue.appendChild(og); });
+let mSel = { hue: "10YR", v: 5, c: 4 };
+function mParse(t) {
+  t = t.trim().toUpperCase().replace(/\s+/g, " ");
+  let m = t.match(/^N\s*([0-9.]+)\s*\/?\s*0?$/);
+  if (m) return { hue: "N", v: +m[1], c: 0 };
+  m = t.match(/^([0-9.]+)\s*(R|YR|Y|GY|G|BG|B|PB)\s*([0-9.]+)\s*\/\s*([0-9.]+)$/);
+  if (!m) return null;
+  const hue = m[1].replace(/\.0$/, "") + m[2].replace("GY", "GY");
+  const fix = { "R": "R", "YR": "YR", "Y": "Y", "GY": "GY", "G": "G", "BG": "BG", "B": "B", "PB": "PB" };
+  return { hue: m[1].replace(/\.0$/, "") + fix[m[2]], v: +m[3], c: +m[4] };
+}
+function mKey(v, c) { return `${v}/${c}`; }
+function mNotes(hue, v, c) {
+  const n = [];
+  const red = ["10R", "2.5YR", "5YR"].includes(hue), yel = ["7.5YR", "10YR", "2.5Y", "5Y"].includes(hue);
+  const gley = !red && !yel;
+  if (v <= 3 && c <= 3 && !gley) n.push("Dark and dull: in a topsoil this usually reflects organic matter. Dark colours like this (moist value and chroma of 3 or less) are part of how mollic and umbric surface horizons are defined.");
+  if (red && c >= 4) n.push("Red hue with strong chroma: usually iron oxides such as hematite, typical of well-drained, often older and strongly weathered soils.");
+  if (yel && c >= 4 && v >= 4) n.push("Yellowish brown with strong chroma: usually goethite, common in well to moderately well-drained soils.");
+  if (gley || hue === "N") n.push("Gley colours (neutral, greenish or bluish): iron has been reduced under long periods of saturation, a sign of poor drainage.");
+  else if (c <= 2 && v >= 4) n.push("Low chroma below the topsoil often points to iron depletion from periodic saturation (redoximorphic features), especially alongside brighter mottles.");
+  if (v >= 6 && c <= 3 && !gley) n.push("Light and pale: can indicate a leached (eluvial) horizon, or carbonates or gypsum. Check with acid for fizzing.");
+  if (!n.length) n.push("A middle-of-the-range soil colour. Compare it with the horizons above and below: the changes between horizons usually say more than one colour alone.");
+  return n.map(t => `<p style="margin:0 0 8px">${t}</p>`).join("") + '<p class="hint" style="margin:0">Record whether the sample was moist or dry; dry colours are usually one to two value steps lighter.</p>';
+}
+function mRender() {
+  const page = MUNSELL[mSel.hue]; mHue.value = mSel.hue;
+  const msg = $("m-msg"); msg.className = "msg"; msg.textContent = "";
+  const hex = page && page[mKey(mSel.v, mSel.c)];
+  const name = mSel.hue === "N" ? `N ${mSel.v}/` : `${mSel.hue} ${mSel.v}/${mSel.c}`;
+  if (hex) { $("m-swatch").style.background = "#" + hex; $("m-name").textContent = name; $("m-hex").textContent = "#" + hex + " on screen"; $("m-notes").innerHTML = mNotes(mSel.hue, mSel.v, mSel.c); }
+  else { msg.className = "msg err"; msg.textContent = page ? `${name} is not a chip on this page. Pick one from the chart.` : "That hue isn't on the soil or gley chart pages."; }
+  // chart page grid
+  const host = $("m-page"); host.innerHTML = "";
+  $("m-page-title").textContent = mSel.hue === "N" ? "Chart page: N (neutral)" : "Chart page: " + mSel.hue;
+  if (!page) return;
+  const keys = Object.keys(page).map(k => k.split("/").map(Number));
+  const vs = [...new Set(keys.map(k => k[0]))].sort((a, b) => b - a), cs = [...new Set(keys.map(k => k[1]))].sort((a, b) => a - b);
+  const tbl = document.createElement("div");
+  tbl.style.cssText = `display:grid; grid-template-columns: 34px repeat(${cs.length}, minmax(0, 52px)); gap:4px; align-items:center;`;
+  const cell = (txt, st) => { const d = document.createElement("div"); d.textContent = txt; d.style.cssText = "font-size:.75rem; color:var(--ink-3); text-align:center;" + (st || ""); tbl.appendChild(d); };
+  vs.forEach(v => {
+    cell(String(v), "text-align:right; padding-right:4px");
+    cs.forEach(c => {
+      const hx = page[mKey(v, c)];
+      const b = document.createElement("button");
+      b.type = "button";
+      const sel = v === mSel.v && c === mSel.c;
+      b.style.cssText = `aspect-ratio:1.3; width:100%; border-radius:6px; border:${sel ? "3px solid var(--ink)" : "1px solid var(--line)"}; padding:0; cursor:${hx ? "pointer" : "default"}; background:${hx ? "#" + hx : "transparent"};`;
+      if (hx) { b.title = mSel.hue === "N" ? `N ${v}/` : `${mSel.hue} ${v}/${c}`; b.setAttribute("aria-label", b.title); b.addEventListener("click", () => { mSel = { hue: mSel.hue, v, c }; $("m-text").value = b.title; mRender(); }); }
+      else { b.disabled = true; b.style.border = "1px dashed var(--line)"; }
+      tbl.appendChild(b);
+    });
+  });
+  cell(""); cs.forEach(c => cell(mSel.hue === "N" ? "" : String(c)));
+  host.appendChild(tbl);
+  if (mSel.hue !== "N") { const cap = document.createElement("div"); cap.className = "hint"; cap.style.margin = "4px 0 0 38px"; cap.textContent = "Chroma →"; host.appendChild(cap); }
+}
+function updMunsell() {
+  const p = mParse($("m-text").value);
+  if (!p) { const msg = $("m-msg"); msg.className = "msg err"; msg.textContent = "Use a form like 10YR 5/4, 2.5Y 6/2 or N 5."; return; }
+  mSel = p; mRender();
+}
+$("m-text").addEventListener("input", updMunsell);
+mHue.addEventListener("change", () => {
+  const page = MUNSELL[mHue.value];
+  let v = mSel.v, c = mSel.c;
+  if (!page[mKey(v, c)]) { const k = Object.keys(page)[Math.floor(Object.keys(page).length / 2)].split("/").map(Number); v = k[0]; c = k[1]; }
+  mSel = { hue: mHue.value, v, c }; $("m-text").value = mSel.hue === "N" ? `N ${v}/` : `${mSel.hue} ${v}/${c}`; mRender();
+});
 
 /* ---------------- init ---------------- */
 $("sp-data").value = EX_CONT; spLastText = EX_CONT; spRefreshColumns();
