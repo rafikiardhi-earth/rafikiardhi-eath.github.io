@@ -2,22 +2,61 @@
 title: "About"
 ---
 
-## Trevan Flynn, PhD
+RafikiArdhi is an independent environmental research company built on one idea: **science should stay open.** We publish what we produce, turn validated methods into free tools, and fund that work through the projects we take on.
 
-**Founder and principal scientist**
+## Open by design
 
-Trevan Flynn holds a PhD in soil science, with a focus on quantitative pedology. His work aims to improve our understanding of multidimensional soil resilience and soil multifunctionality, and to advance soil knowledge and decision-support systems in resource-poor regions.
+::: {.cards}
+::: {.card-item}
+### We publish what we produce
+Our methods go through peer review and into the scientific literature, with the details needed to reproduce them. Results that shape decisions should be open to scrutiny.
+:::
+::: {.card-item}
+### Free tools
+Validated methods become free tools that anyone can use in a browser. They run on your own device, so your data never leaves it.
+:::
+::: {.card-item}
+### Paid work funds open work
+Projects, advanced analyses and custom development pay for the research. As methods are proven, and agreements allow, they are released openly.
+:::
+::: {.card-item}
+### Credit where it is due
+We build on other people's work and cite it clearly: the methods, data and classification systems our tools rely on.
+:::
+:::
 
-He has lived and worked across Southern, Centeral and Eastern Africa, from national-scale soil mapping to extension work with smallholder farmers on heavily leached soil.
+## How a method becomes open
 
-His research has been funded through the South African National Research Foundation, The Southern African Science Service Centre for Climate Change and Adaptive Land Management (SASSCAL), EU Horizon 2020, EU LIFE and the Australian Research Council, and he has assembled international consortia for World Bank and BRICS proposals. He has taught crop and soil science at university level and introduced a course in digital soil mapping and remote sensing in agriculture at Stellenbosch University.
+1. **Solve.** We take on environmental problems that existing methods handle poorly.
+2. **Validate.** The method is tested against independent data and published.
+3. **Release.** A simplified, well-documented version becomes a free tool.
+4. **Support.** The full system method, applied to your data and question, is available as a project.
 
-He publishes with a global network of collaborators in journals including *Geoderma*, *Science of the Total Environment*, *Catena*, *Pedosphere*, and *Journal of Environmental Management*.
+## What is free, and what is a project
 
-## The name
-
-*Rafiki ardhi* short for "friend of the land".
+::: {.cards}
+::: {.card-item}
+### Always free
+Published methods and open-access papers, the online tools, their documentation and the references behind them.
+:::
+::: {.card-item}
+### Projects
+Advanced and continuous versions of the tools, analysis of your data, custom development and training. Client data stays confidential, and client-funded results are never published without an agreement.
+:::
+:::
 
 ## Approach
 
-We build on existing knowledge rather than replacing it. Every map is updated, not reset; every estimate carries its uncertainty; and every result is explained in terms the decision maker can use.
+We build on existing knowledge rather than replacing it. Every map and piece of information is updated, not reset; every estimate propagates its uncertainty; and every result is explained in terms the decision maker can use.
+
+We do not use AI to replace human expertise. Where others reach for black-box AI, we use “glass box” functions: methods that are easy to interpret, scale to large problems, and are benchmarked against AI models.
+
+## The name
+
+*Rafiki ardhi* is Kiswahili for "friend of the land".
+
+<a class="btn-earth" href="tools.html">Try the tools</a>&nbsp; <a class="btn-earth" href="contact.html">Get in touch</a>
+
+---
+
+*Founded by Trevan Flynn, PhD, soil scientist. See [Publications](publications.qmd) for the research behind our methods.*
