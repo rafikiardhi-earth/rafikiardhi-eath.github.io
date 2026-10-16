@@ -1,0 +1,11 @@
+id,top_cm,bottom_cm,designation,munsell_value_moist,munsell_chroma_moist,clay_pct,sand_pct,coarse_fragments_pct,oc_pct,cec_cmol,ca_cmol,mg_cmol,k_cmol,na_cmol,al_cmol,ph_h2o,ec_dS_m,caco3_pct,caso4_pct,artefacts_pct,plinthite_pct,slickensides,gleyic,stagnic,andic,spodic,nitic,retic,cambic,fluvic,duric,anthric,permafrost,rock_cm,organic_cm
+LIX1,0,15,A,4,3,12,70,5,1.1,4,1.8,0.6,0.2,0.0,0.1,6.0,0.3,0,0,0,0,absent,n,n,n,n,n,n,n,n,n,n,n,none,0
+LIX1,15,35,E,5,4,14,66,5,0.6,3.5,1.4,0.5,0.2,0.0,0.1,5.8,0.2,0,0,0,0,absent,,,,,,,,,,,,,
+LIX1,35,110,Bt,4,6,28,52,8,0.3,5,2.4,0.9,0.2,0.0,0.2,5.9,0.2,0,0,0,0,absent,,,,,,,,,,,,,
+CHE1,0,40,Ah,2,1,30,20,0,3.5,35,25,6,1.5,0.3,0,7.2,0.5,0,0,0,0,absent,n,n,n,n,n,n,n,n,n,n,n,none,0
+CHE1,40,70,AB,3,2,30,20,0,1.2,30,22,6,1,0.3,0,7.6,0.6,0,0,0,0,absent,,,,,,,,,,,,,
+CHE1,70,150,Ck,5,3,28,25,0,0.4,20,16,3,0.5,0.2,0,8.1,0.8,12,0,0,0,absent,,,,,,,,,,,,,
+VER1,0,30,A,3,2,55,15,0,1.5,45,30,10,1,1,0,7.4,0.8,0,0,0,0,many,n,n,n,n,n,n,n,n,n,n,n,none,0
+VER1,30,120,Bss,4,2,60,10,0,0.8,48,32,11,1,1.5,0,7.8,1,0,0,0,0,many,,,,,,,,,,,,,
+SAL1,0,20,Az,5,3,20,40,0,0.5,15,6,3,0.5,4,0,8.2,25,0,0,0,0,absent,n,n,n,n,n,n,n,n,n,n,n,none,0
+SAL1,20,80,Bz,5,3,22,40,0,0.3,14,5,3,0.4,4,0,8.3,10,0,0,0,0,absent,,,,,,,,,,,,,
