@@ -4,6 +4,7 @@ project:
   resources:
     - CNAME
     - images/
+    - wrb_profiles_template.csv
 
 website:
   title: "RafikiArdhi"
