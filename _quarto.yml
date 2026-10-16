@@ -20,7 +20,7 @@ website:
         text: Home
       - href: services.qmd
         text: Services
-      - href: tools.qmd
+      - href: tools.html
         text: Tools
       - href: about.qmd
         text: About
