@@ -1,0 +1,1145 @@
+---
+title: "Tools"
+page-layout: full
+---
+
+```{=html}
+<style>
+.rk-tools {
+  --bg: #f7f5f0;
+  --surface: #fffdf9;
+  --surface-2: #efebe2;
+  --ink: #1f1c17;
+  --ink-2: #57514a;
+  --ink-3: #8a8379;
+  --line: #ddd6ca;
+  --accent: #8a4b22;
+  --accent-ink: #ffffff;
+  --accent-soft: #f3e6da;
+  --s1: #2a78d6;
+  --s2: #eb6834;
+  --obs: #b9b1a4;
+  --good: #1f7a4d;
+  --warn: #9a6400;
+  --radius: 10px;
+}
+.rk-tools a { color: var(--accent); }
+.rk-tools .rk-wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+.rk-tools .hero { padding: 36px 0 20px; }
+.rk-tools .hero h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.15; margin: 0 0 12px; letter-spacing: -.01em; }
+.rk-tools .hero p { margin: 0 0 10px; color: var(--ink-2); max-width: 62ch; }
+.rk-tools .privacy { font-size: .9rem; color: var(--ink-3); }
+.rk-tools nav.rk-tabs { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
+.rk-tools nav.rk-tabs .rk-wrap { display: flex; gap: 6px; overflow-x: auto; padding-top: 10px; padding-bottom: 10px; scrollbar-width: none; }
+.rk-tools nav.rk-tabs .rk-wrap::-webkit-scrollbar { display: none; }
+.rk-tools nav.rk-tabs button {
+  flex: 0 0 auto; border: 1px solid var(--line); background: var(--surface); color: var(--ink-2);
+  padding: 7px 13px; border-radius: 999px; font: inherit; font-size: .9rem; cursor: pointer; white-space: nowrap;
+}
+.rk-tools nav.rk-tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.rk-tools main { padding: 24px 0 60px; }
+.rk-tools section.tool { display: none; }
+.rk-tools section.tool.active { display: block; }
+.rk-tools .tool h2 { font-size: 1.4rem; margin: 0 0 6px; }
+.rk-tools .lede { color: var(--ink-2); margin: 0 0 18px; max-width: 68ch; }
+.rk-tools .rk-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
+.rk-tools .rk-card h3 { font-size: 1rem; margin: 0 0 10px; }
+.rk-tools .rk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.rk-tools label { display: block; font-size: .85rem; color: var(--ink-2); margin-bottom: 4px; }
+.rk-tools input[type=number], .rk-tools input[type=text], .rk-tools select, .rk-tools textarea {
+  width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
+}
+.rk-tools textarea { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .85rem; min-height: 150px; resize: vertical; }
+.rk-tools input[type=range] { width: 100%; accent-color: var(--accent); }
+.rk-tools .rk-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 10px; }
+.rk-tools button.rk-btn {
+  font: inherit; font-size: .92rem; padding: 8px 14px; border-radius: 8px; cursor: pointer;
+  border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+}
+.rk-tools button.rk-btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.rk-tools .file-label { display: inline-flex; align-items: center; gap: 6px; font-size: .92rem; padding: 8px 14px; border-radius: 8px; border: 1px dashed var(--ink-3); cursor: pointer; color: var(--ink); margin: 0; }
+.rk-tools .file-label input { display: none; }
+.rk-tools .hint { font-size: .82rem; color: var(--ink-3); margin-top: 6px; }
+.rk-tools .msg { font-size: .9rem; margin-top: 10px; }
+.rk-tools .msg.err { color: #c0392b; }
+.rk-tools .msg.ok { color: var(--good); }
+.rk-tools .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; }
+.rk-tools .stat { background: var(--surface-2); border-radius: 8px; padding: 10px 12px; }
+.rk-tools .stat .k { font-size: .78rem; color: var(--ink-2); }
+.rk-tools .stat .v { font-size: 1.35rem; font-weight: 650; font-variant-numeric: tabular-nums; }
+.rk-tools .stat .u { font-size: .78rem; color: var(--ink-3); }
+.rk-tools .big { font-size: 2rem; font-weight: 700; margin: 4px 0; }
+.rk-tools .rk-table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+.rk-tools table { border-collapse: collapse; width: 100%; font-size: .85rem; font-variant-numeric: tabular-nums; }
+.rk-tools th, .rk-tools td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.rk-tools th:first-child, .rk-tools td:first-child { text-align: left; }
+.rk-tools th { background: var(--surface-2); font-weight: 600; color: var(--ink-2); position: sticky; top: 0; }
+.rk-tools tr:last-child td { border-bottom: none; }
+.rk-tools td.na { color: var(--ink-3); }
+.rk-tools td.part { color: var(--warn); }
+.rk-tools .chart { width: 100%; height: auto; display: block; }
+.rk-tools .chart text { fill: var(--ink-2); font-size: 11px; font-family: inherit; }
+.rk-tools .chart .axis line, .rk-tools .chart .axis path { stroke: var(--line); }
+.rk-tools .chart .grid line { stroke: var(--line); stroke-dasharray: 2 3; }
+.rk-tools .legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: .82rem; color: var(--ink-2); margin: 6px 0 4px; }
+.rk-tools .legend i { display: inline-block; width: 14px; height: 3px; border-radius: 2px; vertical-align: middle; margin-right: 6px; }
+.rk-tools .chart-box { position: relative; }
+.rk-tools .tip {
+  position: absolute; pointer-events: none; background: var(--ink); color: var(--bg);
+  font-size: .78rem; padding: 6px 8px; border-radius: 6px; white-space: nowrap; display: none; z-index: 2;
+}
+.rk-tools .advanced {
+  border: 1px solid var(--accent); background: var(--accent-soft); border-radius: var(--radius);
+  padding: 14px 16px; margin-top: 8px;
+}
+.rk-tools .advanced strong { display: block; margin-bottom: 4px; }
+.rk-tools .advanced p { margin: 0 0 8px; color: var(--ink-2); font-size: .93rem; }
+.rk-tools .advanced a.cta { font-weight: 600; text-decoration: none; }
+.rk-tools .advanced a.cta:hover { text-decoration: underline; }
+.rk-tools .refs { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
+.rk-tools .two { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 760px) { .rk-tools .two { grid-template-columns: 1fr 1fr; } }
+.rk-tools { color: var(--ink); }
+.rk-tools nav.rk-tabs { position: static; background: transparent; }
+.rk-tools .rk-wrap { max-width: none; padding: 0; }
+.rk-tools .hero { padding: 0 0 12px; }
+.rk-tools .rk-card h3, .rk-tools h2 { margin-top: 0; }
+.rk-tools input, .rk-tools select, .rk-tools textarea { font-size: 16px; }
+
+</style>
+<div class="rk-tools">
+<div class="rk-wrap hero">
+  <p>Free tools treat the soil horizon by horizon. Our advanced methods treat it as one connected system, continuous with depth and across the landscape, because that is how water, carbon and energy actually move.</p>
+  <p class="privacy">Everything runs in your browser. Uploaded data never leaves your device.</p>
+</div>
+
+<nav class="rk-tabs" aria-label="Tools">
+  <div class="rk-wrap" role="tablist">
+    <button role="tab" data-tab="spline" aria-selected="true">Profile harmoniser</button>
+    <button role="tab" data-tab="carbon" aria-selected="false">Carbon stocks</button>
+    <button role="tab" data-tab="water" aria-selected="false">Water retention</button>
+    <button role="tab" data-tab="vg" aria-selected="false">van Genuchten</button>
+    <button role="tab" data-tab="hsg" aria-selected="false">Hydrologic soil group</button>
+    <button role="tab" data-tab="texture" aria-selected="false">Texture class</button>
+    <button role="tab" data-tab="sampling" aria-selected="false">Sampling density</button>
+  </div>
+</nav>
+
+<main class="rk-wrap">
+
+<!-- ============ PROFILE HARMONISER ============ -->
+<section class="tool active" id="tab-spline">
+  <h2>Profile harmoniser</h2>
+  <p class="lede">Fit a physics-informed spline (phySpline) to irregular horizon data and harmonise it to standard depth intervals. Works for continuous properties (carbon, pH, clay) and for ordered classes such as texture.</p>
+
+  <div class="rk-card">
+    <h3>1. Your data</h3>
+    <textarea id="sp-data" spellcheck="false" aria-label="Profile data as CSV"></textarea>
+    <div class="rk-row">
+      <label class="file-label">Upload CSV<input type="file" id="sp-file" accept=".csv,.txt,.tsv"></label>
+      <button class="rk-btn" id="sp-ex-cont">Example: soil carbon</button>
+      <button class="rk-btn" id="sp-ex-class">Example: texture classes</button>
+    </div>
+    <p class="hint">Columns: profile id, top depth (cm), bottom depth (cm), then one or more property columns. Comma, semicolon or tab separated. Up to 20,000 rows.</p>
+  </div>
+
+  <div class="rk-card">
+    <h3>2. Settings</h3>
+    <div class="rk-grid">
+      <div><label for="sp-var">Property</label><select id="sp-var"></select></div>
+      <div><label for="sp-mode">Mode</label>
+        <select id="sp-mode"><option value="continuous">Continuous</option><option value="classification">Ordered classes</option></select></div>
+      <div><label for="sp-lam">Smoothing (λ)</label><input type="number" id="sp-lam" value="0.1" min="0.0001" step="0.01"></div>
+      <div><label for="sp-depths">Target depths (cm)</label><input type="text" id="sp-depths" value="0, 5, 15, 30, 60, 100, 200"></div>
+    </div>
+    <div id="sp-order-box" style="margin-top:12px; display:none">
+      <label for="sp-order">Class order (finest to coarsest, or any order that makes sense for your classes)</label>
+      <input type="text" id="sp-order">
+    </div>
+    <div class="rk-row"><button class="rk-btn primary" id="sp-run">Harmonise</button></div>
+    <div class="msg" id="sp-msg" role="status"></div>
+  </div>
+
+  <div id="sp-results" hidden>
+    <div class="rk-card">
+      <div class="rk-row" style="margin-top:0; justify-content:space-between">
+        <h3 style="margin:0">Profile view</h3>
+        <select id="sp-prof" style="width:auto; min-width:140px" aria-label="Profile to show"></select>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--obs); height:8px"></i>Observed horizons</span>
+        <span><i style="background:var(--s1)"></i>Spline</span>
+        <span><i style="background:var(--s2)"></i>Harmonised intervals</span>
+      </div>
+      <div class="chart-box"><svg class="chart" id="sp-chart" role="img" aria-label="Depth profile"></svg><div class="tip" id="sp-tip"></div></div>
+    </div>
+    <div class="rk-card">
+      <div class="rk-row" style="margin-top:0; justify-content:space-between">
+        <h3 style="margin:0">Harmonised values</h3>
+        <button class="rk-btn" id="sp-dl">Download CSV</button>
+      </div>
+      <p class="hint" style="margin-top:4px">Intervals that extend past the bottom of a profile are averaged over the soil that is present and shown in amber. Blank means no soil in that interval.</p>
+      <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:8px"><div id="sp-table"></div></div>
+    </div>
+  </div>
+
+  <div class="advanced">
+    <strong>Need more than horizon-based harmonisation?</strong>
+    <p>Our holomorphic spline treats the profile as one continuous system: much faster on large datasets, with uncertainty at every depth and boundary-aware profiles linked to water and heat flux.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Advanced%20profile%20harmonisation">Get in touch →</a>
+  </div>
+  <p class="refs">Method: Flynn, T., Rasaei, Z., Kostecki, R. (2025). Bayes' inference and nearest neighbor splines to harmonise soil texture classes to international depth standards. <a href="https://doi.org/10.2139/ssrn.5078983">doi:10.2139/ssrn.5078983</a>. Open R implementation: rafikisol package.</p>
+</section>
+
+<!-- ============ CARBON ============ -->
+<section class="tool" id="tab-carbon">
+  <h2>Soil carbon stocks</h2>
+  <p class="lede">Calculate organic carbon stocks for many profiles at once, by summing horizons to fixed depths, with an optional equivalent soil mass basis for comparing sites or sampling dates.</p>
+  <div class="rk-card">
+    <h3>1. Your data</h3>
+    <textarea id="c-data" spellcheck="false" aria-label="Carbon data as CSV"></textarea>
+    <div class="rk-row">
+      <label class="file-label">Upload CSV<input type="file" id="c-file" accept=".csv,.txt,.tsv"></label>
+      <button class="rk-btn" id="c-ex">Load example</button>
+    </div>
+    <p class="hint">Columns: id, top (cm), bottom (cm), soc (%), bd (bulk density, g/cm³), and optionally cf (coarse fragments, % by volume).</p>
+  </div>
+  <div class="rk-card">
+    <h3>2. Settings</h3>
+    <div class="rk-grid">
+      <div><label for="c-depths">Report to depths (cm)</label><input type="text" id="c-depths" value="30, 100"></div>
+      <div><label for="c-esm">Reference soil mass (Mg/ha, optional)</label><input type="number" id="c-esm" placeholder="e.g. 4000" min="0"></div>
+    </div>
+    <p class="hint">Equivalent soil mass: stock in the soil needed to reach the reference mass, regardless of depth. Useful when bulk density differs between sites or dates.</p>
+    <div class="rk-row"><button class="rk-btn primary" id="c-run">Calculate</button></div>
+    <div class="msg" id="c-msg" role="status"></div>
+  </div>
+  <div class="rk-card" id="c-results" hidden>
+    <div class="rk-row" style="margin-top:0; justify-content:space-between">
+      <h3 style="margin:0">Stocks (Mg C/ha)</h3>
+      <button class="rk-btn" id="c-dl">Download CSV</button>
+    </div>
+    <div class="stats" id="c-summary" style="margin-top:10px"></div>
+    <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:12px"><div id="c-table"></div></div>
+    <p class="hint">Amber values: the profile is shallower than the reporting depth, so the stock covers only the soil that was sampled.</p>
+  </div>
+  <div class="advanced">
+    <strong>Horizon sums can overestimate stocks</strong>
+    <p>Summing horizons assumes each layer is uniform. Our published work shows this can substantially overestimate carbon stocks compared with assessing the profile at every point. For baselines, credits or reporting, we calculate stocks from depth-continuous profiles with uncertainty.</p>
+    <!-- TODO: add citation for the discrete-vs-integrated stocks paper -->
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Depth-continuous%20carbon%20stocks">Get in touch →</a>
+  </div>
+</section>
+
+<!-- ============ WATER RETENTION ============ -->
+<section class="tool" id="tab-water">
+  <h2>Water retention from texture</h2>
+  <p class="lede">Estimate field capacity, wilting point, available water and saturated conductivity from sand, clay and organic matter, using the Saxton &amp; Rawls (2006) pedotransfer functions.</p>
+  <div class="two">
+    <div class="rk-card">
+      <h3>Inputs</h3>
+      <div class="rk-grid">
+        <div><label for="w-sand">Sand (%)</label><input type="number" id="w-sand" value="40" min="0" max="100"></div>
+        <div><label for="w-clay">Clay (%)</label><input type="number" id="w-clay" value="20" min="0" max="100"></div>
+        <div><label for="w-om">Organic matter (%)</label><input type="number" id="w-om" value="2.5" min="0" max="8" step="0.1"></div>
+      </div>
+      <p class="hint">Valid for organic matter up to about 8% and clay up to about 60%.</p>
+      <div class="msg" id="w-msg" role="status"></div>
+    </div>
+    <div class="rk-card">
+      <h3>Estimates</h3>
+      <div class="stats" id="w-out"></div>
+    </div>
+  </div>
+  <div class="advanced">
+    <strong>Need retention that varies with depth?</strong>
+    <p>We build depth-continuous retention profiles and calibrate pedotransfer functions to your own site data, ready for water balance and recharge modelling.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Site-calibrated%20water%20retention">Get in touch →</a>
+  </div>
+  <p class="refs">Saxton, K.E., Rawls, W.J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. Soil Sci. Soc. Am. J. 70, 1569–1578.</p>
+</section>
+
+<!-- ============ VAN GENUCHTEN ============ -->
+<section class="tool" id="tab-vg">
+  <h2>van Genuchten curves</h2>
+  <p class="lede">Explore how the van Genuchten–Mualem parameters shape water retention and unsaturated conductivity. Start from a texture class and adjust.</p>
+  <div class="rk-card">
+    <div class="rk-grid">
+      <div><label for="vg-preset">Start from texture class</label><select id="vg-preset"></select></div>
+    </div>
+    <div class="rk-grid" style="margin-top:12px">
+      <div><label for="vg-tr">θr residual: <b id="vg-tr-v"></b></label><input type="range" id="vg-tr" min="0" max="0.2" step="0.001"></div>
+      <div><label for="vg-ts">θs saturated: <b id="vg-ts-v"></b></label><input type="range" id="vg-ts" min="0.25" max="0.6" step="0.001"></div>
+      <div><label for="vg-a">α (1/cm): <b id="vg-a-v"></b></label><input type="range" id="vg-a" min="-3" max="-0.5" step="0.01"></div>
+      <div><label for="vg-n">n: <b id="vg-n-v"></b></label><input type="range" id="vg-n" min="1.05" max="3" step="0.01"></div>
+      <div><label for="vg-ks">Ks (cm/day): <b id="vg-ks-v"></b></label><input type="range" id="vg-ks" min="-1" max="3" step="0.01"></div>
+    </div>
+  </div>
+  <div class="rk-card"><div class="stats" id="vg-out"></div></div>
+  <div class="two">
+    <div class="rk-card">
+      <h3>Water retention θ(h)</h3>
+      <div class="chart-box"><svg class="chart" id="vg-ret" role="img" aria-label="Water retention curve"></svg><div class="tip" id="vg-ret-tip"></div></div>
+    </div>
+    <div class="rk-card">
+      <h3>Hydraulic conductivity K(h)</h3>
+      <div class="chart-box"><svg class="chart" id="vg-k" role="img" aria-label="Hydraulic conductivity curve"></svg><div class="tip" id="vg-k-tip"></div></div>
+    </div>
+  </div>
+  <div class="advanced">
+    <strong>Want parameters for your own soils?</strong>
+    <p>We fit hydraulic parameters to your lab or field measurements and carry them into two-dimensional flux, recharge and drainage modelling across hillslopes.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Hydraulic%20parameters%20and%20flux%20modelling">Get in touch →</a>
+  </div>
+  <p class="refs">van Genuchten, M.Th. (1980). Soil Sci. Soc. Am. J. 44, 892–898. Class parameters: Carsel, R.F., Parrish, R.S. (1988). Water Resour. Res. 24, 755–769.</p>
+</section>
+
+<!-- ============ HSG ============ -->
+<section class="tool" id="tab-hsg">
+  <h2>Hydrologic soil group</h2>
+  <p class="lede">Assign a hydrologic soil group (A–D) for runoff estimation from depth to a restrictive layer, depth to the seasonal high water table, and saturated conductivity.</p>
+  <div class="two">
+    <div class="rk-card">
+      <h3>Inputs</h3>
+      <div class="rk-grid">
+        <div><label for="h-rest">Depth to restrictive layer (cm)</label><input type="number" id="h-rest" value="150" min="0"></div>
+        <div><label for="h-wt">Depth to high water table (cm)</label><input type="number" id="h-wt" value="200" min="0"></div>
+        <div><label for="h-ks">Ksat of least permeable layer</label><input type="number" id="h-ks" value="5" min="0" step="any"></div>
+        <div><label for="h-unit">Ksat units</label>
+          <select id="h-unit"><option value="1">µm/s</option><option value="0.2777778">mm/h</option><option value="0.1157407">cm/day</option><option value="7.0555556">in/h</option></select></div>
+      </div>
+      <p class="hint">Use the least permeable layer in the top 50 cm if a restriction or water table lies within 100 cm, otherwise in the top 100 cm. No restriction? Enter a large depth such as 300.</p>
+    </div>
+    <div class="rk-card">
+      <h3>Result</h3>
+      <div class="big" id="h-group">–</div>
+      <p id="h-why" style="margin:0; color:var(--ink-2)"></p>
+    </div>
+  </div>
+  <div class="advanced">
+    <strong>Need hydrologic groups across a whole area?</strong>
+    <p>We map hydrologic soil groups continuously from geology, terrain and soil data, including where soil surveys are missing or coarse.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Hydrologic%20soil%20group%20mapping">Get in touch →</a>
+  </div>
+  <p class="refs">Criteria follow USDA-NRCS National Engineering Handbook Part 630, Chapter 7 (2009). This is a screening tool, not a replacement for official survey data.</p>
+</section>
+
+<!-- ============ TEXTURE ============ -->
+<section class="tool" id="tab-texture">
+  <h2>Texture class</h2>
+  <p class="lede">Find the USDA texture class from particle-size fractions.</p>
+  <div class="two">
+    <div class="rk-card">
+      <h3>Inputs</h3>
+      <div class="rk-grid">
+        <div><label for="t-sand">Sand (%)</label><input type="number" id="t-sand" value="45" min="0" max="100"></div>
+        <div><label for="t-silt">Silt (%)</label><input type="number" id="t-silt" value="30" min="0" max="100"></div>
+        <div><label for="t-clay">Clay (%)</label><input type="number" id="t-clay" value="25" min="0" max="100"></div>
+      </div>
+      <div class="msg" id="t-msg" role="status"></div>
+      <div class="big" id="t-class" style="margin-top:14px">–</div>
+      <div class="rk-row"><button class="rk-btn" id="t-to-water">Use in water retention →</button></div>
+    </div>
+    <div class="rk-card">
+      <div class="chart-box"><svg class="chart" id="t-tri" role="img" aria-label="USDA texture triangle"></svg></div>
+    </div>
+  </div>
+  <div class="advanced">
+    <strong>Texture across a site or catchment?</strong>
+    <p>We produce continuous texture surfaces with depth and across landscapes, with uncertainty, from sparse profile data.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Continuous%20texture%20mapping">Get in touch →</a>
+  </div>
+</section>
+
+<!-- ============ SAMPLING ============ -->
+<section class="tool" id="tab-sampling">
+  <h2>Sampling density</h2>
+  <p class="lede">Estimate how many samples you need to measure a field or site mean within a chosen margin of error, assuming simple random sampling.</p>
+  <div class="two">
+    <div class="rk-card">
+      <h3>Inputs</h3>
+      <div class="rk-grid">
+        <div><label for="s-cv">Coefficient of variation (%)</label><input type="number" id="s-cv" value="30" min="1" step="any"></div>
+        <div><label for="s-err">Allowable error (% of mean)</label><input type="number" id="s-err" value="10" min="0.5" step="any"></div>
+        <div><label for="s-conf">Confidence</label>
+          <select id="s-conf"><option value="0.90">90%</option><option value="0.95" selected>95%</option><option value="0.99">99%</option></select></div>
+        <div><label for="s-area">Area (ha, optional)</label><input type="number" id="s-area" min="0" step="any"></div>
+      </div>
+      <p class="hint">No CV to hand? Typical values: pH 5–15%, organic carbon 20–40%, available P or K 40–80%.</p>
+    </div>
+    <div class="rk-card">
+      <h3>Result</h3>
+      <div class="big" id="s-n">–</div>
+      <p id="s-why" style="margin:0 0 10px; color:var(--ink-2)"></p>
+      <div class="rk-table-wrap"><div id="s-table"></div></div>
+    </div>
+  </div>
+  <div class="advanced">
+    <strong>Spatial variation changes the answer</strong>
+    <p>Random sampling ignores the fact that nearby soils are alike. We design optimised and stratified sampling schemes and management zones that reach the same precision with fewer samples.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Sampling%20design">Get in touch →</a>
+  </div>
+</section>
+
+</main>
+
+<script>
+// Lightweight JavaScript port of rafikisol::phySpline (Flynn et al.).
+// Same piecewise-quadratic basis, stiffness-weighted Jacobian-energy penalty,
+// C1 continuity, zero top gradient and zero bottom gradient. The equality
+// constraints are solved through the KKT system, which is equivalent to the
+// null-space solve in the R version.
+(function (root) {
+  function solveLinear(M, b) {
+    const n = b.length, A = M.map((r, i) => r.concat([b[i]]));
+    for (let c = 0; c < n; c++) {
+      let p = c;
+      for (let r = c + 1; r < n; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+      if (Math.abs(A[p][c]) < 1e-14) return null;
+      [A[c], A[p]] = [A[p], A[c]];
+      for (let r = c + 1; r < n; r++) {
+        const f = A[r][c] / A[c][c];
+        if (f !== 0) for (let k = c; k <= n; k++) A[r][k] -= f * A[c][k];
+      }
+    }
+    const x = new Array(n).fill(0);
+    for (let r = n - 1; r >= 0; r--) {
+      let s = A[r][n];
+      for (let k = r + 1; k < n; k++) s -= A[r][k] * x[k];
+      x[r] = s / A[r][r];
+    }
+    return x;
+  }
+
+  const median2 = (a, b) => (a + b) / 2;
+
+  function fillGhosts(rows) {
+    const out = [];
+    if (rows[0].top > 0) out.push({ top: 0, bottom: rows[0].top, y: rows[0].y, ghost: true });
+    rows.forEach((r, i) => {
+      out.push({ top: r.top, bottom: r.bottom, y: r.y, ghost: false });
+      const nx = rows[i + 1];
+      if (nx && r.bottom < nx.top) out.push({ top: r.bottom, bottom: nx.top, y: median2(r.y, nx.y), ghost: true });
+    });
+    return out;
+  }
+
+  // rows: [{top, bottom, y}] for one profile. Returns segments with coefficients.
+  function fitProfile(rows, lam) {
+    rows = rows.slice().sort((a, b) => a.top - b.top);
+    const seg = fillGhosts(rows), n = seg.length;
+    const hi = seg.map(s => s.bottom - s.top), y = seg.map(s => s.y);
+    if (n === 1) return seg.map(s => ({ ...s, a: s.y, b: 0, g: 0, fit: s.y }));
+    const m = 3 * n, H = hi.reduce((s, v) => s + v, 0);
+    // A (n x m)
+    const A = Array.from({ length: n }, () => new Array(m).fill(0));
+    hi.forEach((h, j) => { A[j][3 * j] = 1; A[j][3 * j + 1] = h / 2; A[j][3 * j + 2] = h * h / 3; });
+    // AtA, Aty
+    const AtA = Array.from({ length: m }, () => new Array(m).fill(0)), Aty = new Array(m).fill(0);
+    for (let j = 0; j < n; j++) for (let p = 3 * j; p < 3 * j + 3; p++) {
+      Aty[p] += A[j][p] * y[j];
+      for (let q = 3 * j; q < 3 * j + 3; q++) AtA[p][q] += A[j][p] * A[j][q];
+    }
+    let sA = 0; AtA.forEach(r => r.forEach(v => { sA += v * v; })); sA = Math.sqrt(sA);
+    // stiffness-weighted penalty
+    const k = Math.E, R = Array.from({ length: m }, () => new Array(m).fill(0));
+    let cum = 0, sR = 0;
+    hi.forEach((h, j) => {
+      const zt = cum / H; cum += h; const zb = cum / H, hn = zb - zt;
+      const st = hn < 1e-6 ? Math.exp(k * zt) : (Math.exp(k * zb) - Math.exp(k * zt)) / (k * hn);
+      const w = st * st, o = 3 * j;
+      R[o + 1][o + 1] = w * h; R[o + 1][o + 2] = w * h * h; R[o + 2][o + 1] = w * h * h; R[o + 2][o + 2] = w * 4 / 3 * h ** 3;
+    });
+    R.forEach(r => r.forEach(v => { sR += v * v; }));
+    const scale = sA / Math.max(1e-8, Math.sqrt(sR));
+    // constraints
+    const G = [];
+    for (let j = 0; j < n - 1; j++) {
+      const h = hi[j], r1 = new Array(m).fill(0), r2 = new Array(m).fill(0);
+      r1[3 * j] = 1; r1[3 * j + 1] = h; r1[3 * j + 2] = h * h; r1[3 * j + 3] = -1;
+      r2[3 * j + 1] = 1; r2[3 * j + 2] = 2 * h; r2[3 * j + 4] = -1;
+      G.push(r1, r2);
+    }
+    const gt = new Array(m).fill(0); gt[1] = 1; G.push(gt);
+    const gb = new Array(m).fill(0); gb[m - 2] = 1; gb[m - 1] = 2 * hi[n - 1]; G.push(gb);
+    // KKT: [2(AtA/n + lam R_s)  G'; G 0]
+    const c = G.length, K = Array.from({ length: m + c }, () => new Array(m + c).fill(0)), rhs = new Array(m + c).fill(0);
+    for (let p = 0; p < m; p++) {
+      rhs[p] = 2 * Aty[p] / n;
+      for (let q = 0; q < m; q++) K[p][q] = 2 * (AtA[p][q] / n + lam * scale * R[p][q]);
+    }
+    G.forEach((row, i) => row.forEach((v, p) => { K[m + i][p] = v; K[p][m + i] = v; }));
+    let beta = solveLinear(K, rhs);
+    if (!beta || beta.some(v => !isFinite(v))) beta = seg.flatMap(s => [s.y, 0, 0]);
+    return seg.map((s, j) => {
+      const a = beta[3 * j], b = beta[3 * j + 1], g = beta[3 * j + 2], h = hi[j];
+      return { ...s, a, b, g, fit: a + b * h / 2 + g * h * h / 3 };
+    });
+  }
+
+  function valueAt(segs, z) {
+    for (const s of segs) if (z >= s.top && z <= s.bottom) { const x = z - s.top; return s.a + s.b * x + s.g * x * x; }
+    return NaN;
+  }
+
+  // Mean over [z1, z2], restricted to the part of the interval inside the profile.
+  // Returns {value, coverage} where coverage is the fraction of the interval with soil.
+  function intervalMean(segs, z1, z2) {
+    let area = 0, len = 0;
+    segs.forEach(s => {
+      const a = Math.max(s.top, z1), b = Math.min(s.bottom, z2);
+      if (b > a) {
+        const x1 = a - s.top, x2 = b - s.top;
+        area += s.a * (x2 - x1) + s.b / 2 * (x2 * x2 - x1 * x1) + s.g / 3 * (x2 ** 3 - x1 ** 3);
+        len += b - a;
+      }
+    });
+    return { value: len > 0 ? area / len : NaN, coverage: len / (z2 - z1) };
+  }
+
+  root.PhySpline = { fitProfile, valueAt, intervalMean, solveLinear };
+  if (typeof module !== 'undefined') module.exports = root.PhySpline;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function () {
+"use strict";
+const $ = id => document.getElementById(id);
+const NS = "http://www.w3.org/2000/svg";
+const fmt = (v, d = 2) => (v == null || !isFinite(v)) ? "–" : Number(v).toFixed(d);
+
+/* ---------------- tabs ---------------- */
+const tabs = document.querySelectorAll("nav.rk-tabs button");
+function showTab(name, push) {
+  tabs.forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === name)));
+  document.querySelectorAll("section.tool").forEach(s => s.classList.toggle("active", s.id === "tab-" + name));
+  if (push) history.replaceState(null, "", "#" + name);
+  if (name === "vg") drawVG();
+  if (name === "texture") updTexture();
+  if (name === "spline" && lastSpline) drawProfile();
+}
+tabs.forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab, true)));
+
+/* ---------------- shared helpers ---------------- */
+function parseCSV(text) {
+  const lines = text.replace(/\r/g, "").split("\n").filter(l => l.trim() !== "");
+  if (!lines.length) return { header: [], rows: [] };
+  const first = lines[0];
+  const sep = first.includes("\t") ? "\t" : (first.split(";").length > first.split(",").length ? ";" : ",");
+  const split = l => {
+    const out = []; let cur = "", q = false;
+    for (let i = 0; i < l.length; i++) {
+      const ch = l[i];
+      if (ch === '"') { if (q && l[i + 1] === '"') { cur += '"'; i++; } else q = !q; }
+      else if (ch === sep && !q) { out.push(cur.trim()); cur = ""; }
+      else cur += ch;
+    }
+    out.push(cur.trim()); return out;
+  };
+  return { header: split(first), rows: lines.slice(1).map(split) };
+}
+function toCSV(header, rows) {
+  const esc = v => { const s = v == null ? "" : String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; };
+  return [header.map(esc).join(",")].concat(rows.map(r => r.map(esc).join(","))).join("\n");
+}
+function download(name, text) {
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([text], { type: "text/csv" }));
+  a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+function readFileInto(input, textarea, after) {
+  input.addEventListener("change", () => {
+    const f = input.files[0]; if (!f) return;
+    if (f.size > 5e6) { alert("File is larger than 5 MB. For big datasets, get in touch."); return; }
+    const r = new FileReader();
+    r.onload = () => { textarea.value = r.result; after && after(); };
+    r.readAsText(f);
+  });
+}
+const num = v => { if (v == null) return NaN; const s = String(v).trim(); return s === "" ? NaN : Number(s); };
+function parseDepths(s) {
+  const d = s.split(/[\s,;]+/).map(Number).filter(v => isFinite(v));
+  return [...new Set(d)].sort((a, b) => a - b);
+}
+function el(tag, attrs, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+function niceTicks(lo, hi, n) {
+  const span = hi - lo || 1, step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= step0) || 10 * mag;
+  const t = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) t.push(+v.toFixed(10));
+  return t;
+}
+function setTable(host, header, rows, cellClass) {
+  host.innerHTML = "";
+  const table = document.createElement("table"); host.appendChild(table);
+  const thead = table.createTHead().insertRow();
+  header.forEach(h => { const th = document.createElement("th"); th.textContent = h; thead.appendChild(th); });
+  const tb = table.createTBody();
+  rows.forEach((r, i) => {
+    const tr = tb.insertRow();
+    r.forEach((v, j) => { const td = tr.insertCell(); td.textContent = v; const c = cellClass && cellClass(i, j, v); if (c) td.className = c; });
+  });
+}
+
+/* ============ PROFILE HARMONISER ============ */
+const TEXTURE_ORDER = ["C", "SiC", "SC", "CL", "SiCL", "SCL", "L", "SiL", "SL", "Si", "LS", "S"];
+const EX_CONT = `id,top,bottom,soc_pct
+P1,0,12,3.2
+P1,12,28,1.9
+P1,28,55,1.1
+P1,55,90,0.6
+P1,90,130,0.4
+P2,0,8,4.5
+P2,8,20,3.0
+P2,20,45,1.4
+P2,45,80,0.7
+P3,0,15,2.1
+P3,15,40,1.6
+P3,40,70,0.9
+P3,70,110,0.5
+P3,110,150,0.3
+P4,5,20,2.8
+P4,25,50,1.2
+P4,50,100,0.6`;
+const EX_CLASS = `id,top,bottom,texture
+1,0,15,SCL
+1,15,45,SC
+1,45,110,SC
+2,0,30,SCL
+2,30,100,SCL
+2,100,160,SL
+3,0,15,SCL
+3,15,30,SC
+3,30,120,C
+3,120,180,C
+4,0,4,LS
+4,4,20,SL
+4,20,75,SL
+5,0,30,SC
+5,30,180,C
+6,0,5,SCL
+6,5,35,C
+6,35,55,SC
+6,55,135,SC
+7,0,15,SL
+7,15,35,SCL
+8,0,5,SL
+8,5,20,SCL
+8,20,45,SCL
+9,0,5,SL
+9,5,15,SCL
+9,15,65,SC
+9,65,110,C
+9,110,160,SC
+10,0,5,SL
+10,5,45,SCL
+10,45,130,SCL`;
+
+let spParsed = null, lastSpline = null;
+function spRefreshColumns() {
+  spParsed = parseCSV($("sp-data").value);
+  const sel = $("sp-var"); const prev = sel.value; sel.innerHTML = "";
+  spParsed.header.slice(3).forEach((h, i) => { const o = document.createElement("option"); o.value = i + 3; o.textContent = h; sel.appendChild(o); });
+  if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+  spGuessMode();
+}
+function spGuessMode() {
+  if (!spParsed || !spParsed.rows.length) return;
+  const c = +$("sp-var").value;
+  const vals = spParsed.rows.map(r => r[c]).filter(v => v != null && v !== "");
+  const numeric = vals.every(v => isFinite(Number(v)));
+  $("sp-mode").value = numeric ? "continuous" : "classification";
+  if (!numeric) {
+    const uniq = [...new Set(vals)];
+    const tex = uniq.every(v => TEXTURE_ORDER.includes(v));
+    $("sp-order").value = tex ? TEXTURE_ORDER.join(", ") : uniq.sort().join(", ");
+  }
+  $("sp-order-box").style.display = numeric ? "none" : "block";
+}
+$("sp-data").addEventListener("change", spRefreshColumns);
+$("sp-var").addEventListener("change", spGuessMode);
+$("sp-mode").addEventListener("change", () => {
+  $("sp-order-box").style.display = $("sp-mode").value === "classification" ? "block" : "none";
+  if ($("sp-mode").value === "classification" && !$("sp-order").value) spGuessMode();
+});
+$("sp-ex-cont").addEventListener("click", () => { $("sp-data").value = EX_CONT; spRefreshColumns(); runSpline(); });
+$("sp-ex-class").addEventListener("click", () => { $("sp-data").value = EX_CLASS; spRefreshColumns(); runSpline(); });
+readFileInto($("sp-file"), $("sp-data"), spRefreshColumns);
+
+function runSpline() {
+  const msg = $("sp-msg"); msg.className = "msg"; msg.textContent = "";
+  spRefreshColumnsIfNeeded();
+  const P = spParsed;
+  if (!P || P.header.length < 4 || !P.rows.length) { msg.className = "msg err"; msg.textContent = "Need at least four columns: id, top, bottom and a property."; return; }
+  if (P.rows.length > 20000) { msg.className = "msg err"; msg.textContent = "More than 20,000 rows. For large datasets, get in touch."; return; }
+  const col = +$("sp-var").value, mode = $("sp-mode").value;
+  const lam = Number($("sp-lam").value);
+  if (!(lam > 0)) { msg.className = "msg err"; msg.textContent = "Smoothing must be greater than 0."; return; }
+  const d = parseDepths($("sp-depths").value);
+  if (d.length < 2) { msg.className = "msg err"; msg.textContent = "Enter at least two target depths."; return; }
+  let order = null;
+  if (mode === "classification") {
+    order = $("sp-order").value.split(/[,;]+/).map(s => s.trim()).filter(Boolean);
+    if (order.length < 2) { msg.className = "msg err"; msg.textContent = "Enter the class order, separated by commas."; return; }
+  }
+  const groups = new Map(); let skipped = 0;
+  P.rows.forEach(r => {
+    const id = r[0], top = num(r[1]), bottom = num(r[2]);
+    let y;
+    if (mode === "classification") { const k = order.indexOf(String(r[col]).trim()); y = k >= 0 ? k + 1 : NaN; }
+    else y = num(r[col]);
+    if (id === undefined || id === "" || !isFinite(top) || !isFinite(bottom) || bottom <= top || !isFinite(y)) { skipped++; return; }
+    if (!groups.has(id)) groups.set(id, []);
+    groups.get(id).push({ top, bottom, y });
+  });
+  if (!groups.size) { msg.className = "msg err"; msg.textContent = "No usable rows. Check the columns and the class order."; return; }
+  const t0 = performance.now();
+  const fits = [];
+  groups.forEach((rows, id) => {
+    rows.sort((a, b) => a.top - b.top);
+    // drop overlapping horizons: keep the first
+    const clean = []; rows.forEach(r => { if (!clean.length || r.top >= clean[clean.length - 1].bottom) clean.push(r); else skipped++; });
+    const segs = PhySpline.fitProfile(clean, lam);
+    const vals = d.slice(0, -1).map((z, i) => PhySpline.intervalMean(segs, z, d[i + 1]));
+    fits.push({ id, rows: clean, segs, vals });
+  });
+  const ms = performance.now() - t0;
+  lastSpline = { fits, d, mode, order, name: P.header[col] };
+  msg.className = "msg ok";
+  msg.textContent = `Fitted ${fits.length} profile${fits.length > 1 ? "s" : ""} in ${ms < 1 ? "<1" : Math.round(ms)} ms` + (skipped ? ` · ${skipped} row${skipped > 1 ? "s" : ""} skipped (missing values, unknown classes or overlaps)` : "") + ".";
+  const ps = $("sp-prof"); ps.innerHTML = "";
+  fits.forEach((f, i) => { const o = document.createElement("option"); o.value = i; o.textContent = "Profile " + f.id; ps.appendChild(o); });
+  $("sp-results").hidden = false;
+  spTable(); drawProfile();
+}
+let spLastText = "";
+function spRefreshColumnsIfNeeded() { if ($("sp-data").value !== spLastText) { spLastText = $("sp-data").value; spRefreshColumns(); } }
+$("sp-run").addEventListener("click", runSpline);
+$("sp-prof").addEventListener("change", drawProfile);
+
+function classOf(v, order) {
+  if (!isFinite(v)) return "";
+  const k = Math.min(order.length, Math.max(1, Math.round(v)));
+  return order[k - 1];
+}
+function spRows() {
+  const S = lastSpline, labs = S.d.slice(0, -1).map((z, i) => `${z}-${S.d[i + 1]}cm`);
+  const header = ["id"].concat(S.mode === "classification" ? labs.concat(labs.map(l => l + "_uncertainty")) : labs).concat(["soil_depth_cm"]);
+  const rows = S.fits.map(f => {
+    const vals = f.vals.map(m => m.coverage > 0 ? (S.mode === "classification" ? classOf(m.value, S.order) : +m.value.toPrecision(5)) : "");
+    const unc = S.mode === "classification" ? f.vals.map(m => { if (!(m.coverage > 0)) return ""; const k = Math.min(S.order.length, Math.max(1, Math.round(m.value))); return +Math.min(1, Math.abs(m.value - k)).toFixed(3); }) : [];
+    return [f.id].concat(vals, unc, [f.segs[f.segs.length - 1].bottom]);
+  });
+  return { header, rows };
+}
+function spTable() {
+  const S = lastSpline, { header, rows } = spRows();
+  const nInt = S.d.length - 1;
+  setTable($("sp-table"), header, rows.slice(0, 500).map(r => r.map(v => typeof v === "number" && !Number.isInteger(v) ? fmt(v, S.mode === "classification" ? 2 : 3) : v)), (i, j) => {
+    const k = (j - 1) % nInt; if (j < 1 || j > (S.mode === "classification" ? 2 * nInt : nInt)) return "";
+    const m = S.fits[i].vals[k]; return m.coverage === 0 ? "na" : m.coverage < 0.999 ? "part" : "";
+  });
+}
+$("sp-dl").addEventListener("click", () => { const { header, rows } = spRows(); download("harmonised_" + lastSpline.name + ".csv", toCSV(header, rows)); });
+
+function drawProfile() {
+  const S = lastSpline; if (!S) return;
+  const f = S.fits[+$("sp-prof").value || 0];
+  const svg = $("sp-chart"); svg.innerHTML = "";
+  const W = Math.max(300, svg.clientWidth || 600), H = 380, m = { l: 48, r: 16, t: 28, b: 12 };
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const zmax = Math.max(f.segs[f.segs.length - 1].bottom, 1);
+  const zs = []; for (let i = 0; i <= 200; i++) zs.push(i / 200 * zmax);
+  const ys = zs.map(z => PhySpline.valueAt(f.segs, z));
+  let lo, hi;
+  if (S.mode === "classification") { lo = 0.5; hi = S.order.length + 0.5; }
+  else {
+    const all = ys.concat(f.rows.map(r => r.y)).filter(isFinite);
+    lo = Math.min(...all); hi = Math.max(...all); const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad;
+  }
+  const X = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r);
+  const Y = z => m.t + z / zmax * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg);
+  const yt = niceTicks(0, zmax, 6);
+  yt.forEach(z => { el("line", { x1: m.l, x2: W - m.r, y1: Y(z), y2: Y(z) }, g); const t = el("text", { x: m.l - 6, y: Y(z) + 4, "text-anchor": "end" }, svg); t.textContent = z; });
+  const lbl = el("text", { x: 4, y: 14 }, svg); lbl.textContent = "Depth (cm)";
+  if (S.mode === "classification") {
+    const step = S.order.length > 8 && W < 500 ? 2 : 1;
+    S.order.forEach((c, i) => { if (i % step) return; el("line", { x1: X(i + 1), x2: X(i + 1), y1: m.t, y2: H - m.b }, g); const t = el("text", { x: X(i + 1), y: m.t - 8, "text-anchor": "middle" }, svg); t.textContent = c; });
+  } else {
+    niceTicks(lo, hi, W < 500 ? 4 : 6).forEach(v => { el("line", { x1: X(v), x2: X(v), y1: m.t, y2: H - m.b }, g); const t = el("text", { x: X(v), y: m.t - 8, "text-anchor": "middle" }, svg); t.textContent = v; });
+    const nm = el("text", { x: W - m.r, y: 14, "text-anchor": "end" }, svg); nm.textContent = S.name;
+  }
+  // observed horizons
+  f.rows.forEach(r => el("rect", { x: X(r.y) - 4, y: Y(r.top) + 1, width: 8, height: Math.max(1, Y(r.bottom) - Y(r.top) - 2), rx: 3, fill: "var(--obs)" }, svg));
+  // harmonised steps
+  let dpath = "";
+  S.d.slice(0, -1).forEach((z, i) => {
+    const mv = f.vals[i]; if (!(mv.coverage > 0)) return;
+    const z2 = Math.min(S.d[i + 1], zmax); const v = S.mode === "classification" ? Math.round(mv.value) : mv.value;
+    dpath += `M${X(v)},${Y(z)}V${Y(z2)}`;
+  });
+  el("path", { d: dpath, stroke: "var(--s2)", "stroke-width": 2.5, fill: "none", "stroke-linecap": "round" }, svg);
+  // spline
+  el("path", { d: zs.map((z, i) => (i ? "L" : "M") + X(ys[i]).toFixed(1) + "," + Y(z).toFixed(1)).join(""), stroke: "var(--s1)", "stroke-width": 2, fill: "none" }, svg);
+  // hover
+  const cross = el("line", { x1: m.l, x2: W - m.r, stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" }, svg);
+  const dot = el("circle", { r: 4.5, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 2, visibility: "hidden" }, svg);
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  const tip = $("sp-tip");
+  const move = ev => {
+    const p = ev.touches ? ev.touches[0] : ev, rect = svg.getBoundingClientRect(), sy = (p.clientY - rect.top) * H / rect.height;
+    const z = Math.max(0, Math.min(zmax, (sy - m.t) / (H - m.t - m.b) * zmax)), v = PhySpline.valueAt(f.segs, z);
+    cross.setAttribute("y1", Y(z)); cross.setAttribute("y2", Y(z)); cross.setAttribute("visibility", "visible");
+    dot.setAttribute("cx", X(v)); dot.setAttribute("cy", Y(z)); dot.setAttribute("visibility", "visible");
+    tip.style.display = "block";
+    tip.textContent = `${z.toFixed(0)} cm · ` + (S.mode === "classification" ? `${classOf(v, S.order)} (latent ${v.toFixed(2)})` : `${v.toPrecision(3)}`);
+    const px = X(v) * rect.width / W, py = Y(z) * rect.height / H;
+    tip.style.left = Math.min(rect.width - tip.offsetWidth - 4, px + 10) + "px"; tip.style.top = (py - 34) + "px";
+  };
+  const leave = () => { cross.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); tip.style.display = "none"; };
+  hit.addEventListener("mousemove", move); hit.addEventListener("touchmove", move, { passive: true }); hit.addEventListener("touchstart", move, { passive: true });
+  hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
+}
+
+/* ============ CARBON ============ */
+const EX_CARBON = `id,top,bottom,soc,bd,cf
+P1,0,12,3.2,1.05,2
+P1,12,28,1.9,1.22,5
+P1,28,55,1.1,1.38,8
+P1,55,90,0.6,1.45,12
+P1,90,130,0.4,1.50,15
+P2,0,8,4.5,0.95,0
+P2,8,20,3.0,1.10,0
+P2,20,45,1.4,1.30,3
+P2,45,80,0.7,1.42,5
+P3,0,15,2.1,1.25,10
+P3,15,40,1.6,1.32,10
+P3,40,70,0.9,1.41,20
+P3,70,110,0.5,1.48,25`;
+$("c-ex").addEventListener("click", () => { $("c-data").value = EX_CARBON; runCarbon(); });
+readFileInto($("c-file"), $("c-data"));
+let carbonOut = null;
+function runCarbon() {
+  const msg = $("c-msg"); msg.className = "msg"; msg.textContent = "";
+  const P = parseCSV($("c-data").value);
+  const hdr = P.header.map(h => h.toLowerCase());
+  const ix = name => hdr.indexOf(name);
+  const iId = 0, iT = ix("top") >= 0 ? ix("top") : 1, iB = ix("bottom") >= 0 ? ix("bottom") : 2;
+  const iS = ix("soc"), iD = ix("bd"), iC = ix("cf");
+  if (iS < 0 || iD < 0) { msg.className = "msg err"; msg.textContent = "Columns named soc and bd are required."; return; }
+  const depths = parseDepths($("c-depths").value).filter(v => v > 0);
+  if (!depths.length) { msg.className = "msg err"; msg.textContent = "Enter at least one reporting depth."; return; }
+  const ref = num($("c-esm").value);
+  const groups = new Map(); let skipped = 0;
+  P.rows.forEach(r => {
+    const top = num(r[iT]), bot = num(r[iB]), soc = num(r[iS]), bd = num(r[iD]), cf = iC >= 0 ? (num(r[iC]) || 0) : 0;
+    if (!r[iId] || !isFinite(top) || !isFinite(bot) || bot <= top || !isFinite(soc) || !isFinite(bd)) { skipped++; return; }
+    if (!groups.has(r[iId])) groups.set(r[iId], []);
+    groups.get(r[iId]).push({ top, bot, soc, bd, cf: Math.min(100, Math.max(0, cf)) });
+  });
+  if (!groups.size) { msg.className = "msg err"; msg.textContent = "No usable rows."; return; }
+  const header = ["id"].concat(depths.map(z => `0-${z}cm`)).concat(isFinite(ref) && ref > 0 ? [`ESM ${ref} Mg/ha`, "ESM depth (cm)"] : []).concat(["sampled depth (cm)"]);
+  const rows = [], partial = [];
+  groups.forEach((hz, id) => {
+    hz.sort((a, b) => a.top - b.top);
+    const maxD = hz[hz.length - 1].bot;
+    const row = [id], prow = [false];
+    depths.forEach(z => {
+      let s = 0;
+      hz.forEach(h => { const ov = Math.max(0, Math.min(h.bot, z) - h.top); s += h.soc * h.bd * ov * (1 - h.cf / 100); });
+      row.push(s); prow.push(maxD < z);
+    });
+    if (isFinite(ref) && ref > 0) {
+      // cumulative soil mass (Mg/ha) = bd * thickness(cm) * (1-cf) * 100
+      let mass = 0, stock = 0, depth = NaN;
+      for (const h of hz) {
+        const th = h.bot - h.top, f = 1 - h.cf / 100, mh = h.bd * th * f * 100;
+        if (mass + mh >= ref) {
+          const need = (ref - mass) / (h.bd * f * 100); stock += h.soc * h.bd * need * f; depth = h.top + need; mass = ref; break;
+        }
+        mass += mh; stock += h.soc * h.bd * th * f;
+      }
+      row.push(isFinite(depth) ? stock : NaN, depth); prow.push(false, false);
+    }
+    row.push(maxD); prow.push(false);
+    rows.push(row); partial.push(prow);
+  });
+  carbonOut = { header, rows };
+  const means = depths.map((z, k) => rows.reduce((s, r) => s + r[k + 1], 0) / rows.length);
+  $("c-summary").innerHTML = depths.map((z, k) => `<div class="stat"><div class="k">Mean, 0–${z} cm</div><div class="v">${fmt(means[k], 1)}</div><div class="u">Mg C/ha · ${rows.length} profiles</div></div>`).join("");
+  setTable($("c-table"), header, rows.map(r => r.map((v, j) => j === 0 ? v : (isFinite(v) ? fmt(v, j === r.length - 1 || header[j] === "ESM depth (cm)" ? 0 : 1) : "–"))),
+    (i, j) => partial[i][j] ? "part" : (rows[i][j] !== rows[i][0] && !isFinite(rows[i][j]) ? "na" : ""));
+  $("c-results").hidden = false;
+  if (skipped) { msg.className = "msg"; msg.textContent = `${skipped} row${skipped > 1 ? "s" : ""} skipped because of missing values.`; }
+  if (isFinite(ref) && rows.some(r => !isFinite(r[depths.length + 1]))) { msg.className = "msg"; msg.textContent += " Some profiles do not reach the reference mass, shown as –."; }
+}
+$("c-run").addEventListener("click", runCarbon);
+$("c-dl").addEventListener("click", () => carbonOut && download("carbon_stocks.csv", toCSV(carbonOut.header, carbonOut.rows.map(r => r.map(v => typeof v === "number" ? +v.toFixed(3) : v)))));
+
+/* ============ WATER RETENTION (Saxton & Rawls 2006) ============ */
+function saxtonRawls(sandPct, clayPct, om) {
+  const S = sandPct / 100, C = clayPct / 100;
+  const t1500t = -0.024 * S + 0.487 * C + 0.006 * om + 0.005 * S * om - 0.013 * C * om + 0.068 * S * C + 0.031;
+  const t1500 = t1500t + (0.14 * t1500t - 0.02);
+  const t33t = -0.251 * S + 0.195 * C + 0.011 * om + 0.006 * S * om - 0.027 * C * om + 0.452 * S * C + 0.299;
+  const t33 = t33t + (1.283 * t33t * t33t - 0.374 * t33t - 0.015);
+  const ts33t = 0.278 * S + 0.034 * C + 0.022 * om - 0.018 * S * om - 0.027 * C * om - 0.584 * S * C + 0.078;
+  const ts33 = ts33t + (0.636 * ts33t - 0.107);
+  const ts = t33 + ts33 - 0.097 * S + 0.043;
+  const bd = (1 - ts) * 2.65;
+  const B = (Math.log(1500) - Math.log(33)) / (Math.log(t33) - Math.log(t1500));
+  const lambda = 1 / B;
+  const ks = 1930 * Math.pow(ts - t33, 3 - lambda); // mm/h
+  return { wp: t1500, fc: t33, sat: ts, awc: t33 - t1500, bd, ks };
+}
+function updWater() {
+  const s = num($("w-sand").value), c = num($("w-clay").value), om = num($("w-om").value);
+  const msg = $("w-msg"); msg.className = "msg"; msg.textContent = "";
+  if (![s, c, om].every(isFinite) || s < 0 || c < 0 || om < 0 || s + c > 100) { msg.className = "msg err"; msg.textContent = "Sand plus clay must be 100% or less."; $("w-out").innerHTML = ""; return; }
+  if (om > 8 || c > 60) { msg.textContent = "Outside the range the equations were fitted to; treat results with caution."; }
+  const r = saxtonRawls(s, c, Math.min(om, 8));
+  const stat = (k, v, u) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${u}</div></div>`;
+  $("w-out").innerHTML =
+    stat("Field capacity (33 kPa)", fmt(r.fc, 3), "m³/m³") +
+    stat("Wilting point (1500 kPa)", fmt(r.wp, 3), "m³/m³") +
+    stat("Available water", fmt(r.awc, 3), `m³/m³ · ${fmt(r.awc * 1000, 0)} mm per m`) +
+    stat("Saturation", fmt(r.sat, 3), "m³/m³") +
+    stat("Saturated conductivity", fmt(r.ks, 1), "mm/h") +
+    stat("Bulk density (normal)", fmt(r.bd, 2), "g/cm³");
+}
+["w-sand", "w-clay", "w-om"].forEach(id => $(id).addEventListener("input", updWater));
+
+/* ============ VAN GENUCHTEN ============ */
+// Carsel & Parrish (1988): thr, ths, alpha (1/cm), n, Ks (cm/day)
+const CP = {
+  "Sand": [0.045, 0.43, 0.145, 2.68, 712.8], "Loamy sand": [0.057, 0.41, 0.124, 2.28, 350.2],
+  "Sandy loam": [0.065, 0.41, 0.075, 1.89, 106.1], "Loam": [0.078, 0.43, 0.036, 1.56, 24.96],
+  "Silt": [0.034, 0.46, 0.016, 1.37, 6.0], "Silt loam": [0.067, 0.45, 0.020, 1.41, 10.8],
+  "Sandy clay loam": [0.100, 0.39, 0.059, 1.48, 31.44], "Clay loam": [0.095, 0.41, 0.019, 1.31, 6.24],
+  "Silty clay loam": [0.089, 0.43, 0.010, 1.23, 1.68], "Sandy clay": [0.100, 0.38, 0.027, 1.23, 2.88],
+  "Silty clay": [0.070, 0.36, 0.005, 1.09, 0.48], "Clay": [0.068, 0.38, 0.008, 1.09, 4.8]
+};
+const vgSel = $("vg-preset");
+Object.keys(CP).forEach(k => { const o = document.createElement("option"); o.value = k; o.textContent = k; vgSel.appendChild(o); });
+vgSel.value = "Loam";
+function vgLoad() {
+  const [tr, ts, a, n, ks] = CP[vgSel.value];
+  $("vg-tr").value = tr; $("vg-ts").value = ts; $("vg-a").value = Math.log10(a); $("vg-n").value = n; $("vg-ks").value = Math.log10(ks);
+  drawVG();
+}
+vgSel.addEventListener("change", vgLoad);
+["vg-tr", "vg-ts", "vg-a", "vg-n", "vg-ks"].forEach(id => $(id).addEventListener("input", drawVG));
+function vgParams() {
+  return { tr: +$("vg-tr").value, ts: +$("vg-ts").value, a: Math.pow(10, +$("vg-a").value), n: +$("vg-n").value, ks: Math.pow(10, +$("vg-ks").value) };
+}
+const vgTheta = (p, h) => { const m = 1 - 1 / p.n; return p.tr + (p.ts - p.tr) / Math.pow(1 + Math.pow(p.a * h, p.n), m); };
+const vgK = (p, h) => { const m = 1 - 1 / p.n, se = 1 / Math.pow(1 + Math.pow(p.a * h, p.n), m); return p.ks * Math.sqrt(se) * Math.pow(1 - Math.pow(1 - Math.pow(se, 1 / m), m), 2); };
+function logChart(svg, tipEl, opts) {
+  svg.innerHTML = "";
+  const W = Math.max(280, svg.clientWidth || 420), H = 280, m = { l: 52, r: 14, t: 12, b: 40 };
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const hs = []; for (let i = 0; i <= 240; i++) hs.push(Math.pow(10, -0.5 + i / 240 * 6.5));
+  const ys = hs.map(opts.f);
+  const X = h => m.l + (Math.log10(h) + 0.5) / 6.5 * (W - m.l - m.r);
+  let ylo = opts.ylo, yhi = opts.yhi;
+  const Y = opts.ylog ? v => m.t + (1 - (Math.log10(Math.max(v, Math.pow(10, ylo))) - ylo) / (yhi - ylo)) * (H - m.t - m.b)
+                      : v => m.t + (1 - (v - ylo) / (yhi - ylo)) * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg);
+  for (let e = 0; e <= 6; e++) { const h = Math.pow(10, e); el("line", { x1: X(h), x2: X(h), y1: m.t, y2: H - m.b }, g); const t = el("text", { x: X(h), y: H - m.b + 16, "text-anchor": "middle" }, svg); t.textContent = e === 0 ? "1" : "10" + "⁰¹²³⁴⁵⁶"[e]; }
+  const xl = el("text", { x: (m.l + W - m.r) / 2, y: H - 4, "text-anchor": "middle" }, svg); xl.textContent = "Suction h (cm, log scale)";
+  const yticks = opts.ylog ? Array.from({ length: yhi - ylo + 1 }, (_, i) => ylo + i).filter((_, i, a) => a.length < 8 || i % 2 === 0) : niceTicks(ylo, yhi, 5);
+  yticks.forEach(v => { const yy = opts.ylog ? Y(Math.pow(10, v)) : Y(v); el("line", { x1: m.l, x2: W - m.r, y1: yy, y2: yy }, g); const t = el("text", { x: m.l - 6, y: yy + 4, "text-anchor": "end" }, svg); t.textContent = opts.ylog ? (v >= 0 ? (v === 0 ? "1" : "1e" + v) : "1e" + v) : v; });
+  // reference lines at FC (330 cm) and WP (15000 cm)
+  [[336.5, "FC"], [15296, "WP"]].forEach(([h, l]) => { el("line", { x1: X(h), x2: X(h), y1: m.t, y2: H - m.b, stroke: "var(--ink-3)", "stroke-dasharray": "4 3" }, svg); const t = el("text", { x: X(h) + 4, y: m.t + 12 }, svg); t.textContent = l; });
+  const floor = opts.ylog ? Math.pow(10, ylo) : -Infinity;
+  let path = "", pen = false;
+  hs.forEach((h, i) => { if (!(ys[i] >= floor)) { pen = false; return; } path += (pen ? "L" : "M") + X(h).toFixed(1) + "," + Y(ys[i]).toFixed(1); pen = true; });
+  el("path", { d: path, stroke: "var(--s1)", "stroke-width": 2, fill: "none" }, svg);
+  const dot = el("circle", { r: 4.5, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 2, visibility: "hidden" }, svg);
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  const move = ev => {
+    const p = ev.touches ? ev.touches[0] : ev, rect = svg.getBoundingClientRect(), sx = (p.clientX - rect.left) * W / rect.width;
+    const h = Math.pow(10, Math.max(-0.5, Math.min(6, (sx - m.l) / (W - m.l - m.r) * 6.5 - 0.5))), v = opts.f(h);
+    dot.setAttribute("cx", X(h)); dot.setAttribute("cy", Y(v)); dot.setAttribute("visibility", v >= floor ? "visible" : "hidden");
+    tipEl.style.display = "block"; tipEl.textContent = `h = ${h < 10 ? h.toFixed(1) : Math.round(h)} cm · ${opts.label(v)}`;
+    tipEl.style.left = Math.min(rect.width - tipEl.offsetWidth - 4, X(h) * rect.width / W + 10) + "px"; tipEl.style.top = (Y(v) * rect.height / H - 34) + "px";
+  };
+  const leave = () => { dot.setAttribute("visibility", "hidden"); tipEl.style.display = "none"; };
+  hit.addEventListener("mousemove", move); hit.addEventListener("touchmove", move, { passive: true }); hit.addEventListener("touchstart", move, { passive: true });
+  hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
+}
+function drawVG() {
+  const p = vgParams();
+  if (p.tr >= p.ts) { p.tr = p.ts - 0.01; $("vg-tr").value = p.tr; }
+  $("vg-tr-v").textContent = p.tr.toFixed(3); $("vg-ts-v").textContent = p.ts.toFixed(3);
+  $("vg-a-v").textContent = p.a.toPrecision(3); $("vg-n-v").textContent = p.n.toFixed(2); $("vg-ks-v").textContent = p.ks.toPrecision(3);
+  const fc = vgTheta(p, 336.5), wp = vgTheta(p, 15296);
+  const stat = (k, v, u) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${u}</div></div>`;
+  $("vg-out").innerHTML = stat("θ at field capacity", fmt(fc, 3), "m³/m³ at 33 kPa") + stat("θ at wilting point", fmt(wp, 3), "m³/m³ at 1500 kPa") +
+    stat("Available water", fmt(fc - wp, 3), `m³/m³ · ${fmt((fc - wp) * 1000, 0)} mm per m`) + stat("K at field capacity", vgK(p, 336.5).toExponential(2), "cm/day");
+  if (!$("tab-vg").classList.contains("active")) return;
+  logChart($("vg-ret"), $("vg-ret-tip"), { f: h => vgTheta(p, h), ylo: 0, yhi: 0.6, label: v => `θ = ${v.toFixed(3)}` });
+  const kmax = Math.ceil(Math.log10(p.ks));
+  logChart($("vg-k"), $("vg-k-tip"), { f: h => vgK(p, h), ylog: true, ylo: kmax - 12, yhi: kmax, label: v => `K = ${v.toExponential(2)} cm/day` });
+}
+
+/* ============ HSG (NEH 630 Ch. 7) ============ */
+function hsgClass(ks, strict) {
+  // ks in um/s
+  if (strict) return ks > 40 ? "A" : ks > 10 ? "B" : ks > 1 ? "C" : "D";
+  return ks > 10 ? "A" : ks > 4 ? "B" : ks > 0.4 ? "C" : "D";
+}
+function updHSG() {
+  const rest = num($("h-rest").value), wt = num($("h-wt").value), ks = num($("h-ks").value) * Number($("h-unit").value);
+  const out = $("h-group"), why = $("h-why");
+  if (![rest, wt, ks].every(isFinite) || ks < 0) { out.textContent = "–"; why.textContent = "Enter all three values."; return; }
+  let g, txt;
+  const ksTxt = `Ksat ${ks < 1 ? ks.toPrecision(2) : ks.toFixed(1)} µm/s`;
+  if (rest < 50) { g = "D"; txt = "A restrictive layer within 50 cm puts the soil in group D regardless of conductivity."; }
+  else {
+    const strict = rest <= 100 || wt <= 100;
+    const base = hsgClass(ks, strict);
+    const rule = strict ? "restriction or water table within 100 cm, so the stricter thresholds apply (A > 40, B > 10, C > 1 µm/s)" : "no restriction or water table within 100 cm (A > 10, B > 4, C > 0.4 µm/s)";
+    if (wt < 60) {
+      g = base === "D" ? "D" : base + "/D";
+      txt = base === "D" ? `Water table within 60 cm and ${ksTxt}: group D.` : `Water table within 60 cm: group D when undrained, ${base} if adequately drained (${ksTxt}; ${rule}).`;
+    } else { g = base; txt = `${ksTxt}; ${rule}.`; }
+  }
+  out.textContent = g; why.textContent = txt;
+}
+["h-rest", "h-wt", "h-ks", "h-unit"].forEach(id => $(id).addEventListener("input", updHSG));
+
+/* ============ TEXTURE (USDA) ============ */
+function usdaClass(sand, silt, clay) {
+  if (silt + 1.5 * clay < 15) return "Sand";
+  if (silt + 2 * clay < 30) return "Loamy sand";
+  if ((clay >= 7 && clay < 20 && sand > 52) || (clay < 7 && silt < 50)) return "Sandy loam";
+  if (clay >= 7 && clay < 27 && silt >= 28 && silt < 50 && sand <= 52) return "Loam";
+  if (silt >= 80 && clay < 12) return "Silt";
+  if ((silt >= 50 && clay >= 12 && clay < 27) || (silt >= 50 && silt < 80 && clay < 12)) return "Silt loam";
+  if (clay >= 20 && clay < 35 && silt < 28 && sand > 45) return "Sandy clay loam";
+  if (clay >= 27 && clay < 40 && sand > 20 && sand <= 45) return "Clay loam";
+  if (clay >= 27 && clay < 40 && sand <= 20) return "Silty clay loam";
+  if (clay >= 35 && sand > 45) return "Sandy clay";
+  if (clay >= 40 && silt >= 40) return "Silty clay";
+  return "Clay";
+}
+let triBuilt = null;
+function buildTriangle() {
+  const svg = $("t-tri"); svg.innerHTML = "";
+  const W = 420, side = 360, h = side * Math.sqrt(3) / 2, ox = 40, oy = 22, H = oy + h + 52;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  // sand corner bottom-left, silt bottom-right, clay top
+  const P = (sand, clay) => { const silt = 100 - sand - clay; return [ox + side * (silt + clay / 2) / 100, oy + h * (1 - clay / 100)]; };
+  // class boundaries traced on a fine triangular lattice
+  const N = 200, s = 100 / N, cls = [];
+  for (let i = 0; i <= N; i++) { cls[i] = []; for (let j = 0; i + j <= N; j++) cls[i][j] = usdaClass(i * s, 100 - (i + j) * s, j * s); }
+  const cen = (a, b, c) => P((a[0] + b[0] + c[0]) / 3 * s, (a[1] + b[1] + c[1]) / 3 * s);
+  let d = "";
+  const seg = (p, q) => { d += `M${p[0].toFixed(1)},${p[1].toFixed(1)}L${q[0].toFixed(1)},${q[1].toFixed(1)}`; };
+  // the two sloping sand boundaries are drawn exactly below, not traced
+  const sloped = (a, b) => { const k = [a, b].sort().join("|"); return k === "Loamy sand|Sand" || k === "Loamy sand|Sandy loam"; };
+  for (let i = 0; i < N; i++) for (let j = 0; i + j < N; j++) {
+    // up triangle (i,j),(i+1,j),(i,j+1); down triangle (i+1,j),(i,j+1),(i+1,j+1)
+    const up = cen([i, j], [i + 1, j], [i, j + 1]);
+    if (i + j + 2 <= N) { const dn = cen([i + 1, j], [i, j + 1], [i + 1, j + 1]); if (cls[i + 1][j] !== cls[i][j + 1] && !sloped(cls[i + 1][j], cls[i][j + 1])) seg(up, dn); }
+    if (j > 0) { const dn = cen([i + 1, j - 1], [i, j], [i + 1, j]); if (cls[i][j] !== cls[i + 1][j] && !sloped(cls[i][j], cls[i + 1][j])) seg(up, dn); }
+    if (i > 0) { const dn = cen([i, j], [i - 1, j + 1], [i, j + 1]); if (cls[i][j] !== cls[i][j + 1] && !sloped(cls[i][j], cls[i][j + 1])) seg(up, dn); }
+  }
+  // silt + 1.5 clay = 15 and silt + 2 clay = 30 (P takes sand, clay)
+  seg(P(85, 0), P(90, 10)); seg(P(70, 0), P(85, 15));
+  const A = P(100, 0), B = P(0, 0), C = P(0, 100);
+  el("path", { d: `M${A}L${B}L${C}Z`, fill: "var(--surface-2)", stroke: "var(--ink-3)", "stroke-width": 1.2 }, svg);
+  el("path", { d, stroke: "var(--ink-3)", "stroke-width": 1, fill: "none", "stroke-linecap": "round" }, svg);
+  // labels at class centroids
+  const acc = {};
+  for (let i = 0; i <= N; i += 2) for (let j = 0; i + j <= N; j += 2) { const c = cls[i][j]; (acc[c] = acc[c] || [0, 0, 0]); acc[c][0] += i * s; acc[c][1] += j * s; acc[c][2]++; }
+  const short = { "Sand": "S", "Loamy sand": "LS", "Sandy loam": "SL", "Loam": "L", "Silt loam": "SiL", "Silt": "Si", "Sandy clay loam": "SCL", "Clay loam": "CL", "Silty clay loam": "SiCL", "Sandy clay": "SC", "Silty clay": "SiC", "Clay": "C" };
+  const nudge = { "Sand": [-3, -1], "Loamy sand": [0, 0], "Silt": [0, 0] };
+  Object.keys(acc).forEach(c => { let [sa, cl] = [acc[c][0] / acc[c][2], acc[c][1] / acc[c][2]]; const nz = nudge[c] || [0, 0]; const p = P(sa + nz[0], cl + nz[1]); const t = el("text", { x: p[0], y: p[1] + 4, "text-anchor": "middle", style: "font-size:11px" }, svg); t.textContent = short[c]; });
+  // axis labels
+  [[A, "Sand", -8, 18, "middle"], [B, "Silt", 8, 18, "middle"], [C, "Clay", 0, -8, "middle"]].forEach(([p, l, dx, dy, an]) => { const t = el("text", { x: p[0] + dx, y: p[1] + dy, "text-anchor": an, style: "font-weight:600" }, svg); t.textContent = l; });
+  const pt = el("circle", { r: 7, fill: "var(--s2)", stroke: "var(--surface)", "stroke-width": 2.5 }, svg);
+  triBuilt = { P, pt };
+}
+function updTexture() {
+  const sa = num($("t-sand").value), si = num($("t-silt").value), cl = num($("t-clay").value), msg = $("t-msg");
+  msg.className = "msg"; msg.textContent = "";
+  if (!triBuilt) buildTriangle();
+  if (![sa, si, cl].every(isFinite) || sa < 0 || si < 0 || cl < 0) { $("t-class").textContent = "–"; triBuilt.pt.setAttribute("visibility", "hidden"); return; }
+  const tot = sa + si + cl;
+  if (tot <= 0) { $("t-class").textContent = "–"; return; }
+  if (Math.abs(tot - 100) > 0.5) { msg.textContent = `Fractions add to ${fmt(tot, 1)}%; rescaled to 100%.`; }
+  const s = sa / tot * 100, c = cl / tot * 100, l = si / tot * 100;
+  $("t-class").textContent = usdaClass(s, l, c);
+  const p = triBuilt.P(s, c); triBuilt.pt.setAttribute("cx", p[0]); triBuilt.pt.setAttribute("cy", p[1]); triBuilt.pt.setAttribute("visibility", "visible");
+}
+["t-sand", "t-silt", "t-clay"].forEach(id => $(id).addEventListener("input", updTexture));
+$("t-to-water").addEventListener("click", () => {
+  const sa = num($("t-sand").value), si = num($("t-silt").value), cl = num($("t-clay").value), tot = sa + si + cl;
+  if (!(tot > 0)) return;
+  $("w-sand").value = +(sa / tot * 100).toFixed(1); $("w-clay").value = +(cl / tot * 100).toFixed(1); updWater(); showTab("water", true);
+});
+
+/* ============ SAMPLING ============ */
+function lgamma(x) {
+  const c = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5];
+  let y = x, t = x + 5.5; t -= (x + 0.5) * Math.log(t); let s = 1.000000000190015;
+  for (const k of c) s += k / ++y;
+  return -t + Math.log(2.5066282746310005 * s / x);
+}
+function betacf(a, b, x) {
+  let qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap;
+  if (Math.abs(d) < 1e-30) d = 1e-30; d = 1 / d; let h = d;
+  for (let m = 1; m <= 200; m++) {
+    const m2 = 2 * m; let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+    d = 1 + aa * d; if (Math.abs(d) < 1e-30) d = 1e-30; c = 1 + aa / c; if (Math.abs(c) < 1e-30) c = 1e-30; d = 1 / d; h *= d * c;
+    aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+    d = 1 + aa * d; if (Math.abs(d) < 1e-30) d = 1e-30; c = 1 + aa / c; if (Math.abs(c) < 1e-30) c = 1e-30; d = 1 / d;
+    const del = d * c; h *= del; if (Math.abs(del - 1) < 3e-12) break;
+  }
+  return h;
+}
+function ibeta(a, b, x) {
+  if (x <= 0) return 0; if (x >= 1) return 1;
+  const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+  return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b;
+}
+const tcdf = (t, df) => 1 - 0.5 * ibeta(df / 2, 0.5, df / (df + t * t)); // t >= 0
+function tinv(p, df) { let lo = 0, hi = 1000; for (let i = 0; i < 100; i++) { const mid = (lo + hi) / 2; if (tcdf(mid, df) < p) lo = mid; else hi = mid; } return (lo + hi) / 2; }
+function sampleN(cv, e, conf) {
+  const p = 1 - (1 - conf) / 2;
+  let n = Math.pow(1.96 * cv / e, 2);
+  for (let k = 0; k < 50; k++) { const t = tinv(p, Math.max(1, Math.ceil(n) - 1)), nn = Math.pow(t * cv / e, 2); if (Math.abs(nn - n) < 1e-6) { n = nn; break; } n = nn; }
+  return Math.max(2, Math.ceil(n));
+}
+function updSampling() {
+  const cv = num($("s-cv").value), e = num($("s-err").value), conf = Number($("s-conf").value), area = num($("s-area").value);
+  if (!(cv > 0) || !(e > 0)) { $("s-n").textContent = "–"; return; }
+  const n = sampleN(cv, e, conf);
+  $("s-n").textContent = n + " samples";
+  $("s-why").textContent = `to estimate the mean within ±${e}% at ${Math.round(conf * 100)}% confidence` + (area > 0 ? ` · about ${(n / area).toFixed(n / area < 1 ? 2 : 1)} per ha` : "") + ".";
+  const errs = [5, 10, 15, 20, 25].filter((v, i, a) => a.indexOf(v) === i);
+  setTable($("s-table"), ["Allowable error", "90%", "95%", "99%"], errs.map(er => [`±${er}%`].concat([0.9, 0.95, 0.99].map(c => sampleN(cv, er, c)))));
+}
+["s-cv", "s-err", "s-conf", "s-area"].forEach(id => $(id).addEventListener("input", updSampling));
+
+/* ---------------- init ---------------- */
+$("sp-data").value = EX_CONT; spLastText = EX_CONT; spRefreshColumns();
+$("c-data").value = EX_CARBON;
+updWater(); vgLoad(); updHSG(); updSampling();
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); }, 150); });
+const start = location.hash.slice(1);
+if ([...tabs].some(b => b.dataset.tab === start)) showTab(start, false);
+})();
+</script>
+</div>
+```
