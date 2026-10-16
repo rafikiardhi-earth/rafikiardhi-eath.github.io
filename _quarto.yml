@@ -18,14 +18,14 @@ website:
     left:
       - href: index.qmd
         text: Home
+      - href: about.qmd
+        text: About
       - href: services.qmd
         text: Services
       - href: tools.qmd
         text: Tools
       - href: soil-keys.qmd
         text: Soil key
-      - href: about.qmd
-        text: About
       - href: publications.qmd
         text: Publications
       - href: contact.qmd
