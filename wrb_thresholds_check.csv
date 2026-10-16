@@ -1,0 +1,56 @@
+item,criterion,app_before,WRB_2022_book,book_page,status
+Argic horizon,clay increase if coarser layer above has low clay,"< 10% clay above: +4 points","< 15% clay above: >= 6 points more (absolute)",36,FIXED
+Argic horizon,clay increase ratio,"10-50% clay above: x1.4","15 to < 50% clay above: ratio >= 1.4",36,FIXED (band edge)
+Argic horizon,clay increase if coarser layer above is clayey,">= 50%: +20 points",">= 50% clay above: >= 20 points more",36,OK
+Argic horizon,minimum clay and texture,not checked,"loamy sand or finer and >= 8% clay",36,ADDED
+Argic horizon,thickness,not checked,">= 7.5 cm (sandy loam or finer) or >= 15 cm; and >= 1/10 of overlying mineral material",36-37,ADDED
+Argic horizon,transitional horizon,adjacent layer only,"coarser layer may be separated by a transitional horizon <= 15 cm",36,ADDED
+Argic horizon,illuvial clay evidence (coatings/bridges/thin sections/fine clay),not checked,"alternative route via criterion 2.b",36,NOT CHECKED (needs field/lab data)
+Natric horizon,clay increase,same as old argic (wrong),"same as argic: 6 / 1.4 / 20",53,FIXED
+Natric horizon,sodium,"ESP >= 15 in one horizon","ESP >= 15 throughout the natric horizon or its upper 40 cm (or Mg+Na > Ca+acidity with ESP >= 15 within 50 cm)",54,FIXED (Mg+Na route not checked)
+Natric horizon,structure,not checked,"columnar/prismatic, or blocky with tongues of coarser material",54,NOT CHECKED (noted in result)
+Solonetz,depth,"natric starting <= 100 cm","natric starting <= 100 cm from the mineral soil surface",100,OK
+Histosols,organic material thickness,">= 40 cm within 100 cm","starting <= 40 cm and >= 40 cm combined within 100 cm (>= 60 cm if >= 75% moss fibres); or >= 10 cm over ice/rock/technic hard material",95,FIXED (10 cm over rock added; moss case noted in help)
+Organic material,definition,"~20% organic C","SOC >= 20%",91,OK
+Leptosols,rock depth,"<= 25 cm","continuous rock <= 25 cm",99,OK
+Leptosols,fine earth,"coarse fragments >= 80% over 0-75 cm","< 20% fine earth averaged over 75 cm or to continuous rock",99,OK (now stops at rock)
+Leptosols,exclusions,not checked,"no duric/petrocalcic/petroduric/petrogypsic/pisoplinthic/spodic horizon",99,ADDED (duric and spodic field calls)
+Vertisols,clay above vertic horizon,"every horizon above 100 cm >= 30% clay","vertic horizon <= 100 cm and >= 30% clay from the mineral soil surface down to it",101,FIXED (old rule wrongly excluded soils with less clay below the vertic horizon)
+Vertic horizon,thickness,not checked,">= 25 cm, >= 30% clay",70,ADDED
+Salic horizon,EC rule,"any horizon EC >= 15","ECe >= 15 and EC x thickness >= 450; or pH >= 8.5 with ECe >= 8 and EC x thickness >= 240",64,FIXED (pH of saturation extract approximated by pH water)
+Salic horizon,thickness,not checked,">= 15 cm",64,ADDED
+Solonchaks,depth,"<= 50 cm","salic horizon starting <= 50 cm",102,OK
+Plinthosols,depth,"<= 50 cm (step help, form and CSV)","plinthic/pisoplinthic/petroplinthic starting <= 100 cm",106,FIXED
+Technosols,technic hard material depth,"within ~5 cm (step help)","geomembrane or technic hard material starting <= 100 cm",97,FIXED
+Abrupt textural difference,clay jump,"double if < 20%, +20 if >= 20%","double if < 20%, >= 20 points if >= 20%",72,OK
+Abrupt textural difference,lower layer,not checked,">= 15% clay, >= 7.5 cm thick, starts >= 10 cm from mineral surface; transition <= 2 cm",72,ADDED (transition sharpness not checked)
+Planosols,depth,"<= 75 cm","abrupt textural difference <= 75 cm",107,OK
+Nitic horizon,clay and thickness,"any horizon >= 30% clay",">= 30% clay, >= 30 cm thick",55,FIXED
+Nitisols,clay above nitic,not checked,"clay from surface to nitic >= half its weighted average clay; no vertic above",109,ADDED (Fe criteria not checked)
+Ferralic horizon,CEC,"< 16 cmol/kg clay","< 16 cmol/kg clay",44,OK
+Ferralic horizon,thickness,"low-CEC horizons summed (could be non-contiguous)",">= 30 cm",44,FIXED (contiguous)
+Ferralic horizon,texture and stones,not checked,"sandy loam or finer, >= 8% clay, < 80% coarse fragments",44,ADDED
+Ferralsols,argic above ferralic,not checked,"no argic starting above or at the ferralic unless its upper 30 cm has < 10% WDC, delta pH >= 0, or >= 1.4% SOC",110,FIXED (SOC route checked; otherwise shown as provisional)
+Mollic horizon,colour and SOC,"value <= 3, chroma <= 3, OC >= 0.6","value <= 3 moist and <= 5 dry, chroma <= 3, SOC >= 0.6; calcareous/sandy alternatives (>= 1% or >= 2.5% SOC)",52,FIXED (calcareous/sandy alternatives added; dry value not checked)
+Mollic horizon,base saturation,"minimum of horizons >= 50","weighted average >= 50%",53,FIXED
+Mollic horizon,thickness,">= 20 cm",">= 20 cm, or >= 10 cm directly over continuous rock",53,FIXED
+Chernic horizon,thickness,"20 cm (same as mollic)",">= 30 cm",41,FIXED
+Chernic horizon,colour and SOC,"chroma <= 2, OC >= 1","value <= 3 moist (<= 5 dry), chroma <= 2, SOC >= 1%; calcareous alternatives",40-41,OK (alternatives added)
+Chernozems,carbonate depth,"<= 50 cm below the dark layer","protocalcic layer >= 5 cm or calcic horizon starting <= 50 cm below the lower limit of the mollic horizon",111,OK (CaCO3 equivalent used as proxy unless secondary_carbonates_pct given)
+Chernozems,base saturation to carbonates,mollic only,">= 50% from surface to the carbonate layer throughout",111,ADDED
+Kastanozems,carbonate depth,"<= 70 cm below the dark layer","starting <= 70 cm from the mineral soil surface",112,FIXED
+Phaeozems,base saturation,">= 50% to 100 cm",">= 50% throughout to 100 cm or to a limiting layer",113,OK
+Gypsic horizon,content and thickness,">= 5%, >= 15 cm",">= 5% gypsum, >= 15 cm, thickness x % >= 150",47,FIXED (product added)
+Calcic horizon,content and thickness,">= 15%, >= 15 cm",">= 15% CaCO3 equivalent, >= 15 cm; protocalcic or >= 5% more than layer below",37-38,OK (last part not checked)
+Gypsisols / Calcisols,argic exclusion,not checked,"no argic starting above unless it contains secondary gypsum/carbonates throughout",116-117,ADDED
+Acrisols / Lixisols,low-activity clay,"CEC < 24 cmol/kg clay in the first argic horizon","CEC < 24 cmol/kg clay in some subhorizon of the argic within 150 cm",119-120,FIXED
+Acrisols / Alisols,low base status,"base saturation < 50%","exchangeable Al > exchangeable (Ca+Mg+K+Na) in half or more of 50-100 cm (or lower half above a limiting layer)",119-121,FIXED (base saturation is the WRB 2015 rule)
+Annex 2 fallback,pH for Al = bases,none,"pH water 4.6 (OC < 2%), 4.9 (2-7.5%), 5.4 (7.5-20%)",221 (Table 9.3),ADDED
+Arenosols,texture,"silt + 2 clay < 30 (weighted)","weighted average loamy sand or sand within 100 cm (USDA classes, Table 8.39)",125,OK
+Arenosols,finer and stony layers,"weighted coarse fragments < 40%","finer layers < 15 cm combined; layers with >= 40% coarse fragments < 15 cm combined",125,FIXED
+Key order,32 RSGs,HS AT TC CR LP SN VR SC GL AN PZ PT PL ST NT FR CH KS PH UM DU GY CL RT AC LX AL LV CM FL AR RG,same,95-126,OK
+Qualifier Dystric/Eutric,definition,"base saturation < 50% / >= 50% (20-100 cm)","exchangeable Al > bases (Dystric) or bases >= Al (Eutric) in the major part of 20-100 cm",131-133,FIXED
+Qualifier Calcaric,definition,"CaCO3 >= 2% between 20 and 50 cm","calcaric material in a layer >= 30 cm within 100 cm; no calcic horizon within 100 cm",129,FIXED
+Qualifier Humic,definition,">= 1% OC weighted 0-50 cm",">= 1% SOC weighted average to 50 cm",137,OK
+Qualifier Skeletic,definition,">= 40% coarse fragments 0-100 cm",">= 40% coarse fragments averaged over 100 cm or to a limiting layer",146,OK
+Qualifier Salic,definition,"EC >= 15 within 100 cm","salic horizon starting <= 100 cm",146,FIXED
