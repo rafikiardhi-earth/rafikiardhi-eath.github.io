@@ -449,35 +449,56 @@ body.quarto-light .wrbk {
 
 <script>
 // Simplified WRB 2022 key engine for the RafikiArdhi WRB key.
-// Every threshold lives in WRB_T so it can be checked against WRB 2022 Chapters 3 and 4.
+// Every threshold lives in WRB_T and was checked against IUSS Working Group WRB (2022), 4th edition with
+// errata corrections of 24 September 2024 (page numbers in comments). Criteria that need data the form does
+// not collect (structure, dry colour, illuvial clay evidence, etc.) are noted in the result instead.
 (function (root) {
   const WRB_T = {
-    histicOrganicCm: 40,          // Histosols: organic material within 100 cm
-    leptoRockCm: 25,              // Leptosols: continuous rock starting within
-    leptoCoarsePct: 80,           // Leptosols: coarse fragments averaged over 0-75 cm (i.e. < 20% fine earth)
-    natricESP: 15,                // Solonetz: exchangeable sodium percentage, in a horizon with an argic-type clay increase
-    vertisolClayPct: 30,          // Vertisols: clay from surface down to the vertic horizon
-    salicEC: 15,                  // Solonchaks: EC of saturation extract (dS/m)
-    salicDepthCm: 50,
-    planoDepthCm: 75,             // Planosols: abrupt textural difference within
-    nitisolClayPct: 30,
-    ferralicCECclay: 16,          // cmol(+)/kg clay
-    ferralicDepthCm: 150, ferralicThickCm: 30,
-    darkValue: 3, darkChroma: 3, darkOC: 0.6, darkThickCm: 20,
-    chernicChroma: 2, chernicOC: 1,
+    // Histosols, Ch 4 p 95
+    histicOrganicCm: 40, histicOverRockCm: 10,
+    // Leptosols, Ch 4 p 99
+    leptoRockCm: 25, leptoCoarsePct: 80, leptoDepthCm: 75,
+    // argic / natric clay increase, Ch 3.1.3 p 36 and 3.1.21 p 53
+    argicMinClay: 8, argicLowClay: 15, argicLowAdd: 6, argicRatio: 1.4, argicHighClay: 50, argicHighAdd: 20,
+    argicThinCm: 7.5, argicThickCm: 15, argicTransitionCm: 15, argicDepthCm: 100,
+    // natric, Ch 3.1.21 p 54
+    natricESP: 15, natricUpperCm: 40,
+    // Vertisols, Ch 4 p 101; vertic horizon Ch 3.1.40 p 70
+    vertisolClayPct: 30, verticThickCm: 25,
+    // salic, Ch 3.1.33 p 64; Solonchaks Ch 4 p 102
+    salicEC: 15, salicProduct: 450, salicAlkPH: 8.5, salicAlkEC: 8, salicAlkProduct: 240, salicThickCm: 15, salicDepthCm: 50,
+    // plinthic group, Ch 4 p 106
+    plinthicDepthCm: 100,
+    // abrupt textural difference, Ch 3.2.1 p 72; Planosols Ch 4 p 107
+    abruptLowerClay: 15, abruptLowerThickCm: 7.5, abruptMinStartCm: 10, abruptDoubleBelow: 20, abruptAdd: 20, planoDepthCm: 75,
+    // nitic, Ch 3.1.22 p 55; Nitisols Ch 4 p 109
+    nitisolClayPct: 30, niticThickCm: 30, niticDepthCm: 100,
+    // ferralic, Ch 3.1.10 p 44; Ferralsols Ch 4 p 110
+    ferralicCECclay: 16, ferralicMinClay: 8, ferralicCoarsePct: 80, ferralicDepthCm: 150, ferralicThickCm: 30, ferralsolArgicOC: 1.4,
+    // mollic, Ch 3.1.20 p 52; chernic Ch 3.1.6 p 40
+    darkValue: 3, darkChroma: 3, darkOC: 0.6, darkThickCm: 20, darkOverRockCm: 10,
+    darkCalcMid: 15, darkCalcHigh: 40, darkMidOC: 1, darkHighValue: 5, darkHighOC: 2.5,
+    chernicChroma: 2, chernicOC: 1, chernicMidOC: 1.5, chernicThickCm: 30,
     baseSat: 50,
-    carbonatePresentPct: 1,       // secondary carbonates detected (CaCO3 equivalent)
-    chernoCarbBelowCm: 50, kastanoCarbBelowCm: 70,
-    gypsicPct: 5, calcicPct: 15, accumThickCm: 15, accumDepthCm: 100,
-    argicDepthCm: 100,
-    // clay increase to the horizon below: upper < 10% -> +4 points; 10-50% -> ratio 1.4; >= 50% -> +20 points
-    argicLowClay: 10, argicLowAdd: 4, argicRatio: 1.4, argicHighClay: 50, argicHighAdd: 20,
-    lowActivityCECclay: 24,
-    arenoCoarsePct: 40
+    // Chernozems / Kastanozems, Ch 4 pp 111-112
+    carbonatePresentPct: 1, protocalcicMinCm: 5, chernoCarbBelowCm: 50, kastanoCarbDepthCm: 70, phaeoDepthCm: 100,
+    // gypsic Ch 3.1.14 p 47; calcic Ch 3.1.4 p 37; Gypsisols/Calcisols Ch 4 pp 116-117
+    gypsicPct: 5, gypsicProduct: 150, calcicPct: 15, accumThickCm: 15, accumDepthCm: 100,
+    // Acrisols / Lixisols / Alisols, Ch 4 pp 119-121
+    lowActivityCECclay: 24, lowActivityDepthCm: 150, alRangeTop: 50, alRangeBottom: 100,
+    // Annex 2, Table 9.3 p 221: pH(water) at which exchangeable bases = exchangeable Al, by organic C class
+    alPH: [[2, 4.6], [7.5, 4.9], [20, 5.4]],
+    // Arenosols, Ch 4 p 125
+    arenoDepthCm: 100, arenoLayerCm: 15, arenoCoarsePct: 40
   };
 
   const yn = v => v === "y" ? true : v === "n" ? false : null;
   const has = v => v !== null && v !== undefined && v !== "" && isFinite(v);
+  const thick = h => h.bottom - h.top;
+  const silt = h => has(h.sand) && has(h.clay) ? 100 - h.sand - h.clay : null;
+  // USDA texture tests (WRB Annex 1, Table 8.39): sand = silt + 1.5 clay < 15; loamy sand or coarser = silt + 2 clay < 30
+  const isSand = h => silt(h) !== null ? silt(h) + 1.5 * h.clay < 15 : null;
+  const isLSorCoarser = h => silt(h) !== null ? silt(h) + 2 * h.clay < 30 : null;
 
   // weighted mean of field f over [z1,z2] using horizons that have it; null if none
   function wmean(hz, f, z1, z2) {
@@ -485,56 +506,115 @@ body.quarto-light .wrbk {
     hz.forEach(h => { const o = Math.max(0, Math.min(h.bottom, z2) - Math.max(h.top, z1)); if (o > 0 && has(h[f])) { s += h[f] * o; w += o; } });
     return w > 0 ? { v: s / w, cover: w / (z2 - z1) } : null;
   }
+  // contiguous runs of horizons that satisfy test(h) === true
+  function runs(hz, test) {
+    const out = []; let cur = null;
+    hz.forEach(h => {
+      if (test(h) === true && (!cur || cur.bottom === h.top)) { if (!cur) { cur = { top: h.top, bottom: h.bottom, hz: [h] }; out.push(cur); } else { cur.bottom = h.bottom; cur.hz.push(h); } }
+      else if (test(h) === true) { cur = { top: h.top, bottom: h.bottom, hz: [h] }; out.push(cur); }
+      else cur = null;
+    });
+    out.forEach(r => r.thick = r.bottom - r.top);
+    return out;
+  }
 
   function classify(site, horizons, T = WRB_T) {
     const hz = horizons.filter(h => has(h.top) && has(h.bottom) && h.bottom > h.top).sort((a, b) => a.top - b.top);
     const depth = hz.length ? hz[hz.length - 1].bottom : 0;
+    const rockAt = has(site.rock) ? +site.rock : null;
     const out = [];
     const add = (code, ok, note) => out.push({ code, ok, note });
 
-    // HS
-    add("HS", has(site.organicCm) ? site.organicCm >= T.histicOrganicCm : null, has(site.organicCm) ? `${site.organicCm} cm organic material` : "organic layer thickness not given");
+    // clay-increase rule shared by argic and natric (Ch 3.1.3 criterion 2.a.iv-vi)
+    const clayRule = (above, here) => above < T.argicLowClay ? here - above >= T.argicLowAdd
+      : above < T.argicHighClay ? here / above >= T.argicRatio : here - above >= T.argicHighAdd;
+    // first horizon starting <= 100 cm that meets the textural criteria of an argic/natric horizon
+    function clayIncrease(extra) {
+      let seen = false;
+      for (let i = 1; i < hz.length; i++) {
+        const b = hz[i]; if (b.top > T.argicDepthCm) break;
+        if (!has(b.clay)) continue;
+        // reference: the layer directly above, or the one above a transitional horizon <= 15 cm thick
+        const refs = [hz[i - 1]]; if (i >= 2 && thick(hz[i - 1]) <= T.argicTransitionCm) refs.push(hz[i - 2]);
+        const ref = refs.find(a => has(a.clay) && a.clay < b.clay && clayRule(a.clay, b.clay));
+        if (refs.some(a => has(a.clay))) seen = true;
+        if (!ref || b.clay < T.argicMinClay || isSand(b) === true) continue;
+        // horizon = this layer plus following layers that keep the increase over the same reference
+        const zone = [b]; for (let j = i + 1; j < hz.length && hz[j].top === zone[zone.length - 1].bottom && has(hz[j].clay) && clayRule(ref.clay, hz[j].clay); j++) zone.push(hz[j]);
+        const zt = zone[zone.length - 1].bottom - b.top, minT = isLSorCoarser(b) === true ? T.argicThickCm : T.argicThinCm;
+        if (zt < minT || zt < b.top / 10) continue;
+        if (extra && !extra(zone)) continue;
+        return { found: true, top: b.top, zone, ref, note: `clay ${ref.clay}→${b.clay}% at ${b.top} cm` };
+      }
+      return { found: seen ? false : null, note: seen ? "no qualifying clay increase within 100 cm" : "clay not given for consecutive horizons" };
+    }
+    const argic = clayIncrease();
+
+    // HS (Ch 4 p 95)
+    {
+      let ok = null, note = "organic layer thickness not given";
+      if (has(site.organicCm)) {
+        ok = site.organicCm >= T.histicOrganicCm || (rockAt !== null && site.organicCm >= T.histicOverRockCm && rockAt <= site.organicCm);
+        note = `${site.organicCm} cm organic material`;
+      }
+      add("HS", ok, note);
+    }
     add("AT", yn(site.anthric), "field observation");
     add("TC", yn(site.artefacts), "field observation");
     add("CR", yn(site.permafrost), "field observation");
-    // LP: rock within 25 cm, or < 20% fine earth (coarse fragments >= 80%) over 0-75 cm
+    // LP (Ch 4 p 99): rock <= 25 cm, or < 20% fine earth over 75 cm; and no duric or spodic horizon
     {
-      let ok = site.rock === "none" ? false : has(site.rock) ? site.rock <= T.leptoRockCm : null;
+      let ok = site.rock === "none" ? false : rockAt !== null ? rockAt <= T.leptoRockCm : null;
       const note = [];
-      if (has(site.rock)) note.push(`rock at ${site.rock} cm`); else if (site.rock === "none") note.push("no rock within 100 cm");
-      const cf = wmean(hz, "cf", 0, 75);
+      if (rockAt !== null) note.push(`rock at ${rockAt} cm`); else if (site.rock === "none") note.push("no rock within 100 cm");
+      const cf = wmean(hz, "cf", 0, Math.min(T.leptoDepthCm, rockAt ?? T.leptoDepthCm));
       if (cf) { note.push(`coarse fragments ${cf.v.toFixed(0)}% (0–75 cm)`); if (cf.v >= T.leptoCoarsePct) ok = true; }
+      if (ok && (site.duric === "y" || site.spodic === "y")) { ok = false; note.push("excluded: duric or spodic horizon"); }
       add("LP", ok, note.join("; ") || "rock depth and coarse fragments not given");
     }
-    // SN: horizon starting within 100 cm with ESP >= threshold and more clay than the one above
+    // SN (Ch 4 p 100): natric horizon <= 100 cm = argic-type clay increase + ESP >= 15 in its upper 40 cm
     {
-      const cand = hz.filter((h, i) => h.top < 100 && has(h.esp));
-      let ok = cand.length ? false : yn(site.sodic), note = cand.length ? "" : "field observation (no ESP data)";
-      cand.forEach(h => { const i = hz.indexOf(h), up = hz[i - 1]; const clayUp = !!up && has(h.clay) && has(up.clay) && (up.clay < T.argicLowClay ? h.clay - up.clay >= T.argicLowAdd : up.clay < T.argicHighClay ? h.clay / up.clay >= T.argicRatio : h.clay - up.clay >= T.argicHighAdd);
-        if (h.esp >= T.natricESP && clayUp) { ok = true; note = `ESP ${h.esp}% at ${h.top} cm`; } });
-      if (ok === false && cand.length) note = `max ESP ${Math.max(...cand.map(h => h.esp))}%`;
+      const anyESP = hz.some(h => h.top <= T.argicDepthCm && has(h.esp));
+      let ok = yn(site.sodic), note = "field observation (no ESP data)";
+      if (anyESP) {
+        const nat = clayIncrease(zone => { const up = zone.filter(h => h.top < zone[0].top + T.natricUpperCm); return up.every(h => has(h.esp) && h.esp >= T.natricESP); });
+        ok = nat.found; note = nat.found ? `${nat.note}; ESP ≥ ${T.natricESP}% in its upper 40 cm (columnar/prismatic structure not checked)` : `max ESP ${Math.max(...hz.filter(h => has(h.esp)).map(h => h.esp))}%; ${nat.note}`;
+      }
       add("SN", ok, note);
     }
-    // VR
+    // VR (Ch 4 p 101): vertic horizon <= 100 cm, >= 30% clay from the surface down to it
     {
       const s = yn(site.slickensides); let ok = s, note = "slickensides / wedge-shaped aggregates";
       if (s === true) {
-        const top = hz.filter(h => h.top < 100);
-        if (!top.length || top.some(h => !has(h.clay))) ok = null, note = "slickensides present but clay not given";
-        else { ok = top.every(h => h.clay >= T.vertisolClayPct); note = `clay ${Math.min(...top.map(h => h.clay))}–${Math.max(...top.map(h => h.clay))}% above 100 cm`; }
+        if (!hz.length || hz[0].top !== 0 || !has(hz[0].clay)) { ok = null; note = "slickensides present but surface clay not given"; }
+        else {
+          const r = runs(hz, h => has(h.clay) ? h.clay >= T.vertisolClayPct : null)[0];
+          ok = !!r && r.top === 0 && r.thick >= T.verticThickCm;
+          note = ok ? `≥ ${T.vertisolClayPct}% clay from the surface to ${r.bottom} cm` : `clay drops below ${T.vertisolClayPct}% within ${r ? r.bottom : 0} cm`;
+        }
       }
       add("VR", ok, note);
     }
-    // SC
+    // SC (Ch 4 p 102): salic horizon starting <= 50 cm
     {
-      const c = hz.filter(h => h.top < T.salicDepthCm && has(h.ec));
-      add("SC", c.length ? c.some(h => h.ec >= T.salicEC) : yn(site.saline), c.length ? `max EC ${Math.max(...c.map(h => h.ec))} dS/m within ${T.salicDepthCm} cm` : "field observation (no EC data)");
+      const known = hz.some(h => h.top <= T.salicDepthCm && has(h.ec));
+      let ok = yn(site.saline), note = "field observation (no EC data)";
+      if (known) {
+        const prod = r => r.hz.reduce((s, h) => s + h.ec * thick(h), 0);
+        const a = runs(hz, h => has(h.ec) ? h.ec >= T.salicEC : null).filter(r => r.top <= T.salicDepthCm && r.thick >= T.salicThickCm && prod(r) >= T.salicProduct);
+        const b = runs(hz, h => has(h.ec) && has(h.ph) ? h.ec >= T.salicAlkEC && h.ph >= T.salicAlkPH : null).filter(r => r.top <= T.salicDepthCm && r.thick >= T.salicThickCm && prod(r) >= T.salicAlkProduct);
+        ok = a.length > 0 || b.length > 0;
+        const maxEC = Math.max(...hz.filter(h => h.top <= T.salicDepthCm && has(h.ec)).map(h => h.ec));
+        note = ok ? (a.length ? `EC ≥ ${T.salicEC} dS/m, ${a[0].thick} cm thick from ${a[0].top} cm` : `alkaline (pH ≥ ${T.salicAlkPH}) with EC ≥ ${T.salicAlkEC} dS/m from ${b[0].top} cm (pH of the saturation extract taken from pH water)`)
+          : `max EC ${maxEC} dS/m within ${T.salicDepthCm} cm; thickness or EC × thickness too low for a salic horizon`;
+      }
+      add("SC", ok, note);
     }
     add("GL", yn(site.gleyic), "field observation");
     add("AN", yn(site.andic), "field observation");
     add("PZ", yn(site.spodic), "field observation");
-    add("PT", yn(site.plinthic), "field observation");
-    // PL: stagnic + abrupt textural difference within 75 cm
+    add("PT", yn(site.plinthic), "field observation (within 100 cm)");
+    // PL (Ch 4 p 107): abrupt textural difference <= 75 cm, with stagnic properties and reducing conditions
     {
       const st = yn(site.stagnic); let ok = st, note = "stagnic properties";
       if (st === true) {
@@ -542,93 +622,159 @@ body.quarto-light .wrbk {
         for (let i = 1; i < hz.length; i++) {
           const a = hz[i - 1], b = hz[i]; if (b.top > T.planoDepthCm) break;
           if (!has(a.clay) || !has(b.clay)) continue;
-          const at = a.clay >= 20 ? b.clay - a.clay >= 20 : b.clay >= 2 * a.clay;
-          abrupt = abrupt || at; if (at) note = `clay ${a.clay}→${b.clay}% at ${b.top} cm`;
+          if (abrupt === null) abrupt = false;
+          const at = b.clay >= T.abruptLowerClay && thick(b) >= T.abruptLowerThickCm && b.top >= T.abruptMinStartCm &&
+            (a.clay < T.abruptDoubleBelow ? b.clay >= 2 * a.clay : b.clay - a.clay >= T.abruptAdd);
+          if (at) { abrupt = true; note = `clay ${a.clay}→${b.clay}% at ${b.top} cm (boundary sharpness not checked)`; break; }
         }
-        ok = abrupt; if (abrupt === false) note = "no abrupt clay increase within 75 cm"; if (abrupt === null) note = "stagnic, but clay not given";
+        ok = abrupt; if (abrupt === false) note = "no abrupt textural difference within 75 cm"; if (abrupt === null) note = "stagnic, but clay not given";
       }
       add("PL", ok, note);
     }
     add("ST", yn(site.stagnic), "field observation");
-    // NT
+    // NT (Ch 4 p 109): nitic horizon <= 100 cm (>= 30% clay, >= 30 cm), clay above >= half its weighted average
     {
-      const n = yn(site.nitic); let ok = n, note = "nitic structure and shiny ped faces";
-      if (n === true) { const c = hz.filter(h => h.top < 100 && has(h.clay)); ok = c.length ? c.some(h => h.clay >= T.nitisolClayPct) : null; note = c.length ? `max clay ${Math.max(...c.map(h => h.clay))}%` : "clay not given"; }
+      const n = yn(site.nitic); let ok = n, note = "nitic structure and shiny ped faces (Fe criteria not checked)";
+      if (n === true) {
+        if (!hz.some(h => has(h.clay))) { ok = null; note = "clay not given"; }
+        else {
+          const r = runs(hz, h => has(h.clay) ? h.clay >= T.nitisolClayPct : null).find(r => r.top <= T.niticDepthCm && r.thick >= T.niticThickCm);
+          if (!r) { ok = false; note = `no layer ≥ ${T.niticThickCm} cm thick with ≥ ${T.nitisolClayPct}% clay within 100 cm`; }
+          else {
+            const avg = r.hz.reduce((s, h) => s + h.clay * thick(h), 0) / r.thick;
+            const above = hz.filter(h => h.bottom <= r.top);
+            ok = above.every(h => has(h.clay) && h.clay >= avg / 2);
+            note = ok ? `clayey layer from ${r.top} cm (avg ${avg.toFixed(0)}% clay)` : `clay above ${r.top} cm is less than half of the nitic layer's ${avg.toFixed(0)}%`;
+          }
+        }
+      }
       add("NT", ok, note);
     }
-    // FR
+    // FR (Ch 4 p 110): ferralic horizon <= 150 cm and no argic above it (unless an exception applies)
     {
-      const c = hz.filter(h => h.top < T.ferralicDepthCm && has(h.cec) && has(h.clay) && h.clay > 0);
-      let ok = c.length ? false : yn(site.ferralic), note = c.length ? "" : "field judgement (no CEC data)";
-      if (c.length) {
-        const v = c.map(h => ({ h, r: h.cec / (h.clay / 100) }));
-        const low = v.filter(x => x.r < T.ferralicCECclay), thick = low.reduce((s, x) => s + (x.h.bottom - x.h.top), 0);
-        ok = thick >= T.ferralicThickCm;
-        note = `lowest CEC ${Math.min(...v.map(x => x.r)).toFixed(1)} cmol/kg clay`;
+      const known = hz.some(h => h.top <= T.ferralicDepthCm && has(h.cec) && has(h.clay) && h.clay > 0);
+      let ok = yn(site.ferralic), note = "field judgement (no CEC data)";
+      if (known) {
+        const fr = runs(hz, h => !(has(h.cec) && has(h.clay) && h.clay > 0) ? null :
+          h.cec / (h.clay / 100) < T.ferralicCECclay && h.clay >= T.ferralicMinClay && isLSorCoarser(h) !== true && !(has(h.cf) && h.cf >= T.ferralicCoarsePct))
+          .find(r => r.top <= T.ferralicDepthCm && r.thick >= T.ferralicThickCm);
+        if (!fr) { ok = false; const v = hz.filter(h => has(h.cec) && has(h.clay) && h.clay > 0).map(h => h.cec / (h.clay / 100)); note = `no ≥ ${T.ferralicThickCm} cm layer with CEC < ${T.ferralicCECclay} cmol/kg clay (lowest ${Math.min(...v).toFixed(1)})`; }
+        else if (argic.found && argic.top <= fr.top) {
+          // exceptions: < 10% water-dispersible clay, delta pH >= 0, or >= 1.4% SOC in the argic's upper 30 cm
+          const up = argic.zone.filter(h => h.top < argic.top + 30);
+          const ocOk = up.length && up.every(h => has(h.oc)) ? up.every(h => h.oc >= T.ferralsolArgicOC) : null;
+          ok = ocOk ? true : null;
+          note = ocOk ? `ferralic from ${fr.top} cm; argic above has ≥ ${T.ferralsolArgicOC}% organic C` : `ferralic from ${fr.top} cm, but an argic horizon starts above it: a Ferralsol only if the argic's upper 30 cm has < 10% water-dispersible clay, ΔpH ≥ 0 or ≥ ${T.ferralsolArgicOC}% organic C`;
+        } else { ok = true; note = `CEC < ${T.ferralicCECclay} cmol/kg clay from ${fr.top} to ${fr.bottom} cm`; }
       }
       add("FR", ok, note);
     }
-    // Dark topsoil group
+    // Dark topsoil group (mollic Ch 3.1.20, chernic Ch 3.1.6; RSGs Ch 4 pp 111-114)
     {
+      const carb = h => (has(h.caco3) ? h.caco3 : 0) + (has(h.gypsum) ? h.gypsum : 0);
+      const darkOk = h => {
+        if (!has(h.value) || !has(h.chroma) || !has(h.oc)) return null;
+        const c = carb(h), coarse = isLSorCoarser(h) === true;
+        if (c >= T.darkCalcHigh || coarse) return h.value <= T.darkHighValue && h.chroma <= T.darkChroma && h.oc >= T.darkHighOC;
+        if (c >= T.darkCalcMid) return h.value <= T.darkValue && h.chroma <= T.darkChroma && h.oc >= T.darkMidOC;
+        return h.value <= T.darkValue && h.chroma <= T.darkChroma && h.oc >= T.darkOC;
+      };
+      const chernOk = h => {
+        if (darkOk(h) !== true || h.chroma > T.chernicChroma) return false;
+        const c = has(h.caco3) ? h.caco3 : 0;
+        if (c >= T.darkCalcHigh || isLSorCoarser(h) === true) return h.oc >= T.darkHighOC;
+        if (c >= T.darkCalcMid) return h.value <= T.darkValue && h.oc >= T.chernicMidOC;
+        return h.value <= T.darkValue && h.oc >= T.chernicOC;
+      };
       let dark = null, darkBottom = 0, dk = [];
       if (hz.length && hz[0].top === 0) {
-        for (const h of hz) {
-          if (!has(h.value) || !has(h.chroma) || !has(h.oc)) { if (!dk.length) dark = null; break; }
-          if (h.value <= T.darkValue && h.chroma <= T.darkChroma && h.oc >= T.darkOC && h.top === (dk.length ? dk[dk.length - 1].bottom : 0)) dk.push(h); else break;
-        }
-        const thick = dk.reduce((s, h) => s + h.bottom - h.top, 0);
-        if (dk.length || has(hz[0].value)) dark = thick >= T.darkThickCm;
-        darkBottom = dk.length ? dk[dk.length - 1].bottom : 0;
+        const r = runs(hz, darkOk)[0];
+        if (r && r.top === 0) { dk = r.hz; darkBottom = r.bottom; }
+        const minT = rockAt !== null && rockAt <= darkBottom ? T.darkOverRockCm : T.darkThickCm;
+        if (dk.length) dark = darkBottom >= minT; else if (darkOk(hz[0]) === false) dark = false;
       }
-      const bsDark = dk.length && dk.every(h => has(h.bs)) ? Math.min(...dk.map(h => h.bs)) : null;
-      const mollic = dark && bsDark !== null ? bsDark >= T.baseSat : null;
-      const carbTop = hz.find(h => has(h.caco3) && h.caco3 >= T.carbonatePresentPct && h.top >= darkBottom);
-      const carbKnown = hz.some(h => has(h.caco3));
-      const chernic = dark && dk.every(h => h.chroma <= T.chernicChroma && h.oc >= T.chernicOC);
+      const bsW = dk.length && dk.every(h => has(h.bs)) ? dk.reduce((s, h) => s + h.bs * thick(h), 0) / darkBottom : null;
+      const mollic = dark && bsW !== null ? bsW >= T.baseSat : null;
+      const chR = runs(hz, chernOk)[0]; const chernic = !!chR && chR.top === 0 && chR.thick >= T.chernicThickCm;
+      // carbonate layer: secondary carbonates if recorded, else CaCO3 equivalent as a proxy; or a calcic horizon
+      const secKnown = hz.some(h => has(h.seccarb));
+      const carbLayer = h => secKnown ? (has(h.seccarb) ? h.seccarb > 0 : null) : (has(h.caco3) ? h.caco3 >= T.carbonatePresentPct : null);
+      const cr = runs(hz, carbLayer).find(r => r.thick >= T.protocalcicMinCm && r.bottom > darkBottom);
+      const carbKnown = hz.some(h => carbLayer(h) !== null);
+      const carbTop = cr ? Math.max(cr.top, darkBottom) : null;
+      const bsTo = z => { const s = hz.filter(h => h.top < z); return s.length && s.every(h => has(h.bs)) ? s.every(h => h.bs >= T.baseSat) : null; };
+      const and3 = (...xs) => xs.some(x => x === false) ? false : xs.some(x => x === null) ? null : true;
+      const proxy = secKnown ? "" : " (CaCO₃ equivalent used as a proxy for secondary carbonates)";
       const notDark = `dark topsoil ${dark === null ? "not assessed (colour or organic carbon missing)" : `${darkBottom} cm thick`}`;
-      const g = (ok, note) => dark === false ? false : (dark === null ? null : ok);
-      add("CH", g(mollic === null ? null : mollic && chernic && (carbKnown ? !!carbTop && carbTop.top <= darkBottom + T.chernoCarbBelowCm : null)), dark ? `chernic ${chernic ? "yes" : "no"}; carbonates ${carbTop ? "from " + carbTop.top + " cm" : carbKnown ? "none" : "not given"}` : notDark);
-      add("KS", g(mollic === null ? null : mollic && (carbKnown ? !!carbTop && carbTop.top <= darkBottom + T.kastanoCarbBelowCm : null)), dark ? `mollic ${mollic === null ? "?" : mollic ? "yes" : "no"} (BS ${bsDark ?? "?"}%)` : notDark);
-      const bs100 = hz.filter(h => h.top < 100); const bsAll = bs100.every(h => has(h.bs)) ? bs100.every(h => h.bs >= T.baseSat) : null;
-      add("PH", g(mollic === null ? null : mollic && (bsAll === null ? null : bsAll)), dark ? `base saturation ${bsAll === null ? "not given for all horizons" : bsAll ? "≥ 50% to 100 cm" : "< 50% somewhere above 100 cm"}` : notDark);
+      const g = ok => dark === false ? false : (dark === null ? null : ok);
+      const chOk = and3(mollic, chernic, carbKnown ? carbTop !== null && carbTop <= darkBottom + T.chernoCarbBelowCm : null, carbTop !== null ? bsTo(carbTop) : null);
+      add("CH", g(chOk), dark ? `chernic ${chernic ? "yes" : `no (needs chroma ≤ ${T.chernicChroma}, ≥ ${T.chernicOC}% organic C, ≥ ${T.chernicThickCm} cm)`}; carbonates ${carbTop !== null ? "from " + carbTop + " cm" : carbKnown ? "none" : "not given"}${proxy}` : notDark);
+      const ksOk = and3(mollic, carbKnown ? carbTop !== null && carbTop <= T.kastanoCarbDepthCm : null, carbTop !== null ? bsTo(carbTop) : null);
+      add("KS", g(ksOk), dark ? `mollic ${mollic === null ? "?" : mollic ? "yes" : "no"} (weighted BS ${bsW === null ? "?" : bsW.toFixed(0)}%); carbonates ${carbTop !== null ? "from " + carbTop + " cm" : carbKnown ? "none" : "not given"}` : notDark);
+      const bsAll = bsTo(Math.min(T.phaeoDepthCm, rockAt ?? T.phaeoDepthCm));
+      add("PH", g(and3(mollic, bsAll)), dark ? `base saturation ${bsAll === null ? "not given for all horizons" : bsAll ? "≥ 50% to 100 cm" : "< 50% somewhere above 100 cm"} (dry colour and structure not checked)` : notDark);
       add("UM", g(true), dark ? "dark topsoil with low base saturation" : notDark);
     }
     add("DU", yn(site.duric), "field observation");
-    const accum = (f, thr) => { const c = hz.filter(h => h.top < T.accumDepthCm && has(h[f])); return c.length ? c.some(h => h[f] >= thr && h.bottom - h.top >= T.accumThickCm) : null; };
-    const gy = accum("gypsum", T.gypsicPct), cl = accum("caco3", T.calcicPct);
-    add("GY", gy !== null ? gy : yn(site.gypsic), gy !== null ? "gypsum % within 100 cm" : "field observation (no gypsum data)");
-    add("CL", cl !== null ? cl : yn(site.calcic), cl !== null ? "CaCO₃ equivalent % within 100 cm" : "field observation (no CaCO₃ data)");
-    // Argic group
+    // GY and CL (Ch 4 pp 116-117), with the argic exclusion
     {
-      let argic = null, aH = null, note = "clay not given for consecutive horizons";
-      for (let i = 1; i < hz.length; i++) {
-        const a = hz[i - 1], b = hz[i]; if (b.top > T.argicDepthCm) break;
-        if (!has(a.clay) || !has(b.clay)) continue;
-        const ok = a.clay < T.argicLowClay ? b.clay - a.clay >= T.argicLowAdd : a.clay < T.argicHighClay ? b.clay / a.clay >= T.argicRatio : b.clay - a.clay >= T.argicHighAdd;
-        if (argic === null) argic = false;
-        if (ok) { argic = true; aH = b; note = `clay ${a.clay}→${b.clay}% at ${b.top} cm`; break; }
-        note = "no qualifying clay increase within 100 cm";
-      }
-      const R = (ok, n) => argic === false ? false : argic === null ? null : ok;
-      add("RT", R(yn(site.retic)), argic ? `${note}; retic properties ${site.retic === "y" ? "yes" : site.retic === "n" ? "no" : "?"}` : note);
-      const act = aH && has(aH.cec) && aH.clay > 0 ? aH.cec / (aH.clay / 100) : null;
-      const lowAct = act === null ? null : act < T.lowActivityCECclay;
-      const lowBS = aH && has(aH.bs) ? aH.bs < T.baseSat : null;
-      const detail = argic ? `${note}; CEC ${act === null ? "?" : act.toFixed(1)} cmol/kg clay; BS ${aH && has(aH.bs) ? aH.bs : "?"}%` : note;
-      const both = (x, y) => x === null || y === null ? null : x && y;
-      add("AC", R(both(lowAct, lowBS)), detail);
-      add("LX", R(both(lowAct, lowBS === null ? null : !lowBS)), detail);
-      add("AL", R(both(lowAct === null ? null : !lowAct, lowBS)), detail);
-      add("LV", R(both(lowAct === null ? null : !lowAct, lowBS === null ? null : !lowBS)), detail);
+      const accum = (f, thr, product) => {
+        const known = hz.some(h => h.top <= T.accumDepthCm && has(h[f])); if (!known) return null;
+        return runs(hz, h => has(h[f]) ? h[f] >= thr : null).find(r => r.top <= T.accumDepthCm && r.thick >= T.accumThickCm &&
+          (!product || r.hz.reduce((s, h) => s + h[f] * thick(h), 0) >= product)) || false;
+      };
+      const argicHas = test => { const z = argic.zone; if (z.some(h => test(h) === null)) return null; return z.every(h => test(h) === true); };
+      const argicExcl = (acc, test) => {
+        if (!acc || !argic.found || argic.top > acc.top) return { ok: !!acc, note: "" };
+        const ex = argicHas(test);
+        return { ok: ex, note: ex ? "; argic above contains secondary accumulations throughout" : ex === null ? "; an argic horizon starts above it (Calcisol/Gypsisol only if it has secondary carbonates or gypsum throughout)" : "; excluded: argic horizon above it" };
+      };
+      const sec = h => { const c = has(h.seccarb) ? h.seccarb > 0 : has(h.caco3) ? h.caco3 >= T.carbonatePresentPct : null; const y = has(h.gypsum) ? h.gypsum > 0 : null; return c || y ? true : (c === null && y === null ? null : false); };
+      const gy = accum("gypsum", T.gypsicPct, T.gypsicProduct), cl = accum("caco3", T.calcicPct, 0);
+      const gx = argicExcl(gy, sec), cx = argicExcl(cl, h => has(h.seccarb) ? h.seccarb > 0 : has(h.caco3) ? h.caco3 >= T.carbonatePresentPct : null);
+      add("GY", gy !== null ? gx.ok : yn(site.gypsic), gy !== null ? (gy ? `gypsum ≥ ${T.gypsicPct}% from ${gy.top} cm, ${gy.thick} cm thick${gx.note}` : `no gypsic layer (≥ ${T.gypsicPct}%, ≥ ${T.accumThickCm} cm, thickness × % ≥ ${T.gypsicProduct}) within 100 cm`) : "field observation (no gypsum data)");
+      add("CL", cl !== null ? cx.ok : yn(site.calcic), cl !== null ? (cl ? `CaCO₃ ≥ ${T.calcicPct}% from ${cl.top} cm, ${cl.thick} cm thick${cx.note}` : `no calcic layer (≥ ${T.calcicPct}%, ≥ ${T.accumThickCm} cm) within 100 cm`) : "field observation (no CaCO₃ data)");
+    }
+    // Argic group (Ch 4 pp 118-122)
+    {
+      const R = ok => argic.found === false ? false : argic.found === null ? null : ok;
+      add("RT", R(yn(site.retic)), argic.found ? `${argic.note}; retic properties ${site.retic === "y" ? "yes" : site.retic === "n" ? "no" : "?"}` : argic.note);
+      // low-activity clay in some subhorizon of the argic horizon within 150 cm
+      const sub = argic.found ? argic.zone.filter(h => h.top < T.lowActivityDepthCm) : [];
+      const acts = sub.filter(h => has(h.cec) && h.clay > 0).map(h => h.cec / (h.clay / 100));
+      const lowAct = acts.some(a => a < T.lowActivityCECclay) ? true : acts.length === sub.length && acts.length ? false : null;
+      // exchangeable Al > exchangeable bases in half or more of 50-100 cm (or the lower half above a limiting layer)
+      const alDom = h => {
+        const bases = has(h.bases) ? h.bases : has(h.bs) && has(h.cec) ? h.bs * h.cec / 100 : null;
+        if (has(h.al) && bases !== null) return h.al > bases;
+        if (has(h.ph)) { const oc = has(h.oc) ? h.oc : 0; const row = T.alPH.find(r => oc < r[0]) || T.alPH[T.alPH.length - 1]; return h.ph < row[1]; }
+        return null;
+      };
+      let z1 = T.alRangeTop, z2 = T.alRangeBottom;
+      if (rockAt !== null && rockAt <= T.alRangeBottom) { z2 = rockAt; z1 = Math.min(z1, rockAt / 2); }
+      let tTrue = 0, tKnown = 0;
+      hz.forEach(h => { const o = Math.max(0, Math.min(h.bottom, z2) - Math.max(h.top, z1)); const v = alDom(h); if (o > 0 && v !== null) { tKnown += o; if (v) tTrue += o; } });
+      const span = z2 - z1;
+      const al = tTrue >= span / 2 ? true : (tKnown - tTrue) > span / 2 ? false : null;
+      const alSrc = hz.some(h => has(h.al)) ? "exchangeable Al vs bases" : hz.some(h => has(h.ph)) ? "pH water (Annex 2, Table 9.3)" : "no Al or pH data";
+      const detail = argic.found ? `${argic.note}; CEC ${acts.length ? Math.min(...acts).toFixed(1) : "?"} cmol/kg clay; Al dominance ${al === null ? "?" : al ? "yes" : "no"} (${alSrc})` : argic.note;
+      const both = (x, y) => x === false || y === false ? false : x === null || y === null ? null : true;
+      add("AC", R(both(lowAct, al)), detail);
+      add("LX", R(lowAct), detail);
+      add("AL", R(al), detail);
+      add("LV", R(true), detail);
     }
     add("CM", yn(site.cambic), "field observation");
     add("FL", yn(site.fluvic), "field observation");
-    // AR: loamy sand or coarser (silt + 2 clay < 30) and < 40% coarse fragments, 0-100 cm
+    // AR (Ch 4 p 125): weighted loamy sand or sand within 100 cm; finer layers < 15 cm; layers with >= 40% coarse fragments < 15 cm
     {
-      const zb = Math.min(100, depth || 100);
-      const fine = hz.map(h => ({ ...h, fx: has(h.clay) && has(h.sand) ? (100 - h.sand - h.clay) + 2 * h.clay : null }));
-      const fx = wmean(fine, "fx", 0, zb), cf = wmean(hz, "cf", 0, zb);
-      add("AR", fx ? fx.v < 30 && (!cf || cf.v < T.arenoCoarsePct) : null, fx ? `silt + 2×clay ${fx.v.toFixed(0)} (sandy if < 30)` : "sand and clay not given");
+      const zb = Math.min(T.arenoDepthCm, rockAt ?? T.arenoDepthCm, depth || T.arenoDepthCm);
+      const fine = hz.map(h => ({ ...h, fx: silt(h) !== null ? silt(h) + 2 * h.clay : null }));
+      const fx = wmean(fine, "fx", 0, zb);
+      const over = (test) => hz.reduce((s, h) => s + (test(h) ? Math.max(0, Math.min(h.bottom, zb) - h.top) : 0), 0);
+      const finerCm = over(h => isLSorCoarser(h) === false), stonyCm = over(h => has(h.cf) && h.cf >= T.arenoCoarsePct);
+      const ok = fx ? fx.v < 30 && finerCm < T.arenoLayerCm && stonyCm < T.arenoLayerCm : null;
+      add("AR", ok, fx ? `silt + 2×clay ${fx.v.toFixed(0)} (sandy if < 30); finer layers ${finerCm} cm; stony layers ${stonyCm} cm` : "sand and clay not given");
     }
     // Resolve in key order
     const unsure = [];
@@ -674,10 +820,10 @@ const RSG = {
   GY: ["Gypsisols", "Soils with secondary gypsum accumulation."],
   CL: ["Calcisols", "Soils with secondary carbonate accumulation."],
   RT: ["Retisols", "Soils where coarser, paler material tongues into a finer, more strongly coloured clay-enriched subsoil."],
-  AC: ["Acrisols", "Clay-enriched subsoil with low-activity clays and low base saturation."],
-  LX: ["Lixisols", "Clay-enriched subsoil with low-activity clays and high base saturation."],
-  AL: ["Alisols", "Clay-enriched subsoil with high-activity clays and low base saturation."],
-  LV: ["Luvisols", "Clay-enriched subsoil with high-activity clays and high base saturation."],
+  AC: ["Acrisols", "Clay-enriched subsoil with low-activity clays and low base status (aluminium-dominated)."],
+  LX: ["Lixisols", "Clay-enriched subsoil with low-activity clays and high base status."],
+  AL: ["Alisols", "Clay-enriched subsoil with high-activity clays and low base status (aluminium-dominated)."],
+  LV: ["Luvisols", "Clay-enriched subsoil with high-activity clays and high base status."],
   CM: ["Cambisols", "Moderately developed soils with a subsurface horizon showing alteration (colour, structure or weathering)."],
   FL: ["Fluvisols", "Young soils in river, lake or marine deposits, still showing their layering."],
   AR: ["Arenosols", "Deep sandy soils with little development."],
@@ -686,14 +832,14 @@ const RSG = {
 
 const Q = [
   { id: "HS", step: "Organic soils", q: "Is there a thick layer of organic material (peat or muck) near the surface?",
-    help: ["Roughly 40 cm or more of organic material within the upper 100 cm, or at least 10 cm of it directly over rock or rubble.",
+    help: ["Organic material starting within 40 cm, adding up to about 40 cm or more within the upper 100 cm (60 cm if mostly moss fibres), or at least 10 cm of it directly over rock or ice.",
            "Organic material: very dark, light when dry, made mostly of plant remains; roughly 20% organic carbon or more."] },
   { id: "AT", step: "Human-influenced soils", q: "Has long, intensive human use built or reshaped a thick topsoil?",
     help: ["About 50 cm or more of a human-made horizon: hortic (long manuring and garden use), irragric (irrigation sediment), plaggic (sod or manure additions), pretic (ancient dark earths) or terric (added mineral material).",
            "Or a puddled, wet-rice layer (anthraquic) over an iron/manganese-enriched subsoil (hydragric)."] },
   { id: "TC", step: "Human-influenced soils", q: "Does the soil contain many artefacts, or sit on a sealed or technical surface?",
     help: ["About 20% or more artefacts (bricks, glass, plastics, mine spoil, ash) by volume in the upper 100 cm.",
-           "Or a geomembrane or continuous technical hard material (such as asphalt or concrete) starting within about 5 cm."] },
+           "Or a geomembrane or technical hard material (such as asphalt or concrete) starting within 100 cm."] },
   { id: "CR", step: "Root limitations", q: "Is there permafrost within the upper 100 cm?",
     help: ["A cryic horizon: perennially frozen soil (ice-cemented or visible ice), starting within 100 cm of the surface."] },
   { id: "LP", step: "Root limitations", q: "Is the soil very shallow over hard rock, or made up mostly of stones and gravel?",
@@ -718,28 +864,29 @@ const Q = [
     help: ["A spodic horizon starting within 200 cm, often under a bleached, ash-grey (albic) layer.",
            "Typical of acid, sandy soils under heath or coniferous forest."] },
   { id: "PT", step: "Iron and aluminium chemistry", q: "Are there iron-rich mottles that harden irreversibly, or an ironstone layer or concretions, near the surface?",
-    help: ["A plinthic, petroplinthic or pisoplinthic horizon starting within 50 cm (or within 100 cm under a bleached or stagnic layer).",
+    help: ["A plinthic, petroplinthic or pisoplinthic horizon starting within 100 cm.",
            "Plinthite: red, iron-rich mottles in a lighter matrix that harden on repeated wetting and drying."] },
   { id: "PL", step: "Iron and aluminium chemistry", q: "Is there an abrupt change to a much finer subsoil, with signs of perched water above it?",
-    help: ["An abrupt textural difference (clay roughly doubling over a short distance) within 75 cm.",
+    help: ["An abrupt textural difference within 75 cm: over 2 cm or less, clay at least doubles (or rises by 20 points if the layer above already has 20% or more), into a layer with at least 15% clay.",
            "Stagnic properties (pale, bleached ped surfaces with rusty interiors) and reducing conditions in the layer directly above it."] },
   { id: "ST", step: "Iron and aluminium chemistry", q: "Does water perch in the upper soil, leaving bleached and rusty mottled patterns?",
     help: ["Stagnic properties with reducing conditions in a substantial part of the soil starting within about 60 cm.",
            "Typical pattern: pale, bleached zones along cracks and ped faces with rusty or dark concentrations inside peds."] },
   { id: "NT", step: "Iron and aluminium chemistry", q: "Is there a deep, clayey, red subsoil with strong nutty blocks and shiny ped faces (nitic horizon)?",
-    help: ["A nitic horizon starting within 100 cm: at least 30% clay, moderate to strong angular blocky or nutty structure with shiny ped faces, gradual clay change with depth.",
+    help: ["A nitic horizon starting within 100 cm: at least 30% clay over 30 cm or more, moderate to strong angular blocky or nutty structure with shiny ped faces, and above it at least half as much clay.",
            "Common on basic rocks in the humid tropics."] },
   { id: "FR", step: "Iron and aluminium chemistry", q: "Is there a deeply weathered subsoil with very low-activity clays (ferralic horizon)?",
     help: ["A ferralic horizon starting within 150 cm.",
-           "Lab cues: CEC (pH 7) below about 16 cmol(+)/kg clay, few weatherable minerals, little silt, weak structure that breaks to fine granules."] },
+           "Lab cues: CEC (pH 7) below 16 cmol(+)/kg clay over 30 cm or more, few weatherable minerals, weak structure that breaks to fine granules.",
+           "If a clay-enriched (argic) horizon starts above it, answer Yes only if that horizon's upper 30 cm has little water-dispersible clay, ΔpH of 0 or more, or 1.4% organic carbon or more."] },
   { id: "MO", step: "Dark topsoils", q: "Is there a thick, dark, humus-rich mineral topsoil (mollic or umbric horizon)?",
     help: ["Dark colour: moist value and chroma of 3 or less, at least 0.6% organic carbon, usually 20 cm or more thick.",
            "Mollic = base saturation 50% or more; umbric = below 50%."], yes: "CH", no: "DU" },
   { id: "CH", step: "Dark topsoils", q: "Is the dark topsoil very dark (chernic), with secondary carbonates starting close below it?",
-    help: ["A chernic horizon (moist chroma 2 or less, very dark, granular, 1% organic carbon or more).",
+    help: ["A chernic horizon: very dark (moist chroma 2 or less), granular, 1% organic carbon or more, at least 30 cm thick.",
            "A calcic horizon or secondary carbonates starting within about 50 cm below the dark layer; base saturation 50% or more above them."], no: "KS" },
   { id: "KS", step: "Dark topsoils", q: "Are there secondary carbonates below the dark (mollic) topsoil?",
-    help: ["A calcic horizon or secondary carbonates (white powdery coatings, nodules, soft masses) starting within about 70 cm below the mollic horizon.",
+    help: ["A calcic horizon or secondary carbonates (white powdery coatings, nodules, soft masses) starting within 70 cm of the surface.",
            "Base saturation 50% or more above them."], no: "PH" },
   { id: "PH", step: "Dark topsoils", q: "Is base saturation high (50% or more) through the profile, with no shallow carbonates?",
     help: ["A mollic horizon with base saturation (pH 7) of 50% or more down to about 100 cm (or to rock).",
@@ -750,23 +897,25 @@ const Q = [
   { id: "DU", step: "Accumulations", q: "Is there a layer cemented or enriched by secondary silica within 100 cm?",
     help: ["A duric horizon (silica nodules, 'durinodes') or petroduric horizon (duripan) starting within 100 cm."] },
   { id: "GY", step: "Accumulations", q: "Is there a layer of secondary gypsum within 100 cm?",
-    help: ["A gypsic or petrogypsic horizon starting within 100 cm: visible gypsum crystals, pseudomycelia or cemented gypsum, usually 5% gypsum or more."] },
+    help: ["A gypsic or petrogypsic horizon starting within 100 cm: visible gypsum crystals, pseudomycelia or cemented gypsum, 5% gypsum or more over at least 15 cm.",
+           "Not if a clay-enriched (argic) horizon starts above it, unless that horizon contains secondary gypsum or carbonates throughout."] },
   { id: "CL", step: "Accumulations", q: "Is there a layer of secondary carbonate (lime) accumulation within 100 cm?",
-    help: ["A calcic or petrocalcic horizon starting within 100 cm: white soft masses, nodules or a hardpan; fizzes strongly with dilute acid; usually 15% CaCO₃ equivalent or more."] },
+    help: ["A calcic or petrocalcic horizon starting within 100 cm: white soft masses, nodules or a hardpan; fizzes strongly with dilute acid; 15% CaCO₃ equivalent or more over at least 15 cm.",
+           "Not if a clay-enriched (argic) horizon starts above it, unless that horizon contains secondary carbonates throughout."] },
   { id: "AR0", step: "Clay-enriched subsoils", q: "Is there a clay-enriched subsoil (argic horizon) within 100 cm?",
-    help: ["Clearly more clay than the layer above: roughly 1.4 times more (or 6–8 percentage points more, depending on the clay content above), often with clay coatings on ped faces.",
+    help: ["Clearly more clay than the coarser layer above: 6 percentage points more if that layer has under 15% clay, 1.4 times more if it has 15–50%, or 20 points more if it has 50% or more. At least 8% clay. Clay coatings on ped faces also count as evidence.",
            "If there is no clear clay increase, answer No."], yes: "RT", no: "CM" },
   { id: "RT", step: "Clay-enriched subsoils", q: "Does paler, coarser material tongue down into the clay-enriched subsoil (retic properties)?",
     help: ["Bleached, coarser-textured material interfingering into the argic horizon in vertical tongues or wedges.",
            "Typical of cool, humid forest soils."], no: "ACT" },
   { id: "ACT", step: "Clay-enriched subsoils", q: "Does the clay in the subsoil have low activity?",
-    help: ["CEC (pH 7) below about 24 cmol(+)/kg clay in much of the argic horizon.",
+    help: ["CEC (pH 7) below 24 cmol(+)/kg clay in some part of the argic horizon within 150 cm.",
            "Typical of strongly weathered, kaolinitic soils in warm climates."], yes: "BSL", no: "BSH" },
-  { id: "BSL", step: "Clay-enriched subsoils", q: "Is the base saturation low (below 50%) in most of the subsoil?",
-    help: ["Base saturation (pH 7) below 50% in most of the layer between about 50 and 100 cm.",
+  { id: "BSL", step: "Clay-enriched subsoils", q: "Does exchangeable aluminium outweigh the exchangeable bases in most of the subsoil?",
+    help: ["Exchangeable Al greater than exchangeable Ca + Mg + K + Na in half or more of the layer between 50 and 100 cm. Without those data, pH (water) below about 4.6 is the book's guide for low-carbon subsoils.",
            "Yes → Acrisols; No → Lixisols."], yes: "=AC", no: "=LX" },
-  { id: "BSH", step: "Clay-enriched subsoils", q: "Is the base saturation low (below 50%) in most of the subsoil?",
-    help: ["Base saturation (pH 7) below 50% in most of the layer between about 50 and 100 cm; often high exchangeable aluminium.",
+  { id: "BSH", step: "Clay-enriched subsoils", q: "Does exchangeable aluminium outweigh the exchangeable bases in most of the subsoil?",
+    help: ["Exchangeable Al greater than exchangeable Ca + Mg + K + Na in half or more of the layer between 50 and 100 cm. Without those data, pH (water) below about 4.6 is the book's guide for low-carbon subsoils.",
            "Yes → Alisols; No → Luvisols."], yes: "=AL", no: "=LV" },
   { id: "CM", step: "Little development", q: "Is there a subsurface horizon showing alteration (colour, structure or weathering) but no clay enrichment?",
     help: ["A cambic horizon starting within 50 cm and extending to at least 25 cm.",
@@ -775,7 +924,7 @@ const Q = [
     help: ["Fluvic material (visible stratification, or organic carbon that varies irregularly with depth) at least 25 cm thick, starting within about 25 cm.",
            "Typical of floodplains, deltas and coastal flats."] },
   { id: "AR", step: "Little development", q: "Is the soil sandy throughout?",
-    help: ["Loamy sand or coarser texture (weighted average) down to 100 cm or to rock, with less than about 40% coarse fragments.",
+    help: ["Loamy sand or sand (weighted average) down to 100 cm. Finer layers, and layers with 40% or more coarse fragments, each add up to less than 15 cm.",
            "Feels gritty and does not hold together in a ribbon."] }
 ];
 // default flow: yes -> RSG with same code; no -> next question in order
@@ -863,15 +1012,32 @@ const QUAL_NAMES = ["Abruptic","Acric","Albic","Alic","Andic","Arenic","Calcaric
 let QS = { principal: [], supplementary: [] };
 function wavg(hz, f, z1, z2) { let s = 0, w = 0; hz.forEach(h => { if (h[f] === "" || h[f] == null || !isFinite(h[f]) || h.top === "" || h.bottom === "") return; const o = Math.max(0, Math.min(h.bottom, z2) - Math.max(h.top, z1)); if (o > 0) { s += h[f] * o; w += o; } }); return w > 0 ? { v: s / w, cover: w / (z2 - z1) } : null; }
 function suggestQualifiers(hz) {
-  const out = [];
-  const bs = wavg(hz, "bs", 20, 100);
-  if (bs && bs.cover >= 0.5) out.push(bs.v < 50 ? ["Dystric", `base saturation ${bs.v.toFixed(0)}% (weighted, 20–100 cm)`] : ["Eutric", `base saturation ${bs.v.toFixed(0)}% (weighted, 20–100 cm)`]);
-  if (hz.some(h => isFinite(h.caco3) && h.caco3 !== "" && h.caco3 >= 2 && h.top < 50 && h.bottom > 20)) out.push(["Calcaric", "CaCO₃ ≥ 2% between 20 and 50 cm"]);
-  const oc = wavg(hz, "oc", 0, 50);
+  // definitions from WRB 2022, Chapter 5 (Dystric/Eutric p 131, Calcaric p 127, Humic p 137, Skeletic p 146, Salic p 145)
+  const out = [], ok = v => v !== "" && v != null && isFinite(v);
+  const H = hz.filter(h => ok(h.top) && ok(h.bottom) && h.bottom > h.top).sort((x, y) => x.top - y.top);
+  // Dystric / Eutric: exchangeable Al vs exchangeable bases over the major part of 20-100 cm (pH water fallback, Annex 2 Table 9.3)
+  const alDom = h => { const bases = ok(h.bases) ? h.bases : ok(h.bs) && ok(h.cec) ? h.bs * h.cec / 100 : null;
+    if (ok(h.al) && bases !== null) return h.al > bases;
+    if (ok(h.ph)) { const oc = ok(h.oc) ? h.oc : 0; return h.ph < (oc < 2 ? 4.6 : oc < 7.5 ? 4.9 : 5.4); } return null; };
+  let tA = 0, tB = 0; H.forEach(h => { const o = Math.max(0, Math.min(h.bottom, 100) - Math.max(h.top, 20)), v = alDom(h); if (o > 0 && v !== null) { if (v) tA += o; else tB += o; } });
+  const src = H.some(h => ok(h.al)) ? "exchangeable Al vs bases" : "pH water as a guide";
+  if (tA >= 40) out.push(["Dystric", `Al outweighs bases over ${tA} of 80 cm between 20 and 100 cm (${src})`]);
+  else if (tB > 40) out.push(["Eutric", `bases outweigh Al over ${tB} of 80 cm between 20 and 100 cm (${src})`]);
+  // Calcaric: >= 2% CaCO3 in a layer >= 30 cm thick within 100 cm, and no calcic horizon within 100 cm
+  const calcic = H.some(h => ok(h.caco3) && h.caco3 >= 15 && h.top <= 100 && h.bottom - h.top >= 15);
+  let run = 0, best = 0, prev = null;
+  H.forEach(h => { const c = ok(h.caco3) && h.caco3 >= 2 && h.top < 100; run = c ? (prev !== null && prev === h.top ? run : 0) + Math.min(h.bottom, 100) - h.top : 0; prev = c ? h.bottom : null; best = Math.max(best, run); });
+  if (best >= 30 && !calcic) out.push(["Calcaric", `CaCO₃ ≥ 2% over ${best} cm within 100 cm, no calcic horizon (fizzing throughout the fine earth needs field confirmation)`]);
+  const oc = wavg(H, "oc", 0, 50);
   if (oc && oc.cover >= 0.8 && oc.v >= 1) out.push(["Humic", `organic C ${oc.v.toFixed(1)}% (weighted, 0–50 cm)`]);
-  const cf = wavg(hz, "cf", 0, 100);
+  const cf = wavg(H, "cf", 0, 100);
   if (cf && cf.cover >= 0.5 && cf.v >= 40) out.push(["Skeletic", `coarse fragments ${cf.v.toFixed(0)}% (weighted, 0–100 cm)`]);
-  if (hz.some(h => isFinite(h.ec) && h.ec !== "" && h.ec >= 15 && h.top < 100)) out.push(["Salic", "EC ≥ 15 dS/m within 100 cm"]);
+  // Salic: a salic horizon (>= 15 cm; EC >= 15 with EC x thickness >= 450, or pH >= 8.5 with EC >= 8 and >= 240) starting within 100 cm
+  const salic = (test, prod) => { let t = 0, p = 0, top = null, last = null;
+    for (const h of H) { if (test(h) && (last === null || last === h.top)) { if (top === null) top = h.top; t += h.bottom - h.top; p += h.ec * (h.bottom - h.top); last = h.bottom; if (top <= 100 && t >= 15 && p >= prod) return top; } else { t = 0; p = 0; top = null; last = null; if (test(h)) { top = h.top; t = h.bottom - h.top; p = h.ec * t; last = h.bottom; if (top <= 100 && t >= 15 && p >= prod) return top; } } }
+    return null; };
+  const sz = salic(h => ok(h.ec) && h.ec >= 15, 450) ?? salic(h => ok(h.ec) && ok(h.ph) && h.ec >= 8 && h.ph >= 8.5, 240);
+  if (sz !== null) out.push(["Salic", `salic horizon from ${sz} cm`]);
   return out;
 }
 function qualName(code) {
@@ -923,7 +1089,7 @@ const SITE_Q = [
     ["gleyic", "yn", "Groundwater gleying (gleyic properties) starting within ~40 cm, or under water / tidal?"],
     ["andic", "yn", "Andic or vitric (volcanic) properties near the surface?"],
     ["spodic", "yn", "Spodic horizon (humus / Fe–Al accumulation) within 200 cm?"],
-    ["plinthic", "yn", "Plinthite, ironstone or iron concretions (plinthic / petroplinthic / pisoplinthic) within 50 cm?"],
+    ["plinthic", "yn", "Plinthite, ironstone or iron concretions (plinthic / petroplinthic / pisoplinthic) within 100 cm?"],
     ["stagnic", "yn", "Perched-water mottling (stagnic properties) starting within ~60 cm?"],
     ["nitic", "yn", "Nitic structure: strong nutty blocks with shiny ped faces?"],
     ["ferralic", "yn", "Ferralic horizon (used if no CEC data)?"]]],
@@ -939,13 +1105,13 @@ const HZ_F = [
   ["top", "Top (cm)"], ["bottom", "Bottom (cm)"], ["clay", "Clay %"], ["sand", "Sand %"],
   ["cf", "Coarse fragments % vol"], ["oc", "Organic C %"], ["value", "Munsell value (moist)", "v"], ["chroma", "Munsell chroma (moist)", "c"],
   ["cec", "CEC pH 7 (cmol/kg soil)"], ["bs", "Base saturation %"], ["esp", "ESP %"], ["ec", "EC (dS/m)"],
-  ["caco3", "CaCO₃ equiv. %"], ["gypsum", "Gypsum %"]
+  ["caco3", "CaCO₃ equiv. %"], ["gypsum", "Gypsum %"], ["ph", "pH (water)"], ["al", "Exch. Al (cmol/kg)"]
 ];
 let F = { site: {}, hz: [{ top: 0, bottom: 20 }, { top: 20, bottom: 50 }, { top: 50, bottom: 100 }] };
 const EXAMPLE = { site: { organicCm: 0, anthric: "n", artefacts: "n", permafrost: "n", rock: "none", slickensides: "n", saline: "n", sodic: "n", gleyic: "n", andic: "n", spodic: "n", plinthic: "n", stagnic: "n", nitic: "n", duric: "n", gypsic: "n", calcic: "n", retic: "n", cambic: "n", fluvic: "n" },
-  hz: [{ top: 0, bottom: 15, clay: 12, sand: 70, cf: 5, oc: 1.1, value: 4, chroma: 3, cec: 4, bs: 65 },
-       { top: 15, bottom: 35, clay: 14, sand: 66, cf: 5, oc: 0.6, value: 5, chroma: 4, cec: 3.5, bs: 60 },
-       { top: 35, bottom: 110, clay: 28, sand: 52, cf: 8, oc: 0.3, value: 4, chroma: 6, cec: 5, bs: 70 }] };
+  hz: [{ top: 0, bottom: 15, clay: 12, sand: 70, cf: 5, oc: 1.1, value: 4, chroma: 3, cec: 4, bs: 65, ph: 6.2 },
+       { top: 15, bottom: 35, clay: 14, sand: 66, cf: 5, oc: 0.6, value: 5, chroma: 4, cec: 3.5, bs: 60, ph: 6.0 },
+       { top: 35, bottom: 110, clay: 28, sand: 52, cf: 8, oc: 0.3, value: 4, chroma: 6, cec: 5, bs: 70, ph: 6.1 }] };
 const ynSel = (k, v) => `<select data-site="${k}"><option value="" ${!v ? "selected" : ""}>Not sure</option><option value="y" ${v === "y" ? "selected" : ""}>Yes</option><option value="n" ${v === "n" ? "selected" : ""}>No</option></select>`;
 /* ---------------- CSV upload (soilKey column names) ---------------- */
 let batch = null;
@@ -957,7 +1123,7 @@ function parseCSVText(t) {
   return { head: split(lines[0]).map(h => h.toLowerCase()), rows: lines.slice(1).map(split) };
 }
 const SK_MAP = { top_cm: "top", bottom_cm: "bottom", clay_pct: "clay", sand_pct: "sand", coarse_fragments_pct: "cf", oc_pct: "oc",
-  munsell_value_moist: "value", munsell_chroma_moist: "chroma", cec_cmol: "cec", bs_pct: "bs", ec_dS_m: "ec", ec_ds_m: "ec", caco3_pct: "caco3", caso4_pct: "gypsum" };
+  munsell_value_moist: "value", munsell_chroma_moist: "chroma", cec_cmol: "cec", bs_pct: "bs", ec_dS_m: "ec", ec_ds_m: "ec", caco3_pct: "caco3", secondary_carbonates_pct: "seccarb", caso4_pct: "gypsum", ph_h2o: "ph", al_cmol: "al" };
 const SITE_COLS = ["gleyic", "stagnic", "andic", "spodic", "nitic", "retic", "cambic", "fluvic", "duric", "anthric", "permafrost", "saline", "sodic", "gypsic", "calcic", "ferralic", "artefacts", "plinthic", "slickensides"];
 function csvToProfiles(text) {
   const { head, rows } = parseCSVText(text);
@@ -972,7 +1138,7 @@ function csvToProfiles(text) {
       Object.entries(SK_MAP).forEach(([c, f]) => { if (ix(c) >= 0) h[f] = num(r[ix(c)]); });
       // base saturation and ESP from exchangeable cations when given
       const ca = num(r[ix("ca_cmol")]), mg = num(r[ix("mg_cmol")]), k = num(r[ix("k_cmol")]), na = num(r[ix("na_cmol")]);
-      if ((h.bs === "" || h.bs === undefined) && [ca, mg, k, na].every(v => v !== "") && h.cec > 0) h.bs = 100 * (ca + mg + k + na) / h.cec;
+      if ([ca, mg, k, na].every(v => v !== "")) { h.bases = ca + mg + k + na; if ((h.bs === "" || h.bs === undefined) && h.cec > 0) h.bs = 100 * h.bases / h.cec; }
       if (na !== "" && h.cec > 0) h.esp = 100 * na / h.cec;
       h._slick = ix("slickensides") >= 0 ? (r[ix("slickensides")] || "").toLowerCase() : "";
       h._art = ix("artefacts_pct") >= 0 ? num(r[ix("artefacts_pct")]) : "";
@@ -987,7 +1153,7 @@ function csvToProfiles(text) {
     if (slick.length && !site.slickensides) site.slickensides = slick.some(h => !["absent", "none", "0", "no"].includes(h._slick)) ? "y" : "n";
     const art = hz.filter(h => h.top < 100 && h._art !== "");
     if (art.length && !site.artefacts) { const w = art.reduce((s, h) => s + (Math.min(h.bottom, 100) - h.top), 0), m = art.reduce((s, h) => s + h._art * (Math.min(h.bottom, 100) - h.top), 0) / w; site.artefacts = m >= 20 ? "y" : "n"; }
-    const pl = hz.filter(h => h.top < 50 && h._plin !== "");
+    const pl = hz.filter(h => h.top < 100 && h._plin !== "");
     if (pl.length && !site.plinthic) site.plinthic = pl.some(h => h._plin >= 15) ? "y" : "n";
     if (ix("rock_cm") >= 0) { const v = (first[ix("rock_cm")] || "").trim().toLowerCase(); site.rock = v === "none" ? "none" : (num(v) !== "" ? num(v) : ""); }
     if (ix("organic_cm") >= 0 && num(first[ix("organic_cm")]) !== "") site.organicCm = num(first[ix("organic_cm")]);
@@ -1018,7 +1184,7 @@ function formView() {
       <label class="secondary" style="display:flex; align-items:center; justify-content:center; margin-top:4px">Choose CSV file<input type="file" id="csvin" accept=".csv,.tsv,.txt" style="display:none"></label>
       <details><summary>Columns it reads</summary><ul>
         <li><b>Required:</b> top_cm, bottom_cm</li>
-        <li><b>Lab:</b> clay_pct, sand_pct, coarse_fragments_pct, oc_pct, cec_cmol, bs_pct (or ca_cmol, mg_cmol, k_cmol, na_cmol), ec_dS_m, caco3_pct, caso4_pct</li>
+        <li><b>Lab:</b> clay_pct, sand_pct, coarse_fragments_pct, oc_pct, cec_cmol, bs_pct (or ca_cmol, mg_cmol, k_cmol, na_cmol), al_cmol, ph_h2o, ec_dS_m, caco3_pct, secondary_carbonates_pct, caso4_pct</li>
         <li><b>Colour:</b> munsell_value_moist, munsell_chroma_moist</li>
         <li><b>Morphology:</b> slickensides (absent / few / common / many), artefacts_pct, plinthite_pct</li>
         <li><b>Optional field calls</b> (y / n, one per profile): gleyic, stagnic, andic, spodic, nitic, retic, cambic, fluvic, duric, anthric, permafrost, rock_cm (depth to rock), organic_cm</li>
