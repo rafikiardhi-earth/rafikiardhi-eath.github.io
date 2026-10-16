@@ -34,6 +34,7 @@ website:
 format:
   html:
     theme:
+      dark: [darkly, styles-dark.scss]
       light: [cosmo, styles.scss]
     toc: false
     smooth-scroll: true
