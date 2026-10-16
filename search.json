@@ -123,27 +123,41 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "Founder and principal scientist\nTrevan Flynn holds a PhD in soil science, with a focus on quantitative pedology. His work aims to improve our understanding of multidimensional soil resilience and soil multifunctionality, and to advance soil knowledge and decision-support systems in resource-poor regions.\nHe has lived and worked across Southern, Centeral and Eastern Africa, from national-scale soil mapping to extension work with smallholder farmers on heavily leached soil.\nHis research has been funded through the South African National Research Foundation, The Southern African Science Service Centre for Climate Change and Adaptive Land Management (SASSCAL), EU Horizon 2020, EU LIFE and the Australian Research Council, and he has assembled international consortia for World Bank and BRICS proposals. He has taught crop and soil science at university level and introduced a course in digital soil mapping and remote sensing in agriculture at Stellenbosch University.\nHe publishes with a global network of collaborators in journals including Geoderma, Science of the Total Environment, Catena, Pedosphere, and Journal of Environmental Management."
+    "text": "RafikiArdhi is an independent environmental research company built on one idea: science should stay open. We publish what we produce, turn validated methods into free tools, and fund that work through the projects we take on."
   },
   {
-    "objectID": "about.html#trevan-flynn-phd",
-    "href": "about.html#trevan-flynn-phd",
+    "objectID": "about.html#open-by-design",
+    "href": "about.html#open-by-design",
     "title": "About",
-    "section": "",
-    "text": "Founder and principal scientist\nTrevan Flynn holds a PhD in soil science, with a focus on quantitative pedology. His work aims to improve our understanding of multidimensional soil resilience and soil multifunctionality, and to advance soil knowledge and decision-support systems in resource-poor regions.\nHe has lived and worked across Southern, Centeral and Eastern Africa, from national-scale soil mapping to extension work with smallholder farmers on heavily leached soil.\nHis research has been funded through the South African National Research Foundation, The Southern African Science Service Centre for Climate Change and Adaptive Land Management (SASSCAL), EU Horizon 2020, EU LIFE and the Australian Research Council, and he has assembled international consortia for World Bank and BRICS proposals. He has taught crop and soil science at university level and introduced a course in digital soil mapping and remote sensing in agriculture at Stellenbosch University.\nHe publishes with a global network of collaborators in journals including Geoderma, Science of the Total Environment, Catena, Pedosphere, and Journal of Environmental Management."
+    "section": "Open by design",
+    "text": "Open by design\n\n\nWe publish what we produce\nOur methods go through peer review and into the scientific literature, with the details needed to reproduce them. Results that shape decisions should be open to scrutiny.\n\n\nFree tools\nValidated methods become free tools that anyone can use in a browser. They run on your own device, so your data never leaves it.\n\n\nPaid work funds open work\nProjects, advanced analyses and custom development pay for the research. As methods are proven, and agreements allow, they are released openly.\n\n\nCredit where it is due\nWe build on other people’s work and cite it clearly: the methods, data and classification systems our tools rely on."
   },
   {
-    "objectID": "about.html#the-name",
-    "href": "about.html#the-name",
+    "objectID": "about.html#how-a-method-becomes-open",
+    "href": "about.html#how-a-method-becomes-open",
     "title": "About",
-    "section": "The name",
-    "text": "The name\nRafiki ardhi short for “friend of the land”."
+    "section": "How a method becomes open",
+    "text": "How a method becomes open\n\nSolve. We take on environmental problems that existing methods handle poorly.\nValidate. The method is tested against independent data and published.\nRelease. A simplified, well-documented version becomes a free tool.\nSupport. The full system method, applied to your data and question, is available as a project."
+  },
+  {
+    "objectID": "about.html#what-is-free-and-what-is-a-project",
+    "href": "about.html#what-is-free-and-what-is-a-project",
+    "title": "About",
+    "section": "What is free, and what is a project",
+    "text": "What is free, and what is a project\n\n\nAlways free\nPublished methods and open-access papers, the online tools, their documentation and the references behind them.\n\n\nProjects\nAdvanced and continuous versions of the tools, analysis of your data, custom development and training. Client data stays confidential, and client-funded results are never published without an agreement."
   },
   {
     "objectID": "about.html#approach",
     "href": "about.html#approach",
     "title": "About",
     "section": "Approach",
-    "text": "Approach\nWe build on existing knowledge rather than replacing it. Every map is updated, not reset; every estimate carries its uncertainty; and every result is explained in terms the decision maker can use."
+    "text": "Approach\nWe build on existing knowledge rather than replacing it. Every map and piece of information is updated, not reset; every estimate propagates its uncertainty; and every result is explained in terms the decision maker can use.\nWe do not use AI to replace human expertise. Where others reach for black-box AI, we use “glass box” functions: methods that are easy to interpret, scale to large problems, and are benchmarked against AI models."
+  },
+  {
+    "objectID": "about.html#the-name",
+    "href": "about.html#the-name",
+    "title": "About",
+    "section": "The name",
+    "text": "The name\nRafiki ardhi is Kiswahili for “friend of the land”.\nTry the tools  Get in touch\n\nFounded by Trevan Flynn, PhD, soil scientist. See Publications for the research behind our methods."
   }
 ]
