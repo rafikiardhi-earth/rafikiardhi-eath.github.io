@@ -67,6 +67,19 @@ details li { margin-bottom: 6px; }
 .secondary { width: 100%; min-height: 46px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; margin-top: 10px; cursor: pointer; }
 .foot { margin-top: auto; padding-top: 22px; font-size: .78rem; color: var(--ink-3); }
 .foot a { color: var(--accent); }
+.beta { font-size: .66rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--warn); border: 1px solid var(--warn); border-radius: 999px; padding: 1px 7px; vertical-align: 2px; margin-left: 4px; }
+.qual { margin-top: 18px; border: 1px solid var(--line); border-radius: 12px; padding: 14px; background: var(--surface-2); }
+.qual h2 { display: flex; align-items: center; gap: 6px; }
+.qual .warn { font-size: .85rem; color: var(--warn); margin: 0 0 10px; }
+.qname { font-size: 1.15rem; font-weight: 700; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin: 8px 0; word-break: break-word; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; font-size: .85rem; background: var(--bg); color: var(--ink); }
+.chip button { background: none; border: none; color: var(--ink-3); cursor: pointer; font: inherit; padding: 0; }
+.sugg { display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: start; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: .88rem; color: var(--ink-2); }
+.sugg button { border: 1px solid var(--accent); color: var(--accent); background: none; border-radius: 8px; padding: 3px 9px; font: inherit; font-size: .82rem; cursor: pointer; }
+.qadd { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 8px; margin-top: 8px; }
+.qadd input, .qadd select { font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; width: 100%; }
+.qadd button { border: none; background: var(--accent); color: var(--accent-ink); border-radius: 9px; padding: 0 14px; font: inherit; font-weight: 700; cursor: pointer; }
 .modes { display: grid; gap: 10px; margin-top: 16px; }
 .modes button { text-align: left; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: inherit; cursor: pointer; }
 .modes button b { display: block; font-size: 1.02rem; }
@@ -90,13 +103,13 @@ details li { margin-bottom: 6px; }
 <body>
 <div class="app">
   <header>
-    <div class="brand">Rafiki<span>Ardhi</span> · WRB key</div>
+    <div class="brand">Rafiki<span>Ardhi</span> · WRB key <span class="beta">Beta</span></div>
     <button id="restart" hidden>Start over</button>
   </header>
   <div class="progress" aria-hidden="true"><div id="bar" style="width:0%"></div></div>
   <main id="view"></main>
   <div class="foot">
-    Simplified field key to the Reference Soil Groups of the World Reference Base for Soil Resources, 4th edition (IUSS Working Group WRB, 2022). It does not replace the full key and diagnostic definitions in the WRB text, and it stops at the Reference Soil Group (no qualifiers). <a href="https://wrb.isric.org/documents.html">WRB documents</a>
+    <b>Beta.</b> A learning and screening aid that does not replace classification by a qualified soil scientist. Simplified field key to the Reference Soil Groups of the World Reference Base for Soil Resources, 4th edition (IUSS Working Group WRB, 2022). It does not replace the full key, diagnostic definitions or qualifier lists in the WRB text. <a href="https://wrb.isric.org/documents.html">WRB documents</a>
   </div>
 </div>
 
@@ -501,11 +514,61 @@ function result(code) {
       <p>${desc}</p>
       ${unsure.length ? `<div class="flag"><strong>Provisional.</strong> You weren't sure about ${unsure.length} question${unsure.length > 1 ? "s" : ""} earlier in the key, so check ${unsure.length > 1 ? "these" : "this"} first:<ul style="margin:8px 0 0; padding-left:18px">${alts.map(a => `<li>${a.q.q}${a.to ? ` If yes, the soil would key out as <b>${a.to}</b> instead.` : " If yes, the key would follow a different branch from that point."}</li>`).join("")}</ul></div>` : ""}
       <div class="trail"><h2 style="margin-top:14px">Your answers</h2>${path.map(p => `<div><span>${byId[p.id].q}</span><span class="a ${p.ans}">${p.ans === "y" ? "Yes" : p.ans === "n" ? "No" : "Not sure"}</span></div>`).join("")}</div>
+      <div id="qhost"></div>
       <button class="primary" id="again">Classify another profile</button>
       <button class="secondary" id="back2">← Change last answer</button>
     </div>`;
-  $("again").onclick = () => { path = []; path.started = true; render(); window.scrollTo(0, 0); };
+  QS = { principal: [], supplementary: [] }; $("qhost").appendChild(qualBox(code, null));
+  $("again").onclick = () => { path = []; QS = { principal: [], supplementary: [] }; path.started = true; render(); window.scrollTo(0, 0); };
   $("back2").onclick = () => { path.pop(); render(); };
+}
+
+/* ---------------- qualifiers (beta) ---------------- */
+const QUAL_NAMES = ["Abruptic","Acric","Albic","Alic","Andic","Arenic","Calcaric","Calcic","Cambic","Chromic","Clayic","Cutanic","Densic","Dolomitic","Duric","Dystric","Eutric","Ferralic","Ferric","Fluvic","Fractic","Geric","Gleyic","Gypsic","Gypsiric","Haplic","Humic","Hyperdystric","Hypereutric","Leptic","Lixic","Loamic","Luvic","Mollic","Nitic","Ochric","Petric","Petrocalcic","Petroplinthic","Pisoplinthic","Plinthic","Profondic","Protic","Rhodic","Salic","Siltic","Skeletic","Sodic","Stagnic","Umbric","Vertic","Vitric","Xanthic"];
+let QS = { principal: [], supplementary: [] };
+function wavg(hz, f, z1, z2) { let s = 0, w = 0; hz.forEach(h => { if (h[f] === "" || h[f] == null || !isFinite(h[f]) || h.top === "" || h.bottom === "") return; const o = Math.max(0, Math.min(h.bottom, z2) - Math.max(h.top, z1)); if (o > 0) { s += h[f] * o; w += o; } }); return w > 0 ? { v: s / w, cover: w / (z2 - z1) } : null; }
+function suggestQualifiers(hz) {
+  const out = [];
+  const bs = wavg(hz, "bs", 20, 100);
+  if (bs && bs.cover >= 0.5) out.push(bs.v < 50 ? ["Dystric", `base saturation ${bs.v.toFixed(0)}% (weighted, 20–100 cm)`] : ["Eutric", `base saturation ${bs.v.toFixed(0)}% (weighted, 20–100 cm)`]);
+  if (hz.some(h => isFinite(h.caco3) && h.caco3 !== "" && h.caco3 >= 2 && h.top < 50 && h.bottom > 20)) out.push(["Calcaric", "CaCO₃ ≥ 2% between 20 and 50 cm"]);
+  const oc = wavg(hz, "oc", 0, 50);
+  if (oc && oc.cover >= 0.8 && oc.v >= 1) out.push(["Humic", `organic C ${oc.v.toFixed(1)}% (weighted, 0–50 cm)`]);
+  const cf = wavg(hz, "cf", 0, 100);
+  if (cf && cf.cover >= 0.5 && cf.v >= 40) out.push(["Skeletic", `coarse fragments ${cf.v.toFixed(0)}% (weighted, 0–100 cm)`]);
+  if (hz.some(h => isFinite(h.ec) && h.ec !== "" && h.ec >= 15 && h.top < 100)) out.push(["Salic", "EC ≥ 15 dS/m within 100 cm"]);
+  return out;
+}
+function qualName(code) {
+  // principal qualifiers are written before the name, the first one listed closest to it
+  const pr = QS.principal.slice().reverse().join(" "), su = QS.supplementary.length ? ` (${QS.supplementary.join(", ")})` : "";
+  return `${pr ? pr + " " : ""}${RSG[code][0]}${su}`;
+}
+function qualBox(code, sugg) {
+  const host = document.createElement("div"); host.className = "qual";
+  const draw = () => {
+    const chips = kind => QS[kind].map((q, i) => `<span class="chip">${q}<button data-rm="${kind}:${i}" aria-label="Remove ${q}">✕</button></span>`).join("") || `<span style="color:var(--ink-3); font-size:.85rem">None yet</span>`;
+    host.innerHTML = `<h2>Qualifiers <span class="beta">Beta</span></h2>
+      <p class="warn">For advanced users. Each Reference Soil Group has its own list of allowed qualifiers and rules in WRB 2022 (Chapter 4). Check every qualifier against that list. This does not replace a qualified soil scientist.</p>
+      <div class="qname" id="qname">${qualName(code)}</div>
+      <div class="row2" style="margin-top:0"><button class="secondary" id="qcopy" style="margin:0">Copy name</button></div>
+      ${sugg && sugg.length ? `<h2 style="margin-top:14px; font-size:.95rem">Suggested from your data</h2>${sugg.map(([n, why]) => `<div class="sugg"><button data-sug="${n}">Add</button><span><b style="color:var(--ink)">${n}</b> · ${why}. Check it's on the ${RSG[code][0]} list.</span></div>`).join("")}` : ""}
+      <h2 style="margin-top:14px; font-size:.95rem">Principal qualifiers</h2><div class="chips">${chips("principal")}</div>
+      <h2 style="font-size:.95rem">Supplementary qualifiers</h2><div class="chips">${chips("supplementary")}</div>
+      <div class="qadd"><input id="qin" list="qlist" placeholder="Qualifier name, e.g. Rhodic" autocomplete="off"><select id="qkind" aria-label="Qualifier type"><option value="principal">Principal</option><option value="supplementary">Supplementary</option></select></div>
+      <button class="secondary" id="qaddbtn">Add qualifier</button>
+      <datalist id="qlist">${QUAL_NAMES.map(n => `<option value="${n}">`).join("")}</datalist>
+      <p class="hint" style="font-size:.8rem; color:var(--ink-3); margin-top:10px">Add principal qualifiers in the order of the group's list; the first is written closest to the group name. Supplementary qualifiers go in brackets after the name.</p>`;
+    host.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { const [k, i] = b.dataset.rm.split(":"); QS[k].splice(+i, 1); draw(); });
+    host.querySelectorAll("[data-sug]").forEach(b => b.onclick = () => { const n = b.dataset.sug; if (!QS.principal.includes(n) && !QS.supplementary.includes(n)) QS.principal.push(n); draw(); });
+    host.querySelector("#qaddbtn").onclick = () => {
+      let n = host.querySelector("#qin").value.trim(); if (!n) return;
+      n = n.charAt(0).toUpperCase() + n.slice(1).toLowerCase();
+      const k = host.querySelector("#qkind").value; if (!QS.principal.includes(n) && !QS.supplementary.includes(n)) QS[k].push(n); draw();
+    };
+    host.querySelector("#qcopy").onclick = async () => { const t = qualName(code); try { await navigator.clipboard.writeText(t); host.querySelector("#qcopy").textContent = "Copied"; } catch (e) { host.querySelector("#qcopy").textContent = t; } };
+  };
+  draw(); return host;
 }
 
 /* ---------------- form mode ---------------- */
@@ -595,8 +658,10 @@ function showFormResult() {
     ${r.unsure.length ? `<div class="flag"><strong>Provisional.</strong> ${r.unsure.length} group${r.unsure.length > 1 ? "s" : ""} earlier in the key couldn't be checked with the data given. If any of these apply, the soil would key out there instead:<ul style="margin:8px 0 0; padding-left:18px">${r.unsure.map(u => `<li><b>${RSG[u.code][0]}</b>: ${u.note}</li>`).join("")}</ul></div>` : ""}
     <h2 style="margin-top:16px">How the key ran</h2>
     ${r.trail.map(t => { const [g, c] = sym(t.ok); return `<div class="chk"><span class="s ${c}">${g}</span><span class="t"><b>${RSG[t.code][0]}</b> · ${t.note}</span></div>`; }).join("")}
+    <div id="qhost"></div>
     <button class="primary" id="edit">Edit the data</button>
     <button class="secondary" id="new">Classify another profile</button></div>`;
+  QS = { principal: [], supplementary: [] }; $("qhost").appendChild(qualBox(r.code, suggestQualifiers(F.hz)));
   $("edit").onclick = () => { formResult = null; render(); };
   $("new").onclick = () => { formResult = null; F = { site: {}, hz: [{ top: 0, bottom: 20 }, { top: 20, bottom: 50 }, { top: 50, bottom: 100 }] }; render(); window.scrollTo(0, 0); };
 }
