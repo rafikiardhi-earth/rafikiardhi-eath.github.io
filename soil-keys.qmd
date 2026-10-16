@@ -855,7 +855,7 @@ function formView() {
   const site = F.site;
   let h = `<div class="step">Enter profile data</div>
     <div class="wk-card"><h1 style="font-size:1.15rem">Upload a CSV</h1>
-      <p>One row per horizon, using the soilKey R package column names, so the same file works in both. Add an <b>id</b> column to classify several profiles at once.</p>
+      <p>One row per horizon, using the soilKey R package column names, so the same file works in both. Add an <b>id</b> column to classify several profiles at once. <a href="wrb_profiles_template.csv" download>Download example CSV</a></p>
       <label class="secondary" style="display:flex; align-items:center; justify-content:center; margin-top:4px">Choose CSV file<input type="file" id="csvin" accept=".csv,.tsv,.txt" style="display:none"></label>
       <details><summary>Columns it reads</summary><ul>
         <li><b>Required:</b> top_cm, bottom_cm</li>
@@ -1014,6 +1014,9 @@ body.quarto-light .sakey {
 .sakey .fgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
 .sakey .fgrid.one { grid-template-columns: 1fr; }
 .sakey .fld label { display: block; font-size: .82rem; color: var(--ink-2); margin-bottom: 3px; }
+.sakey textarea { width: 100%; min-height: 110px; font: inherit; font-size: 16px; line-height: 1.45; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; resize: vertical; }
+.sakey .exs { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 4px; }
+.sakey .exs button { font: inherit; font-size: .82rem; border: 1px dashed var(--line); background: none; color: var(--ink-2); border-radius: 999px; padding: 4px 10px; cursor: pointer; text-align: left; }
 .sakey .fld select, .sakey .fld input { width: 100%; font: inherit; font-size: 16px; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 9px 10px; }
 .sakey .sec { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 22px 0 6px; }
 .sakey .hcard { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 14px; margin-top: 10px; }
@@ -1107,9 +1110,178 @@ const FAMHELP = [
   [/black cutans/i, () => "Dark clay skins coating the upright faces of the prisms all over; they usually point to a wetter soil climate."]
 ];
 const famHelp = name => { for (const [re, f] of FAMHELP) if (re.test(name)) return f(name); return ""; };
+/* Free-text profile description -> South African soil form (2018) and family hints.
+   Rule-based: it only recognises the book's horizon names and common field terms, never guesses. */
+function makeSADescribe(FORMS, TOPS) {
+  // [canonical horizon, pattern]; longer names first so "red apedal" is not read as "red"
+  const HZ_WORDS = [
+    ["Podzol with placic pan", /\bpodzol\w*\s+with\s+(?:a\s+)?(?:thin\s+)?placic(?:\s+pan)?\b|\bplacic(?:\s+pan)?\b/],
+    ["Unconsolidated Material with Wetness", /\bunconsolidated (?:material|deposits?|colluvium)\s+with\s+(?:signs of\s+)?wetness\b/],
+    ["Yellow-Brown Apedal", /\byellow[- ]?brown apedal\b/],
+    ["Red Apedal", /\bred apedal\b/],
+    ["Red Structured", /\bred structured\b/],
+    ["Soft Plinthic", /\bsoft plinthic\b/],
+    ["Hard Plinthic", /\bhard plinthic\b|\bferricrete\b|\bouklip\b|\bironstone\b/],
+    ["Soft Carbonate", /\bsoft (?:carbonate|calcrete)\b/],
+    ["Hard Carbonate", /\bhard (?:carbonate|calcrete)\b|\bcalcrete\b/],
+    ["Prismacutanic", /\bprismacutanic\b/],
+    ["Pedocutanic", /\bpedocutanic\b/],
+    ["Neocutanic", /\bneocutanic\b/],
+    ["Neocarbonate", /\bneocarbonate\b/],
+    ["Podzol", /\bpodzol(?:ic)?\b/],
+    ["Dorbank", /\bdorbank\b|\bsilcrete\b/],
+    ["Gypsic", /\bgypsic\b/],
+    ["Alluvial", /\balluvi(?:al|um)\b/],
+    ["Regic Sand", /\bregic\b|\bwind[- ]?blown sand\b/],
+    ["Lithic", /\b(?:sapro|geo|gley)?lithic\b|\bsaprolite\b|\bweather(?:ing|ed) rock\b/],
+    ["Hard Rock", /\bhard rock\b|\bbedrock\b|\bsolid rock\b|\bfractured rock\b/],
+    ["Gleyic", /\bgleyic\b/],
+    ["Gley", /\bgley\b(?! ?ing)(?! ?ed)/],
+    ["Albic", /\balbic\b|\bbleached (?:e|layer|horizon|subsoil)\b|\be horizon\b/],
+    // topsoils
+    ["Peat", /\bpeat(?:y)?\b/],
+    ["Organic", /\borganic\b(?!\s*(?:c\b|carbon|matter|material content))/],
+    ["Vertic", /\bvertic\b(?!\s*propert)/],
+    ["Melanic", /\bmelanic\b/],
+    ["Humic", /\bhumic\b/],
+    ["Orthic", /\borthic\b/]
+  ];
+  const WET_HZ = ["Gley", "Gleyic", "Unconsolidated Material with Wetness", "Soft Plinthic"];
+  const NEG = "(?:no|not|without|absent|lacks?|lacking|free of|none|nil)";
+  const negated = (t, w) => new RegExp(`\\b${NEG}\\s+(?:\\w+[\\s,]+){0,3}?${w}`).test(t) || new RegExp(`${w}\\w*\\s+(?:is |are )?(?:absent|not (?:present|seen|observed))`).test(t);
+  const found = (t, w) => new RegExp(`\\b${w}`).test(t);
+  const yesNo = (t, w) => found(t, w) ? !negated(t, w) : null;
+
+  function parse(raw) {
+    const t = " " + String(raw || "").toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ") + " ";
+    let masked = t;
+    const hits = [];
+    for (const [name, re] of HZ_WORDS) {
+      const g = new RegExp(re.source, "g"); let m;
+      while ((m = g.exec(masked))) {
+        hits.push({ name, at: m.index, text: m[0].trim() });
+        masked = masked.slice(0, m.index) + " ".repeat(m[0].length) + masked.slice(m.index + m[0].length);
+        g.lastIndex = m.index + m[0].length;
+      }
+    }
+    hits.sort((a, b) => a.at - b.at);
+    const tops = [...new Set(hits.filter(h => TOPS.includes(h.name)).map(h => h.name))];
+    const subs = [];
+    hits.filter(h => !TOPS.includes(h.name)).forEach(h => { if (!subs.includes(h.name)) subs.push(h.name); });
+    // "X under/below/beneath Y" reverses text order
+    const reversedCue = /\b(?:under|below|beneath|underlying|overlain by)\b/.test(t) && !/\b(?:over|on top of|overlying|then|followed by)\b/.test(t);
+
+    const H = {};
+    // wetness
+    const wetWords = "(?:signs of wetness|wetness|mottl\\w*|gley\\w*|waterlog\\w*|wet\\b|redox)";
+    if (/\b(?:well|freely|excessively)[- ]drained\b/.test(t) || negated(t, wetWords) || /\bnot wet\b|\bdry throughout\b/.test(t)) H.wet = false;
+    else if (new RegExp(`\\b${wetWords}`).test(t)) H.wet = true;
+    // colours
+    const topCol = t.match(/\b(dark|black|chromic|bleached|grey|gray|red)\s+(?:(?:orthic|melanic|humic|vertic)\s+)?(?:a\b|a horizon|topsoil|surface)/);
+    if (topCol) H.topColour = { dark: "dark", black: "dark", chromic: "chromic", bleached: "grey", grey: "grey", gray: "grey", red: "red" }[topCol[1]];
+    if (/\bchromic\b/.test(t) && !H.topColour) H.topColour = "chromic";
+    const subCol = masked.match(/\b(red|maroon|reddish|brown|brownish|yellow|grey|gray)\b(?!\s*(?:a\b|a horizon|topsoil|surface))/);
+    if (subCol) H.colour = { red: "red", maroon: "red", reddish: "red", brown: "brown", brownish: "brown", yellow: "yellow", grey: "grey", gray: "grey" }[subCol[1]];
+    // base status
+    if (/\b(?:dystrophic|acid(?:ic)?|strongly leached|leached|low base)\b/.test(t)) H.base = "dystrophic";
+    else if (/\bmesotrophic\b/.test(t)) H.base = "mesotrophic";
+    else if (/\b(?:eutrophic|base[- ]rich|high base)\b/.test(t)) H.base = "eutrophic";
+    if (H.base === "dystrophic" && !/\bdystrophic\b/.test(t)) H.baseInferred = true;
+    // texture contrast
+    if (/\baluvic\b|\bno (?:clear |marked )?(?:clay increase|textural contrast)\b/.test(t)) H.luvic = false;
+    else if (/\bluvic\b|\bclay increase\b|\btextural contrast\b|\bclay[- ]enriched\b/.test(t)) H.luvic = true;
+    // calcareous
+    if (/\bnon[- ]?calcareous\b|\bnot calcareous\b|\bdoes ?n[o']t fizz\b|\bno (?:fizz|effervescence|lime|free carbonates?)\b/.test(t)) H.calc = false;
+    else if (/\bcalcareous\b|\bfizz\w*\b|\beffervesc\w*\b|\bfree lime\b/.test(t)) H.calc = true;
+    H.sepiolite = yesNo(t, "sepiolite");
+    H.vertic = yesNo(t, "vertic propert") ?? (/\bslickensides?\b|\bswelling clay\b/.test(t) ? !negated(t, "slickensides?") : null);
+    H.lamellae = yesNo(t, "lamellae");
+    H.ortstein = yesNo(t, "ortstein");
+    H.blackCutans = yesNo(t, "black cutans");
+    if (/\bthick humic\b/.test(t)) H.humicThick = true; else if (/\bthin humic\b/.test(t)) H.humicThick = false;
+    const dec = t.match(/\b(fibric|hemic|sapric)\b/); if (dec) H.decomp = dec[1];
+    const lit = t.match(/\b(saprolith\w*|saprolite|geolithic|gleylithic)\b/); if (lit) H.lithic = lit[1].startsWith("sapro") ? "saprolithic" : lit[1];
+    if (/\bfractured rock\b/.test(t)) H.rock = "fractured"; else if (/\bsolid rock\b/.test(t)) H.rock = "solid";
+    if (/\bfirm\b/.test(t)) H.firm = true; else if (/\bfriable\b/.test(t)) H.firm = false;
+    // thickness of a single subsoil to 1.5 m
+    H.thick = /\b(?:continu\w*|extend\w*|goes|runs|persists?)\s+(?:down\s+)?(?:to|beyond|past|below)\s+(?:at least\s+)?(?:1[.,]5\s*m|150\s*cm|depth|the base)\b|\bdeeper than (?:1[.,]5\s*m|150\s*cm)\b|\bthroughout the profile\b|\bthick (?:neocutanic|neocarbonate|red apedal|yellow[- ]brown apedal|albic|regic)\b/.test(t);
+    const dep = t.match(/\b(?:observ\w*|augered|dug|described|pit|profile|hole)\s+(?:was\s+)?(?:to|down to|at)\s+(\d+(?:[.,]\d+)?)\s*(cm|m)\b/);
+    if (dep) { const v = parseFloat(dep[1].replace(",", ".")); H.depthCm = dep[2] === "m" ? Math.round(v * 100) : Math.round(v); }
+
+    // candidate forms
+    let notes = [];
+    let rows = FORMS.slice();
+    if (tops.length) {
+      rows = rows.filter(f => f.t === tops[0]);
+      if (tops.length > 1) notes.push(`More than one topsoil named (${tops.join(", ")}); used ${tops[0]}.`);
+    } else notes.push("No diagnostic topsoil named, so all six topsoils are kept.");
+    let order = subs.slice();
+    if (reversedCue && order.length > 1) order.reverse();
+    const fit = (ord) => {
+      let r = rows;
+      if (ord[0]) r = r.filter(f => f.s1 === ord[0]);
+      // horizons below the first subsoil must match the form's lower sequence in order (a description may stop early)
+      if (ord[1]) r = r.filter(f => { const p = f.s2.split("+"); return ord.slice(1).every((x, i) => p[i] === x); });
+      return r;
+    };
+    let cand = fit(order);
+    if (!cand.length && order.length > 1) { const alt = fit(order.slice().reverse()); if (alt.length) { cand = alt; order = order.slice().reverse(); notes.push("Read the subsoil horizons in the opposite order to the text, as that is the only sequence in the key."); } }
+    if (order.length === 1 && H.thick && cand.some(f => f.s2 === "THICK")) cand = cand.filter(f => f.s2 === "THICK");
+    const before = cand.length;
+    if (H.wet === false) {
+      cand = cand.filter(f => !WET_HZ.includes(f.s1) && !f.s2.split("+").some(x => WET_HZ.includes(x)));
+      if (cand.length < before) notes.push(`"No wetness" ruled out ${before - cand.length} form${before - cand.length > 1 ? "s" : ""} with gley, gleyic, soft plinthic or wet material.`);
+    }
+    if (H.base && H.baseInferred) notes.push(`Read "${(t.match(/\b(acid(?:ic)?|strongly leached|leached|low base)\b/) || [""])[0]}" as dystrophic (low base status). Confirm with the S-value per kg clay.`);
+    if (/\bapedal\b/.test(masked)) notes.push(`"Apedal" without a colour: say red apedal or yellow-brown apedal.`);
+    if (/\bplinthic\b/.test(masked)) notes.push(`"Plinthic" alone: say soft plinthic or hard plinthic.`);
+    if (/\bcutanic\b/.test(masked)) notes.push(`"Cutanic" alone: say neocutanic, pedocutanic or prismacutanic.`);
+    return { top: tops[0] || null, subs: order, hits, hints: H, candidates: cand, notes };
+  }
+
+  // family answers that follow from the description; only filled when exactly one option fits
+  const ASPECTS = [
+    [/topsoil$/i, (o, H) => H.topColour == null ? null : (/^dark\/chromic/i.test(o) ? ["dark", "chromic"].includes(H.topColour) : /^(dark|black)/i.test(o) ? H.topColour === "dark" : /^chromic/i.test(o) ? H.topColour === "chromic" : /^grey/i.test(o) ? H.topColour === "grey" : /^red/i.test(o) ? H.topColour === "red" : null), o => /(dark|chromic|grey|black|red)[^,]*topsoil$/i.test(o) && !/calcareous|fibric|hemic|sapric/i.test(o), "topsoil colour"],
+    [/calcareous/i, (o, H) => H.calc == null ? null : (/non-calcareous/i.test(o) ? !H.calc : H.calc), null, "lime"],
+    [/sepiolite/i, (o, H) => H.sepiolite == null ? null : (/without sepiolite|sepiolite absent/i.test(o) ? !H.sepiolite : H.sepiolite), null, "sepiolite"],
+    [/vertic propert/i, (o, H) => H.vertic == null ? null : (/without vertic|vertic properties absent/i.test(o) ? !H.vertic : H.vertic), null, "vertic properties"],
+    [/^(red|brown|grey)/i, (o, H) => H.colour == null ? null : (/^red/i.test(o) ? H.colour === "red" : /^brown or grey/i.test(o) ? ["brown", "grey"].includes(H.colour) : /^brown/i.test(o) ? H.colour === "brown" : /^grey or yellow/i.test(o) ? ["grey", "yellow"].includes(H.colour) : null), o => !/topsoil$/i.test(o), "colour"],
+    [/albic horizon (grey|yellow|red)/i, (o, H) => H.colour == null ? null : o.toLowerCase().includes(H.colour === "brown" ? "yellow" : H.colour), null, "albic colour"],
+    [/trophic/i, (o, H) => H.base == null ? null : o.toLowerCase().includes(H.base), null, "base status"],
+    [/luvic/i, (o, H) => H.luvic == null ? null : (/^aluvic/i.test(o) ? !H.luvic : H.luvic), null, "textural contrast"],
+    [/wetness (absent|present)|gleying (absent|present)/i, (o, H) => H.wet == null ? null : (/absent/i.test(o) ? !H.wet : H.wet), null, "wetness"],
+    [/humic horizon/i, (o, H) => H.humicThick == null ? null : (/^thick/i.test(o) ? H.humicThick : !H.humicThick), null, "humic thickness"],
+    [/fibric|hemic|sapric/i, (o, H) => H.decomp == null ? null : o.toLowerCase().startsWith(H.decomp), null, "decomposition"],
+    [/saprolithic|geolithic|gleylithic/i, (o, H) => H.lithic == null ? null : o.toLowerCase().startsWith(H.lithic), null, "lithic weathering"],
+    [/fractured rock|solid rock/i, (o, H) => H.rock == null ? null : o.toLowerCase().startsWith(H.rock), null, "rock weathering"],
+    [/lamellae/i, (o, H) => H.lamellae == null ? null : (/absent/i.test(o) ? !H.lamellae : H.lamellae), null, "lamellae"],
+    [/ortstein/i, (o, H) => H.ortstein == null ? null : (/absent/i.test(o) ? !H.ortstein : H.ortstein), null, "ortstein"],
+    [/black cutans/i, (o, H) => H.blackCutans == null ? null : (/absent/i.test(o) ? !H.blackCutans : H.blackCutans), null, "black cutans"],
+    [/^(firm|friable|slightly firm)/i, (o, H) => H.firm == null ? null : (/^friable/i.test(o) ? !H.firm : H.firm), null, "consistence"]
+  ];
+  function prefill(form, H) {
+    const out = {};
+    form.fam.forEach((c, i) => {
+      const ok = c.options.map(o => {
+        const asp = ASPECTS.filter(([re, , gate]) => re.test(o) && (!gate || gate(o)));
+        if (!asp.length) return { v: null };
+        const vals = asp.map(([, f]) => f(o, H));
+        if (vals.some(v => v === false)) return { v: false };
+        if (vals.some(v => v === null)) return { v: null };
+        return { v: true, why: asp.map(a => a[3]).join(", ") };
+      });
+      const yes = ok.map((x, k) => x.v === true ? k : -1).filter(k => k >= 0);
+      if (yes.length === 1) out[i] = { k: yes[0] + 1, why: ok[yes[0]].why };
+      else if (yes.length === 0) { const left = ok.map((x, k) => x.v !== false ? k : -1).filter(k => k >= 0); if (left.length === 1 && ok.some(x => x.v === false)) out[i] = { k: left[0] + 1, why: "only option left" }; }
+    });
+    return out;
+  }
+  return { parse, prefill };
+}
+const DESC = makeSADescribe(FORMS, TOPS);
 const nice = s => s === "THICK" ? "continues to 1.5 m" : s.replace("+", ", then ");
 let S = {};
-const reset = () => { S = { stage: "intro", depth: "", top: null, s1: null, path: [], form: null, fam: {}, note: null, cond: null }; };
+const reset = () => { S = { stage: "intro", depth: "", top: null, s1: null, path: [], form: null, fam: {}, note: null, cond: null, desc: "", parsed: null, inferred: {}, fromDesc: false }; };
 reset();
 const $ = id => document.getElementById(id);
 const view = () => document.getElementById("sa-view");
@@ -1120,7 +1292,7 @@ function optBtns(opts) {
 }
 function bind(opts) { view().querySelectorAll("[data-i]").forEach(b => b.onclick = () => opts[+b.dataset.i].go()); }
 function back() { const p = S.path.pop(); if (p) { Object.assign(S, p); render(); } }
-function push() { S.path.push({ stage: S.stage, top: S.top, s1: S.s1, form: S.form, note: S.note, cond: S.cond, fam: { ...S.fam } }); }
+function push() { S.path.push({ stage: S.stage, top: S.top, s1: S.s1, form: S.form, note: S.note, cond: S.cond, fam: { ...S.fam }, inferred: { ...S.inferred }, fromDesc: S.fromDesc }); }
 function navBack() { return `<div class="wk-nav"><button id="sback">← Back</button><span></span></div>`; }
 function bindBack() { const b = $("sback"); if (b) b.onclick = back; }
 
@@ -1134,6 +1306,7 @@ function render() {
   if (st === "s2") return s2Q();
   if (st === "family") return familyQ();
   if (st === "browse") return browse();
+  if (st === "describe") return describeQ();
   if (st === "topsoilonly" || st === "notinkey") return special();
 }
 function intro() {
@@ -1142,12 +1315,14 @@ function intro() {
     <div class="fld" style="margin-top:12px"><label>Observation depth (cm, optional)</label><input type="number" inputmode="decimal" id="sdepth" placeholder="e.g. 150" value="${S.depth}"></div>
     <div class="modes">
       <button id="sgo"><b>Identify the soil form</b><span>Topsoil, then subsoil horizons, then family.</span></button>
+      <button id="sdesc"><b>Describe the profile</b><span>Type it in your own words, e.g. “orthic A over a neocutanic B, no signs of wetness”.</span></button>
       <button id="sbrowse"><b>Browse all 135 forms</b><span>Already know the form? Go straight to its family table.</span></button>
     </div>
     <ul class="intro" style="margin-top:14px"><li>This covers natural soils (Section A). For soils strongly altered by people (Anthrosols, Technosols), use Section B of the book.</li><li>Horizon descriptions here are short summaries. Always check the full definitions in the book.</li><li>The ARC also publishes an official app, <a href="https://play.google.com/store/apps/details?id=arc.ict.digitalsoilclassification" target="_blank" rel="noopener">Digital Soil Classification</a> (Android).</li></ul>`);
   $("sdepth").oninput = e => { S.depth = e.target.value; };
   $("sgo").onclick = () => { push(); setStage("top"); };
   $("sbrowse").onclick = () => { push(); setStage("browse"); };
+  $("sdesc").onclick = () => { push(); setStage("describe"); };
 }
 function topQ() {
   const opts = TOPS.map(t => ({ label: t, sub: HZ[t], go: () => { push(); S.top = t; setStage("s1"); } }));
@@ -1187,10 +1362,92 @@ function s2Q() {
   view().innerHTML = `<div class="step">Step 3 · Second subsoil horizon under ${S.s1.toLowerCase()}</div>` + card(`<h1>What lies below the ${S.s1.toLowerCase()} horizon?</h1>${optBtns(opts)}`) + navBack();
   bind(opts); bindBack();
 }
-function chooseForm(f) { S.form = f; S.fam = {}; setStage("family"); }
+function chooseForm(f) { S.form = f; S.fam = {}; S.inferred = {}; S.fromDesc = false; setStage("family"); }
+function chooseFromDesc(f) {
+  S.form = f; S.fam = {}; S.fromDesc = true; S.cond = false;
+  S.inferred = S.parsed ? DESC.prefill(f, S.parsed.hints) : {};
+  Object.entries(S.inferred).forEach(([i, v]) => { S.fam[+i] = v.k; });
+  setStage("family");
+}
+const DESC_EX = [
+  "Orthic A over a neocutanic B, acidic, no signs of wetness",
+  "Dark orthic topsoil, red apedal B continuing to 1.5 m, dystrophic, luvic",
+  "Orthic A on yellow-brown apedal over soft plinthic",
+  "Melanic A over pedocutanic, calcareous, on saprolite"
+];
+function describeQ() {
+  view().innerHTML = `<div class="step">Describe the profile</div>` + card(`<h1>Describe the profile in your own words</h1>
+    <p>Name the topsoil and the subsoil horizons from the top down, using the book's horizon names (orthic, melanic, red apedal, neocutanic, soft plinthic…). You can add field observations such as colour, wetness, lime, base status or clay increase.</p>
+    <textarea id="sdesc-in" placeholder="e.g. Orthic A over a neocutanic B horizon, acidic, no signs of wetness">${S.desc.replace(/</g, "&lt;")}</textarea>
+    <div class="exs">${DESC_EX.map((e, i) => `<button data-ex="${i}">${e}</button>`).join("")}</div>
+    <button class="primary" id="sdesc-go">Find the soil form</button>
+    <div id="sdesc-out"></div>
+    <p class="hint" style="font-size:.82rem; color:var(--ink-3); margin-top:12px">The app reads the horizon names you give; it doesn't check that each horizon was identified correctly. Check every horizon against its definition in the book.</p>`) + navBack();
+  const run = () => { S.desc = $("sdesc-in").value; S.parsed = S.desc.trim() ? DESC.parse(S.desc) : null; if (S.parsed && S.parsed.hints.depthCm && !S.depth) S.depth = String(S.parsed.hints.depthCm); drawDesc(); };
+  view().querySelectorAll("[data-ex]").forEach(b => b.onclick = () => { $("sdesc-in").value = DESC_EX[+b.dataset.ex]; run(); });
+  $("sdesc-go").onclick = run;
+  $("sdesc-in").onkeydown = e => { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) run(); };
+  if (S.parsed) drawDesc();
+  bindBack();
+}
+function hintChips(p) {
+  const H = p.hints, c = [];
+  if (p.top) c.push(`${p.top} topsoil`);
+  p.subs.forEach((x, i) => c.push(`${i === 0 ? "" : "then "}${x.toLowerCase()}`));
+  if (H.thick) c.push("continues to 1.5 m");
+  if (H.wet === false) c.push("no wetness"); else if (H.wet === true) c.push("signs of wetness");
+  if (H.topColour) c.push(`${H.topColour} topsoil`);
+  if (H.colour) c.push(`${H.colour} subsoil`);
+  if (H.base) c.push(H.base + (H.baseInferred ? " (inferred)" : ""));
+  if (H.luvic != null) c.push(H.luvic ? "luvic" : "aluvic");
+  if (H.calc != null) c.push(H.calc ? "calcareous" : "non-calcareous");
+  if (H.vertic != null) c.push(H.vertic ? "vertic properties" : "no vertic properties");
+  if (H.lithic) c.push(H.lithic);
+  if (H.rock) c.push(H.rock + " rock");
+  if (H.decomp) c.push(H.decomp);
+  if (H.humicThick != null) c.push(H.humicThick ? "thick humic" : "thin humic");
+  ["lamellae", "ortstein", "sepiolite"].forEach(k => { if (H[k] != null) c.push((H[k] ? "" : "no ") + k); });
+  if (H.blackCutans != null) c.push((H.blackCutans ? "" : "no ") + "black cutans");
+  if (H.firm != null) c.push(H.firm ? "firm" : "friable");
+  if (H.depthCm) c.push(`observed to ${H.depthCm} cm`);
+  return c.map(x => `<span class="chip">${x}</span>`).join("");
+}
+function drawDesc() {
+  const out = $("sdesc-out"), p = S.parsed;
+  if (!p) { out.innerHTML = ""; return; }
+  const cs = p.candidates;
+  let h = `<h2 style="margin-top:16px">What the app understood</h2><div class="chips">${hintChips(p) || `<span style="color:var(--ink-3); font-size:.85rem">No horizon names recognised</span>`}</div>`;
+  if (p.notes.length) h += `<ul style="margin:4px 0 0; padding-left:18px; font-size:.88rem; color:var(--ink-2)">${p.notes.map(n => `<li>${n}</li>`).join("")}</ul>`;
+  if (!p.top && !p.subs.length) {
+    h += `<div class="flag"><strong>No diagnostic horizons found.</strong> Use the book's horizon names, for example orthic A, red apedal B, soft plinthic, neocutanic or hard rock. Or use the step-by-step key instead.</div>`;
+  } else if (!cs.length) {
+    h += `<div class="flag"><strong>No soil form has this sequence.</strong> Check the horizon names and their order (top down). If you're sure of them, the step-by-step key explains how the book handles sequences that aren't in the key.</div>`;
+  } else {
+    const sameTS = cs.every(f => f.t === cs[0].t && f.s1 === cs[0].s1);
+    const label = f => !sameTS ? seqTxt(f) : f.s2 === "THICK" ? `${f.s1} continues to 1.5 m or deeper` : f.s2 === "-" ? "No further diagnostic horizon recognised" : nice(f.s2);
+    if (cs.length === 1) h += `<h2 style="margin-top:14px">Soil form</h2>`;
+    else if (sameTS) h += `<h2 style="margin-top:14px">${cs.length} forms fit. What lies below the ${cs[0].s1.toLowerCase()} horizon?</h2>`;
+    else h += `<h2 style="margin-top:14px">${cs.length} forms fit${cs.length > 25 ? " (showing 25; add more detail to narrow it down)" : ""}</h2>`;
+    h += cs.slice(0, 25).map(f => `<div class="chk" style="grid-template-columns: 44px 1fr; cursor:pointer" data-df="${f.code}"><span class="s y">${f.code}</span><span class="t"><b>${f.name}</b> · ${label(f)}</span></div>`).join("");
+    h += `<p class="hint" style="font-size:.82rem; color:var(--ink-3)">Tap a form to see its family questions${cs.length === 1 ? "" : " and the answers taken from your description"}.</p>`;
+  }
+  out.innerHTML = h;
+  out.querySelectorAll("[data-df]").forEach(e => e.onclick = () => { push(); chooseFromDesc(FORMS.find(f => f.code === e.dataset.df)); });
+}
 const depthTxt = () => S.depth ? ` (${(S.depth / 100).toFixed(S.depth % 100 ? 2 : 1).replace(/0$/, "")} m)` : "";
 function famCode(f) { const d = ["0", "0", "0", "0"]; f.fam.forEach((c, i) => { d[c.pos] = S.fam[i] ? String(S.fam[i]) : "?"; }); return d.join(""); }
 function seqTxt(f) { return [f.t, f.s1].concat(f.s2 === "-" ? [] : f.s2 === "THICK" ? ["(thick)"] : f.s2.split("+")).join(" / "); }
+function descNote(f) {
+  if (!S.fromDesc || !S.parsed) return "";
+  const H = S.parsed.hints, unused = [];
+  const has = re => f.fam.some(c => re.test(c.name));
+  if (H.base && !has(/base status/i)) unused.push("base status");
+  if (H.luvic != null && !has(/textural contrast/i)) unused.push("clay increase");
+  if (H.calc != null && !f.fam.some(c => c.options.some(o => /calcareous/i.test(o)))) unused.push("lime");
+  if (H.colour && !f.fam.some(c => c.options.some(o => /^(red|brown|grey)/i.test(o)) || /albic colour/i.test(c.name))) unused.push("subsoil colour");
+  const n = Object.keys(S.inferred).length;
+  return `<div class="flag" style="border-color:var(--line); background:none"><strong style="color:var(--ink)">From your description.</strong> ${n ? `${n} family answer${n > 1 ? "s were" : " was"} taken from what you wrote (marked below); change them if they're wrong.` : "None of the family answers could be taken from what you wrote, so answer them below."}${unused.length ? ` Not used for this form's family: ${unused.join(", ")}.` : ""}</div>`;
+}
 function familyQ() {
   const f = S.form, code = famCode(f), done = f.fam.every((c, i) => S.fam[i]);
   const cond = S.cond ? `<div class="flag"><strong>Conditional.</strong> Observation stopped before the full sequence could be confirmed, so the name is conditional and the depth must be stated. The form may change with deeper observation; other forms starting ${f.t.toLowerCase()} / ${f.s1.toLowerCase()} are ${rowsTS(f.t, f.s1).filter(r => r !== f).map(r => r.name).join(", ") || "none"}.</div>` : "";
@@ -1202,7 +1459,8 @@ function familyQ() {
     ${done ? "" : `<p class="hint" style="font-size:.85rem; color:var(--ink-3)">Answer the family questions below to complete the code (? = not yet answered).</p>`}
     <div class="row2" style="margin-top:6px"><button class="secondary" id="scopy" style="margin:0">Copy name</button></div>
     <h2 style="margin-top:18px">Family</h2>
-    ${f.fam.map((c, i) => `<div class="fam" style="margin-top:14px"><div style="font-weight:600">${c.name}</div>
+    ${descNote(f)}
+    ${f.fam.map((c, i) => `<div class="fam" style="margin-top:14px"><div style="font-weight:600">${c.name}${S.inferred[i] && S.fam[i] === S.inferred[i].k ? ` <span class="beta" style="color:var(--accent); border-color:var(--accent)">from your description</span>` : ""}</div>
       ${famHelp(c.name) ? `<div style="font-size:.85rem; color:var(--ink-3); margin:2px 0 6px">${famHelp(c.name)}</div>` : ""}
       <div class="answers" style="margin-top:6px">${c.options.map((o, k) => `<button data-c="${i}" data-k="${k + 1}" class="${S.fam[i] === k + 1 ? "yes" : ""}" style="min-height:44px; text-align:left; padding:8px 12px"><b>${k + 1}</b> · ${o}</button>`).join("")}</div></div>`).join("")}
     <button class="primary" id="snew">Classify another profile</button>`) + navBack();
