@@ -442,8 +442,9 @@ body.quarto-light .wrbk {
   <div class="wk-progress" aria-hidden="true"><div id="bar" style="width:0%"></div></div>
   <main id="view"></main>
   <div class="foot"><a href="tools.html">← Back to Tools</a><br>
-    <b>Beta.</b> A learning and screening aid that does not replace classification by a qualified soil scientist. Simplified field key to the Reference Soil Groups of the World Reference Base for Soil Resources, 4th edition (IUSS Working Group WRB, 2022). It does not replace the full key, diagnostic definitions or qualifier lists in the WRB text. <a href="https://wrb.isric.org/documents.html">WRB documents</a>
-  </div>
+    <b>Beta</b> learning aid. It does not replace the WRB text or a qualified soil scientist.<br>
+    <b>Source:</b> IUSS Working Group WRB (2022). <i>World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps</i>, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria. <a href="https://wrb.isric.org/documents.html" target="_blank" rel="noopener">wrb.isric.org</a><br>
+    <b>Classifying from data in R:</b> Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. R package version 0.9.259. <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a> · <a href="https://github.com/HugoMachadoRodrigues/soilKey" target="_blank" rel="noopener">GitHub</a></div>
 </div>
 
 <script>
@@ -1201,7 +1202,9 @@ body.quarto-light .sakey {
   </header>
   <main id="sa-view"></main>
   <div class="foot"><a href="tools.html">← Back to Tools</a><br>
-    <b>Beta.</b> An unofficial aid that implements the soil form key and family tables of <i>Soil Classification: A Natural and Anthropogenic System for South Africa</i> (Soil Classification Working Group, 2018, ARC-Institute for Soil, Climate and Water, Pretoria). It is not affiliated with or endorsed by the ARC or the Soil Classification Working Group, and it does not replace the book or classification by a qualified soil scientist. Horizon and family descriptions here are brief summaries; the full diagnostic definitions in the book always apply.</div>
+    <b>Beta</b> learning aid, not affiliated with or endorsed by the ARC. It does not replace the book or a qualified soil scientist.<br>
+    <b>Source:</b> Soil Classification Working Group (2018). <i>Soil Classification: A Natural and Anthropogenic System for South Africa</i>. ARC-Institute for Soil, Climate and Water, Pretoria.<br>
+    <b>Official app:</b> <a href="https://play.google.com/store/apps/details?id=arc.ict.digitalsoilclassification" target="_blank" rel="noopener">Digital Soil Classification</a> (ARC, Android)</div>
 </div>
 <script>
 (function () {
@@ -1210,12 +1213,12 @@ const FORMS = [{"t": "Peat", "s1": "Gley", "s2": "-", "name": "Mfabeni", "code":
 const TOPS = ["Peat", "Organic", "Vertic", "Melanic", "Humic", "Orthic"];
 /* Short descriptions in our own words, summarising the book's diagnostic criteria (Section A5). */
 const HZ = {
-  "Peat": "Waterlogged surface layer with more than 20% organic carbon, in a wetland setting.",
+  "Peat": "Waterlogged surface layer of mostly plant remains, with organic C above 20%, in a wetland.",
   "Organic": "Wet surface layer with 10–20% organic carbon.",
   "Vertic": "Dark, strongly structured clay topsoil (≥ 30% clay) that cracks, shows slickensides or wedge-shaped peds, or is self-mulching.",
   "Melanic": "Dark (dry value and chroma ≤ 3, not reddish), moderate to strong blocky structure, no slickensides, base-rich (≥ 4 cmol(+) exchangeable cations per kg clay for each 1% organic C), under 10% organic C.",
   "Humic": "Dark, carbon-rich (> 1.8% organic C throughout), weak structure, leached (< 4 cmol(+) per kg clay for each 1% organic C), freely drained.",
-  "Orthic": "Any topsoil that is not peat, organic, vertic, melanic or humic. It may still be dark, chromic or bleached.",
+  "Orthic": "The default topsoil: it fits none of the other five types, though it can still be dark, chromic or bleached.",
   "Gley": "Grey to blue-grey matrix, weak or no structure, few mottles; often wet.",
   "Albic": "Light grey (bleached) matrix in the dry state, weak or no structure, fewer than 10% mottles.",
   "Gleyic": "Structured horizon with grey ped exteriors and brighter, mottled ped interiors (a redox pattern).",
@@ -1223,7 +1226,7 @@ const HZ = {
   "Red Apedal": "Uniform red colours, weak or no structure, not calcareous.",
   "Red Structured": "Uniform red colours with moderate to strong structure and red cutans; no slickensides.",
   "Soft Plinthic": "More than 10% red, yellow-brown or black Fe/Mn mottles, with grey colours in or just below the horizon; weak structure; not cemented.",
-  "Hard Plinthic": "Cemented ironstone, or a near-continuous sheet of iron/manganese concretions.",
+  "Hard Plinthic": "Hardened ironstone layer, or closely packed hardened iron/manganese nodules.",
   "Podzol": "Layer enriched in iron, aluminium and humus, often dark; mainly in the southern Cape.",
   "Podzol with placic pan": "Podzol with a thin (about 2–10 mm), wavy, hard, dark iron pan.",
   "Prismacutanic": "Abrupt change to a clay-enriched subsoil with vertical prisms and cutans; not gleyed.",
@@ -1255,12 +1258,12 @@ const FAMHELP = [
   [/vertic properties/i, () => "Vertic properties: plasticity index ≥ 30 (lab confirmed); strong structure, many cutans and coarse cracks help in the field. Brown and red follow the yellow-brown and red apedal colour definitions."],
   [/ortstein/i, () => "Ortstein: in or below the podzol, at least 50% cemented and more than 25 mm thick."],
   [/consistence of underlying/i, () => "Firm: needs at least moderate thumb–finger pressure to crush. Friable: crushes under gentle pressure."],
-  [/consistence and\/or texture of gley/i, () => "Friable and/or sand to loamy sand, or slightly firm and/or sandy loam or finer."],
+  [/consistence and\/or texture of gley/i, () => "Choose by feel: loose or friable sandy gley, or firmer gley with more clay (sandy loam texture or heavier)."],
   [/alluvial wetness/i, () => "Wet: grey (albic-type) colours in at least 10% of the matrix, or free water present."],
   [/gleying/i, () => "Gleyed: grey (albic-type) matrix colours in or below the horizon."],
   [/lamellae/i, () => "Thin, wavy layers enriched in clay, oxides or organic matter, usually first appearing at 40–100 cm."],
   [/colour of/i, () => "Colours are judged in the dry state. Brown follows the yellow-brown apedal definition, red the red apedal definition, grey the albic definition."],
-  [/black cutans/i, () => "Continuous black cutans on vertical ped faces, usually a sign of a wetter soil climate."]
+  [/black cutans/i, () => "Dark clay skins coating the upright faces of the prisms all over; they usually point to a wetter soil climate."]
 ];
 const famHelp = name => { for (const [re, f] of FAMHELP) if (re.test(name)) return f(name); return ""; };
 const nice = s => s === "THICK" ? "continues to 1.5 m" : s.replace("+", ", then ");
@@ -1300,7 +1303,7 @@ function intro() {
       <button id="sgo"><b>Identify the soil form</b><span>Topsoil, then subsoil horizons, then family.</span></button>
       <button id="sbrowse"><b>Browse all 135 forms</b><span>Already know the form? Go straight to its family table.</span></button>
     </div>
-    <ul class="intro" style="margin-top:14px"><li>This covers natural soils (Section A). For soils strongly altered by people (Anthrosols, Technosols), use Section B of the book.</li><li>Horizon descriptions here are short summaries. Always check the full definitions in the book.</li></ul>`);
+    <ul class="intro" style="margin-top:14px"><li>This covers natural soils (Section A). For soils strongly altered by people (Anthrosols, Technosols), use Section B of the book.</li><li>Horizon descriptions here are short summaries. Always check the full definitions in the book.</li><li>The ARC also publishes an official app, <a href="https://play.google.com/store/apps/details?id=arc.ict.digitalsoilclassification" target="_blank" rel="noopener">Digital Soil Classification</a> (Android).</li></ul>`);
   $("sdepth").oninput = e => { S.depth = e.target.value; };
   $("sgo").onclick = () => { push(); setStage("top"); };
   $("sbrowse").onclick = () => { push(); setStage("browse"); };
@@ -1332,7 +1335,7 @@ function thickQ() {
     { label: "No, another horizon starts above 1.5 m", go: () => { push(); rs.some(r => r.s2 !== "THICK") ? setStage("s2") : (S.note = `${S.top} / ${S.s1} over another horizon`, setStage("notinkey")); } },
     { label: "Observation stopped above 1.5 m", cls: "unsure", go: () => { push(); S.cond = true; chooseForm(th); } }
   ];
-  view().innerHTML = `<div class="step">Step 3 · Thickness</div>` + card(`<h1>Does the ${S.s1.toLowerCase()} horizon continue to at least 1.5 m?</h1><p>If it does, the soil form is defined by this single thick horizon.</p>${optBtns(opts)}`) + navBack();
+  view().innerHTML = `<div class="step">Step 3 · Thickness</div>` + card(`<h1>Does the ${S.s1.toLowerCase()} horizon continue to at least 1.5 m?</h1><p>If so, this one horizon decides the form on its own.</p>${optBtns(opts)}`) + navBack();
   bind(opts); bindBack();
 }
 function s2Q() {
@@ -1371,7 +1374,7 @@ function special() {
   const t = S.stage === "topsoilonly";
   view().innerHTML = `<div class="step">${t ? "Topsoil only" : "Not in the key"}</div>` + card(t
     ? `<h1>“${S.top} soil”${depthTxt()}</h1><p>When only the topsoil can be observed, the soil takes the name of its topsoil, with the observation depth stated.</p>`
-    : `<h1>Sequence not in the key</h1><p>${S.note}.</p><p>The book allows a provisional new soil form when a topsoil and two subsoil horizons are clearly identified but the sequence isn't in the key, provided a full data set (profile description, lab data, distribution and a photograph) is sent to the Soil Classification Working Group.</p><p>Before that, re-check the horizon calls against the full definitions, as a misidentified horizon is the more common cause.</p>`) + `<button class="primary" id="snew">Start again</button>` + navBack();
+    : `<h1>Sequence not in the key</h1><p>${S.note}.</p><p>If you're confident about a topsoil and two subsoil horizons that don't appear together in the key, the book lets you propose a provisional new form. It asks for a complete record (description, lab results, where the soil occurs and a photo) to be submitted to the classification working group.</p><p>Before that, re-check the horizon calls against the full definitions, as a misidentified horizon is the more common cause.</p>`) + `<button class="primary" id="snew">Start again</button>` + navBack();
   $("snew").onclick = () => { const d = S.depth; reset(); S.depth = d; setStage("top"); };
   bindBack();
 }
