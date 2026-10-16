@@ -41,7 +41,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
@@ -177,6 +176,11 @@ ul.task-list li input[type="checkbox"] {
   --warn: #9a6400;
   --radius: 10px;
 }
+body.quarto-dark .rk-tools {
+  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1;
+  --ink-3: #8f887d; --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f;
+  --s1: #3987e5; --s2: #d95926; --obs: #5d564d; --good: #5cc28f; --warn: #e0a440;
+}
 .rk-tools a { color: var(--accent); }
 .rk-tools .rk-wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
 .rk-tools .rk-hero { padding: 36px 0 20px; }
@@ -287,11 +291,11 @@ ul.task-list li input[type="checkbox"] {
 
 <!-- ============ PROFILE HARMONISER ============ -->
 <section class="tool active" id="tab-spline">
-  <h2 class="anchored">Profile harmoniser</h2>
+  <h2>Profile harmoniser</h2>
   <p class="lede">Fit a physics-informed spline (phySpline) to irregular horizon data and harmonise it to standard depth intervals. Works for continuous properties (carbon, pH, clay) and for ordered classes such as texture.</p>
 
   <div class="rk-card">
-    <h3 class="anchored">1. Your data</h3>
+    <h3>1. Your data</h3>
     <textarea id="sp-data" spellcheck="false" aria-label="Profile data as CSV"></textarea>
     <div class="rk-row">
       <label class="file-label">Upload CSV<input type="file" id="sp-file" accept=".csv,.txt,.tsv"></label>
@@ -302,7 +306,7 @@ ul.task-list li input[type="checkbox"] {
   </div>
 
   <div class="rk-card">
-    <h3 class="anchored">2. Settings</h3>
+    <h3>2. Settings</h3>
     <div class="rk-grid">
       <div><label for="sp-var">Property</label><select id="sp-var"></select></div>
       <div><label for="sp-mode">Mode</label>
@@ -321,7 +325,7 @@ ul.task-list li input[type="checkbox"] {
   <div id="sp-results" hidden="">
     <div class="rk-card">
       <div class="rk-row" style="margin-top:0; justify-content:space-between">
-        <h3 style="margin:0" class="anchored">Profile view</h3>
+        <h3 style="margin:0">Profile view</h3>
         <select id="sp-prof" style="width:auto; min-width:140px" aria-label="Profile to show"></select>
       </div>
       <div class="legend">
@@ -333,7 +337,7 @@ ul.task-list li input[type="checkbox"] {
     </div>
     <div class="rk-card">
       <div class="rk-row" style="margin-top:0; justify-content:space-between">
-        <h3 style="margin:0" class="anchored">Harmonised values</h3>
+        <h3 style="margin:0">Harmonised values</h3>
         <button class="rk-btn" id="sp-dl">Download CSV</button>
       </div>
       <p class="hint" style="margin-top:4px">Intervals that extend past the bottom of a profile are averaged over the soil that is present and shown in amber. Blank means no soil in that interval.</p>
@@ -351,10 +355,10 @@ ul.task-list li input[type="checkbox"] {
 
 <!-- ============ CARBON ============ -->
 <section class="tool" id="tab-carbon">
-  <h2 class="anchored">Soil carbon stocks</h2>
+  <h2>Soil carbon stocks</h2>
   <p class="lede">Calculate organic carbon stocks for many profiles at once, by summing horizons to fixed depths, with an optional equivalent soil mass basis for comparing sites or sampling dates.</p>
   <div class="rk-card">
-    <h3 class="anchored">1. Your data</h3>
+    <h3>1. Your data</h3>
     <textarea id="c-data" spellcheck="false" aria-label="Carbon data as CSV"></textarea>
     <div class="rk-row">
       <label class="file-label">Upload CSV<input type="file" id="c-file" accept=".csv,.txt,.tsv"></label>
@@ -363,7 +367,7 @@ ul.task-list li input[type="checkbox"] {
     <p class="hint">Columns: id, top (cm), bottom (cm), soc (%), bd (bulk density, g/cm³), and optionally cf (coarse fragments, % by volume).</p>
   </div>
   <div class="rk-card">
-    <h3 class="anchored">2. Settings</h3>
+    <h3>2. Settings</h3>
     <div class="rk-grid">
       <div><label for="c-depths">Report to depths (cm)</label><input type="text" id="c-depths" value="30, 100"></div>
       <div><label for="c-esm">Reference soil mass (Mg/ha, optional)</label><input type="number" id="c-esm" placeholder="e.g. 4000" min="0"></div>
@@ -374,7 +378,7 @@ ul.task-list li input[type="checkbox"] {
   </div>
   <div class="rk-card" id="c-results" hidden="">
     <div class="rk-row" style="margin-top:0; justify-content:space-between">
-      <h3 style="margin:0" class="anchored">Stocks (Mg C/ha)</h3>
+      <h3 style="margin:0">Stocks (Mg C/ha)</h3>
       <button class="rk-btn" id="c-dl">Download CSV</button>
     </div>
     <div class="stats" id="c-summary" style="margin-top:10px"></div>
@@ -391,11 +395,11 @@ ul.task-list li input[type="checkbox"] {
 
 <!-- ============ WATER RETENTION ============ -->
 <section class="tool" id="tab-water">
-  <h2 class="anchored">Water retention from texture</h2>
+  <h2>Water retention from texture</h2>
   <p class="lede">Estimate field capacity, wilting point, available water and saturated conductivity from sand, clay and organic matter, using the Saxton &amp; Rawls (2006) pedotransfer functions.</p>
   <div class="two">
     <div class="rk-card">
-      <h3 class="anchored">Inputs</h3>
+      <h3>Inputs</h3>
       <div class="rk-grid">
         <div><label for="w-sand">Sand (%)</label><input type="number" id="w-sand" value="40" min="0" max="100"></div>
         <div><label for="w-clay">Clay (%)</label><input type="number" id="w-clay" value="20" min="0" max="100"></div>
@@ -405,7 +409,7 @@ ul.task-list li input[type="checkbox"] {
       <div class="msg" id="w-msg" role="status"></div>
     </div>
     <div class="rk-card">
-      <h3 class="anchored">Estimates</h3>
+      <h3>Estimates</h3>
       <div class="stats" id="w-out"></div>
     </div>
   </div>
@@ -419,7 +423,7 @@ ul.task-list li input[type="checkbox"] {
 
 <!-- ============ VAN GENUCHTEN ============ -->
 <section class="tool" id="tab-vg">
-  <h2 class="anchored">van Genuchten curves</h2>
+  <h2>van Genuchten curves</h2>
   <p class="lede">Explore how the van Genuchten–Mualem parameters shape water retention and unsaturated conductivity. Start from a texture class and adjust.</p>
   <div class="rk-card">
     <div class="rk-grid">
@@ -436,11 +440,11 @@ ul.task-list li input[type="checkbox"] {
   <div class="rk-card"><div class="stats" id="vg-out"></div></div>
   <div class="two">
     <div class="rk-card">
-      <h3 class="anchored">Water retention θ(h)</h3>
+      <h3>Water retention θ(h)</h3>
       <div class="chart-box"><svg class="chart" id="vg-ret" role="img" aria-label="Water retention curve"></svg><div class="tip" id="vg-ret-tip"></div></div>
     </div>
     <div class="rk-card">
-      <h3 class="anchored">Hydraulic conductivity K(h)</h3>
+      <h3>Hydraulic conductivity K(h)</h3>
       <div class="chart-box"><svg class="chart" id="vg-k" role="img" aria-label="Hydraulic conductivity curve"></svg><div class="tip" id="vg-k-tip"></div></div>
     </div>
   </div>
@@ -454,11 +458,11 @@ ul.task-list li input[type="checkbox"] {
 
 <!-- ============ HSG ============ -->
 <section class="tool" id="tab-hsg">
-  <h2 class="anchored">Hydrologic soil group</h2>
+  <h2>Hydrologic soil group</h2>
   <p class="lede">Assign a hydrologic soil group (A–D) for runoff estimation from depth to a restrictive layer, depth to the seasonal high water table, and saturated conductivity.</p>
   <div class="two">
     <div class="rk-card">
-      <h3 class="anchored">Inputs</h3>
+      <h3>Inputs</h3>
       <div class="rk-grid">
         <div><label for="h-rest">Depth to restrictive layer (cm)</label><input type="number" id="h-rest" value="150" min="0"></div>
         <div><label for="h-wt">Depth to high water table (cm)</label><input type="number" id="h-wt" value="200" min="0"></div>
@@ -469,7 +473,7 @@ ul.task-list li input[type="checkbox"] {
       <p class="hint">Use the least permeable layer in the top 50 cm if a restriction or water table lies within 100 cm, otherwise in the top 100 cm. No restriction? Enter a large depth such as 300.</p>
     </div>
     <div class="rk-card">
-      <h3 class="anchored">Result</h3>
+      <h3>Result</h3>
       <div class="big" id="h-group">–</div>
       <p id="h-why" style="margin:0; color:var(--ink-2)"></p>
     </div>
@@ -484,11 +488,11 @@ ul.task-list li input[type="checkbox"] {
 
 <!-- ============ TEXTURE ============ -->
 <section class="tool" id="tab-texture">
-  <h2 class="anchored">Texture class</h2>
+  <h2>Texture class</h2>
   <p class="lede">Find the USDA texture class from particle-size fractions.</p>
   <div class="two">
     <div class="rk-card">
-      <h3 class="anchored">Inputs</h3>
+      <h3>Inputs</h3>
       <div class="rk-grid">
         <div><label for="t-sand">Sand (%)</label><input type="number" id="t-sand" value="45" min="0" max="100"></div>
         <div><label for="t-silt">Silt (%)</label><input type="number" id="t-silt" value="30" min="0" max="100"></div>
@@ -511,11 +515,11 @@ ul.task-list li input[type="checkbox"] {
 
 <!-- ============ MUNSELL ============ -->
 <section class="tool" id="tab-munsell">
-  <h2 class="anchored">Munsell soil colour</h2>
+  <h2>Munsell soil colour</h2>
   <p class="lede">See a Munsell notation as an on-screen colour, browse a soil chart page, and learn what the colour usually tells you about the soil.</p>
   <div class="two">
     <div class="rk-card">
-      <h3 class="anchored">Notation</h3>
+      <h3>Notation</h3>
       <div class="rk-grid">
         <div><label for="m-text">Type a notation</label><input type="text" id="m-text" value="10YR 5/4" placeholder="e.g. 7.5YR 4/6 or N 5"></div>
         <div><label for="m-hue">Chart page (hue)</label><select id="m-hue"></select></div>
@@ -531,7 +535,7 @@ ul.task-list li input[type="checkbox"] {
       <div id="m-notes" style="margin-top:14px; color:var(--ink-2); font-size:.93rem"></div>
     </div>
     <div class="rk-card">
-      <h3 id="m-page-title" class="anchored">Chart page</h3>
+      <h3 id="m-page-title">Chart page</h3>
       <div id="m-page"></div>
       <p class="hint">Rows are value (lightness), columns are chroma (strength). Tap a chip to select it.</p>
     </div>
@@ -541,11 +545,11 @@ ul.task-list li input[type="checkbox"] {
 
 <!-- ============ SAMPLING ============ -->
 <section class="tool" id="tab-sampling">
-  <h2 class="anchored">Sampling density</h2>
+  <h2>Sampling density</h2>
   <p class="lede">Estimate how many samples you need to measure a field or site mean within a chosen margin of error, assuming simple random sampling.</p>
   <div class="two">
     <div class="rk-card">
-      <h3 class="anchored">Inputs</h3>
+      <h3>Inputs</h3>
       <div class="rk-grid">
         <div><label for="s-cv">Coefficient of variation (%)</label><input type="number" id="s-cv" value="30" min="1" step="any"></div>
         <div><label for="s-err">Allowable error (% of mean)</label><input type="number" id="s-err" value="10" min="0.5" step="any"></div>
@@ -556,7 +560,7 @@ ul.task-list li input[type="checkbox"] {
       <p class="hint">No CV to hand? Typical values: pH 5–15%, organic carbon 20–40%, available P or K 40–80%.</p>
     </div>
     <div class="rk-card">
-      <h3 class="anchored">Result</h3>
+      <h3>Result</h3>
       <div class="big" id="s-n">–</div>
       <p id="s-why" style="margin:0 0 10px; color:var(--ink-2)"></p>
       <div class="rk-table-wrap"><div id="s-table"></div></div>
@@ -1412,13 +1416,6 @@ if ([...tabs].some(b => b.dataset.tab === start)) showTab(start, false);
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
-    const icon = "";
-    const anchorJS = new window.AnchorJS();
-    anchorJS.options = {
-      placement: 'right',
-      icon: icon
-    };
-    anchorJS.add('.anchored');
     const isCodeAnnotation = (el) => {
       for (const clz of el.classList) {
         if (clz.startsWith('code-annotation-')) {                     
