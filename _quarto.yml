@@ -25,7 +25,7 @@ website:
       - href: tools.qmd
         text: Tools
       - href: soil-keys.qmd
-        text: Soil key
+        text: Soil Keys
       - href: publications.qmd
         text: Publications
       - href: contact.qmd
