@@ -111,6 +111,8 @@ body.quarto-dark .rk-tools {
 @media (min-width: 760px) { .rk-tools .two { grid-template-columns: 1fr 1fr; } }
 .rk-tools { color: var(--ink); }
 .rk-tools nav.rk-tabs { position: static; background: transparent; }
+.rk-tools nav.rk-tabs .rk-wrap { flex-wrap: wrap; overflow: visible; padding: 10px 0; }
+.rk-tools nav.rk-tabs button { font-size: .88rem; padding: 6px 12px; }
 .rk-tools .rk-wrap { max-width: none; padding: 0; }
 .rk-tools .rk-hero { padding: 0 0 12px; }
 .rk-tools .rk-card h3, .rk-tools h2 { margin-top: 0; }
@@ -128,15 +130,15 @@ body.quarto-dark .rk-tools {
 <nav class="rk-tabs" aria-label="Tools">
   <div class="rk-wrap" role="tablist">
     <button role="tab" data-tab="spline" aria-selected="true">Profile harmoniser</button>
+    <button role="tab" data-tab="vg" aria-selected="false">van Genuchten</button>
+    <button role="tab" data-tab="pedodiv" aria-selected="false">Pedodiversity</button>
+    <button role="tab" data-tab="eval" aria-selected="false">Model evaluation</button>
+    <button role="tab" data-tab="texture" aria-selected="false">Texture class</button>
     <button role="tab" data-tab="carbon" aria-selected="false">Carbon stocks</button>
     <button role="tab" data-tab="water" aria-selected="false">Water retention</button>
-    <button role="tab" data-tab="vg" aria-selected="false">van Genuchten</button>
     <button role="tab" data-tab="hsg" aria-selected="false">Hydrologic soil group</button>
-    <button role="tab" data-tab="texture" aria-selected="false">Texture class</button>
-    <button role="tab" data-tab="munsell" aria-selected="false">Munsell colour</button>
     <button role="tab" data-tab="sampling" aria-selected="false">Sampling density</button>
-    <button role="tab" data-tab="eval" aria-selected="false">Model evaluation</button>
-    <button role="tab" data-tab="pedodiv" aria-selected="false">Pedodiversity</button>
+    <button role="tab" data-tab="munsell" aria-selected="false">Munsell colour</button>
   </div>
 </nav>
 
@@ -595,7 +597,7 @@ body.quarto-dark .rk-tools {
     <p>Taxonomic indices treat every class as equally different and ignore where soils sit and how they change with depth. Our approach measures pedodiversity from continuous soil properties in three dimensions, as the organisation of energy across the soil system.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Pedodiversity%20analysis">Get in touch →</a>
   </div>
-  <p class="refs">Ibáñez, J.J., De-Alba, S., Bermúdez, F.F., García-Álvarez, A. (1995). Pedodiversity: concepts and measures. Catena 24, 215–232. Hill, M.O. (1973). Ecology 54, 427–432. Thermodynamic approach: Flynn, T. (2026). Thermodynamic pedodiversity patterns reveal agroecosystem patterns in indigenous lands of the U.S. Southwest. Research Square, <a href="https://doi.org/10.32942/X2H66M/v1">doi:10.32942/X2H66M/v1</a>.</p>
+  <p class="refs">Ibáñez, J.J., De-Alba, S., Bermúdez, F.F., García-Álvarez, A. (1995). Pedodiversity: concepts and measures. Catena 24, 215–232. Hill, M.O. (1973). Ecology 54, 427–432. Thermodynamic approach: Flynn, T. (2026). Preprint. <a href="https://doi.org/10.32942/X2H66M">doi:10.32942/X2H66M</a>.</p>
 </section>
 
 </main>
