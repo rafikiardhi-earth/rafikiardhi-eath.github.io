@@ -1114,6 +1114,8 @@ const famHelp = name => { for (const [re, f] of FAMHELP) if (re.test(name)) retu
    Rule-based: it only recognises the book's horizon names and common field terms, never guesses. */
 /* ---- Your own words for the book's horizons (Describe the profile) ----
    Add a line: [["word or phrase", "another phrase"], "Horizon name exactly as in the book"].
+   A word can point to several horizons: [["word"], ["Horizon one", "Horizon two"]] (or list it on two lines);
+   the app then keeps the forms for each possibility and lets the user choose.
    Matching ignores capitals; whole words only. The app tells the user which words it translated. */
 const SA_SYNONYMS = [
   [["cambic", "weakly developed b", "weakly developed subsoil", "weakly developed horizon"], "Neocutanic"]
@@ -1159,14 +1161,31 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
   const yesNo = (t, w) => found(t, w) ? !negated(t, w) : null;
 
   function parse(raw) {
-    let t = " " + String(raw || "").toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ") + " ";
-    // your own words -> the book's horizon names (see SA_SYNONYMS)
-    const synNotes = [];
+    const base = " " + String(raw || "").toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ") + " ";
+    // your own words -> the book's horizon names (see SA_SYNONYMS); a word may point to several horizons
+    const synNotes = [], seen = new Set();
+    let variants = [base];
     SYNONYMS.forEach(([words, name]) => words.forEach(w => {
       const esc = w.toLowerCase().trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
-      const re = new RegExp(`\\b${esc}\\b`, "g");
-      if (re.test(t)) { t = t.replace(re, " " + name.toLowerCase() + " "); synNotes.push(`Read "${w}" as ${name.toLowerCase()}. Check it meets the book's definition.`); }
+      const re = new RegExp(`\\b${esc}\\b`, "g"), test = new RegExp(`\\b${esc}\\b`);
+      if (!test.test(base) || seen.has(w.toLowerCase())) return;
+      seen.add(w.toLowerCase());
+      // collect every horizon this word is listed under
+      const names = [];
+      SYNONYMS.forEach(([ws, n]) => { if (ws.some(x => x.toLowerCase().trim() === w.toLowerCase().trim())) (Array.isArray(n) ? n : [n]).forEach(k => { if (!names.includes(k)) names.push(k); }); });
+      variants = variants.flatMap(v => names.map(n => v.replace(re, " " + n.toLowerCase() + " "))).slice(0, 16);
+      synNotes.push(`Read "${w}" as ${names.map(n => n.toLowerCase()).join(" or ")}. Check it meets the book's definition.`);
     }));
+    const rs = variants.map(v => parseCore(v, synNotes));
+    if (rs.length === 1) return rs[0];
+    const m = { ...rs[0] }, all = [];
+    rs.forEach(r => r.candidates.forEach(f => { if (!all.includes(f)) all.push(f); }));
+    m.candidates = all;
+    const n = Math.max(...rs.map(r => r.subs.length));
+    m.subs = Array.from({ length: n }, (_, i) => [...new Set(rs.map(r => r.subs[i]).filter(Boolean))].join(" or "));
+    return m;
+  }
+  function parseCore(t, synNotes) {
     let masked = t;
     const hits = [];
     for (const [name, re] of HZ_WORDS) {
