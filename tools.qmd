@@ -9,7 +9,7 @@ RafikiArdhi builds methods for problems where standard tools fall short, and rel
 ::: {.cards}
 ::: {.card-item}
 ### phySpline: profile harmonisation
-Converts soil profiles sampled at any depths to standard depth intervals (for example GlobalSoilMap 0–5, 5–15, 15–30 cm) with a physics-informed spline, so profiles from different surveys can be compared and mapped together.
+Converts soil profiles sampled at any depths to standard depth intervals (for example GlobalSoilMap 0–5, 5–15, 15–30 cm) with a physics-informed spline, so profiles from different surveys can be compared and mapped together. Classes are estimated along a continuous ordered gradient, so the harmoniser can identify transitional classes that were not described in the original horizons.
 
 [rafikisol on GitHub →](https://github.com/rafikisol)
 :::
