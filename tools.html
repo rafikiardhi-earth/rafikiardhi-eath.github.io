@@ -335,6 +335,9 @@ ul.task-list li input[type="checkbox"] {
   --accent-soft: #f3e6da;
   --s1: #2a78d6;
   --s2: #eb6834;
+  --s3: #1baf7a;
+  --s4: #eda100;
+  --s5: #e87ba4;
   --obs: #b9b1a4;
   --good: #1f7a4d;
   --warn: #9a6400;
@@ -343,7 +346,7 @@ ul.task-list li input[type="checkbox"] {
 body.quarto-dark .rk-tools {
   --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1;
   --ink-3: #8f887d; --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f;
-  --s1: #3987e5; --s2: #d95926; --obs: #5d564d; --good: #5cc28f; --warn: #e0a440;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --obs: #5d564d; --good: #5cc28f; --warn: #e0a440;
 }
 .rk-tools a { color: var(--accent); }
 .rk-tools td.diag { font-weight: 700; background: var(--accent-soft); }
@@ -427,7 +430,9 @@ body.quarto-dark .rk-tools {
 @media (min-width: 760px) { .rk-tools .two { grid-template-columns: 1fr 1fr; } }
 .rk-tools { color: var(--ink); }
 .rk-tools nav.rk-tabs { position: static; background: transparent; }
-.rk-tools nav.rk-tabs .rk-wrap { flex-wrap: wrap; overflow: visible; padding: 10px 0; }
+.rk-tools nav.rk-tabs .rk-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px 18px; overflow: visible; padding: 12px 0; }
+.rk-tools .tgroup { display: flex; flex-wrap: wrap; gap: 6px; align-content: flex-start; }
+.rk-tools .tglabel { flex: 0 0 100%; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 600; }
 .rk-tools nav.rk-tabs button { font-size: .88rem; padding: 6px 12px; }
 .rk-tools .rk-wrap { max-width: none; padding: 0; }
 .rk-tools .rk-hero { padding: 0 0 12px; }
@@ -445,16 +450,10 @@ body.quarto-dark .rk-tools {
 
 <nav class="rk-tabs" aria-label="Tools">
   <div class="rk-wrap" role="tablist">
-    <button role="tab" data-tab="spline" aria-selected="true">Profile harmoniser</button>
-    <button role="tab" data-tab="vg" aria-selected="false">van Genuchten</button>
-    <button role="tab" data-tab="pedodiv" aria-selected="false">Pedodiversity</button>
-    <button role="tab" data-tab="eval" aria-selected="false">Model evaluation</button>
-    <button role="tab" data-tab="texture" aria-selected="false">Texture class</button>
-    <button role="tab" data-tab="carbon" aria-selected="false">Carbon stocks</button>
-    <button role="tab" data-tab="water" aria-selected="false">Water retention</button>
-    <button role="tab" data-tab="hsg" aria-selected="false">Hydrologic soil group</button>
-    <button role="tab" data-tab="sampling" aria-selected="false">Sampling density</button>
-    <button role="tab" data-tab="munsell" aria-selected="false">Munsell colour</button>
+    <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" aria-selected="false">Pedodiversity</button><button role="tab" data-tab="eval" aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" aria-selected="false">Sampling density</button></div>
+    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" aria-selected="false">Hydrologic soil group</button></div>
+    <div class="tgroup"><span class="tglabel">Energy</span><button role="tab" data-tab="soiltemp" aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" aria-selected="false">Energy balance</button></div>
+    <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" aria-selected="false">Munsell colour</button></div>
   </div>
 </nav>
 
@@ -866,6 +865,80 @@ body.quarto-dark .rk-tools {
   <p class="refs">Lin, L.I. (1989). Biometrics 45, 255–268. Malone, B.P., McBratney, A.B., Minasny, B. (2011). Geoderma 160, 614–626. Burrough, P.A., van Gaans, P.F.M., Hootsmans, R. (1997). Geoderma 77, 115–135. Open R implementation: rafikisol package.</p>
 </section>
 
+<!-- ============ SOIL TEMPERATURE ============ -->
+<section class="tool" id="tab-soiltemp">
+  <h2>Soil temperature waves</h2>
+  <p class="lede">Daily and seasonal temperature swings at the surface fade and arrive later the deeper you go. See how soil moisture, density and clay control how far heat travels.</p>
+  <div class="rk-card">
+    <div class="rk-grid">
+      <div><label for="st-cycle">Cycle</label><select id="st-cycle"><option value="day">Daily</option><option value="year">Annual</option></select></div>
+      <div><label for="st-mean">Mean surface temperature (°C)</label><input type="number" id="st-mean" value="20" step="any"></div>
+      <div><label for="st-amp">Surface amplitude (± °C)</label><input type="number" id="st-amp" value="12" min="0" step="any"></div>
+    </div>
+    <div class="rk-grid" style="margin-top:12px">
+      <div><label for="st-theta">Water content: <b id="st-theta-v"></b> m³/m³</label><input type="range" id="st-theta" min="0" max="0.45" step="0.005" value="0.2"></div>
+      <div><label for="st-bd">Bulk density: <b id="st-bd-v"></b> g/cm³</label><input type="range" id="st-bd" min="0.9" max="1.8" step="0.01" value="1.3"></div>
+      <div><label for="st-clay">Clay: <b id="st-clay-v"></b>%</label><input type="range" id="st-clay" min="1" max="60" step="1" value="20"></div>
+    </div>
+  </div>
+  <div class="rk-card"><div class="stats" id="st-out"></div></div>
+  <div class="two">
+    <div class="rk-card">
+      <h3 id="st-c1-title">Temperature through the day</h3>
+      <div class="legend" id="st-legend"></div>
+      <div class="chart-box"><svg class="chart" id="st-c1" role="img" aria-label="Temperature over the cycle at several depths"></svg><div class="tip" id="st-c1-tip"></div></div>
+    </div>
+    <div class="rk-card">
+      <h3>Thermal diffusivity vs water content</h3>
+      <div class="chart-box"><svg class="chart" id="st-c2" role="img" aria-label="Thermal diffusivity against water content"></svg><div class="tip" id="st-c2-tip"></div></div>
+      <p class="hint">Diffusivity peaks at intermediate moisture: water first bridges grains and conducts heat well, then extra water mostly adds heat capacity.</p>
+    </div>
+  </div>
+  <div class="advanced">
+    <strong>Real soils are layered and the weather isn't a sine wave</strong>
+    <p>We model coupled heat and water movement through layered profiles and across hillslopes, from surface conditions down to depth.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Soil%20heat%20and%20water%20modelling">Get in touch →</a>
+  </div>
+  <p class="refs">Uniform soil with sinusoidal surface temperature (Carslaw &amp; Jaeger). Thermal conductivity: Campbell, G.S. (1985). Soil Physics with BASIC. Heat capacity: de Vries (1963).</p>
+</section>
+
+<!-- ============ ENERGY BALANCE ============ -->
+<section class="tool" id="tab-energy">
+  <h2>Surface energy balance</h2>
+  <p class="lede">Follow the sun's energy at a bare soil surface: how much heats the air, how much evaporates water, and how much flows into the ground. Wet the soil and watch evaporation take over.</p>
+  <div class="rk-card">
+    <div class="rk-grid">
+      <div><label for="eb-rs">Solar radiation: <b id="eb-rs-v"></b> W/m²</label><input type="range" id="eb-rs" min="0" max="1100" step="10" value="800"></div>
+      <div><label for="eb-alb">Albedo: <b id="eb-alb-v"></b></label><input type="range" id="eb-alb" min="0.05" max="0.45" step="0.01" value="0.2"></div>
+      <div><label for="eb-ta">Air temperature: <b id="eb-ta-v"></b> °C</label><input type="range" id="eb-ta" min="-5" max="45" step="0.5" value="25"></div>
+      <div><label for="eb-rh">Relative humidity: <b id="eb-rh-v"></b>%</label><input type="range" id="eb-rh" min="5" max="100" step="1" value="40"></div>
+      <div><label for="eb-u">Wind speed: <b id="eb-u-v"></b> m/s</label><input type="range" id="eb-u" min="0.5" max="10" step="0.1" value="2"></div>
+      <div><label for="eb-theta">Surface water content: <b id="eb-theta-v"></b> m³/m³</label><input type="range" id="eb-theta" min="0" max="0.45" step="0.005" value="0.1"></div>
+    </div>
+    <div class="rk-grid" style="margin-top:12px">
+      <div><label for="eb-fc">Field capacity (m³/m³)</label><input type="number" id="eb-fc" value="0.30" min="0.05" max="0.6" step="0.01"></div>
+      <div><label for="eb-bd">Bulk density (g/cm³)</label><input type="number" id="eb-bd" value="1.3" min="0.8" max="2" step="0.01"></div>
+      <div><label for="eb-clay">Clay (%)</label><input type="number" id="eb-clay" value="20" min="1" max="80" step="1"></div>
+    </div>
+  </div>
+  <div class="rk-card"><div class="stats" id="eb-out"></div>
+    <h3 style="margin-top:16px">Where net radiation goes</h3>
+    <div class="legend"><span><i style="background:var(--s1); height:8px"></i>Sensible heat H</span><span><i style="background:var(--s2); height:8px"></i>Evaporation LE</span><span><i style="background:var(--s3); height:8px"></i>Ground heat G</span></div>
+    <div id="eb-bar"></div>
+  </div>
+  <div class="rk-card">
+    <h3>Partitioning as the soil wets up</h3>
+    <div class="legend"><span><i style="background:var(--s1)"></i>H</span><span><i style="background:var(--s2)"></i>LE</span><span><i style="background:var(--s3)"></i>G</span><span><i style="background:var(--ink-3)"></i>Current water content</span></div>
+    <div class="chart-box"><svg class="chart" id="eb-c1" role="img" aria-label="Energy fluxes against soil water content"></svg><div class="tip" id="eb-c1-tip"></div></div>
+  </div>
+  <div class="advanced">
+    <strong>From one point to a whole landscape</strong>
+    <p>We map energy and water budgets across fields and catchments, linking soil properties, moisture and terrain to where energy is stored and dissipated.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Energy%20and%20water%20budgets">Get in touch →</a>
+  </div>
+  <p class="refs">Steady-state bare-soil balance Rn = H + LE + G solved for surface temperature; neutral aerodynamic resistance at 2 m (z₀ = 1 cm); evaporation by the moisture-availability (β = θ/θfc) method; G by conduction over the top 10 cm (Campbell conductivity); sky emissivity after Brutsaert (1975). A teaching model, not a field estimate.</p>
+</section>
+
 <!-- ============ PEDODIVERSITY ============ -->
 <section class="tool" id="tab-pedodiv">
   <h2>Pedodiversity</h2>
@@ -1249,6 +1322,59 @@ body.quarto-dark .rk-tools {
   root.Pedodiv = { pedodiv };
   if (typeof module !== 'undefined') module.exports = root.Pedodiv;
 })(typeof window !== 'undefined' ? window : globalThis);
+// Soil heat and surface energy balance for the RafikiArdhi Tools page.
+(function (root) {
+  const SIGMA = 5.670374419e-8, RHOCP = 1200, GAMMA = 0.0665, LV = 2.45e6, KARMAN = 0.41;
+
+  // Thermal properties (Campbell 1985 conductivity; de Vries heat capacity)
+  // bd: bulk density g/cm3, clay: fraction 0-1, theta: volumetric water content m3/m3
+  function thermal(bd, clay, theta) {
+    const A = 0.65 - 0.78 * bd + 0.60 * bd * bd, B = 1.06 * bd, C = 1 + 2.6 / Math.sqrt(Math.max(clay, 0.005)), D = 0.03 + 0.1 * bd * bd, E = 4;
+    const lambda = A + B * theta - (A - D) * Math.exp(-Math.pow(C * theta, E));       // W m-1 K-1
+    const heatCap = (1.92 * (bd / 2.65) + 4.18 * theta) * 1e6;                          // J m-3 K-1
+    return { lambda, heatCap, diffusivity: lambda / heatCap };                           // m2 s-1
+  }
+
+  // Periodic heat conduction: T(z,t) = Tm + A0 exp(-z/d) sin(w t - z/d)
+  function tempWave(diffusivity, periodSec) {
+    const w = 2 * Math.PI / periodSec, d = Math.sqrt(2 * diffusivity / w);
+    return {
+      dampingDepth: d, omega: w,
+      at: (Tm, A0, z, t) => Tm + A0 * Math.exp(-z / d) * Math.sin(w * t - z / d),
+      amplitude: (A0, z) => A0 * Math.exp(-z / d),
+      lagSec: z => z / (d * w)
+    };
+  }
+
+  const esat = T => 0.6108 * Math.exp(17.27 * T / (T + 237.3)); // kPa, T in C
+
+  // Surface energy balance solved for surface temperature (bisection).
+  // p: { Rs (W m-2), albedo, Ta (C), RH (%), u (m s-1), theta, thetaFC, bd, clay, Tdeep (C), z0 (m) }
+  function energyBalance(p) {
+    const TaK = p.Ta + 273.15, ea = esat(p.Ta) * p.RH / 100;
+    const epsA = 1.24 * Math.pow(ea * 10 / TaK, 1 / 7);              // Brutsaert (ea in hPa)
+    const Ld = epsA * SIGMA * Math.pow(TaK, 4), epsS = 0.95;
+    const ra = Math.pow(Math.log(2 / p.z0), 2) / (KARMAN * KARMAN * Math.max(p.u, 0.1)); // neutral, 2 m
+    const beta = Math.max(0, Math.min(1, p.theta / p.thetaFC));       // moisture availability
+    const th = thermal(p.bd, p.clay, p.theta), dz = 0.1;
+    const parts = Ts => {
+      const TsK = Ts + 273.15;
+      const Rn = (1 - p.albedo) * p.Rs + epsS * Ld - epsS * SIGMA * Math.pow(TsK, 4);
+      const H = RHOCP * (Ts - p.Ta) / ra;
+      const LE = Math.max(0, beta * RHOCP / GAMMA * (esat(Ts) - ea) / ra);
+      const G = th.lambda * (Ts - p.Tdeep) / dz;
+      return { Rn, H, LE, G, res: Rn - H - LE - G };
+    };
+    let lo = p.Ta - 40, hi = p.Ta + 60;
+    for (let i = 0; i < 200; i++) { const m = (lo + hi) / 2; if (parts(m).res > 0) lo = m; else hi = m; }
+    const Ts = (lo + hi) / 2, r = parts(Ts);
+    return { Ts, ...r, ra, beta, lambda: th.lambda, bowen: r.LE > 1e-6 ? r.H / r.LE : Infinity, evapMmPerHour: r.LE / LV * 3600 };
+  }
+
+  root.SoilEnergy = { thermal, tempWave, energyBalance, esat };
+  if (typeof module !== 'undefined') module.exports = root.SoilEnergy;
+})(typeof window !== 'undefined' ? window : globalThis);
+
 
 
 
@@ -1271,6 +1397,8 @@ function showTab(name, push) {
   if (name === "texture") updTexture();
   if (name === "munsell") updMunsell();
   if (name === "eval") drawEvCharts();
+  if (name === "soiltemp") updSoilTemp();
+  if (name === "energy") updEnergy();
   if (name === "spline" && lastSpline) drawProfile();
 }
 tabs.forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab, true)));
@@ -2260,13 +2388,108 @@ function pdShow() {
 $("pd-dl").addEventListener("click", () => pdOut && download("pedodiversity.csv", toCSV(["site", "richness", "shannon", "evenness", "simpson", "hill_N1", "hill_N2", "dominance"],
   pdOut.map(x => [x.site, x.r.S, +x.r.shannon.toFixed(5), +x.r.evenness.toFixed(5), +x.r.simpson.toFixed(5), +x.r.hill1.toFixed(4), +x.r.hill2.toFixed(4), +x.r.bergerParker.toFixed(5)]))));
 
+/* ============ SOIL TEMPERATURE ============ */
+const ST_SERIES = ["var(--s1)", "var(--s2)", "var(--s3)", "var(--s4)", "var(--s5)"];
+function lineChart(svg, tip, o) {
+  // o: { xs, series:[{name, ys, color}], xlab, ylab, xTicks, xFmt, yFmt, marker }
+  svg.innerHTML = "";
+  const W = Math.max(280, svg.clientWidth || 420), H = 290, m = { l: 50, r: 14, t: 14, b: 40 };
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const all = o.series.flatMap(sr => sr.ys).filter(isFinite);
+  let lo = o.ylo != null ? o.ylo : Math.min(...all), hi = o.yhi != null ? o.yhi : Math.max(...all);
+  if (o.ylo == null) { const pad = (hi - lo) * 0.08 || 1; lo -= pad; hi += pad; }
+  const x0 = o.xs[0], x1 = o.xs[o.xs.length - 1];
+  const X = v => m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r), Y = v => H - m.b - (v - lo) / (hi - lo) * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg);
+  (o.xTicks || niceTicks(x0, x1, 5)).forEach(v => { el("line", { x1: X(v), x2: X(v), y1: m.t, y2: H - m.b }, g); const t = el("text", { x: X(v), y: H - m.b + 16, "text-anchor": "middle" }, svg); t.textContent = o.xFmt ? o.xFmt(v) : v; });
+  niceTicks(lo, hi, 5).filter(v => v >= lo && v <= hi).forEach(v => { el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v) }, g); const t = el("text", { x: m.l - 6, y: Y(v) + 4, "text-anchor": "end" }, svg); t.textContent = o.yFmt ? o.yFmt(v) : v; });
+  const xl = el("text", { x: (m.l + W - m.r) / 2, y: H - 4, "text-anchor": "middle" }, svg); xl.textContent = o.xlab;
+  const yl = el("text", { x: 4, y: 11 }, svg); yl.textContent = o.ylab;
+  if (o.marker != null) el("line", { x1: X(o.marker), x2: X(o.marker), y1: m.t, y2: H - m.b, stroke: "var(--ink-3)", "stroke-width": 1.5, "stroke-dasharray": "5 4" }, svg);
+  o.series.forEach(sr => el("path", { d: sr.ys.map((y, i) => (i ? "L" : "M") + X(o.xs[i]).toFixed(1) + "," + Y(y).toFixed(1)).join(""), stroke: sr.color, "stroke-width": 2, fill: "none", "stroke-linejoin": "round" }, svg));
+  const cross = el("line", { y1: m.t, y2: H - m.b, stroke: "var(--ink-3)", "stroke-width": 1, visibility: "hidden" }, svg);
+  const dots = o.series.map(sr => el("circle", { r: 4, fill: sr.color, stroke: "var(--surface)", "stroke-width": 1.5, visibility: "hidden" }, svg));
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  const move = ev => {
+    const p = ev.touches ? ev.touches[0] : ev, rect = svg.getBoundingClientRect(), sx = (p.clientX - rect.left) * W / rect.width;
+    const k = Math.max(0, Math.min(o.xs.length - 1, Math.round((sx - m.l) / (W - m.l - m.r) * (o.xs.length - 1))));
+    cross.setAttribute("x1", X(o.xs[k])); cross.setAttribute("x2", X(o.xs[k])); cross.setAttribute("visibility", "visible");
+    o.series.forEach((sr, i) => { dots[i].setAttribute("cx", X(o.xs[k])); dots[i].setAttribute("cy", Y(sr.ys[k])); dots[i].setAttribute("visibility", "visible"); });
+    tip.style.display = "block"; tip.innerHTML = `<b>${o.xFmt ? o.xFmt(o.xs[k]) : o.xs[k]}</b>` + o.series.map(sr => `<br>${sr.name}: ${o.yFmt ? o.yFmt(sr.ys[k]) : sr.ys[k]}`).join("");
+    const px = X(o.xs[k]) * rect.width / W; tip.style.left = (px > rect.width / 2 ? px - tip.offsetWidth - 10 : px + 10) + "px"; tip.style.top = "4px";
+  };
+  const leave = () => { cross.setAttribute("visibility", "hidden"); dots.forEach(d => d.setAttribute("visibility", "hidden")); tip.style.display = "none"; };
+  hit.addEventListener("mousemove", move); hit.addEventListener("touchstart", move, { passive: true }); hit.addEventListener("touchmove", move, { passive: true });
+  hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
+}
+function updSoilTemp() {
+  const theta = +$("st-theta").value, bd = +$("st-bd").value, clay = +$("st-clay").value;
+  $("st-theta-v").textContent = theta.toFixed(3); $("st-bd-v").textContent = bd.toFixed(2); $("st-clay-v").textContent = clay;
+  const annual = $("st-cycle").value === "year", Tm = num($("st-mean").value), A0 = Math.max(0, num($("st-amp").value));
+  if (!isFinite(Tm) || !isFinite(A0)) return;
+  const th = SoilEnergy.thermal(bd, clay / 100, theta), period = annual ? 365.25 * 86400 : 86400;
+  const wv = SoilEnergy.tempWave(th.diffusivity, period);
+  const depths = annual ? [0, 0.25, 0.5, 1, 2] : [0, 0.05, 0.1, 0.2, 0.5];
+  const dLab = z => annual ? `${z} m` : `${Math.round(z * 100)} cm`;
+  const lagTxt = s => annual ? `${(s / 86400).toFixed(0)} days` : `${(s / 3600).toFixed(1)} h`;
+  const zRef = annual ? 1 : 0.1;
+  const st = (k, v, u) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${u}</div></div>`;
+  $("st-out").innerHTML = st("Damping depth", annual ? fmt(wv.dampingDepth, 2) + " m" : fmt(wv.dampingDepth * 100, 1) + " cm", "amplitude falls to 37%") +
+    st(`Swing at ${dLab(zRef)}`, "± " + fmt(wv.amplitude(A0, zRef), 1) + " °C", `of ± ${fmt(A0, 1)} at the surface`) +
+    st(`Peak arrives at ${dLab(zRef)}`, lagTxt(wv.lagSec(zRef)), "after the surface peak") +
+    st("Conductivity", fmt(th.lambda, 2), "W/m/K") + st("Heat capacity", fmt(th.heatCap / 1e6, 2), "MJ/m³/K") + st("Diffusivity", (th.diffusivity * 1e7).toFixed(2) + "×10⁻⁷", "m²/s");
+  $("st-c1-title").textContent = annual ? "Temperature through the year" : "Temperature through the day";
+  $("st-legend").innerHTML = depths.map((z, i) => `<span><i style="background:${ST_SERIES[i]}"></i>${dLab(z)}</span>`).join("");
+  if (!$("tab-soiltemp").classList.contains("active")) return;
+  // surface peak at mid-cycle: phase so the surface maximum falls at 14:00 (daily) or day 200 (annual)
+  const N = 145, xs = Array.from({ length: N }, (_, i) => i / (N - 1) * (annual ? 365 : 24));
+  const peak = annual ? 200 : 14, unit = annual ? 86400 : 3600;
+  const series = depths.map((z, i) => ({ name: dLab(z), color: ST_SERIES[i], ys: xs.map(x => wv.at(Tm, A0, z, (x - peak) * unit + period / 4)) }));
+  lineChart($("st-c1"), $("st-c1-tip"), { xs, series, xlab: annual ? "Day of year" : "Hour of day", ylab: "°C",
+    xTicks: annual ? [0, 60, 120, 180, 240, 300, 365] : [0, 4, 8, 12, 16, 20, 24], xFmt: v => annual ? `day ${Math.round(v)}` : `${Math.floor(v)}:${String(Math.round((v % 1) * 60)).padStart(2, "0")}`, yFmt: v => (+v).toFixed(1) + " °C" });
+  const ths = Array.from({ length: 91 }, (_, i) => i * 0.005);
+  lineChart($("st-c2"), $("st-c2-tip"), { xs: ths, series: [{ name: "Diffusivity", color: "var(--s1)", ys: ths.map(t => SoilEnergy.thermal(bd, clay / 100, t).diffusivity * 1e7) }],
+    xlab: "Water content (m³/m³)", ylab: "×10⁻⁷ m²/s", ylo: 0, marker: theta, xFmt: v => (+v).toFixed(2), yFmt: v => (+v).toFixed(2) });
+}
+["st-cycle", "st-mean", "st-amp", "st-theta", "st-bd", "st-clay"].forEach(id => $(id).addEventListener("input", updSoilTemp));
+
+/* ============ ENERGY BALANCE ============ */
+function ebParams(theta) {
+  return { Rs: +$("eb-rs").value, albedo: +$("eb-alb").value, Ta: +$("eb-ta").value, RH: +$("eb-rh").value, u: +$("eb-u").value,
+    theta: theta != null ? theta : +$("eb-theta").value, thetaFC: Math.max(0.05, num($("eb-fc").value) || 0.3),
+    bd: Math.min(2, Math.max(0.8, num($("eb-bd").value) || 1.3)), clay: Math.min(0.8, Math.max(0.01, (num($("eb-clay").value) || 20) / 100)), Tdeep: +$("eb-ta").value - 3, z0: 0.01 };
+}
+function updEnergy() {
+  [["eb-rs", 0], ["eb-alb", 2], ["eb-ta", 1], ["eb-rh", 0], ["eb-u", 1], ["eb-theta", 3]].forEach(([id, d]) => { $(id + "-v").textContent = (+$(id).value).toFixed(d); });
+  const p = ebParams(), r = SoilEnergy.energyBalance(p);
+  const st = (k, v, u) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${u}</div></div>`;
+  $("eb-out").innerHTML = st("Surface temperature", fmt(r.Ts, 1) + " °C", `air ${fmt(p.Ta, 1)} °C`) + st("Net radiation Rn", fmt(r.Rn, 0), "W/m²") +
+    st("Sensible heat H", fmt(r.H, 0), "W/m² to the air") + st("Evaporation LE", fmt(r.LE, 0), `W/m² · ${fmt(r.evapMmPerHour, 2)} mm/h`) +
+    st("Ground heat G", fmt(r.G, 0), "W/m² into the soil") + st("Bowen ratio", isFinite(r.bowen) ? fmt(r.bowen, 2) : "–", "H / LE");
+  const parts = [["H", r.H, "var(--s1)"], ["LE", r.LE, "var(--s2)"], ["G", r.G, "var(--s3)"]];
+  const pos = parts.filter(q => q[1] > 0), tot = pos.reduce((a, q) => a + q[1], 0);
+  $("eb-bar").innerHTML = tot > 0 ? `<div style="display:flex; height:26px; border-radius:6px; overflow:hidden; gap:2px; margin-top:6px">` +
+    pos.map(q => `<div title="${q[0]} ${fmt(q[1], 0)} W/m²" style="flex:${q[1]}; background:${q[2]}"></div>`).join("") + `</div>` +
+    `<div style="display:flex; gap:14px; flex-wrap:wrap; font-size:.85rem; color:var(--ink-2); margin-top:6px">` + pos.map(q => `<span>${q[0]}: ${fmt(100 * q[1] / tot, 0)}%</span>`).join("") + `</div>` +
+    (parts.some(q => q[1] < 0) ? `<p class="hint">Negative fluxes (heat flowing back to the surface) are left out of the bar.</p>` : "")
+    : `<p class="hint">No net energy to share out: the surface is losing heat (night-time conditions).</p>`;
+  if (!$("tab-energy").classList.contains("active")) return;
+  const ths = Array.from({ length: 61 }, (_, i) => i * 0.0075);
+  const sw = ths.map(t => SoilEnergy.energyBalance(ebParams(t)));
+  lineChart($("eb-c1"), $("eb-c1-tip"), { xs: ths, marker: p.theta, xlab: "Surface water content (m³/m³)", ylab: "W/m²",
+    series: [{ name: "H", color: "var(--s1)", ys: sw.map(q => q.H) }, { name: "LE", color: "var(--s2)", ys: sw.map(q => q.LE) }, { name: "G", color: "var(--s3)", ys: sw.map(q => q.G) }],
+    xFmt: v => (+v).toFixed(2), yFmt: v => Math.round(v) + "" });
+}
+["eb-rs", "eb-alb", "eb-ta", "eb-rh", "eb-u", "eb-theta", "eb-fc", "eb-bd", "eb-clay"].forEach(id => $(id).addEventListener("input", updEnergy));
+
 /* ---------------- init ---------------- */
 $("sp-data").value = EX_CONT; spLastText = EX_CONT; spRefreshColumns();
 $("c-data").value = EX_CARBON;
 $("pd-data").value = PD_EX;
+updSoilTemp(); updEnergy();
 $("ev-cont-data").value = EV_EX.cont; $("ev-cat-data").value = EV_EX.cat; $("ev-ci-data").value = EV_EX.ci;
 updWater(); vgLoad(); updHSG(); updSampling();
-let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawEvCharts(); }, 150); });
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawEvCharts(); updSoilTemp(); updEnergy(); }, 150); });
 const start = location.hash.slice(1);
 if ([...tabs].some(b => b.dataset.tab === start)) showTab(start, false);
 })();
