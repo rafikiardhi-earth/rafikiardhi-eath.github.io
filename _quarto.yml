@@ -22,8 +22,8 @@ website:
         text: Services
       - href: tools.qmd
         text: Tools
-      - href: wrb-key.html
-        text: Soil classification
+      - href: wrb-key.qmd
+        text: Soil key
       - href: about.qmd
         text: About
       - href: publications.qmd
