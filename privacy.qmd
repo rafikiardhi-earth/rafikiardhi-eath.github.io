@@ -1,0 +1,47 @@
+---
+title: "Privacy"
+description: "What RafikiArdhi collects when you visit this site (very little) and what our free tools do with the numbers you enter (nothing: they never leave your browser)."
+---
+
+*Last updated: October 2026*
+
+The short version: our tools run entirely in your browser and store nothing; we use Google Analytics to count visits; we don't have accounts, don't sell anything about you, and don't show ads.
+
+## The tools
+
+Everything you enter into our calculators and classification keys is processed in your own browser. Nothing is sent to us or anyone else, and nothing is saved on our servers. We don't have a database.
+
+- **Share links.** Some tools put your inputs into the page address so that "Copy link" can recreate your calculation. That address stays in your browser unless you choose to share it.
+- **Your units.** If you switch between US and metric units, your browser remembers the choice on your device. We never see it.
+- **Uploaded files.** Files you load into a tool (for example a CSV of soil profiles) are read by your browser and are not uploaded anywhere.
+
+## Visit statistics
+
+We use **Google Analytics** to understand how the site is used: which pages are visited, how people find us (for example from a search engine or another website), and roughly where visitors are and what devices they use. This helps us decide which tools to improve or build next.
+
+- Google Analytics uses cookies and collects information such as the pages you view, your browser and device type, the website that referred you, and your approximate location (city or country level).
+- We don't send Google anything you type into the tools, and we have configured Google Analytics not to record the share-link part of page addresses.
+- We can't see who you are. We only see totals and trends.
+- Google processes this data under its own privacy policy: [policies.google.com/privacy](https://policies.google.com/privacy). You can see how Google uses data from sites that use its services at [policies.google.com/technologies/partner-sites](https://policies.google.com/technologies/partner-sites).
+
+**To opt out,** you can block cookies in your browser settings, use a browser or extension that blocks trackers, or install Google's [Analytics opt-out add-on](https://tools.google.com/dlpage/gaoptout). The site and all the tools work exactly the same without them.
+
+## If you contact us
+
+If you email us, we use your name, address and message only to reply and to carry out any work you ask us for. We don't add you to mailing lists or share your details.
+
+## Client projects
+
+Data from paid projects is handled under the agreement for that project. It stays confidential, and results funded by a client are published only with their agreement.
+
+## Children
+
+This site isn't aimed at children, and we don't knowingly collect information from them.
+
+## Changes
+
+If we change how the site handles information, we'll update this page and the date at the top.
+
+## Contact
+
+RafikiArdhi LLC, Carbondale, Colorado, USA. Questions about privacy are welcome through our [contact page](contact.qmd).
