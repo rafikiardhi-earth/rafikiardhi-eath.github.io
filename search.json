@@ -154,60 +154,74 @@
     "text": "Why this matters\nTopsoil is the layer where roots, water and soil life do most of their work. Subsoil compacted by trucks and graders can be as dense as a road base: roots can’t enter it and water can’t drain through it. Sod laid on a thin layer over it looks fine for a season, then thins out, browns in summer and floods after storms.\nFixing it costs far less before planting than after, so check before you invest in landscaping."
   },
   {
-    "objectID": "rain-garden.html",
-    "href": "rain-garden.html",
-    "title": "Rain garden and dry well calculator",
+    "objectID": "privacy.html",
+    "href": "privacy.html",
+    "title": "Privacy",
     "section": "",
-    "text": "A rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a drainage test first."
+    "text": "Last updated: October 2026\nThe short version: our tools run entirely in your browser and store nothing; we use Google Analytics to count visits; we don’t have accounts, don’t sell anything about you, and don’t show ads."
   },
   {
-    "objectID": "rain-garden.html#building-a-rain-garden",
-    "href": "rain-garden.html#building-a-rain-garden",
-    "title": "Rain garden and dry well calculator",
-    "section": "Building a rain garden",
-    "text": "Building a rain garden\n\nLocation: a low spot at least 10 ft from the house, where water already heads, but not where it stands for days.\nShape: longer than it is wide, across the slope, with a level bottom so water spreads evenly.\nInlet and overflow: line the inlet with stone so it doesn’t erode, and give the overflow a safe path for storms bigger than the design.\nPlants: wet-tolerant species in the bottom, drought-tolerant ones on the rim. Native plants with deep roots keep the soil open.\nSoil: if your soil drains poorly, mix compost into the bottom, but don’t create a “bathtub” of loose soil in dense clay. An underdrain is the fix for very slow soils."
+    "objectID": "privacy.html#the-tools",
+    "href": "privacy.html#the-tools",
+    "title": "Privacy",
+    "section": "The tools",
+    "text": "The tools\nEverything you enter into our calculators and classification keys is processed in your own browser. Nothing is sent to us or anyone else, and nothing is saved on our servers. We don’t have a database.\n\nShare links. Some tools put your inputs into the page address so that “Copy link” can recreate your calculation. That address stays in your browser unless you choose to share it.\nYour units. If you switch between US and metric units, your browser remembers the choice on your device. We never see it.\nUploaded files. Files you load into a tool (for example a CSV of soil profiles) are read by your browser and are not uploaded anywhere."
   },
   {
-    "objectID": "tree-protection.html",
-    "href": "tree-protection.html",
-    "title": "Tree protection zone calculator",
+    "objectID": "privacy.html#visit-statistics",
+    "href": "privacy.html#visit-statistics",
+    "title": "Privacy",
+    "section": "Visit statistics",
+    "text": "Visit statistics\nWe use Google Analytics to understand how the site is used: which pages are visited, how people find us (for example from a search engine or another website), and roughly where visitors are and what devices they use. This helps us decide which tools to improve or build next.\n\nGoogle Analytics uses cookies and collects information such as the pages you view, your browser and device type, the website that referred you, and your approximate location (city or country level).\nWe don’t send Google anything you type into the tools, and we have configured Google Analytics not to record the share-link part of page addresses.\nWe can’t see who you are. We only see totals and trends.\nGoogle processes this data under its own privacy policy: policies.google.com/privacy. You can see how Google uses data from sites that use its services at policies.google.com/technologies/partner-sites.\n\nTo opt out, you can block cookies in your browser settings, use a browser or extension that blocks trackers, or install Google’s Analytics opt-out add-on. The site and all the tools work exactly the same without them."
+  },
+  {
+    "objectID": "privacy.html#if-you-contact-us",
+    "href": "privacy.html#if-you-contact-us",
+    "title": "Privacy",
+    "section": "If you contact us",
+    "text": "If you contact us\nIf you email us, we use your name, address and message only to reply and to carry out any work you ask us for. We don’t add you to mailing lists or share your details."
+  },
+  {
+    "objectID": "privacy.html#client-projects",
+    "href": "privacy.html#client-projects",
+    "title": "Privacy",
+    "section": "Client projects",
+    "text": "Client projects\nData from paid projects is handled under the agreement for that project. It stays confidential, and results funded by a client are published only with their agreement."
+  },
+  {
+    "objectID": "privacy.html#children",
+    "href": "privacy.html#children",
+    "title": "Privacy",
+    "section": "Children",
+    "text": "Children\nThis site isn’t aimed at children, and we don’t knowingly collect information from them."
+  },
+  {
+    "objectID": "privacy.html#changes",
+    "href": "privacy.html#changes",
+    "title": "Privacy",
+    "section": "Changes",
+    "text": "Changes\nIf we change how the site handles information, we’ll update this page and the date at the top."
+  },
+  {
+    "objectID": "privacy.html#contact",
+    "href": "privacy.html#contact",
+    "title": "Privacy",
+    "section": "Contact",
+    "text": "Contact\nRafikiArdhi LLC, Carbondale, Colorado, USA. Questions about privacy are welcome through our contact page."
+  },
+  {
+    "objectID": "foundation-grading.html",
+    "href": "foundation-grading.html",
+    "title": "Foundation grading check",
     "section": "",
-    "text": "Most of a tree’s roots are in the top 12–18 inches of soil and spread well beyond the branches. Driving, stockpiling, trenching or changing the grade over them can kill a mature tree, often a few years later. Before any work, fence off a protection zone.\nMeasure the trunk at 4½ ft (1.4 m) above the ground. Wrap a tape around it for the circumference, or measure the diameter directly."
+    "text": "Water pooling against a foundation is one of the most expensive problems a house can have. The common building-code guideline is that ground should fall at least 6 inches over the first 10 feet from the house (about 5%). You can check it in an afternoon.\nHow to measure: drive a stake against the foundation and another 10 ft (3 m) out. Tie a string between them and level it with a line level. At each stake, measure from the string down to the ground. The drop is the outer measurement minus the inner one. Repeat every 10–15 ft along each wall."
   },
   {
-    "objectID": "tree-protection.html#why-trees-die-after-construction",
-    "href": "tree-protection.html#why-trees-die-after-construction",
-    "title": "Tree protection zone calculator",
-    "section": "Why trees die after construction",
-    "text": "Why trees die after construction\nRoots need air as much as water. Compaction from vehicles crushes the pore spaces; fill soil buries roots too deep; trenching cuts them. The tree may look fine for a season or two, using stored energy, then decline from the top down. By the time you see dieback, the damage was done years before.\nThe zone here scales with the trunk, the tree’s age and how well the species copes, following a widely used arborist approach. The simpler rule of thumb, one foot of radius per inch of trunk diameter, is shown in the working for comparison."
-  },
-  {
-    "objectID": "ph-adjustment.html",
-    "href": "ph-adjustment.html",
-    "title": "Soil pH calculator: lime and sulfur",
-    "section": "",
-    "text": "Changing soil pH takes more material on clay than on sand, and it happens slowly. This estimates how much ground limestone (to raise pH) or elemental sulfur (to lower it) you need, and tells you when lowering pH isn’t realistic."
-  },
-  {
-    "objectID": "ph-adjustment.html#why-ph-changes-slowly",
-    "href": "ph-adjustment.html#why-ph-changes-slowly",
-    "title": "Soil pH calculator: lime and sulfur",
-    "section": "Why pH changes slowly",
-    "text": "Why pH changes slowly\nSoil is buffered: clay and organic matter hold large reserves of acidity (or alkalinity) that resist change. That’s why clay needs two or three times as much lime as sand, and why the same amount works slowly.\nLowering pH in alkaline soils is a special case. Many soils in dry regions contain free lime (calcium carbonate), which fizzes in vinegar. Any acid you add, including sulfur as it breaks down, is used up dissolving that lime before the pH moves. Even 1% lime takes well over 100 lb of sulfur per 1,000 ft² just to neutralise. That’s why gardeners in those regions do better choosing plants suited to their soil.\nThe rates here are typical extension values for the top 6 inches. A lab “lime requirement” or “buffer pH” result is more accurate for your soil when you have one."
-  },
-  {
-    "objectID": "drip-irrigation.html",
-    "href": "drip-irrigation.html",
-    "title": "Drip irrigation calculator",
-    "section": "",
-    "text": "Drip puts water at the roots, but run times are usually guesses. Enter what each plant needs and what your emitters deliver; this works out the run time and checks that the zone can supply it."
-  },
-  {
-    "objectID": "drip-irrigation.html#tips",
-    "href": "drip-irrigation.html#tips",
-    "title": "Drip irrigation calculator",
-    "section": "Tips",
-    "text": "Tips\n\nWater deeply, less often. Infrequent, longer runs wet a deeper root zone than daily short ones, and deep roots handle heat better.\nEmitters belong at the edge of the roots, not against the trunk or stem. For trees and shrubs that means moving them outward as the plant grows.\nNew plantings need more frequent water for their first season. Established native and low-water plants often need little or none outside drought.\nCheck the filter and flush the lines each spring. Clogged emitters are the most common reason a drip zone stops working."
+    "objectID": "foundation-grading.html#other-signs-of-a-grading-problem",
+    "href": "foundation-grading.html#other-signs-of-a-grading-problem",
+    "title": "Foundation grading check",
+    "section": "Other signs of a grading problem",
+    "text": "Other signs of a grading problem\n\nWater standing next to the foundation after rain or irrigation.\nMulch or soil piled up against the siding, often built up over years.\nDownspouts that empty right at the wall.\nPatios, walks or window wells that have settled so they tip toward the house.\nDamp patches, efflorescence (white crust) or musty smells in a basement or crawlspace.\n\nMost of these are cheap to fix compared with foundation repairs."
   },
   {
     "objectID": "fertilizer-calculator.html",
@@ -224,18 +238,60 @@
     "text": "Reading a fertilizer label\n\nN (nitrogen) drives green leafy growth. It’s the nutrient lawns need most, and it doesn’t stay in soil long, which is why it’s applied regularly.\nP (phosphate, P₂O₅) supports roots and establishment. The label shows phosphate, not pure phosphorus: elemental P is about 44% of the P₂O₅ number.\nK (potash, K₂O) helps with stress tolerance. Elemental K is about 83% of the K₂O number.\nSlow-release or organic products feed over weeks rather than days. The arithmetic is the same; they’re just gentler.\n\nMore is not better. Extra nitrogen means more mowing, weaker roots and nitrate washing into waterways. A soil test tells you whether you need phosphate or potash at all."
   },
   {
-    "objectID": "foundation-grading.html",
-    "href": "foundation-grading.html",
-    "title": "Foundation grading check",
+    "objectID": "drip-irrigation.html",
+    "href": "drip-irrigation.html",
+    "title": "Drip irrigation calculator",
     "section": "",
-    "text": "Water pooling against a foundation is one of the most expensive problems a house can have. The common building-code guideline is that ground should fall at least 6 inches over the first 10 feet from the house (about 5%). You can check it in an afternoon.\nHow to measure: drive a stake against the foundation and another 10 ft (3 m) out. Tie a string between them and level it with a line level. At each stake, measure from the string down to the ground. The drop is the outer measurement minus the inner one. Repeat every 10–15 ft along each wall."
+    "text": "Drip puts water at the roots, but run times are usually guesses. Enter what each plant needs and what your emitters deliver; this works out the run time and checks that the zone can supply it."
   },
   {
-    "objectID": "foundation-grading.html#other-signs-of-a-grading-problem",
-    "href": "foundation-grading.html#other-signs-of-a-grading-problem",
-    "title": "Foundation grading check",
-    "section": "Other signs of a grading problem",
-    "text": "Other signs of a grading problem\n\nWater standing next to the foundation after rain or irrigation.\nMulch or soil piled up against the siding, often built up over years.\nDownspouts that empty right at the wall.\nPatios, walks or window wells that have settled so they tip toward the house.\nDamp patches, efflorescence (white crust) or musty smells in a basement or crawlspace.\n\nMost of these are cheap to fix compared with foundation repairs."
+    "objectID": "drip-irrigation.html#tips",
+    "href": "drip-irrigation.html#tips",
+    "title": "Drip irrigation calculator",
+    "section": "Tips",
+    "text": "Tips\n\nWater deeply, less often. Infrequent, longer runs wet a deeper root zone than daily short ones, and deep roots handle heat better.\nEmitters belong at the edge of the roots, not against the trunk or stem. For trees and shrubs that means moving them outward as the plant grows.\nNew plantings need more frequent water for their first season. Established native and low-water plants often need little or none outside drought.\nCheck the filter and flush the lines each spring. Clogged emitters are the most common reason a drip zone stops working."
+  },
+  {
+    "objectID": "ph-adjustment.html",
+    "href": "ph-adjustment.html",
+    "title": "Soil pH calculator: lime and sulfur",
+    "section": "",
+    "text": "Changing soil pH takes more material on clay than on sand, and it happens slowly. This estimates how much ground limestone (to raise pH) or elemental sulfur (to lower it) you need, and tells you when lowering pH isn’t realistic."
+  },
+  {
+    "objectID": "ph-adjustment.html#why-ph-changes-slowly",
+    "href": "ph-adjustment.html#why-ph-changes-slowly",
+    "title": "Soil pH calculator: lime and sulfur",
+    "section": "Why pH changes slowly",
+    "text": "Why pH changes slowly\nSoil is buffered: clay and organic matter hold large reserves of acidity (or alkalinity) that resist change. That’s why clay needs two or three times as much lime as sand, and why the same amount works slowly.\nLowering pH in alkaline soils is a special case. Many soils in dry regions contain free lime (calcium carbonate), which fizzes in vinegar. Any acid you add, including sulfur as it breaks down, is used up dissolving that lime before the pH moves. Even 1% lime takes well over 100 lb of sulfur per 1,000 ft² just to neutralise. That’s why gardeners in those regions do better choosing plants suited to their soil.\nThe rates here are typical extension values for the top 6 inches. A lab “lime requirement” or “buffer pH” result is more accurate for your soil when you have one."
+  },
+  {
+    "objectID": "tree-protection.html",
+    "href": "tree-protection.html",
+    "title": "Tree protection zone calculator",
+    "section": "",
+    "text": "Most of a tree’s roots are in the top 12–18 inches of soil and spread well beyond the branches. Driving, stockpiling, trenching or changing the grade over them can kill a mature tree, often a few years later. Before any work, fence off a protection zone.\nMeasure the trunk at 4½ ft (1.4 m) above the ground. Wrap a tape around it for the circumference, or measure the diameter directly."
+  },
+  {
+    "objectID": "tree-protection.html#why-trees-die-after-construction",
+    "href": "tree-protection.html#why-trees-die-after-construction",
+    "title": "Tree protection zone calculator",
+    "section": "Why trees die after construction",
+    "text": "Why trees die after construction\nRoots need air as much as water. Compaction from vehicles crushes the pore spaces; fill soil buries roots too deep; trenching cuts them. The tree may look fine for a season or two, using stored energy, then decline from the top down. By the time you see dieback, the damage was done years before.\nThe zone here scales with the trunk, the tree’s age and how well the species copes, following a widely used arborist approach. The simpler rule of thumb, one foot of radius per inch of trunk diameter, is shown in the working for comparison."
+  },
+  {
+    "objectID": "rain-garden.html",
+    "href": "rain-garden.html",
+    "title": "Rain garden and dry well calculator",
+    "section": "",
+    "text": "A rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a drainage test first."
+  },
+  {
+    "objectID": "rain-garden.html#building-a-rain-garden",
+    "href": "rain-garden.html#building-a-rain-garden",
+    "title": "Rain garden and dry well calculator",
+    "section": "Building a rain garden",
+    "text": "Building a rain garden\n\nLocation: a low spot at least 10 ft from the house, where water already heads, but not where it stands for days.\nShape: longer than it is wide, across the slope, with a level bottom so water spreads evenly.\nInlet and overflow: line the inlet with stone so it doesn’t erode, and give the overflow a safe path for storms bigger than the design.\nPlants: wet-tolerant species in the bottom, drought-tolerant ones on the rim. Native plants with deep roots keep the soil open.\nSoil: if your soil drains poorly, mix compost into the bottom, but don’t create a “bathtub” of loose soil in dense clay. An underdrain is the fix for very slow soils."
   },
   {
     "objectID": "homeowners.html",
