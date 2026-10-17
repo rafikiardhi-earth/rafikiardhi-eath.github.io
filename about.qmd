@@ -59,4 +59,4 @@ We do not use AI to replace human expertise. Where others reach for black-box AI
 
 ---
 
-*Founded by Trevan Flynn, PhD, soil scientist. See [Publications](publications.qmd) for the research behind our methods.*
+*Founded by Trevan Flynn, PhD, soil scientist. See [Research](publications.qmd) for the research behind our methods.*
