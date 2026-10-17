@@ -1191,6 +1191,7 @@ function formView() {
       <li><b>Features:</b> mottles_pct (Fe/Mn mottles), clay_films_amount (none / few / common / many), effervescence, carbonate_form (powdery / nodular / honeycomb), slickensides, cracks_width_cm, self_mulching, cementation_class, cementing_agent (iron / carbonate / silica / gypsum), designation (R = hard rock, Cr = lithic)</li>
       <li><b>Field calls (y / n)</b> for what properties can't show: saturated (peat / organic), variegated (neocutanic), stratified (alluvial), aeolian (regic sand), colluvial (with wetness), podzolic, placic, lithic, hard_rock</li>
       <li><b>description</b> (optional): notes such as dark, dystrophic, luvic, calcareous, used for the family.</li>
+      <li><b>Blank cells:</b> a horizon is still identified, and every test skipped for lack of data is listed, with the profile marked <b>Provisional</b>. Blank cementation, gypsum and y/n field calls are read as "not present".</li>
       <li>soilKey column names, so the same file can be used for the WRB key. Other columns are ignored.</li></ul></details>
       <div class="msg" id="csvmsg" style="font-size:.9rem; margin-top:8px; color:var(--warn)"></div>
     </div>
@@ -1971,6 +1972,7 @@ function makeSAIdentify() {
     if (yes(h.stratified)) return R("Alluvial", "stratified deposit (field call)");
     if (yes(h.aeolian)) return R("Regic Sand", "recent wind-blown sand (field call)");
     // carbonates
+    if (ef === null) unsure.push("carbonate horizons not checked (no effervescence or caco3_pct)");
     if (ef === true) {
       const form = String(h.carbonate_form ?? "").toLowerCase(), cc = num(h.caco3_pct);
       if (/powder|nodul|honeycomb|boulder/.test(form) || (cc !== null && cc >= 40)) return R("Soft Carbonate", form ? `carbonate-dominated (${form})` : "carbonate-dominated (CaCO₃ ≥ 40%, a proxy for 'carbonates dominate')");
@@ -1979,12 +1981,15 @@ function makeSAIdentify() {
     // wetness group
     const albicG = albicGrey(dH, dV ?? mV, dC ?? mC), gleyG = gleyGrey(mH, mV, mC);
     if (yes(h.colluvial) && (gleyG || albicG)) return R("Unconsolidated Material with Wetness", "poorly sorted colluvium with grey colours (field call)");
+    if (mt === null) unsure.push("soft plinthic and gleyic not checked (mottles_pct missing)");
+    if (gleyG === null && albicG === null) unsure.push("gley and albic not checked (Munsell colour missing)");
     if (mt !== null && mt > 10 && weakOrNone !== false) {
       const greyHere = albicG || gleyG, greyBelow = down ? (albicGrey(down.munsell_hue_dry ?? down.munsell_hue_moist, num(down.munsell_value_dry ?? down.munsell_value_moist), num(down.munsell_chroma_dry ?? down.munsell_chroma_moist)) || gleyGrey(down.munsell_hue_moist, num(down.munsell_value_moist), num(down.munsell_chroma_moist))) : null;
       if (greyHere || greyBelow) return R("Soft Plinthic", `Fe/Mn mottles ${mt}% with grey colours ${greyHere ? "in the matrix" : "below"}`);
       if (greyHere === null && greyBelow === null) unsure.push("Soft Plinthic: grey colours in or below the horizon not given");
     }
     if (modPlus && (gleyG || albicG) && (mt ?? 0) > 0) return R("Gleyic", "moderate/strong structure with grey ped faces and mottled interiors");
+    if (gleyG === true && !greyish(hue(mH)) && clayIncrease(up, h) === null) unsure.push("gley clay increase not checked (clay_pct missing)");
     if (gleyG === true && (greyish(hue(mH)) || clayIncrease(up, h) !== false)) {
       if (modPlus) unsure.push("Gley vs gleyic: structure is moderate or stronger");
       return R("Gley", "grey (gley) matrix colours, weak structure, little mottling");
@@ -1995,6 +2000,7 @@ function makeSAIdentify() {
       unsure.push("Albic: not one Munsell value lighter than the topsoil");
     }
     // structured subsoils
+    if (g === null) unsure.push("structure not given (structured vs apedal horizons not checked)");
     const st = stype(h);
     if (modPlus && /prism|column/.test(st)) {
       const jumps = [clayJump(up, h), (grade(up) !== null && g !== null) ? g - grade(up) >= 1 : null, (cons(up) !== null && cons(h) !== null) ? cons(h) - cons(up) >= 2 : null];
@@ -2018,10 +2024,9 @@ function makeSAIdentify() {
       if (red) return R("Red Apedal", "uniform red colours, weak or no structure");
       const yel = yellowColour(mH, mV, mC);
       if (yel) return R("Yellow-Brown Apedal", "uniform yellow-brown colours, weak or no structure");
-      if (red === null && yel === null) unsure.push("colour not given");
+      if (red === null && yel === null && !unsure.some(u => /Munsell colour missing/.test(u))) unsure.push("colour not given");
       return R("Neocutanic", "weak structure, colours neither uniform red nor yellow-brown (variegation not given)");
     }
-    unsure.push("structure not given");
     return R("Neocutanic", "default for weakly developed subsoil (structure not given)");
   }
 
@@ -2122,9 +2127,11 @@ function saBatchFromCSV(text) {
     const identified = idr.sequence.map(sq => `${sq.name}${sq.forced ? "" : ` (${sq.why})`}`).join(" / ");
     // topsoil uncertainty is a list of topsoils that couldn't be ruled out; subsoil uncertainty is a list of notes
     const topIsIdentified = idr.horizons.length && !idr.horizons[0].forced;
-    const unsure = [...new Set(idr.sequence.flatMap((sq, k) => k === 0 && topIsIdentified ? [] : sq.unsure))];
+    const unsure = [...new Set(idr.sequence.flatMap((sq, k) => k === 0 && topIsIdentified ? [] : sq.unsure.map(u => `${sq.name}: ${u}`)))];
     if (topIsIdentified && idr.horizons[0].unsure.length) unsure.unshift(`topsoil could also be ${idr.horizons[0].unsure.join(" or ").toLowerCase()} (data missing to rule it out)`);
-    return { id, desc, parsed, form: f, code, name, depth: deepest > 0 ? String(deepest) : "", identified, unsure };
+    // Checked: every test that could change a horizon call had data; Provisional: at least one was skipped; Given: all horizons named in the file
+    const status = idr.sequence.every(sq => sq.forced) ? "Given" : unsure.length ? "Provisional" : "Checked";
+    return { id, desc, parsed, form: f, code, name, depth: deepest > 0 ? String(deepest) : "", identified, unsure, status };
   });
 }
 function csvQ() {
@@ -2153,8 +2160,8 @@ function csvQ() {
     if (!SABATCH || !SABATCH.length) { $("sacsvout").innerHTML = ""; return; }
     const status = b => b.form ? "y" : b.parsed.candidates.length ? "u" : "n";
     $("sacsvout").innerHTML = `<h2 style="margin-top:16px">${SABATCH.length} profile${SABATCH.length > 1 ? "s" : ""}</h2>` +
-      SABATCH.map((b, i) => `<div class="chk" style="grid-template-columns: 1fr auto; cursor:pointer" data-bi="${i}"><span class="t"><b>${b.id}</b> · ${b.form ? b.name : b.parsed.candidates.length ? `${b.parsed.candidates.length} forms fit` : "no form matches"}<span style="display:block; font-size:.82rem; color:var(--ink-3)">${b.identified.replace(/</g, "&lt;")}</span>${b.unsure.length ? `<span style="display:block; font-size:.82rem; color:var(--warn)">Check: ${b.unsure.join("; ").replace(/</g, "&lt;")}</span>` : ""}</span><span class="s ${status(b)}">${b.form ? "Form" : b.parsed.candidates.length ? "Choose" : "Check"}</span></div>`).join("") +
-      `<p class="hint" style="font-size:.82rem; color:var(--ink-3)">Tap a profile to open its family questions, or choose among the forms that fit. ? in a code means that family answer couldn't be taken from the file.</p>
+      SABATCH.map((b, i) => `<div class="chk" style="grid-template-columns: 1fr auto; cursor:pointer" data-bi="${i}"><span class="t"><b>${b.id}</b> · ${b.form ? b.name : b.parsed.candidates.length ? `${b.parsed.candidates.length} forms fit` : "no form matches"}<span style="display:block; font-size:.82rem; color:var(--ink-3)">${b.identified.replace(/</g, "&lt;")}</span><span style="display:block; font-size:.82rem; font-weight:600; color:${b.status === "Provisional" ? "var(--warn)" : b.status === "Checked" ? "var(--good)" : "var(--ink-3)"}">${b.status === "Provisional" ? "Provisional" : b.status === "Checked" ? "Checked: every horizon test had data" : "Horizons given in the file"}</span>${b.unsure.length ? `<span style="display:block; font-size:.82rem; color:var(--warn)">Not checked: ${b.unsure.join("; ").replace(/</g, "&lt;")}</span>` : ""}</span><span class="s ${status(b)}">${b.form ? "Form" : b.parsed.candidates.length ? "Choose" : "Check"}</span></div>`).join("") +
+      `<p class="hint" style="font-size:.82rem; color:var(--ink-3)">Tap a profile to open its family questions, or choose among the forms that fit. <b>Provisional</b> means at least one horizon test was skipped for lack of data, so a horizon (and the form) could change with fuller data. ? in a code means that family answer couldn't be taken from the file.</p>
       <button class="primary" id="sadl">Download results (CSV)</button>`;
     $("sacsvout").querySelectorAll("[data-bi]").forEach(el => el.onclick = () => {
       const b = SABATCH[+el.dataset.bi];
@@ -2163,8 +2170,8 @@ function csvQ() {
     });
     $("sadl").onclick = () => {
       const esc = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
-      const lines = [["id", "form", "form_code", "family_code", "name", "status", "forms_that_fit", "horizons_identified", "to_check", "read_as", "notes"].join(",")].concat(SABATCH.map(b => [
-        b.id, b.form ? b.form.name : "", b.form ? b.form.code : "", b.code, b.name,
+      const lines = [["id", "form", "form_code", "family_code", "name", "status", "form_status", "forms_that_fit", "horizons_identified", "not_checked", "read_as", "notes"].join(",")].concat(SABATCH.map(b => [
+        b.id, b.form ? b.form.name : "", b.form ? b.form.code : "", b.code, b.name, b.status,
         b.form ? "form found" : b.parsed.candidates.length ? "several forms fit" : "no form matches",
         b.form ? "" : b.parsed.candidates.slice(0, 25).map(f => f.name).join("; "), b.identified, b.unsure.join("; "), b.desc, b.parsed.notes.join(" ")].map(esc).join(",")));
       dl("sa_classified_profiles.csv", lines.join("\n") + "\n");
