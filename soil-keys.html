@@ -1603,11 +1603,13 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
 
     // candidate forms
     let notes = synNotes.slice();
-    let rows = FORMS.slice();
-    if (tops.length) {
-      rows = rows.filter(f => f.t === tops[0]);
-      if (tops.length > 1) notes.push(`More than one topsoil named (${tops.join(", ")}); used ${tops[0]}.`);
-    } else notes.push("No diagnostic topsoil named, so all six topsoils are kept.");
+    // Topsoil: orthic is the default topsoil, so a named diagnostic topsoil outranks it, and none named means orthic
+    let useTops = tops.filter(x => x !== "Orthic").length ? tops.filter(x => x !== "Orthic") : tops.slice();
+    let assumedOrthic = false;
+    if (!useTops.length) { useTops = ["Orthic"]; assumedOrthic = true; }
+    if (tops.includes("Orthic") && useTops.length && !useTops.includes("Orthic")) notes.push(`Orthic and ${useTops.join(" / ").toLowerCase()} both mentioned; a diagnostic topsoil outranks orthic, so ${useTops.join(" / ").toLowerCase()} is used.`);
+    if (useTops.length > 1) notes.push(`More than one diagnostic topsoil named (${useTops.join(", ").toLowerCase()}); forms for each are shown.`);
+    let rows = FORMS.filter(f => useTops.includes(f.t));
     let order = subs.slice();
     if (reversedCue && order.length > 1) order.reverse();
     const fit = (ord) => {
@@ -1618,6 +1620,10 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
       return r;
     };
     let cand = fit(order);
+    if (assumedOrthic) {
+      if (cand.length) notes.push("No topsoil named, so orthic (the default topsoil) is assumed. Name it if it is peat, organic, vertic, melanic or humic.");
+      else { rows = FORMS.slice(); useTops = TOPS.slice(); cand = fit(order); notes.push("No topsoil named, and no orthic form has this sequence, so all six topsoils are kept."); }
+    }
     if (!cand.length && order.length > 1) { const alt = fit(order.slice().reverse()); if (alt.length) { cand = alt; order = order.slice().reverse(); notes.push("Read the subsoil horizons in the opposite order to the text, as that is the only sequence in the key."); } }
     if (order.length === 1 && H.thick && cand.some(f => f.s2 === "THICK")) cand = cand.filter(f => f.s2 === "THICK");
     const before = cand.length;
@@ -1629,7 +1635,8 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
     if (/\bapedal\b/.test(masked)) notes.push(`"Apedal" without a colour: say red apedal or yellow-brown apedal.`);
     if (/\bplinthic\b/.test(masked)) notes.push(`"Plinthic" alone: say soft plinthic or hard plinthic.`);
     if (/\bcutanic\b/.test(masked)) notes.push(`"Cutanic" alone: say neocutanic, pedocutanic or prismacutanic.`);
-    return { top: tops[0] || null, subs: order, hits, hints: H, candidates: cand, notes };
+    const topLabel = useTops.length === TOPS.length ? null : useTops.join(" or ");
+    return { top: topLabel, topAssumed: assumedOrthic && topLabel === "Orthic", subs: order, hits, hints: H, candidates: cand, notes };
   }
 
   // family answers that follow from the description; only filled when exactly one option fits
@@ -1782,7 +1789,7 @@ function describeQ() {
 }
 function hintChips(p) {
   const H = p.hints, c = [];
-  if (p.top) c.push(`${p.top} topsoil`);
+  if (p.top) c.push(`${p.top} topsoil${p.topAssumed ? " (assumed)" : ""}`);
   p.subs.forEach((x, i) => c.push(`${i === 0 ? "" : "then "}${x.toLowerCase()}`));
   if (H.thick) c.push("continues to 1.5 m");
   if (H.wet === false) c.push("no wetness"); else if (H.wet === true) c.push("signs of wetness");
