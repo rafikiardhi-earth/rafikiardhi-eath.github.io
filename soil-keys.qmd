@@ -860,7 +860,7 @@ function formView() {
       <details><summary>Columns it reads</summary><ul style="margin:8px 0 0; padding-left:18px">
       <li><b>id</b>, <b>top_cm</b>, <b>bottom_cm</b>: profile and depths (the order and observation depth come from these; a last horizon reaching 150 cm counts as continuing to 1.5 m).</li>
       <li><b>horizon</b> (optional): a horizon name, e.g. orthic A, red apedal. When filled, it is used as given; when empty, the horizon is identified from the columns below.</li>
-      <li><b>Colour:</b> munsell_hue_moist, munsell_value_moist, munsell_chroma_moist, munsell_hue_dry, munsell_value_dry, munsell_chroma_dry</li>
+      <li><b>Colour:</b> munsell_hue_moist, munsell_value_moist, munsell_chroma_moist, munsell_hue_dry, munsell_value_dry, munsell_chroma_dry. Colour decides first between uniform horizons (red apedal, yellow-brown apedal, red structured) and variegated ones (neocutanic, pedocutanic). Give a second colour (ped faces or variegation) as munsell_hue_ped, munsell_value_ped, munsell_chroma_ped, or the field call <b>variegated</b> (y / n); otherwise uniformity is assumed and flagged.</li>
       <li><b>Structure and consistence:</b> structure_grade (single grain / massive / weak / moderate / strong), structure_type (blocky, prismatic, columnar…), consistence_moist, boundary_distinctness (abrupt / clear / gradual)</li>
       <li><b>Lab:</b> clay_pct, oc_pct, ca_cmol, mg_cmol, k_cmol, na_cmol (or s_value_cmol), caco3_pct, caso4_pct, plasticity_index</li>
       <li><b>Features:</b> mottles_pct (Fe/Mn mottles), clay_films_amount (none / few / common / many), effervescence, carbonate_form (powdery / nodular / honeycomb), slickensides, cracks_width_cm, self_mulching, cementation_class, cementing_agent (iron / carbonate / silica / gypsum), designation (R = hard rock, Cr = lithic)</li>
@@ -1573,6 +1573,23 @@ function makeSAIdentify() {
     if (isHue(H, 5, "YR")) return (v >= 5 && c <= 2) || (v >= 6 && c === 3);
     return false;
   }
+  // Munsell hue pages in order; "one unit" of hue = one page (2.5 steps)
+  const HUE_ORDER = ["5R", "7.5R", "10R", "2.5YR", "5YR", "7.5YR", "10YR", "2.5Y", "5Y", "7.5Y", "10Y"];
+  const hueIdx = h => { const H = hue(h); if (!H || H.fam === "N") return null; const k = HUE_ORDER.indexOf(`${H.n}${H.fam}`); return k < 0 ? null : k; };
+  // colour uniformity: a second colour (ped faces / variegation) more than one unit away in hue, value or chroma = variegated
+  // (neocutanic criterion iii); otherwise the field call "variegated"; null when neither is given
+  function variegation(h) {
+    const pH = h.munsell_hue_ped, pV = num(h.munsell_value_ped), pC = num(h.munsell_chroma_ped);
+    if (has(pH) || pV !== null || pC !== null) {
+      const mH = h.munsell_hue_moist, mV = num(h.munsell_value_moist), mC = num(h.munsell_chroma_moist);
+      const a = hueIdx(mH), b = hueIdx(pH ?? mH);
+      const dh = a !== null && b !== null ? Math.abs(a - b) : 0;
+      const dv = mV !== null && pV !== null ? Math.abs(mV - pV) : 0, dc = mC !== null && pC !== null ? Math.abs(mC - pC) : 0;
+      return { varied: dh > 1 || dv > 1 || dc > 1, how: "from the matrix and ped-face colours" };
+    }
+    const v = yn(h.variegated);
+    return v === null ? null : { varied: v, how: "field call" };
+  }
   const redderThan5YR = h => { const H = hue(h); return !!H && (H.fam === "R" || (H.fam === "YR" && H.n <= 5)); };
 
   // ---- field descriptors ----
@@ -1686,19 +1703,35 @@ function makeSAIdentify() {
       return R("Prismacutanic", "prismatic/columnar structure (transition not checked)");
     }
     const red = redColour(mH, mV, mC);
+    const vg = variegation(h), uniform = vg === null ? null : !vg.varied;
+    // a second colour that is itself red (or yellow-brown) by the same table keeps the horizon "uniform red" (variability within the defined hues is permitted)
+    const hasPed = has(h.munsell_hue_ped) || num(h.munsell_value_ped) !== null;
+    const pedRed = hasPed ? redColour(h.munsell_hue_ped ?? mH, num(h.munsell_value_ped) ?? mV, num(h.munsell_chroma_ped) ?? mC) : null;
+    const pedYel = hasPed ? yellowColour(h.munsell_hue_ped ?? mH, num(h.munsell_value_ped) ?? mV, num(h.munsell_chroma_ped) ?? mC) : null;
+    const uniformRed = red === true && (pedRed === true || (pedRed === null && uniform !== false));
     if (modPlus) {
-      const ct = cutans(h), inc = clayIncrease(up, h);
-      if (red && !slick(h) && !(ct && inc)) return R("Red Structured", "uniform red colours with moderate/strong structure");
-      if (ct !== false) { if (ct === null) unsure.push("Pedocutanic: clay cutans not given"); return R("Pedocutanic", "moderate/strong blocky structure with clay cutans"); }
-      if (red) return R("Red Structured", "uniform red colours with moderate/strong structure");
-      unsure.push("structured subsoil without cutans or red colour");
-      return R("Pedocutanic", "moderate/strong structure (cutans absent: check)");
+      // colour decides first: uniform red throughout = red structured; anything else = pedocutanic
+      if (uniformRed) {
+        if (slick(h)) unsure.push("Red structured: slickensides present");
+        if (abruptBoundary(h)) unsure.push("Red structured: upper boundary is abrupt (should be diffuse, gradual or clear)");
+        if (uniform === null && pedRed === null) unsure.push("colour uniformity not given (read as uniform; give munsell_*_ped or variegated)");
+        if (!slick(h) && !abruptBoundary(h)) return R("Red Structured", "uniform red colours (Munsell red) with moderate/strong structure");
+      }
+      if (red === null) unsure.push("colour not given (red structured vs pedocutanic not checked)");
+      const ct = cutans(h);
+      if (ct === null) unsure.push("Pedocutanic: clay cutans not given");
+      if (ct === false) unsure.push("Pedocutanic: clay cutans absent (check)");
+      return R("Pedocutanic", red ? "red but not uniform (or slickensides / abrupt boundary), moderate/strong structure" : "brown or variegated colours with moderate/strong structure");
     }
     if (weakOrNone !== false) {
-      if (yes(h.variegated)) return R("Neocutanic", "weak structure with colour variegation, not gleyed");
-      if (red) return R("Red Apedal", "uniform red colours, weak or no structure");
+      // colour decides first: uniform red / uniform yellow-brown = apedal; variegated = neocutanic
       const yel = yellowColour(mH, mV, mC);
-      if (yel) return R("Yellow-Brown Apedal", "uniform yellow-brown colours, weak or no structure");
+      const uniformYel = yel === true && (pedYel === true || (pedYel === null && uniform !== false));
+      if (uniformRed || uniformYel) {
+        if (uniform === null && pedRed === null && pedYel === null) unsure.push("colour uniformity not given (read as uniform; give munsell_*_ped or variegated)");
+        return uniformRed ? R("Red Apedal", "uniform red colours (Munsell red), weak or no structure") : R("Yellow-Brown Apedal", "uniform yellow-brown colours (Munsell yellow), weak or no structure");
+      }
+      if (uniform === false) return R("Neocutanic", `weak structure with colour variegation (${vg.how}), not gleyed`);
       if (red === null && yel === null && !unsure.some(u => /Munsell colour missing/.test(u))) unsure.push("colour not given");
       return R("Neocutanic", "weak structure, colours neither uniform red nor yellow-brown (variegation not given)");
     }
@@ -1748,18 +1781,18 @@ function makeSAIdentify() {
 const SAID = makeSAIdentify();
 /* ---------------- CSV upload: one row per horizon ---------------- */
 let SABATCH = null;
-const SA_CSV_TEMPLATE = `id,top_cm,bottom_cm,horizon,designation,munsell_hue_moist,munsell_value_moist,munsell_chroma_moist,munsell_value_dry,munsell_chroma_dry,structure_grade,structure_type,clay_pct,oc_pct,ca_cmol,mg_cmol,k_cmol,na_cmol,mottles_pct,clay_films_amount,slickensides,effervescence,description
-P1,0,25,,A,7.5YR,4,3,5,3,weak,,12,0.8,2,1,0.3,0.1,,,,,
-P1,25,160,,B,2.5YR,3,6,,,weak,,25,0.4,1.5,0.5,0.1,0,,,,,
-P2,0,25,,A,7.5YR,4,3,5,3,weak,,12,0.8,2,1,0.3,0.1,,,,,
-P2,25,70,,B1,10YR,5,6,,,weak,,20,,,,,,,,,,
-P2,70,110,,B2,10YR,6,2,7,2,weak,,25,,,,,,25,,,,
-P3,0,30,,A,10YR,2,1,3,2,moderate,subangular blocky,30,2,15,5,0.8,0.2,,,absent,,
-P3,30,160,,Bt,7.5YR,4,4,,,moderate,angular blocky,45,,,,,,,common,,,
-P4,0,20,,A,7.5YR,4,3,5,3,weak,,12,0.8,,,,,,,,,
-P4,20,40,,R,,,,,,,,,,,,,,,,,,
-P5,0,25,orthic A,,,,,,,,,,,,,,,,,,,dark
-P5,25,160,red apedal B,,,,,,,,,,,,,,,,,,,dystrophic luvic`;
+const SA_CSV_TEMPLATE = `id,top_cm,bottom_cm,horizon,designation,munsell_hue_moist,munsell_value_moist,munsell_chroma_moist,munsell_value_dry,munsell_chroma_dry,structure_grade,structure_type,clay_pct,oc_pct,ca_cmol,mg_cmol,k_cmol,na_cmol,mottles_pct,clay_films_amount,slickensides,effervescence,variegated,description
+P1,0,25,,A,7.5YR,4,3,5,3,weak,,12,0.8,2,1,0.3,0.1,,,,,,
+P1,25,160,,B,2.5YR,3,6,,,weak,,25,0.4,1.5,0.5,0.1,0,,,,,n,
+P2,0,25,,A,7.5YR,4,3,5,3,weak,,12,0.8,2,1,0.3,0.1,,,,,,
+P2,25,70,,B1,10YR,5,6,,,weak,,20,,,,,,,,,,n,
+P2,70,110,,B2,10YR,6,2,7,2,weak,,25,,,,,,25,,,,,
+P3,0,30,,A,10YR,2,1,3,2,moderate,subangular blocky,30,2,15,5,0.8,0.2,,,absent,,,
+P3,30,160,,Bt,7.5YR,4,4,,,moderate,angular blocky,45,,,,,,,common,,,n,
+P4,0,20,,A,7.5YR,4,3,5,3,weak,,12,0.8,,,,,,,,,,
+P4,20,40,,R,,,,,,,,,,,,,,,,,,,
+P5,0,25,orthic A,,,,,,,,,,,,,,,,,,,,dark
+P5,25,160,red apedal B,,,,,,,,,,,,,,,,,,,,dystrophic luvic`;
 function saParseCSV(text) {
   const lines = String(text).replace(/\r/g, "").split("\n").filter(l => l.trim());
   if (!lines.length) return { head: [], rows: [] };
