@@ -1968,8 +1968,9 @@ function makeSAIdentify() {
   }
 
   // ---- subsoil ----
-  function subsoil(h, up, down, isSecond) {
-    const g = grade(h), ef = effervesces(h), mt = mottles(h), gyp = num(h.caso4_pct), ag = agent(h), cem = cemented(h), d = desg(h);
+  function subsoil(h, up, down, isSecond, opts = {}) {
+    // opts.blanksAbsent: blank mottles / effervescence are read as "none" and blank colour uniformity as "uniform"
+    const g = grade(h), ef = effervesces(h) ?? (opts.blanksAbsent ? false : null), mt = mottles(h) ?? (opts.blanksAbsent ? 0 : null), gyp = num(h.caso4_pct), ag = agent(h), cem = cemented(h), d = desg(h);
     const mH = h.munsell_hue_moist, mV = num(h.munsell_value_moist), mC = num(h.munsell_chroma_moist);
     const dH = h.munsell_hue_dry ?? mH, dV = num(h.munsell_value_dry), dC = num(h.munsell_chroma_dry);
     const unsure = [], R = (name, why) => ({ name, why, unsure });
@@ -2028,7 +2029,7 @@ function makeSAIdentify() {
       return R("Prismacutanic", "prismatic/columnar structure (transition not checked)");
     }
     const red = redColour(mH, mV, mC);
-    const vg = variegation(h), uniform = vg === null ? null : !vg.varied;
+    const vg0 = variegation(h), vg = vg0 ?? (opts.blanksAbsent ? { varied: false, how: "assumed uniform" } : null), uniform = vg === null ? null : !vg.varied;
     // a second colour that is itself red (or yellow-brown) by the same table keeps the horizon "uniform red" (variability within the defined hues is permitted)
     const hasPed = has(h.munsell_hue_ped) || num(h.munsell_value_ped) !== null;
     const pedRed = hasPed ? redColour(h.munsell_hue_ped ?? mH, num(h.munsell_value_ped) ?? mV, num(h.munsell_chroma_ped) ?? mC) : null;
@@ -2064,13 +2065,13 @@ function makeSAIdentify() {
   }
 
   // ---- whole profile ----
-  function identify(hz) {
+  function identify(hz, opts = {}) {
     const out = [];
     hz.forEach((h, i) => {
       const forced = String(h.horizon ?? "").trim();
       if (forced) { out.push({ name: forced, why: "given in the file", unsure: [], forced: true }); return; }
       if (i === 0) out.push(topsoil(h, hz[1]));
-      else out.push(subsoil(h, hz[i - 1], hz[i + 1], i === 1));
+      else out.push(subsoil(h, hz[i - 1], hz[i + 1], i === 1, opts));
     });
     // merge consecutive horizons with the same diagnostic name (e.g. Bt1, Bt2)
     const seq = [];
@@ -2105,7 +2106,7 @@ function makeSAIdentify() {
 }
 const SAID = makeSAIdentify();
 /* ---------------- CSV upload: one row per horizon ---------------- */
-let SABATCH = null;
+let SABATCH = null, SABATCH_TEXT = "", SA_BLANKS_ABSENT = false, SA_SHOW_DETAILS = false;
 const SA_CSV_TEMPLATE = `id,top_cm,bottom_cm,horizon,designation,munsell_hue_moist,munsell_value_moist,munsell_chroma_moist,munsell_value_dry,munsell_chroma_dry,structure_grade,structure_type,clay_pct,oc_pct,ca_cmol,mg_cmol,k_cmol,na_cmol,mottles_pct,clay_films_amount,slickensides,effervescence,variegated,description
 P1,0,25,,A,7.5YR,4,3,5,3,weak,,12,0.8,2,1,0.3,0.1,,,,,,
 P1,25,160,,B,2.5YR,3,6,,,weak,,25,0.4,1.5,0.5,0.1,0,,,,,n,
@@ -2125,7 +2126,7 @@ function saParseCSV(text) {
   const split = l => { const o = []; let c = "", q = false; for (let i = 0; i < l.length; i++) { const ch = l[i]; if (ch === '"') { if (q && l[i + 1] === '"') { c += '"'; i++; } else q = !q; } else if (ch === sep && !q) { o.push(c.trim()); c = ""; } else c += ch; } o.push(c.trim()); return o; };
   return { head: split(lines[0]).map(h => h.toLowerCase().trim()), rows: lines.slice(1).map(split) };
 }
-function saBatchFromCSV(text) {
+function saBatchFromCSV(text, opts = {}) {
   const { head, rows } = saParseCSV(text), ix = n => head.indexOf(n);
   if (!head.length) throw new Error("The file is empty.");
   const num = v => { const n = parseFloat(String(v ?? "").replace(",", ".")); return isFinite(n) ? n : null; };
@@ -2140,7 +2141,7 @@ function saBatchFromCSV(text) {
     if (hz.every(h => h.top !== null)) hz.sort((a, b) => a.top - b.top || a._k - b._k);
     const deepest = Math.max(...hz.map(h => h.bottom ?? -1));
     // horizons named in the file are used as given; the rest are identified from their properties
-    const idr = SAID.identify(hz.map(h => ({ ...h, horizon: h.horizon || h.horizon_name || "" })));
+    const idr = SAID.identify(hz.map(h => ({ ...h, horizon: h.horizon || h.horizon_name || "" })), opts);
     const fw = SAID.familyWords(hz, idr.sequence);
     const parts = idr.sequence.map((sq, k) => {
       const notes = sq.rows.map(i => hz[i].description).filter(Boolean).join(" ");
@@ -2178,6 +2179,10 @@ function csvQ() {
       <li>Other columns are ignored.</li></ul></details>
     <label class="secondary" style="display:flex; align-items:center; justify-content:center; margin-top:12px; cursor:pointer">Choose CSV file<input type="file" id="sacsvin" accept=".csv,.tsv,.txt" style="display:none"></label>
     <button class="secondary" id="satpl">Download an example CSV</button>
+    <label style="display:flex; gap:10px; align-items:flex-start; margin-top:14px; padding:12px; border:1px solid var(--line); border-radius:10px; cursor:pointer; font-size:.93rem; color:var(--ink)">
+      <input type="checkbox" id="sablank" ${SA_BLANKS_ABSENT ? "checked" : ""} style="width:20px; height:20px; margin-top:2px; flex:none; accent-color:var(--accent)">
+      <span><b>Treat blank cells as "absent"</b><span style="display:block; color:var(--ink-2); font-size:.86rem; margin-top:2px">Blank mottles = no mottles, blank effervescence = does not fizz, blank second colour = uniform colour. Use this when blanks mean "not present" rather than "not measured". Structure and colour are still required.</span></span>
+    </label>
     <div id="sacsvmsg" style="margin-top:8px; font-size:.9rem; color:var(--warn)"></div>
     <div id="sacsvout"></div>`) + navBack();
   view().innerHTML = h;
@@ -2186,16 +2191,23 @@ function csvQ() {
   $("sacsvin").onchange = e => {
     const file = e.target.files[0]; if (!file) return;
     const rd = new FileReader();
-    rd.onload = () => { try { SABATCH = saBatchFromCSV(rd.result); $("sacsvmsg").textContent = SABATCH.length ? "" : "No horizons found in the file."; drawBatch(); } catch (err) { $("sacsvmsg").textContent = err.message; } };
+    rd.onload = () => { try { SABATCH_TEXT = rd.result; SABATCH = saBatchFromCSV(rd.result, { blanksAbsent: SA_BLANKS_ABSENT }); $("sacsvmsg").textContent = SABATCH.length ? "" : "No horizons found in the file."; drawBatch(); } catch (err) { $("sacsvmsg").textContent = err.message; } };
     rd.readAsText(file);
+  };
+  $("sablank").onchange = e => {
+    SA_BLANKS_ABSENT = e.target.checked;
+    if (SABATCH_TEXT) { try { SABATCH = saBatchFromCSV(SABATCH_TEXT, { blanksAbsent: SA_BLANKS_ABSENT }); drawBatch(); } catch (err) { $("sacsvmsg").textContent = err.message; } }
   };
   const drawBatch = () => {
     if (!SABATCH || !SABATCH.length) { $("sacsvout").innerHTML = ""; return; }
     const status = b => b.form ? "y" : b.parsed.candidates.length ? "u" : "n";
-    $("sacsvout").innerHTML = `<h2 style="margin-top:16px">${SABATCH.length} profile${SABATCH.length > 1 ? "s" : ""}</h2>` +
-      SABATCH.map((b, i) => `<div class="chk" style="grid-template-columns: 1fr auto; cursor:pointer" data-bi="${i}"><span class="t"><b>${b.id}</b> · ${b.form ? b.name : b.parsed.candidates.length ? `${b.parsed.candidates.length} forms fit` : "no form matches"}<span style="display:block; font-size:.82rem; color:var(--ink-3)">${b.identified.replace(/</g, "&lt;")}</span><span style="display:block; font-size:.82rem; font-weight:600; color:${b.status === "Provisional" ? "var(--warn)" : b.status === "Checked" ? "var(--good)" : "var(--ink-3)"}">${b.status === "Provisional" ? "Provisional" : b.status === "Checked" ? "Checked: every horizon test had data" : "Horizons given in the file"}</span>${b.unsure.length ? `<span style="display:block; font-size:.82rem; color:var(--warn)">Not checked: ${b.unsure.join("; ").replace(/</g, "&lt;")}</span>` : ""}</span><span class="s ${status(b)}">${b.form ? "Form" : b.parsed.candidates.length ? "Choose" : "Check"}</span></div>`).join("") +
-      `<p class="hint" style="font-size:.82rem; color:var(--ink-3)">Tap a profile to open its family questions, or choose among the forms that fit. <b>Provisional</b> means at least one horizon test was skipped for lack of data, so a horizon (and the form) could change with fuller data. ? in a code means that family answer couldn't be taken from the file.</p>
+    $("sacsvout").innerHTML = `<div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:16px"><h2 style="margin:0">${SABATCH.length} profile${SABATCH.length > 1 ? "s" : ""}</h2>
+      <label style="display:flex; align-items:center; gap:8px; font-size:.88rem; color:var(--ink-2); cursor:pointer"><input type="checkbox" id="sadetails" ${SA_SHOW_DETAILS ? "checked" : ""} style="width:18px; height:18px; accent-color:var(--accent)">Show details</label></div>` +
+      (SA_BLANKS_ABSENT ? `<div class="flag" style="margin:6px 0 10px"><strong>Assumption on.</strong> Blank mottles, effervescence and second colours are being read as absent. "Checked" below relies on that: if any blank actually means "not measured", untick the box to see what was skipped.</div>` : "") +
+      SABATCH.map((b, i) => `<div class="chk" style="grid-template-columns: 1fr auto; cursor:pointer" data-bi="${i}"><span class="t"><b>${b.id}</b> · ${b.form ? b.name : b.parsed.candidates.length ? `${b.parsed.candidates.length} forms fit` : "no form matches"}${SA_SHOW_DETAILS ? `<span style="display:block; font-size:.82rem; color:var(--ink-3)">${b.identified.replace(/</g, "&lt;")}</span>` : ""}<span style="display:block; font-size:.82rem; font-weight:600; color:${b.status === "Provisional" ? "var(--warn)" : b.status === "Checked" ? "var(--good)" : "var(--ink-3)"}">${b.status === "Provisional" ? "Provisional" : b.status === "Checked" ? (SA_BLANKS_ABSENT ? "Checked, assuming blanks are absent" : "Checked: every horizon test had data") : "Horizons given in the file"}</span>${SA_SHOW_DETAILS && b.unsure.length ? `<span style="display:block; font-size:.82rem; color:var(--warn)">Not checked: ${b.unsure.join("; ").replace(/</g, "&lt;")}</span>` : ""}</span><span class="s ${status(b)}">${b.form ? "Form" : b.parsed.candidates.length ? "Choose" : "Check"}</span></div>`).join("") +
+      `<p class="hint" style="font-size:.82rem; color:var(--ink-3)">Tap a profile to open its family questions, or choose among the forms that fit. Tick <b>Show details</b> to see how each horizon was identified and what wasn't checked. <b>Provisional</b> means at least one horizon test was skipped for lack of data, so a horizon (and the form) could change with fuller data. ? in a code means that family answer couldn't be taken from the file.</p>
       <button class="primary" id="sadl">Download results (CSV)</button>`;
+    $("sadetails").onchange = e => { SA_SHOW_DETAILS = e.target.checked; drawBatch(); };
     $("sacsvout").querySelectorAll("[data-bi]").forEach(el => el.onclick = () => {
       const b = SABATCH[+el.dataset.bi];
       push(); S.desc = b.desc; S.parsed = b.parsed; S.depth = b.depth;
@@ -2203,10 +2215,10 @@ function csvQ() {
     });
     $("sadl").onclick = () => {
       const esc = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
-      const lines = [["id", "form", "form_code", "family_code", "name", "status", "form_status", "forms_that_fit", "horizons_identified", "not_checked", "read_as", "notes"].join(",")].concat(SABATCH.map(b => [
+      const lines = [["id", "form", "form_code", "family_code", "name", "status", "form_status", "forms_that_fit", "horizons_identified", "not_checked", "blanks_as_absent", "read_as", "notes"].join(",")].concat(SABATCH.map(b => [
         b.id, b.form ? b.form.name : "", b.form ? b.form.code : "", b.code, b.name, b.status,
         b.form ? "form found" : b.parsed.candidates.length ? "several forms fit" : "no form matches",
-        b.form ? "" : b.parsed.candidates.slice(0, 25).map(f => f.name).join("; "), b.identified, b.unsure.join("; "), b.desc, b.parsed.notes.join(" ")].map(esc).join(",")));
+        b.form ? "" : b.parsed.candidates.slice(0, 25).map(f => f.name).join("; "), b.identified, b.unsure.join("; "), SA_BLANKS_ABSENT ? "yes" : "no", b.desc, b.parsed.notes.join(" ")].map(esc).join(",")));
       dl("sa_classified_profiles.csv", lines.join("\n") + "\n");
     };
   };
