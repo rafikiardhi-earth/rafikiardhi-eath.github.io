@@ -1,48 +1,101 @@
 ---
 title: "Homeowners"
-description: "Free calculators and decision tools for yards and gardens: how much topsoil, mulch, gravel or sod to buy, and how to check a quote. No ads, no sign-up."
+description: "Free calculators and decision tools for yards and gardens, built by soil scientists: materials, quotes, irrigation, soil tests, fertilizer, drainage and trees. No ads, no sign-up."
 ---
 
-Free tools for your yard and garden, built by soil scientists. Work out how much material you actually need, check a quote before you pay it, and make decisions with the working shown.
+Free tools for your yard and garden, built by soil scientists. Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions with the working shown.
 
 No ads, no sign-up, and no supplier pays to be listed. Every tool shows how its numbers are calculated, so you can check them yourself.
 
-## Calculators
+## Buying materials
 
 ::: {.cards}
 ::: {.card-item}
 ### [Landscape materials calculator](materials-calculator.qmd)
-How much topsoil, compost, mulch, gravel, road base, sand, sod or grass seed to order, for any shape of yard. Cubic yards, tons, bags and pallets, with a bulk-vs-bags price check.
+How much topsoil, compost, mulch, gravel, road base, sand, sod or grass seed to order, for any shape of yard, in yards, tons, bags or pallets.
 :::
 ::: {.card-item}
-### Quote checker *(coming soon)*
-Enter a quote and your area to see the depth and price per unit you're actually paying for.
+### [Quote checker](quote-checker.qmd)
+See what depth a quote really covers, whether it's more than you need, and the price per yard and per ton. Includes a yards-to-tons converter.
+:::
+::: {.card-item}
+### [Raised bed and planter soil](planter-soil.qmd)
+Soil for raised beds, pots and planters, how to fill deep beds for less, and how much soil a tree needs.
+:::
+::: {.card-item}
+### [Fertilizer label calculator](fertilizer-calculator.qmd)
+Turn the N-P-K numbers into how much to spread, and compare the real cost per pound of nutrient.
 :::
 :::
 
-## Irrigation
-
-::: {.cards}
-::: {.card-item}
-### Catch-cup test *(coming soon)*
-Measure how much water your sprinklers really put down, and how evenly, to set run times per zone.
-:::
-::: {.card-item}
-### Cycle-and-soak scheduler *(coming soon)*
-Split watering into shorter cycles so clay soils and slopes absorb it instead of letting it run off.
-:::
-:::
-
-## Soil and fertilizer
+## Watering
 
 ::: {.cards}
 ::: {.card-item}
-### Fertilizer label decoder *(coming soon)*
-Turn the N-P-K numbers on a bag into how much product to spread, and compare the real cost per pound of nutrient.
+### [Sprinkler catch-cup test](catch-cup-test.qmd)
+Measure what each zone really puts down, and how evenly, to set run times.
 :::
 ::: {.card-item}
-### Soil test translator *(coming soon)*
-Plain-language reading of a soil lab report: what's low, what's high, and what to do (or not do) about it.
+### [Cycle-and-soak scheduler](cycle-and-soak.qmd)
+Stop runoff on clay and slopes by splitting watering into short cycles.
+:::
+::: {.card-item}
+### [Drip irrigation calculator](drip-irrigation.qmd)
+Run times and emitters per plant, and whether the zone can supply them.
+:::
+::: {.card-item}
+### [Lawn vs low-water landscape](lawn-water.qmd)
+Compare a season's water use and cost for lawns, low-water plantings and mulch.
+:::
+::: {.card-item}
+### [Rain barrel calculator](rain-harvest.qmd)
+How much your roof collects per storm and per year, and how fast a barrel fills.
+:::
+:::
+
+## Your soil
+
+::: {.cards}
+::: {.card-item}
+### [Soil test translator](soil-test-translator.qmd)
+A lab report in plain English: what to do, and what you don't need to buy.
+:::
+::: {.card-item}
+### [Should I amend my soil?](should-i-amend.qmd)
+Check before you buy compost, topsoil or sand, for what you're planting.
+:::
+::: {.card-item}
+### [DIY soil tests](diy-soil-tests.qmd)
+Jar, ribbon and drainage tests: find your texture and how fast your soil drains.
+:::
+::: {.card-item}
+### [Soil pH: lime and sulfur](ph-adjustment.qmd)
+How much to raise or lower pH, and when lowering it isn't realistic.
+:::
+::: {.card-item}
+### [Compost mix calculator](compost-mix.qmd)
+Balance greens and browns, and fix a smelly or slow pile.
+:::
+:::
+
+## Drainage, building and trees
+
+::: {.cards}
+::: {.card-item}
+### [Foundation grading check](foundation-grading.qmd)
+Does the ground slope away from your house enough, and how much fill to fix it.
+:::
+::: {.card-item}
+### [Rain garden and dry well](rain-garden.qmd)
+Size a rain garden or dry well from your roof area and how fast your soil drains.
+:::
+::: {.card-item}
+### [New-build yard soil check](construction-soil-check.qmd)
+Find out if construction left you thin topsoil over compacted subsoil, and what to ask your builder.
+:::
+::: {.card-item}
+### [Tree protection zone](tree-protection.qmd)
+How much space to fence off around a tree before construction or digging.
 :::
 :::
 

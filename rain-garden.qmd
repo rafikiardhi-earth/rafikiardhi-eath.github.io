@@ -1,0 +1,68 @@
+---
+title: "Rain garden and dry well calculator"
+description: "How big should a rain garden or dry well be for your roof or driveway? Size it from the drainage area, rainfall and how fast your soil drains."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+A rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a [drainage test](diy-soil-tests.qmd) first.
+
+```{=html}
+<div class="hmc" id="rg"></div>
+<script>
+(function () {
+  const qir = +new URLSearchParams(location.search).get('ir') || null; // mm/hr from the perc test
+  const COEF = { roof: 0.95, pave: 0.9, gravel: 0.5, lawn: 0.25 };
+  HM.tool({
+    id: 'rg', step: 'Where the water comes from',
+    inputs: [
+      { k: 'area', l: 'Area draining to it', t: 'area', h: 'For a roof, the footprint (plan view) of the part that drains to this downspout.' },
+      { k: 'surf', l: 'Surface', t: 'select', d: 'roof', opts: [['roof', 'Roof'], ['pave', 'Driveway, patio or paving'], ['gravel', 'Gravel'], ['lawn', 'Lawn']] },
+      { k: 'storm', l: 'Storm to capture', t: 'wdep', d: { us: 1, si: 25 }, h: 'One inch (25 mm) captures most storms in many regions. Your local stormwater authority may give a design value.' },
+      { t: 'sec', l: 'Your soil and design' },
+      { k: 'ir', l: 'Drainage rate (from your test)', t: 'rate', d: u => qir ? (u === 'us' ? qir / 25.4 : qir) : (u === 'us' ? 0.5 : 13) },
+      { k: 'type', l: 'Type', t: 'seg', d: 'garden', opts: [['garden', 'Rain garden'], ['well', 'Dry well (gravel pit)']] },
+      { k: 'pond', l: 'Ponding depth', t: 'dep', d: { us: 6, si: 15 }, show: v => v.type === 'garden', h: 'How deep water can stand before it overflows. 4–8 in (10–20 cm) is typical.' },
+      { k: 'wdep', l: 'Gravel depth', t: 'len', d: { us: 3, si: 1 }, show: v => v.type === 'well' }
+    ],
+    compute(v, U) {
+      if (!(v.area > 0) || !(v.storm > 0)) return U.empty('Enter the drainage area and storm size.');
+      const c = COEF[v.surf], V = v.area * (v.storm / 1000) * c; // m³
+      const gal = V * 264.172;
+      const work = [`Runoff = ${U.f(v.area, 'area', 0)} × ${U.f(v.storm, 'wdep', 2)} × ${c} (share that runs off a ${v.surf === 'pave' ? 'paved surface' : v.surf}) = ${U.f(V, 'vol', 2)} (${U.us ? HM.fmt(gal, 0) + ' gal' : HM.fmt(V * 1000, 0) + ' L'})`];
+      let h = '';
+      if (!(v.ir > 0)) return U.empty('Enter your drainage rate.');
+      if (v.type === 'garden') {
+        if (!(v.pond > 0)) return U.empty('Enter the ponding depth.');
+        const A = V / v.pond, hrs = (v.pond * 1000) / v.ir;
+        h = U.big('Rain garden area', U.f(A, 'area', 0), `${HM.fmt(A / v.area * 100, 0)}% of the area that drains to it, ponding up to ${U.f(v.pond, 'dep', 0)} deep.`);
+        h += U.kv([['Runoff to hold', U.us ? `${HM.fmt(gal, 0)} gal` : `${HM.fmt(V * 1000, 0)} L`], ['Time to drain', `${HM.fmt(hrs, 0)} hours`], ['For example', U.us ? `${HM.fmt(Math.sqrt(A / 0.0929 / 2), 0)} × ${HM.fmt(Math.sqrt(A / 0.0929 * 2), 0)} ft` : `${HM.fmt(Math.sqrt(A / 2), 1)} × ${HM.fmt(Math.sqrt(A * 2), 1)} m`]]);
+        work.push(`Area = ${U.f(V, 'vol', 2)} ÷ ${U.f(v.pond, 'dep', 0)} = ${U.f(A, 'area', 0)}`, `Drain time = ${U.f(v.pond, 'dep', 0)} ÷ ${U.f(v.ir, 'rate', 2)} = ${HM.fmt(hrs, 1)} hours`);
+        if (hrs > 48) h += U.note('Water would stand for more than two days: plants suffer and mosquitoes can breed. Make it shallower and bigger, or add an underdrain, or choose a different spot.', 'bad');
+        else if (hrs > 24) h += U.note('Drains within 1–2 days: acceptable, but choose plants that tolerate wet roots in the bottom.');
+        else h += U.note('Drains within a day: good.', 'good');
+      } else {
+        if (!(v.wdep > 0)) return U.empty('Enter the gravel depth.');
+        const Vg = V / 0.35, foot = Vg / v.wdep, hrs = (v.wdep * 1000) / v.ir;
+        h = U.big('Gravel volume', U.f(Vg, 'vol', 2), `A pit about ${U.f(foot, 'area', 0)} in area and ${U.f(v.wdep, 'len', 1)} deep, filled with clean washed stone.`);
+        h += U.kv([['Runoff to hold', U.us ? `${HM.fmt(gal, 0)} gal` : `${HM.fmt(V * 1000, 0)} L`], ['Gravel weight (approx.)', U.f(Vg * 1.6, 'ton', 1)], ['Time to empty through the bottom', `${HM.fmt(hrs, 0)} hours`]]);
+        work.push(`Gravel holds water in about 35% of its volume: ${U.f(V, 'vol', 2)} ÷ 0.35 = ${U.f(Vg, 'vol', 2)}`, `Footprint = ${U.f(Vg, 'vol', 2)} ÷ ${U.f(v.wdep, 'len', 1)} = ${U.f(foot, 'area', 0)}`, `Empty time (bottom only, conservative) = ${U.f(v.wdep, 'len', 1)} ÷ ${U.f(v.ir, 'rate', 2)} = ${HM.fmt(hrs, 0)} hours`);
+        if (hrs > 72) h += U.note('This soil drains too slowly for a dry well to empty between storms. A shallower, wider design or a rain garden with an underdrain is better.', 'bad');
+        h += U.note('Line the sides and top with landscape fabric so soil doesn\'t wash into the gravel, and give it an overflow route for big storms.');
+      }
+      if (v.ir < 0.5 * 25.4) h += U.note('Your soil drains slowly (under ½ in/hr). Infiltration will be limited; an underdrain or a bigger, shallower basin helps.');
+      h += U.note('Keep it at least 10 ft (3 m) from foundations, away from septic systems and wells, and call your utility locating service (811 in the US) before you dig.', 'good');
+      return { html: h, work };
+    }
+  });
+})();
+</script>
+```
+
+## Building a rain garden
+
+- **Location:** a low spot at least 10 ft from the house, where water already heads, but not where it stands for days.
+- **Shape:** longer than it is wide, across the slope, with a level bottom so water spreads evenly.
+- **Inlet and overflow:** line the inlet with stone so it doesn't erode, and give the overflow a safe path for storms bigger than the design.
+- **Plants:** wet-tolerant species in the bottom, drought-tolerant ones on the rim. Native plants with deep roots keep the soil open.
+- **Soil:** if your soil drains poorly, mix compost into the bottom, but don't create a "bathtub" of loose soil in dense clay. An underdrain is the fix for very slow soils.

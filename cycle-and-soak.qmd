@@ -1,0 +1,87 @@
+---
+title: "Cycle-and-soak sprinkler scheduler"
+description: "Stop sprinkler runoff on clay soil and slopes. Split watering into short cycles with soak time, based on your soil, slope and sprinkler type."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+If water runs down the sidewalk while the sprinklers are on, your heads are putting water down faster than the soil can take it in. The fix costs nothing: run the same total time in shorter cycles, with a soak in between. This works out how short, and how many.
+
+```{=html}
+<div class="hmc" id="cs"></div>
+<script>
+(function () {
+  // Typical maximum application rates (in/hr) before runoff, by soil, slope 0–5 / 5–8 / 8–12 / 12%+.
+  // Rows follow the standard irrigation design table; loam is the midpoint of the sandy-loam and silt-loam rows.
+  const IR = {
+    sand:      { c: [2.0, 1.5, 1.0, 0.5], b: [2.0, 1.2, 0.75, 0.4], cc: [1.75, 1.25, 0.75, 0.4], bc: [1.5, 1.0, 0.5, 0.3] },
+    sandyloam: { c: [1.75, 1.25, 0.75, 0.4], b: [1.0, 0.8, 0.6, 0.3], cc: [1.25, 0.75, 0.5, 0.3], bc: [0.75, 0.5, 0.4, 0.2] },
+    siltloam:  { c: [1.0, 0.8, 0.6, 0.4], b: [0.5, 0.4, 0.3, 0.2], cc: [0.6, 0.45, 0.3, 0.2], bc: [0.3, 0.25, 0.15, 0.1] },
+    clay:      { c: [0.2, 0.15, 0.12, 0.1], b: [0.15, 0.1, 0.08, 0.06], cc: [0.2, 0.15, 0.12, 0.1], bc: [0.15, 0.1, 0.08, 0.06] }
+  };
+  const AWC = { sand: 0.06, sandyloam: 0.12, loam: 0.16, siltloam: 0.19, clayloam: 0.17, clay: 0.15 }; // in of water per in of soil
+  const STORE = [0.10, 0.07, 0.05, 0.03]; // in of water the surface holds before it runs off, by slope
+  const HEADS = { spray: 1.5, rotor: 0.5, rotary: 0.4 };
+  const qpr = +new URLSearchParams(location.search).get('pr') || null; // mm/hr from the catch-cup test
+  function irOf(tex, slope, bare, comp) {
+    const key = (bare ? 'b' : 'c') + (comp ? 'c' : '');
+    if (tex === 'loam') return (IR.sandyloam[key][slope] + IR.siltloam[key][slope]) / 2;
+    const row = tex === 'clayloam' ? 'clay' : tex;
+    return IR[row][key][slope];
+  }
+  HM.tool({
+    id: 'cs', step: 'Sprinklers',
+    inputs: [
+      { k: 'head', l: 'Sprinkler type', t: 'select', d: qpr ? 'measured' : 'spray', opts: [['spray', 'Spray heads (pop-up, fixed spray)'], ['rotor', 'Rotors (gear-driven, rotating stream)'], ['rotary', 'Rotary nozzles (multi-stream, e.g. MP-type)'], ['measured', 'I measured it (catch-cup test)']] },
+      { k: 'pr', l: 'Application rate', t: 'rate', d: (u, v) => { if (qpr) return u === 'us' ? qpr / 25.4 : qpr; const r = HEADS[(v && v.head) || 'spray'] || 1.5; return u === 'us' ? r : r * 25.4; }, h: 'Typical for this head type. Your own catch-cup result is better: <a href="catch-cup-test.qmd">measure it</a>.' },
+      { t: 'sec', l: 'Soil and slope' },
+      { k: 'tex', l: 'Soil texture', t: 'select', d: 'loam', opts: [['sand', 'Sand or loamy sand (gritty, falls apart)'], ['sandyloam', 'Sandy loam'], ['loam', 'Loam'], ['siltloam', 'Silt loam (smooth, floury)'], ['clayloam', 'Clay loam'], ['clay', 'Clay (sticky, shiny when rubbed)']], h: 'Not sure? Try the <a href="diy-soil-tests.qmd">ribbon or jar test</a>.' },
+      { k: 'slope', l: 'Slope', t: 'select', d: '0', opts: [['0', 'Flat or gentle (0–5%)'], ['1', 'Moderate (5–8%)'], ['2', 'Steep (8–12%)'], ['3', 'Very steep (over 12%)']], h: 'A 5% slope drops 6 in over 10 ft; 12% drops about 1.5 ft over 10 ft.' },
+      { k: 'bare', l: 'Bare soil or new seed (no established cover)', t: 'check', d: false },
+      { k: 'comp', l: 'Compacted, or a hard layer close to the surface (common around new houses)', t: 'check', d: false },
+      { t: 'sec', l: 'How much to water' },
+      { k: 'day', l: 'Water to apply each watering day', t: 'wdep', d: { us: 0.5, si: 13 }, w: 3, h: 'Your weekly need divided by watering days.' },
+      { k: 'root', l: 'Root depth', t: 'dep', d: { us: 6, si: 15 }, w: 3, h: 'Lawns 4–8 in, shrubs 12–18 in.' }
+    ],
+    onChange(k, api) { if (k === 'head' && HEADS[api.get('head')]) api.setDisp('pr', HEADS[api.get('head')] * (api.units() === 'us' ? 1 : 25.4)); if (k === 'pr') api.setChoice('head', 'measured'); },
+    compute(v, U) {
+      if (!(v.pr > 0) || !(v.day > 0)) return U.empty('Enter the application rate and how much to apply.');
+      const sl = +v.slope, irIn = irOf(v.tex, sl, v.bare, v.comp), ir = irIn * 25.4; // mm/hr
+      const S = STORE[sl] * 25.4, pr = v.pr, total = v.day / pr * 60; // minutes
+      const work = [`Soil intake rate (${v.tex === 'loam' ? 'midpoint of sandy loam and silt loam' : 'typical value'}, this slope${v.bare ? ', bare' : ''}${v.comp ? ', compacted' : ''}) ≈ ${U.f(ir, 'rate', 2)}`,
+        `Total run time = ${U.f(v.day, 'wdep', 2)} ÷ ${U.f(pr, 'rate', 2)} × 60 = ${HM.fmt(total, 1)} min`];
+      let h, cycles = 1, len = total, soak = 0;
+      if (pr <= ir) {
+        h = U.big('No cycling needed', `1 × ${Math.ceil(total)} min`, `Your soil can take water in as fast as these heads put it down.`);
+        work.push(`Application rate ${U.f(pr, 'rate', 2)} ≤ intake ${U.f(ir, 'rate', 2)}, so water soaks in as it lands`);
+      } else {
+        const tmax = S / (pr - ir) * 60;
+        cycles = Math.max(1, Math.ceil(total / tmax - 1e-9)); len = total / cycles;
+        const dc = pr * len / 60, soakRaw = dc / ir * 60 - len;
+        soak = Math.max(30, Math.ceil(soakRaw / 5) * 5);
+        h = U.big('Run', cycles > 1 ? `${cycles} × ${Math.ceil(len)} min` : `1 × ${Math.ceil(len)} min`, cycles > 1 ? `with at least ${soak} minutes between cycles, ${HM.fmt(Math.ceil(len) * cycles, 0)} minutes in total.` : 'Short enough to soak in without cycling.');
+        h += U.kv([['Longest cycle before runoff', `${HM.fmt(tmax, 1)} min`], ['Heads apply', U.f(pr, 'rate', 2)], ['Soil takes in', U.f(ir, 'rate', 2)]]);
+        work.push(`Heads apply faster than the soil takes it in, so water ponds. The surface holds about ${U.f(S, 'wdep', 2)} before it runs off`,
+          `Longest cycle = ${U.f(S, 'wdep', 2)} ÷ (${U.f(pr, 'rate', 2)} − ${U.f(ir, 'rate', 2)}) × 60 = ${HM.fmt(tmax, 1)} min`,
+          `Cycles = ${HM.fmt(total, 1)} ÷ ${HM.fmt(tmax, 1)} → ${cycles} cycle${cycles > 1 ? 's' : ''} of ${HM.fmt(len, 1)} min`,
+          `Each cycle puts down ${U.f(dc, 'wdep', 2)}, which takes ${HM.fmt(dc / ir * 60, 0)} min to soak in → soak at least ${soak} min (minimum 30)`);
+      }
+      const awc = AWC[v.tex], rootIn = v.root / 0.0254, maxIn = awc * rootIn * 0.5, maxMm = maxIn * 25.4;
+      work.push(`Root zone holds about ${awc} in of water per in of soil × ${HM.fmt(rootIn, 1)} in × 50% (refill when half used) = ${U.f(maxMm, 'wdep', 2)} per watering`);
+      if (v.day > maxMm * 1.1) h += U.note(`${U.f(v.day, 'wdep', 2)} is more than the root zone can hold (about ${U.f(maxMm, 'wdep', 2)}). The extra drains below the roots. Water less each time and more often, or encourage deeper roots by watering deeply but only when needed.`, 'bad');
+      else h += U.note(`Good: ${U.f(v.day, 'wdep', 2)} fits in the root zone, which holds about ${U.f(maxMm, 'wdep', 2)} at a time.`, 'good');
+      if (cycles > 1) h += U.note('Most controllers have a cycle-and-soak setting. If yours doesn\'t, set several start times for the same program, at least the soak time apart.');
+      return { html: h, work };
+    }
+  });
+})();
+</script>
+```
+
+## Why this works
+
+Water soaks into soil at a limited rate. Sandy soil can take in an inch or more an hour; clay may take in a tenth of an inch. Spray heads often put down over an inch an hour, so on clay most of a long cycle runs off. On slopes it runs off even sooner.
+
+Short cycles stop each round before water starts to run off; the soak lets it move down into the soil before the next round. The total water is the same; you just stop losing it to the gutter.
+
+The intake rates used here are typical design values for each soil and slope. Compacted soil or a hard layer near the surface (very common on new-build lots) cuts them sharply. If you still see runoff, shorten the cycles further.

@@ -1,0 +1,60 @@
+---
+title: "Lawn vs low-water landscape: water use calculator"
+description: "Compare how much water a bluegrass lawn, tall fescue, buffalograss, low-water planting or mulch uses each season, and what it costs."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+How much water does a lawn actually use compared with the alternatives? This estimates a season's irrigation for the same area planted different ways, from your climate and water price.
+
+```{=html}
+<div class="hmc" id="lw"></div>
+<script>
+(function () {
+  // season reference evapotranspiration and usable rain, inches
+  const CLIM = { desert: [55, 3], semi: [35, 7], temperate: [27, 14], humid: [26, 22] };
+  // [name, plant factor (share of reference ET), irrigation efficiency]
+  const OPT = [
+    ['Kentucky bluegrass lawn', 0.8, 0.75], ['Tall fescue lawn', 0.7, 0.75], ['Buffalograss or blue grama lawn', 0.4, 0.75],
+    ['Low-water shrubs and perennials (drip)', 0.3, 0.9], ['Native planting, once established', 0.15, 0.9], ['Mulch, gravel or hardscape', 0, 1]
+  ];
+  HM.tool({
+    id: 'lw', step: 'Your yard',
+    inputs: [
+      { k: 'area', l: 'Area', t: 'area' },
+      { k: 'clim', l: 'Climate', t: 'select', d: 'semi', opts: [['desert', 'Hot desert'], ['semi', 'Semi-arid (dry summers, cold winters)'], ['temperate', 'Temperate'], ['humid', 'Humid'], ['custom', 'My own numbers']] },
+      { k: 'eto', l: 'Growing-season reference evapotranspiration', t: 'wdep', d: (u, v) => { const c = CLIM[(v && v.clim) || 'semi'] || CLIM.semi; return u === 'us' ? c[0] : Math.round(c[0] * 25.4 / 5) * 5; }, w: 3, h: 'Local weather networks publish this (ETo). The climate presets are rough.' },
+      { k: 'rain', l: 'Usable rain in the season', t: 'wdep', d: (u, v) => { const c = CLIM[(v && v.clim) || 'semi'] || CLIM.semi; return u === 'us' ? c[1] : Math.round(c[1] * 25.4 / 5) * 5; }, w: 3 },
+      { k: 'price', l: 'Water price', t: 'pwater', w: 3, h: 'From your water bill. Many utilities charge more at higher use.' }
+    ],
+    onChange(k, api) {
+      if (k === 'clim' && CLIM[api.get('clim')]) { const c = CLIM[api.get('clim')], us = api.units() === 'us'; api.setDisp('eto', us ? c[0] : Math.round(c[0] * 25.4 / 5) * 5); api.setDisp('rain', us ? c[1] : Math.round(c[1] * 25.4 / 5) * 5); }
+      if (k === 'eto' || k === 'rain') api.setChoice('clim', 'custom');
+    },
+    compute(v, U) {
+      if (!(v.area > 0) || !(v.eto > 0)) return U.empty('Enter the area and your climate.');
+      const rain = v.rain || 0;
+      const rows = OPT.map(o => {
+        const depth = Math.max(0, o[1] * v.eto - rain) / o[2]; // mm
+        const L = depth * v.area; // litres
+        return { o, depth, L, cost: v.price > 0 ? L / 1000 * v.price : null };
+      });
+      const base = rows[0].L;
+      const g = x => U.us ? `${HM.fmt(x / 3.785411784, 0)} gal` : `${HM.fmt(x / 1000, 1)} m³`;
+      let h = `<div class="step">Irrigation per season for ${U.f(v.area, 'area', 0)}</div><table class="tt"><thead><tr><th>Planting</th><th class="r">Water</th>${v.price > 0 ? '<th class="r">Cost</th>' : ''}</tr></thead><tbody>` +
+        rows.map(r => `<tr><td>${r.o[0]}${r.L < base && base > 0 ? `<br><span class="tag good">${HM.fmt((1 - r.L / base) * 100, 0)}% less</span>` : ''}</td><td class="r">${g(r.L)}<br><span style="color:var(--ink-3)">${U.f(r.depth, 'wdep', 1)}</span></td>${v.price > 0 ? `<td class="r">${U.money(r.cost)}</td>` : ''}</tr>`).join('') + '</tbody></table>';
+      if (rows[0].L === 0) h += U.note('Rain covers all the plants\' needs in this climate, so none of them needs irrigation in an average season.', 'good');
+      h += U.note('Estimates for an average season with efficient watering. Real use is often higher: overwatering, leaks and poor coverage are common. The <a href="catch-cup-test.qmd">catch-cup test</a> shows how efficient your system is.');
+      h += U.note('Low-water plantings use most of their water in the first one or two years while they establish.', 'good');
+      return { html: h, work: [`Water need = plant factor × reference ET; irrigation = (need − usable rain) ÷ watering efficiency`].concat(rows.map(r => `${r.o[0]}: (${r.o[1]} × ${U.f(v.eto, 'wdep', 1)} − ${U.f(rain, 'wdep', 1)}) ÷ ${r.o[2]} = ${U.f(r.depth, 'wdep', 1)} → × ${U.f(v.area, 'area', 0)} = ${g(r.L)}`)) };
+    }
+  });
+})();
+</script>
+```
+
+## How this is worked out
+
+Plants lose water through their leaves at a rate set mainly by weather: sun, heat, wind and dry air. Weather networks express that as **reference evapotranspiration (ETo)**: what a well-watered grass would use. Each planting uses a share of it: bluegrass close to 80%, buffalograss under half, established low-water shrubs a third or less. Subtract the rain the plants can use, allow for watering that's never perfectly efficient, and you have the irrigation.
+
+The factors used here are typical values for planning. They're useful for comparing options, not for setting a controller: for that, use the [catch-cup test](catch-cup-test.qmd).

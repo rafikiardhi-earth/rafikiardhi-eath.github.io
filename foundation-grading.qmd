@@ -1,0 +1,62 @@
+---
+title: "Foundation grading check"
+description: "Does the ground slope away from your house enough? Check the grade with a string line and a level, and work out how much fill soil it takes to fix."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+Water pooling against a foundation is one of the most expensive problems a house can have. The common building-code guideline is that ground should fall at least **6 inches over the first 10 feet** from the house (about 5%). You can check it in an afternoon.
+
+**How to measure:** drive a stake against the foundation and another 10 ft (3 m) out. Tie a string between them and level it with a line level. At each stake, measure from the string down to the ground. The drop is the outer measurement minus the inner one. Repeat every 10–15 ft along each wall.
+
+```{=html}
+<div class="hmc" id="fg"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'fg', step: 'Your measurements',
+    inputs: [
+      { k: 'dist', l: 'Distance between the stakes', t: 'len', d: { us: 10, si: 3 }, w: 3 },
+      { k: 'wall', l: 'Length of this wall', t: 'len', w: 3 },
+      { k: 'drops', l: 'Drop at each spot, comma-separated (use a minus sign if the ground rises away from the house)', t: 'list', of: 'dep', ph: u => u === 'us' ? 'e.g. 6.5, 4, 1, -1' : 'e.g. 16, 10, 2.5, -2' }
+    ],
+    compute(v, U) {
+      const ds = v.drops || [];
+      if (!(v.dist > 0) || !ds.length) return U.empty('Enter the stake distance and at least one drop.');
+      const need = 0.05 * v.dist; // m
+      const seg = v.wall > 0 ? v.wall / ds.length : null;
+      let vol = 0, bad = 0;
+      const rows = ds.map((d, i) => {
+        const s = d / v.dist * 100, ok = d >= need - 1e-6;
+        if (!ok) { bad++; if (seg) vol += (need - d) * v.dist / 2 * seg; }
+        return `<tr><td>${i + 1}</td><td>${U.f(d, 'dep', 1)}</td><td>${HM.fmt(s, 1)}%</td><td>${ok ? '<span class="tag good">OK</span>' : d <= 0 ? '<span class="tag bad">Slopes toward house</span>' : `<span class="tag warn">Raise ${U.f(need - d, 'dep', 1)}</span>`}</td></tr>`;
+      });
+      let h = bad === 0 ? U.big('Result', 'Grade looks good', `Every spot falls at least ${U.f(need, 'dep', 1)} over ${U.f(v.dist, 'len', 0)}.`)
+        : U.big('Result', `${bad} of ${ds.length} spots need work`, `The guideline is a fall of at least ${U.f(need, 'dep', 1)} over ${U.f(v.dist, 'len', 0)}.`);
+      h += `<table class="tt"><thead><tr><th>Spot</th><th>Drop</th><th>Slope</th><th></th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+      const work = [`Required drop = 5% × ${U.f(v.dist, 'len', 1)} = ${U.f(need, 'dep', 1)}`];
+      if (bad && seg) {
+        const order = vol * 1.25;
+        h += U.kv([['Fill soil to fix (approx.)', `${U.f(order, 'vol', 2)} (${U.f(order, 'cuft', 0)})`]]);
+        work.push(`Each low spot is raised at the wall and tapered to nothing at the outer stake: a wedge of (shortfall × ${U.f(v.dist, 'len', 1)} ÷ 2) × ${U.f(seg, 'len', 1)} of wall`, `Total wedge volume = ${U.f(vol, 'vol', 2)}; +25% for compaction = ${U.f(order, 'vol', 2)}`);
+      } else if (bad) h += U.note('Enter the wall length to estimate how much fill it takes.');
+      if (bad) {
+        h += `<h3>How to fix it</h3><ul class="plain"><li>Build the slope with a <strong>compactable, clay-rich fill</strong>, tamped in layers. Topsoil, mulch and sand let water straight through to the foundation.</li><li>Finish with a thin layer of topsoil to grow on.</li><li>Keep at least 6 in (15 cm) between the soil and siding or any wood, and never bury weep holes or vents. If raising the soil would break this rule, use a swale (a shallow channel) to carry water away instead.</li><li>Extend downspouts at least 5–10 ft (1.5–3 m) from the house.</li></ul>`;
+      }
+      h += U.note('Local codes and site conditions vary. If water is already getting into a basement, or the house sits close to a property line, get a professional to look at it.');
+      return { html: h, work };
+    }
+  });
+})();
+</script>
+```
+
+## Other signs of a grading problem
+
+- Water standing next to the foundation after rain or irrigation.
+- Mulch or soil piled up against the siding, often built up over years.
+- Downspouts that empty right at the wall.
+- Patios, walks or window wells that have settled so they tip toward the house.
+- Damp patches, efflorescence (white crust) or musty smells in a basement or crawlspace.
+
+Most of these are cheap to fix compared with foundation repairs.

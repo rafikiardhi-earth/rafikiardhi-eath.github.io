@@ -1,0 +1,71 @@
+---
+title: "Raised bed and planter soil calculator"
+description: "How much soil to fill raised beds, pots and tree planters, in bags or bulk, and how much soil a tree really needs to grow well."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+Filling raised beds and big planters takes more soil than most people expect, and bags add up fast. This works out the volume for beds, round pots and tree planters, and shows how to cut the cost of deep beds.
+
+```{=html}
+<div class="hmc" id="pl"></div>
+<script>
+(function () {
+  const CUFT = 0.0283168466, YD3 = 0.764554858;
+  HM.tool({
+    id: 'pl', step: 'Container',
+    inputs: [
+      { k: 'shape', l: 'Shape', t: 'select', d: 'bed', opts: [['bed', 'Rectangular raised bed or planter box'], ['round', 'Round pot or planter'], ['tree', 'How much soil does a tree need?']] },
+      { k: 'L', l: 'Length', t: 'len', w: 3, show: v => v.shape === 'bed' },
+      { k: 'W', l: 'Width', t: 'len', w: 3, show: v => v.shape === 'bed' },
+      { k: 'D1', l: 'Diameter at the top', t: 'dia', w: 3, show: v => v.shape === 'round' },
+      { k: 'D2', l: 'Diameter at the bottom (if tapered)', t: 'dia', w: 3, show: v => v.shape === 'round' },
+      { k: 'H', l: 'Soil depth', t: 'dia', d: { us: 12, si: 30 }, w: 3, show: v => v.shape !== 'tree', h: 'Fill to about 1 in (2–3 cm) below the rim.' },
+      { k: 'n', l: 'How many', t: 'num', d: 1, w: 3, show: v => v.shape !== 'tree' },
+      { k: 'fill', l: 'Bottom filler (for beds deeper than about 18 in)', t: 'select', d: '0', show: v => v.shape === 'bed', opts: [['0', 'None: all soil'], ['25', 'Bottom quarter with logs, branches or native soil'], ['33', 'Bottom third with logs, branches or native soil']], h: 'Most vegetable roots work in the top 12–18 in. Filling the bottom of deep beds with untreated logs and branches or ordinary soil from the yard saves money. Woody fill settles as it rots, so top up each year.' },
+      { k: 'canopy', l: 'Expected canopy width when mature', t: 'len', show: v => v.shape === 'tree', h: 'From the plant tag or a nursery reference. Small trees 15–20 ft, medium 25–35 ft, large 40 ft or more.' },
+      { k: 'bag', l: 'Bag size', t: 'cuft', d: { us: 1.5, si: 50 }, show: v => v.shape !== 'tree' }
+    ],
+    compute(v, U) {
+      if (v.shape === 'tree') {
+        if (!(v.canopy > 0)) return U.empty('Enter the mature canopy width.');
+        const r = v.canopy / 2, crown = Math.PI * r * r; // m²
+        const ft2 = crown / 0.09290304, need = ft2 * 2 * CUFT; // 2 ft³ soil per ft² crown
+        return {
+          html: U.big('Soil the roots need', U.f(need, 'vol', 1), `about ${HM.fmt(need / CUFT, 0)} ft³, or a bed ${U.us ? HM.fmt(Math.sqrt(need / CUFT / 3), 0) + ' ft square and 3 ft deep' : HM.fmt(Math.sqrt(need / 0.9), 1) + ' m square and 0.9 m deep'}.`) +
+            U.note('That\'s why trees in small planters and sidewalk cut-outs stay small and short-lived. If a planter can\'t hold this much, choose a smaller tree, or connect the planter to open soil (structural soil or soil cells under paving).') +
+            U.note('In open ground, roots spread far beyond the canopy, mostly in the top 12–18 in. Protect that zone from compaction.', 'good'),
+          work: [`Mature crown area = π × (${U.f(v.canopy, 'len', 1)} ÷ 2)² = ${U.f(crown, 'area', 0)}`, `Guideline: about 2 ft³ of good soil per ft² of crown (0.6 m³ per m²) → ${HM.fmt(ft2, 0)} × 2 = ${HM.fmt(need / CUFT, 0)} ft³ = ${U.f(need, 'vol', 1)}`]
+        };
+      }
+      const n = v.n > 0 ? Math.round(v.n) : 1;
+      let V1, w;
+      if (v.shape === 'bed') {
+        if (!(v.L > 0) || !(v.W > 0) || !(v.H > 0)) return U.empty('Enter the length, width and depth.');
+        V1 = v.L * v.W * v.H; w = `${U.f(v.L, 'len')} × ${U.f(v.W, 'len')} × ${U.f(v.H, 'dia')} = ${U.f(V1, 'cuft', 1)} each`;
+      } else {
+        if (!(v.D1 > 0) || !(v.H > 0)) return U.empty('Enter the diameter and depth.');
+        const r1 = v.D1 / 2, r2 = (v.D2 > 0 ? v.D2 : v.D1) / 2;
+        V1 = Math.PI * v.H / 3 * (r1 * r1 + r1 * r2 + r2 * r2);
+        w = v.D2 > 0 ? `Tapered pot: π × depth ÷ 3 × (R² + R·r + r²) = ${U.f(V1, 'cuft', 2)} each` : `π × (${U.f(v.D1, 'dia')} ÷ 2)² × ${U.f(v.H, 'dia')} = ${U.f(V1, 'cuft', 2)} each`;
+      }
+      const fillPct = v.shape === 'bed' ? +v.fill : 0;
+      const Vsoil = V1 * n * (1 - fillPct / 100), Vorder = Vsoil * 1.2, bags = Math.ceil(Vorder / (v.bag || 1) - 1e-9);
+      const small = Vorder < 0.2;
+      let h = U.big('You need', small ? U.f(Vorder, 'cuft', 1) : U.f(Vorder, 'vol', 2), `${small ? (U.us ? `about ${HM.fmt(Vorder / 0.000946353, 0)} quarts` : '') : `${U.f(Vorder, 'cuft', 0)}`}, including 20% extra because the mix settles after filling and watering.`);
+      h += U.kv([['Or in bags', `${bags} × ${U.f(v.bag, 'cuft', 1)}`], fillPct ? ['Volume saved by bottom filler', U.f(V1 * n * fillPct / 100 * 1.2, 'vol', 2)] : null]);
+      if (!small && Vorder > 0.75) h += U.note('At this size a bulk delivery of garden mix is usually much cheaper than bags. Compare in the <a href="materials-calculator.qmd?m=gardenmix">materials calculator</a>.', 'good');
+      h += U.note('For pots, use a potting mix, not garden soil: soil packs down in containers and drains poorly. Raised beds can use a garden or raised-bed mix.');
+      return { html: h, work: [w, n > 1 ? `× ${n} = ${U.f(V1 * n, 'cuft', 1)}` : null, fillPct ? `Minus ${fillPct}% bottom filler = ${U.f(Vsoil, 'cuft', 1)}` : null, `+ 20% for settling = ${U.f(Vorder, 'cuft', 1)} (${U.f(Vorder, 'vol', 2)})`, `Bags = ${U.f(Vorder, 'cuft', 1)} ÷ ${U.f(v.bag, 'cuft', 1)} → ${bags}`].filter(Boolean) };
+    }
+  });
+})();
+</script>
+```
+
+## Tips for filling beds
+
+- **A raised bed 4 × 8 ft and 12 in deep holds about 1.2 cubic yards** (32 ft³) once settled. That's over 20 bags of 1.5 ft³.
+- **Fill in layers and water each one** so the soil settles before you plant.
+- **Top up each spring.** Beds sink as organic matter breaks down; an inch or two of compost each year keeps them full.
+- **Avoid treated wood scraps** as filler, and anything painted or glued.

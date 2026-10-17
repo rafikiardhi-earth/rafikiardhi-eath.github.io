@@ -1,0 +1,142 @@
+---
+title: "DIY soil tests: texture, drainage and the ribbon test"
+description: "Three free soil tests you can do at home with a jar, a shovel and your hands: find your soil texture, how fast it drains, and what that means for watering and planting."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+Three simple tests tell you most of what matters about your soil: what it's made of (texture) and how fast water moves through it (drainage). Texture decides how often to water, how fast water soaks in, and how the soil behaves when you dig.
+
+## Jar test (texture)
+
+1. Fill a straight-sided jar about one-third with soil from root depth (pick out stones, roots and debris).
+2. Add water until the jar is about two-thirds full, plus a teaspoon of dishwasher detergent or salt-free water softener to separate the particles.
+3. Shake hard for 3–5 minutes, then set it down and start a timer.
+4. **After 1 minute**, mark the height of the settled layer: that's the sand.
+5. **After 2 hours**, mark the height again: sand plus silt.
+6. **After 2 days** (when the water clears), mark the final height: everything, including clay.
+
+```{=html}
+<div class="hmc" id="jar"></div>
+<script>
+function usdaTexture(S, Si, C) {
+  if (Si + 1.5 * C < 15) return 'sand';
+  if (Si + 2 * C < 30) return 'loamy sand';
+  if ((C >= 7 && C < 20 && S > 52) || (C < 7 && Si < 50)) return 'sandy loam';
+  if (C >= 7 && C < 27 && Si >= 28 && Si < 50 && S <= 52) return 'loam';
+  if (Si >= 80 && C < 12) return 'silt';
+  if ((Si >= 50 && C >= 12 && C < 27) || (Si >= 50 && Si < 80 && C < 12)) return 'silt loam';
+  if (C >= 20 && C < 35 && Si < 28 && S > 45) return 'sandy clay loam';
+  if (C >= 27 && C < 40 && S > 20 && S <= 45) return 'clay loam';
+  if (C >= 27 && C < 40 && S <= 20) return 'silty clay loam';
+  if (C >= 35 && S > 45) return 'sandy clay';
+  if (C >= 40 && Si >= 40) return 'silty clay';
+  return 'clay';
+}
+const TEXMEAN = {
+  'sand': 'Drains fast and holds little water or nutrients. Water often in small amounts; compost helps it hold more.',
+  'loamy sand': 'Drains fast and dries out quickly. Water more often in smaller amounts; compost helps.',
+  'sandy loam': 'Easy to work and drains well, with moderate water holding. Good for most plants.',
+  'loam': 'A good balance: holds water and nutrients but drains freely. Suits most plants.',
+  'silt loam': 'Holds plenty of water and is fertile, but crusts and compacts easily. Avoid working it wet; mulch the surface.',
+  'silt': 'Holds water well but crusts and compacts easily. Keep it covered and avoid working it wet.',
+  'sandy clay loam': 'Holds water and nutrients; can be firm when dry. Takes water in moderately slowly.',
+  'clay loam': 'Holds water and nutrients well but takes water in slowly and compacts easily. Water in short cycles; don\'t dig it wet.',
+  'silty clay loam': 'Holds a lot of water and takes it in slowly. Prone to compaction and crusting.',
+  'sandy clay': 'Sticky when wet, hard when dry; slow to take in water.',
+  'silty clay': 'Holds a lot of water but takes it in very slowly. Water in short cycles; drainage may be poor.',
+  'clay': 'Holds a lot of water and nutrients but takes water in very slowly, compacts easily and stays wet. Water in short cycles, don\'t dig it wet, and don\'t add a little sand (it makes it denser).'
+};
+(function () {
+  HM.tool({
+    id: 'jar', step: 'Your marks', units: false,
+    inputs: [
+      { k: 'a', l: 'Height after 1 minute (sand)', t: 'num', w: 2 },
+      { k: 'b', l: 'After 2 hours (sand + silt)', t: 'num', w: 2 },
+      { k: 'c', l: 'After 2 days (total)', t: 'num', w: 2 },
+      { t: 'info', h: 'Any unit works (inches, cm or mm), as long as all three use the same one.' }
+    ],
+    compute(v, U) {
+      if (!(v.a >= 0) || !(v.b > 0) || !(v.c > 0)) return U.empty('Enter all three heights.');
+      if (!(v.a <= v.b && v.b <= v.c)) return U.empty('Each mark should be at or above the one before: 1 minute ≤ 2 hours ≤ 2 days.');
+      const S = v.a / v.c * 100, Si = (v.b - v.a) / v.c * 100, C = 100 - S - Si;
+      const t = usdaTexture(S, Si, C);
+      return {
+        html: U.big('Your soil is', t.charAt(0).toUpperCase() + t.slice(1), TEXMEAN[t]) + U.kv([['Sand', HM.fmt(S, 0) + '%'], ['Silt', HM.fmt(Si, 0) + '%'], ['Clay', HM.fmt(C, 0) + '%']]) +
+          U.note('The jar test is approximate: settled layers pack differently from the particles\' true proportions. If the result surprises you, cross-check with the ribbon test below.') +
+          U.note('Next: use your texture in the <a href="cycle-and-soak.qmd">cycle-and-soak scheduler</a> to set sprinkler run times.', 'good'),
+        work: [`Sand = ${HM.fmt(v.a, 2)} ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(S, 1)}%`, `Silt = (${HM.fmt(v.b, 2)} − ${HM.fmt(v.a, 2)}) ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(Si, 1)}%`, `Clay = 100 − sand − silt = ${HM.fmt(C, 1)}%`, `Texture class from the USDA soil texture triangle: ${t}`]
+      };
+    }
+  });
+})();
+</script>
+```
+
+## Ribbon test (texture by feel)
+
+Take a walnut-sized lump of soil, wet it until it's like putty, and work it in your hand. Then press it between your thumb and finger, pushing it up into a ribbon until it breaks under its own weight.
+
+```{=html}
+<div class="hmc" id="rib"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'rib', step: 'What you feel', units: false, hash: false,
+    inputs: [
+      { k: 'ball', l: 'Does the moist soil hold together in a ball?', t: 'seg', d: 'yes', opts: [['no', 'No, it falls apart'], ['yes', 'Yes']] },
+      { k: 'rib', l: 'How long a ribbon before it breaks?', t: 'seg', d: 'short', opts: [['none', 'No ribbon'], ['short', 'Under 1 in (2.5 cm)'], ['mid', '1–2 in (2.5–5 cm)'], ['long', 'Over 2 in (5 cm)']], show: v => v.ball === 'yes' },
+      { k: 'feel', l: 'Rub a little in your palm with water. It feels…', t: 'seg', d: 'neither', opts: [['gritty', 'Gritty'], ['smooth', 'Smooth, floury'], ['neither', 'Neither stands out']], show: v => v.ball === 'yes' && v.rib !== 'none' }
+    ],
+    compute(v, U) {
+      let t;
+      if (v.ball === 'no') t = 'sand';
+      else if (v.rib === 'none') t = 'loamy sand';
+      else {
+        const M = { short: { gritty: 'sandy loam', smooth: 'silt loam', neither: 'loam' }, mid: { gritty: 'sandy clay loam', smooth: 'silty clay loam', neither: 'clay loam' }, long: { gritty: 'sandy clay', smooth: 'silty clay', neither: 'clay' } };
+        t = M[v.rib][v.feel];
+      }
+      return U.big('Your soil is probably', t.charAt(0).toUpperCase() + t.slice(1), TEXMEAN[t]);
+    }
+  });
+})();
+</script>
+```
+
+## Drainage (percolation) test
+
+1. Dig a hole about 12 in (30 cm) deep and 6–12 in wide.
+2. Fill it with water and let it drain completely. This wets the surrounding soil; skip it and the result will be too fast.
+3. Fill it again. Measure the water depth, wait a set time (an hour is easy), and measure again.
+
+```{=html}
+<div class="hmc" id="perc"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'perc', step: 'Your result', hash: false,
+    inputs: [
+      { k: 'drop', l: 'How far the water level dropped', t: 'wdep', w: 3 },
+      { k: 'min', l: 'In how many minutes', t: 'min', d: 60, w: 3 }
+    ],
+    compute(v, U) {
+      if (!(v.drop >= 0) || !(v.min > 0)) return U.empty('Enter the drop and the time.');
+      const r = v.drop / (v.min / 60), inhr = r / 25.4;
+      let g, m;
+      if (inhr > 4) { g = ['warn', 'Very fast']; m = 'Water drains away quickly, taking nutrients with it. Plants dry out fast: mulch, add compost, and water little and often.'; }
+      else if (inhr >= 1) { g = ['good', 'Good']; m = 'Drains well. Suits most plants, and good for a rain garden.'; }
+      else if (inhr >= 0.5) { g = ['good', 'Moderate']; m = 'Adequate for most plants. A rain garden will work if sized generously.'; }
+      else if (inhr >= 0.1) { g = ['warn', 'Slow']; m = 'Poor drainage: roots of many plants suffer after heavy rain. Choose plants that tolerate wet soil, plant slightly high, and avoid overwatering. A rain garden would need an underdrain.'; }
+      else { g = ['bad', 'Very slow']; m = 'Water barely moves. Look for a compacted or hard layer below; amendments won\'t fix this. Raised beds, regrading or drainage may be needed.'; }
+      return {
+        html: U.big('Drains at', U.f(r, 'rate', 2), '') + `<p><span class="tag ${g[0]}">${g[1]}</span></p><p class="sub">${m}</p>` +
+          U.note(`Planning a rain garden? Use this rate in the <a href="rain-garden.qmd?ir=${HM.fmt(r, 2)}">rain garden calculator</a>.`, 'good'),
+        work: [`Rate = ${U.f(v.drop, 'wdep', 2)} ÷ ${HM.fmt(v.min / 60, 2)} hr = ${U.f(r, 'rate', 2)}`, 'Bands (in/hr): over 4 very fast, 1–4 good, 0.5–1 moderate, 0.1–0.5 slow, under 0.1 very slow']
+      };
+    }
+  });
+})();
+</script>
+```
+
+If the hole still holds water the next day, test again somewhere else and dig deeper to look for a dense or cemented layer. Drainage problems are usually about a layer below, not the soil you plant in.

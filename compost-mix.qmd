@@ -1,0 +1,65 @@
+---
+title: "Compost mix calculator (greens and browns)"
+description: "Balance your compost pile: estimate the carbon-to-nitrogen ratio and moisture of your greens and browns, and what to add to fix a smelly or slow pile."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+A compost pile works fastest at a carbon-to-nitrogen (C:N) ratio of about 25–35 and moisture like a wrung-out sponge. Too much nitrogen (greens) and it smells; too much carbon (browns) and it barely heats up. Enter what you're adding, by the bucket or any equal measure.
+
+```{=html}
+<div class="hmc" id="cm"></div>
+<script>
+(function () {
+  // [name, N % of dry weight, C:N, moisture %, lb per cubic yard as collected]
+  const M = {
+    none: ['—', 0, 0, 0, 0],
+    grass: ['Grass clippings (fresh)', 2.4, 17, 82, 400], food: ['Kitchen scraps', 2.5, 15, 80, 900], coffee: ['Coffee grounds', 2.1, 20, 60, 800],
+    green: ['Garden plants and weeds (green)', 2.0, 25, 70, 500], horse: ['Horse manure with bedding', 1.6, 30, 72, 1100], chicken: ['Chicken manure', 3.0, 10, 70, 1200],
+    leaves: ['Dry leaves', 0.9, 54, 38, 200], straw: ['Straw', 0.7, 80, 12, 80], chips: ['Wood chips', 0.1, 500, 40, 450],
+    sawdust: ['Sawdust (untreated)', 0.1, 450, 30, 400], card: ['Cardboard (shredded)', 0.1, 560, 8, 250], paper: ['Newspaper (shredded)', 0.1, 500, 5, 150]
+  };
+  const opts = Object.entries(M).map(([k, m]) => [k, m[0]]);
+  const rows = [['grass', 2], ['leaves', 3], ['none', 0], ['none', 0], ['none', 0]];
+  const inputs = [];
+  rows.forEach((r, i) => { inputs.push({ k: 'm' + i, l: i === 0 ? 'Material' : '', t: 'select', d: r[0], opts, w: 3 }, { k: 'q' + i, l: i === 0 ? 'Parts (buckets)' : '', t: 'num', d: r[1] || null, w: 3 }); });
+  HM.tool({
+    id: 'cm', step: 'What goes in', units: false, inputs,
+    compute(v, U) {
+      let C = 0, N = 0, W = 0, wet = 0, list = [];
+      for (let i = 0; i < 5; i++) {
+        const m = M[v['m' + i]], q = v['q' + i];
+        if (!m || !m[4] || !(q > 0)) continue;
+        const mass = q * m[4], dry = mass * (1 - m[3] / 100), n = dry * m[1] / 100;
+        N += n; C += n * m[2]; W += mass * m[3] / 100; wet += mass;
+        list.push(`${HM.fmt(q, 1)} part${q === 1 ? '' : 's'} ${m[0].toLowerCase()}: C:N ${m[2]}, ${m[3]}% moisture`);
+      }
+      if (!(N > 0)) return U.empty('Add at least one material and how much of it.');
+      const cn = C / N, moist = W / wet * 100;
+      let tag, msg;
+      if (cn < 20) { tag = ['bad', 'Too green']; msg = 'Too much nitrogen: the pile will smell of ammonia and slump. Add browns (leaves, straw, shredded cardboard).'; }
+      else if (cn < 25) { tag = ['warn', 'A little green']; msg = 'Close. A few more browns would reduce odour and nitrogen loss.'; }
+      else if (cn <= 35) { tag = ['good', 'Balanced']; msg = 'A good mix: it should heat up within a few days if it\'s moist and big enough (about 3 ft or 1 m each way).'; }
+      else if (cn <= 50) { tag = ['warn', 'A little brown']; msg = 'Will compost, but slowly. Add some greens (clippings, kitchen scraps, manure).'; }
+      else { tag = ['bad', 'Too brown']; msg = 'Too much carbon: the pile will stay cold and take a year or more. Add greens.'; }
+      const mt = moist < 40 ? ['warn', 'Dry: add water as you build it'] : moist <= 65 ? ['good', 'About right'] : ['warn', 'Wet: add dry browns and turn it'];
+      return {
+        html: U.big('C:N ratio', `${HM.fmt(cn, 0)} : 1`, '') + `<p><span class="tag ${tag[0]}">${tag[1]}</span></p><p class="sub">${msg}</p>` +
+          U.kv([['Estimated moisture', `${HM.fmt(moist, 0)}% <span class="tag ${mt[0]}">${mt[1]}</span>`]]) +
+          U.note('These are typical values: real materials vary a lot. Use the squeeze test too: a handful should feel like a wrung-out sponge, with a drop or two of water.', 'good'),
+        work: list.concat([`Each material's dry weight = parts × typical weight × (1 − moisture); nitrogen = dry weight × N%; carbon = nitrogen × its C:N`, `Mix C:N = total carbon ÷ total nitrogen = ${HM.fmt(cn, 1)}`, `Moisture = total water ÷ total weight = ${HM.fmt(moist, 0)}%`])
+      };
+    }
+  });
+})();
+</script>
+```
+
+## Greens and browns
+
+- **Greens** (nitrogen-rich, usually wet): grass clippings, kitchen scraps, coffee grounds, fresh garden plants, manure.
+- **Browns** (carbon-rich, usually dry): dry leaves, straw, wood chips, sawdust, cardboard, newspaper.
+
+Note that "parts" are by volume, and materials differ a lot in weight: a bucket of grass clippings weighs several times a bucket of dry leaves. That's why roughly 2–3 buckets of browns to 1 of greens often balances.
+
+**Keep out:** meat, dairy and oily food (attract pests), pet and human waste, diseased plants, weeds with seeds (unless your pile gets hot), and anything treated with herbicide. Some herbicides survive composting and damage vegetables.

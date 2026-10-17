@@ -1,0 +1,80 @@
+---
+title: "Soil pH calculator: lime and sulfur"
+description: "How much lime to raise soil pH, or sulfur to lower it, for your soil type and area. Includes the check most calculators skip: whether lowering pH is realistic at all."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+Changing soil pH takes more material on clay than on sand, and it happens slowly. This estimates how much ground limestone (to raise pH) or elemental sulfur (to lower it) you need, and tells you when lowering pH isn't realistic.
+
+```{=html}
+<div class="hmc" id="ph"></div>
+<script>
+(function () {
+  // lb per 1,000 ft² to change pH by one unit in the top 6 in
+  const LIME = { sand: 30, sandyloam: 45, loam: 60, siltloam: 70, clay: 80 };
+  const SULF = { sand: 10, sandyloam: 13, loam: 17, siltloam: 20, clay: 25 };
+  const OMF = { low: 1, mid: 1.25, high: 1.5 };
+  const LB1000 = 4.88242764; // g/m² per lb/1000 ft²
+  HM.tool({
+    id: 'ph', step: 'Your soil',
+    inputs: [
+      { k: 'cur', l: 'Current pH (from a soil test)', t: 'num', w: 3 },
+      { k: 'tgt', l: 'Target pH', t: 'num', d: 6.5, w: 3, h: 'Most lawns and gardens: 6.0–7.0. Blueberries 4.5–5.5; azaleas and rhododendrons 5.0–6.0.' },
+      { k: 'tex', l: 'Soil texture', t: 'select', d: 'loam', opts: [['sand', 'Sand or loamy sand'], ['sandyloam', 'Sandy loam'], ['loam', 'Loam'], ['siltloam', 'Silt loam'], ['clay', 'Clay loam or clay']] },
+      { k: 'om', l: 'Organic matter', t: 'select', d: 'mid', opts: [['low', 'Low (under 2%)'], ['mid', 'Medium (2–5%)'], ['high', 'High (over 5%)']], h: 'Organic matter resists pH change, so more of it means more material.' },
+      { k: 'fizz', l: 'Vinegar test: does a spoonful of soil fizz in vinegar?', t: 'select', d: 'unk', opts: [['unk', 'Haven\'t tried'], ['no', 'No fizz'], ['yes', 'Yes, it fizzes']], show: v => v.tgt != null && v.cur != null && v.tgt < v.cur },
+      { k: 'lime', l: 'Free lime (calcium carbonate), if your report gives it (%)', t: 'num', show: v => v.fizz === 'yes' && v.tgt < v.cur },
+      { t: 'sec', l: 'Where' },
+      { k: 'site', l: 'Situation', t: 'seg', d: 'lawn', opts: [['lawn', 'Established lawn or bed (spread on top)'], ['new', 'New bed (mixed in)']] },
+      { k: 'area', l: 'Area', t: 'area' }
+    ],
+    compute(v, U) {
+      if (v.cur == null || v.tgt == null) return U.empty('Enter your current pH and target.');
+      if (v.cur < 3 || v.cur > 10 || v.tgt < 3 || v.tgt > 10) return U.empty('pH values are normally between 4 and 9. Check the numbers.');
+      const d = v.tgt - v.cur;
+      if (Math.abs(d) < 0.2) return U.note('Your pH is already at the target. Nothing to add.', 'good');
+      const raise = d > 0, f = OMF[v.om], perUnit = (raise ? LIME : SULF)[v.tex] * f;
+      const rate = perUnit * Math.abs(d); // lb/1000 ft²
+      const maxApp = raise ? (v.site === 'lawn' ? 50 : 100) : (v.site === 'lawn' ? 5 : 20);
+      const apps = Math.ceil(rate / maxApp - 1e-9);
+      const rateSI = rate * LB1000; // g/m²
+      const work = [`${raise ? 'Ground limestone' : 'Elemental sulfur'} to change pH by 1 unit in ${v.tex === 'clay' ? 'clay' : v.tex.replace('loam', ' loam')}: about ${raise ? LIME[v.tex] : SULF[v.tex]} lb per 1,000 ft² (top 6 in)`,
+        `× ${f} for ${v.om === 'low' ? 'low' : v.om === 'mid' ? 'medium' : 'high'} organic matter × ${HM.fmt(Math.abs(d), 1)} units = ${HM.fmt(rate, 0)} lb per 1,000 ft² (${HM.fmt(rateSI / 1000, 2)} kg per m²)`];
+      let h = '';
+      if (!raise && v.fizz === 'yes') {
+        const lp = v.lime > 0 ? v.lime : 1;
+        const soil = 1000 * 0.5 * 80; // lb of soil in top 6 in of 1,000 ft²
+        const sNeed = soil * lp / 100 * 0.32;
+        h += U.big('Not realistic', 'Don\'t try to lower pH', `Fizzing means free lime. Before the pH moves at all, sulfur has to dissolve that lime: about ${U.f(sNeed * LB1000, 'arate', 0)} of sulfur for each 1% of lime${v.lime > 0 ? '' : ' (assuming 1%)'}.`);
+        h += `<h3>What works instead</h3><ul class="plain"><li>Choose plants that like alkaline soil. There are good ones for every purpose.</li><li>For yellowing leaves on iron-hungry plants (maples, oaks, roses), use a chelated iron product made for high-pH soil (EDDHA type).</li><li>Grow acid-loving plants like blueberries in containers or raised beds filled with an acidic mix.</li><li>Organic matter and mulch help nutrient availability even when pH stays high.</li></ul>`;
+        work.push(`Top 6 in of 1,000 ft² ≈ 500 ft³ × 80 lb/ft³ = 40,000 lb of soil`, `${HM.fmt(lp, 1)}% lime = ${HM.fmt(soil * lp / 100, 0)} lb of calcium carbonate; sulfur needed to neutralise it = × 0.32 = ${HM.fmt(sNeed, 0)} lb per 1,000 ft², before any pH change`);
+        return { html: h, work };
+      }
+      const label = raise ? 'ground limestone' : 'elemental sulfur';
+      if (v.area > 0) {
+        const kg = rateSI * v.area / 1000;
+        h += U.big('Apply', U.f(kg, 'mass', 1), `of ${label} over ${U.f(v.area, 'area', 0)} (${U.f(rateSI, 'arate', 1)}).`);
+        work.push(`For your area: ${U.f(rateSI, 'arate', 1)} × ${U.f(v.area, 'area', 0)} = ${U.f(kg, 'mass', 1)}`);
+      } else h += U.big('Apply', U.f(rateSI, 'arate', 1), `of ${label}. Enter your area for the total.`);
+      if (apps > 1) h += U.note(`Split this into ${apps} applications of no more than ${U.f(maxApp * LB1000, 'arate', 0)} each${raise ? ', spring and fall' : ', several months apart'}. ${raise ? 'Heavy single doses on lawns can clump and burn.' : 'Too much sulfur at once burns roots and grass.'}`);
+      if (v.site === 'lawn') h += U.note(`Spread on the surface and water in. It works slowly from the top down, so a surface application takes a year or more to fully act${raise ? '; core aerating first speeds it up' : ''}.`);
+      else h += U.note('Mix it into the top 6 in. It still takes weeks (lime) to months (sulfur) to change pH fully.');
+      if (Math.abs(d) > 1.5) h += U.note('That is a big change. Aim for part of it, then retest in 6–12 months before adding more.', 'bad');
+      if (!raise && v.fizz === 'unk') h += U.note('Do the vinegar test first: if your soil fizzes, sulfur will be wasted.', 'bad');
+      if (raise && v.tex !== 'sand' && v.cur > 6) h += U.note('A small rise like this rarely matters for most plants. Only lime if your plants or soil test call for it.');
+      h += U.note(raise ? 'If your soil test gives a lime requirement (often from a "buffer pH"), use that instead: it is more accurate than this estimate.' : 'Use elemental sulfur, not aluminum sulfate, which can harm roots. Iron sulfate works faster but needs about 6 times as much by weight.', 'good');
+      return { html: h, work };
+    }
+  });
+})();
+</script>
+```
+
+## Why pH changes slowly
+
+Soil is buffered: clay and organic matter hold large reserves of acidity (or alkalinity) that resist change. That's why clay needs two or three times as much lime as sand, and why the same amount works slowly.
+
+**Lowering pH in alkaline soils is a special case.** Many soils in dry regions contain free lime (calcium carbonate), which fizzes in vinegar. Any acid you add, including sulfur as it breaks down, is used up dissolving that lime before the pH moves. Even 1% lime takes well over 100 lb of sulfur per 1,000 ft² just to neutralise. That's why gardeners in those regions do better choosing plants suited to their soil.
+
+The rates here are typical extension values for the top 6 inches. A lab "lime requirement" or "buffer pH" result is more accurate for your soil when you have one.

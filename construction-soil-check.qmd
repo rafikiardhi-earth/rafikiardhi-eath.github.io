@@ -1,0 +1,53 @@
+---
+title: "New-build yard soil check"
+description: "Plants struggling around a new house? Check whether the builder left thin topsoil over compacted subsoil, what to do about it, and what to ask your builder."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+On many new-build lots, the topsoil is scraped off during construction, the subsoil is compacted by heavy machinery, and a thin layer of soil is spread back on top before the sod goes down. Lawns and plants then struggle for years. A few simple checks show whether that's what happened.
+
+**You'll need:** a shovel, a long screwdriver, and moist (not soggy) soil, a day or two after rain or watering.
+
+```{=html}
+<div class="hmc" id="cn"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'cn', step: 'What you find', units: false,
+    inputs: [
+      { k: 'top', l: 'Dig a hole 12 in (30 cm) deep. How deep is the dark, crumbly topsoil before it changes to lighter, denser subsoil?', t: 'select', d: 'unk', opts: [['unk', 'Haven\'t checked'], ['0', 'Under 2 in (5 cm)'], ['2', '2–4 in (5–10 cm)'], ['4', '4–6 in (10–15 cm)'], ['6', 'More than 6 in (15 cm)']] },
+      { k: 'sd', l: 'Push a screwdriver straight into moist soil. It…', t: 'select', d: 'unk', opts: [['unk', 'Haven\'t checked'], ['easy', 'Goes in easily to the handle'], ['hard', 'Stops or gets very hard after 2–4 in'], ['no', 'Barely goes in']] },
+      { k: 'pud', l: 'Water stands on the lawn or beds for more than a day after rain', t: 'check', d: false },
+      { k: 'deb', l: 'You found construction debris in the soil (concrete, drywall, wire, wood scraps, gravel)', t: 'check', d: false },
+      { k: 'roots', l: 'Sod roots stop at the old sod layer, and the sod lifts up like a carpet', t: 'check', d: false },
+      { k: 'grade', l: 'Ground near the house is flat or slopes toward it', t: 'check', d: false },
+      { k: 'warr', l: 'The house is still under the builder\'s warranty', t: 'check', d: false }
+    ],
+    compute(v, U) {
+      const find = [], fix = [], ask = [];
+      let score = 0;
+      if (v.top === '0' || v.top === '2') { score += 2; find.push(`Thin topsoil (${v.top === '0' ? 'under 2 in' : '2–4 in'}). Lawns and beds do best with at least 4–6 in of loose topsoil over subsoil roots can enter.`); fix.push('For beds: loosen the subsoil 8–12 in deep and mix in compost (about 1–2 in) before planting. For lawns, aerate yearly and top-dress with compost; if renovating, loosen the subsoil and add topsoil mixed into it, not just spread on top.'); ask.push('How much topsoil was specified for the lot, and how deep was it replaced?'); }
+      if (v.sd === 'hard' || v.sd === 'no') { score += 2; find.push('Compacted soil. Roots and water can\'t get through, so plants stay shallow and dry out or drown.'); fix.push('Break up compaction before planting: deep digging or a broadfork for beds, rental tiller or ripping for larger areas (when the soil is moist, not wet). On existing lawns, core aerate once or twice a year.'); ask.push('Was the subsoil loosened (ripped or tilled) before topsoil and sod went down?'); }
+      if (v.roots) { score += 1; find.push('Sod roots not growing into the soil below, a sign of a layer the roots won\'t cross (compaction, or sod laid on very different soil).'); fix.push('Core aerate and water deeply but less often to encourage roots down.'); }
+      if (v.pud) { score += 2; find.push('Standing water. Compacted subsoil acts like a floor; water perches on top of it.'); fix.push('Loosening compaction often fixes it. If not, look at grading and where downspouts empty; see the <a href="rain-garden.qmd">rain garden calculator</a>.'); }
+      if (v.deb) { score += 1; find.push('Construction debris. Concrete washout and drywall can raise pH and salts; debris blocks roots.'); fix.push('Remove debris where you\'ll plant. A <a href="soil-test-translator.qmd">soil test</a> will show if pH or salts are affected.'); ask.push('Can you remove buried construction debris from the yard?'); }
+      if (v.grade) { score += 2; find.push('Poor grading near the house. This matters more than anything else on this list.'); fix.push('Check it properly with the <a href="foundation-grading.qmd">foundation grading check</a>.'); ask.push('Does the grading meet the approved grading plan, and can I see the grading certificate?'); }
+      const unk = v.top === 'unk' && v.sd === 'unk';
+      let h;
+      if (!find.length) h = U.big('Result', unk ? 'Do the two checks above' : 'No major problems found', unk ? 'The topsoil depth and screwdriver tests tell you most of what you need.' : 'Your soil looks reasonable. Plant problems may be watering, plant choice or pests.');
+      else h = U.big('Result', score >= 4 ? 'Typical construction damage' : 'Some problems', `${find.length} issue${find.length > 1 ? 's' : ''} found.`) +
+        `<h3>What you found</h3><ul class="plain">${find.map(x => `<li>${x}</li>`).join('')}</ul><h3>What to do</h3><ul class="plain">${fix.map(x => `<li>${x}</li>`).join('')}</ul>`;
+      if (ask.length) h += `<h3>${v.warr ? 'Ask your builder (you\'re under warranty)' : 'Questions for your builder'}</h3><ul class="plain">${ask.map(x => `<li>${x}</li>`).join('')}</ul>` + (v.warr ? U.note('Take dated photos of your test holes with a tape measure in them, and put your questions in writing.', 'good') : '');
+      return h;
+    }
+  });
+})();
+</script>
+```
+
+## Why this matters
+
+Topsoil is the layer where roots, water and soil life do most of their work. Subsoil compacted by trucks and graders can be as dense as a road base: roots can't enter it and water can't drain through it. Sod laid on a thin layer over it looks fine for a season, then thins out, browns in summer and floods after storms.
+
+Fixing it costs far less before planting than after, so check before you invest in landscaping.
