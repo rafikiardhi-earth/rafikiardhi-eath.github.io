@@ -1,14 +1,10 @@
 ---
-title: "Publications"
+title: "Research"
 ---
 
 A full, current list is on [ORCID](https://orcid.org/0000-0002-5187-9946) and [Google Scholar](https://scholar.google.com/citations?hl=en&user=5UqrBX8AAAAJ).
 
 ## Selected publications
-
-<!-- Add 5–8 papers, newest first. Format:
-Author A, **Flynn T**, Author C (Year). Title. *Journal*, volume, pages. [doi](https://doi.org/...)
--->
 
 - Flynn, T., Rasaei, Z., Rostecki, R. (2026). Smoothing Earth's surface: The complexity of soil texture class transitions. *Science of the Total Environment*. [https://doi.org/10.1016/j.scitotenv.2026.181621](https://doi.org/10.1016/j.scitotenv.2026.181621)
 - Qasha, V., Manyevere, A., Flynn, T., Mashamaite, V. (2026). Active ecological restoration drives rapid soil chemistry and carbon change in Mistbelt Afromontane forests. *Trees Forests and People*. [https://doi.org/10.1016/j.tfp.2026.101321](https://doi.org/10.1016/j.tfp.2026.101321)
