@@ -857,13 +857,16 @@ function formView() {
     <div class="wk-card"><h1 style="font-size:1.15rem">Upload a CSV</h1>
       <p>One row per horizon, using the soilKey R package column names, so the same file works in both. Add an <b>id</b> column to classify several profiles at once. <a href="wrb_profiles_template.csv" download>Download example CSV</a></p>
       <label class="secondary" style="display:flex; align-items:center; justify-content:center; margin-top:4px">Choose CSV file<input type="file" id="csvin" accept=".csv,.tsv,.txt" style="display:none"></label>
-      <details><summary>Columns it reads</summary><ul>
-        <li><b>Required:</b> top_cm, bottom_cm</li>
-        <li><b>Lab:</b> clay_pct, sand_pct, coarse_fragments_pct, oc_pct, cec_cmol, bs_pct (or ca_cmol, mg_cmol, k_cmol, na_cmol), al_cmol, ph_h2o, ec_dS_m, caco3_pct, secondary_carbonates_pct, caso4_pct</li>
-        <li><b>Colour:</b> munsell_value_moist, munsell_chroma_moist</li>
-        <li><b>Morphology:</b> slickensides (absent / few / common / many), artefacts_pct, plinthite_pct</li>
-        <li><b>Optional field calls</b> (y / n, one per profile): gleyic, stagnic, andic, spodic, nitic, retic, cambic, fluvic, duric, anthric, permafrost, rock_cm (depth to rock), organic_cm</li>
-        <li>Other columns are ignored, so a full soilKey file works as it is.</li></ul></details>
+      <details><summary>Columns it reads</summary><ul style="margin:8px 0 0; padding-left:18px">
+      <li><b>id</b>, <b>top_cm</b>, <b>bottom_cm</b>: profile and depths (the order and observation depth come from these; a last horizon reaching 150 cm counts as continuing to 1.5 m).</li>
+      <li><b>horizon</b> (optional): a horizon name, e.g. orthic A, red apedal. When filled, it is used as given; when empty, the horizon is identified from the columns below.</li>
+      <li><b>Colour:</b> munsell_hue_moist, munsell_value_moist, munsell_chroma_moist, munsell_hue_dry, munsell_value_dry, munsell_chroma_dry</li>
+      <li><b>Structure and consistence:</b> structure_grade (single grain / massive / weak / moderate / strong), structure_type (blocky, prismatic, columnar…), consistence_moist, boundary_distinctness (abrupt / clear / gradual)</li>
+      <li><b>Lab:</b> clay_pct, oc_pct, ca_cmol, mg_cmol, k_cmol, na_cmol (or s_value_cmol), caco3_pct, caso4_pct, plasticity_index</li>
+      <li><b>Features:</b> mottles_pct (Fe/Mn mottles), clay_films_amount (none / few / common / many), effervescence, carbonate_form (powdery / nodular / honeycomb), slickensides, cracks_width_cm, self_mulching, cementation_class, cementing_agent (iron / carbonate / silica / gypsum), designation (R = hard rock, Cr = lithic)</li>
+      <li><b>Field calls (y / n)</b> for what properties can't show: saturated (peat / organic), variegated (neocutanic), stratified (alluvial), aeolian (regic sand), colluvial (with wetness), podzolic, placic, lithic, hard_rock</li>
+      <li><b>description</b> (optional): notes such as dark, dystrophic, luvic, calcareous, used for the family.</li>
+      <li>soilKey column names, so the same file can be used for the WRB key. Other columns are ignored.</li></ul></details>
       <div class="msg" id="csvmsg" style="font-size:.9rem; margin-top:8px; color:var(--warn)"></div>
     </div>
     <div class="wk-card"><h1 style="font-size:1.25rem">Or fill in by hand: field observations</h1>
@@ -1188,7 +1191,7 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
   const found = (t, w) => new RegExp(`\\b${w}`).test(t);
   const yesNo = (t, w) => found(t, w) ? !negated(t, w) : null;
 
-  function parse(raw) {
+  function parse(raw, opts = {}) {
     const base = " " + String(raw || "").toLowerCase().replace(/[’']/g, "'").replace(/\s+/g, " ") + " ";
     // your own words -> the book's horizon names (see SA_SYNONYMS); a word may point to several horizons
     const synNotes = [], seen = new Set();
@@ -1209,7 +1212,7 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
       variants = variants.flatMap(v => names.map(n => { const b = blankHz(v); return v.replace(re, (x, at) => b.slice(at, at + x.length).trim() ? " " + n.toLowerCase() + " " : x); })).slice(0, 16);
       synNotes.push(`Read "${w}" as ${names.map(n => n.toLowerCase()).join(" or ")}. Check it meets the book's definition.`);
     });
-    const rs = variants.map(v => parseCore(v, synNotes, base));
+    const rs = variants.map(v => parseCore(v, synNotes, base, opts));
     if (rs.length === 1) return rs[0];
     const m = { ...rs[0] }, all = [];
     rs.forEach(r => r.candidates.forEach(f => { if (!all.includes(f)) all.push(f); }));
@@ -1219,7 +1222,7 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
     m.subs = Array.from({ length: k }, (_, i) => [...new Set(good.map(r => r.subs[i]).filter(Boolean))].join(" or "));
     return m;
   }
-  function parseCore(t, synNotes, orig) {
+  function parseCore(t, synNotes, orig, opts = {}) {
     orig = orig || t;
     let masked = t;
     const hits = [];
@@ -1286,7 +1289,7 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
     if (useTops.length > 1) notes.push(`More than one diagnostic topsoil named (${useTops.join(", ").toLowerCase()}); forms for each are shown.`);
     let rows = FORMS.filter(f => useTops.includes(f.t));
     let order = subs.slice();
-    if (reversedCue && order.length > 1) order.reverse();
+    if (reversedCue && order.length > 1 && !opts.fixedOrder) order.reverse();
     const fit = (ord) => {
       let r = rows;
       if (ord[0]) r = r.filter(f => f.s1 === ord[0]);
@@ -1299,7 +1302,7 @@ function makeSADescribe(FORMS, TOPS, SYNONYMS = []) {
       if (cand.length) notes.push("No topsoil named, so orthic (the default topsoil) is assumed. Name it if it is peat, organic, vertic, melanic or humic.");
       else { rows = FORMS.slice(); useTops = TOPS.slice(); cand = fit(order); notes.push("No topsoil named, and no orthic form has this sequence, so all six topsoils are kept."); }
     }
-    if (!cand.length && order.length > 1) { const alt = fit(order.slice().reverse()); if (alt.length) { cand = alt; order = order.slice().reverse(); notes.push("Read the subsoil horizons in the opposite order to the text, as that is the only sequence in the key."); } }
+    if (!cand.length && order.length > 1 && !opts.fixedOrder) { const alt = fit(order.slice().reverse()); if (alt.length) { cand = alt; order = order.slice().reverse(); notes.push("Read the subsoil horizons in the opposite order to the text, as that is the only sequence in the key."); } }
     if (order.length === 1 && H.thick && cand.some(f => f.s2 === "THICK")) cand = cand.filter(f => f.s2 === "THICK");
     const before = cand.length;
     if (H.wet === false) {
@@ -1381,6 +1384,7 @@ function render() {
   if (st === "s2") return s2Q();
   if (st === "family") return familyQ();
   if (st === "describe") return describeQ();
+  if (st === "csv") return csvQ();
   if (st === "topsoilonly" || st === "notinkey") return special();
 }
 function intro() {
@@ -1390,11 +1394,13 @@ function intro() {
     <div class="modes">
       <button id="sgo"><b>Identify the soil form</b><span>Topsoil, then subsoil horizons, then family.</span></button>
       <button id="sdesc"><b>Describe the profile</b><span>Type it in your own words, e.g. “orthic A over a neocutanic B, no signs of wetness”.</span></button>
+      <button id="scsv"><b>Upload a CSV</b><span>Many profiles at once: one row per horizon, in order. Download the results as a CSV.</span></button>
     </div>
     <ul class="intro" style="margin-top:14px"><li>This covers natural soils (Section A). For soils strongly altered by people (Anthrosols, Technosols), use Section B of the book.</li><li>Horizon descriptions here are short summaries. Always check the full definitions in the book.</li><li>The ARC also publishes an official app, <a href="https://play.google.com/store/apps/details?id=arc.ict.digitalsoilclassification" target="_blank" rel="noopener">Digital Soil Classification</a> (Android).</li></ul>`);
   $("sdepth").oninput = e => { S.depth = e.target.value; };
   $("sgo").onclick = () => { push(); setStage("top"); };
   $("sdesc").onclick = () => { push(); setStage("describe"); };
+  $("scsv").onclick = () => { push(); setStage("csv"); };
 }
 function topQ() {
   const opts = TOPS.map(t => ({ label: t, sub: HZ[t], go: () => { push(); S.top = t; setStage("s1"); } }));
@@ -1505,6 +1511,342 @@ function drawDesc() {
   }
   out.innerHTML = h;
   out.querySelectorAll("[data-df]").forEach(e => e.onclick = () => { push(); chooseFromDesc(FORMS.find(f => f.code === e.dataset.df)); });
+}
+/* Identify South African (2018) diagnostic horizons from horizon properties.
+   Rules follow the book's Section A5 diagnostic criteria, written as code. Criteria that need data the
+   file does not have are reported as "not checked" and the call is marked uncertain, never guessed. */
+function makeSAIdentify() {
+  const has = v => v !== null && v !== undefined && v !== "" && !(typeof v === "number" && !isFinite(v));
+  const num = v => { if (!has(v)) return null; const n = parseFloat(String(v).replace(",", ".")); return isFinite(n) ? n : null; };
+  const yes = v => /^(y|yes|true|1|present|common|many|prominent)$/i.test(String(v ?? "").trim());
+  const no = v => /^(n|no|false|0|absent|none)$/i.test(String(v ?? "").trim());
+  const yn = v => yes(v) ? true : no(v) ? false : null;
+
+  // ---- Munsell ----
+  // hue "5YR", "2.5YR", "10R", "7.5R", "10YR", "2.5Y", "5Y", "N", "5G", "10BG", "5B" ...
+  function hue(h) {
+    if (!has(h)) return null;
+    const s = String(h).toUpperCase().replace(/\s+/g, "");
+    if (/^N/.test(s)) return { fam: "N", n: 0 };
+    const m = s.match(/^(\d+(?:\.\d+)?)(YR|R|Y|GY|G|BG|B|PB|P|RP)$/); if (!m) return null;
+    return { fam: m[2], n: +m[1] };
+  }
+  const isHue = (H, n, fam) => H && H.fam === fam && Math.abs(H.n - n) < 0.01;
+  const greyish = H => H && ["N", "G", "BG", "B", "GY", "PB"].includes(H.fam);
+  // "red" colours, red apedal criteria (i) (moist state; dry values used only where stated)
+  function redColour(h, v, c) {
+    const H = hue(h); if (!H || !has(v) || !has(c)) return null;
+    if (isHue(H, 5, "YR")) return (v >= 3 && v <= 5 && c >= 4) || (v >= 3 && v <= 4 && c === 3);
+    if (isHue(H, 2.5, "YR")) return (v >= 3 && c >= 6) || (v >= 2 && v <= 4 && c === 4);
+    if (isHue(H, 10, "R")) return (v >= 3 && c >= 4) || (v >= 3 && v <= 4 && c === 3) || (v === 3 && c === 2);
+    if (isHue(H, 7.5, "R")) return (v >= 3 && c >= 6) || (v >= 2 && v <= 4 && c >= 3 && c <= 4) || (v === 3 && c === 2);
+    if (H.fam === "R" || (H.fam === "YR" && H.n < 5)) return c >= 3; // redder hues not tabulated
+    return false;
+  }
+  // "yellow" colours, yellow-brown apedal criteria (i) (moist)
+  function yellowColour(h, v, c) {
+    const H = hue(h); if (!H || !has(v) || !has(c)) return null;
+    if (isHue(H, 2.5, "Y")) return (v >= 5 && c >= 6) || (c === 4 && (v === 4 || v === 5));
+    if (isHue(H, 10, "YR")) return (v >= 3 && v <= 4 && c >= 3) || (v >= 5 && v <= 6 && c >= 6) || [[5, 4], [7, 6], [7, 8], [8, 6], [8, 8]].some(([a, b]) => v === a && c === b);
+    if (isHue(H, 7.5, "YR")) return (v === 4 && c >= 2) || (v >= 5 && c >= 4) || (v === 3 && c === 4) || (v === 5 && c === 4);
+    if (isHue(H, 5, "YR")) return v >= 6 && c >= 6;
+    return false;
+  }
+  // "grey" colours of the albic horizon (dry state)
+  function albicGrey(h, v, c) {
+    const H = hue(h); if (!H || !has(v) || !has(c)) return null;
+    if (greyish(H)) return true;
+    if (isHue(H, 2.5, "Y") || isHue(H, 5, "Y")) return (v >= 5 && c <= 2) || (v >= 6 && c <= 4);
+    if (isHue(H, 10, "YR")) return (v === 4 && c <= 2) || (v >= 5 && c <= 3) || (v >= 6 && c <= 4);
+    if (isHue(H, 7.5, "YR")) return (v >= 5 && c <= 3) || (v >= 6 && c <= 4);
+    if (isHue(H, 5, "YR")) return (v >= 5 && c <= 2) || (v >= 6 && c <= 3);
+    return false;
+  }
+  // "grey" matrix colours of the gley horizon (moist state)
+  function gleyGrey(h, v, c) {
+    const H = hue(h); if (!H || !has(v) || !has(c)) return null;
+    if (greyish(H)) return true;
+    if (isHue(H, 2.5, "Y") || isHue(H, 5, "Y")) return c <= 2;
+    if (isHue(H, 10, "YR")) return (v === 4 && c <= 2) || (v >= 5 && c <= 3) || (v >= 6 && c === 4);
+    if (isHue(H, 7.5, "YR")) return (v >= 5 && c <= 2) || (v >= 6 && c <= 4);
+    if (isHue(H, 5, "YR")) return (v >= 5 && c <= 2) || (v >= 6 && c === 3);
+    return false;
+  }
+  const redderThan5YR = h => { const H = hue(h); return !!H && (H.fam === "R" || (H.fam === "YR" && H.n <= 5)); };
+
+  // ---- field descriptors ----
+  const GRADE = { "single grain": 0, "single-grain": 0, singlegrain: 0, massive: 0, structureless: 0, apedal: 0, none: 0, "0": 0, weak: 1, "1": 1, moderate: 2, "2": 2, strong: 3, "3": 3 };
+  const grade = h => { const g = String(h.structure_grade ?? "").toLowerCase().trim(); if (g in GRADE) return GRADE[g];
+    const t = String(h.structure_type ?? "").toLowerCase(); if (/single|massive|apedal/.test(t)) return 0; return null; };
+  const stype = h => String(h.structure_type ?? "").toLowerCase();
+  const CONS = { loose: 0, "very friable": 1, friable: 2, "slightly firm": 3, firm: 4, "very firm": 5, "extremely firm": 6 };
+  const cons = h => { const s = String(h.consistence_moist ?? "").toLowerCase().trim(); return s in CONS ? CONS[s] : null; };
+  const effervesces = h => { const e = String(h.effervescence ?? "").toLowerCase().trim();
+    if (e) return !/^(none|no|n|0|non|absent)/.test(e); const c = num(h.caco3_pct); return c === null ? null : c >= 1; };
+  const mottles = h => num(h.mottles_pct) ?? num(h.plinthite_pct) ?? num(h.redoximorphic_features_pct);
+  const cutans = h => { const s = String(h.clay_films_amount ?? h.cutans ?? "").toLowerCase().trim(); if (!s) return null; return /common|many|prominent|continuous|yes|^y$/.test(s); };
+  const cemented = h => { const s = String(h.cementation_class ?? "").toLowerCase(); if (!s) return null; return /strong|indurat|cement|hard|moderately/.test(s) && !/^(none|weak|not)/.test(s); };
+  const agent = h => String(h.cementing_agent ?? "").toLowerCase();
+  const desg = h => String(h.designation ?? "").trim();
+  const sval = h => { const s = num(h.s_value_cmol); if (s !== null) return s; const p = ["ca_cmol", "mg_cmol", "k_cmol", "na_cmol"].map(k => num(h[k])); return p.every(x => x !== null) ? p.reduce((a, b) => a + b, 0) : null; };
+  // exchangeable cations per kg clay per 1% organic carbon (melanic / humic criterion)
+  const baseIndex = h => { const s = sval(h), cl = num(h.clay_pct), oc = num(h.oc_pct); return s !== null && cl > 0 && oc > 0 ? (s * 100 / cl) / oc : null; };
+  const slick = h => { const s = String(h.slickensides ?? "").toLowerCase().trim(); if (!s) return null; return !/^(absent|none|no|n|0)$/.test(s); };
+  const abruptBoundary = h => /abrupt/i.test(String(h.boundary_distinctness ?? ""));
+  // texture jump used by the prismacutanic abrupt transition
+  const clayJump = (up, h) => { const a = num(up?.clay_pct), b = num(h.clay_pct); if (a === null || b === null) return null; return a < 20 ? b >= 2 * a : b - a >= 20; };
+  const clayIncrease = (up, h) => { const a = num(up?.clay_pct), b = num(h.clay_pct); if (a === null || b === null) return null; return b > a; };
+
+  function and3(...xs) { return xs.some(x => x === false) ? false : xs.some(x => x === null) ? null : true; }
+
+  // ---- topsoil ----
+  function topsoil(h, below) {
+    const oc = num(h.oc_pct), wet = yn(h.saturated), out = [];
+    const tests = [
+      ["Peat", and3(oc === null ? null : oc > 20, oc !== null && oc > 20 ? wet : (oc === null ? null : false)), "organic C > 20% and waterlogged"],
+      ["Organic", and3(oc === null ? null : oc >= 10 && oc <= 20, oc !== null && oc >= 10 && oc <= 20 ? wet : (oc === null ? null : false)), "organic C 10–20% and waterlogged"],
+      ["Vertic", (() => { const g = grade(h), cl = num(h.clay_pct); const feat = [slick(h), num(h.cracks_width_cm) === null ? null : num(h.cracks_width_cm) >= 1, yn(h.self_mulching), num(h.plasticity_index) === null ? null : num(h.plasticity_index) >= 30];
+        const any = feat.some(x => x === true) ? true : feat.every(x => x === false) ? false : null;
+        return and3(g === null ? null : g >= 3, cl === null ? null : cl >= 30, any); })(), "strong structure, ≥ 30% clay, cracks / slickensides / self-mulching / PI ≥ 30"],
+      ["Melanic", (() => { const v = num(h.munsell_value_dry), c = num(h.munsell_chroma_dry), H = h.munsell_hue_dry ?? h.munsell_hue_moist;
+        const dark = v === null || c === null ? null : v <= 3 && c <= 3 && !(String(H).toUpperCase().replace(/\s/g, "") === "10YR" && v === 3 && c === 3) && !redderThan5YR(H);
+        const bi = baseIndex(h), g = grade(h), sl = slick(h);
+        return and3(dark, bi === null ? null : bi >= 4, g === null ? null : g >= 2, sl === null ? null : !sl, oc === null ? null : oc < 10); })(), "dark dry colour, base-rich, moderate or stronger structure, no slickensides"],
+      ["Humic", (() => { const bi = baseIndex(h), g = grade(h);
+        const belowWet = below ? (albicGrey(below.munsell_hue_dry ?? below.munsell_hue_moist, num(below.munsell_value_dry ?? below.munsell_value_moist), num(below.munsell_chroma_dry ?? below.munsell_chroma_moist)) || (mottles(below) ?? 0) > 10 || yes(below.podzolic)) : false;
+        return and3(oc === null ? null : oc > 1.8, bi === null ? null : bi < 4, g === null ? null : g <= 1, belowWet === null ? null : !belowWet); })(), "organic C > 1.8%, leached, weak or no structure, freely drained"]
+    ];
+    const unsure = [];
+    for (const [name, ok, why] of tests) {
+      if (ok === true) return { name, why, unsure };
+      if (ok === null) unsure.push(name);
+    }
+    return { name: "Orthic", why: "none of the other topsoils' criteria are met", unsure };
+  }
+
+  // ---- subsoil ----
+  function subsoil(h, up, down, isSecond) {
+    const g = grade(h), ef = effervesces(h), mt = mottles(h), gyp = num(h.caso4_pct), ag = agent(h), cem = cemented(h), d = desg(h);
+    const mH = h.munsell_hue_moist, mV = num(h.munsell_value_moist), mC = num(h.munsell_chroma_moist);
+    const dH = h.munsell_hue_dry ?? mH, dV = num(h.munsell_value_dry), dC = num(h.munsell_chroma_dry);
+    const unsure = [], R = (name, why) => ({ name, why, unsure });
+    const weakOrNone = g === null ? null : g <= 1, modPlus = g === null ? null : g >= 2;
+    // rock and cemented layers
+    if (yes(h.hard_rock) || /^\d*R$/i.test(d)) return R("Hard Rock", "hard rock (field call or R designation)");
+    if (cem) {
+      if (/silic|silica/.test(ag)) return R("Dorbank", "cemented by silica");
+      if (/iron|fe|plinth|ferr/.test(ag)) return R(yes(h.placic) ? "Podzol with placic pan" : "Hard Plinthic", "cemented by iron/manganese");
+      if (/gyps/.test(ag) || (gyp ?? 0) >= 5) return R("Gypsic", "cemented, gypsum ≥ 5%");
+      if (/carbon|calc|lime/.test(ag) || ef) return R("Hard Carbonate", "cemented by carbonate");
+      unsure.push("cemented layer: cementing agent not given");
+    }
+    if (yes(h.lithic) || /^\d*(Cr|C\/R|R\/C)$/i.test(d)) return R("Lithic", "weathering rock with soil (field call or Cr designation)");
+    if ((gyp ?? 0) >= 5) return R("Gypsic", "gypsum ≥ 5%");
+    if (yes(h.podzolic)) return R("Podzol", "podzolic (field call)");
+    if (yes(h.stratified)) return R("Alluvial", "stratified deposit (field call)");
+    if (yes(h.aeolian)) return R("Regic Sand", "recent wind-blown sand (field call)");
+    // carbonates
+    if (ef === true) {
+      const form = String(h.carbonate_form ?? "").toLowerCase(), cc = num(h.caco3_pct);
+      if (/powder|nodul|honeycomb|boulder/.test(form) || (cc !== null && cc >= 40)) return R("Soft Carbonate", form ? `carbonate-dominated (${form})` : "carbonate-dominated (CaCO₃ ≥ 40%, a proxy for 'carbonates dominate')");
+      if (weakOrNone !== false) return R("Neocarbonate", "effervesces, soil material dominates, weak or no structure");
+    }
+    // wetness group
+    const albicG = albicGrey(dH, dV ?? mV, dC ?? mC), gleyG = gleyGrey(mH, mV, mC);
+    if (yes(h.colluvial) && (gleyG || albicG)) return R("Unconsolidated Material with Wetness", "poorly sorted colluvium with grey colours (field call)");
+    if (mt !== null && mt > 10 && weakOrNone !== false) {
+      const greyHere = albicG || gleyG, greyBelow = down ? (albicGrey(down.munsell_hue_dry ?? down.munsell_hue_moist, num(down.munsell_value_dry ?? down.munsell_value_moist), num(down.munsell_chroma_dry ?? down.munsell_chroma_moist)) || gleyGrey(down.munsell_hue_moist, num(down.munsell_value_moist), num(down.munsell_chroma_moist))) : null;
+      if (greyHere || greyBelow) return R("Soft Plinthic", `Fe/Mn mottles ${mt}% with grey colours ${greyHere ? "in the matrix" : "below"}`);
+      if (greyHere === null && greyBelow === null) unsure.push("Soft Plinthic: grey colours in or below the horizon not given");
+    }
+    if (modPlus && (gleyG || albicG) && (mt ?? 0) > 0) return R("Gleyic", "moderate/strong structure with grey ped faces and mottled interiors");
+    if (gleyG === true && (greyish(hue(mH)) || clayIncrease(up, h) !== false)) {
+      if (modPlus) unsure.push("Gley vs gleyic: structure is moderate or stronger");
+      return R("Gley", "grey (gley) matrix colours, weak structure, little mottling");
+    }
+    if (albicG === true && weakOrNone !== false && (mt ?? 0) < 10 && ef !== true) {
+      const topV = num(up?.munsell_value_dry), ok = !(isSecond && topV !== null && dV !== null && dV < topV + 1);
+      if (ok) return R("Albic", "grey (albic) dry colours, weak structure, < 10% mottles");
+      unsure.push("Albic: not one Munsell value lighter than the topsoil");
+    }
+    // structured subsoils
+    const st = stype(h);
+    if (modPlus && /prism|column/.test(st)) {
+      const jumps = [clayJump(up, h), (grade(up) !== null && g !== null) ? g - grade(up) >= 1 : null, (cons(up) !== null && cons(h) !== null) ? cons(h) - cons(up) >= 2 : null];
+      const n = jumps.filter(x => x === true).length;
+      if (n >= 2 || abruptBoundary(h)) return R("Prismacutanic", "prismatic/columnar structure with an abrupt transition");
+      if (jumps.every(x => x !== null)) return R("Pedocutanic", "prismatic structure, but the upper boundary is not abrupt");
+      unsure.push("Prismacutanic vs pedocutanic: abruptness of the upper transition not given");
+      return R("Prismacutanic", "prismatic/columnar structure (transition not checked)");
+    }
+    const red = redColour(mH, mV, mC);
+    if (modPlus) {
+      const ct = cutans(h), inc = clayIncrease(up, h);
+      if (red && !slick(h) && !(ct && inc)) return R("Red Structured", "uniform red colours with moderate/strong structure");
+      if (ct !== false) { if (ct === null) unsure.push("Pedocutanic: clay cutans not given"); return R("Pedocutanic", "moderate/strong blocky structure with clay cutans"); }
+      if (red) return R("Red Structured", "uniform red colours with moderate/strong structure");
+      unsure.push("structured subsoil without cutans or red colour");
+      return R("Pedocutanic", "moderate/strong structure (cutans absent: check)");
+    }
+    if (weakOrNone !== false) {
+      if (yes(h.variegated)) return R("Neocutanic", "weak structure with colour variegation, not gleyed");
+      if (red) return R("Red Apedal", "uniform red colours, weak or no structure");
+      const yel = yellowColour(mH, mV, mC);
+      if (yel) return R("Yellow-Brown Apedal", "uniform yellow-brown colours, weak or no structure");
+      if (red === null && yel === null) unsure.push("colour not given");
+      return R("Neocutanic", "weak structure, colours neither uniform red nor yellow-brown (variegation not given)");
+    }
+    unsure.push("structure not given");
+    return R("Neocutanic", "default for weakly developed subsoil (structure not given)");
+  }
+
+  // ---- whole profile ----
+  function identify(hz) {
+    const out = [];
+    hz.forEach((h, i) => {
+      const forced = String(h.horizon ?? "").trim();
+      if (forced) { out.push({ name: forced, why: "given in the file", unsure: [], forced: true }); return; }
+      if (i === 0) out.push(topsoil(h, hz[1]));
+      else out.push(subsoil(h, hz[i - 1], hz[i + 1], i === 1));
+    });
+    // merge consecutive horizons with the same diagnostic name (e.g. Bt1, Bt2)
+    const seq = [];
+    out.forEach((o, i) => { const last = seq[seq.length - 1]; if (last && last.name === o.name) { last.rows.push(i); last.unsure.push(...o.unsure); } else seq.push({ ...o, rows: [i], unsure: o.unsure.slice() }); });
+    return { horizons: out, sequence: seq };
+  }
+
+  // family clues as words the description parser understands
+  function familyWords(hz, seq) {
+    const words = seq.map(() => []);
+    const top = hz[0];
+    if (top) {
+      const v = num(top.munsell_value_moist), c = num(top.munsell_chroma_moist);
+      if (v !== null && c !== null) words[0].push(v <= 4 && c <= 2 ? "dark" : v <= 4 && c >= 3 ? "chromic" : v >= 5 && c <= 3 ? "bleached" : "");
+      if (effervesces(top) !== null && seq[0] && /Melanic|Vertic/.test(seq[0].name)) words[0].push(effervesces(top) ? "calcareous" : "non-calcareous");
+    }
+    seq.forEach((s, k) => {
+      if (k === 0) return;
+      const h = hz[s.rows[0]], up = hz[seq[k - 1].rows[seq[k - 1].rows.length - 1]];
+      const S = sval(h), cl = num(h.clay_pct);
+      if (S !== null && cl > 0) { const b = S * 100 / cl; words[k].push(b < 5 ? "dystrophic" : b <= 15 ? "mesotrophic" : "eutrophic"); }
+      const a = num(up?.clay_pct);
+      if (a !== null && cl !== null && (k === 1 || /Albic/.test(seq[k - 1].name))) words[k].push((a <= 15 ? cl - a >= 5 : cl / a > 1.3) ? "luvic" : "aluvic");
+      const ef = effervesces(h); if (ef !== null && !/Carbonate/.test(s.name)) words[k].push(ef ? "calcareous" : "non-calcareous");
+      const r = redColour(h.munsell_hue_moist, num(h.munsell_value_moist), num(h.munsell_chroma_moist));
+      if (!/Apedal|Red Structured|Albic|Gley/.test(s.name) && r !== null) words[k].push(r ? "red" : "brown");
+    });
+    return words.map(w => w.filter(Boolean).join(" "));
+  }
+
+  return { identify, familyWords, colour: { redColour, yellowColour, albicGrey, gleyGrey } };
+}
+const SAID = makeSAIdentify();
+/* ---------------- CSV upload: one row per horizon ---------------- */
+let SABATCH = null;
+const SA_CSV_TEMPLATE = `id,top_cm,bottom_cm,horizon,designation,munsell_hue_moist,munsell_value_moist,munsell_chroma_moist,munsell_value_dry,munsell_chroma_dry,structure_grade,structure_type,clay_pct,oc_pct,ca_cmol,mg_cmol,k_cmol,na_cmol,mottles_pct,clay_films_amount,slickensides,effervescence,description
+P1,0,25,,A,7.5YR,4,3,5,3,weak,,12,0.8,2,1,0.3,0.1,,,,,
+P1,25,160,,B,2.5YR,3,6,,,weak,,25,0.4,1.5,0.5,0.1,0,,,,,
+P2,0,25,,A,7.5YR,4,3,5,3,weak,,12,0.8,2,1,0.3,0.1,,,,,
+P2,25,70,,B1,10YR,5,6,,,weak,,20,,,,,,,,,,
+P2,70,110,,B2,10YR,6,2,7,2,weak,,25,,,,,,25,,,,
+P3,0,30,,A,10YR,2,1,3,2,moderate,subangular blocky,30,2,15,5,0.8,0.2,,,absent,,
+P3,30,160,,Bt,7.5YR,4,4,,,moderate,angular blocky,45,,,,,,,common,,,
+P4,0,20,,A,7.5YR,4,3,5,3,weak,,12,0.8,,,,,,,,,
+P4,20,40,,R,,,,,,,,,,,,,,,,,,
+P5,0,25,orthic A,,,,,,,,,,,,,,,,,,,dark
+P5,25,160,red apedal B,,,,,,,,,,,,,,,,,,,dystrophic luvic`;
+function saParseCSV(text) {
+  const lines = String(text).replace(/\r/g, "").split("\n").filter(l => l.trim());
+  if (!lines.length) return { head: [], rows: [] };
+  const sep = lines[0].includes("\t") ? "\t" : (lines[0].split(";").length > lines[0].split(",").length ? ";" : ",");
+  const split = l => { const o = []; let c = "", q = false; for (let i = 0; i < l.length; i++) { const ch = l[i]; if (ch === '"') { if (q && l[i + 1] === '"') { c += '"'; i++; } else q = !q; } else if (ch === sep && !q) { o.push(c.trim()); c = ""; } else c += ch; } o.push(c.trim()); return o; };
+  return { head: split(lines[0]).map(h => h.toLowerCase().trim()), rows: lines.slice(1).map(split) };
+}
+function saBatchFromCSV(text) {
+  const { head, rows } = saParseCSV(text), ix = n => head.indexOf(n);
+  if (!head.length) throw new Error("The file is empty.");
+  const num = v => { const n = parseFloat(String(v ?? "").replace(",", ".")); return isFinite(n) ? n : null; };
+  const PROPS = ["munsell_hue_moist", "munsell_value_moist", "munsell_chroma_moist", "munsell_value_dry", "munsell_chroma_dry", "structure_grade", "structure_type", "clay_pct", "oc_pct", "designation", "mottles_pct", "effervescence", "caco3_pct", "cementation_class"];
+  if (ix("horizon") < 0 && !PROPS.some(c => ix(c) >= 0)) throw new Error('The CSV needs a "horizon" column, or horizon properties (e.g. munsell colours, structure_grade, clay_pct). See "Columns it reads".');
+  const groups = new Map();
+  rows.forEach((r, k) => { const o = { _k: k }; head.forEach((c, j) => { o[c] = (r[j] ?? "").trim(); });
+    const id = o.id || "profile"; if (!groups.has(id)) groups.set(id, []); groups.get(id).push(o); });
+  return [...groups.entries()].map(([id, hz]) => {
+    hz = hz.filter(h => Object.entries(h).some(([k, v]) => k !== "_k" && k !== "id" && v !== ""));
+    hz.forEach(h => { h.top = num(h.top_cm); h.bottom = num(h.bottom_cm); });
+    if (hz.every(h => h.top !== null)) hz.sort((a, b) => a.top - b.top || a._k - b._k);
+    const deepest = Math.max(...hz.map(h => h.bottom ?? -1));
+    // horizons named in the file are used as given; the rest are identified from their properties
+    const idr = SAID.identify(hz.map(h => ({ ...h, horizon: h.horizon || h.horizon_name || "" })));
+    const fw = SAID.familyWords(hz, idr.sequence);
+    const parts = idr.sequence.map((sq, k) => {
+      const notes = sq.rows.map(i => hz[i].description).filter(Boolean).join(" ");
+      const isTop = k === 0 && !sq.forced && ["Peat", "Organic", "Vertic", "Melanic", "Humic", "Orthic"].includes(sq.name);
+      return [fw[k], notes, sq.name.toLowerCase() + (isTop ? " topsoil" : "")].filter(Boolean).join(" ");
+    });
+    let desc = parts.join(" over ");
+    if (deepest >= 150) desc += " to 1.5 m";
+    const parsed = DESC.parse(desc, { fixedOrder: true });
+    const cs = parsed.candidates, f = cs.length === 1 ? cs[0] : null;
+    let code = "", name = "";
+    if (f) {
+      const pre = DESC.prefill(f, parsed.hints), d = ["0", "0", "0", "0"];
+      f.fam.forEach((c, i) => { d[c.pos] = pre[i] ? String(pre[i].k) : "?"; });
+      code = d.join(""); name = `${f.name} ${code}${deepest > 0 ? ` (${(deepest / 100).toFixed(deepest % 100 ? 2 : 1).replace(/0$/, "")} m)` : ""}`;
+    }
+    const identified = idr.sequence.map(sq => `${sq.name}${sq.forced ? "" : ` (${sq.why})`}`).join(" / ");
+    // topsoil uncertainty is a list of topsoils that couldn't be ruled out; subsoil uncertainty is a list of notes
+    const topIsIdentified = idr.horizons.length && !idr.horizons[0].forced;
+    const unsure = [...new Set(idr.sequence.flatMap((sq, k) => k === 0 && topIsIdentified ? [] : sq.unsure))];
+    if (topIsIdentified && idr.horizons[0].unsure.length) unsure.unshift(`topsoil could also be ${idr.horizons[0].unsure.join(" or ").toLowerCase()} (data missing to rule it out)`);
+    return { id, desc, parsed, form: f, code, name, depth: deepest > 0 ? String(deepest) : "", identified, unsure };
+  });
+}
+function csvQ() {
+  let h = `<div class="step">Upload a CSV</div>` + card(`<h1>Classify many profiles</h1>
+    <p>One row per horizon, from the surface down. Give each horizon's <b>properties</b> (colour, structure, clay, organic carbon…) and the key identifies the diagnostic horizons from the book's criteria, or give the <b>horizon name</b> yourself.</p>
+    <details><summary>Columns it reads</summary><ul style="margin:8px 0 0; padding-left:18px">
+      <li><b>horizon</b> (required): the horizon name, e.g. orthic A, red apedal B, soft plinthic, saprolite.</li>
+      <li><b>id</b>: profile name, to classify several profiles in one file.</li>
+      <li><b>top_cm</b>, <b>bottom_cm</b>: used for the order and the observation depth; a last horizon reaching 150 cm counts as continuing to 1.5 m.</li>
+      <li><b>description</b>: optional notes for that horizon, e.g. dark, bleached, dystrophic, luvic, calcareous, no wetness. These fill family answers where they can.</li>
+      <li>Other columns are ignored.</li></ul></details>
+    <label class="secondary" style="display:flex; align-items:center; justify-content:center; margin-top:12px; cursor:pointer">Choose CSV file<input type="file" id="sacsvin" accept=".csv,.tsv,.txt" style="display:none"></label>
+    <button class="secondary" id="satpl">Download an example CSV</button>
+    <div id="sacsvmsg" style="margin-top:8px; font-size:.9rem; color:var(--warn)"></div>
+    <div id="sacsvout"></div>`) + navBack();
+  view().innerHTML = h;
+  const dl = (name, text) => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([text], { type: "text/csv" })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 500); };
+  $("satpl").onclick = () => dl("sa_profiles_example.csv", SA_CSV_TEMPLATE + "\n");
+  $("sacsvin").onchange = e => {
+    const file = e.target.files[0]; if (!file) return;
+    const rd = new FileReader();
+    rd.onload = () => { try { SABATCH = saBatchFromCSV(rd.result); $("sacsvmsg").textContent = SABATCH.length ? "" : "No horizons found in the file."; drawBatch(); } catch (err) { $("sacsvmsg").textContent = err.message; } };
+    rd.readAsText(file);
+  };
+  const drawBatch = () => {
+    if (!SABATCH || !SABATCH.length) { $("sacsvout").innerHTML = ""; return; }
+    const status = b => b.form ? "y" : b.parsed.candidates.length ? "u" : "n";
+    $("sacsvout").innerHTML = `<h2 style="margin-top:16px">${SABATCH.length} profile${SABATCH.length > 1 ? "s" : ""}</h2>` +
+      SABATCH.map((b, i) => `<div class="chk" style="grid-template-columns: 1fr auto; cursor:pointer" data-bi="${i}"><span class="t"><b>${b.id}</b> · ${b.form ? b.name : b.parsed.candidates.length ? `${b.parsed.candidates.length} forms fit` : "no form matches"}<span style="display:block; font-size:.82rem; color:var(--ink-3)">${b.identified.replace(/</g, "&lt;")}</span>${b.unsure.length ? `<span style="display:block; font-size:.82rem; color:var(--warn)">Check: ${b.unsure.join("; ").replace(/</g, "&lt;")}</span>` : ""}</span><span class="s ${status(b)}">${b.form ? "Form" : b.parsed.candidates.length ? "Choose" : "Check"}</span></div>`).join("") +
+      `<p class="hint" style="font-size:.82rem; color:var(--ink-3)">Tap a profile to open its family questions, or choose among the forms that fit. ? in a code means that family answer couldn't be taken from the file.</p>
+      <button class="primary" id="sadl">Download results (CSV)</button>`;
+    $("sacsvout").querySelectorAll("[data-bi]").forEach(el => el.onclick = () => {
+      const b = SABATCH[+el.dataset.bi];
+      push(); S.desc = b.desc; S.parsed = b.parsed; S.depth = b.depth;
+      if (b.form) chooseFromDesc(b.form); else setStage("describe");
+    });
+    $("sadl").onclick = () => {
+      const esc = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+      const lines = [["id", "form", "form_code", "family_code", "name", "status", "forms_that_fit", "horizons_identified", "to_check", "read_as", "notes"].join(",")].concat(SABATCH.map(b => [
+        b.id, b.form ? b.form.name : "", b.form ? b.form.code : "", b.code, b.name,
+        b.form ? "form found" : b.parsed.candidates.length ? "several forms fit" : "no form matches",
+        b.form ? "" : b.parsed.candidates.slice(0, 25).map(f => f.name).join("; "), b.identified, b.unsure.join("; "), b.desc, b.parsed.notes.join(" ")].map(esc).join(",")));
+      dl("sa_classified_profiles.csv", lines.join("\n") + "\n");
+    };
+  };
+  drawBatch();
+  bindBack();
 }
 const depthTxt = () => S.depth ? ` (${(S.depth / 100).toFixed(S.depth % 100 ? 2 : 1).replace(/0$/, "")} m)` : "";
 function famCode(f) { const d = ["0", "0", "0", "0"]; f.fam.forEach((c, i) => { d[c.pos] = S.fam[i] ? String(S.fam[i]) : "?"; }); return d.join(""); }
