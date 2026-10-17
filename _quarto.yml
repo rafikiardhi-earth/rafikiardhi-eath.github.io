@@ -10,6 +10,7 @@ website:
   title: "RafikiArdhi"
   favicon: favicon.png
   site-url: "https://rafikiardhi.earth"
+  google-analytics: "G-8QXXQWKPTD"
   description: "Environmental analytics for soil, water and landscape decisions."
   page-navigation: false
   navbar:
