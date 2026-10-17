@@ -1,0 +1,51 @@
+---
+title: "Homeowners"
+description: "Free calculators and decision tools for yards and gardens: how much topsoil, mulch, gravel or sod to buy, and how to check a quote. No ads, no sign-up."
+---
+
+Free tools for your yard and garden, built by soil scientists. Work out how much material you actually need, check a quote before you pay it, and make decisions with the working shown.
+
+No ads, no sign-up, and no supplier pays to be listed. Every tool shows how its numbers are calculated, so you can check them yourself.
+
+## Calculators
+
+::: {.cards}
+::: {.card-item}
+### [Landscape materials calculator](materials-calculator.qmd)
+How much topsoil, compost, mulch, gravel, road base, sand, sod or grass seed to order, for any shape of yard. Cubic yards, tons, bags and pallets, with a bulk-vs-bags price check.
+:::
+::: {.card-item}
+### Quote checker *(coming soon)*
+Enter a quote and your area to see the depth and price per unit you're actually paying for.
+:::
+:::
+
+## Irrigation
+
+::: {.cards}
+::: {.card-item}
+### Catch-cup test *(coming soon)*
+Measure how much water your sprinklers really put down, and how evenly, to set run times per zone.
+:::
+::: {.card-item}
+### Cycle-and-soak scheduler *(coming soon)*
+Split watering into shorter cycles so clay soils and slopes absorb it instead of letting it run off.
+:::
+:::
+
+## Soil and fertilizer
+
+::: {.cards}
+::: {.card-item}
+### Fertilizer label decoder *(coming soon)*
+Turn the N-P-K numbers on a bag into how much product to spread, and compare the real cost per pound of nutrient.
+:::
+::: {.card-item}
+### Soil test translator *(coming soon)*
+Plain-language reading of a soil lab report: what's low, what's high, and what to do (or not do) about it.
+:::
+:::
+
+---
+
+*Working professionally? See our [scientific tools](tools.qmd) for soil classification, profile modelling and more.*
