@@ -25,3 +25,10 @@ Author A, **Flynn T**, Author C (Year). Title. *Journal*, volume, pages. [doi](h
 - Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands. *EarthArXiv* under review at *Regional Environmental Change*. [https://doi.org/10.31223/X5JN5T](https://doi.org/10.31223/X5JN5T)
 - Soil-informed multivariate decision support to assess urban ecosystem service potential (in press). *Nature Springer* in preprint at *EarthArXiv*. [https://doi.org/10.31223/X50763](https://doi.org/10.31223/X50763)
 - Thermodynamic pedodiversity patterns reveal higher-order soil organization in indigenous agroecosystems of the U.S. Southwest. *EcoEvoRxiv* under review at *Scientific Reports*. [https://doi.org/10.32942/X2H66M](https://doi.org/10.32942/X2H66M)
+
+## Media
+
+## Media & outreach
+
+
+- **2016** · Stellenbosch University News · "American student is SU's top horticultural science student" (HORTGRO Science / Daan Strydom Prize; Perold Medal). [Read](https://www.su.ac.za/en/node/1426)
