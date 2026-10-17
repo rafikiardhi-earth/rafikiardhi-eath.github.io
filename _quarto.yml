@@ -26,6 +26,8 @@ website:
         text: Tools
       - href: soil-keys.qmd
         text: Soil Keys
+      - href: homeowners.qmd
+        text: Homeowners
       - href: publications.qmd
         text: Research
       - href: contact.qmd
