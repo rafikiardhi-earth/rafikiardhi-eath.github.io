@@ -1,0 +1,1491 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="How much topsoil, compost, mulch, gravel, sand, sod or grass seed do you need? Any shape of yard, with the working shown so you can check a quote.">
+
+<title>Landscape materials calculator – RafikiArdhi</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./favicon.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-ba38ce498b7ba985051d24ae6851d00c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-bdd2f71b0baae5f8e9a37a252d37403c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-fixed fullcontent quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="./index.html" class="navbar-brand navbar-brand-logo">
+    <img src="./images/logo-small.png" alt="RafikiArdhi logo" class="navbar-logo light-content">
+    <img src="./images/logo-small.png" alt="RafikiArdhi logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">RafikiArdhi</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./services.html"> 
+<span class="menu-text">Services</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./tools.html"> 
+<span class="menu-text">Tools</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./soil-keys.html"> 
+<span class="menu-text">Soil Keys</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./publications.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Landscape materials calculator</h1>
+</div>
+
+<div>
+  <div class="description">
+    How much topsoil, compost, mulch, gravel, sand, sod or grass seed do you need? Any shape of yard, with the working shown so you can check a quote.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Measure your area, pick a material, and see how much to order: in cubic yards, tons, bags or pallets. Odd shapes are fine: add them up piece by piece and subtract patios or paths. Every number shows how it was calculated, so you can check it against a supplier’s quote.</p>
+<style>
+.hmc {
+  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
+  --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f; --warn: #e0a440; --good: #5cc28f; --bad: #e07070;
+  color: var(--ink); font-size: 1.02rem; line-height: 1.5; max-width: 620px; margin: 8px auto 28px;
+}
+body.quarto-light .hmc {
+  --bg: #f7f5f0; --surface: #fffdf9; --surface-2: #efebe2; --ink: #1f1c17; --ink-2: #57514a; --ink-3: #8a8379;
+  --line: #ddd6ca; --accent: #8a4b22; --accent-ink: #ffffff; --accent-soft: #f3e6da; --warn: #9a6400; --good: #1f7a4d; --bad: #b3261e;
+}
+.hmc * { box-sizing: border-box; }
+.hmc .cx { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 12px; }
+.hmc .step { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 0 0 10px; }
+.hmc .hint { font-size: .9rem; color: var(--ink-2); margin: 6px 0 0; }
+.hmc label { display: block; font-size: .9rem; font-weight: 600; color: var(--ink-2); margin: 10px 0 4px; }
+.hmc label .u { font-weight: 400; color: var(--ink-3); }
+.hmc input, .hmc select {
+  width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  font: inherit; padding: 8px 12px;
+}
+.hmc input:focus, .hmc select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.hmc input.bad { border-color: var(--bad); }
+.hmc .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hmc .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.hmc .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.hmc .seg button { flex: 1 1 auto; min-height: 42px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+.hmc .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.hmc .shape { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-top: 10px; background: var(--bg); }
+.hmc .shape.sub { border-style: dashed; }
+.hmc .shead { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: center; }
+.hmc .shead button.x { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: var(--ink-2); font-size: 1.2rem; cursor: pointer; }
+.hmc .sarea { margin-top: 8px; font-size: .9rem; color: var(--ink-3); }
+.hmc .sarea b { color: var(--ink); }
+.hmc .sarea.err { color: var(--bad); }
+.hmc .secondary { width: 100%; min-height: 44px; border-radius: 12px; border: 1px dashed var(--line); background: transparent; color: var(--accent); font: inherit; font-weight: 600; margin-top: 10px; cursor: pointer; }
+.hmc .total { margin-top: 12px; font-size: 1rem; color: var(--ink-2); }
+.hmc .total b { color: var(--ink); }
+.hmc .res { border: 2px solid var(--accent); }
+.hmc .res .big { font-size: 2rem; font-weight: 700; line-height: 1.15; margin: 2px 0 6px; font-family: "Source Serif 4", Georgia, serif; }
+.hmc .res .sub { color: var(--ink-2); margin: 0 0 10px; }
+.hmc .res ul { list-style: none; padding: 0; margin: 10px 0 0; }
+.hmc .res li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+.hmc .res li span:first-child { color: var(--ink-2); }
+.hmc .res li span:last-child { font-weight: 600; text-align: right; }
+.hmc .note { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink-2); margin-top: 10px; }
+.hmc .say { margin-top: 12px; background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .95rem; }
+.hmc .say .lab { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; display: block; margin-bottom: 2px; }
+.hmc .linkbtn { background: none; border: none; color: var(--accent); font: inherit; font-weight: 600; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.hmc .empty { color: var(--ink-3); margin: 0; }
+.hmc details.cx { padding: 0; }
+.hmc details summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--accent); list-style: none; }
+.hmc details summary::-webkit-details-marker { display: none; }
+.hmc details summary::before { content: "＋ "; }
+.hmc details[open] summary::before { content: "－ "; }
+.hmc details .db { padding: 0 16px 16px; }
+.hmc .work { font-size: .92rem; color: var(--ink-2); margin: 0; padding-left: 18px; }
+.hmc .work li { margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.hmc .cmp { margin-top: 12px; font-size: .95rem; }
+.hmc .cmp div { display: flex; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--line); }
+.hmc .cmp .win { color: var(--good); font-weight: 700; }
+.hmc .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+.hmc .actions button { min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: .92rem; cursor: pointer; }
+.hmc .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 50; }
+.hmc .toast.on { opacity: 1; }
+.hmc .smallprint { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
+@media (max-width: 420px) { .hmc .shead { grid-template-columns: 1fr auto; } .hmc .shead select[data-sh="op"] { grid-column: 1 / -1; grid-row: 2; } .hmc .row3 { grid-template-columns: 1fr; } }
+@media print { .hmc .actions, .hmc .secondary, .hmc .shead button.x, .hmc .toast { display: none !important; } .hmc details { display: block; } .hmc .cx { break-inside: avoid; } }
+</style>
+
+<div class="hmc" id="hmc">
+  <div class="seg" id="h-units" role="group" aria-label="Units">
+    <button type="button" data-u="us">US (ft, in, yd³)</button>
+    <button type="button" data-u="si">Metric (m, cm, m³)</button>
+  </div>
+
+  <section class="cx">
+    <div class="step">1 · Material</div>
+    <select id="h-mat" aria-label="Material"></select>
+    <p class="hint" id="h-mathint"></p>
+  </section>
+
+  <section class="cx">
+    <div class="step">2 · Area</div>
+    <p class="hint" style="margin-top:0">Split odd shapes into pieces and add them up. Use <em>Subtract</em> for patios, paths or anything you won't cover. Lengths like <code>12'6"</code> work too.</p>
+    <div id="h-shapes"></div>
+    <button type="button" class="secondary" id="h-add">+ Add another piece</button>
+    <div class="total">Total area: <b id="h-area">–</b></div>
+  </section>
+
+  <section class="cx" id="h-s3"></section>
+
+  <section class="cx res" id="h-res" aria-live="polite"></section>
+
+  <details class="cx" id="h-price"><summary>Compare prices</summary><div class="db" id="h-pricebody"></div></details>
+  <details class="cx" id="h-assume"><summary>Assumptions (edit to match your supplier)</summary><div class="db" id="h-assumebody"></div></details>
+  <details class="cx" id="h-work"><summary>Show the working</summary><div class="db" id="h-workbody"></div></details>
+
+  <div class="actions">
+    <button type="button" id="h-link">Copy link</button>
+    <button type="button" id="h-print">Print</button>
+    <button type="button" id="h-reset">Start over</button>
+  </div>
+  <p class="smallprint">Free, no sign-up, no ads, and no supplier pays to be here. Figures are typical values; your supplier's own numbers for weight and coverage always win. Nothing you enter leaves your browser.</p>
+  <div class="toast" id="h-toast"></div>
+</div>
+
+<script>
+(function () {
+  const root = document.getElementById('hmc');
+  if (!root) return;
+  const $ = s => root.querySelector(s);
+
+  // ---- unit constants (everything is stored internally in SI) ----
+  const FT = 0.3048, IN = 0.0254, FT2 = 0.09290304, YD3 = 0.764554858, CUFT = 0.0283168466,
+        TON = 0.90718474, LBt = 0.00045359237, LBkg = 0.45359237, SEEDF = 4.88242764; // g/m² per lb/1000 ft²
+
+  // ---- materials: density = loose t/m³; extra = % to add for settling/compaction ----
+  const MATS = [
+    { id: 'topsoil', g: 'Soil & compost', name: 'Topsoil (screened)', kind: 'vol', din: 4, dcm: 10, extra: 15, dens: 1.30, sold: 'vol',
+      range: { us: 'Typical: 1–2 in to level a lawn, 4–6 in under new sod or seed, 6–8 in for new beds.', si: 'Typical: 2–5 cm to level a lawn, 10–15 cm under new turf or seed, 15–20 cm for new beds.' },
+      bags: { us: [0.75, 1, 1.5, 2], si: [25, 40, 50, 70] }, bag: { us: 1, si: 40 }, why: 'settling' },
+    { id: 'compost', g: 'Soil & compost', name: 'Compost', kind: 'vol', din: 2, dcm: 5, extra: 15, dens: 0.65, sold: 'vol',
+      range: { us: 'Typical: ¼–½ in to top-dress a lawn, 1–3 in mixed into a new bed.', si: 'Typical: 0.5–1 cm to top-dress a lawn, 2–8 cm mixed into a new bed.' },
+      bags: { us: [0.75, 1, 1.5, 2], si: [25, 40, 50, 70] }, bag: { us: 1, si: 40 }, why: 'settling' },
+    { id: 'gardenmix', g: 'Soil & compost', name: 'Garden / raised-bed mix', kind: 'vol', din: 10, dcm: 25, extra: 20, dens: 1.00, sold: 'vol',
+      range: { us: 'Typical: 8–12 in for raised beds, 6–8 in for in-ground beds.', si: 'Typical: 20–30 cm for raised beds, 15–20 cm for in-ground beds.' },
+      bags: { us: [1, 1.5, 2], si: [40, 50, 70] }, bag: { us: 1.5, si: 50 }, why: 'settling' },
+    { id: 'mulch', g: 'Mulch', name: 'Shredded bark mulch', kind: 'vol', din: 3, dcm: 7.5, extra: 10, dens: 0.40, sold: 'vol',
+      range: { us: 'Typical: 2–3 in around plants, 3–4 in for weed control. Keep it a few inches off trunks and stems.', si: 'Typical: 5–8 cm around plants, 8–10 cm for weed control. Keep it a few cm off trunks and stems.' },
+      bags: { us: [1.5, 2, 3], si: [50, 60, 70] }, bag: { us: 2, si: 50 }, why: 'settling' },
+    { id: 'chips', g: 'Mulch', name: 'Wood chips', kind: 'vol', din: 3, dcm: 7.5, extra: 10, dens: 0.35, sold: 'vol',
+      range: { us: 'Typical: 3–4 in for paths and beds.', si: 'Typical: 8–10 cm for paths and beds.' },
+      bags: { us: [2, 3], si: [50, 70] }, bag: { us: 2, si: 50 }, why: 'settling' },
+    { id: 'gravel', g: 'Stone & sand', name: 'Gravel / crushed rock (decorative)', kind: 'vol', din: 3, dcm: 7.5, extra: 5, dens: 1.60, sold: 'wt',
+      range: { us: 'Typical: 2–3 in for beds and paths, over landscape fabric.', si: 'Typical: 5–8 cm for beds and paths, over landscape fabric.' },
+      bags: { us: [0.5], si: [15, 25] }, bag: { us: 0.5, si: 15 }, why: 'settling' },
+    { id: 'roadbase', g: 'Stone & sand', name: 'Road base / crusher fines (compacted)', kind: 'vol', din: 4, dcm: 10, extra: 25, dens: 1.75, sold: 'wt',
+      range: { us: 'Typical: 4–6 in for paths and patio bases, compacted in 2 in layers. Enter the finished, compacted depth.', si: 'Typical: 10–15 cm for paths and patio bases, compacted in 5 cm layers. Enter the finished, compacted depth.' },
+      bags: { us: [0.5], si: [15] }, bag: { us: 0.5, si: 15 }, why: 'compaction' },
+    { id: 'sand', g: 'Stone & sand', name: 'Sand (paver bedding / fill)', kind: 'vol', din: 1, dcm: 2.5, extra: 15, dens: 1.55, sold: 'wt',
+      range: { us: 'Typical: 1 in screeded bedding layer under pavers.', si: 'Typical: 2.5–3 cm screeded bedding layer under pavers.' },
+      bags: { us: [0.5], si: [15, 25] }, bag: { us: 0.5, si: 15 }, why: 'compaction' },
+    { id: 'rock', g: 'Stone & sand', name: 'River rock / cobble', kind: 'vol', din: 3, dcm: 7.5, extra: 5, dens: 1.50, sold: 'wt',
+      range: { us: 'Typical: 2–4 in. Bigger stones need a deeper layer to hide the fabric.', si: 'Typical: 5–10 cm. Bigger stones need a deeper layer to hide the fabric.' },
+      bags: { us: [0.5], si: [15] }, bag: { us: 0.5, si: 15 }, why: 'settling' },
+    { id: 'sod', g: 'Lawn', name: 'Sod / turf rolls', kind: 'sod' },
+    { id: 'seed', g: 'Lawn', name: 'Grass seed', kind: 'seed' },
+    { id: 'fabric', g: 'Other', name: 'Landscape fabric', kind: 'fabric' }
+  ];
+  const MAT = Object.fromEntries(MATS.map(m => [m.id, m]));
+
+  // seeding rates, lb per 1,000 ft² (n = new lawn, o = overseeding a thin lawn)
+  const GRASS = [
+    { id: 'kbg', name: 'Kentucky bluegrass', n: 2.5, o: 1.5 },
+    { id: 'tf', name: 'Tall fescue', n: 7, o: 4 },
+    { id: 'pr', name: 'Perennial ryegrass', n: 7, o: 4 },
+    { id: 'ff', name: 'Fine fescue', n: 4, o: 2.5 },
+    { id: 'mix', name: 'Sun mix (bluegrass / ryegrass / fescue)', n: 5, o: 3 },
+    { id: 'buf', name: 'Buffalograss (treated seed)', n: 3, o: 1.5 },
+    { id: 'bg', name: 'Blue grama', n: 2, o: 1 }
+  ];
+  const SEEDBAGS = { us: [1, 3, 5, 7, 10, 25, 50], si: [0.5, 1, 2.5, 5, 10, 20] }; // lb / kg
+  const FABROLLS = { us: [[3, 50], [4, 50], [3, 100], [4, 100], [6, 100]], si: [[1, 10], [1, 25], [2, 25], [2, 50]] };
+
+  const SHAPES = {
+    rect: { name: 'Rectangle / square', f: [['L', 'Length', 'len'], ['W', 'Width', 'len']] },
+    circle: { name: 'Circle', f: [['D', 'Diameter (straight across the middle)', 'len']] },
+    tri: { name: 'Triangle (3 sides)', f: [['A', 'Side 1', 'len'], ['B', 'Side 2', 'len'], ['C', 'Side 3', 'len']] },
+    irr: { name: 'Irregular (measure widths)', f: [['L', 'Length of a straight line along it', 'len'], ['W', 'Widths across, evenly spaced, comma-separated (include both ends; 0 if it comes to a point)', 'lenlist']] },
+    known: { name: 'I already know the area', f: [['A', 'Area', 'area']] }
+  };
+
+  // display types: factor such that SI = displayed × factor
+  const T = {
+    len:   { us: [FT, 'ft'], si: [1, 'm'] },
+    lenlist: { us: [FT, 'ft'], si: [1, 'm'] },
+    dep:   { us: [IN, 'in'], si: [0.01, 'cm'] },
+    area:  { us: [FT2, 'ft²'], si: [1, 'm²'] },
+    pct:   { us: [1, '%'], si: [1, '%'] },
+    dens:  { us: [TON / YD3, 'tons per yd³'], si: [1, 't per m³'] },
+    mass:  { us: [LBt, 'lb'], si: [0.001, 'kg'] },
+    vol:   { us: [YD3, 'yd³'], si: [1, 'm³'] },
+    pvol:  { us: [1 / YD3, '$ per yd³'], si: [1, 'per m³'] },
+    pwt:   { us: [1 / TON, '$ per ton'], si: [1, 'per tonne'] },
+    money: { us: [1, '$'], si: [1, ''] },
+    rate:  { us: [SEEDF, 'lb per 1,000 ft²'], si: [1, 'g per m²'] }
+  };
+
+  // ---- state ----
+  let S;
+  function fresh(u) {
+    return { u: u || 'us', m: 'topsoil', shapes: [{ id: 1, t: 'rect', op: 1 }], nid: 2, dm: 'even', sm: 'n', sg: 'tf', f: {} };
+  }
+  let RAW = {};       // what the user typed, per field key (keeps 12'6" as typed)
+  const mat = () => MAT[S.m];
+  const clearRaw = () => Object.keys(RAW).forEach(k => { if (!k.startsWith('sh')) delete RAW[k]; });
+
+  const DEF = {
+    'sod.waste': () => 5,
+    'sod.roll': () => S.u === 'us' ? 10 * FT2 : 1,
+    'sod.pallet': () => S.u === 'us' ? 450 * FT2 : 50,
+    'fab.overlap': () => 10,
+    'truck.pay': () => S.u === 'us' ? 1500 * LBt : 0.7,
+    'truck.bed': () => S.u === 'us' ? 1.5 * YD3 : 1.2,
+    'price.dlv': () => null
+  };
+  function get(key) {
+    if (S.f[key] !== undefined && S.f[key] !== null) return S.f[key];
+    if (DEF[key]) return DEF[key]();
+    let m;
+    if ((m = key.match(/^d[12]\.(.+)$/))) { const M = MAT[m[1]]; return S.u === 'us' ? M.din * IN : M.dcm / 100; }
+    if ((m = key.match(/^ov\.(.+)\.extra$/))) return MAT[m[1]].extra;
+    if ((m = key.match(/^ov\.(.+)\.dens$/))) return MAT[m[1]].dens;
+    if ((m = key.match(/^seed\.rate\.(.+)\.([no])$/))) { const G = GRASS.find(g => g.id === m[1]); return G[m[2]] * SEEDF; }
+    return null;
+  }
+
+  // ---- parsing ----
+  const num = s => { s = String(s).replace(/[$,\s]/g, ''); if (s === '') return null; return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN; };
+  function parseFeet(s) { // returns feet
+    s = String(s).trim().toLowerCase().replace(/[’′]/g, "'").replace(/[”″]/g, '"');
+    if (!s) return null;
+    let m;
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:'|ft|feet|foot)\s*(?:(\d*\.?\d+)\s*(?:"|in|inch|inches)?)?$/))) return +m[1] + (m[2] ? +m[2] / 12 : 0);
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:"|in|inch|inches)$/))) return +m[1] / 12;
+    if ((m = s.match(/^(\d+)\s+(\d*\.?\d+)$/))) return +m[1] + +m[2] / 12;
+    return num(s);
+  }
+  function parseMeters(s) {
+    s = String(s).trim().toLowerCase(); if (!s) return null; let m;
+    if ((m = s.match(/^(\d*\.?\d+)\s*cm$/))) return +m[1] / 100;
+    if ((m = s.match(/^(\d*\.?\d+)\s*mm$/))) return +m[1] / 1000;
+    if ((m = s.match(/^(\d*\.?\d+)\s*m$/))) return +m[1];
+    return num(s);
+  }
+  function parse(type, s) { // -> SI
+    if (type === 'len') { const v = S.u === 'us' ? parseFeet(s) : parseMeters(s); return v == null || isNaN(v) ? v : v * (S.u === 'us' ? FT : 1); }
+    if (type === 'lenlist') {
+      const parts = String(s).includes(',') || String(s).includes(';') ? String(s).split(/[,;]/) : String(s).trim().split(/\s+/);
+      const out = parts.map(p => p.trim()).filter(p => p !== '').map(p => parse('len', p));
+      if (!out.length) return null;
+      return out.some(v => v == null || isNaN(v)) ? NaN : out;
+    }
+    if (type === 'dep') {
+      const str = String(s).trim().toLowerCase();
+      if (S.u === 'us' && /'|ft|feet/.test(str)) { const ft = parseFeet(str); return ft == null || isNaN(ft) ? ft : ft * FT; }
+      if (S.u === 'si' && /\d\s*m$/.test(str) && !/cm|mm/.test(str)) { const mm = num(str.replace(/m$/, '')); return mm == null || isNaN(mm) ? mm : mm; }
+      if (S.u === 'si' && /mm$/.test(str)) { const v = num(str.replace(/mm$/, '')); return v == null || isNaN(v) ? v : v / 1000; }
+      const v = num(str.replace(/("|in|inch|inches|cm)$/, ''));
+      return v == null || isNaN(v) ? v : v * T.dep[S.u][0];
+    }
+    const v = num(s);
+    return v == null || isNaN(v) ? v : v * T[type][S.u][0];
+  }
+
+  // ---- formatting ----
+  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  const fmtFix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+  const disp = (si, type) => si == null ? null : si / T[type][S.u][0];
+  const unit = type => T[type][S.u][1];
+  const money = x => (S.u === 'us' ? '$' : '') + fmtFix(x, 2);
+  const upHalf = x => Math.ceil(x * 2 - 1e-9) / 2;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const A_ = si => fmt(disp(si, 'area'), si / T.area[S.u][0] < 100 ? 1 : 0) + ' ' + unit('area');
+  const L_ = si => fmt(disp(si, 'len'), 2) + ' ' + unit('len');
+  const D_ = si => fmt(disp(si, 'dep'), 2) + ' ' + unit('dep');
+  const V_ = (si, d = 2) => fmt(disp(si, 'vol'), d) + ' ' + unit('vol');
+  const W_ = t => S.u === 'us' ? fmt(t / TON, 1) + ' tons' : fmt(t, 1) + ' t';
+  const bagLabel = v => S.u === 'us' ? fmt(v, 2) + ' cu ft' : fmt(v, 0) + ' L';
+  const bagSI = v => S.u === 'us' ? v * CUFT : v / 1000;
+
+  function shownValue(key, type) {
+    if (RAW[key] !== undefined) return RAW[key];
+    const v = get(key);
+    if (v == null) return '';
+    if (Array.isArray(v)) return v.map(x => fmt(disp(x, 'len'), 2)).join(', ');
+    return fmt(disp(v, type), type === 'dens' ? 2 : 3).replace(/,/g, '');
+  }
+  function field(key, label, type, opts = {}) {
+    const u = unit(type);
+    return `<label for="hk-${esc(key)}">${label}${u && type !== 'money' ? ` <span class="u">(${u})</span>` : ''}</label>` +
+      `<input id="hk-${esc(key)}" data-k="${esc(key)}" data-t="${type}" type="text" inputmode="${type === 'lenlist' ? 'text' : 'decimal'}" autocomplete="off" value="${esc(shownValue(key, type))}" placeholder="${esc(opts.ph || '')}">`;
+  }
+
+  // ---- render: material select ----
+  function renderMat() {
+    const groups = [...new Set(MATS.map(m => m.g))];
+    $('#h-mat').innerHTML = groups.map(g => `<optgroup label="${g}">` + MATS.filter(m => m.g === g).map(m => `<option value="${m.id}"${m.id === S.m ? ' selected' : ''}>${m.name}</option>`).join('') + '</optgroup>').join('');
+    const M = mat();
+    const hints = {
+      vol: M.range ? M.range[S.u] : '',
+      sod: 'Rolls and pallets vary by farm: check your supplier\'s sizes in step 3.',
+      seed: 'For new lawns and overseeding. The rate on your seed bag always wins.',
+      fabric: 'Weed barrier for gravel and rock beds.'
+    };
+    $('#h-mathint').textContent = (hints[M.kind] || '') + ' Your area stays the same if you switch material.';
+  }
+
+  function renderUnits() {
+    root.querySelectorAll('#h-units button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.u === S.u)));
+  }
+
+  function renderShapes() {
+    $('#h-shapes').innerHTML = S.shapes.map(sh => {
+      const def = SHAPES[sh.t];
+      const fs = def.f.map(([k, lab, type]) => field(`sh${sh.id}.${k}`, lab, type, { ph: type === 'lenlist' ? (S.u === 'us' ? 'e.g. 0, 8, 11, 9.5, 6' : 'e.g. 0, 2.4, 3.3, 2.9, 1.8') : '' }));
+      const grid = def.f.length === 3 ? 'row3' : def.f.length === 2 && sh.t === 'rect' ? 'row2' : '';
+      return `<div class="shape${sh.op < 0 ? ' sub' : ''}" data-id="${sh.id}">
+        <div class="shead">
+          <select data-sh="t" aria-label="Shape">${Object.entries(SHAPES).map(([k, v]) => `<option value="${k}"${k === sh.t ? ' selected' : ''}>${v.name}</option>`).join('')}</select>
+          <select data-sh="op" aria-label="Add or subtract"><option value="1"${sh.op > 0 ? ' selected' : ''}>＋ Add</option><option value="-1"${sh.op < 0 ? ' selected' : ''}>− Subtract</option></select>
+          ${S.shapes.length > 1 ? '<button type="button" class="x" data-del aria-label="Remove this piece">×</button>' : '<span></span>'}
+        </div>
+        <div class="${grid}">${grid ? fs.map(f => `<div>${f}</div>`).join('') : fs.join('')}</div>
+        <div class="sarea" id="sa-${sh.id}"></div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderStep3() {
+    const M = mat(), m = M.id;
+    let h = '';
+    if (M.kind === 'vol') {
+      h = `<div class="step">3 · Depth</div>
+        <div class="seg" role="group" aria-label="Depth"><button type="button" data-dm="even" aria-pressed="${S.dm === 'even'}">Even depth</button><button type="button" data-dm="slope" aria-pressed="${S.dm === 'slope'}">Sloped (deeper at one end)</button></div>
+        ${S.dm === 'even' ? field(`d1.${m}`, M.why === 'compaction' ? 'Finished depth' : 'Depth', 'dep')
+          : `<div class="row2"><div>${field(`d1.${m}`, 'Shallow end', 'dep')}</div><div>${field(`d2.${m}`, 'Deep end', 'dep')}</div></div>`}
+        <p class="hint">${M.range[S.u]}</p>
+        <label for="h-bag">Bag size, if you buy bags</label>
+        <select id="h-bag" data-sel="bag.${m}">${M.bags[S.u].map(b => `<option value="${b}"${b === bagSize() ? ' selected' : ''}>${bagLabel(b)}</option>`).join('')}</select>`;
+    } else if (M.kind === 'sod') {
+      h = `<div class="step">3 · Sod</div>
+        ${field('sod.waste', 'Extra for cuts and edges', 'pct')}
+        <div class="row2"><div>${field('sod.roll', 'Area per roll', 'area')}</div><div>${field('sod.pallet', 'Area per pallet', 'area')}</div></div>
+        <p class="hint">${S.u === 'us' ? 'A common roll is 2 × 5 ft (10 ft²) and a pallet covers 400–500 ft², but sizes vary by farm. Ask your supplier.' : 'Rolls are often about 1 m² and pallets cover around 40–60 m², but sizes vary by farm. Ask your supplier.'}</p>`;
+    } else if (M.kind === 'seed') {
+      const G = GRASS.find(g => g.id === S.sg);
+      h = `<div class="step">3 · Seed</div>
+        <label for="h-grass">Grass type</label>
+        <select id="h-grass" data-sel="sg">${GRASS.map(g => `<option value="${g.id}"${g.id === S.sg ? ' selected' : ''}>${g.name}</option>`).join('')}</select>
+        <div class="seg" role="group" aria-label="Seeding type" style="margin-top:10px"><button type="button" data-sm="n" aria-pressed="${S.sm === 'n'}">New lawn</button><button type="button" data-sm="o" aria-pressed="${S.sm === 'o'}">Overseeding</button></div>
+        ${field(`seed.rate.${G.id}.${S.sm}`, 'Seeding rate', 'rate')}
+        <p class="hint">Typical rate for ${G.name.toLowerCase()}. If your seed bag gives a different rate, type it in: the label wins.</p>
+        <label for="h-sbag">Bag size</label>
+        <select id="h-sbag" data-sel="seedbag">${SEEDBAGS[S.u].map(b => `<option value="${b}"${b === seedBag() ? ' selected' : ''}>${fmt(b, 1)} ${S.u === 'us' ? 'lb' : 'kg'}</option>`).join('')}</select>`;
+    } else if (M.kind === 'fabric') {
+      h = `<div class="step">3 · Fabric</div>
+        ${field('fab.overlap', 'Extra for overlapping seams', 'pct')}
+        <label for="h-roll">Roll size</label>
+        <select id="h-roll" data-sel="fabroll">${FABROLLS[S.u].map((r, i) => `<option value="${i}"${i === fabRollIdx() ? ' selected' : ''}>${r[0]} × ${r[1]} ${S.u === 'us' ? 'ft' : 'm'}</option>`).join('')}</select>`;
+    }
+    $('#h-s3').innerHTML = h;
+  }
+  function bagSize() { const M = mat(), v = S.f[`bag.${M.id}.${S.u}`]; return M.bags[S.u].includes(v) ? v : M.bag[S.u]; }
+  function seedBag() { const v = S.f[`seedbag.${S.u}`]; return SEEDBAGS[S.u].includes(v) ? v : (S.u === 'us' ? 5 : 2.5); }
+  function fabRollIdx() { const v = S.f[`fabroll.${S.u}`]; return v != null && FABROLLS[S.u][v] ? v : 0; }
+
+  function renderAssume() {
+    const M = mat(), m = M.id;
+    const box = $('#h-assume');
+    if (M.kind !== 'vol') { box.hidden = true; return; }
+    box.hidden = false;
+    $('#h-assumebody').innerHTML =
+      `<div class="row2"><div>${field(`ov.${m}.extra`, M.why === 'compaction' ? 'Extra for compaction' : 'Extra for settling', 'pct')}</div><div>${field(`ov.${m}.dens`, 'Loose weight', 'dens')}</div></div>
+       <p class="hint">${M.why === 'compaction' ? 'Loose material shrinks when it is compacted, so you need more than the finished volume.' : 'Loose material settles once it is spread and watered, so you need a little more than the measured volume.'} Weight varies with moisture and source; ask your supplier for theirs.</p>
+       <div class="row2"><div>${field('truck.pay', 'Pickup payload', 'mass')}</div><div>${field('truck.bed', 'Volume per load', 'vol')}</div></div>
+       <p class="hint">Used for the pickup-load estimate. Check the payload on your door sticker.</p>
+       <button type="button" class="linkbtn" id="h-areset">Reset assumptions</button>`;
+  }
+
+  function renderPrice() {
+    const M = mat(), m = M.id;
+    let h = '';
+    if (M.kind === 'vol') {
+      h = `<div class="row2"><div>${field(`price.bulk.${m}`, 'Bulk price', M.sold === 'wt' ? 'pwt' : 'pvol')}</div><div>${field('price.dlv', 'Delivery fee', 'money')}</div></div>
+        ${field(`price.bag.${m}`, 'Price per bag', 'money')}`;
+    } else if (M.kind === 'sod') {
+      h = `<div class="row2"><div>${field('price.roll', 'Price per roll', 'money')}</div><div>${field('price.pallet', 'Price per pallet', 'money')}</div></div>`;
+    } else if (M.kind === 'seed') {
+      h = field('price.seedbag', 'Price per bag', 'money');
+    } else {
+      h = field('price.fabroll', 'Price per roll', 'money');
+    }
+    $('#h-pricebody').innerHTML = h + '<div class="cmp" id="h-cmp"></div>';
+  }
+
+  function renderAll() { renderUnits(); renderMat(); renderShapes(); renderStep3(); renderAssume(); renderPrice(); compute(); }
+
+  // ---- area of each piece ----
+  function pieceArea(sh) {
+    const g = k => get(`sh${sh.id}.${k}`);
+    const vals = SHAPES[sh.t].f.map(([k]) => g(k));
+    if (vals.some(v => v == null)) return { a: null };
+    if (vals.some(v => (Array.isArray(v) ? false : (isNaN(v) || v < 0)))) return { a: NaN, err: 'Check the numbers.' };
+    const s = x => fmt(disp(x, 'len'), 2), U = unit('len'), UA = unit('area');
+    if (sh.t === 'rect') { const [L, W] = vals; return { a: L * W, w: `${s(L)} × ${s(W)} ${U}` }; }
+    if (sh.t === 'circle') { const [D] = vals; return { a: Math.PI * D * D / 4, w: `circle ${s(D)} ${U} across: π × ${s(D)}² ÷ 4` }; }
+    if (sh.t === 'tri') {
+      const [a, b, c] = vals, p = (a + b + c) / 2, q = p * (p - a) * (p - b) * (p - c);
+      if (q <= 0) return { a: NaN, err: 'Those three sides can\'t make a triangle: the two shorter sides must add up to more than the longest.' };
+      return { a: Math.sqrt(q), w: `triangle ${s(a)}, ${s(b)}, ${s(c)} ${U} (Heron's formula)` };
+    }
+    if (sh.t === 'irr') {
+      const [L, W] = vals;
+      if (isNaN(L) || !Array.isArray(W)) return { a: NaN, err: 'Check the numbers. Separate widths with commas.' };
+      if (W.length < 2) return { a: NaN, err: 'Enter at least two widths: one at each end.' };
+      const n = W.length - 1, sum = W.reduce((t, w, i) => t + (i === 0 || i === n ? w / 2 : w), 0);
+      return { a: L / n * sum, w: `irregular, ${W.length} widths over ${s(L)} ${U} (spacing ${s(L / n)} ${U}, trapezoid rule)` };
+    }
+    if (sh.t === 'known') { const [A] = vals; return { a: A, w: `entered area` }; }
+    return { a: null };
+  }
+
+  // ---- main calculation ----
+  function compute() {
+    let total = 0, any = false, bad = false;
+    const work = [];
+    S.shapes.forEach(sh => {
+      const r = pieceArea(sh), el = $('#sa-' + sh.id);
+      if (!el) return;
+      el.className = 'sarea';
+      if (r.a == null) { el.textContent = ''; return; }
+      if (isNaN(r.a)) { el.className = 'sarea err'; el.textContent = r.err; bad = true; return; }
+      any = true; total += sh.op * r.a;
+      el.innerHTML = `${sh.op < 0 ? 'Subtracting' : 'Area'}: <b>${A_(r.a)}</b>`;
+      work.push(`${sh.op < 0 ? '− ' : (work.length ? '+ ' : '')}${r.w} = ${A_(r.a)}`);
+    });
+    // mark bad inputs
+    root.querySelectorAll('input[data-k]').forEach(inp => {
+      const k = inp.dataset.k, v = S.f[k];
+      inp.classList.toggle('bad', RAW[k] !== undefined && RAW[k].trim() !== '' && (v == null || (Array.isArray(v) ? false : isNaN(v))));
+    });
+    $('#h-area').textContent = any ? A_(total) : '–';
+    const R = { total, work };
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    if (!any || total <= 0) {
+      res.innerHTML = `<p class="empty">${any && total <= 0 ? 'The pieces you subtract are bigger than the pieces you add. Check the Add / Subtract choices.' : 'Enter your measurements above to see how much to order.'}</p>`;
+      wb.innerHTML = '<p class="empty">The calculation will appear here.</p>';
+      if (cmp) cmp.innerHTML = '';
+      writeHash();
+      return;
+    }
+    const M = mat();
+    if (work.length > 1) work.push(`Total area = ${A_(total)}`); else work[0] = 'Area: ' + work[0];
+    if (M.kind === 'vol') vol(M, R); else if (M.kind === 'sod') sod(R); else if (M.kind === 'seed') seed(R); else fabric(R);
+    writeHash();
+  }
+
+  function li(a, b) { return `<li><span>${a}</span><span>${b}</span></li>`; }
+  function sayBox(txt) { return `<div class="say"><span class="lab">What to tell the supplier</span><span id="h-say">${esc(txt)}</span> <button type="button" class="linkbtn" id="h-copysay">Copy</button></div>`; }
+
+  function vol(M, R) {
+    const m = M.id, A = R.total;
+    const d1 = get(`d1.${m}`), d2 = get(`d2.${m}`);
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    if (d1 == null || isNaN(d1) || (S.dm === 'slope' && (d2 == null || isNaN(d2))) || d1 <= 0) {
+      res.innerHTML = '<p class="empty">Enter a depth in step 3.</p>'; wb.innerHTML = ''; cmp.innerHTML = ''; return;
+    }
+    const d = S.dm === 'even' ? d1 : (d1 + d2) / 2;
+    const X = (get(`ov.${m}.extra`) || 0) / 100, dens = get(`ov.${m}.dens`);
+    const V = A * d, Vo = V * (1 + X), Wt = Vo * dens;
+    const bag = bagSize(), bSI = bagSI(bag), bags = Math.ceil(Vo / bSI - 1e-9);
+    const pay = get('truck.pay'), bed = get('truck.bed');
+    const loads = Math.ceil(Math.max(Wt / pay, Vo / bed) - 1e-9);
+    const weightLimited = Wt / pay > Vo / bed;
+    const Vd = disp(V, 'vol'), Vod = disp(Vo, 'vol'), orderV = upHalf(Vod);
+    const tons = S.u === 'us' ? Wt / TON : Wt, orderT = upHalf(tons);
+    const U = unit('vol'), WU = S.u === 'us' ? 'tons' : 'tonnes';
+    const extraWord = M.why === 'compaction' ? 'compaction' : 'settling';
+    let big, sub;
+    if (M.sold === 'wt') {
+      big = `About ${fmt(orderT, 1)} ${WU}`;
+      sub = `That is ${fmt(Vod, 2)} ${U} of loose ${M.name.toLowerCase().split(' (')[0]}, including ${fmt(X * 100, 0)}% extra for ${extraWord}. Stone and sand are usually sold by weight.`;
+    } else {
+      big = `${fmt(orderV, 1)} ${U}`;
+      sub = `You need ${fmt(Vod, 2)} ${U}, including ${fmt(X * 100, 0)}% extra for ${extraWord} (${fmt(Vd, 2)} ${U} before ${extraWord}). Rounded up to the next ½ ${U}.`;
+    }
+    const items = [];
+    if (M.sold === 'wt') items.push(li('Loose volume', `${fmt(Vod, 2)} ${U}`)); else items.push(li('Weight', `≈ ${W_(Wt)}${S.u === 'us' ? ` (${fmt(Math.round(Wt / LBt / 10) * 10, 0)} lb)` : ''}`));
+    items.push(li('Or in bags', `${fmt(bags, 0)} bags of ${bagLabel(bag)}`));
+    items.push(li('Pickup loads', `≈ ${loads}`));
+    const notes = [];
+    if (Vod < 1 && S.u === 'us' || Vod < 0.75 && S.u === 'si') notes.push('Small job: bags are often cheaper than a bulk delivery once the delivery fee is added. Use <em>Compare prices</em> below.');
+    if (weightLimited && loads > 1) notes.push(`Weight, not space, limits each pickup load here: a bed that looks half full of ${M.name.toLowerCase().split(' (')[0]} can already be at the payload limit.`);
+    if (M.id === 'topsoil' || M.id === 'gardenmix') notes.push('Before you buy, ask whether it is screened, what it is made of, and whether it has been tested. See the buyer\'s checklist below the calculator.');
+    const depthTxt = S.dm === 'even' ? D_(d) : `${D_(d1)} to ${D_(d2)}`;
+    const say = M.sold === 'wt'
+      ? `I need about ${fmt(orderT, 1)} ${WU} of ${M.name.toLowerCase().replace(/ \(.*\)/, '')} (about ${fmt(Vod, 1)} ${U} loose) to cover ${A_(A)} at ${depthTxt}${M.why === 'compaction' ? ' compacted' : ''}.`
+      : `I need ${fmt(orderV, 1)} ${U} of ${M.name.toLowerCase().replace(/ \(.*\)/, '')} to cover ${A_(A)} at ${depthTxt}.`;
+    res.innerHTML = `<div class="step">Order</div><div class="big">${big}</div><p class="sub">${sub}</p><ul>${items.join('')}</ul>` +
+      notes.map(n => `<div class="note">${n}</div>`).join('') + sayBox(say);
+
+    // working
+    const w = R.work.slice();
+    if (S.dm === 'even') w.push(`Depth = ${D_(d)} = ${S.u === 'us' ? fmt(d / FT, 3) + ' ft' : fmt(d, 3) + ' m'}`);
+    else w.push(`Average depth = (${D_(d1)} + ${D_(d2)}) ÷ 2 = ${D_(d)} (for a steady slope the average gives the volume)`);
+    if (S.u === 'us') {
+      const ft3 = V / CUFT;
+      w.push(`Volume = ${fmt(A / FT2, 1)} ft² × ${fmt(d / FT, 3)} ft = ${fmt(ft3, 1)} ft³ ÷ 27 = ${fmt(Vd, 2)} yd³`);
+    } else w.push(`Volume = ${fmt(A, 2)} m² × ${fmt(d, 3)} m = ${fmt(V, 3)} m³`);
+    w.push(`With ${fmt(X * 100, 0)}% extra for ${extraWord}: ${fmt(Vd, 2)} × ${fmt(1 + X, 2)} = ${fmt(Vod, 2)} ${U}${M.sold === 'vol' ? ` → order ${fmt(orderV, 1)} ${U}` : ''}`);
+    w.push(`Weight = ${fmt(Vod, 2)} ${U} × ${fmt(disp(dens, 'dens'), 2)} ${unit('dens')} = ${W_(Wt)}${M.sold === 'wt' ? ` → order about ${fmt(orderT, 1)} ${WU}` : ''}`);
+    w.push(S.u === 'us' ? `Bags = ${fmt(Vo / CUFT, 1)} ft³ ÷ ${fmt(bag, 2)} ft³ per bag = ${fmt(Vo / bSI, 1)} → ${bags} bags` : `Bags = ${fmt(Vo * 1000, 0)} L ÷ ${fmt(bag, 0)} L per bag = ${fmt(Vo / bSI, 1)} → ${bags} bags`);
+    w.push(`Pickup loads = the larger of ${W_(Wt)} ÷ ${S.u === 'us' ? fmt(pay / LBt, 0) + ' lb' : fmt(pay * 1000, 0) + ' kg'} payload and ${fmt(Vod, 2)} ÷ ${fmt(disp(bed, 'vol'), 2)} ${U} per load → ${loads}`);
+    wb.innerHTML = `<ol class="work">${w.map(x => `<li>${x}</li>`).join('')}</ol>`;
+
+    // prices
+    const pb = get(`price.bulk.${m}`), dl = get('price.dlv') || 0, pbag = get(`price.bag.${m}`);
+    const rows = [];
+    let bulkTot = null, bagTot = null;
+    if (pb != null && !isNaN(pb)) {
+      const pDisp = disp(pb, M.sold === 'wt' ? 'pwt' : 'pvol');
+      bulkTot = (M.sold === 'wt' ? orderT : orderV) * pDisp + dl;
+      rows.push(['Bulk' + (dl ? ', delivered' : ''), bulkTot, `${fmt(M.sold === 'wt' ? orderT : orderV, 1)} ${M.sold === 'wt' ? WU : U} × ${money(pDisp)}${dl ? ' + ' + money(dl) : ''}`]);
+    }
+    if (pbag != null && !isNaN(pbag)) { bagTot = bags * pbag; rows.push(['Bags', bagTot, `${bags} × ${money(pbag)}`]); }
+    let h = rows.map(r => `<div><span>${r[0]} <span style="color:var(--ink-3)">${r[2]}</span></span><span class="${rows.length > 1 && r[1] === Math.min(bulkTot, bagTot) ? 'win' : ''}">${money(r[1])}</span></div>`).join('');
+    if (bulkTot != null && bagTot != null) {
+      const cheaper = bulkTot <= bagTot ? 'Bulk' : 'Bags';
+      h += `<p class="hint">${cheaper} saves ${money(Math.abs(bulkTot - bagTot))}.`;
+      const pv = M.sold === 'wt' ? pb * dens : pb;     // bulk price per m³
+      const bagPerM3 = pbag / bSI;
+      if (bagPerM3 > pv && dl > 0) h += ` Bags are cheaper below about ${fmt(disp(dl / (bagPerM3 - pv), 'vol'), 2)} ${U}, where the delivery fee outweighs the bag premium.`;
+      h += '</p>';
+    }
+    if (!rows.length) h = '<p class="hint">Enter prices from your supplier to compare bulk delivery with bags.</p>';
+    cmp.innerHTML = h;
+  }
+
+  function sod(R) {
+    const A = R.total, w = (get('sod.waste') || 0) / 100, roll = get('sod.roll'), pal = get('sod.pallet');
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    if (!(roll > 0) || !(pal > 0)) { res.innerHTML = '<p class="empty">Enter the roll and pallet sizes in step 3.</p>'; return; }
+    const Aw = A * (1 + w), rolls = Math.ceil(Aw / roll - 1e-9), full = Math.floor(Aw / pal + 1e-9);
+    const rem = Math.max(0, Math.ceil((Aw - full * pal) / roll - 1e-9)), allPal = Math.ceil(Aw / pal - 1e-9);
+    const big = full === 0 ? `${rolls} rolls` : rem === 0 ? `${full} pallet${full > 1 ? 's' : ''}` : `${full} pallet${full > 1 ? 's' : ''} + ${rem} rolls`;
+    const items = [li('Sod needed', A_(Aw)), li('All in rolls', `${rolls} rolls`), li('All in pallets', `${allPal} pallet${allPal > 1 ? 's' : ''} (${A_(allPal * pal)})`)];
+    const say = `I need ${big} of sod, about ${A_(Aw)} including ${fmt(w * 100, 0)}% for cuts.`;
+    res.innerHTML = `<div class="step">Order</div><div class="big">${big}</div><p class="sub">Covers ${A_(A)} plus ${fmt(w * 100, 0)}% for cuts and edges.</p><ul>${items.join('')}</ul>
+      <div class="note">Lay sod the day it arrives, on soil that is loosened and levelled. Need topsoil under it? <button type="button" class="linkbtn" data-goto="topsoil">Switch to topsoil</button> (your area is kept).</div>` + sayBox(say);
+    wb.innerHTML = `<ol class="work">${R.work.concat([
+      `With ${fmt(w * 100, 0)}% extra: ${A_(A)} × ${fmt(1 + w, 2)} = ${A_(Aw)}`,
+      `Rolls = ${A_(Aw)} ÷ ${A_(roll)} per roll = ${fmt(Aw / roll, 1)} → ${rolls}`,
+      `Pallets = ${A_(Aw)} ÷ ${A_(pal)} per pallet = ${fmt(Aw / pal, 2)} → ${full} full pallet${full === 1 ? '' : 's'}${rem ? ` + ${rem} rolls for the remaining ${A_(Aw - full * pal)}` : ''}`
+    ]).map(x => `<li>${x}</li>`).join('')}</ol>`;
+    const pr = get('price.roll'), pp = get('price.pallet'), opts = [];
+    if (pr > 0) opts.push(['All rolls', rolls * pr]);
+    if (pp > 0) opts.push(['All pallets', allPal * pp]);
+    if (pr > 0 && pp > 0 && full > 0 && rem > 0) opts.push([`${full} pallet${full > 1 ? 's' : ''} + ${rem} rolls`, full * pp + rem * pr]);
+    const best = Math.min(...opts.map(o => o[1]));
+    cmp.innerHTML = opts.length ? opts.map(o => `<div><span>${o[0]}</span><span class="${opts.length > 1 && o[1] === best ? 'win' : ''}">${money(o[1])}</span></div>`).join('') : '<p class="hint">Enter roll and pallet prices to find the cheapest mix.</p>';
+  }
+
+  function seed(R) {
+    const A = R.total, G = GRASS.find(g => g.id === S.sg), rate = get(`seed.rate.${G.id}.${S.sm}`);
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    if (!(rate > 0)) { res.innerHTML = '<p class="empty">Enter a seeding rate in step 3.</p>'; return; }
+    const kg = A * rate / 1000, bag = seedBag(), bagKg = S.u === 'us' ? bag * LBkg : bag, bags = Math.ceil(kg / bagKg - 1e-9);
+    const amt = S.u === 'us' ? `${fmt(kg / LBkg, 1)} lb` : `${fmt(kg, 2)} kg`;
+    const say = `I need ${amt} of ${G.name.toLowerCase()} seed for ${A_(A)} (${S.sm === 'n' ? 'new lawn' : 'overseeding'}).`;
+    res.innerHTML = `<div class="step">Buy</div><div class="big">${amt}</div><p class="sub">${G.name}, ${S.sm === 'n' ? 'new lawn' : 'overseeding'}, at ${fmt(disp(rate, 'rate'), 2)} ${unit('rate')}.</p><ul>${li('Bags', `${bags} × ${fmt(bag, 1)} ${S.u === 'us' ? 'lb' : 'kg'}`)}</ul>
+      <div class="note">More seed is not better: sowing too thickly gives weak, crowded seedlings. Good seed-to-soil contact and steady moisture until it is established matter more.</div>` + sayBox(say);
+    wb.innerHTML = `<ol class="work">${R.work.concat([
+      S.u === 'us' ? `Seed = ${fmt(disp(rate, 'rate'), 2)} lb per 1,000 ft² × ${fmt(A / FT2 / 1000, 3)} thousand ft² = ${amt}` : `Seed = ${fmt(rate, 1)} g/m² × ${fmt(A, 1)} m² = ${fmt(kg * 1000, 0)} g = ${amt}`,
+      `Bags = ${amt} ÷ ${fmt(bag, 1)} ${S.u === 'us' ? 'lb' : 'kg'} = ${fmt(kg / bagKg, 2)} → ${bags}`
+    ]).map(x => `<li>${x}</li>`).join('')}</ol>`;
+    const p = get('price.seedbag');
+    cmp.innerHTML = p > 0 ? `<div><span>${bags} bags × ${money(p)}</span><span>${money(bags * p)}</span></div>` : '<p class="hint">Enter the price per bag to see the cost. Compare cost per lb between bag sizes: bigger bags are often much cheaper per lb.</p>';
+  }
+
+  function fabric(R) {
+    const A = R.total, ov = (get('fab.overlap') || 0) / 100, r = FABROLLS[S.u][fabRollIdx()];
+    const rollA = S.u === 'us' ? r[0] * r[1] * FT2 : r[0] * r[1];
+    const Aw = A * (1 + ov), rolls = Math.ceil(Aw / rollA - 1e-9);
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    const rl = `${r[0]} × ${r[1]} ${S.u === 'us' ? 'ft' : 'm'}`;
+    res.innerHTML = `<div class="step">Buy</div><div class="big">${rolls} roll${rolls > 1 ? 's' : ''}</div><p class="sub">${rl} rolls for ${A_(A)} plus ${fmt(ov * 100, 0)}% for overlaps.</p>
+      <div class="note">Overlap seams by ${S.u === 'us' ? '6–12 in' : '15–30 cm'} and pin every ${S.u === 'us' ? '3–4 ft' : 'metre or so'}. Fabric works best under gravel and rock; under bark mulch, the mulch breaks down on top and weeds root into it anyway.</div>` + sayBox(`I need ${rolls} roll${rolls > 1 ? 's' : ''} of ${rl} landscape fabric.`);
+    wb.innerHTML = `<ol class="work">${R.work.concat([`With ${fmt(ov * 100, 0)}% overlap: ${A_(Aw)}`, `Rolls = ${A_(Aw)} ÷ ${A_(rollA)} per roll = ${fmt(Aw / rollA, 2)} → ${rolls}`]).map(x => `<li>${x}</li>`).join('')}</ol>`;
+    const p = get('price.fabroll');
+    cmp.innerHTML = p > 0 ? `<div><span>${rolls} × ${money(p)}</span><span>${money(rolls * p)}</span></div>` : '<p class="hint">Enter the price per roll to see the cost.</p>';
+  }
+
+  // ---- share link (state in the URL hash) ----
+  function writeHash() {
+    try {
+      const pack = JSON.stringify({ v: 1, u: S.u, m: S.m, sh: S.shapes, dm: S.dm, sm: S.sm, sg: S.sg, f: S.f });
+      const h = '#s=' + btoa(unescape(encodeURIComponent(pack))).replace(/=+$/, '');
+      if (location.hash !== h) history.replaceState(null, '', h);
+    } catch (e) { /* ignore */ }
+  }
+  function readHash() {
+    try {
+      const m = location.hash.match(/^#s=(.+)$/);
+      if (!m) return null;
+      const o = JSON.parse(decodeURIComponent(escape(atob(m[1]))));
+      if (!o || o.v !== 1 || !MAT[o.m] || !Array.isArray(o.sh) || !o.sh.length) return null;
+      const st = fresh(o.u === 'si' ? 'si' : 'us');
+      st.m = o.m; st.shapes = o.sh.filter(s => SHAPES[s.t]).map(s => ({ id: +s.id, t: s.t, op: s.op < 0 ? -1 : 1 }));
+      if (!st.shapes.length) return null;
+      st.nid = Math.max(...st.shapes.map(s => s.id)) + 1;
+      st.dm = o.dm === 'slope' ? 'slope' : 'even'; st.sm = o.sm === 'o' ? 'o' : 'n';
+      st.sg = GRASS.some(g => g.id === o.sg) ? o.sg : 'tf';
+      st.f = o.f && typeof o.f === 'object' ? o.f : {};
+      return st;
+    } catch (e) { return null; }
+  }
+
+  function toast(msg) { const t = $('#h-toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('on'), 1800); }
+  function copy(text, msg) {
+    const done = () => toast(msg);
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, () => fallback());
+    else fallback();
+    function fallback() {
+      const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) { window.prompt('Copy this:', text); }
+      ta.remove();
+    }
+  }
+
+  // ---- events ----
+  root.addEventListener('input', e => {
+    const inp = e.target.closest('input[data-k]');
+    if (!inp) return;
+    const k = inp.dataset.k, t = inp.dataset.t;
+    RAW[k] = inp.value;
+    const v = inp.value.trim() === '' ? null : parse(t, inp.value);
+    if (v == null) delete S.f[k]; else S.f[k] = v;
+    if (/^d1\./.test(k) || /^sh/.test(k)) { /* nothing extra */ }
+    compute();
+  });
+  root.addEventListener('change', e => {
+    const el = e.target;
+    if (el.id === 'h-mat') { S.m = el.value; clearRaw(); renderMat(); renderStep3(); renderAssume(); renderPrice(); compute(); return; }
+    if (el.dataset.sh) {
+      const id = +el.closest('.shape').dataset.id, sh = S.shapes.find(s => s.id === id);
+      if (el.dataset.sh === 't') { sh.t = el.value; renderShapes(); }
+      else { sh.op = +el.value; el.closest('.shape').classList.toggle('sub', sh.op < 0); }
+      compute(); return;
+    }
+    if (el.dataset.sel) {
+      const s = el.dataset.sel;
+      if (s === 'sg') { S.sg = el.value; renderStep3(); }
+      else if (s === 'seedbag') S.f[`seedbag.${S.u}`] = +el.value;
+      else if (s === 'fabroll') S.f[`fabroll.${S.u}`] = +el.value;
+      else if (s.startsWith('bag.')) S.f[`${s}.${S.u}`] = +el.value;
+      compute();
+    }
+  });
+  root.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.u && b.dataset.u !== S.u) {
+      S.u = b.dataset.u; RAW = {};
+      try { localStorage.setItem('ra-units', S.u); } catch (err) { /* ignore */ }
+      renderAll(); return;
+    }
+    if (b.dataset.dm) { S.dm = b.dataset.dm; renderStep3(); compute(); return; }
+    if (b.dataset.sm) { S.sm = b.dataset.sm; renderStep3(); compute(); return; }
+    if (b.dataset.goto) { S.m = b.dataset.goto; clearRaw(); renderMat(); renderStep3(); renderAssume(); renderPrice(); compute(); $('#h-mat').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    if (b.hasAttribute('data-del')) {
+      const id = +b.closest('.shape').dataset.id;
+      S.shapes = S.shapes.filter(s => s.id !== id);
+      Object.keys(S.f).forEach(k => { if (k.startsWith(`sh${id}.`)) delete S.f[k]; });
+      renderShapes(); compute(); return;
+    }
+    if (b.id === 'h-add') {
+      const id = S.nid++;
+      S.shapes.push({ id, t: 'rect', op: 1 });
+      renderShapes(); compute();
+      const first = root.querySelector(`.shape[data-id="${id}"] input`); if (first) first.focus();
+      return;
+    }
+    if (b.id === 'h-areset') {
+      const m = S.m;
+      [`ov.${m}.extra`, `ov.${m}.dens`, 'truck.pay', 'truck.bed'].forEach(k => { delete S.f[k]; delete RAW[k]; });
+      renderAssume(); compute(); return;
+    }
+    if (b.id === 'h-copysay') { copy($('#h-say').textContent, 'Copied'); return; }
+    if (b.id === 'h-link') { writeHash(); copy(location.href, 'Link copied'); return; }
+    if (b.id === 'h-print') { root.querySelectorAll('details').forEach(d => d.open = true); window.print(); return; }
+    if (b.id === 'h-reset') { S = fresh(S.u); RAW = {}; history.replaceState(null, '', location.pathname + location.search); renderAll(); return; }
+  });
+
+  // ---- start ----
+  let u0 = 'us';
+  try { const s = localStorage.getItem('ra-units'); if (s === 'si' || s === 'us') u0 = s; } catch (e) { /* ignore */ }
+  S = readHash() || fresh(u0);
+  const qm = new URLSearchParams(location.search).get('m');
+  if (qm && MAT[qm] && !location.hash) S.m = qm;
+  renderAll();
+})();
+</script>
+<section id="how-to-measure" class="level2">
+<h2 data-anchor-id="how-to-measure">How to measure</h2>
+<ul>
+<li><strong>Rectangles and squares:</strong> length × width. An L-shaped bed is two rectangles; add them as two pieces.</li>
+<li><strong>Circles:</strong> measure straight across the middle (the diameter). For a ring around a tree, add the full circle and subtract the inner circle.</li>
+<li><strong>Triangles:</strong> measure all three sides. You don’t need the height.</li>
+<li><strong>Curvy beds:</strong> run a tape measure along the longest straight line through the bed. Every few feet, measure straight across at a right angle. Enter those widths in order, including both ends (0 if the bed comes to a point). The more widths you measure, the more accurate the area.</li>
+</ul>
+</section>
+<section id="why-order-more-than-you-measured" class="level2">
+<h2 data-anchor-id="why-order-more-than-you-measured">Why order more than you measured</h2>
+<p>Loose soil, compost and mulch settle once they are spread and watered, and road base or sand shrinks when it is compacted. The calculator adds a typical allowance for each material; you can change it under <em>Assumptions</em>. It then rounds up to the next half unit, because suppliers rarely sell less.</p>
+</section>
+<section id="cubic-yards-vs-tons" class="level2">
+<h2 data-anchor-id="cubic-yards-vs-tons">Cubic yards vs tons</h2>
+<p>Soil, compost and mulch are usually sold by the <strong>cubic yard</strong> (volume). Stone, gravel and sand are usually sold by the <strong>ton</strong> (weight). The same cubic yard can weigh anywhere from about 600 lb (mulch) to over 2,500 lb (gravel), so a price per ton and a price per yard cannot be compared without knowing the weight. Ask your supplier what their material weighs per yard, and put that number in <em>Assumptions</em>.</p>
+</section>
+<section id="before-you-buy-topsoil" class="level2">
+<h2 data-anchor-id="before-you-buy-topsoil">Before you buy topsoil</h2>
+<p>“Topsoil” has no legal definition, and quality varies a lot. Before you buy, ask:</p>
+<ul>
+<li><strong>Is it screened?</strong> Screened soil has had rocks, roots and clods removed.</li>
+<li><strong>What is in it?</strong> Native soil, a blend with compost or sand, or fill dirt?</li>
+<li><strong>Has it been tested?</strong> Ask for pH, organic matter, salts and texture. A reputable supplier can tell you.</li>
+<li><strong>Can I see it first?</strong> Look for weeds, construction debris, plastic or a sour smell. When the load arrives, check that it matches what you saw.</li>
+</ul>
+<p>Don’t pay for more than you need: a quote for several times the volume this calculator gives is worth questioning.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/rafikiardhi\.earth");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 RafikiArdhi LLC · Carbondale, Colorado</p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+<p><em>Rafiki Ardhi</em> — short for “friend of the land”</p>
+</div>
+  </div>
+</footer>
+
+
+
+
+<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
