@@ -23,12 +23,14 @@ website:
         text: About
       - href: services.qmd
         text: Services
-      - href: tools.qmd
-        text: Tools
-      - href: soil-keys.qmd
-        text: Soil Keys
-      - href: homeowners.qmd
-        text: Homeowners
+      - text: Tools
+        menu:
+          - href: homeowners.qmd
+            text: For homeowners
+          - href: tools.qmd
+            text: For researchers
+          - href: soil-keys.qmd
+            text: Soil classification keys
       - href: publications.qmd
         text: Research
       - href: contact.qmd
