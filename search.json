@@ -651,6 +651,13 @@
     "text": "Approach\nWe build on existing knowledge rather than replacing it. Every map and piece of information is updated, not reset; every estimate propagates its uncertainty; and every result is explained in terms the decision maker can use.\nWe do not use AI to replace human expertise. Where others reach for black-box AI, we use “glass box” functions: methods that are easy to interpret, scale to large problems, and are benchmarked against AI models."
   },
   {
+    "objectID": "about.html#acknowledgements",
+    "href": "about.html#acknowledgements",
+    "title": "About",
+    "section": "Acknowledgements",
+    "text": "Acknowledgements\nThe free tools on this site were co-authors, improved by people who tested them, checked the methods and suggested changes. Thank you to:\n\nRosana Kostecki, PhD\nZahra Rasaei, PhD\nSara Merzoug (LinkedIn), Affiliation: 2GBEI Laboratory, Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco\n\nAny remaining errors are ours. Found one, or want to suggest a tool? Get in touch."
+  },
+  {
     "objectID": "about.html#the-name",
     "href": "about.html#the-name",
     "title": "About",
