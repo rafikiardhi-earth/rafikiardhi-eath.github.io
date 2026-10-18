@@ -3,6 +3,7 @@ title: "Check a result"
 description: "Plausibility checks for soil and environmental results: kriging error, R² vs RMSE, classification accuracy, detectable change, back-transformation, carbon stock arithmetic, area estimation, effective sample size, spatial cross-validation, lab conversions and coordinates."
 anchor-sections: false
 include-in-header: _hm-head.html
+page-layour: full
 ---
 
 Before you submit, or when you review, check that the numbers can all be true. Each check takes the figures a paper or report gives (or your own) and tests them against what the method allows. Nothing you enter leaves your browser.
