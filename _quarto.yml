@@ -34,7 +34,7 @@ website:
       - href: contact.qmd
         text: Contact
   page-footer:
-    left: left: "© 2026 RafikiArdhi LLC · Carbondale, Colorado · [Privacy](privacy.qmd)"
+    left: "© 2026 RafikiArdhi LLC · Carbondale, Colorado · [Privacy](privacy.qmd)"
     right: "*Rafiki Ardhi* — short for “friend of the land”"
 
 format:
