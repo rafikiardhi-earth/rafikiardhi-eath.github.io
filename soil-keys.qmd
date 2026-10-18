@@ -26,6 +26,8 @@ body.quarto-light .keyswitch button[aria-selected="true"] { background: #8a4b22;
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 [data-wrb-lang][hidden] { display: none !important; }
+.sw-wrap .sw-intro { max-width: 640px; margin: 0 auto 10px; line-height: 1.7; }
+.sw-wrap .sw-intro p { margin: 0 0 8px; }
 .fa-wrap { direction: rtl; text-align: right; font-family: "Vazirmatn", Tahoma, "Segoe UI", sans-serif; }
 .fa-wrap .wrbk, .fa-wrap .wrbk button, .fa-wrap .wrbk input, .fa-wrap .wrbk select, .fa-wrap .wrbk textarea { font-family: inherit; }
 .fa-wrap .fa-intro { max-width: 560px; margin: 0 auto 6px; line-height: 1.9; font-size: .95rem; opacity: .9; }
@@ -131,7 +133,7 @@ body.quarto-light .wrbk {
   <header>
     <div class="brand"><span class="beta" style="margin-left:0">Beta</span> <span style="font-weight:400; font-size:.85rem; color:var(--ink-3)">Learning and screening aid</span></div>
     <div class="key-hd-right">
-      <select class="key-lang" id="wrb-lang" aria-label="Language"><option value="en" selected>English</option><option value="fa" lang="fa">فارسی</option></select>
+      <select class="key-lang" id="wrb-lang" aria-label="Language"><option value="en" selected>English</option><option value="fa" lang="fa">فارسی</option><option value="sw" lang="sw">Kiswahili</option></select>
       <button id="restart" hidden>Start over</button>
     </div>
   </header>
@@ -968,7 +970,7 @@ render();
   <header>
     <div class="brand"><span class="beta" style="margin-right:0">آزمایشی</span> <span style="font-weight:400; font-size:.85rem; color:var(--ink-3)">ابزار آموزشی و غربالگری</span></div>
     <div class="key-hd-right">
-      <select class="key-lang" id="wrb-lang-fa" aria-label="زبان / Language"><option value="en" lang="en">English</option><option value="fa">فارسی</option></select>
+      <select class="key-lang" id="wrb-lang-fa" aria-label="زبان / Language"><option value="en" lang="en">English</option><option value="fa" selected>فارسی</option><option value="sw" lang="sw">Kiswahili</option></select>
       <button id="fa-restart" hidden>شروع دوباره</button>
     </div>
   </header>
@@ -1711,10 +1713,755 @@ render();
 </script>
 </div>
 </div>
+<div class="sw-wrap" data-wrb-lang="sw" lang="sw" hidden>
+<div class="sw-intro">
+  <p>Ufunguo huu wa hatua kwa hatua unakufikisha kwenye Kundi la Rejea la Udongo (Reference Soil Group) katika mfumo wa kimataifa wa uainishaji wa udongo, WRB 2022. Majina ya makundi na viainishi yameandikwa kwa Kiingereza kama yalivyo katika WRB, na maelezo mafupi ya Kiswahili ndani ya mabano. Hesabu zote zinafanyika kwenye kifaa chako, na hakuna data inayotumwa wala kuhifadhiwa.</p>
+</div>
+<div class="wrbk">
+<div class="wk-app">
+  <header>
+    <div class="brand"><span class="beta" style="margin-left:0">Majaribio</span> <span style="font-weight:400; font-size:.85rem; color:var(--ink-3)">Zana ya kujifunzia na uchunguzi wa awali</span></div>
+    <div class="key-hd-right">
+      <select class="key-lang" id="wrb-lang-sw" aria-label="Lugha / Language"><option value="en" lang="en">English</option><option value="fa" lang="fa">فارسی</option><option value="sw" selected>Kiswahili</option></select>
+      <button id="sw-restart" hidden>Anza upya</button>
+    </div>
+  </header>
+  <div class="wk-progress" aria-hidden="true"><div id="sw-bar" style="width:0%"></div></div>
+  <main id="sw-view"></main>
+  <div class="foot"><a href="tools.html">← Rudi kwenye Zana</a><br>
+    <b>Majaribio:</b> ni zana ya kujifunzia. Haichukui nafasi ya maandiko ya WRB wala mtaalamu wa udongo.<br>
+    <b>Chanzo:</b> <span lang="en">IUSS Working Group WRB (2022). <i>World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps</i>, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria.</span> <a href="https://wrb.isric.org/documents.html" target="_blank" rel="noopener">wrb.isric.org</a><br>
+    <b>Kuainisha kutoka data katika R:</b> <span lang="en">Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. R package version 0.9.259.</span> <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a> · <a href="https://github.com/HugoMachadoRodrigues/soilKey" target="_blank" rel="noopener">GitHub</a></div>
+</div>
+<script>
+// Simplified WRB 2022 key engine for the RafikiArdhi WRB key.
+// Every threshold lives in WRB_T and was checked against IUSS Working Group WRB (2022), 4th edition with
+// errata corrections of 24 September 2024 (page numbers in comments). Criteria that need data the form does
+// not collect (structure, dry colour, illuvial clay evidence, etc.) are noted in the result instead.
+(function (root) {
+  const WRB_T = {
+    // Histosols, Ch 4 p 95
+    histicOrganicCm: 40, histicOverRockCm: 10,
+    // Leptosols, Ch 4 p 99
+    leptoRockCm: 25, leptoCoarsePct: 80, leptoDepthCm: 75,
+    // argic / natric clay increase, Ch 3.1.3 p 36 and 3.1.21 p 53
+    argicMinClay: 8, argicLowClay: 15, argicLowAdd: 6, argicRatio: 1.4, argicHighClay: 50, argicHighAdd: 20,
+    argicThinCm: 7.5, argicThickCm: 15, argicTransitionCm: 15, argicDepthCm: 100,
+    // natric, Ch 3.1.21 p 54
+    natricESP: 15, natricUpperCm: 40,
+    // Vertisols, Ch 4 p 101; vertic horizon Ch 3.1.40 p 70
+    vertisolClayPct: 30, verticThickCm: 25,
+    // salic, Ch 3.1.33 p 64; Solonchaks Ch 4 p 102
+    salicEC: 15, salicProduct: 450, salicAlkPH: 8.5, salicAlkEC: 8, salicAlkProduct: 240, salicThickCm: 15, salicDepthCm: 50,
+    // plinthic group, Ch 4 p 106
+    plinthicDepthCm: 100,
+    // abrupt textural difference, Ch 3.2.1 p 72; Planosols Ch 4 p 107
+    abruptLowerClay: 15, abruptLowerThickCm: 7.5, abruptMinStartCm: 10, abruptDoubleBelow: 20, abruptAdd: 20, planoDepthCm: 75,
+    // nitic, Ch 3.1.22 p 55; Nitisols Ch 4 p 109
+    nitisolClayPct: 30, niticThickCm: 30, niticDepthCm: 100,
+    // ferralic, Ch 3.1.10 p 44; Ferralsols Ch 4 p 110
+    ferralicCECclay: 16, ferralicMinClay: 8, ferralicCoarsePct: 80, ferralicDepthCm: 150, ferralicThickCm: 30, ferralsolArgicOC: 1.4,
+    // mollic, Ch 3.1.20 p 52; chernic Ch 3.1.6 p 40
+    darkValue: 3, darkChroma: 3, darkOC: 0.6, darkThickCm: 20, darkOverRockCm: 10,
+    darkCalcMid: 15, darkCalcHigh: 40, darkMidOC: 1, darkHighValue: 5, darkHighOC: 2.5,
+    chernicChroma: 2, chernicOC: 1, chernicMidOC: 1.5, chernicThickCm: 30,
+    baseSat: 50,
+    // Chernozems / Kastanozems, Ch 4 pp 111-112
+    carbonatePresentPct: 1, protocalcicMinCm: 5, chernoCarbBelowCm: 50, kastanoCarbDepthCm: 70, phaeoDepthCm: 100,
+    // gypsic Ch 3.1.14 p 47; calcic Ch 3.1.4 p 37; Gypsisols/Calcisols Ch 4 pp 116-117
+    gypsicPct: 5, gypsicProduct: 150, calcicPct: 15, accumThickCm: 15, accumDepthCm: 100,
+    // Acrisols / Lixisols / Alisols, Ch 4 pp 119-121
+    lowActivityCECclay: 24, lowActivityDepthCm: 150, alRangeTop: 50, alRangeBottom: 100,
+    // Annex 2, Table 9.3 p 221: pH(water) at which exchangeable bases = exchangeable Al, by organic C class
+    alPH: [[2, 4.6], [7.5, 4.9], [20, 5.4]],
+    // Arenosols, Ch 4 p 125
+    arenoDepthCm: 100, arenoLayerCm: 15, arenoCoarsePct: 40
+  };
+
+  const yn = v => v === "y" ? true : v === "n" ? false : null;
+  const has = v => v !== null && v !== undefined && v !== "" && isFinite(v);
+  const thick = h => h.bottom - h.top;
+  const silt = h => has(h.sand) && has(h.clay) ? 100 - h.sand - h.clay : null;
+  // USDA texture tests (WRB Annex 1, Table 8.39): sand = silt + 1.5 clay < 15; loamy sand or coarser = silt + 2 clay < 30
+  const isSand = h => silt(h) !== null ? silt(h) + 1.5 * h.clay < 15 : null;
+  const isLSorCoarser = h => silt(h) !== null ? silt(h) + 2 * h.clay < 30 : null;
+
+  // weighted mean of field f over [z1,z2] using horizons that have it; null if none
+  function wmean(hz, f, z1, z2) {
+    let s = 0, w = 0;
+    hz.forEach(h => { const o = Math.max(0, Math.min(h.bottom, z2) - Math.max(h.top, z1)); if (o > 0 && has(h[f])) { s += h[f] * o; w += o; } });
+    return w > 0 ? { v: s / w, cover: w / (z2 - z1) } : null;
+  }
+  // contiguous runs of horizons that satisfy test(h) === true
+  function runs(hz, test) {
+    const out = []; let cur = null;
+    hz.forEach(h => {
+      if (test(h) === true && (!cur || cur.bottom === h.top)) { if (!cur) { cur = { top: h.top, bottom: h.bottom, hz: [h] }; out.push(cur); } else { cur.bottom = h.bottom; cur.hz.push(h); } }
+      else if (test(h) === true) { cur = { top: h.top, bottom: h.bottom, hz: [h] }; out.push(cur); }
+      else cur = null;
+    });
+    out.forEach(r => r.thick = r.bottom - r.top);
+    return out;
+  }
+
+  function classify(site, horizons, T = WRB_T) {
+    const hz = horizons.filter(h => has(h.top) && has(h.bottom) && h.bottom > h.top).sort((a, b) => a.top - b.top);
+    const depth = hz.length ? hz[hz.length - 1].bottom : 0;
+    const rockAt = has(site.rock) ? +site.rock : null;
+    const out = [];
+    const add = (code, ok, note) => out.push({ code, ok, note });
+
+    // clay-increase rule shared by argic and natric (Ch 3.1.3 criterion 2.a.iv-vi)
+    const clayRule = (above, here) => above < T.argicLowClay ? here - above >= T.argicLowAdd
+      : above < T.argicHighClay ? here / above >= T.argicRatio : here - above >= T.argicHighAdd;
+    // first horizon starting <= 100 cm that meets the textural criteria of an argic/natric horizon
+    function clayIncrease(extra) {
+      let seen = false;
+      for (let i = 1; i < hz.length; i++) {
+        const b = hz[i]; if (b.top > T.argicDepthCm) break;
+        if (!has(b.clay)) continue;
+        // reference: the layer directly above, or the one above a transitional horizon <= 15 cm thick
+        const refs = [hz[i - 1]]; if (i >= 2 && thick(hz[i - 1]) <= T.argicTransitionCm) refs.push(hz[i - 2]);
+        const ref = refs.find(a => has(a.clay) && a.clay < b.clay && clayRule(a.clay, b.clay));
+        if (refs.some(a => has(a.clay))) seen = true;
+        if (!ref || b.clay < T.argicMinClay || isSand(b) === true) continue;
+        // horizon = this layer plus following layers that keep the increase over the same reference
+        const zone = [b]; for (let j = i + 1; j < hz.length && hz[j].top === zone[zone.length - 1].bottom && has(hz[j].clay) && clayRule(ref.clay, hz[j].clay); j++) zone.push(hz[j]);
+        const zt = zone[zone.length - 1].bottom - b.top, minT = isLSorCoarser(b) === true ? T.argicThickCm : T.argicThinCm;
+        if (zt < minT || zt < b.top / 10) continue;
+        if (extra && !extra(zone)) continue;
+        return { found: true, top: b.top, zone, ref, note: `ongezeko la mfinyanzi kutoka ${ref.clay} hadi ${b.clay}% katika sentimita ${b.top}` };
+      }
+      return { found: seen ? false : null, note: seen ? "hakuna ongezeko la mfinyanzi linalostahili ndani ya sentimita 100" : "mfinyanzi haukutolewa kwa matabaka yanayofuatana" };
+    }
+    const argic = clayIncrease();
+
+    // HS (Ch 4 p 95)
+    {
+      let ok = null, note = "unene wa tabaka la mabaki ya mimea haukutolewa";
+      if (has(site.organicCm)) {
+        ok = site.organicCm >= T.histicOrganicCm || (rockAt !== null && site.organicCm >= T.histicOverRockCm && rockAt <= site.organicCm);
+        note = `sentimita ${site.organicCm} za mabaki ya mimea`;
+      }
+      add("HS", ok, note);
+    }
+    add("AT", yn(site.anthric), "uchunguzi wa shambani");
+    add("TC", yn(site.artefacts), "uchunguzi wa shambani");
+    add("CR", yn(site.permafrost), "uchunguzi wa shambani");
+    // LP (Ch 4 p 99): rock <= 25 cm, or < 20% fine earth over 75 cm; and no duric or spodic horizon
+    {
+      let ok = site.rock === "none" ? false : rockAt !== null ? rockAt <= T.leptoRockCm : null;
+      const note = [];
+      if (rockAt !== null) note.push(`mwamba katika sentimita ${rockAt}`); else if (site.rock === "none") note.push("hakuna mwamba ndani ya sentimita 100");
+      const cf = wmean(hz, "cf", 0, Math.min(T.leptoDepthCm, rockAt ?? T.leptoDepthCm));
+      if (cf) { note.push(`vipande vikubwa ${cf.v.toFixed(0)}% (sentimita 0–75)`); if (cf.v >= T.leptoCoarsePct) ok = true; }
+      if (ok && (site.duric === "y" || site.spodic === "y")) { ok = false; note.push("imeondolewa: tabaka la duric au spodic"); }
+      add("LP", ok, note.join("; ") || "kina cha mwamba na vipande vikubwa havikutolewa");
+    }
+    // SN (Ch 4 p 100): natric horizon <= 100 cm = argic-type clay increase + ESP >= 15 in its upper 40 cm
+    {
+      const anyESP = hz.some(h => h.top <= T.argicDepthCm && has(h.esp));
+      let ok = yn(site.sodic), note = "uchunguzi wa shambani (hakuna data ya ESP)";
+      if (anyESP) {
+        const nat = clayIncrease(zone => { const up = zone.filter(h => h.top < zone[0].top + T.natricUpperCm); return up.every(h => has(h.esp) && h.esp >= T.natricESP); });
+        ok = nat.found; note = nat.found ? `${nat.note}; ESP ≥ ${T.natricESP}% katika sentimita 40 zake za juu (muundo wa nguzo/prismu haukuchunguzwa)` : `ESP ya juu kabisa ${Math.max(...hz.filter(h => has(h.esp)).map(h => h.esp))}%; ${nat.note}`;
+      }
+      add("SN", ok, note);
+    }
+    // VR (Ch 4 p 101): vertic horizon <= 100 cm, >= 30% clay from the surface down to it
+    {
+      const s = yn(site.slickensides); let ok = s, note = "nyuso za kuteleza / vipande vya umbo la kabari";
+      if (s === true) {
+        if (!hz.length || hz[0].top !== 0 || !has(hz[0].clay)) { ok = null; note = "nyuso za kuteleza zipo lakini mfinyanzi wa juu haukutolewa"; }
+        else {
+          const r = runs(hz, h => has(h.clay) ? h.clay >= T.vertisolClayPct : null)[0];
+          ok = !!r && r.top === 0 && r.thick >= T.verticThickCm;
+          note = ok ? `mfinyanzi ≥ ${T.vertisolClayPct}% kutoka usoni hadi sentimita ${r.bottom}` : `mfinyanzi unashuka chini ya ${T.vertisolClayPct}% ndani ya sentimita ${r ? r.bottom : 0}`;
+        }
+      }
+      add("VR", ok, note);
+    }
+    // SC (Ch 4 p 102): salic horizon starting <= 50 cm
+    {
+      const known = hz.some(h => h.top <= T.salicDepthCm && has(h.ec));
+      let ok = yn(site.saline), note = "uchunguzi wa shambani (hakuna data ya EC)";
+      if (known) {
+        const prod = r => r.hz.reduce((s, h) => s + h.ec * thick(h), 0);
+        const a = runs(hz, h => has(h.ec) ? h.ec >= T.salicEC : null).filter(r => r.top <= T.salicDepthCm && r.thick >= T.salicThickCm && prod(r) >= T.salicProduct);
+        const b = runs(hz, h => has(h.ec) && has(h.ph) ? h.ec >= T.salicAlkEC && h.ph >= T.salicAlkPH : null).filter(r => r.top <= T.salicDepthCm && r.thick >= T.salicThickCm && prod(r) >= T.salicAlkProduct);
+        ok = a.length > 0 || b.length > 0;
+        const maxEC = Math.max(...hz.filter(h => h.top <= T.salicDepthCm && has(h.ec)).map(h => h.ec));
+        note = ok ? (a.length ? `EC ≥ ${T.salicEC} dS/m, unene wa sentimita ${a[0].thick} kuanzia sentimita ${a[0].top}` : `alkali (pH ≥ ${T.salicAlkPH}) pamoja na EC ≥ ${T.salicAlkEC} dS/m kuanzia sentimita ${b[0].top} (pH ya dondoo la kujaza imechukuliwa kutoka pH ya maji)`)
+          : `EC ya juu kabisa ${maxEC} dS/m ndani ya sentimita ${T.salicDepthCm}; unene au EC × unene ni mdogo mno kwa tabaka la salic`;
+      }
+      add("SC", ok, note);
+    }
+    add("GL", yn(site.gleyic), "uchunguzi wa shambani");
+    add("AN", yn(site.andic), "uchunguzi wa shambani");
+    add("PZ", yn(site.spodic), "uchunguzi wa shambani");
+    add("PT", yn(site.plinthic), "uchunguzi wa shambani (ndani ya sentimita 100)");
+    // PL (Ch 4 p 107): abrupt textural difference <= 75 cm, with stagnic properties and reducing conditions
+    {
+      const st = yn(site.stagnic); let ok = st, note = "sifa za stagnic";
+      if (st === true) {
+        let abrupt = null;
+        for (let i = 1; i < hz.length; i++) {
+          const a = hz[i - 1], b = hz[i]; if (b.top > T.planoDepthCm) break;
+          if (!has(a.clay) || !has(b.clay)) continue;
+          if (abrupt === null) abrupt = false;
+          const at = b.clay >= T.abruptLowerClay && thick(b) >= T.abruptLowerThickCm && b.top >= T.abruptMinStartCm &&
+            (a.clay < T.abruptDoubleBelow ? b.clay >= 2 * a.clay : b.clay - a.clay >= T.abruptAdd);
+          if (at) { abrupt = true; note = `mfinyanzi kutoka ${a.clay} hadi ${b.clay}% katika sentimita ${b.top} (ukali wa mpaka haukuchunguzwa)`; break; }
+        }
+        ok = abrupt; if (abrupt === false) note = "hakuna tofauti ya ghafla ya umbile ndani ya sentimita 75"; if (abrupt === null) note = "stagnic, lakini mfinyanzi haukutolewa";
+      }
+      add("PL", ok, note);
+    }
+    add("ST", yn(site.stagnic), "uchunguzi wa shambani");
+    // NT (Ch 4 p 109): nitic horizon <= 100 cm (>= 30% clay, >= 30 cm), clay above >= half its weighted average
+    {
+      const n = yn(site.nitic); let ok = n, note = "muundo wa nitic na nyuso za vipande zinazong'aa (vigezo vya chuma havikuchunguzwa)";
+      if (n === true) {
+        if (!hz.some(h => has(h.clay))) { ok = null; note = "mfinyanzi haukutolewa"; }
+        else {
+          const r = runs(hz, h => has(h.clay) ? h.clay >= T.nitisolClayPct : null).find(r => r.top <= T.niticDepthCm && r.thick >= T.niticThickCm);
+          if (!r) { ok = false; note = `hakuna tabaka lenye unene ≥ sentimita ${T.niticThickCm} lenye mfinyanzi ≥ ${T.nitisolClayPct}% ndani ya sentimita 100`; }
+          else {
+            const avg = r.hz.reduce((s, h) => s + h.clay * thick(h), 0) / r.thick;
+            const above = hz.filter(h => h.bottom <= r.top);
+            ok = above.every(h => has(h.clay) && h.clay >= avg / 2);
+            note = ok ? `tabaka la mfinyanzi kuanzia sentimita ${r.top} (wastani ${avg.toFixed(0)}% mfinyanzi)` : `mfinyanzi juu ya sentimita ${r.top} ni chini ya nusu ya ${avg.toFixed(0)}% ya tabaka la nitic`;
+          }
+        }
+      }
+      add("NT", ok, note);
+    }
+    // FR (Ch 4 p 110): ferralic horizon <= 150 cm and no argic above it (unless an exception applies)
+    {
+      const known = hz.some(h => h.top <= T.ferralicDepthCm && has(h.cec) && has(h.clay) && h.clay > 0);
+      let ok = yn(site.ferralic), note = "uamuzi wa shambani (hakuna data ya CEC)";
+      if (known) {
+        const fr = runs(hz, h => !(has(h.cec) && has(h.clay) && h.clay > 0) ? null :
+          h.cec / (h.clay / 100) < T.ferralicCECclay && h.clay >= T.ferralicMinClay && isLSorCoarser(h) !== true && !(has(h.cf) && h.cf >= T.ferralicCoarsePct))
+          .find(r => r.top <= T.ferralicDepthCm && r.thick >= T.ferralicThickCm);
+        if (!fr) { ok = false; const v = hz.filter(h => has(h.cec) && has(h.clay) && h.clay > 0).map(h => h.cec / (h.clay / 100)); note = `hakuna tabaka la ≥ sentimita ${T.ferralicThickCm} lenye CEC < ${T.ferralicCECclay} cmol/kg ya mfinyanzi (ndogo kabisa ${Math.min(...v).toFixed(1)})`; }
+        else if (argic.found && argic.top <= fr.top) {
+          // exceptions: < 10% water-dispersible clay, delta pH >= 0, or >= 1.4% SOC in the argic's upper 30 cm
+          const up = argic.zone.filter(h => h.top < argic.top + 30);
+          const ocOk = up.length && up.every(h => has(h.oc)) ? up.every(h => h.oc >= T.ferralsolArgicOC) : null;
+          ok = ocOk ? true : null;
+          note = ocOk ? `ferralic kuanzia sentimita ${fr.top}; tabaka la argic juu yake lina kaboni hai ≥ ${T.ferralsolArgicOC}%` : `ferralic kuanzia sentimita ${fr.top}, lakini tabaka la argic linaanza juu yake: ni Ferralsol tu ikiwa sentimita 30 za juu za argic zina mfinyanzi unaotawanyika majini < 10%, ΔpH ≥ 0 au kaboni hai ≥ ${T.ferralsolArgicOC}%`;
+        } else { ok = true; note = `CEC < ${T.ferralicCECclay} cmol/kg ya mfinyanzi kutoka sentimita ${fr.top} hadi ${fr.bottom}`; }
+      }
+      add("FR", ok, note);
+    }
+    // Dark topsoil group (mollic Ch 3.1.20, chernic Ch 3.1.6; RSGs Ch 4 pp 111-114)
+    {
+      const carb = h => (has(h.caco3) ? h.caco3 : 0) + (has(h.gypsum) ? h.gypsum : 0);
+      const darkOk = h => {
+        if (!has(h.value) || !has(h.chroma) || !has(h.oc)) return null;
+        const c = carb(h), coarse = isLSorCoarser(h) === true;
+        if (c >= T.darkCalcHigh || coarse) return h.value <= T.darkHighValue && h.chroma <= T.darkChroma && h.oc >= T.darkHighOC;
+        if (c >= T.darkCalcMid) return h.value <= T.darkValue && h.chroma <= T.darkChroma && h.oc >= T.darkMidOC;
+        return h.value <= T.darkValue && h.chroma <= T.darkChroma && h.oc >= T.darkOC;
+      };
+      const chernOk = h => {
+        if (darkOk(h) !== true || h.chroma > T.chernicChroma) return false;
+        const c = has(h.caco3) ? h.caco3 : 0;
+        if (c >= T.darkCalcHigh || isLSorCoarser(h) === true) return h.oc >= T.darkHighOC;
+        if (c >= T.darkCalcMid) return h.value <= T.darkValue && h.oc >= T.chernicMidOC;
+        return h.value <= T.darkValue && h.oc >= T.chernicOC;
+      };
+      let dark = null, darkBottom = 0, dk = [];
+      if (hz.length && hz[0].top === 0) {
+        const r = runs(hz, darkOk)[0];
+        if (r && r.top === 0) { dk = r.hz; darkBottom = r.bottom; }
+        const minT = rockAt !== null && rockAt <= darkBottom ? T.darkOverRockCm : T.darkThickCm;
+        if (dk.length) dark = darkBottom >= minT; else if (darkOk(hz[0]) === false) dark = false;
+      }
+      const bsW = dk.length && dk.every(h => has(h.bs)) ? dk.reduce((s, h) => s + h.bs * thick(h), 0) / darkBottom : null;
+      const mollic = dark && bsW !== null ? bsW >= T.baseSat : null;
+      const chR = runs(hz, chernOk)[0]; const chernic = !!chR && chR.top === 0 && chR.thick >= T.chernicThickCm;
+      // carbonate layer: secondary carbonates if recorded, else CaCO3 equivalent as a proxy; or a calcic horizon
+      const secKnown = hz.some(h => has(h.seccarb));
+      const carbLayer = h => secKnown ? (has(h.seccarb) ? h.seccarb > 0 : null) : (has(h.caco3) ? h.caco3 >= T.carbonatePresentPct : null);
+      const cr = runs(hz, carbLayer).find(r => r.thick >= T.protocalcicMinCm && r.bottom > darkBottom);
+      const carbKnown = hz.some(h => carbLayer(h) !== null);
+      const carbTop = cr ? Math.max(cr.top, darkBottom) : null;
+      const bsTo = z => { const s = hz.filter(h => h.top < z); return s.length && s.every(h => has(h.bs)) ? s.every(h => h.bs >= T.baseSat) : null; };
+      const and3 = (...xs) => xs.some(x => x === false) ? false : xs.some(x => x === null) ? null : true;
+      const proxy = secKnown ? "" : " (CaCO₃ sawa na imetumika badala ya kabonati za pili)";
+      const notDark = `udongo wa juu mweusi ${dark === null ? "haukupimwa (rangi au kaboni hai haipo)" : `wenye unene wa sentimita ${darkBottom}`}`;
+      const g = ok => dark === false ? false : (dark === null ? null : ok);
+      const chOk = and3(mollic, chernic, carbKnown ? carbTop !== null && carbTop <= darkBottom + T.chernoCarbBelowCm : null, carbTop !== null ? bsTo(carbTop) : null);
+      add("CH", g(chOk), dark ? `chernic ${chernic ? "ndiyo" : `hapana (inahitaji chroma ≤ ${T.chernicChroma}, kaboni hai ≥ ${T.chernicOC}%, ≥ sentimita ${T.chernicThickCm})`}; kabonati ${carbTop !== null ? "kuanzia sentimita " + carbTop : carbKnown ? "hakuna" : "hazikutolewa"}${proxy}` : notDark);
+      const ksOk = and3(mollic, carbKnown ? carbTop !== null && carbTop <= T.kastanoCarbDepthCm : null, carbTop !== null ? bsTo(carbTop) : null);
+      add("KS", g(ksOk), dark ? `mollic ${mollic === null ? "?" : mollic ? "ndiyo" : "hapana"} (kiwango cha besi cha wastani ${bsW === null ? "?" : bsW.toFixed(0)}%); kabonati ${carbTop !== null ? "kuanzia sentimita " + carbTop : carbKnown ? "hakuna" : "hazikutolewa"}` : notDark);
+      const bsAll = bsTo(Math.min(T.phaeoDepthCm, rockAt ?? T.phaeoDepthCm));
+      add("PH", g(and3(mollic, bsAll)), dark ? `kiwango cha besi ${bsAll === null ? "hakikutolewa kwa matabaka yote" : bsAll ? "≥ 50% hadi sentimita 100" : "< 50% mahali fulani juu ya sentimita 100"} (rangi kavu na muundo havikuchunguzwa)` : notDark);
+      add("UM", g(true), dark ? "udongo wa juu mweusi wenye kiwango kidogo cha besi" : notDark);
+    }
+    add("DU", yn(site.duric), "uchunguzi wa shambani");
+    // GY and CL (Ch 4 pp 116-117), with the argic exclusion
+    {
+      const accum = (f, thr, product) => {
+        const known = hz.some(h => h.top <= T.accumDepthCm && has(h[f])); if (!known) return null;
+        return runs(hz, h => has(h[f]) ? h[f] >= thr : null).find(r => r.top <= T.accumDepthCm && r.thick >= T.accumThickCm &&
+          (!product || r.hz.reduce((s, h) => s + h[f] * thick(h), 0) >= product)) || false;
+      };
+      const argicHas = test => { const z = argic.zone; if (z.some(h => test(h) === null)) return null; return z.every(h => test(h) === true); };
+      const argicExcl = (acc, test) => {
+        if (!acc || !argic.found || argic.top > acc.top) return { ok: !!acc, note: "" };
+        const ex = argicHas(test);
+        return { ok: ex, note: ex ? "; tabaka la argic juu yake lina milimbikizo ya pili kote" : ex === null ? "; tabaka la argic linaanza juu yake (Calcisol/Gypsisol tu ikiwa lina kabonati au jasi ya pili kote)" : "; imeondolewa: tabaka la argic juu yake" };
+      };
+      const sec = h => { const c = has(h.seccarb) ? h.seccarb > 0 : has(h.caco3) ? h.caco3 >= T.carbonatePresentPct : null; const y = has(h.gypsum) ? h.gypsum > 0 : null; return c || y ? true : (c === null && y === null ? null : false); };
+      const gy = accum("gypsum", T.gypsicPct, T.gypsicProduct), cl = accum("caco3", T.calcicPct, 0);
+      const gx = argicExcl(gy, sec), cx = argicExcl(cl, h => has(h.seccarb) ? h.seccarb > 0 : has(h.caco3) ? h.caco3 >= T.carbonatePresentPct : null);
+      add("GY", gy !== null ? gx.ok : yn(site.gypsic), gy !== null ? (gy ? `jasi ≥ ${T.gypsicPct}% kuanzia sentimita ${gy.top}, unene wa sentimita ${gy.thick}${gx.note}` : `hakuna tabaka la gypsic (≥ ${T.gypsicPct}%, ≥ sentimita ${T.accumThickCm}, unene × % ≥ ${T.gypsicProduct}) ndani ya sentimita 100`) : "uchunguzi wa shambani (hakuna data ya jasi)");
+      add("CL", cl !== null ? cx.ok : yn(site.calcic), cl !== null ? (cl ? `CaCO₃ ≥ ${T.calcicPct}% kuanzia sentimita ${cl.top}, unene wa sentimita ${cl.thick}${cx.note}` : `hakuna tabaka la calcic (≥ ${T.calcicPct}%, ≥ sentimita ${T.accumThickCm}) ndani ya sentimita 100`) : "uchunguzi wa shambani (hakuna data ya CaCO₃)");
+    }
+    // Argic group (Ch 4 pp 118-122)
+    {
+      const R = ok => argic.found === false ? false : argic.found === null ? null : ok;
+      add("RT", R(yn(site.retic)), argic.found ? `${argic.note}; sifa za retic ${site.retic === "y" ? "ndiyo" : site.retic === "n" ? "hapana" : "?"}` : argic.note);
+      // low-activity clay in some subhorizon of the argic horizon within 150 cm
+      const sub = argic.found ? argic.zone.filter(h => h.top < T.lowActivityDepthCm) : [];
+      const acts = sub.filter(h => has(h.cec) && h.clay > 0).map(h => h.cec / (h.clay / 100));
+      const lowAct = acts.some(a => a < T.lowActivityCECclay) ? true : acts.length === sub.length && acts.length ? false : null;
+      // exchangeable Al > exchangeable bases in half or more of 50-100 cm (or the lower half above a limiting layer)
+      const alDom = h => {
+        const bases = has(h.bases) ? h.bases : has(h.bs) && has(h.cec) ? h.bs * h.cec / 100 : null;
+        if (has(h.al) && bases !== null) return h.al > bases;
+        if (has(h.ph)) { const oc = has(h.oc) ? h.oc : 0; const row = T.alPH.find(r => oc < r[0]) || T.alPH[T.alPH.length - 1]; return h.ph < row[1]; }
+        return null;
+      };
+      let z1 = T.alRangeTop, z2 = T.alRangeBottom;
+      if (rockAt !== null && rockAt <= T.alRangeBottom) { z2 = rockAt; z1 = Math.min(z1, rockAt / 2); }
+      let tTrue = 0, tKnown = 0;
+      hz.forEach(h => { const o = Math.max(0, Math.min(h.bottom, z2) - Math.max(h.top, z1)); const v = alDom(h); if (o > 0 && v !== null) { tKnown += o; if (v) tTrue += o; } });
+      const span = z2 - z1;
+      const al = tTrue >= span / 2 ? true : (tKnown - tTrue) > span / 2 ? false : null;
+      const alSrc = hz.some(h => has(h.al)) ? "Al inayobadilishana dhidi ya besi" : hz.some(h => has(h.ph)) ? "pH ya maji (Kiambatisho 2, Jedwali 9.3)" : "hakuna data ya Al au pH";
+      const detail = argic.found ? `${argic.note}; CEC ${acts.length ? Math.min(...acts).toFixed(1) : "?"} cmol/kg ya mfinyanzi; Al inatawala ${al === null ? "?" : al ? "ndiyo" : "hapana"} (${alSrc})` : argic.note;
+      const both = (x, y) => x === false || y === false ? false : x === null || y === null ? null : true;
+      add("AC", R(both(lowAct, al)), detail);
+      add("LX", R(lowAct), detail);
+      add("AL", R(al), detail);
+      add("LV", R(true), detail);
+    }
+    add("CM", yn(site.cambic), "uchunguzi wa shambani");
+    add("FL", yn(site.fluvic), "uchunguzi wa shambani");
+    // AR (Ch 4 p 125): weighted loamy sand or sand within 100 cm; finer layers < 15 cm; layers with >= 40% coarse fragments < 15 cm
+    {
+      const zb = Math.min(T.arenoDepthCm, rockAt ?? T.arenoDepthCm, depth || T.arenoDepthCm);
+      const fine = hz.map(h => ({ ...h, fx: silt(h) !== null ? silt(h) + 2 * h.clay : null }));
+      const fx = wmean(fine, "fx", 0, zb);
+      const over = (test) => hz.reduce((s, h) => s + (test(h) ? Math.max(0, Math.min(h.bottom, zb) - h.top) : 0), 0);
+      const finerCm = over(h => isLSorCoarser(h) === false), stonyCm = over(h => has(h.cf) && h.cf >= T.arenoCoarsePct);
+      const ok = fx ? fx.v < 30 && finerCm < T.arenoLayerCm && stonyCm < T.arenoLayerCm : null;
+      add("AR", ok, fx ? `tope laini (silt) + 2×mfinyanzi ${fx.v.toFixed(0)} (ni mchanga ikiwa < 30); matabaka yenye chembe ndogo zaidi sentimita ${finerCm}; matabaka ya mawe sentimita ${stonyCm}` : "mchanga na mfinyanzi havikutolewa");
+    }
+    // Resolve in key order
+    const unsure = [];
+    for (const r of out) {
+      if (r.ok === true) return { code: r.code, trail: out.slice(0, out.indexOf(r) + 1), unsure };
+      if (r.ok === null) unsure.push(r);
+    }
+    return { code: "RG", trail: out, unsure };
+  }
+  root.WRBEngineSW = { classify, WRB_T };
+  if (typeof module !== 'undefined') module.exports = root.WRBEngineSW;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+</script>
+<script>
+(function () {
+"use strict";
+/* Each node: a question in WRB key order. yes -> result code or next node id; no -> next node id.
+   Groups that need the same diagnostic (mollic group, argic group) are asked as a short sub-sequence,
+   keeping the published key order. Thresholds are simplified; see the WRB 2022 Chapters 3 and 4. */
+const RSG_EN = {"HS": "Histosols", "AT": "Anthrosols", "TC": "Technosols", "CR": "Cryosols", "LP": "Leptosols", "SN": "Solonetz", "VR": "Vertisols", "SC": "Solonchaks", "GL": "Gleysols", "AN": "Andosols", "PZ": "Podzols", "PT": "Plinthosols", "PL": "Planosols", "ST": "Stagnosols", "NT": "Nitisols", "FR": "Ferralsols", "CH": "Chernozems", "KS": "Kastanozems", "PH": "Phaeozems", "UM": "Umbrisols", "DU": "Durisols", "GY": "Gypsisols", "CL": "Calcisols", "RT": "Retisols", "AC": "Acrisols", "LX": "Lixisols", "AL": "Alisols", "LV": "Luvisols", "CM": "Cambisols", "FL": "Fluvisols", "AR": "Arenosols", "RG": "Regosols"};
+const RSG_SW = {"HS": "udongo wa mboji", "AT": "udongo uliobadilishwa na binadamu", "TC": "udongo wa mabaki ya kiteknolojia", "CR": "udongo wa barafu ya kudumu", "LP": "udongo mwembamba", "SN": "udongo wa sodiamu", "VR": "udongo wa mfinyanzi unaopasuka", "SC": "udongo wa chumvi", "GL": "udongo uliojaa maji ya ardhini", "AN": "udongo wa volkano", "PZ": "udongo wa podzol", "PT": "udongo wa plinthite", "PL": "udongo wenye maji yaliyotuama juu", "ST": "udongo wa maji yaliyotuama", "NT": "udongo mwekundu wenye vipande vinavyong'aa", "FR": "udongo uliochakaa sana", "CH": "udongo mweusi wa nyika", "KS": "udongo wa kahawia-giza wa nyika kavu", "PH": "udongo mweusi wenye rutuba", "UM": "udongo mweusi wenye asidi", "DU": "udongo wa silika", "GY": "udongo wa jasi", "CL": "udongo wa chokaa", "RT": "udongo wenye ndimi za udongo mwepesi", "AC": "udongo wa mfinyanzi wenye asidi", "LX": "udongo wa mfinyanzi wenye besi nyingi", "AL": "udongo wa mfinyanzi hai wenye asidi", "LV": "udongo wa mfinyanzi hai wenye rutuba", "CM": "udongo uliokomaa kiasi", "FL": "udongo wa mchanga wa mto", "AR": "udongo wa mchanga", "RG": "udongo usiokomaa"};
+const RSG = {
+  HS: ["Histosols (udongo wa mboji)", "Udongo wenye tabaka nene za mabaki ya mimea, kama mboji (peat) na tope jeusi la kinamasi."],
+  AT: ["Anthrosols (udongo uliobadilishwa na binadamu)", "Udongo uliobadilishwa sana na matumizi ya muda mrefu ya binadamu, kama umwagiliaji, kuongeza vitu au kilimo cha mpunga majini."],
+  TC: ["Technosols (udongo wa mabaki ya kiteknolojia)", "Udongo wenye vitu vingi vilivyotengenezwa na binadamu au vitu vigumu vya kiufundi, kama udongo wa mijini, migodini na viwandani."],
+  CR: ["Cryosols (udongo wa barafu ya kudumu)", "Udongo wenye barafu ya kudumu (permafrost) karibu na uso."],
+  LP: ["Leptosols (udongo mwembamba)", "Udongo mwembamba juu ya mwamba mgumu, au udongo ambao sehemu kubwa ni mawe na changarawe."],
+  SN: ["Solonetz (udongo wa sodiamu)", "Udongo wenye tabaka la chini lililoshindiliwa na lenye sodiamu nyingi inayobadilishana."],
+  VR: ["Vertisols (udongo wa mfinyanzi unaopasuka)", "Udongo mzito wa mfinyanzi unaosinyaa na kupasuka ukikauka, na kuvimba ukiwa na maji."],
+  SC: ["Solonchaks (udongo wa chumvi)", "Udongo wenye kiasi kikubwa cha chumvi inayoyeyuka."],
+  GL: ["Gleysols (udongo uliojaa maji ya ardhini)", "Udongo uliojaa maji ya ardhini, ulio chini ya maji au katika eneo la maji kujaa na kupwa kwa muda mrefu kiasi kwamba hali ya upunguzaji (reduction) imetokea."],
+  AN: ["Andosols (udongo wa volkano)", "Udongo mwepesi wenye vinyweleo vingi kutokana na mali ya volkano, wenye alofeni (allophane) au michanganyiko ya alumini na humasi."],
+  PZ: ["Podzols (udongo wa podzol)", "Udongo wenye mlimbikizo wa humasi na/au oksidi za chuma na alumini katika tabaka la chini, mara nyingi chini ya tabaka lililopauka."],
+  PT: ["Plinthosols (udongo wa plinthite)", "Udongo wenye mlimbikizo wa chuma unaokuwa mgumu ukikabiliwa na hewa (plinthite), au uliokwisha kuwa mgumu."],
+  PL: ["Planosols (udongo wenye maji yaliyotuama juu)", "Udongo wenye maji yaliyotuama juu ya badiliko la ghafla kwenda tabaka la chini lenye mfinyanzi mwingi zaidi."],
+  ST: ["Stagnosols (udongo wa maji yaliyotuama)", "Udongo wenye maji yaliyotuama na tofauti ya wastani ya muundo au umbile."],
+  NT: ["Nitisols (udongo mwekundu wenye vipande vinavyong'aa)", "Udongo mwekundu, wenye kina na unaopitisha maji vizuri wa nchi za tropiki, wenye muundo imara wa vipande na nyuso zinazong'aa."],
+  FR: ["Ferralsols (udongo uliochakaa sana)", "Udongo wa tropiki uliochakaa (weathered) sana, wenye kaolinite na oksidi za chuma na alumini kwa wingi."],
+  CH: ["Chernozems (udongo mweusi wa nyika)", "Udongo wa juu mweusi sana wenye humasi nyingi juu ya kabonati za pili (secondary carbonates), wa kawaida katika nyika."],
+  KS: ["Kastanozems (udongo wa kahawia-giza wa nyika kavu)", "Udongo wa juu mweusi wenye humasi nyingi na kabonati za pili, wa kawaida katika nyika kavu zaidi."],
+  PH: ["Phaeozems (udongo mweusi wenye rutuba)", "Udongo wa juu mweusi wenye humasi nyingi, kiwango cha juu cha besi (base saturation) na bila kabonati karibu na uso."],
+  UM: ["Umbrisols (udongo mweusi wenye asidi)", "Udongo wa juu mweusi wenye humasi nyingi lakini wenye asidi na kiwango kidogo cha besi."],
+  DU: ["Durisols (udongo wa silika)", "Udongo wenye mlimbikizo wa silika ya pili, mara nyingi uliogandamana kuwa mgumu (duripan)."],
+  GY: ["Gypsisols (udongo wa jasi)", "Udongo wenye mlimbikizo wa jasi (gypsum) ya pili."],
+  CL: ["Calcisols (udongo wa chokaa)", "Udongo wenye mlimbikizo wa kabonati ya pili (chokaa)."],
+  RT: ["Retisols (udongo wenye ndimi za udongo mwepesi)", "Udongo ambao udongo mwepesi na wenye chembe kubwa zaidi unaingia kama ndimi ndani ya tabaka la chini lenye mfinyanzi mwingi na rangi kali zaidi."],
+  AC: ["Acrisols (udongo wa mfinyanzi wenye asidi)", "Tabaka la chini lenye mfinyanzi mwingi, mfinyanzi usio na shughuli nyingi, na besi kidogo (alumini inatawala)."],
+  LX: ["Lixisols (udongo wa mfinyanzi wenye besi nyingi)", "Tabaka la chini lenye mfinyanzi mwingi, mfinyanzi usio na shughuli nyingi, na besi nyingi."],
+  AL: ["Alisols (udongo wa mfinyanzi hai wenye asidi)", "Tabaka la chini lenye mfinyanzi mwingi, mfinyanzi wenye shughuli nyingi, na besi kidogo (alumini inatawala)."],
+  LV: ["Luvisols (udongo wa mfinyanzi hai wenye rutuba)", "Tabaka la chini lenye mfinyanzi mwingi, mfinyanzi wenye shughuli nyingi, na besi nyingi."],
+  CM: ["Cambisols (udongo uliokomaa kiasi)", "Udongo uliokomaa kiasi, wenye tabaka la chini linaloonyesha mabadiliko (rangi, muundo au uchakavu)."],
+  FL: ["Fluvisols (udongo wa mchanga wa mto)", "Udongo mchanga katika mashapo ya mto, ziwa au bahari ambayo bado yanaonyesha matabaka yake."],
+  AR: ["Arenosols (udongo wa mchanga)", "Udongo wa mchanga wenye kina na ukuaji mdogo."],
+  RG: ["Regosols (udongo usiokomaa)", "Udongo wenye ukuaji mdogo au bila ukuaji wa matabaka ambao hauingii katika kundi lingine lolote."]
+};
+
+const Q = [
+  {"id": "HS", "step": "Udongo wa mabaki ya mimea", "q": "Je, kuna tabaka nene la mabaki ya mimea (mboji au tope jeusi) karibu na uso?", "help": ["Mabaki ya mimea yanayoanza ndani ya sentimita 40, na kufikia jumla ya takriban sentimita 40 au zaidi ndani ya sentimita 100 za juu (sentimita 60 ikiwa ni nyuzi za moss kwa wingi), au angalau sentimita 10 moja kwa moja juu ya mwamba au barafu.", "Mabaki ya mimea (organic material): meusi sana, mepesi yakikauka, hasa kutokana na mabaki ya mimea; takriban asilimia 20 ya kaboni hai au zaidi."]},
+  {"id": "AT", "step": "Udongo ulioathiriwa na binadamu", "q": "Je, matumizi ya muda mrefu na makali ya binadamu yamejenga au kubadilisha tabaka nene la udongo wa juu?", "help": ["Takriban sentimita 50 au zaidi ya tabaka lililotengenezwa na binadamu: hortic (mbolea na bustani kwa muda mrefu), irragric (mashapo ya maji ya umwagiliaji), plaggic (kuongeza nyasi au samadi), pretic (udongo mweusi wa kale) au terric (kuongeza udongo wa madini).", "Au tabaka lililovurugwa kwa kilimo cha mpunga majini (anthraquic) juu ya tabaka la chini lenye chuma na manganisi (hydragric)."]},
+  {"id": "TC", "step": "Udongo ulioathiriwa na binadamu", "q": "Je, udongo una vitu vingi vilivyotengenezwa na binadamu, au uko juu ya uso uliofunikwa au wa kiufundi?", "help": ["Takriban asilimia 20 au zaidi ya ujazo ni vitu vilivyotengenezwa na binadamu (matofali, kioo, plastiki, mabaki ya migodi, majivu) ndani ya sentimita 100 za juu.", "Au utando wa kiufundi (geomembrane) au kitu kigumu cha kiufundi (kama lami au zege) kinachoanza ndani ya sentimita 100."]},
+  {"id": "CR", "step": "Vizuizi vya mizizi", "q": "Je, kuna barafu ya kudumu (permafrost) ndani ya sentimita 100 za juu?", "help": ["Tabaka la cryic: udongo ulioganda kwa kudumu (umeshikamanishwa na barafu au una barafu inayoonekana), unaoanza ndani ya sentimita 100 kutoka usoni."]},
+  {"id": "LP", "step": "Vizuizi vya mizizi", "q": "Je, udongo ni mwembamba sana juu ya mwamba mgumu, au sehemu kubwa ni mawe na changarawe?", "help": ["Mwamba mgumu unaoendelea (au kitu kigumu cha kiufundi) unaoanza ndani ya sentimita 25 kutoka usoni.", "Au chini ya takriban asilimia 20 ya udongo laini (kwa ujazo), kwa wastani katika sentimita 75 za juu."]},
+  {"id": "SN", "step": "Vizuizi vya mizizi", "q": "Je, kuna tabaka la chini lililoshindiliwa na lenye sodiamu nyingi ndani ya sentimita 100?", "help": ["Tabaka la natric: tabaka la chini lenye mfinyanzi mwingi, mara nyingi lenye muundo wa nguzo au prismu zenye vichwa vya mviringo, linaloanza ndani ya sentimita 100.", "Sodiamu inayobadilishana takriban asilimia 15 ya CEC au zaidi (au Na + Mg zaidi ya Ca + asidi inayobadilishana) katika tabaka hilo."]},
+  {"id": "VR", "step": "Vizuizi vya mizizi", "q": "Je, ni mfinyanzi mzito unaopasuka ukikauka, wenye nyuso za vipande zilizong'arishwa na zenye mifereji?", "help": ["Tabaka la vertic (nyuso za kuteleza zinazoitwa slickensides na/au vipande vyenye umbo la kabari) linaloanza ndani ya sentimita 100.", "Takriban asilimia 30 ya mfinyanzi au zaidi kutoka usoni hadi tabaka la vertic; nyufa pana zinazofunguka na kufungika kwa misimu."]},
+  {"id": "SC", "step": "Vizuizi vya mizizi", "q": "Je, udongo una chumvi nyingi sana karibu na uso?", "help": ["Tabaka la salic linaloanza ndani ya sentimita 50: chumvi nyingi inayoyeyuka (upitishaji umeme wa dondoo la kujaza takriban dS/m 15 au zaidi, kidogo zaidi katika udongo wa alkali).", "Dalili shambani: ganda la chumvi au chumvi inayochanua juu ya uso, mimea inayostahimili chumvi."]},
+  {"id": "GL", "step": "Kemia ya chuma na alumini", "q": "Je, udongo umejaa maji ya ardhini karibu na uso, au uko chini ya maji kila wakati au katika eneo la maji kujaa na kupwa?", "help": ["Sifa za gleyic (rangi za kijivu, kijani au buluu za upunguzaji, madoa ya kutu kando ya mizizi au vinyweleo) katika tabaka lenye unene wa angalau sentimita 25 linaloanza ndani ya takriban sentimita 40, pamoja na hali ya upunguzaji.", "Au udongo uko chini ya maji au katika eneo la maji kujaa na kupwa."]},
+  {"id": "AN", "step": "Kemia ya chuma na alumini", "q": "Je, ni udongo mwepesi, wenye vinyweleo vingi wa volkano (sifa za andic au vitric)?", "help": ["Sifa za andic au vitric katika matabaka yenye jumla ya takriban sentimita 30 ndani ya sentimita 100, yanayoanza ndani ya sentimita 25.", "Dalili za maabara za andic: Al(ox) + ½Fe(ox) ≥ 2%, uzito wa ujazo ≤ 0.9 g/cm³, uhifadhi wa fosfeti ≥ 85%. Dalili shambani: unateleza na kuhisi kama mafuta ukipakwa, kipimo cha NaF ni chanya."]},
+  {"id": "PZ", "step": "Kemia ya chuma na alumini", "q": "Je, kuna mlimbikizo wa humasi nyeusi na/au chuma na alumini wekundu katika tabaka la chini (tabaka la spodic)?", "help": ["Tabaka la spodic linaloanza ndani ya sentimita 200, mara nyingi chini ya tabaka lililopauka la rangi ya majivu (albic).", "Kawaida katika udongo wa mchanga wenye asidi chini ya vichaka au misitu ya misonobari."]},
+  {"id": "PT", "step": "Kemia ya chuma na alumini", "q": "Je, kuna madoa yenye chuma kingi yanayokuwa magumu bila kurudi, au tabaka au vijiwe vya chuma, karibu na uso?", "help": ["Tabaka la plinthic, petroplinthic au pisoplinthic linaloanza ndani ya sentimita 100.", "Plinthite: madoa mekundu yenye chuma kingi katika udongo wa rangi nyepesi, yanayokuwa magumu baada ya kulowana na kukauka mara kwa mara."]},
+  {"id": "PL", "step": "Kemia ya chuma na alumini", "q": "Je, kuna badiliko la ghafla kwenda tabaka la chini lenye mfinyanzi mwingi zaidi, na dalili za maji yaliyotuama juu yake?", "help": ["Tofauti ya ghafla ya umbile (abrupt textural difference) ndani ya sentimita 75: katika umbali wa sentimita 2 au chini, mfinyanzi unaongezeka angalau mara mbili (au kwa asilimia 20 ikiwa tabaka la juu tayari lina asilimia 20 au zaidi), kwenda tabaka lenye angalau asilimia 15 ya mfinyanzi.", "Sifa za stagnic (nyuso za vipande zilizopauka zenye ndani yenye kutu) na hali ya upunguzaji katika tabaka lililo moja kwa moja juu yake."]},
+  {"id": "ST", "step": "Kemia ya chuma na alumini", "q": "Je, maji hutuama katika udongo wa juu, na kuacha madoa yaliyopauka na ya kutu?", "help": ["Sifa za stagnic pamoja na hali ya upunguzaji katika sehemu kubwa ya udongo inayoanza ndani ya takriban sentimita 60.", "Mfumo wa kawaida: maeneo yaliyopauka kando ya nyufa na nyuso za vipande, na milimbikizo ya kutu au meusi ndani ya vipande."]},
+  {"id": "NT", "step": "Kemia ya chuma na alumini", "q": "Je, kuna tabaka la chini lenye kina, mfinyanzi na rangi nyekundu, lenye vipande imara vya umbo la karanga na nyuso zinazong'aa (tabaka la nitic)?", "help": ["Tabaka la nitic linaloanza ndani ya sentimita 100: angalau asilimia 30 ya mfinyanzi katika sentimita 30 au zaidi, muundo wa vipande wa wastani hadi imara wenye nyuso zinazong'aa, na juu yake angalau nusu ya kiasi hicho cha mfinyanzi.", "Ni kawaida juu ya miamba ya besi katika maeneo ya tropiki yenye unyevu."]},
+  {"id": "FR", "step": "Kemia ya chuma na alumini", "q": "Je, kuna tabaka la chini lililochakaa sana lenye mfinyanzi usio na shughuli nyingi kabisa (tabaka la ferralic)?", "help": ["Tabaka la ferralic linaloanza ndani ya sentimita 150.", "Dalili za maabara: CEC (pH 7) chini ya 16 cmol(+)/kg ya mfinyanzi katika sentimita 30 au zaidi, madini machache yanayoweza kuchakaa, muundo dhaifu unaovunjika kuwa chembechembe ndogo.", "Ikiwa tabaka lenye mfinyanzi mwingi (argic) linaanza juu yake, jibu Ndiyo tu ikiwa sentimita 30 za juu za tabaka hilo zina mfinyanzi kidogo unaotawanyika katika maji, ΔpH ya 0 au zaidi, au asilimia 1.4 ya kaboni hai au zaidi."]},
+  {"id": "MO", "step": "Udongo wa juu mweusi", "q": "Je, kuna udongo wa juu wa madini ulio mnene, mweusi na wenye humasi nyingi (tabaka la mollic au umbric)?", "help": ["Rangi nyeusi: value na chroma ya hali ya unyevu 3 au chini, angalau asilimia 0.6 ya kaboni hai, kwa kawaida unene wa sentimita 20 au zaidi.", "Mollic = kiwango cha besi asilimia 50 au zaidi; umbric = chini ya asilimia 50."], "yes": "CH", "no": "DU"},
+  {"id": "CH", "step": "Udongo wa juu mweusi", "q": "Je, udongo wa juu ni mweusi sana (chernic), na kabonati za pili zinaanza karibu chini yake?", "help": ["Tabaka la chernic: jeusi sana (chroma ya unyevu 2 au chini), lenye chembechembe, asilimia 1 ya kaboni hai au zaidi, unene wa angalau sentimita 30.", "Tabaka la calcic au kabonati za pili zinazoanza ndani ya takriban sentimita 50 chini ya tabaka jeusi; kiwango cha besi asilimia 50 au zaidi juu yake."], "no": "KS"},
+  {"id": "KS", "step": "Udongo wa juu mweusi", "q": "Je, kuna kabonati za pili chini ya udongo wa juu mweusi (mollic)?", "help": ["Tabaka la calcic au kabonati za pili (mipako meupe ya unga, vifundo, mabonge laini) zinazoanza ndani ya sentimita 70 kutoka usoni.", "Kiwango cha besi asilimia 50 au zaidi juu yake."], "no": "PH"},
+  {"id": "PH", "step": "Udongo wa juu mweusi", "q": "Je, kiwango cha besi ni cha juu (asilimia 50 au zaidi) katika udongo wote, bila kabonati karibu na uso?", "help": ["Tabaka la mollic lenye kiwango cha besi (pH 7) cha asilimia 50 au zaidi hadi takriban sentimita 100 (au hadi mwamba).", "Ikiwa udongo wa juu mweusi una asidi (kiwango kidogo cha besi), jibu Hapana."], "no": "UM"},
+  {"id": "UM", "step": "Udongo wa juu mweusi", "q": "Je, ni udongo wa juu mweusi, wenye humasi nyingi na kiwango kidogo cha besi (umbric)?", "help": ["Tabaka la umbric, au udongo wa juu mweusi wenye kiwango cha besi chini ya asilimia 50.", "Ikiwa hakuna kundi lolote la udongo wa juu mweusi linalofaa, jibu Hapana ili kuendelea na ufunguo."]},
+  {"id": "DU", "step": "Milimbikizo", "q": "Je, kuna tabaka lililogandamanishwa au lenye silika ya pili ndani ya sentimita 100?", "help": ["Tabaka la duric (vifundo vya silika, 'durinodes') au petroduric (duripan) linaloanza ndani ya sentimita 100."]},
+  {"id": "GY", "step": "Milimbikizo", "q": "Je, kuna tabaka la jasi ya pili ndani ya sentimita 100?", "help": ["Tabaka la gypsic au petrogypsic linaloanza ndani ya sentimita 100: fuwele za jasi zinazoonekana, nyuzi au jasi iliyogandamana, asilimia 5 ya jasi au zaidi katika angalau sentimita 15.", "Siyo ikiwa tabaka lenye mfinyanzi mwingi (argic) linaanza juu yake, isipokuwa tabaka hilo lina jasi au kabonati za pili kote."]},
+  {"id": "CL", "step": "Milimbikizo", "q": "Je, kuna tabaka la mlimbikizo wa kabonati ya pili (chokaa) ndani ya sentimita 100?", "help": ["Tabaka la calcic au petrocalcic linaloanza ndani ya sentimita 100: mabonge laini meupe, vifundo au tabaka gumu; linatoa povu kwa nguvu likiwekewa asidi iliyochanganywa na maji; asilimia 15 ya CaCO₃ au zaidi katika angalau sentimita 15.", "Siyo ikiwa tabaka lenye mfinyanzi mwingi (argic) linaanza juu yake, isipokuwa tabaka hilo lina kabonati za pili kote."]},
+  {"id": "AR0", "step": "Matabaka ya chini yenye mfinyanzi mwingi", "q": "Je, kuna tabaka la chini lenye mfinyanzi mwingi (tabaka la argic) ndani ya sentimita 100?", "help": ["Mfinyanzi mwingi zaidi waziwazi kuliko tabaka la juu lenye chembe kubwa: asilimia 6 zaidi ikiwa tabaka hilo lina chini ya asilimia 15 ya mfinyanzi, mara 1.4 zaidi ikiwa lina asilimia 15–50, au asilimia 20 zaidi ikiwa lina asilimia 50 au zaidi. Angalau asilimia 8 ya mfinyanzi. Mipako ya mfinyanzi kwenye nyuso za vipande pia ni ushahidi.", "Ikiwa hakuna ongezeko la wazi la mfinyanzi, jibu Hapana."], "yes": "RT", "no": "CM"},
+  {"id": "RT", "step": "Matabaka ya chini yenye mfinyanzi mwingi", "q": "Je, udongo mwepesi na wenye chembe kubwa zaidi unaingia kama ndimi ndani ya tabaka la chini lenye mfinyanzi mwingi (sifa za retic)?", "help": ["Udongo uliopauka na wenye chembe kubwa zaidi unaoingia ndani ya tabaka la argic kama ndimi au kabari wima.", "Kawaida katika udongo wa misitu ya maeneo baridi na yenye unyevu."], "no": "ACT"},
+  {"id": "ACT", "step": "Matabaka ya chini yenye mfinyanzi mwingi", "q": "Je, mfinyanzi wa tabaka la chini hauna shughuli nyingi?", "help": ["CEC (pH 7) chini ya 24 cmol(+)/kg ya mfinyanzi katika sehemu fulani ya tabaka la argic ndani ya sentimita 150.", "Kawaida katika udongo uliochakaa sana wenye kaolinite katika hali ya hewa ya joto."], "yes": "BSL", "no": "BSH"},
+  {"id": "BSL", "step": "Matabaka ya chini yenye mfinyanzi mwingi", "q": "Je, alumini inayobadilishana inazidi besi zinazobadilishana katika sehemu kubwa ya tabaka la chini?", "help": ["Al inayobadilishana zaidi ya Ca + Mg + K + Na zinazobadilishana katika nusu au zaidi ya tabaka kati ya sentimita 50 na 100. Bila data hizo, pH (maji) chini ya takriban 4.6 ndiyo mwongozo wa kitabu kwa matabaka ya chini yenye kaboni kidogo.", "Ndiyo → Acrisols; Hapana → Lixisols."], "yes": "=AC", "no": "=LX"},
+  {"id": "BSH", "step": "Matabaka ya chini yenye mfinyanzi mwingi", "q": "Je, alumini inayobadilishana inazidi besi zinazobadilishana katika sehemu kubwa ya tabaka la chini?", "help": ["Al inayobadilishana zaidi ya Ca + Mg + K + Na zinazobadilishana katika nusu au zaidi ya tabaka kati ya sentimita 50 na 100. Bila data hizo, pH (maji) chini ya takriban 4.6 ndiyo mwongozo wa kitabu kwa matabaka ya chini yenye kaboni kidogo.", "Ndiyo → Alisols; Hapana → Luvisols."], "yes": "=AL", "no": "=LV"},
+  {"id": "CM", "step": "Ukuaji mdogo", "q": "Je, kuna tabaka la chini linaloonyesha mabadiliko (rangi, muundo au uchakavu) lakini bila ongezeko la mfinyanzi?", "help": ["Tabaka la cambic linaloanza ndani ya sentimita 50 na kuendelea hadi angalau sentimita 25.", "Dalili: rangi nyekundu au kahawia zaidi kuliko chini yake, muundo wa udongo badala ya muundo wa mwamba au mashapo, kuondolewa kwa kabonati."]},
+  {"id": "FL", "step": "Ukuaji mdogo", "q": "Je, udongo uko katika mashapo mapya ya mto, ziwa au bahari ambayo bado yanaonyesha matabaka yake?", "help": ["Mali ya fluvic (matabaka yanayoonekana, au kaboni hai inayobadilika bila mpangilio kwa kina) yenye unene wa angalau sentimita 25, inayoanza ndani ya takriban sentimita 25.", "Kawaida katika tambarare za mafuriko, delta na fukwe za pwani."]},
+  {"id": "AR", "step": "Ukuaji mdogo", "q": "Je, udongo ni wa mchanga kote?", "help": ["Mchanga tifutifu (loamy sand) au mchanga (wastani wa uzito) hadi sentimita 100. Matabaka yenye chembe ndogo zaidi, na matabaka yenye asilimia 40 au zaidi ya vipande vikubwa, kila moja jumla yake ni chini ya sentimita 15.", "Unahisi mkwaruzo na haushikamani kuwa utepe ukiufinya kati ya vidole."]}
+];
+// default flow: yes -> RSG with same code; no -> next question in order
+const ORDER = Q.map(q => q.id), byId = Object.fromEntries(Q.map(q => [q.id, q]));
+// Results are written "=CODE"; anything else is the id of the next question.
+const nextOf = id => { const i = ORDER.indexOf(id); return i >= 0 && i < ORDER.length - 1 ? ORDER[i + 1] : "=RG"; };
+const yesOf = q => q.yes || "=" + q.id;
+const noOf = q => q.no || (q.id === "AR" ? "=RG" : nextOf(q.id));
+byId.UM.no = "DU";
+
+let path = []; // [{id, ans}]
+const $ = id => document.getElementById("sw-" + id);
+const view = $("view");
+const total = 26;
+
+function render() {
+  const cur = currentNode();
+  $("restart").hidden = !formMode && path.length === 0 && cur === "START";
+  $("bar").style.width = (cur.startsWith("=") ? 100 : Math.min(95, path.length / total * 100)) + "%";
+  if (formMode) return formResult ? showFormResult() : batch ? batchView() : formView();
+  if (cur === "START") return intro();
+  if (cur.startsWith("=")) return result(cur.slice(1));
+  question(byId[cur]);
+}
+function currentNode() {
+  if (!path.started) return "START";
+  let node = "HS";
+  for (const p of path) {
+    const q = byId[p.id];
+    node = p.ans === "y" ? yesOf(q) : noOf(q);
+  }
+  return node;
+}
+function intro() {
+  view.innerHTML = `<div class="wk-card">
+    <h1>Tafuta Kundi la Rejea la Udongo (Reference Soil Group) la WRB</h1>
+    <p>Njia mbili za kupitia ufunguo wa WRB 2022. Zote zinafuata mpangilio wake, kwa hiyo kundi la kwanza linalofaa ndilo jibu.</p>
+    <div class="modes">
+      <button id="sw-go"><b>Hatua kwa hatua</b><span>Jibu swali moja la ndiyo/hapana kwa wakati mmoja. Bora zaidi shambani.</span></button>
+      <button id="sw-goform"><b>Ingiza data za wasifu</b><span>Jaza uchunguzi wa shambani na data za maabara kwa kila tabaka, na programu itaamua.</span></button>
+    </div>
+    <ul class="intro" style="margin-top:16px"><li>Chagua <b>Sina uhakika</b> au acha kisanduku wazi usipojua. Ufunguo unaendelea na kukuambia nini cha kuchunguza.</li></ul></div>`;
+  $("go").onclick = () => { path.started = true; render(); };
+  $("goform").onclick = () => { formMode = true; render(); };
+}
+function question(q) {
+  const n = path.length + 1;
+  view.innerHTML = `<div class="step">${q.step} · Swali la ${n}</div>
+    <div class="wk-card">
+      <h1>${q.q}</h1>
+      <div class="answers">
+        <button class="yes" data-a="y">Ndiyo</button>
+        <button data-a="n">Hapana</button>
+        <button class="unsure" data-a="u">Sina uhakika</button>
+      </div>
+      <details><summary>Jinsi ya kuchunguza</summary><ul>${q.help.map(h => `<li>${h}</li>`).join("")}</ul></details>
+    </div>
+    <div class="wk-nav"><button id="sw-back" ${path.length ? "" : "hidden"}>← Rudi</button><span></span></div>`;
+  view.querySelectorAll("[data-a]").forEach(b => b.onclick = () => { path.push({ id: q.id, ans: b.dataset.a }); render(); window.scrollTo(0, 0); });
+  const back = $("back"); if (back) back.onclick = () => { path.pop(); render(); };
+}
+function result(code) {
+  const [name, desc] = RSG[code];
+  const unsure = path.filter(p => p.ans === "u");
+  // groups that would have been assigned if an unsure answer had been Yes
+  const alts = unsure.map(p => { const q = byId[p.id], y = yesOf(q); return { q, to: y.startsWith("=") ? RSG[y.slice(1)][0] : null }; });
+  view.innerHTML = `<div class="step">Matokeo</div>
+    <div class="wk-card result">
+      <span class="code">${code}</span>
+      <div class="rsg">${name}</div>
+      <p>${desc}</p>
+      ${unsure.length ? `<div class="flag"><strong>Ya muda.</strong> Hukuwa na uhakika kuhusu swali ${unsure.length} hapo awali katika ufunguo, kwa hiyo chunguza ${unsure.length > 1 ? "haya" : "hili"} kwanza:<ul style="margin:8px 0 0; padding-left:18px">${alts.map(a => `<li>${a.q.q}${a.to ? ` Ikiwa ndiyo, udongo ungekuwa <b>${a.to}</b> badala yake.` : " Ikiwa ndiyo, ufunguo ungefuata tawi tofauti kuanzia hapo."}</li>`).join("")}</ul></div>` : ""}
+      <div class="trail"><h2 style="margin-top:14px">Majibu yako</h2>${path.map(p => `<div><span>${byId[p.id].q}</span><span class="a ${p.ans}">${p.ans === "y" ? "Ndiyo" : p.ans === "n" ? "Hapana" : "Sina uhakika"}</span></div>`).join("")}</div>
+      <div id="sw-qhost"></div>
+      <button class="primary" id="sw-again">Ainisha wasifu mwingine</button>
+      <button class="secondary" id="sw-back2">← Badilisha jibu la mwisho</button>
+    </div>`;
+  QS = { principal: [], supplementary: [] }; $("qhost").appendChild(qualBox(code, null));
+  $("again").onclick = () => { path = []; QS = { principal: [], supplementary: [] }; path.started = true; render(); window.scrollTo(0, 0); };
+  $("back2").onclick = () => { path.pop(); render(); };
+}
+
+/* ---------------- qualifiers (beta) ---------------- */
+const QUAL_NAMES = ["Abruptic","Acric","Albic","Alic","Andic","Arenic","Calcaric","Calcic","Cambic","Chromic","Clayic","Cutanic","Densic","Dolomitic","Duric","Dystric","Eutric","Ferralic","Ferric","Fluvic","Fractic","Geric","Gleyic","Gypsic","Gypsiric","Haplic","Humic","Hyperdystric","Hypereutric","Leptic","Lixic","Loamic","Luvic","Mollic","Nitic","Ochric","Petric","Petrocalcic","Petroplinthic","Pisoplinthic","Plinthic","Profondic","Protic","Rhodic","Salic","Siltic","Skeletic","Sodic","Stagnic","Umbric","Vertic","Vitric","Xanthic"];
+let QS = { principal: [], supplementary: [] };
+function wavg(hz, f, z1, z2) { let s = 0, w = 0; hz.forEach(h => { if (h[f] === "" || h[f] == null || !isFinite(h[f]) || h.top === "" || h.bottom === "") return; const o = Math.max(0, Math.min(h.bottom, z2) - Math.max(h.top, z1)); if (o > 0) { s += h[f] * o; w += o; } }); return w > 0 ? { v: s / w, cover: w / (z2 - z1) } : null; }
+function suggestQualifiers(hz) {
+  // definitions from WRB 2022, Chapter 5 (Dystric/Eutric p 131, Calcaric p 127, Humic p 137, Skeletic p 146, Salic p 145)
+  const out = [], ok = v => v !== "" && v != null && isFinite(v);
+  const H = hz.filter(h => ok(h.top) && ok(h.bottom) && h.bottom > h.top).sort((x, y) => x.top - y.top);
+  // Dystric / Eutric: exchangeable Al vs exchangeable bases over the major part of 20-100 cm (pH water fallback, Annex 2 Table 9.3)
+  const alDom = h => { const bases = ok(h.bases) ? h.bases : ok(h.bs) && ok(h.cec) ? h.bs * h.cec / 100 : null;
+    if (ok(h.al) && bases !== null) return h.al > bases;
+    if (ok(h.ph)) { const oc = ok(h.oc) ? h.oc : 0; return h.ph < (oc < 2 ? 4.6 : oc < 7.5 ? 4.9 : 5.4); } return null; };
+  let tA = 0, tB = 0; H.forEach(h => { const o = Math.max(0, Math.min(h.bottom, 100) - Math.max(h.top, 20)), v = alDom(h); if (o > 0 && v !== null) { if (v) tA += o; else tB += o; } });
+  const src = H.some(h => ok(h.al)) ? "Al inayobadilishana dhidi ya besi" : "pH ya maji kama mwongozo";
+  if (tA >= 40) out.push(["Dystric", `Al inazidi besi katika sentimita ${tA} kati ya 80 (sentimita 20 hadi 100) (${src})`]);
+  else if (tB > 40) out.push(["Eutric", `besi zinazidi Al katika sentimita ${tB} kati ya 80 (sentimita 20 hadi 100) (${src})`]);
+  // Calcaric: >= 2% CaCO3 in a layer >= 30 cm thick within 100 cm, and no calcic horizon within 100 cm
+  const calcic = H.some(h => ok(h.caco3) && h.caco3 >= 15 && h.top <= 100 && h.bottom - h.top >= 15);
+  let run = 0, best = 0, prev = null;
+  H.forEach(h => { const c = ok(h.caco3) && h.caco3 >= 2 && h.top < 100; run = c ? (prev !== null && prev === h.top ? run : 0) + Math.min(h.bottom, 100) - h.top : 0; prev = c ? h.bottom : null; best = Math.max(best, run); });
+  if (best >= 30 && !calcic) out.push(["Calcaric", `CaCO₃ ≥ 2% katika sentimita ${best} ndani ya sentimita 100, hakuna tabaka la calcic (povu katika udongo laini wote linahitaji kuthibitishwa shambani)`]);
+  const oc = wavg(H, "oc", 0, 50);
+  if (oc && oc.cover >= 0.8 && oc.v >= 1) out.push(["Humic", `kaboni hai ${oc.v.toFixed(1)}% (wastani wa uzito, sentimita 0–50)`]);
+  const cf = wavg(H, "cf", 0, 100);
+  if (cf && cf.cover >= 0.5 && cf.v >= 40) out.push(["Skeletic", `vipande vikubwa ${cf.v.toFixed(0)}% (wastani wa uzito, sentimita 0–100)`]);
+  // Salic: a salic horizon (>= 15 cm; EC >= 15 with EC x thickness >= 450, or pH >= 8.5 with EC >= 8 and >= 240) starting within 100 cm
+  const salic = (test, prod) => { let t = 0, p = 0, top = null, last = null;
+    for (const h of H) { if (test(h) && (last === null || last === h.top)) { if (top === null) top = h.top; t += h.bottom - h.top; p += h.ec * (h.bottom - h.top); last = h.bottom; if (top <= 100 && t >= 15 && p >= prod) return top; } else { t = 0; p = 0; top = null; last = null; if (test(h)) { top = h.top; t = h.bottom - h.top; p = h.ec * t; last = h.bottom; if (top <= 100 && t >= 15 && p >= prod) return top; } } }
+    return null; };
+  const sz = salic(h => ok(h.ec) && h.ec >= 15, 450) ?? salic(h => ok(h.ec) && ok(h.ph) && h.ec >= 8 && h.ph >= 8.5, 240);
+  if (sz !== null) out.push(["Salic", `tabaka la salic kuanzia sentimita ${sz}`]);
+  return out;
+}
+function qualName(code) {
+  // principal qualifiers are written before the name, the first one listed closest to it
+  const pr = QS.principal.slice().reverse().join(" "), su = QS.supplementary.length ? ` (${QS.supplementary.join(", ")})` : "";
+  return `${pr ? pr + " " : ""}${RSG_EN[code]}${su}`;
+}
+function qualBox(code, sugg) {
+  const host = document.createElement("div"); host.className = "qual";
+  const draw = () => {
+    const chips = kind => QS[kind].map((q, i) => `<span class="chip">${q}<button data-rm="${kind}:${i}" aria-label="Ondoa ${q}">✕</button></span>`).join("") || `<span style="color:var(--ink-3); font-size:.85rem">Bado hakuna</span>`;
+    host.innerHTML = `<h2>Viainishi (Qualifiers) <span class="beta">Majaribio</span></h2>
+      <p class="warn">Kwa watumiaji wa hali ya juu. Kila Kundi la Rejea la Udongo lina orodha yake ya viainishi vinavyoruhusiwa na kanuni zake katika WRB 2022 (Sura ya 4). Linganisha kila kiainishi na orodha hiyo. Zana hii haichukui nafasi ya mtaalamu wa udongo. Jina la udongo huandikwa kwa Kiingereza, kama WRB inavyoelekeza.</p>
+      <div class="qname" id="sw-qname">${qualName(code)}</div>
+      <div class="row2" style="margin-top:0"><button class="secondary" id="sw-qcopy" style="margin:0">Nakili jina</button></div>
+      ${sugg && sugg.length ? `<h2 style="margin-top:14px; font-size:.95rem">Mapendekezo kutokana na data zako</h2>${sugg.map(([n, why]) => `<div class="sugg"><button data-sug="${n}">Ongeza</button><span><b style="color:var(--ink)">${n}</b> · ${why}. Hakikisha kiko kwenye orodha ya ${RSG_EN[code]}.</span></div>`).join("")}` : ""}
+      <h2 style="margin-top:14px; font-size:.95rem">Viainishi vikuu (principal)</h2><div class="chips">${chips("principal")}</div>
+      <h2 style="font-size:.95rem">Viainishi vya ziada (supplementary)</h2><div class="chips">${chips("supplementary")}</div>
+      <div class="qadd"><input id="sw-qin" list="sw-qlist" placeholder="Jina la kiainishi, mfano Rhodic" autocomplete="off"><select id="sw-qkind" aria-label="Aina ya kiainishi"><option value="principal">Kikuu</option><option value="supplementary">Cha ziada</option></select></div>
+      <button class="secondary" id="sw-qaddbtn">Ongeza kiainishi</button>
+      <datalist id="sw-qlist">${QUAL_NAMES.map(n => `<option value="${n}">`).join("")}</datalist>
+      <p class="hint" style="font-size:.8rem; color:var(--ink-3); margin-top:10px">Ongeza viainishi vikuu kwa mpangilio wa orodha ya kundi; cha kwanza huandikwa karibu zaidi na jina la kundi. Viainishi vya ziada huwekwa ndani ya mabano baada ya jina.</p>`;
+    host.querySelectorAll("[data-rm]").forEach(b => b.onclick = () => { const [k, i] = b.dataset.rm.split(":"); QS[k].splice(+i, 1); draw(); });
+    host.querySelectorAll("[data-sug]").forEach(b => b.onclick = () => { const n = b.dataset.sug; if (!QS.principal.includes(n) && !QS.supplementary.includes(n)) QS.principal.push(n); draw(); });
+    host.querySelector("#sw-qaddbtn").onclick = () => {
+      let n = host.querySelector("#sw-qin").value.trim(); if (!n) return;
+      n = n.charAt(0).toUpperCase() + n.slice(1).toLowerCase();
+      const k = host.querySelector("#sw-qkind").value; if (!QS.principal.includes(n) && !QS.supplementary.includes(n)) QS[k].push(n); draw();
+    };
+    host.querySelector("#sw-qcopy").onclick = async () => { const t = qualName(code); try { await navigator.clipboard.writeText(t); host.querySelector("#sw-qcopy").textContent = "Imenakiliwa"; } catch (e) { host.querySelector("#sw-qcopy").textContent = t; } };
+  };
+  draw(); return host;
+}
+
+/* ---------------- form mode ---------------- */
+let formMode = false, formResult = null;
+const SITE_Q = [["Mabaki ya mimea na athari za binadamu", [["organicCm", "num", "Unene wa tabaka la mabaki ya mimea (mboji/tope jeusi) ndani ya sentimita 100 (sentimita)"], ["anthric", "yn", "Udongo wa juu mnene uliotengenezwa na binadamu (≥ sentimita 50 za hortic, irragric, plaggic, pretic au terric; au tope la kilimo cha mpunga)?"], ["artefacts", "yn", "≥ asilimia 20 ya vitu vilivyotengenezwa na binadamu katika sentimita 100 za juu, au uso uliofunikwa / wa kiufundi?"], ["permafrost", "yn", "Barafu ya kudumu ndani ya sentimita 100?"]]], ["Vizuizi vya mizizi", [["rock", "rock", "Mwamba mgumu unaoendelea ndani ya sentimita 100?"], ["slickensides", "yn", "Nyuso za kuteleza (slickensides) au vipande vya umbo la kabari ndani ya sentimita 100 (nyufa za kusinyaa na kuvimba)?"], ["saline", "yn", "Chumvi nyingi sana karibu na uso (hutumika ikiwa hakuna data ya EC)?"], ["sodic", "yn", "Tabaka la chini lililoshindiliwa lenye sodiamu nyingi (natric) ndani ya sentimita 100 (hutumika ikiwa hakuna data ya ESP)?"]]], ["Sifa za maji na chuma–alumini", [["gleyic", "yn", "Udongo uliojaa maji ya ardhini (sifa za gleyic) unaoanza ndani ya takriban sentimita 40, au chini ya maji / eneo la maji kujaa na kupwa?"], ["andic", "yn", "Sifa za andic au vitric (volkano) karibu na uso?"], ["spodic", "yn", "Tabaka la spodic (mlimbikizo wa humasi / Fe–Al) ndani ya sentimita 200?"], ["plinthic", "yn", "Plinthite, mwamba wa chuma au vijiwe vya chuma (plinthic / petroplinthic / pisoplinthic) ndani ya sentimita 100?"], ["stagnic", "yn", "Madoa ya maji yaliyotuama (sifa za stagnic) yanayoanza ndani ya takriban sentimita 60?"], ["nitic", "yn", "Muundo wa nitic: vipande imara vya umbo la karanga vyenye nyuso zinazong'aa?"], ["ferralic", "yn", "Tabaka la ferralic (hutumika ikiwa hakuna data ya CEC)?"]]], ["Milimbikizo na ukuaji", [["duric", "yn", "Silika ya pili (duric / petroduric) ndani ya sentimita 100?"], ["gypsic", "yn", "Tabaka la jasi ya pili ndani ya sentimita 100 (hutumika ikiwa hakuna data ya jasi)?"], ["calcic", "yn", "Tabaka la kabonati ya pili (calcic) ndani ya sentimita 100 (hutumika ikiwa hakuna data ya CaCO₃)?"], ["retic", "yn", "Udongo mwepesi na wenye chembe kubwa unaoingia kama ndimi katika tabaka la chini lenye mfinyanzi mwingi (retic)?"], ["cambic", "yn", "Tabaka la chini linaloonyesha mabadiliko (cambic) ndani ya sentimita 50?"], ["fluvic", "yn", "Matabaka ya fluvic (mashapo ya mto, ziwa au bahari) karibu na uso?"]]]];
+const HZ_F = [["top", "Juu (sentimita)"], ["bottom", "Chini (sentimita)"], ["clay", "Mfinyanzi %"], ["sand", "Mchanga %"], ["cf", "Vipande vikubwa % ujazo"], ["oc", "Kaboni hai %"], ["value", "Munsell value (unyevu)", "v"], ["chroma", "Munsell chroma (unyevu)", "c"], ["cec", "CEC pH 7 (cmol/kg udongo)"], ["bs", "Kiwango cha besi %"], ["esp", "ESP %"], ["ec", "EC (dS/m)"], ["caco3", "CaCO₃ sawa na %"], ["gypsum", "Jasi %"], ["ph", "pH (maji)"], ["al", "Al inayobadilishana (cmol/kg)"]];
+let F = { site: {}, hz: [{ top: 0, bottom: 20 }, { top: 20, bottom: 50 }, { top: 50, bottom: 100 }] };
+const EXAMPLE = { site: { organicCm: 0, anthric: "n", artefacts: "n", permafrost: "n", rock: "none", slickensides: "n", saline: "n", sodic: "n", gleyic: "n", andic: "n", spodic: "n", plinthic: "n", stagnic: "n", nitic: "n", duric: "n", gypsic: "n", calcic: "n", retic: "n", cambic: "n", fluvic: "n" },
+  hz: [{ top: 0, bottom: 15, clay: 12, sand: 70, cf: 5, oc: 1.1, value: 4, chroma: 3, cec: 4, bs: 65, ph: 6.2 },
+       { top: 15, bottom: 35, clay: 14, sand: 66, cf: 5, oc: 0.6, value: 5, chroma: 4, cec: 3.5, bs: 60, ph: 6.0 },
+       { top: 35, bottom: 110, clay: 28, sand: 52, cf: 8, oc: 0.3, value: 4, chroma: 6, cec: 5, bs: 70, ph: 6.1 }] };
+const ynSel = (k, v) => `<select data-site="${k}"><option value="" ${!v ? "selected" : ""}>Sina uhakika</option><option value="y" ${v === "y" ? "selected" : ""}>Ndiyo</option><option value="n" ${v === "n" ? "selected" : ""}>Hapana</option></select>`;
+/* ---------------- CSV upload (soilKey column names) ---------------- */
+let batch = null;
+function parseCSVText(t) {
+  const lines = t.replace(/\r/g, "").split("\n").filter(l => l.trim());
+  if (!lines.length) return { head: [], rows: [] };
+  const sep = lines[0].includes("\t") ? "\t" : (lines[0].split(";").length > lines[0].split(",").length ? ";" : ",");
+  const split = l => { const o = []; let c = "", q = false; for (let i = 0; i < l.length; i++) { const ch = l[i]; if (ch === '"') { if (q && l[i + 1] === '"') { c += '"'; i++; } else q = !q; } else if (ch === sep && !q) { o.push(c.trim()); c = ""; } else c += ch; } o.push(c.trim()); return o; };
+  return { head: split(lines[0]).map(h => h.toLowerCase()), rows: lines.slice(1).map(split) };
+}
+const SK_MAP = { top_cm: "top", bottom_cm: "bottom", clay_pct: "clay", sand_pct: "sand", coarse_fragments_pct: "cf", oc_pct: "oc",
+  munsell_value_moist: "value", munsell_chroma_moist: "chroma", cec_cmol: "cec", bs_pct: "bs", ec_dS_m: "ec", ec_ds_m: "ec", caco3_pct: "caco3", secondary_carbonates_pct: "seccarb", caso4_pct: "gypsum", ph_h2o: "ph", al_cmol: "al" };
+const SITE_COLS = ["gleyic", "stagnic", "andic", "spodic", "nitic", "retic", "cambic", "fluvic", "duric", "anthric", "permafrost", "saline", "sodic", "gypsic", "calcic", "ferralic", "artefacts", "plinthic", "slickensides"];
+function csvToProfiles(text) {
+  const { head, rows } = parseCSVText(text);
+  const ix = n => head.indexOf(n);
+  if (ix("top_cm") < 0 || ix("bottom_cm") < 0) throw new Error("Safu za top_cm na bottom_cm zinahitajika (majina ya soilKey).");
+  const num = v => { if (v === undefined || v === null) return ""; const s = String(v).trim(); if (s === "" || s.toUpperCase() === "NA") return ""; const n = Number(s); return isFinite(n) ? n : ""; };
+  const groups = new Map();
+  rows.forEach((r, k) => { const id = ix("id") >= 0 ? (r[ix("id")] || "profile") : "profile"; if (!groups.has(id)) groups.set(id, []); groups.get(id).push(r); });
+  return [...groups.entries()].map(([id, rs]) => {
+    const hz = rs.map(r => {
+      const h = {};
+      Object.entries(SK_MAP).forEach(([c, f]) => { if (ix(c) >= 0) h[f] = num(r[ix(c)]); });
+      // base saturation and ESP from exchangeable cations when given
+      const ca = num(r[ix("ca_cmol")]), mg = num(r[ix("mg_cmol")]), k = num(r[ix("k_cmol")]), na = num(r[ix("na_cmol")]);
+      if ([ca, mg, k, na].every(v => v !== "")) { h.bases = ca + mg + k + na; if ((h.bs === "" || h.bs === undefined) && h.cec > 0) h.bs = 100 * h.bases / h.cec; }
+      if (na !== "" && h.cec > 0) h.esp = 100 * na / h.cec;
+      h._slick = ix("slickensides") >= 0 ? (r[ix("slickensides")] || "").toLowerCase() : "";
+      h._art = ix("artefacts_pct") >= 0 ? num(r[ix("artefacts_pct")]) : "";
+      h._plin = ix("plinthite_pct") >= 0 ? num(r[ix("plinthite_pct")]) : "";
+      return h;
+    }).filter(h => h.top !== "" && h.bottom !== "");
+    const site = {};
+    const first = rs[0], val = c => ix(c) >= 0 ? (first[ix(c)] || "").trim().toLowerCase() : "";
+    SITE_COLS.forEach(c => { const v = val(c); if (v === "y" || v === "yes" || v === "true") site[c] = "y"; else if (v === "n" || v === "no" || v === "false") site[c] = "n"; });
+    // morphology columns from the horizons
+    const slick = hz.filter(h => h.top < 100 && h._slick);
+    if (slick.length && !site.slickensides) site.slickensides = slick.some(h => !["absent", "none", "0", "no"].includes(h._slick)) ? "y" : "n";
+    const art = hz.filter(h => h.top < 100 && h._art !== "");
+    if (art.length && !site.artefacts) { const w = art.reduce((s, h) => s + (Math.min(h.bottom, 100) - h.top), 0), m = art.reduce((s, h) => s + h._art * (Math.min(h.bottom, 100) - h.top), 0) / w; site.artefacts = m >= 20 ? "y" : "n"; }
+    const pl = hz.filter(h => h.top < 100 && h._plin !== "");
+    if (pl.length && !site.plinthic) site.plinthic = pl.some(h => h._plin >= 15) ? "y" : "n";
+    if (ix("rock_cm") >= 0) { const v = (first[ix("rock_cm")] || "").trim().toLowerCase(); site.rock = v === "none" ? "none" : (num(v) !== "" ? num(v) : ""); }
+    if (ix("organic_cm") >= 0 && num(first[ix("organic_cm")]) !== "") site.organicCm = num(first[ix("organic_cm")]);
+    return { id, site, hz };
+  });
+}
+function batchView() {
+  view.innerHTML = `<div class="step">Matokeo · wasifu ${batch.length}</div><div class="wk-card">
+    <h1 style="font-size:1.2rem">Wasifu ulioainishwa</h1>
+    <p>Gusa wasifu kuona jinsi ufunguo ulivyoendeshwa. <b>Ya muda</b> inamaanisha makundi ya awali katika ufunguo hayangeweza kuchunguzwa kwa safu zilizotolewa.</p>
+    ${batch.map((b, i) => `<div class="chk" style="grid-template-columns: 1fr auto; cursor:pointer" data-open="${i}"><span class="t"><b>${b.id}</b> · ${RSG[b.r.code][0]}</span><span class="s ${b.r.unsure.length ? "u" : "y"}">${b.r.unsure.length ? "Ya muda" : "Imechunguzwa"}</span></div>`).join("")}
+    <button class="primary" id="sw-dlcsv">Pakua matokeo (CSV)</button>
+    <button class="secondary" id="sw-bback">← Rudi kwenye fomu</button></div>`;
+  view.querySelectorAll("[data-open]").forEach(e => e.onclick = () => { const b = batch[+e.dataset.open]; F = { site: b.site, hz: b.hz }; formResult = b.r; formResult._fromBatch = true; render(); window.scrollTo(0, 0); });
+  $("bback").onclick = () => { batch = null; render(); };
+  $("dlcsv").onclick = () => {
+    const esc = v => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : v;
+    const lines = [["id", "rsg_code", "rsg", "rsg_sw", "status", "groups_not_checked"].join(",")].concat(batch.map(b => [b.id, b.r.code, RSG_EN[b.r.code], RSG_SW[b.r.code], b.r.unsure.length ? "provisional" : "checked", b.r.unsure.map(u => RSG_EN[u.code]).join("; ")].map(esc).join(",")));
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv" })); a.download = "wrb_key_results.csv"; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 500);
+  };
+}
+
+function formView() {
+  const site = F.site;
+  let h = `<div class="step">Ingiza data za wasifu</div>
+    <div class="wk-card"><h1 style="font-size:1.15rem">Fungua faili la CSV</h1>
+      <p>Mstari mmoja kwa kila tabaka, ukitumia majina ya safu ya kifurushi cha R kiitwacho soilKey, ili faili hilo hilo lifanye kazi kwa vyote viwili. Ongeza safu ya <b>id</b> ili kuainisha wasifu kadhaa kwa pamoja. <a href="wrb_profiles_template.csv" download>Pakua mfano wa CSV</a></p>
+      <label class="secondary" style="display:flex; align-items:center; justify-content:center; margin-top:4px">Chagua faili la CSV<input type="file" id="sw-csvin" accept=".csv,.tsv,.txt" style="display:none"></label>
+      <p style="font-size:.85rem; margin:6px 0 0; text-align:center">🔒 Inachakatwa kwenye kifaa chako. Hakuna kinachotumwa wala kuhifadhiwa.</p>
+      <details><summary>Safu zinazosomwa</summary><ul style="margin:8px 0 0; padding-left:18px">
+      <li><b>id</b>, <b>top_cm</b>, <b>bottom_cm</b>: wasifu na kina (top_cm na bottom_cm zinahitajika).</li>
+      <li><b>Rangi na maabara:</b> munsell_value_moist, munsell_chroma_moist, clay_pct, sand_pct, coarse_fragments_pct, oc_pct, cec_cmol, bs_pct, ec_dS_m, caco3_pct, secondary_carbonates_pct, caso4_pct, ph_h2o, al_cmol</li>
+      <li><b>Kationi zinazobadilishana:</b> ca_cmol, mg_cmol, k_cmol, na_cmol (kwa kiwango cha besi na ESP)</li>
+      <li><b>Sifa za tabaka:</b> slickensides, artefacts_pct, plinthite_pct</li>
+      <li><b>Wasifu (kutoka mstari wa kwanza wa kila wasifu):</b> rock_cm (kina cha mwamba, au none), organic_cm, na uchunguzi wa ndiyo/hapana (y / n): gleyic, stagnic, andic, spodic, nitic, retic, cambic, fluvic, duric, anthric, permafrost, saline, sodic, gypsic, calcic, ferralic, artefacts, plinthic, slickensides</li>
+      <li><b>Visanduku vitupu:</b> vipimo visivyo na data vinaorodheshwa na matokeo yanawekwa alama ya «Ya muda». Safu nyingine hazitumiwi.</li></ul></details>
+      <div class="msg" id="sw-csvmsg" style="font-size:.9rem; margin-top:8px; color:var(--warn)"></div>
+    </div>
+    <div class="wk-card"><h1 style="font-size:1.25rem">Au jaza kwa mkono: uchunguzi wa shambani</h1>
+    <p>Acha chochote usichojua kama <b>Sina uhakika</b>.</p>`;
+  SITE_Q.forEach(([sec, qs]) => {
+    h += `<div class="sec">${sec}</div><div class="fgrid one">`;
+    qs.forEach(([k, type, lab]) => {
+      if (type === "num") h += `<div class="fld"><label>${lab}</label><input type="number" inputmode="decimal" data-site="${k}" value="${site[k] ?? ""}" placeholder="Haijarekodiwa"></div>`;
+      else if (type === "rock") {
+        const mode = site.rock === "none" ? "n" : (site.rock === "y" || typeof site.rock === "number") ? "y" : "";
+        h += `<div class="fld"><label>${lab}</label><select data-rock><option value="" ${!mode ? "selected" : ""}>Sina uhakika</option><option value="y" ${mode === "y" ? "selected" : ""}>Ndiyo</option><option value="n" ${mode === "n" ? "selected" : ""}>Hapana</option></select>
+          ${mode === "y" ? `<input type="number" inputmode="decimal" data-site="rock" value="${typeof site.rock === "number" ? site.rock : ""}" placeholder="Kina hadi mwamba (sentimita)" style="margin-top:6px">` : ""}</div>`;
+      } else h += `<div class="fld"><label>${lab}</label>${ynSel(k, site[k])}</div>`;
+    });
+    h += `</div>`;
+  });
+  h += `</div><div class="sec">Matabaka (data za maabara)</div>`;
+  F.hz.forEach((z, i) => {
+    h += `<div class="hcard"><div class="hd">Tabaka la ${i + 1}${F.hz.length > 1 ? `<button data-del="${i}">Ondoa</button>` : ""}</div><div class="fgrid">`;
+    HZ_F.forEach(([k, lab, sel]) => {
+      if (sel) { const opts = sel === "v" ? [1, 2, 2.5, 3, 4, 5, 6, 7, 8] : [0, 1, 2, 3, 4, 6, 8];
+        h += `<div class="fld"><label>${lab}</label><select data-hz="${i}" data-k="${k}"><option value="">–</option>${opts.map(o => `<option ${z[k] == o ? "selected" : ""}>${o}</option>`).join("")}</select></div>`; }
+      else h += `<div class="fld"><label>${lab}</label><input type="number" inputmode="decimal" step="any" data-hz="${i}" data-k="${k}" value="${z[k] ?? ""}"></div>`;
+    });
+    h += `</div></div>`;
+  });
+  h += `<div class="row2"><button class="secondary" id="sw-addhz" style="margin:0">+ Ongeza tabaka</button><button class="secondary" id="sw-ex" style="margin:0">Pakia mfano</button></div>
+    <button class="primary" id="sw-classify">Ainisha</button><div class="wk-nav"><button id="sw-fback">← Rudi</button><span></span></div>`;
+  view.innerHTML = h;
+  view.querySelectorAll("[data-site]").forEach(e => e.oninput = () => { const v = e.value, k = e.dataset.site; F.site[k] = e.type === "number" ? (v === "" ? (k === "rock" ? "y" : "") : +v) : v; });
+  const rk = view.querySelector("[data-rock]"); rk.onchange = () => { F.site.rock = rk.value === "n" ? "none" : rk.value === "y" ? (typeof F.site.rock === "number" ? F.site.rock : "y") : ""; formView(); };
+  view.querySelectorAll("[data-hz]").forEach(e => e.oninput = () => { const v = e.value; F.hz[+e.dataset.hz][e.dataset.k] = v === "" ? "" : +v; });
+  view.querySelectorAll("[data-del]").forEach(b => b.onclick = () => { F.hz.splice(+b.dataset.del, 1); formView(); });
+  $("addhz").onclick = () => { const last = F.hz[F.hz.length - 1]; F.hz.push({ top: last && last.bottom !== "" ? last.bottom : "", bottom: "" }); formView(); };
+  $("ex").onclick = () => { F = JSON.parse(JSON.stringify(EXAMPLE)); formView(); };
+  $("classify").onclick = () => { formResult = WRBEngineSW.classify(F.site, F.hz); render(); window.scrollTo(0, 0); };
+  $("csvin").onchange = e => {
+    const f = e.target.files[0]; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try {
+        const profs = csvToProfiles(rd.result);
+        if (!profs.length) throw new Error("Hakuna matabaka yenye top_cm na bottom_cm yaliyopatikana.");
+        batch = profs.map(p => ({ ...p, r: WRBEngineSW.classify(p.site, p.hz) }));
+        if (batch.length === 1) { F = { site: batch[0].site, hz: batch[0].hz }; formResult = batch[0].r; batch = null; }
+        render(); window.scrollTo(0, 0);
+      } catch (err) { $("csvmsg").textContent = err.message; }
+    };
+    rd.readAsText(f);
+  };
+  $("fback").onclick = () => { formMode = false; render(); };
+}
+function showFormResult() {
+  const r = formResult, [name, desc] = RSG[r.code];
+  const sym = ok => ok === true ? ["✓", "y"] : ok === false ? ["✗", "n"] : ["?", "u"];
+  view.innerHTML = `<div class="step">Matokeo</div><div class="wk-card result">
+    <span class="code">${r.code}</span><div class="rsg">${name}</div><p>${desc}</p>
+    ${r.unsure.length ? `<div class="flag"><strong>Ya muda.</strong> Makundi ${r.unsure.length} ya awali katika ufunguo hayangeweza kuchunguzwa kwa data zilizotolewa. Ikiwa lolote kati yake linafaa, udongo ungekuwa katika kundi hilo badala yake:<ul style="margin:8px 0 0; padding-left:18px">${r.unsure.map(u => `<li><b>${RSG[u.code][0]}</b>: ${u.note}</li>`).join("")}</ul></div>` : ""}
+    <h2 style="margin-top:16px">Jinsi ufunguo ulivyoendeshwa</h2>
+    ${r.trail.map(t => { const [g, c] = sym(t.ok); return `<div class="chk"><span class="s ${c}">${g}</span><span class="t"><b>${RSG[t.code][0]}</b> · ${t.note}</span></div>`; }).join("")}
+    <div id="sw-qhost"></div>
+    <button class="primary" id="sw-edit">Hariri data</button>
+    <button class="secondary" id="sw-new">Ainisha wasifu mwingine</button></div>`;
+  QS = { principal: [], supplementary: [] }; $("qhost").appendChild(qualBox(r.code, suggestQualifiers(F.hz)));
+  if (formResult._fromBatch) { $("edit").textContent = "← Rudi kwenye wasifu wote"; $("edit").onclick = () => { formResult = null; render(); window.scrollTo(0, 0); }; } else $("edit").onclick = () => { formResult = null; render(); };
+  $("new").onclick = () => { formResult = null; batch = null; F = { site: {}, hz: [{ top: 0, bottom: 20 }, { top: 20, bottom: 50 }, { top: 50, bottom: 100 }] }; render(); window.scrollTo(0, 0); };
+}
+
+$("restart").onclick = () => { path = []; formMode = false; formResult = null; batch = null; render(); };
+render();
+})();
+</script>
+</div>
+</div>
 <script>
 (function () {
   // language list for the WRB key: each language is its own copy of the key, shown in place
-  const panes = document.querySelectorAll("[data-wrb-lang]"), sels = [document.getElementById("wrb-lang"), document.getElementById("wrb-lang-fa")];
+  const panes = document.querySelectorAll("[data-wrb-lang]"), sels = [document.getElementById("wrb-lang"), document.getElementById("wrb-lang-fa"), document.getElementById("wrb-lang-sw")];
   function set(l) {
     if (![...panes].some(p => p.dataset.wrbLang === l)) l = "en";
     panes.forEach(p => p.hidden = p.dataset.wrbLang !== l);
@@ -1723,7 +2470,7 @@ render();
   }
   sels.forEach(s => { if (s) s.onchange = () => set(s.value); });
   let l = "en"; try { l = localStorage.getItem("ra-wrb-lang") || "en"; } catch (e) { }
-  if (location.hash === "#wrb-fa") l = "fa";
+  const h = { "#wrb-fa": "fa", "#wrb-sw": "sw" }[location.hash]; if (h) l = h;
   set(l);
 })();
 </script>
