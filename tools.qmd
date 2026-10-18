@@ -243,6 +243,23 @@ body.quarto-dark .rk-tools {
     <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:12px"><div id="c-table"></div></div>
     <p class="hint">Amber values: the profile is shallower than the reporting depth, so the stock covers only the soil that was sampled.</p>
   </div>
+  <div class="rk-card">
+    <h3>Can the change be detected?</h3>
+    <p class="hint" style="margin-top:0">Before trusting (or paying for) a reported change in soil carbon, check whether the sampling could detect a change that size. This gives the smallest change a design can reliably detect, and how many samples a claimed change would need.</p>
+    <div class="rk-grid">
+      <div><label for="cm-cv">Variability, CV of stocks (%)</label><input type="number" id="cm-cv" value="30" min="1" step="any"></div>
+      <div><label for="cm-n">Samples per sampling time</label><input type="number" id="cm-n" value="20" min="2" step="1"></div>
+      <div><label for="cm-des">Design</label><select id="cm-des"><option value="ind">Different locations each time</option><option value="pair">Same locations resampled</option></select></div>
+      <div id="cm-rhobox"><label for="cm-rho">Correlation between times</label><input type="number" id="cm-rho" value="0.6" min="0" max="0.99" step="any"></div>
+      <div><label for="cm-alpha">Significance level</label><select id="cm-alpha"><option value="0.1">0.10</option><option value="0.05" selected>0.05</option><option value="0.01">0.01</option></select></div>
+      <div><label for="cm-pow">Power</label><select id="cm-pow"><option value="0.8" selected>80%</option><option value="0.9">90%</option></select></div>
+      <div><label for="cm-claim">Claimed change (%, optional)</label><input type="number" id="cm-claim" min="0" step="any"></div>
+    </div>
+    <p class="hint">Field CVs for soil carbon stocks are typically 20–50%. Resampling the same locations removes much of the spatial variation from the comparison; the correlation says how much (0.5–0.8 is common).</p>
+    <div class="stats" id="cm-stats" style="margin-top:12px"></div>
+    <div id="cm-verdict" style="margin-top:12px"></div>
+    <p class="hint" id="cm-why"></p>
+  </div>
   <div class="advanced">
     <strong>Horizon sums can overestimate stocks</strong>
     <p>Summing horizons assumes each layer is uniform. Our published work shows this can substantially overestimate carbon stocks compared with assessing the profile at every point. For baselines, credits or reporting, we calculate stocks from depth-continuous profiles with uncertainty.</p>
@@ -457,6 +474,21 @@ body.quarto-dark .rk-tools {
       <div class="rk-table-wrap"><div id="s-table"></div></div>
     </div>
   </div>
+  <div class="rk-card">
+    <h3>Sampling for a map: using the variogram</h3>
+    <p class="hint" style="margin-top:0">The calculator above sizes a sample to estimate one average. For a map, what matters is how far apart samples are compared with the variogram range. This finds how many samples on a regular grid give a chosen kriging error, from a variogram you already have (for example from the <a href="#krige" data-goto-tab="krige">variogram tool</a> or a nearby study).</p>
+    <div class="rk-grid">
+      <div><label for="sv-model">Variogram model</label><select id="sv-model"><option value="sph">Spherical</option><option value="exp">Exponential</option><option value="gau">Gaussian</option></select></div>
+      <div><label for="sv-nug">Nugget (% of sill)</label><input type="number" id="sv-nug" value="20" min="0" max="99" step="any"></div>
+      <div><label for="sv-r">Range, practical (m)</label><input type="number" id="sv-r" value="250" min="1" step="any"></div>
+      <div><label for="sv-area">Area (ha)</label><input type="number" id="sv-area" value="50" min="0.01" step="any"></div>
+      <div><label for="sv-target">Target map error (% of SD)</label><input type="number" id="sv-target" value="60" min="1" max="100" step="any"></div>
+    </div>
+    <p class="hint">Map error is the root mean kriging error at unsampled locations, as a share of the standard deviation of the property. 100% means no better than the mean; the nugget sets the lowest error any density can reach.</p>
+    <div class="rk-row"><button class="rk-btn primary" id="sv-run">Calculate</button></div>
+    <div class="msg" id="sv-msg" role="status"></div>
+    <div id="sv-res" hidden><div class="stats" id="sv-stats" style="margin-top:12px"></div><div class="rk-table-wrap" style="margin-top:12px"><div id="sv-table"></div></div><p class="hint" id="sv-why"></p></div>
+  </div>
   <div class="advanced">
     <strong>Spatial variation changes the answer</strong>
     <p>Random sampling ignores the fact that nearby soils are alike. We design optimised and stratified sampling schemes and management zones that reach the same precision with fewer samples.</p>
@@ -603,6 +635,21 @@ body.quarto-dark .rk-tools {
         </div>
       </div>
     </div>
+    <div class="rk-card">
+      <h3>Check a published result</h3>
+      <p class="hint" style="margin-top:0">R² and RMSE constrain each other, and both are limited by how precisely the soil was measured. Enter what a paper or report gives to see whether the numbers can all be true.</p>
+      <div class="rk-grid">
+        <div><label for="ec-r2">Reported R²</label><input type="number" id="ec-r2" min="0" max="1" step="any"></div>
+        <div><label for="ec-rmse">Reported RMSE</label><input type="number" id="ec-rmse" min="0" step="any"></div>
+        <div><label for="ec-sd">SD of the observed values</label><input type="number" id="ec-sd" min="0" step="any"></div>
+        <div><label for="ec-n">Validation points</label><input type="number" id="ec-n" min="4" step="1"></div>
+        <div><label for="ec-lab">Lab or field repeatability SD (optional)</label><input type="number" id="ec-lab" min="0" step="any"></div>
+      </div>
+      <p class="hint">SD of the observed values is often in a summary-statistics table. Repeatability is the SD of repeated measurements of the same sample; labs or method papers report it.</p>
+      <div class="rk-row"><button class="rk-btn primary" id="ec-run">Check</button><button class="rk-btn" id="ec-ex">Load example</button></div>
+      <div class="msg" id="ec-msg" role="status"></div>
+      <div id="ec-res" hidden><div class="stats" id="ec-stats" style="margin-top:12px"></div><div id="ec-verdict" style="margin-top:12px"></div><p class="hint" id="ec-why"></p></div>
+    </div>
   </div>
 
   <div class="ev-panel" id="ev-cat" hidden>
@@ -622,6 +669,22 @@ body.quarto-dark .rk-tools {
       <h3 style="margin-top:16px">Confusion matrix</h3>
       <p class="hint" style="margin-top:0">Rows are observed classes, columns are predicted. Producer's accuracy: share of each observed class predicted correctly. User's accuracy: share of each predicted class that is correct.</p>
       <div class="rk-table-wrap" id="ev-cat-table"></div>
+    </div>
+    <div class="rk-card">
+      <h3>Check a published accuracy</h3>
+      <p class="hint" style="margin-top:0">An accuracy from a small validation set is uncertain, and it only means something compared with what you would get by guessing. Enter the reported figures to see the confidence interval and whether the map beats chance or another map.</p>
+      <div class="rk-grid">
+        <div><label for="cc-acc">Overall accuracy (%)</label><input type="number" id="cc-acc" min="0" max="100" step="any"></div>
+        <div><label for="cc-n">Validation points</label><input type="number" id="cc-n" min="5" step="1"></div>
+        <div><label for="cc-k">Number of classes</label><input type="number" id="cc-k" min="2" step="1"></div>
+        <div><label for="cc-maj">Largest class share (%, optional)</label><input type="number" id="cc-maj" min="0" max="100" step="any"></div>
+        <div><label for="cc-acc2">Compare with: accuracy (%, optional)</label><input type="number" id="cc-acc2" min="0" max="100" step="any"></div>
+        <div><label for="cc-n2">…and its validation points</label><input type="number" id="cc-n2" min="5" step="1"></div>
+      </div>
+      <p class="hint">The largest class share is the accuracy of a "map" that predicts the most common class everywhere. If it isn't given, an even split between classes is assumed, which flatters the map.</p>
+      <div class="rk-row"><button class="rk-btn primary" id="cc-run">Check</button><button class="rk-btn" id="cc-ex">Load example</button></div>
+      <div class="msg" id="cc-msg" role="status"></div>
+      <div id="cc-res" hidden><div class="stats" id="cc-stats" style="margin-top:12px"></div><div id="cc-verdict" style="margin-top:12px"></div></div>
     </div>
   </div>
 
@@ -2743,30 +2806,9 @@ function kcRun() {
   const msg = $("kc-msg"); msg.className = "msg"; msg.textContent = "";
   const sd = num($("kc-sd").value), nugP = num($("kc-nug").value) || 0, r = num($("kc-r").value), n = Math.round(num($("kc-n").value)), ha = num($("kc-area").value), rep = num($("kc-rmse").value);
   if (!(sd > 0) || !(r > 0) || !(n >= 10) || !(ha > 0) || nugP < 0 || nugP > 100) { msg.className = "msg err"; msg.textContent = "Enter the standard deviation, range, number of samples (10 or more) and area."; $("kc-res").hidden = true; return; }
-  const sill = sd * sd, m = Krige.prepare({ type: $("kc-model").value, c0: sill * nugP / 100, c1: sill * (1 - nugP / 100), r });
-  const A = ha * 10000, spacing = Math.sqrt(A / n);
-  // simulate at most 400 samples at the same density; with more, only interior points are scored
-  const nn = Math.min(n, 400), side = Math.sqrt(nn) * spacing, grid = $("kc-lay").value === "grid";
-  const reps = grid ? 1 : 25, rm = [];
-  let seed = 12345; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
-  for (let t = 0; t < reps; t++) {
-    const xs = [], ys = [];
-    if (grid) { const k = Math.round(Math.sqrt(nn)); for (let i = 0; i < k; i++) for (let j = 0; j < k; j++) { xs.push((i + 0.5) * spacing); ys.push((j + 0.5) * spacing); } }
-    else for (let i = 0; i < nn; i++) { xs.push(rnd() * side); ys.push(rnd() * side); }
-    const zs = xs.map(() => 0), L = xs.length, edge = n > 400 ? side * 0.2 : -1;
-    let sv = 0, cnt = 0;
-    for (let i = 0; i < L; i++) {
-      if (edge > 0 && (xs[i] < edge || ys[i] < edge || xs[i] > side - edge || ys[i] > side - edge)) continue;
-      const d = []; for (let j = 0; j < L; j++) if (j !== i) d.push([Math.hypot(xs[i] - xs[j], ys[i] - ys[j]), j]);
-      d.sort((a, b) => a[0] - b[0]);
-      const q = Krige.okAt(xs, ys, zs, d.slice(0, 16).map(p => p[1]), xs[i], ys[i], m);
-      if (q) { sv += q.var; cnt++; }
-    }
-    rm.push(Math.sqrt(sv / cnt));
-  }
-  rm.sort((a, b) => a - b);
-  const pct = p => rm[Math.min(rm.length - 1, Math.max(0, Math.round(p * (rm.length - 1))))];
-  const lo = pct(0.05), mid = pct(0.5), hi = pct(0.95), floor = Math.sqrt(m.c0);
+  const sill = sd * sd, m = { type: $("kc-model").value, c0: sill * nugP / 100, c1: sill * (1 - nugP / 100), r };
+  const grid = $("kc-lay").value === "grid", reps = grid ? 1 : 25;
+  const E = krExpected(m, n, ha, grid, reps, "loo"), spacing = E.spacing, lo = E.lo, mid = E.mid, hi = E.hi, floor = Math.sqrt(m.c0);
   const d = sd < 10 ? 3 : 2;
   $("kc-stats").innerHTML = evStat("Sample spacing", fmt(spacing, 0) + " m", grid ? "grid" : "average, random layout") + evStat("Spacing ÷ range", fmt(spacing / r, 2), spacing > r ? "samples beyond the range" : "within the range") +
     evStat("Expected RMSE", fmt(mid, d), grid ? "from the kriging variance" : `5–95%: ${fmt(lo, d)}–${fmt(hi, d)}`) + evStat("Lowest possible", fmt(floor, d), "√nugget") + evStat("No spatial skill", fmt(sd, d), "standard deviation") +
@@ -2784,6 +2826,142 @@ function kcRun() {
 $("kc-run").addEventListener("click", kcRun);
 $("kc-ex").addEventListener("click", () => { $("kc-model").value = "sph"; $("kc-sd").value = 8; $("kc-nug").value = 0; $("kc-r").value = 46; $("kc-n").value = 100; $("kc-area").value = 50; $("kc-lay").value = "random"; $("kc-rmse").value = 3; kcRun(); });
 
+
+
+/* ============ PLAUSIBILITY CHECKS ============ */
+const qn = p => EvalStats.qnorm(p);
+const verdictHTML = (cls, head, body) => `<p style="margin:0"><b style="color:${cls === "bad" ? "#c0392b" : cls === "warn" ? "var(--warn)" : "var(--good)"}">${head}</b> ${body}</p>`;
+// expected kriging error for a layout: mode "loo" = at samples, leaving each out; "map" = at random unsampled locations
+function krExpected(m, n, ha, grid, reps, mode) {
+  Krige.prepare(m);
+  const A = ha * 10000, spacing = Math.sqrt(A / n), nn = Math.min(n, 400), side = Math.sqrt(nn) * spacing;
+  let seed = 12345; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const out = [];
+  for (let t = 0; t < reps; t++) {
+    const xs = [], ys = [];
+    if (grid) { const k = Math.max(2, Math.round(Math.sqrt(nn))); for (let i = 0; i < k; i++) for (let j = 0; j < k; j++) { xs.push((i + 0.5) * spacing); ys.push((j + 0.5) * spacing); } }
+    else for (let i = 0; i < nn; i++) { xs.push(rnd() * side); ys.push(rnd() * side); }
+    const L = xs.length, S = grid ? Math.round(Math.sqrt(nn)) * spacing : side, zs = xs.map(() => 0), edge = n > 400 ? S * 0.2 : 0;
+    const targets = [];
+    if (mode === "loo") { for (let i = 0; i < L; i++) if (!(edge && (xs[i] < edge || ys[i] < edge || xs[i] > S - edge || ys[i] > S - edge))) targets.push([xs[i], ys[i], i]); }
+    else for (let i = 0; i < 300; i++) targets.push([edge + rnd() * (S - 2 * edge), edge + rnd() * (S - 2 * edge), -1]);
+    let sv = 0, cnt = 0;
+    targets.forEach(([x0, y0, self]) => {
+      const d = []; for (let j = 0; j < L; j++) if (j !== self) d.push([Math.hypot(x0 - xs[j], y0 - ys[j]), j]);
+      d.sort((a, b) => a[0] - b[0]);
+      const q = Krige.okAt(xs, ys, zs, d.slice(0, 16).map(p => p[1]), x0, y0, m);
+      if (q) { sv += q.var; cnt++; }
+    });
+    out.push(Math.sqrt(sv / cnt));
+  }
+  out.sort((a, b) => a - b);
+  const pct = p => out[Math.min(out.length - 1, Math.max(0, Math.round(p * (out.length - 1))))];
+  return { mid: pct(0.5), lo: pct(0.05), hi: pct(0.95), spacing };
+}
+
+/* model evaluation: R², RMSE, SD and repeatability */
+function ecRun() {
+  const msg = $("ec-msg"); msg.className = "msg"; msg.textContent = "";
+  const r2 = num($("ec-r2").value), rmse = num($("ec-rmse").value), sd = num($("ec-sd").value), n = Math.round(num($("ec-n").value)), lab = num($("ec-lab").value);
+  if (!(r2 >= 0 && r2 <= 1) || !(rmse > 0) || !(sd > 0)) { msg.className = "msg err"; msg.textContent = "Enter R² (0–1), RMSE and the SD of the observed values."; $("ec-res").hidden = true; return; }
+  const floor = sd * Math.sqrt(1 - r2), ratio = rmse / floor, d = sd < 10 ? 3 : 2;
+  let st = evStat("Lowest RMSE this R² allows", fmt(floor, d), "SD × √(1 − R²)") + evStat("Reported ÷ lowest", fmt(ratio, 2), "1 = perfectly calibrated");
+  const v = [];
+  if (rmse < floor * 0.97) v.push(verdictHTML("bad", "These numbers can't all be true.", `With R² = ${r2} and an SD of ${sd}, even perfectly rescaled predictions would have an RMSE of ${fmt(floor, d)}. A reported ${rmse} is lower than that. Usually one figure comes from a different dataset (calibration vs. validation), a different scale (log vs. original), or the SD is not of the same observations.`));
+  else if (ratio > 1.5) v.push(verdictHTML("warn", "R² flatters the predictions.", `The RMSE is ${fmt(ratio, 1)}× what R² alone implies, so the predictions are biased or wrongly scaled: they rise and fall with the observations but miss them. R² measures correlation, not agreement; Lin's CCC or RMSE tell the real story.`));
+  else v.push(verdictHTML("good", "R² and RMSE are consistent.", "The error is close to what the correlation implies, so the predictions are reasonably unbiased and well scaled."));
+  if (lab > 0) {
+    const ceil = Math.max(0, 1 - (lab * lab) / (sd * sd));
+    st += evStat("Highest achievable R²", fmt(ceil, 3), "given repeatability") + evStat("Lowest achievable RMSE", fmt(lab, d), "the repeatability SD");
+    if (r2 > ceil + 0.01 || rmse < lab * 0.95) v.push(verdictHTML("bad", "Better than the measurements allow.", `The observations themselves carry a repeatability error of about ${lab}, which no model can predict. That caps R² near ${fmt(ceil, 2)} and RMSE near ${lab}. A result beyond this suggests averaged replicates, overfitting, or validation data that weren't independent.`));
+  }
+  if (n >= 4 && r2 > 0 && r2 < 1) {
+    const r = Math.sqrt(r2), z = Math.atanh(r), se = 1 / Math.sqrt(n - 3), lo = Math.tanh(z - 1.96 * se), hi = Math.tanh(z + 1.96 * se);
+    st += evStat("R² 95% interval", `${fmt(Math.max(0, lo) ** 2, 2)}–${fmt(hi ** 2, 2)}`, `from ${n} points`) + evStat("RMSE 95% interval", `${fmt(rmse * Math.sqrt(n / (n + 1.96 * Math.sqrt(2 * n))), d)}–${fmt(rmse * Math.sqrt(n / Math.max(1, n - 1.96 * Math.sqrt(2 * n))), d)}`, "approximate");
+    if (n < 30) v.push(verdictHTML("warn", "Small validation set.", `With ${n} points the intervals are wide, so differences between models of a few hundredths of R² mean little.`));
+  }
+  $("ec-stats").innerHTML = st; $("ec-verdict").innerHTML = v.join("");
+  $("ec-why").textContent = "Why: the mean squared error of any prediction is at least SD² × (1 − R²), which is the error left after the best possible straight-line rescaling. Anything above that is bias or wrong scaling. Repeatability error sits in the observations themselves, so it sets a floor no model can get under.";
+  $("ec-res").hidden = false;
+}
+$("ec-run").addEventListener("click", ecRun);
+$("ec-ex").addEventListener("click", () => { $("ec-r2").value = 0.85; $("ec-rmse").value = 0.25; $("ec-sd").value = 0.9; $("ec-n").value = 40; $("ec-lab").value = 0.15; ecRun(); });
+
+/* class accuracy: confidence interval, chance and comparison */
+function ccRun() {
+  const msg = $("cc-msg"); msg.className = "msg"; msg.textContent = "";
+  const a = num($("cc-acc").value) / 100, n = Math.round(num($("cc-n").value)), k = Math.round(num($("cc-k").value)), maj = num($("cc-maj").value) / 100;
+  const a2 = num($("cc-acc2").value) / 100, n2 = Math.round(num($("cc-n2").value));
+  if (!(a >= 0 && a <= 1) || !(n >= 5) || !(k >= 2)) { msg.className = "msg err"; msg.textContent = "Enter the accuracy, number of validation points and number of classes."; $("cc-res").hidden = true; return; }
+  const wilson = (p, m) => { const z = 1.96, den = 1 + z * z / m, c = (p + z * z / (2 * m)) / den, h = z * Math.sqrt(p * (1 - p) / m + z * z / (4 * m * m)) / den; return [Math.max(0, c - h), Math.min(1, c + h)]; };
+  const [lo, hi] = wilson(a, n), base = maj > 0 ? maj : 1 / k;
+  const z = (a - base) / Math.sqrt(base * (1 - base) / n), pBase = 1 - 0.5 * (1 + erf(z / Math.SQRT2));
+  const kappaLike = (a - base) / (1 - base);
+  const nNeed = Math.ceil(1.96 * 1.96 * a * (1 - a) / 0.0025);
+  let st = evStat("95% interval", `${fmt(lo * 100, 0)}–${fmt(hi * 100, 0)}%`, `from ${n} points`) + evStat("Chance baseline", fmt(base * 100, 0) + "%", maj > 0 ? "predict the largest class" : `even split over ${k} classes`) +
+    evStat("Skill over baseline", fmt(kappaLike * 100, 0) + "%", "share of the possible improvement") + evStat("Points for ±5%", nNeed, "to pin accuracy down");
+  const v = [];
+  if (lo <= base) v.push(verdictHTML("bad", "Not clearly better than guessing.", `The 95% interval (${fmt(lo * 100, 0)}–${fmt(hi * 100, 0)}%) reaches down to the ${fmt(base * 100, 0)}% you would get ${maj > 0 ? "by predicting the most common class everywhere" : "by chance"}.`));
+  else v.push(verdictHTML("good", "Better than the baseline.", `Even the low end of the interval (${fmt(lo * 100, 0)}%) is above the ${fmt(base * 100, 0)}% baseline (one-sided p ${pBase < 0.001 ? "< 0.001" : "= " + fmt(pBase, 3)}).`));
+  if (a2 >= 0 && a2 <= 1 && n2 >= 5) {
+    const se = Math.sqrt(a * (1 - a) / n + a2 * (1 - a2) / n2), zz = (a - a2) / se, p2 = 2 * (1 - 0.5 * (1 + erf(Math.abs(zz) / Math.SQRT2)));
+    const [l2, h2] = wilson(a2, n2);
+    st += evStat("Other map's interval", `${fmt(l2 * 100, 0)}–${fmt(h2 * 100, 0)}%`, `from ${n2} points`);
+    v.push(p2 < 0.05 ? verdictHTML("good", "The difference is real.", `${fmt(a * 100, 0)}% vs. ${fmt(a2 * 100, 0)}% is unlikely to be chance (two-sided p = ${fmt(p2, 3)}).`)
+      : verdictHTML("warn", "The difference may be chance.", `${fmt(a * 100, 0)}% vs. ${fmt(a2 * 100, 0)}% is within what different validation samples would give (two-sided p = ${fmt(p2, 2)}). Claims that one map is better need more validation points. If both maps were checked on the same points, a paired test (McNemar) is more powerful.`));
+  }
+  $("cc-stats").innerHTML = st; $("cc-verdict").innerHTML = v.join("");
+  $("cc-res").hidden = false;
+}
+function erf(x) { const t = 1 / (1 + 0.3275911 * Math.abs(x)), y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; }
+$("cc-run").addEventListener("click", ccRun);
+$("cc-ex").addEventListener("click", () => { $("cc-acc").value = 72; $("cc-n").value = 45; $("cc-k").value = 6; $("cc-maj").value = 48; $("cc-acc2").value = 64; $("cc-n2").value = 45; ccRun(); });
+
+/* carbon: minimum detectable change */
+function cmRun() {
+  const cv = num($("cm-cv").value), n = Math.round(num($("cm-n").value)), pair = $("cm-des").value === "pair", rho = pair ? num($("cm-rho").value) : 0;
+  const alpha = Number($("cm-alpha").value), pow = Number($("cm-pow").value), claim = num($("cm-claim").value);
+  $("cm-rhobox").style.display = pair ? "" : "none";
+  if (!(cv > 0) || !(n >= 2) || !(rho >= 0 && rho < 1)) { $("cm-stats").innerHTML = ""; $("cm-verdict").innerHTML = ""; return; }
+  const mdd = nn => { const df = pair ? nn - 1 : 2 * nn - 2; return (tinv(1 - alpha / 2, Math.max(1, df)) + tinv(pow, Math.max(1, df))) * cv * Math.sqrt(2 * (1 - rho) / nn); };
+  const nFor = target => { for (let nn = 2; nn <= 100000; nn = nn < 50 ? nn + 1 : Math.ceil(nn * 1.05)) if (mdd(nn) <= target) { let lo = Math.max(2, Math.floor(nn / 1.05)), hi = nn; while (lo < hi) { const mid = Math.floor((lo + hi) / 2); if (mdd(mid) <= target) hi = mid; else lo = mid + 1; } return lo; } return null; };
+  const m = mdd(n);
+  let st = evStat("Smallest detectable change", "±" + fmt(m, 1) + "%", `with ${n} samples per time`) + evStat("Samples for a 10% change", nFor(10) ?? "> 100,000", "per sampling time") + evStat("Samples for a 5% change", nFor(5) ?? "> 100,000", "per sampling time");
+  let v = "";
+  if (claim > 0) {
+    const need = nFor(claim);
+    st += evStat(`Samples for ${claim}%`, need ?? "> 100,000", "per sampling time");
+    v = claim >= m ? verdictHTML("good", "Detectable.", `A ${claim}% change is larger than the ${fmt(m, 1)}% this design can detect.`)
+      : verdictHTML("bad", "Not detectable with this design.", `A ${claim}% change is smaller than the ${fmt(m, 1)}% this design can reliably detect. A reported change of that size could easily be sampling noise; detecting it would take about ${need ?? "more than 100,000"} samples per sampling time${pair ? "" : ", or fewer by resampling the same locations"}.`);
+  }
+  $("cm-stats").innerHTML = st; $("cm-verdict").innerHTML = v;
+  $("cm-why").textContent = `Smallest detectable change = (t for ${Math.round((1 - alpha) * 100)}% confidence + t for ${Math.round(pow * 100)}% power) × CV × √(2(1 − ρ) ÷ n)${pair ? `, with ρ = ${rho} for resampled locations` : ""}. It assumes the change is expressed relative to the mean stock, and it doesn't include errors in bulk density or depth, which make real designs less sensitive.`;
+}
+["cm-cv", "cm-n", "cm-des", "cm-rho", "cm-alpha", "cm-pow", "cm-claim"].forEach(id => $(id).addEventListener("input", cmRun));
+cmRun();
+
+/* sampling: variogram-based density for a map */
+function svRun() {
+  const msg = $("sv-msg"); msg.className = "msg"; msg.textContent = "";
+  const nug = num($("sv-nug").value), r = num($("sv-r").value), ha = num($("sv-area").value), tgt = num($("sv-target").value) / 100;
+  if (!(nug >= 0 && nug < 100) || !(r > 0) || !(ha > 0) || !(tgt > 0 && tgt <= 1)) { msg.className = "msg err"; msg.textContent = "Enter the nugget, range, area and target error."; $("sv-res").hidden = true; return; }
+  const m = { type: $("sv-model").value, c0: nug / 100, c1: 1 - nug / 100, r };
+  const floor = Math.sqrt(m.c0);
+  const err = n => krExpected(m, n, ha, true, 1, "map").mid;
+  const rows = [], cand = [9, 16, 25, 36, 49, 64, 100, 144, 225, 400, 625, 900, 1600, 2500, 4900, 10000];
+  let need = null;
+  for (const n of cand) { const e = err(n), sp = Math.sqrt(ha * 10000 / n); rows.push([n, fmt(sp, 0), fmt(sp / r, 2), fmt(e * 100, 0) + "%"]); if (need == null && e <= tgt) need = n; }
+  if (need != null) { let lo = cand[Math.max(0, cand.indexOf(need) - 1)], hi = need; if (lo !== hi) { while (hi - lo > Math.max(1, lo * 0.02)) { const mid = Math.round((lo + hi) / 2); if (err(mid) <= tgt) hi = mid; else lo = mid; } need = hi; } }
+  const sp = need ? Math.sqrt(ha * 10000 / need) : null;
+  $("sv-stats").innerHTML = (need ? evStat("Samples needed", need, `regular grid, ${fmt(need / ha, need / ha < 1 ? 2 : 1)} per ha`) + evStat("Grid spacing", fmt(sp, 0) + " m", fmt(sp / r, 2) + " × the range") : evStat("Samples needed", "–", "target not reachable")) +
+    evStat("Lowest possible error", fmt(floor * 100, 0) + "%", "√(nugget share)");
+  setTable($("sv-table"), ["Samples", "Spacing (m)", "Spacing ÷ range", "Map error (% of SD)"], rows);
+  msg.textContent = tgt <= floor ? `The target is below √nugget (${fmt(floor * 100, 0)}%): no sampling density can reach it, because the nugget is variation you can't map at any spacing.` : (need ? "" : "Even 10,000 samples don't reach the target: check the range and nugget.");
+  $("sv-why").textContent = "Map error is the square root of the average ordinary kriging variance at 300 random locations between samples (16 nearest neighbours), relative to the sill. It assumes the variogram holds across the whole area. Spacing well beyond the range leaves the map close to the mean (error near 100%).";
+  $("sv-res").hidden = false;
+}
+$("sv-run").addEventListener("click", svRun);
+document.querySelectorAll("[data-goto-tab]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); showTab(a.dataset.gotoTab, true); window.scrollTo({ top: 0, behavior: "smooth" }); }));
 
 /* ---------------- init ---------------- */
 $("sp-data").value = EX_CONT; spLastText = EX_CONT; spRefreshColumns();
