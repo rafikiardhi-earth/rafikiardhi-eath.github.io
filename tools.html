@@ -476,6 +476,12 @@ body.quarto-dark .rk-tools {
 .rk-tools a.tglink:hover { background: var(--accent-soft); }
 .rk-tools .tglabel { flex: 0 0 100%; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 600; }
 .rk-tools nav.rk-tabs button { font-size: .88rem; padding: 6px 12px; }
+.rk-tools nav.rk-tabs button[data-tip] { position: relative; }
+.rk-tools nav.rk-tabs button[data-tip]::after { content: attr(data-tip); position: absolute; left: 0; top: calc(100% + 8px); width: max-content; max-width: 240px; padding: 8px 10px; border-radius: 8px; background: var(--ink); color: var(--surface); font-size: .8rem; line-height: 1.35; font-weight: 400; text-align: left; white-space: normal; box-shadow: 0 4px 14px rgba(0,0,0,.25); opacity: 0; visibility: hidden; transition: opacity .12s ease .25s; pointer-events: none; z-index: 20; }
+@media (hover: hover) { .rk-tools nav.rk-tabs button[data-tip]:hover::after { opacity: 1; visibility: visible; } }
+
+.rk-tools nav.rk-tabs button[data-tip].tip-r::after { left: auto; right: 0; }
+.rk-tools nav.rk-tabs button[data-tip]:focus-visible::after { opacity: 1; visibility: visible; }
 .rk-tools .rk-wrap { max-width: none; padding: 0; }
 .rk-tools .rk-hero { padding: 0 0 12px; }
 .rk-tools .rk-card h3, .rk-tools h2 { margin-top: 0; }
@@ -497,10 +503,10 @@ body.quarto-dark .rk-tools {
 
 <nav class="rk-tabs" aria-label="Tools">
   <div class="rk-wrap" role="tablist">
-    <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" aria-selected="false">Pedodiversity</button><button role="tab" data-tab="krige" aria-selected="false">Variogram &amp; kriging</button><button role="tab" data-tab="eval" aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" aria-selected="false">Sampling density</button></div>
-    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" aria-selected="false">Hydrologic soil group</button></div>
-    <div class="tgroup"><span class="tglabel">Energy</span><button role="tab" data-tab="soiltemp" aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" aria-selected="false">Energy balance</button></div>
-    <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" aria-selected="false">Munsell colour</button></div>
+    <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" data-tip="Turn horizon data into standard depth intervals (0–5, 5–15 cm…) with a smooth profile." aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" data-tip="How many soil classes an area has and how evenly they share it." aria-selected="false">Pedodiversity</button><button role="tab" data-tab="krige" data-tip="Fit a variogram to point data and test kriging by cross-validation." aria-selected="false">Variogram &amp; kriging</button><button role="tab" data-tab="eval" data-tip="How well a map or model matches independent observations: accuracy, uncertainty, classes." aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" data-tip="How many samples you need for a field mean, or for a map." aria-selected="false">Sampling density</button></div>
+    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="See how van Genuchten parameters shape water retention and conductivity." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from sand, clay and organic matter." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D) for runoff estimates." aria-selected="false">Hydrologic soil group</button></div>
+    <div class="tgroup"><span class="tglabel">Energy</span><button role="tab" data-tab="soiltemp" data-tip="How daily and seasonal temperature swings travel down into the soil." aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" data-tip="Where the sun's energy goes at a bare soil surface as it wets up." aria-selected="false">Energy balance</button></div>
+    <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" data-tip="Texture class from sand, silt and clay, one sample or a whole file." aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" data-tip="Carbon stocks to fixed depths or equivalent soil mass, and whether a change is detectable." aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" data-tip="A Munsell notation as an on-screen colour, and what it tells you about the soil." aria-selected="false">Munsell colour</button></div>
     <div class="tgroup"><span class="tglabel">Checks</span><a class="tglink" href="checks.html">Check a result: yours or a published one →</a></div>
     <div class="tgroup"><span class="tglabel">Soil classification</span><a class="tglink" href="soil-keys.html#wrb">WRB soil key <span style="font-size:.7rem; color:var(--warn); font-weight:700">BETA</span> →</a><a class="tglink" href="soil-keys.html#sa">South African soil key <span style="font-size:.7rem; color:var(--warn); font-weight:700">BETA</span> →</a></div>
   </div>
@@ -3361,6 +3367,7 @@ function openFromHash() {
 }
 openFromHash();
 window.addEventListener("hashchange", openFromHash);
+document.querySelectorAll("nav.rk-tabs button[data-tip]").forEach(btn => { const place = () => btn.classList.toggle("tip-r", btn.getBoundingClientRect().left + 250 > document.documentElement.clientWidth); btn.addEventListener("mouseenter", place); btn.addEventListener("focus", place); });
 ["kr-check", "ev-check-cont", "ev-check-cat", "c-check", "s-check"].forEach(id => { const c = document.getElementById(id); if (!c) return; const p = document.createElement("p"); p.className = "hint"; p.style.marginTop = "12px"; p.innerHTML = '<a href="checks.html">More plausibility checks →</a>'; c.appendChild(p); });
 })();
 </script>
