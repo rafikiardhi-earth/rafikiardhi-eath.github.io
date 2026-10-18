@@ -32,7 +32,7 @@ website:
           - href: soil-keys.qmd
             text: Soil classification keys
           - href: checks.qmd
-            text: Check a result
+            text: "  ↳ Check a result"
       - href: publications.qmd
         text: Research
       - href: contact.qmd
