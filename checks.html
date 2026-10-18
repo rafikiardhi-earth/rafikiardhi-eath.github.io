@@ -687,6 +687,7 @@ body.quarto-light .ck-grid a { border-left-color: #8a4b22; }
   <a href="tools.html#krige/kr-check"><b>Kriging error vs. variogram</b><span>Is a reported kriging RMSE possible, given the range, nugget and sample spacing?</span><small>Variogram &amp; kriging</small></a>
   <a href="tools.html#sampling/s-check"><b>Samples for a map</b><span>How many samples a target map error needs, from the variogram.</span><small>Sampling density</small></a>
   <a href="tools.html#carbon/c-check"><b>Detectable change</b><span>Could the sampling design detect the change in soil carbon being claimed?</span><small>Carbon stocks</small></a>
+  <a href="#pixel-size"><b>Finding the right pixel size</b><span>Coarsest legible, finest legible and recommended resolution for a map.</span><small>On this page</small></a>
   <a href="#back-transform"><b>Back-transformation</b><span>Was a log-scale result reported as the median or the mean?</span><small>On this page</small></a>
   <a href="#stock-arithmetic"><b>Carbon stock arithmetic</b><span>Rebuild a stock from its inputs and catch unit and stone-fraction slips.</span><small>On this page</small></a>
   <a href="#area-estimation"><b>Area from a confusion matrix</b><span>Unbiased class areas with confidence intervals, instead of pixel counts.</span><small>On this page</small></a>
@@ -695,6 +696,75 @@ body.quarto-light .ck-grid a { border-left-color: #8a4b22; }
   <a href="#lab-conversions"><b>Lab method conversions</b><span>Walkley–Black, organic matter factors, pH in CaCl₂ vs. water, oxides.</span><small>On this page</small></a>
   <a href="#coordinates"><b>Coordinates and distances</b><span>Degrees treated as metres, and how far a degree really is.</span><small>On this page</small></a>
 </div>
+<section id="pixel-size" class="level2">
+<h2 data-anchor-id="pixel-size">Finding the right pixel size</h2>
+<p>Grid resolution is often chosen by habit (30 m because that’s Landsat). Hengl (2006) set out rules that tie it to what the data can actually support. For each aspect of a dataset they give a <strong>coarsest legible</strong> resolution (the largest pixel that still represents it), a <strong>finest legible</strong> resolution (below which pixels “are probably just waste of memory”) and a <strong>recommended compromise</strong>. Fill in whatever you know; the overall range is where the rules agree.</p>
+<div class="hmc" id="px"></div>
+<script>
+(function () {
+  const NICE = [0.5, 1, 2, 2.5, 5, 10, 12.5, 20, 25, 30, 40, 50, 60, 75, 90, 100, 125, 150, 200, 250, 300, 400, 500, 750, 1000, 1500, 2000, 2500, 5000, 10000];
+  HM.tool({
+    id: 'px', step: 'Working scale', units: false, hash: false,
+    example: { sn: 50000, r95: 15, area: 10, n: 100, lay: 'random', hr: 525 },
+    inputs: [
+      { k: 'sn', l: 'Scale number of the output map (e.g. 50000 for 1:50,000)', t: 'num' },
+      { t: 'sec', l: 'Positioning error (optional)' },
+      { k: 'r95', l: '95% error radius (m)', t: 'num', w: 2 }, { k: 'r99', l: '99% error radius (m)', t: 'num', w: 2 }, { k: 'rbar', l: 'Average error (m)', t: 'num', w: 2 },
+      { t: 'sec', l: 'Point samples (optional)' },
+      { k: 'area', l: 'Area of the study (km²)', t: 'num', w: 3 },
+      { k: 'n', l: 'Number of sampled points', t: 'num', w: 3 },
+      { k: 'lay', l: 'Sampling layout', t: 'seg', d: 'random', opts: [['random', 'Random or irregular'], ['grid', 'Regular']] },
+      { k: 'xy', l: 'Coordinates in metres, x, y per line (gives the distances between closest point pairs)', t: 'textarea', rows: 3 },
+      { k: 'hr', l: 'Range of spatial dependence (m)', t: 'num', h: 'The distance at which the variogram levels off (the practical range).' },
+      { t: 'sec', l: 'Objects and terrain (optional)' },
+      { k: 'abar', l: 'Average size of delineations (m²)', t: 'num', w: 2 }, { k: 'amld', l: 'Smallest object to map (m²)', t: 'num', w: 2 }, { k: 'wmld', l: 'Narrowest object (m)', t: 'num', w: 2 },
+      { k: 'cont', l: 'Total length of contours (km), with the area above', t: 'num' }
+    ],
+    compute(v, U) {
+      const rows = [], warn = [];
+      const add = (rule, coarse, fine, rec, why) => rows.push({ rule, coarse, fine, rec, why });
+      if (v.sn > 0) add('Working scale (1:' + HM.fmt(v.sn, 0) + ')', 0.0025 * v.sn, 0.0001 * v.sn, 0.0005 * v.sn, 'Coarsest ≤ 0.0025·SN (four cells in the 0.25 cm² minimum legible delineation); finest ≥ 0.0001·SN (0.1 mm location accuracy on the map); recommended = 0.0005·SN (the 0.5 mm rule).');
+      if (v.r95 > 0 || v.r99 > 0 || v.rbar > 0) add('GPS positioning error', v.r99 > 0 ? 1.8 * v.r99 : null, v.rbar > 0 ? v.rbar * Math.sqrt(Math.PI) : null, v.r95 > 0 ? 1.8 * v.r95 : null, 'Coarsest ≤ 1.8·r(99%); finest ≥ average error·√π (the error circle fits in one pixel); recommended = 1.8·r(95%) (95% of fixes fall within the pixel).');
+      if (v.abar > 0 || v.amld > 0 || v.wmld > 0) add('Size of reference objects', v.abar > 0 ? Math.sqrt(v.abar) / 4 : null, v.wmld > 0 ? v.wmld / 2 : null, v.amld > 0 ? Math.sqrt(v.amld) / 4 : null, 'Coarsest ≤ √(average delineation size) ÷ 4; finest ≥ narrowest width ÷ 2; recommended = √(smallest object) ÷ 4, as in Table 1. (The text\'s Eq. 7 gives the looser √(a/4), four pixels per object; Table 1\'s forms are used here. Table 1 prints the finest as √w ÷ 2; w ÷ 2 is used, as a width can\'t be square-rooted.)');
+      const A = v.area > 0 ? v.area * 1e6 : null;
+      let pts = String(v.xy || '').split(/\r?\n/).map(l => l.split(/[,;\t\s]+/).map(Number)).filter(q => q.length >= 2 && isFinite(q[0]) && isFinite(q[1]));
+      if (pts.length < 3) pts = null;
+      const N = pts ? pts.length : v.n;
+      let hbar = null, h5 = null;
+      if (pts) { const nnd = pts.map((p, i) => { let b = Infinity; pts.forEach((q, j) => { if (i !== j) { const d = Math.hypot(p[0] - q[0], p[1] - q[1]); if (d < b) b = d; } }); return b; }).sort((a, b) => a - b); hbar = nnd.reduce((a, b) => a + b, 0) / nnd.length; h5 = nnd[Math.floor(0.05 * (nnd.length - 1))]; }
+      if (A && N > 1) {
+        const s = Math.sqrt(A / N);
+        add(`Inspection density (${HM.fmt(N, 0)} points)`, 0.1 * s, 0.05 * s, 0.0791 * s, 'Coarsest ≤ 0.1·√(A/N); finest ≥ 0.05·√(A/N); recommended = 0.0791·√(A/N) (2.5 observations per cm² of map with the 0.5 mm rule).');
+        const hb = hbar ?? (v.lay === 'grid' ? s : 0.5 * s);
+        add('Distance between points', hb / 2, h5, (v.lay === 'grid' ? 0.5 : 0.25) * s, `Coarsest ≤ half the mean distance between closest point pairs (${hbar ? 'from your coordinates' : v.lay === 'grid' ? '√(A/N) on a regular grid' : '≈ 0.5·√(A/N) for random points'}); finest ≥ the 5% shortest closest-pair distance${h5 ? '' : ' (needs coordinates)'}; recommended = ${v.lay === 'grid' ? '0.5' : '0.25'}·√(A/N).`);
+        if (v.hr > 0) {
+          let m, how;
+          if (pts) { m = 0; for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) if (Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]) <= v.hr) m++; how = 'counted from your coordinates'; }
+          else { m = Math.min(N * (N - 1) / 2, N * (N - 1) / 2 * Math.PI * v.hr * v.hr / A); how = 'estimated for points spread over the area'; }
+          add('Spatial dependence structure', v.hr / 2, h5, m >= 1 ? v.hr * Math.pow(m, -1 / 3) : null, `Coarsest ≤ range ÷ 2; finest ≥ the 5% shortest closest-pair distance${h5 ? '' : ' (needs coordinates)'}; recommended = range × m^(−1/3), with m = ${HM.fmt(m, 0)} point pairs within the range (${how}).`);
+        }
+      } else if (v.hr > 0) warn.push('The spatial-dependence rule also needs the area and number of points.');
+      if (v.cont > 0 && A) add('Complexity of terrain', A / (v.cont * 1000), v.wmld > 0 ? v.wmld / 2 : null, A / (2 * v.cont * 1000), 'Coarsest ≤ area ÷ total contour length; recommended = area ÷ (2 × total contour length), half the average contour spacing; finest ≥ narrowest width ÷ 2.');
+      if (!rows.length) return U.empty('Enter at least one aspect: a map scale, a positioning error, or the area and number of points. The Example button fills in values from Hengl\'s worked examples.');
+      const cs = rows.map(r => r.coarse).filter(x => x > 0), fs = rows.map(r => r.fine).filter(x => x > 0), rs = rows.map(r => r.rec).filter(x => x > 0);
+      const coarse = cs.length ? Math.min(...cs) : null, fine = fs.length ? Math.max(...fs) : null;
+      let rec = rs.length ? rs.slice().sort((a, b) => a - b)[Math.floor((rs.length - 1) / 2)] : null;
+      const conflict = fine != null && coarse != null && fine > coarse;
+      if (rec != null && !conflict) { if (coarse != null) rec = Math.min(rec, coarse); if (fine != null) rec = Math.max(rec, fine); }
+      const inside = NICE.filter(x => x >= (fine ?? 0) * 0.999 && x <= (coarse ?? Infinity) * 1.001);
+      const pick = x => (inside.length && !conflict ? inside : NICE).reduce((b, n) => Math.abs(Math.log(n / x)) < Math.abs(Math.log(b / x)) ? n : b);
+      const f = x => x == null ? '–' : (x < 10 ? HM.fmt(x, 1) : HM.fmt(x, 0)) + ' m';
+      let h = U.big('Recommended resolution', rec != null ? `${pick(rec)} m` : '–', `${rec != null ? f(rec) + ' before rounding to a common grid size. ' : ''}Legible range: ${f(fine)} (finest) to ${f(coarse)} (coarsest).`);
+      if (conflict) h += U.note(`<b>The rules conflict:</b> the finest legible resolution (${f(fine)}) is coarser than the coarsest legible one (${f(coarse)}). The datasets don't support each other: for example, positional error or sample spacing too coarse for the map scale or object size you want. Look at which rows set the two limits.`, 'bad');
+      h += `<table class="tt"><thead><tr><th>Aspect</th><th class="r">Coarsest ≤</th><th class="r">Finest ≥</th><th class="r">Recommended</th></tr></thead><tbody>` + rows.map(r => `<tr><td>${r.rule}</td><td class="r"${r.coarse === coarse ? ' style="font-weight:700"' : ''}>${f(r.coarse)}</td><td class="r"${r.fine === fine ? ' style="font-weight:700"' : ''}>${f(r.fine)}</td><td class="r">${f(r.rec)}</td></tr>`).join('') + '</tbody></table>';
+      h += U.note('The overall coarsest is the strictest (smallest) coarsest value and the overall finest is the largest finest value (both in bold). The recommendation is the median of the recommended values, kept inside that range, then rounded to the nearest common grid size within it.');
+      warn.forEach(w => { h += U.note(w); });
+      return { html: h, work: rows.map(r => `<b>${r.rule}.</b> ${r.why}`).concat(['Equations from Table 1 of Hengl, T. (2006). Finding the right pixel size. Computers & Geosciences 32, 1283–1298.']) };
+    }
+  });
+})();
+</script>
+</section>
 <section id="back-transform" class="level2">
 <h2 data-anchor-id="back-transform">Back-transformation</h2>
 <p>A mean calculated on log values, then exponentiated, is the <strong>median</strong> (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter what the paper gives on the log scale.</p>

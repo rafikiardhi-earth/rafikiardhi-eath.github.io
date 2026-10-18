@@ -252,6 +252,13 @@
     "text": "Before you submit, or when you review, check that the numbers can all be true. Each check takes the figures a paper or report gives (or your own) and tests them against what the method allows. Nothing you enter leaves your browser."
   },
   {
+    "objectID": "checks.html#pixel-size",
+    "href": "checks.html#pixel-size",
+    "title": "Check a result",
+    "section": "Finding the right pixel size",
+    "text": "Finding the right pixel size\nGrid resolution is often chosen by habit (30 m because that’s Landsat). Hengl (2006) set out rules that tie it to what the data can actually support. For each aspect of a dataset they give a coarsest legible resolution (the largest pixel that still represents it), a finest legible resolution (below which pixels “are probably just waste of memory”) and a recommended compromise. Fill in whatever you know; the overall range is where the rules agree."
+  },
+  {
     "objectID": "checks.html#back-transform",
     "href": "checks.html#back-transform",
     "title": "Check a result",
