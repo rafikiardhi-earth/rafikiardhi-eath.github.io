@@ -13,7 +13,7 @@ Our methods go through peer review and into the scientific literature, with the 
 :::
 ::: {.card-item}
 ### Free tools
-Validated methods become free tools that anyone can use in a browser. They run on your own device, so your data never leaves it.
+Validated methods become free tools that anyone can use in a browser from the home gardener to the peer reviewer. They run on your own device, so your data never leaves it.
 :::
 ::: {.card-item}
 ### Paid work funds open work
