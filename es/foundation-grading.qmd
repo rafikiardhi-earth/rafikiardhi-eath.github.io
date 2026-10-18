@@ -1,0 +1,70 @@
+---
+title: "Revisión de la pendiente alrededor de los cimientos"
+description: "¿El terreno baja lo suficiente alejándose de su casa? Revise la pendiente con un hilo y un nivel, y calcule cuánta tierra de relleno se necesita para corregirla."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/foundation-grading.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/foundation-grading.html">'
+---
+
+::: {.hm-lang}
+[English](../foundation-grading.qmd){lang="en"}
+:::
+
+El agua que se junta contra los cimientos es uno de los problemas más caros que puede tener una casa. La guía común de los códigos de construcción es que el terreno baje por lo menos **6 pulgadas en los primeros 10 pies** desde la casa (como 5%). Lo puede revisar en una tarde.
+
+**Cómo medir:** clave una estaca pegada a los cimientos y otra a 10 pies (3 m) hacia afuera. Amarre un hilo entre las dos y nivélelo con un nivel de hilo. En cada estaca, mida desde el hilo hasta el suelo. La caída es la medida de afuera menos la de adentro. Repita cada 10–15 pies a lo largo de cada pared.
+
+```{=html}
+<div class="hmc" id="fg"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'fg', step: 'Sus medidas',
+    inputs: [
+      { k: 'dist', l: 'Distancia entre las estacas', t: 'len', d: { us: 10, si: 3 }, w: 3 },
+      { k: 'wall', l: 'Largo de esta pared', t: 'len', w: 3 },
+      { k: 'drops', l: 'Caída en cada punto, separada por comas (use un signo de menos si el terreno sube alejándose de la casa)', t: 'list', of: 'dep', ph: u => u === 'us' ? 'p. ej. 6.5, 4, 1, -1' : 'p. ej. 16, 10, 2.5, -2' }
+    ],
+    compute(v, U) {
+      const ds = v.drops || [];
+      if (!(v.dist > 0) || !ds.length) return U.empty('Escriba la distancia entre estacas y por lo menos una caída.');
+      const need = 0.05 * v.dist; // m
+      const seg = v.wall > 0 ? v.wall / ds.length : null;
+      let vol = 0, bad = 0;
+      const rows = ds.map((d, i) => {
+        const s = d / v.dist * 100, ok = d >= need - 1e-6;
+        if (!ok) { bad++; if (seg) vol += (need - d) * v.dist / 2 * seg; }
+        return `<tr><td>${i + 1}</td><td>${U.f(d, 'dep', 1)}</td><td>${HM.fmt(s, 1)}%</td><td>${ok ? '<span class="tag good">Bien</span>' : d <= 0 ? '<span class="tag bad">Baja hacia la casa</span>' : `<span class="tag warn">Subir ${U.f(need - d, 'dep', 1)}</span>`}</td></tr>`;
+      });
+      let h = bad === 0 ? U.big('Resultado', 'La pendiente se ve bien', `Cada punto baja por lo menos ${U.f(need, 'dep', 1)} en ${U.f(v.dist, 'len', 0)}.`)
+        : U.big('Resultado', `${bad} de ${ds.length} puntos necesitan arreglo`, `La guía es una caída de por lo menos ${U.f(need, 'dep', 1)} en ${U.f(v.dist, 'len', 0)}.`);
+      h += `<table class="tt"><thead><tr><th>Punto</th><th>Caída</th><th>Pendiente</th><th></th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
+      const work = [`Caída necesaria = 5% × ${U.f(v.dist, 'len', 1)} = ${U.f(need, 'dep', 1)}`];
+      if (bad && seg) {
+        const order = vol * 1.25;
+        h += U.kv([['Tierra de relleno para corregirlo (aprox.)', `${U.f(order, 'vol', 2)} (${U.f(order, 'cuft', 0)})`]]);
+        work.push(`Cada punto bajo se sube junto a la pared y se va adelgazando hasta cero en la estaca de afuera: una cuña de (lo que falta × ${U.f(v.dist, 'len', 1)} ÷ 2) × ${U.f(seg, 'len', 1)} de pared`, `Volumen total de las cuñas = ${U.f(vol, 'vol', 2)}; +25% por compactación = ${U.f(order, 'vol', 2)}`);
+      } else if (bad) h += U.note('Escriba el largo de la pared para estimar cuánto relleno se necesita.');
+      if (bad) {
+        h += `<h3>Cómo corregirlo</h3><ul class="plain"><li>Haga la pendiente con un <strong>relleno compactable con bastante arcilla</strong>, apisonado por capas. La tierra vegetal, el mantillo y la arena dejan pasar el agua directo a los cimientos.</li><li>Termine con una capa delgada de tierra vegetal para que crezcan las plantas.</li><li>Deje por lo menos 6 pulgadas (15 cm) entre la tierra y el revestimiento o cualquier madera, y nunca entierre los orificios de drenaje ni las ventilas. Si subir la tierra rompe esta regla, mejor use una zanja poco profunda (cuneta) para llevarse el agua.</li><li>Alargue las bajantes por lo menos 5–10 pies (1.5–3 m) lejos de la casa.</li></ul>`;
+      }
+      h += U.note('Los códigos locales y las condiciones de cada terreno varían. Si el agua ya está entrando a un sótano, o la casa está cerca del límite de la propiedad, pida a un profesional que lo revise.');
+      return { html: h, work };
+    }
+  });
+})();
+</script>
+```
+
+## Otras señales de un problema de pendiente
+
+- Agua estancada junto a los cimientos después de llover o regar.
+- Mantillo o tierra amontonada contra el revestimiento, muchas veces acumulada con los años.
+- Bajantes que descargan justo junto a la pared.
+- Patios, banquetas o pozos de ventana que se hundieron y ahora se inclinan hacia la casa.
+- Manchas de humedad, eflorescencia (costra blanca) u olor a humedad en un sótano o espacio de acceso bajo la casa.
+
+La mayoría de estos problemas son baratos de arreglar comparados con una reparación de cimientos.

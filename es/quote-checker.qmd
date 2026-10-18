@@ -1,0 +1,128 @@
+---
+title: "Revisar una cotización de jardinería"
+description: "¿Le cotizaron tierra, mantillo, grava o base? Vea qué profundidad cubre de verdad, si es más de lo que necesita, y el precio real por yarda y por tonelada."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/quote-checker.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/quote-checker.html">'
+---
+
+::: {.hm-lang}
+[English](../quote-checker.qmd){lang="en"}
+:::
+
+Escriba el área, la profundidad que quiere y hasta tres cotizaciones. La herramienta muestra qué profundidad cubriría de verdad cada cotización, si es más (o menos) de lo que necesita, y el precio por unidad, para que pueda comparar con justicia cotizaciones en yardas, toneladas y bolsas.
+
+```{=html}
+<div class="hmc" id="qc"></div>
+<script>
+(function () {
+  const MATS = {
+    topsoil: ['Tierra vegetal (topsoil)', 1.30, 15], compost: ['Composta', 0.65, 15], gardenmix: ['Mezcla para jardín o camas elevadas', 1.00, 20],
+    mulch: ['Mantillo de corteza triturada', 0.40, 10], chips: ['Astillas de madera', 0.35, 10], gravel: ['Grava / piedra triturada', 1.60, 5],
+    roadbase: ['Base para caminos / gravilla fina', 1.75, 25], sand: ['Arena', 1.55, 15], rock: ['Piedra de río', 1.50, 5]
+  };
+  const UNITS = [['yd3', 'yardas cúbicas'], ['ton', 'toneladas (EE. UU.)'], ['m3', 'metros cúbicos'], ['t', 'toneladas métricas'], ['bag', 'bolsas']];
+  const quote = n => [
+    { t: 'sec', l: `Cotización ${n}${n > 1 ? ' (opcional)' : ''}` },
+    { k: `q${n}`, l: 'Cantidad', t: 'num', w: 3 },
+    { k: `u${n}`, l: 'Unidad', t: 'select', opts: UNITS, d: { us: 'yd3', si: 'm3' }, w: 3 },
+    { k: `b${n}`, l: 'Tamaño de la bolsa', t: 'cuft', d: { us: 2, si: 50 }, show: v => v[`u${n}`] === 'bag' },
+    { k: `p${n}`, l: 'Precio total, con entrega e impuestos', t: 'money', h: n === 1 ? 'Use el precio total que de verdad pagaría.' : '' }
+  ];
+  HM.tool({
+    id: 'qc', step: 'Su trabajo',
+    inputs: [
+      { k: 'mat', l: 'Material', t: 'select', opts: Object.entries(MATS).map(([k, m]) => [k, m[0]]), d: 'topsoil' },
+      { k: 'area', l: 'Área a cubrir', t: 'area', w: 3, h: '¿Forma irregular? Calcúlela en la <a href="materials-calculator.html">calculadora de materiales</a>.' },
+      { k: 'dep', l: 'Profundidad que quiere', t: 'dep', d: { us: 4, si: 10 }, w: 3 },
+      ...quote(1), ...quote(2), ...quote(3)
+    ],
+    compute(v, U) {
+      const [name, dens, extra] = MATS[v.mat], X = extra / 100;
+      if (!(v.area > 0) || !(v.dep > 0)) return U.empty('Escriba el área y la profundidad.');
+      const need = v.area * v.dep * (1 + X); // loose m³
+      const rows = [], work = [`Volumen suelto que necesita = ${U.f(v.area, 'area', 0)} × ${U.f(v.dep, 'dep')} × ${HM.fmt(1 + X, 2)} (${extra}% por asentamiento) = ${U.f(need, 'vol')}`];
+      for (let n = 1; n <= 3; n++) {
+        const q = v[`q${n}`], p = v[`p${n}`], un = v[`u${n}`];
+        if (!(q > 0)) continue;
+        let V;
+        if (un === 'yd3') V = q * 0.764554858; else if (un === 'm3') V = q;
+        else if (un === 'ton') V = q * 0.90718474 / dens; else if (un === 't') V = q / dens;
+        else V = q * (v[`b${n}`] || 0);
+        if (!(V > 0)) continue;
+        const depth = V / (1 + X) / v.area, ratio = V / need;
+        const perV = p > 0 ? p / U.val(V, 'vol') : null, perT = p > 0 ? p / (U.us ? V * dens / 0.90718474 : V * dens) : null;
+        const fair = p > 0 ? p / V * need : null;
+        rows.push({ n, V, depth, ratio, perV, perT, fair, p });
+        work.push(`Cotización ${n}: ${HM.fmt(q, 2)} ${UNITS.find(x => x[0] === un)[1]} = ${U.f(V, 'vol')} suelto${un === 'ton' || un === 't' ? ` (a ${U.f(dens, 'dens')})` : ''}; cubre ${U.f(V, 'vol')} ÷ ${HM.fmt(1 + X, 2)} ÷ ${U.f(v.area, 'area', 0)} = ${U.f(depth, 'dep', 1)}`);
+      }
+      if (!rows.length) return { html: U.big('Usted necesita', U.f(need, 'vol') + ' suelto', `≈ ${U.f(need * dens, 'ton', 1)}. Escriba una cotización abajo para revisarla.`), work };
+      const tag = r => r.ratio > 1.25 ? `<span class="tag bad">${HM.fmt((r.ratio - 1) * 100, 0)}% más de lo necesario</span>` : r.ratio < 0.95 ? `<span class="tag warn">falta ${HM.fmt((1 - r.ratio) * 100, 0)}%</span>` : '<span class="tag good">Más o menos justo</span>';
+      const priced = rows.filter(r => r.perV != null), best = priced.length > 1 ? Math.min(...priced.map(r => r.perV)) : null;
+      let h = U.big('Usted necesita', U.f(need, 'vol') + ' suelto', `Para cubrir ${U.f(v.area, 'area', 0)} a ${U.f(v.dep, 'dep')}, con ${extra}% extra por asentamiento. Eso pesa unas ${U.f(need * dens, 'ton', 1)}.`);
+      h += `<table class="tt"><thead><tr><th>Cotización</th><th>Cubre</th><th class="r">Por ${U.us ? 'yd³' : 'm³'}</th><th class="r">Por ${U.us ? 'ton.' : 't'}</th></tr></thead><tbody>` +
+        rows.map(r => `<tr><td>${r.n}<br>${tag(r)}</td><td>${U.f(r.depth, 'dep', 1)} de profundidad</td><td class="r"${best != null && r.perV === best ? ' style="color:var(--good);font-weight:700"' : ''}>${r.perV != null ? U.money(r.perV) : '–'}</td><td class="r">${r.perT != null ? U.money(r.perT) : '–'}</td></tr>`).join('') + '</tbody></table>';
+      const notes = [];
+      rows.forEach(r => {
+        if (r.ratio > 1.25) notes.push(U.note(`La cotización ${r.n} alcanza para unas ${U.f(r.depth, 'dep', 1)}, no ${U.f(v.dep, 'dep')}. Pregunte por qué, o pida ${U.f(need, 'vol', 1)}.${r.fair ? ` Al mismo precio por unidad costaría unos ${U.money(r.fair)}.` : ''}`, 'bad'));
+        if (r.ratio < 0.95) notes.push(U.note(`La cotización ${r.n} solo cubre unas ${U.f(r.depth, 'dep', 1)}. Revise si se entendió mal la profundidad o el área.`));
+      });
+      if (best != null) notes.push(U.note('Los precios por unidad incluyen la entrega, así que las cargas pequeñas parecen caras por unidad. Cuando pueda, compare cotizaciones por la misma cantidad.', 'good'));
+      h += notes.join('');
+      rows.forEach(r => { if (r.perV != null) work.push(`Precio por unidad de la cotización ${r.n} = ${U.money(r.p)} ÷ ${U.f(r.V, 'vol')} = ${U.money(r.perV)} por ${U.us ? 'yd³' : 'm³'}`); });
+      return { html: h, work };
+    }
+  });
+})();
+</script>
+```
+
+## Convertidor de yardas y toneladas
+
+La tierra y el mantillo normalmente se venden por yarda cúbica; la piedra, la grava y la arena por tonelada. Esta herramienta convierte entre las dos, y muestra cuánto cubre una cantidad.
+
+```{=html}
+<div class="hmc" id="conv"></div>
+<script>
+(function () {
+  const MATS = {
+    topsoil: ['Tierra vegetal (topsoil)', 1.30], compost: ['Composta', 0.65], gardenmix: ['Mezcla para jardín o camas elevadas', 1.00], mulch: ['Mantillo de corteza triturada', 0.40],
+    chips: ['Astillas de madera', 0.35], gravel: ['Grava / piedra triturada', 1.60], roadbase: ['Base para caminos / gravilla fina', 1.75], sand: ['Arena', 1.55], rock: ['Piedra de río', 1.50]
+  };
+  HM.tool({
+    id: 'conv', step: 'Convertir', hash: false,
+    inputs: [
+      { k: 'mat', l: 'Material', t: 'select', opts: Object.entries(MATS).map(([k, m]) => [k, m[0]]), d: 'topsoil' },
+      { k: 'dens', l: 'Peso (suelto)', t: 'dens', d: (u, v) => { const m = MATS[(v && v.mat) || 'topsoil']; return u === 'us' ? Math.round(m[1] / 1.18655 * 100) / 100 : m[1]; }, h: 'Valor típico. Pídale a su proveedor el suyo: cambia con la humedad.' },
+      { k: 'q', l: 'Cantidad', t: 'num', w: 3 },
+      { k: 'un', l: 'Unidad', t: 'select', opts: [['yd3', 'yardas cúbicas'], ['ton', 'toneladas (EE. UU.)'], ['m3', 'metros cúbicos'], ['t', 'toneladas métricas'], ['cuft', 'pies cúbicos']], d: { us: 'yd3', si: 'm3' }, w: 3 }
+    ],
+    onChange(k, api) { if (k === 'mat') { const m = MATS[api.get('mat')]; api.setDisp('dens', api.units() === 'us' ? Math.round(m[1] / 1.18655 * 100) / 100 : m[1]); } },
+    compute(v, U) {
+      if (!(v.q > 0) || !(v.dens > 0)) return U.empty('Escriba una cantidad.');
+      const V = v.un === 'yd3' ? v.q * 0.764554858 : v.un === 'm3' ? v.q : v.un === 'cuft' ? v.q * 0.0283168466 : v.un === 'ton' ? v.q * 0.90718474 / v.dens : v.q / v.dens;
+      const t = V * v.dens;
+      const deps = U.us ? [1, 2, 3, 4, 6] : [2.5, 5, 7.5, 10, 15];
+      const cover = deps.map(d => [`a ${d} ${U.us ? 'in' : 'cm'}`, U.f(V / (d * (U.us ? 0.0254 : 0.01)), 'area', 0)]);
+      return {
+        html: U.big('Equivale a', `${HM.fmt(V / 0.764554858, 2)} yd³ · ${HM.fmt(t / 0.90718474, 2)} toneladas`, `${HM.fmt(V, 2)} m³ · ${HM.fmt(t, 2)} toneladas métricas · ${HM.fmt(V / 0.0283168466, 0)} ft³ · ${HM.fmt(V / 0.0566336932, 0)} bolsas de 2 ft³`) +
+          '<h3>Área que cubre</h3>' + U.kv(cover),
+        work: [`Volumen = ${U.f(V, 'vol')}`, `Peso = volumen × ${U.f(v.dens, 'dens')} = ${U.f(t, 'ton')}`, `Cobertura = volumen ÷ profundidad`]
+      };
+    }
+  });
+})();
+</script>
+```
+
+## Por qué es difícil comparar cotizaciones
+
+- **Yardas o toneladas.** Una yarda cúbica de mantillo pesa unos cientos de libras; una yarda cúbica de grava pesa bastante más de una tonelada. No se puede comparar un precio por tonelada con un precio por yarda sin saber cuánto pesa el material. La herramienta convierte con pesos típicos; pídale al proveedor los suyos.
+- **La entrega.** Un cargo de entrega repartido en una carga pequeña hace que el precio por unidad parezca alto. Compare cotizaciones por la misma cantidad.
+- **Extra por asentamiento.** El material suelto se asienta después de esparcirlo, así que una cotización justa incluye un poco más que el volumen medido, normalmente 5–25% según el material. Una cotización por el doble de lo que necesita no es "un poco extra".
+- **Las bolsas.** El tamaño de las bolsas varía (1, 1.5, 2 o 3 pies cúbicos). Revise el tamaño antes de comparar precios por bolsa.
+
+Use la [calculadora de materiales](materials-calculator.qmd) para calcular exactamente cuánto necesita en un área de forma irregular.

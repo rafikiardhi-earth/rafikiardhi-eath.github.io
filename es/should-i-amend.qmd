@@ -1,0 +1,89 @@
+---
+title: "¿Debo mejorar mi suelo?"
+description: "Antes de comprar composta, tierra o arena, revise si su suelo la necesita. Una herramienta gratuita de científicos del suelo para césped, camas de hortalizas, arbustos, árboles y plantas nativas."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/should-i-amend.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/should-i-amend.html">'
+---
+
+::: {.hm-lang}
+[English](../should-i-amend.qmd){lang="en"}
+:::
+
+La composta y la tierra son útiles, pero se gasta mucho dinero en enmiendas que no ayudan, o que empeoran las cosas. Conteste unas preguntas y esta herramienta le dice qué vale la pena hacer según lo que va a sembrar.
+
+```{=html}
+<div class="hmc" id="am"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'am', step: 'Lo que va a sembrar', units: false,
+    inputs: [
+      { k: 'plant', l: 'Siembra', t: 'select', d: 'veg', opts: [['veg', 'Cama de hortalizas o frutas'], ['beds', 'Camas de flores o arbustos'], ['native', 'Plantas nativas o de bajo consumo de agua'], ['tree', 'Plantar un árbol o arbusto (el hoyo de plantación)'], ['newlawn', 'Césped nuevo (semilla o pasto en rollo)'], ['lawn', 'Mejorar un césped que ya existe']] },
+      { t: 'sec', l: 'Su suelo', h: 'Conteste lo que pueda. Las <a href="diy-soil-tests.html">pruebas de suelo caseras</a> ayudan con la textura y el drenaje.' },
+      { k: 'om', l: 'Materia orgánica (de un análisis de suelo)', t: 'select', d: 'unk', opts: [['unk', 'No sé'], ['low', 'Menos de 2%'], ['mid', '2–5%'], ['high', 'Más de 5%']] },
+      { k: 'tex', l: 'Textura', t: 'select', d: 'unk', opts: [['unk', 'No sé'], ['sand', 'Arenoso (rasposo, se desmorona)'], ['loam', 'Franco (intermedio)'], ['clay', 'Arcilloso (pegajoso mojado, duro seco)']] },
+      { k: 'drain', l: 'Después de una lluvia fuerte o una prueba de drenaje, el agua…', t: 'select', d: 'unk', opts: [['unk', 'No sé'], ['ok', 'Drena en unas cuantas horas'], ['slow', 'Se encharca casi todo el día'], ['bad', 'Se queda más de un día']] },
+      { k: 'comp', l: 'Cuesta trabajo meter un desarmador más de 2–3 pulgadas cuando el suelo está húmedo', t: 'check', d: false },
+      { k: 'new', l: 'La casa o el patio se construyó o se niveló en los últimos años', t: 'check', d: false }
+    ],
+    compute(v, U) {
+      const P = v.plant, low = v.om === 'low', high = v.om === 'high', unk = v.om === 'unk';
+      const doL = [], dontL = [];
+      let verdict, sub, cls = '';
+      // blockers first
+      if (v.drain === 'bad') {
+        verdict = 'Primero arregle el drenaje'; sub = 'El agua estancada se debe a lo que hay abajo, casi siempre una capa compactada o densa, o agua que llega de otro lado. Ninguna enmienda mezclada en las primeras pulgadas lo va a arreglar.'; cls = 'bad';
+        doL.push('Excave un hoyo de prueba para averiguar por qué: una capa dura que se puede romper, o agua que llega de una bajante o una pendiente y que se puede desviar.', 'Considere camas elevadas, nivelar el terreno, un <a href="rain-garden.html">jardín de lluvia</a>, o plantas que toleren raíces mojadas.');
+      }
+      if (v.comp || v.new) {
+        doL.push(P === 'lawn' ? 'Airee con sacabocados (sacando tapones) cuando el suelo esté húmedo; repítalo cada año hasta que el desarmador entre fácilmente.' : 'Primero afloje el suelo compactado, tan profundo y ancho como pueda (8–12 pulgadas para camas), antes de agregar cualquier cosa.');
+        if (v.new) doL.push('Los lotes de casas nuevas muchas veces tienen una capa delgada de tierra sobre subsuelo compactado. La <a href="construction-soil-check.html">revisión del suelo en casas nuevas</a> le explica paso a paso.');
+      }
+      if (P === 'tree') {
+        verdict = verdict || 'No mejore el hoyo de plantación'; sub = sub || 'Las raíces crecen mejor cuando el hoyo se rellena con la misma tierra que salió de él. Un relleno rico funciona como una maceta: el agua se junta ahí y las raíces dan vueltas en vez de extenderse.';
+        doL.push('Haga el hoyo 2–3 veces más ancho que el cepellón pero no más profundo, para que la base del tronco quede al nivel del suelo o un poco arriba.', 'Rellene con la tierra del lugar, riegue, y ponga 2–4 pulgadas de mantillo en un círculo amplio, sin tocar el tronco.');
+        dontL.push('Composta, tierra para macetas o tierra comprada en el hoyo de plantación.', 'Grava en el fondo del hoyo: empeora el drenaje, no lo mejora.');
+      } else if (P === 'native') {
+        verdict = verdict || 'Probablemente no'; sub = sub || 'Las plantas nativas y de bajo consumo están adaptadas a suelo sin mejorar. Un suelo rico y enmendado muchas veces las hace débiles, de vida corta y con más maleza.';
+        dontL.push('Composta o tierra "para que empiecen bien", a menos que el suelo sea relleno muy alterado.');
+        doL.push('Afloje el suelo compactado, plante, y cubra con grava o una capa delgada de astillas de madera (según lo que prefieran las plantas).');
+      } else if (P === 'veg') {
+        if (high) { verdict = verdict || 'No mucho'; sub = sub || 'Su materia orgánica ya está alta. Una capa delgada cada año la mantiene así.'; doL.push('Ponga más o menos ½ pulgada de composta cada año, o siembre un cultivo de cobertura.'); dontL.push('Entregas grandes de composta o tierra.'); }
+        else { verdict = verdict || 'Sí: composta'; sub = sub || 'Las hortalizas funcionan mejor en suelo con bastante materia orgánica (más o menos 5% o más).'; cls = cls || 'good'; doL.push(`Mezcle ${low || unk ? '2 pulgadas' : '1 pulgada'} de composta en las primeras 6–8 pulgadas cada año. Una pulgada sobre 1,000 ft² son unas 3 yardas cúbicas: la <a href="materials-calculator.html?m=compost">calculadora de materiales</a> hace la cuenta.`); }
+      } else if (P === 'beds') {
+        if (high) { verdict = verdict || 'No'; sub = sub || 'La materia orgánica ya está alta.'; dontL.push('Composta o acondicionador de suelo.'); doL.push('Solo ponga mantillo: al descomponerse alimenta el suelo.'); }
+        else if (low) { verdict = verdict || 'Una vez, y luego mantillo'; sub = sub || 'Vale la pena corregir la materia orgánica baja una vez, cuando haga la cama.'; cls = cls || 'good'; doL.push('Mezcle 1–2 pulgadas de composta en las primeras 8 pulgadas cuando haga la cama, y luego manténgala con mantillo.'); }
+        else { verdict = verdict || 'Opcional'; sub = sub || 'La mayoría de los arbustos y perennes crecen bien en suelo común.'; doL.push('Si agrega algo, ½–1 pulgada de composta mezclada al plantar es suficiente. El mantillo hace el resto con el tiempo.'); }
+      } else if (P === 'newlawn') {
+        if (low || unk || v.comp || v.new) { verdict = verdict || 'Sí, antes de sembrar'; sub = sub || 'Es su única oportunidad de mejorar el suelo debajo de un césped.'; cls = cls || 'good'; doL.push('Afloje las primeras 6 pulgadas y mezcle más o menos 1 pulgada de composta (unas 3 yardas cúbicas por cada 1,000 ft²) antes de sembrar o poner el pasto en rollo.'); }
+        else { verdict = verdict || 'Probablemente no'; sub = sub || 'Su suelo ya tiene una materia orgánica razonable.'; doL.push('Afloje las primeras pulgadas, nivele, y siembre o ponga el pasto en rollo.'); }
+        dontL.push('Una capa delgada de tierra sobre terreno compactado: crea una capa que las raíces no cruzan. Primero afloje y luego mézclela.');
+      } else if (P === 'lawn') {
+        verdict = verdict || (low || unk ? 'Una capa ligera por encima' : 'No mucho'); sub = sub || 'No se puede mezclar nada en un césped que ya existe, así que se mejora desde arriba.';
+        doL.push('Airee con sacabocados y luego cubra con ¼ de pulgada de composta fina, pasando el rastrillo para que entre en los hoyos. Repítalo cada año.');
+        dontL.push('Echar varias pulgadas de tierra sobre el pasto: lo asfixia y crea una capa.');
+      }
+      if (v.tex === 'clay' && (P === 'tree' || P === 'native')) dontL.push('Arena para "aflojar" la arcilla: llena los huecos y hace la arcilla más densa.');
+      if (v.tex === 'clay' && P !== 'tree' && P !== 'native') { dontL.push('Arena para "aflojar" la arcilla: a menos que sea más de la mitad de la mezcla, la arena llena los huecos y hace la arcilla más densa, más parecida al concreto.'); doL.push('En arcilla, lo que mejora la estructura es la composta y no pisarla ni excavarla cuando está mojada.'); }
+      if (v.tex === 'sand' && P !== 'native' && P !== 'tree') doL.push('El suelo arenoso es el que más gana con la composta: retiene el agua y los nutrientes que la arena no puede.');
+      dontL.push('Yeso agrícola, a menos que un análisis de laboratorio muestre sodio. No afloja la arcilla común.');
+      return U.big('Veredicto', verdict, sub) + `<h3>Vale la pena</h3><ul class="plain">${doL.map(x => `<li>${x}</li>`).join('')}</ul>` + (dontL.length ? `<h3>No lo haga</h3><ul class="plain">${dontL.map(x => `<li>${x}</li>`).join('')}</ul>` : '') +
+        (unk && P !== 'tree' && P !== 'native' ? U.note('Un <a href="soil-test-translator.html">análisis de suelo</a> lo confirmaría: la materia orgánica es el número clave.') : '');
+    }
+  });
+})();
+</script>
+```
+
+## En resumen
+
+- **Árboles:** nunca mejore el hoyo de plantación. Hoyo ancho, tierra del lugar, mantillo.
+- **Plantas nativas y de bajo consumo:** normalmente nada. El suelo rico les perjudica.
+- **Hortalizas:** sí, composta cada año.
+- **Césped:** mejore el suelo antes de sembrar. En un césped que ya existe, airee y cubra con una capa ligera.
+- **Arcilla:** la composta ayuda; un poco de arena la empeora.
+- **Agua estancada:** es un problema de drenaje, no de calidad del suelo.

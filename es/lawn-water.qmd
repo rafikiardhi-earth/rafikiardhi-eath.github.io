@@ -1,0 +1,68 @@
+---
+title: "Césped o jardín de bajo consumo: calculadora de agua"
+description: "Compare cuánta agua usa en una temporada un césped de pasto azul de Kentucky, festuca alta, pasto búfalo, plantas de bajo consumo o mantillo, y cuánto cuesta."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/lawn-water.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/lawn-water.html">'
+---
+
+::: {.hm-lang}
+[English](../lawn-water.qmd){lang="en"}
+:::
+
+¿Cuánta agua usa de verdad un césped comparado con las alternativas? Esta herramienta estima el riego de una temporada para la misma área sembrada de distintas maneras, según su clima y el precio del agua.
+
+```{=html}
+<div class="hmc" id="lw"></div>
+<script>
+(function () {
+  // season reference evapotranspiration and usable rain, inches
+  const CLIM = { desert: [55, 3], semi: [35, 7], temperate: [27, 14], humid: [26, 22] };
+  // [name, plant factor (share of reference ET), irrigation efficiency]
+  const OPT = [
+    ['Césped de pasto azul de Kentucky', 0.8, 0.75], ['Césped de festuca alta', 0.7, 0.75], ['Césped de pasto búfalo o navajita azul', 0.4, 0.75],
+    ['Arbustos y perennes de bajo consumo (goteo)', 0.3, 0.9], ['Plantas nativas, ya establecidas', 0.15, 0.9], ['Mantillo, grava o superficie dura', 0, 1]
+  ];
+  HM.tool({
+    id: 'lw', step: 'Su patio',
+    inputs: [
+      { k: 'area', l: 'Área', t: 'area' },
+      { k: 'clim', l: 'Clima', t: 'select', d: 'semi', opts: [['desert', 'Desierto caluroso'], ['semi', 'Semiárido (veranos secos, inviernos fríos)'], ['temperate', 'Templado'], ['humid', 'Húmedo'], ['custom', 'Mis propios números']] },
+      { k: 'eto', l: 'Evapotranspiración de referencia de la temporada de crecimiento', t: 'wdep', d: (u, v) => { const c = CLIM[(v && v.clim) || 'semi'] || CLIM.semi; return u === 'us' ? c[0] : Math.round(c[0] * 25.4 / 5) * 5; }, w: 3, h: 'Las redes meteorológicas locales la publican (ETo). Los climas predeterminados son aproximados.' },
+      { k: 'rain', l: 'Lluvia aprovechable en la temporada', t: 'wdep', d: (u, v) => { const c = CLIM[(v && v.clim) || 'semi'] || CLIM.semi; return u === 'us' ? c[1] : Math.round(c[1] * 25.4 / 5) * 5; }, w: 3 },
+      { k: 'price', l: 'Precio del agua', t: 'pwater', w: 3, h: 'De su recibo del agua. Muchas compañías cobran más cuando se usa más.' }
+    ],
+    onChange(k, api) {
+      if (k === 'clim' && CLIM[api.get('clim')]) { const c = CLIM[api.get('clim')], us = api.units() === 'us'; api.setDisp('eto', us ? c[0] : Math.round(c[0] * 25.4 / 5) * 5); api.setDisp('rain', us ? c[1] : Math.round(c[1] * 25.4 / 5) * 5); }
+      if (k === 'eto' || k === 'rain') api.setChoice('clim', 'custom');
+    },
+    compute(v, U) {
+      if (!(v.area > 0) || !(v.eto > 0)) return U.empty('Escriba el área y su clima.');
+      const rain = v.rain || 0;
+      const rows = OPT.map(o => {
+        const depth = Math.max(0, o[1] * v.eto - rain) / o[2]; // mm
+        const L = depth * v.area; // litres
+        return { o, depth, L, cost: v.price > 0 ? L / 1000 * v.price : null };
+      });
+      const base = rows[0].L;
+      const g = x => U.us ? `${HM.fmt(x / 3.785411784, 0)} gal` : `${HM.fmt(x / 1000, 1)} m³`;
+      let h = `<div class="step">Riego por temporada para ${U.f(v.area, 'area', 0)}</div><table class="tt"><thead><tr><th>Plantas</th><th class="r">Agua</th>${v.price > 0 ? '<th class="r">Costo</th>' : ''}</tr></thead><tbody>` +
+        rows.map(r => `<tr><td>${r.o[0]}${r.L < base && base > 0 ? `<br><span class="tag good">${HM.fmt((1 - r.L / base) * 100, 0)}% menos</span>` : ''}</td><td class="r">${g(r.L)}<br><span style="color:var(--ink-3)">${U.f(r.depth, 'wdep', 1)}</span></td>${v.price > 0 ? `<td class="r">${U.money(r.cost)}</td>` : ''}</tr>`).join('') + '</tbody></table>';
+      if (rows[0].L === 0) h += U.note('En este clima la lluvia cubre todo lo que necesitan las plantas, así que ninguna necesita riego en una temporada promedio.', 'good');
+      h += U.note('Estimaciones para una temporada promedio con riego eficiente. El uso real muchas veces es mayor: regar de más, las fugas y la mala cobertura son comunes. La <a href="catch-cup-test.html">prueba de vasos</a> muestra qué tan eficiente es su sistema.');
+      h += U.note('Las plantas de bajo consumo usan la mayor parte de su agua en los primeros uno o dos años, mientras se establecen.', 'good');
+      return { html: h, work: [`Agua necesaria = factor de la planta × ET de referencia; riego = (necesidad − lluvia aprovechable) ÷ eficiencia del riego`].concat(rows.map(r => `${r.o[0]}: (${r.o[1]} × ${U.f(v.eto, 'wdep', 1)} − ${U.f(rain, 'wdep', 1)}) ÷ ${r.o[2]} = ${U.f(r.depth, 'wdep', 1)} → × ${U.f(v.area, 'area', 0)} = ${g(r.L)}`)) };
+    }
+  });
+})();
+</script>
+```
+
+## Cómo se calcula
+
+Las plantas pierden agua por las hojas a un ritmo que depende sobre todo del clima: sol, calor, viento y aire seco. Las redes meteorológicas lo expresan como **evapotranspiración de referencia (ETo)**: lo que usaría un pasto bien regado. Cada tipo de planta usa una parte de eso: el pasto azul de Kentucky cerca del 80%, el pasto búfalo menos de la mitad, y los arbustos de bajo consumo ya establecidos una tercera parte o menos. Se resta la lluvia que pueden aprovechar las plantas, se toma en cuenta que el riego nunca es perfectamente eficiente, y eso da el riego.
+
+Los factores que se usan aquí son valores típicos para planear. Sirven para comparar opciones, no para programar un controlador: para eso, use la [prueba de vasos](catch-cup-test.qmd).

@@ -1,0 +1,89 @@
+---
+title: "Calculadora del pH del suelo: cal y azufre"
+description: "Cuánta cal necesita para subir el pH del suelo, o cuánto azufre para bajarlo, según su tipo de suelo y el área. Incluye la revisión que casi todas las calculadoras omiten: si bajar el pH es realista."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/ph-adjustment.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/ph-adjustment.html">'
+---
+
+::: {.hm-lang}
+[English](../ph-adjustment.qmd){lang="en"}
+:::
+
+Cambiar el pH del suelo requiere más material en arcilla que en arena, y sucede despacio. Esta herramienta estima cuánta piedra caliza molida (para subir el pH) o azufre elemental (para bajarlo) necesita, y le dice cuándo bajar el pH no es realista.
+
+```{=html}
+<div class="hmc" id="ph"></div>
+<script>
+(function () {
+  // lb per 1,000 ft² to change pH by one unit in the top 6 in
+  const LIME = { sand: 30, sandyloam: 45, loam: 60, siltloam: 70, clay: 80 };
+  const SULF = { sand: 10, sandyloam: 13, loam: 17, siltloam: 20, clay: 25 };
+  const OMF = { low: 1, mid: 1.25, high: 1.5 };
+  const TEXN = { sand: 'arena', sandyloam: 'franco arenoso', loam: 'franco', siltloam: 'franco limoso', clay: 'arcilla' };
+  const LB1000 = 4.88242764; // g/m² per lb/1000 ft²
+  HM.tool({
+    id: 'ph', step: 'Su suelo',
+    inputs: [
+      { k: 'cur', l: 'pH actual (de un análisis de suelo)', t: 'num', w: 3 },
+      { k: 'tgt', l: 'pH que quiere', t: 'num', d: 6.5, w: 3, h: 'La mayoría de los céspedes y jardines: 6.0–7.0. Arándanos 4.5–5.5; azaleas y rododendros 5.0–6.0.' },
+      { k: 'tex', l: 'Textura del suelo', t: 'select', d: 'loam', opts: [['sand', 'Arena o arena franca'], ['sandyloam', 'Franco arenoso'], ['loam', 'Franco'], ['siltloam', 'Franco limoso'], ['clay', 'Franco arcilloso o arcilla']] },
+      { k: 'om', l: 'Materia orgánica', t: 'select', d: 'mid', opts: [['low', 'Baja (menos de 2%)'], ['mid', 'Media (2–5%)'], ['high', 'Alta (más de 5%)']], h: 'La materia orgánica resiste el cambio de pH, así que entre más haya, más material se necesita.' },
+      { k: 'fizz', l: 'Prueba del vinagre: ¿una cucharada de tierra burbujea en vinagre?', t: 'select', d: 'unk', opts: [['unk', 'No la he hecho'], ['no', 'No burbujea'], ['yes', 'Sí, burbujea']], show: v => v.tgt != null && v.cur != null && v.tgt < v.cur },
+      { k: 'lime', l: 'Cal libre (carbonato de calcio), si su reporte la da (%)', t: 'num', show: v => v.fizz === 'yes' && v.tgt < v.cur },
+      { t: 'sec', l: 'Dónde' },
+      { k: 'site', l: 'Situación', t: 'seg', d: 'lawn', opts: [['lawn', 'Césped o cama ya establecida (se esparce encima)'], ['new', 'Cama nueva (se mezcla)']] },
+      { k: 'area', l: 'Área', t: 'area' }
+    ],
+    compute(v, U) {
+      if (v.cur == null || v.tgt == null) return U.empty('Escriba su pH actual y el que quiere.');
+      if (v.cur < 3 || v.cur > 10 || v.tgt < 3 || v.tgt > 10) return U.empty('Los valores de pH normalmente están entre 4 y 9. Revise los números.');
+      const d = v.tgt - v.cur;
+      if (Math.abs(d) < 0.2) return U.note('Su pH ya está donde quiere. No hay que agregar nada.', 'good');
+      const raise = d > 0, f = OMF[v.om], perUnit = (raise ? LIME : SULF)[v.tex] * f;
+      const rate = perUnit * Math.abs(d); // lb/1000 ft²
+      const maxApp = raise ? (v.site === 'lawn' ? 50 : 100) : (v.site === 'lawn' ? 5 : 20);
+      const apps = Math.ceil(rate / maxApp - 1e-9);
+      const rateSI = rate * LB1000; // g/m²
+      const work = [`${raise ? 'Piedra caliza molida' : 'Azufre elemental'} para cambiar el pH 1 unidad en ${TEXN[v.tex]}: unas ${raise ? LIME[v.tex] : SULF[v.tex]} lb por cada 1,000 ft² (primeras 6 pulgadas)`,
+        `× ${f} por materia orgánica ${v.om === 'low' ? 'baja' : v.om === 'mid' ? 'media' : 'alta'} × ${HM.fmt(Math.abs(d), 1)} unidades = ${HM.fmt(rate, 0)} lb por cada 1,000 ft² (${HM.fmt(rateSI / 1000, 2)} kg por m²)`];
+      let h = '';
+      if (!raise && v.fizz === 'yes') {
+        const lp = v.lime > 0 ? v.lime : 1;
+        const soil = 1000 * 0.5 * 80; // lb of soil in top 6 in of 1,000 ft²
+        const sNeed = soil * lp / 100 * 0.32;
+        h += U.big('No es realista', 'No intente bajar el pH', `Si burbujea, hay cal libre. Antes de que el pH se mueva, el azufre tiene que disolver esa cal: unos ${U.f(sNeed * LB1000, 'arate', 0)} de azufre por cada 1% de cal${v.lime > 0 ? '' : ' (suponiendo 1%)'}.`);
+        h += `<h3>Lo que sí funciona</h3><ul class="plain"><li>Escoja plantas a las que les guste el suelo alcalino. Hay buenas opciones para cualquier uso.</li><li>Para hojas amarillas en plantas que necesitan mucho hierro (maples, robles, rosales), use un producto de hierro quelatado hecho para suelo de pH alto (tipo EDDHA).</li><li>Siembre las plantas que prefieren suelo ácido, como los arándanos, en macetas o camas elevadas llenas de una mezcla ácida.</li><li>La materia orgánica y el mantillo ayudan a que los nutrientes estén disponibles aunque el pH siga alto.</li></ul>`;
+        work.push(`Primeras 6 pulgadas de 1,000 ft² ≈ 500 ft³ × 80 lb/ft³ = 40,000 lb de tierra`, `${HM.fmt(lp, 1)}% de cal = ${HM.fmt(soil * lp / 100, 0)} lb de carbonato de calcio; azufre necesario para neutralizarla = × 0.32 = ${HM.fmt(sNeed, 0)} lb por cada 1,000 ft², antes de cualquier cambio de pH`);
+        return { html: h, work };
+      }
+      const label = raise ? 'piedra caliza molida' : 'azufre elemental';
+      if (v.area > 0) {
+        const kg = rateSI * v.area / 1000;
+        h += U.big('Aplique', U.f(kg, 'mass', 1), `de ${label} en ${U.f(v.area, 'area', 0)} (${U.f(rateSI, 'arate', 1)}).`);
+        work.push(`Para su área: ${U.f(rateSI, 'arate', 1)} × ${U.f(v.area, 'area', 0)} = ${U.f(kg, 'mass', 1)}`);
+      } else h += U.big('Aplique', U.f(rateSI, 'arate', 1), `de ${label}. Escriba su área para ver el total.`);
+      if (apps > 1) h += U.note(`Divídalo en ${apps} aplicaciones de no más de ${U.f(maxApp * LB1000, 'arate', 0)} cada una${raise ? ', en primavera y otoño' : ', con varios meses de separación'}. ${raise ? 'Las dosis grandes de una sola vez en el césped pueden apelmazarse y quemarlo.' : 'Demasiado azufre de una vez quema las raíces y el pasto.'}`);
+      if (v.site === 'lawn') h += U.note(`Espárzalo en la superficie y riegue. Actúa despacio de arriba hacia abajo, así que una aplicación en la superficie tarda un año o más en hacer todo su efecto${raise ? '; airear con sacabocados antes lo acelera' : ''}.`);
+      else h += U.note('Mézclelo en las primeras 6 pulgadas. Aun así tarda semanas (la cal) o meses (el azufre) en cambiar el pH por completo.');
+      if (Math.abs(d) > 1.5) h += U.note('Es un cambio grande. Haga solo una parte, y vuelva a analizar en 6–12 meses antes de agregar más.', 'bad');
+      if (!raise && v.fizz === 'unk') h += U.note('Primero haga la prueba del vinagre: si su suelo burbujea, el azufre se desperdiciará.', 'bad');
+      if (raise && v.tex !== 'sand' && v.cur > 6) h += U.note('Un aumento pequeño como este casi nunca importa para la mayoría de las plantas. Solo aplique cal si sus plantas o su análisis de suelo lo piden.');
+      h += U.note(raise ? 'Si su análisis de suelo da un requerimiento de cal (muchas veces a partir de un "pH buffer"), use ese: es más exacto que esta estimación.' : 'Use azufre elemental, no sulfato de aluminio, que puede dañar las raíces. El sulfato de hierro actúa más rápido pero se necesitan unas 6 veces más por peso.', 'good');
+      return { html: h, work };
+    }
+  });
+})();
+</script>
+```
+
+## Por qué el pH cambia despacio
+
+El suelo tiene amortiguación: la arcilla y la materia orgánica guardan grandes reservas de acidez (o alcalinidad) que resisten el cambio. Por eso la arcilla necesita dos o tres veces más cal que la arena, y por eso la misma cantidad actúa despacio.
+
+**Bajar el pH en suelos alcalinos es un caso especial.** Muchos suelos de regiones secas contienen cal libre (carbonato de calcio), que burbujea con vinagre. Cualquier ácido que agregue, incluido el azufre conforme se descompone, se gasta disolviendo esa cal antes de que el pH se mueva. Aun con 1% de cal se necesitan bastante más de 100 lb de azufre por cada 1,000 ft² solo para neutralizarla. Por eso a los jardineros de esas regiones les va mejor escogiendo plantas adaptadas a su suelo.
+
+Las dosis que se usan aquí son valores típicos de extensión agrícola para las primeras 6 pulgadas. Un resultado de laboratorio de "requerimiento de cal" o "pH buffer" es más exacto para su suelo cuando lo tiene.

@@ -1,0 +1,118 @@
+---
+title: "Traductor del análisis de suelo"
+description: "Convierta el reporte de laboratorio de su suelo en palabras sencillas: qué está bajo, qué está alto, qué hacer y qué no necesita comprar. pH, materia orgánica, sales, fósforo, potasio y nitrato."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/soil-test-translator.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/soil-test-translator.html">'
+---
+
+::: {.hm-lang}
+[English](../soil-test-translator.qmd){lang="en"}
+:::
+
+Copie los números de su reporte del análisis de suelo. No los necesita todos: deje en blanco lo que su reporte no tenga. El traductor explica cada resultado y, algo igual de útil, le dice lo que *no* necesita comprar.
+
+```{=html}
+<div class="hmc" id="st"></div>
+<script>
+(function () {
+  const PT = { olsen: [10, 20, 40, 'Olsen (bicarbonato de sodio)'], bray: [15, 30, 60, 'Bray-1'], m3: [20, 45, 90, 'Mehlich-3'], ab: [4, 8, 12, 'AB-DTPA'] };
+  const KT = { aa: [100, 175, 300, 'Acetato de amonio o Mehlich-3'], ab: [61, 121, 181, 'AB-DTPA'] };
+  const band = (x, t) => x < t[0] ? 0 : x < t[1] ? 1 : x < t[2] ? 2 : 3;
+  const TAG = [['bad', 'Bajo'], ['good', 'Medio'], ['good', 'Alto'], ['warn', 'Muy alto']];
+  HM.tool({
+    id: 'st', step: 'Su jardín', units: false,
+    inputs: [
+      { k: 'use', l: '¿Qué está sembrando?', t: 'select', d: 'lawn', opts: [['lawn', 'Césped'], ['veg', 'Hortalizas o frutas'], ['beds', 'Flores, arbustos o árboles'], ['native', 'Plantas nativas o de bajo consumo de agua']] },
+      { t: 'sec', l: 'Resultados de su reporte' },
+      { k: 'ph', l: 'pH', t: 'num', w: 3 },
+      { k: 'om', l: 'Materia orgánica (%)', t: 'num', w: 3 },
+      { k: 'ec', l: 'Sales (EC o "sales solubles", dS/m o mmhos/cm)', t: 'num', w: 3 },
+      { k: 'ecm', l: 'Método de sales', t: 'select', d: 'paste', w: 3, opts: [['paste', 'Pasta saturada (ECe)'], ['11', 'Extracto de agua 1:1 o 1:2']] },
+      { k: 'p', l: 'Fósforo (ppm)', t: 'num', w: 3 },
+      { k: 'pm', l: 'Método de fósforo', t: 'select', d: 'olsen', w: 3, opts: Object.entries(PT).map(([k, v]) => [k, v[3]]), h: 'Viene impreso junto al resultado. Los laboratorios de regiones alcalinas suelen usar Olsen o AB-DTPA.' },
+      { k: 'k', l: 'Potasio (ppm)', t: 'num', w: 3 },
+      { k: 'km', l: 'Método de potasio', t: 'select', d: 'aa', w: 3, opts: Object.entries(KT).map(([k, v]) => [k, v[3]]) },
+      { k: 'no3', l: 'Nitrógeno de nitrato (ppm)', t: 'num', w: 3 },
+      { k: 'lime', l: 'Cal libre / carbonatos', t: 'select', d: 'unk', w: 3, opts: [['unk', 'No viene en el reporte'], ['yes', 'Presente (o "alto" / el suelo burbujea)'], ['no', 'Ninguno']] }
+    ],
+    compute(v, U) {
+      const rows = [], todo = [], skip = [];
+      const veg = v.use === 'veg', native = v.use === 'native', lawn = v.use === 'lawn';
+      const calc = v.lime === 'yes' || (v.lime === 'unk' && v.ph >= 7.8);
+      if (v.ph != null) {
+        let t, m;
+        if (v.ph < 5.5) { t = ['bad', 'Muy ácido']; m = 'Demasiado ácido para la mayoría de los céspedes y hortalizas; los nutrientes quedan menos disponibles.'; todo.push('Suba el pH con piedra caliza molida. Use la <a href="ph-adjustment.html">calculadora de pH</a> para saber cuánto.'); }
+        else if (v.ph < 6.0) { t = ['warn', 'Moderadamente ácido']; m = 'Está bien para muchas plantas; el césped y las hortalizas lo prefieren un poco más alto.'; if (!native) todo.push('Opcional: una pequeña aplicación de cal para acercar el pH a 6.5. Vea la <a href="ph-adjustment.html">calculadora de pH</a>.'); }
+        else if (v.ph <= 7.5) { t = ['good', 'Bueno']; m = 'Le va bien a la mayoría de los céspedes, jardines y plantas de ornato.'; skip.push('Cal o azufre: su pH ya está en el rango bueno.'); }
+        else if (v.ph <= 8.4) { t = ['warn', 'Alcalino']; m = 'Común en regiones secas. La mayoría de las plantas adaptadas están bien; algunas (maples, robles de los pantanos, arándanos, azaleas) se ponen amarillas por falta de hierro.'; todo.push('Escoja plantas adaptadas a suelo alcalino. Si las hojas se ponen amarillas entre las venas en plantas sensibles, use un producto de hierro quelatado (el tipo EDDHA funciona con pH alto).'); }
+        else { t = ['bad', 'Muy alcalino']; m = 'Arriba de 8.4 muchas veces indica sodio. Pídale al laboratorio el sodio (SAR o ESP) antes de sembrar.'; todo.push('Pídale a su laboratorio que analice el sodio.'); }
+        if (v.ph > 7.5 && calc) skip.push('Azufre para bajar el pH: los suelos con cal libre lo neutralizan, así que se necesitan cantidades enormes y casi nunca funciona. Mejor siembre plantas a las que les guste su suelo.');
+        rows.push(['pH', HM.fmt(v.ph, 1), t, m]);
+      }
+      if (v.om != null) {
+        let t, m;
+        if (v.om < 2) { t = ['bad', 'Baja']; m = 'Poca materia orgánica significa mala estructura y menos capacidad de retener agua y nutrientes.'; if (!native) todo.push(lawn ? 'Para el césped: airee con sacabocados y cubra con ¼ de pulgada de composta; repítalo cada año.' : 'Mezcle 1–2 pulgadas de composta en las primeras 6–8 pulgadas de las camas. La <a href="materials-calculator.html?m=compost">calculadora de materiales</a> le da la cantidad.'); }
+        else if (v.om < 5) { t = ['good', 'Moderada']; m = veg ? 'Razonable; las camas de hortalizas funcionan mejor con más o menos 5% o más.' : 'Está bien para césped y plantas de ornato.'; if (veg) todo.push('Agregue más o menos 1 pulgada de composta a las camas de hortalizas cada año.'); else skip.push('Composta o tierra para mejorar el suelo: la materia orgánica ya es suficiente.'); }
+        else { t = ['good', 'Alta']; m = 'Bastante materia orgánica.'; skip.push('Composta, turba o "acondicionador de suelo": ya tiene bastante materia orgánica.'); }
+        if (native && v.om >= 2) skip.push('Enmiendas para plantas nativas: por lo general les va mejor sin suelo rico.');
+        rows.push(['Materia orgánica', HM.fmt(v.om, 1) + '%', t, m]);
+      }
+      if (v.ec != null) {
+        const e = v.ecm === 'paste' ? v.ec : v.ec * 2; // 1:1 roughly half of paste
+        let t, m;
+        if (e < 2) { t = ['good', 'Bajas']; m = 'Las sales no son un problema.'; }
+        else if (e < 4) { t = ['warn', 'Ligeras']; m = 'Las plantas sensibles (frijol, fresas, rosas, algunos pastos) pueden batallar.'; todo.push('Evite plantas sensibles a la sal, use poco estiércol y fertilizante (los dos agregan sales), y riegue a fondo de vez en cuando para lavar las sales hacia abajo.'); }
+        else if (e < 8) { t = ['bad', 'Moderadas']; m = 'Muchas plantas de jardín se quedarán chicas.'; todo.push('Lave las sales con riegos profundos y lentos si el drenaje lo permite; escoja plantas tolerantes a la sal; deje de usar estiércol y composta salada.'); }
+        else { t = ['bad', 'Altas']; m = 'La mayoría de las plantas de jardín no prosperarán.'; todo.push('Las sales altas normalmente requieren mejorar el drenaje y lavar mucho, o camas elevadas con tierra traída de fuera. Revise si el sodio también está alto.'); }
+        rows.push(['Sales', HM.fmt(v.ec, 2) + (v.ecm === 'paste' ? ' (ECe)' : ` (≈ ${HM.fmt(e, 1)} ECe)`), t, m]);
+      }
+      if (v.p != null) {
+        const b = band(v.p, PT[v.pm]);
+        const m = ['Bajo: a las plantas les puede servir el fósforo.', veg ? 'Medio: suficiente para la mayoría de los cultivos; las hortalizas pueden responder a un poco.' : 'Medio: suficiente para césped y plantas de ornato.', 'Alto: no hace falta fósforo.', 'Muy alto: no hace falta fósforo; el exceso se va a los ríos y arroyos.'][b];
+        if (b === 0) todo.push('Aplique fósforo (el número de en medio en la bolsa) en la dosis que sugiere su laboratorio.');
+        if (b >= 2 || (b === 1 && !veg)) skip.push('Fertilizante con fósforo, harina de hueso o fertilizante "iniciador": el fósforo ya es suficiente. Escoja un producto con 0 en el número de en medio.');
+        rows.push(['Fósforo', HM.fmt(v.p, 1) + ' ppm', TAG[b], m]);
+      }
+      if (v.k != null) {
+        const b = band(v.k, KT[v.km]);
+        const m = ['Bajo: a las plantas les puede servir el potasio.', veg ? 'Medio: suficiente para la mayoría; las hortalizas pueden responder.' : 'Medio: suficiente para césped y plantas de ornato.', 'Alto: no hace falta potasio.', 'Muy alto: no hace falta potasio.'][b];
+        if (b === 0) todo.push('Aplique potasio (el último número en la bolsa) en la dosis que sugiere su laboratorio.');
+        if (b >= 2 || (b === 1 && !veg)) skip.push('Potasa o fertilizantes "de invierno" que se venden por su potasio: ya tiene suficiente.');
+        rows.push(['Potasio', HM.fmt(v.k, 0) + ' ppm', TAG[b], m]);
+      }
+      if (v.no3 != null) {
+        let t = v.no3 < 10 ? ['warn', 'Bajo'] : v.no3 <= 30 ? ['good', 'Suficiente'] : ['warn', 'Alto'];
+        rows.push(['Nitrógeno de nitrato', HM.fmt(v.no3, 1) + ' ppm', t, 'El nitrato cambia de una semana a otra, así que tómelo como una foto del momento. ' + (v.no3 > 30 ? 'Alto: no aplique nitrógeno por ahora.' : lawn ? 'El césped se alimenta con un programa regular de nitrógeno de todos modos.' : 'Los valores bajos son normales antes de la temporada de crecimiento.')]);
+        if (v.no3 > 30) skip.push('Fertilizante con nitrógeno por ahora: hay bastante en el suelo.');
+      }
+      if (!rows.length) return U.empty('Escriba por lo menos un resultado de su reporte.');
+      let h = `<table class="tt"><thead><tr><th>Prueba</th><th>Resultado</th><th>Qué significa</th></tr></thead><tbody>` +
+        rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}<br><span class="tag ${r[2][0]}">${r[2][1]}</span></td><td>${r[3]}</td></tr>`).join('') + '</tbody></table>';
+      h += `<h3>Qué hacer</h3>` + (todo.length ? `<ul class="plain">${todo.map(x => `<li>${x}</li>`).join('')}</ul>` : U.note('Según estos resultados, no hay nada que corregir.', 'good'));
+      if (skip.length) h += `<h3>Lo que no necesita comprar</h3><ul class="plain">${skip.map(x => `<li>${x}</li>`).join('')}</ul>`;
+      h += U.note('Los rangos varían entre laboratorios y cultivos. Si su reporte da sus propias categorías o recomendaciones, esas tienen prioridad.');
+      return { html: h, work: [
+        v.p != null ? `Rangos de fósforo para ${PT[v.pm][3]}: bajo por debajo de ${PT[v.pm][0]}, medio hasta ${PT[v.pm][1]}, alto hasta ${PT[v.pm][2]}, muy alto por encima (ppm)` : null,
+        v.k != null ? `Rangos de potasio para ${KT[v.km][3]}: bajo por debajo de ${KT[v.km][0]}, medio hasta ${KT[v.km][1]}, alto hasta ${KT[v.km][2]}, muy alto por encima (ppm)` : null,
+        v.ec != null ? 'Rangos de sales (pasta saturada, dS/m): menos de 2 bajas, 2–4 ligeras, 4–8 moderadas, más de 8 altas. Un extracto 1:1 da más o menos la mitad del valor de la pasta, así que se duplica para comparar.' : null,
+        v.ph != null ? 'Rangos de pH: menos de 5.5 muy ácido, 5.5–6.0 moderadamente ácido, 6.0–7.5 bueno, 7.5–8.4 alcalino, más de 8.4 muy alcalino' : null
+      ].filter(Boolean) };
+    }
+  });
+})();
+</script>
+```
+
+## Cómo hacer un análisis de suelo
+
+La mayoría de los servicios de extensión de las universidades estatales hacen análisis de suelo para jardineros caseros a bajo costo, igual que muchos laboratorios privados. Pida un análisis **de rutina** o **para jardín**: normalmente incluye pH, materia orgánica, sales, fósforo, potasio y muchas veces nitrato.
+
+- **Tome bien la muestra.** Saque de 10 a 15 pequeñas muestras de toda el área, de 0 a 6 pulgadas de profundidad en jardines y de 0 a 4 pulgadas en el césped, mézclelas en una cubeta limpia y mande unas dos tazas.
+- **Muestree cada área por separado.** Una cama de hortalizas, un césped y una orilla de arbustos son suelos distintos con necesidades distintas.
+- **Cada 3 o 4 años es suficiente** para la mayoría de los jardines, a menos que esté corrigiendo un problema.
+
+Un análisis de suelo es la forma más barata de no comprar fertilizante, composta o cal que no necesita.

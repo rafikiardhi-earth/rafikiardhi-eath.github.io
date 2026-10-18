@@ -1,0 +1,73 @@
+---
+title: "Calculadora de mezcla para composta (verdes y cafés)"
+description: "Equilibre su composta: estime la relación carbono-nitrógeno y la humedad de sus materiales verdes y cafés, y qué agregar para arreglar una composta que huele mal o va lenta."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/compost-mix.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/compost-mix.html">'
+---
+
+::: {.hm-lang}
+[English](../compost-mix.qmd){lang="en"}
+:::
+
+Una composta trabaja más rápido con una relación carbono-nitrógeno (C:N) de unos 25–35 y una humedad como la de una esponja exprimida. Con demasiado nitrógeno (verdes) huele mal; con demasiado carbono (cafés) casi no se calienta. Escriba lo que está agregando, por cubetas o cualquier medida igual.
+
+```{=html}
+<div class="hmc" id="cm"></div>
+<script>
+(function () {
+  // [name, N % of dry weight, C:N, moisture %, lb per cubic yard as collected]
+  const M = {
+    none: ['—', 0, 0, 0, 0],
+    grass: ['Pasto recién cortado', 2.4, 17, 82, 400], food: ['Restos de cocina', 2.5, 15, 80, 900], coffee: ['Café molido usado', 2.1, 20, 60, 800],
+    green: ['Plantas y hierbas del jardín (verdes)', 2.0, 25, 70, 500], horse: ['Estiércol de caballo con cama', 1.6, 30, 72, 1100], chicken: ['Gallinaza (estiércol de gallina)', 3.0, 10, 70, 1200],
+    leaves: ['Hojas secas', 0.9, 54, 38, 200], straw: ['Paja', 0.7, 80, 12, 80], chips: ['Astillas de madera', 0.1, 500, 40, 450],
+    sawdust: ['Aserrín (sin tratar)', 0.1, 450, 30, 400], card: ['Cartón (triturado)', 0.1, 560, 8, 250], paper: ['Periódico (triturado)', 0.1, 500, 5, 150]
+  };
+  const opts = Object.entries(M).map(([k, m]) => [k, m[0]]);
+  const rows = [['grass', 2], ['leaves', 3], ['none', 0], ['none', 0], ['none', 0]];
+  const inputs = [];
+  rows.forEach((r, i) => { inputs.push({ k: 'm' + i, l: i === 0 ? 'Material' : '', t: 'select', d: r[0], opts, w: 3 }, { k: 'q' + i, l: i === 0 ? 'Partes (cubetas)' : '', t: 'num', d: r[1] || null, w: 3 }); });
+  HM.tool({
+    id: 'cm', step: 'Lo que lleva', units: false, inputs,
+    compute(v, U) {
+      let C = 0, N = 0, W = 0, wet = 0, list = [];
+      for (let i = 0; i < 5; i++) {
+        const m = M[v['m' + i]], q = v['q' + i];
+        if (!m || !m[4] || !(q > 0)) continue;
+        const mass = q * m[4], dry = mass * (1 - m[3] / 100), n = dry * m[1] / 100;
+        N += n; C += n * m[2]; W += mass * m[3] / 100; wet += mass;
+        list.push(`${HM.fmt(q, 1)} parte${q === 1 ? '' : 's'} de ${m[0].toLowerCase()}: C:N ${m[2]}, ${m[3]}% de humedad`);
+      }
+      if (!(N > 0)) return U.empty('Agregue por lo menos un material y cuánto lleva.');
+      const cn = C / N, moist = W / wet * 100;
+      let tag, msg;
+      if (cn < 20) { tag = ['bad', 'Demasiado verde']; msg = 'Demasiado nitrógeno: la composta olerá a amoníaco y se aplastará. Agregue cafés (hojas, paja, cartón triturado).'; }
+      else if (cn < 25) { tag = ['warn', 'Un poco verde']; msg = 'Casi. Unos cuantos cafés más reducirían el olor y la pérdida de nitrógeno.'; }
+      else if (cn <= 35) { tag = ['good', 'Equilibrada']; msg = 'Una buena mezcla: debería calentarse en unos días si está húmeda y es lo bastante grande (más o menos 3 pies o 1 m por lado).'; }
+      else if (cn <= 50) { tag = ['warn', 'Un poco café']; msg = 'Sí se compostará, pero despacio. Agregue algunos verdes (pasto cortado, restos de cocina, estiércol).'; }
+      else { tag = ['bad', 'Demasiado café']; msg = 'Demasiado carbono: la composta se quedará fría y tardará un año o más. Agregue verdes.'; }
+      const mt = moist < 40 ? ['warn', 'Seca: agregue agua mientras la arma'] : moist <= 65 ? ['good', 'Más o menos bien'] : ['warn', 'Mojada: agregue cafés secos y voltéela'];
+      return {
+        html: U.big('Relación C:N', `${HM.fmt(cn, 0)} : 1`, '') + `<p><span class="tag ${tag[0]}">${tag[1]}</span></p><p class="sub">${msg}</p>` +
+          U.kv([['Humedad estimada', `${HM.fmt(moist, 0)}% <span class="tag ${mt[0]}">${mt[1]}</span>`]]) +
+          U.note('Son valores típicos: los materiales reales varían mucho. Haga también la prueba de apretar: un puño debe sentirse como una esponja exprimida, con una o dos gotas de agua.', 'good'),
+        work: list.concat([`Peso seco de cada material = partes × peso típico × (1 − humedad); nitrógeno = peso seco × N%; carbono = nitrógeno × su C:N`, `C:N de la mezcla = carbono total ÷ nitrógeno total = ${HM.fmt(cn, 1)}`, `Humedad = agua total ÷ peso total = ${HM.fmt(moist, 0)}%`])
+      };
+    }
+  });
+})();
+</script>
+```
+
+## Verdes y cafés
+
+- **Verdes** (ricos en nitrógeno, normalmente mojados): pasto cortado, restos de cocina, café molido usado, plantas frescas del jardín, estiércol.
+- **Cafés** (ricos en carbono, normalmente secos): hojas secas, paja, astillas de madera, aserrín, cartón, periódico.
+
+Tome en cuenta que las "partes" son por volumen, y que los materiales pesan muy distinto: una cubeta de pasto cortado pesa varias veces lo que una cubeta de hojas secas. Por eso más o menos 2–3 cubetas de cafés por 1 de verdes muchas veces queda equilibrado.
+
+**No ponga:** carne, lácteos ni comida grasosa (atraen plagas), excremento de mascotas o humano, plantas enfermas, hierbas con semillas (a menos que su composta se caliente bien) ni nada tratado con herbicida. Algunos herbicidas sobreviven al compostaje y dañan las hortalizas.

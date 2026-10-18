@@ -1,0 +1,77 @@
+---
+title: "Calculadora de jardín de lluvia y pozo seco"
+description: "¿De qué tamaño debe ser un jardín de lluvia o un pozo seco para su techo o su entrada de autos? Calcúlelo según el área que desagua, la lluvia y qué tan rápido drena su suelo."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/rain-garden.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/rain-garden.html">'
+---
+
+::: {.hm-lang}
+[English](../rain-garden.qmd){lang="en"}
+:::
+
+Un jardín de lluvia es una hondonada poco profunda con plantas que recibe el agua que escurre de un techo o de una entrada de autos y deja que se absorba. Un pozo seco hace lo mismo bajo tierra, en un hoyo lleno de grava. Los dos dependen de qué tan rápido drena su suelo, así que primero haga una [prueba de drenaje](diy-soil-tests.qmd).
+
+```{=html}
+<div class="hmc" id="rg"></div>
+<script>
+(function () {
+  const qir = +new URLSearchParams(location.search).get('ir') || null; // mm/hr from the perc test
+  const COEF = { roof: 0.95, pave: 0.9, gravel: 0.5, lawn: 0.25 };
+  const SURF = { roof: 'un techo', pave: 'una superficie pavimentada', gravel: 'grava', lawn: 'césped' };
+  HM.tool({
+    id: 'rg', step: 'De dónde viene el agua',
+    inputs: [
+      { k: 'area', l: 'Área que desagua hacia él', t: 'area', h: 'Para un techo, la superficie vista desde arriba (en planta) de la parte que desagua en esta bajante.' },
+      { k: 'surf', l: 'Superficie', t: 'select', d: 'roof', opts: [['roof', 'Techo'], ['pave', 'Entrada de autos, patio o pavimento'], ['gravel', 'Grava'], ['lawn', 'Césped']] },
+      { k: 'storm', l: 'Tormenta a captar', t: 'wdep', d: { us: 1, si: 25 }, h: 'Una pulgada (25 mm) capta la mayoría de las tormentas en muchas regiones. La autoridad de aguas pluviales de su zona puede dar un valor de diseño.' },
+      { t: 'sec', l: 'Su suelo y el diseño' },
+      { k: 'ir', l: 'Velocidad de drenaje (de su prueba)', t: 'rate', d: u => qir ? (u === 'us' ? qir / 25.4 : qir) : (u === 'us' ? 0.5 : 13) },
+      { k: 'type', l: 'Tipo', t: 'seg', d: 'garden', opts: [['garden', 'Jardín de lluvia'], ['well', 'Pozo seco (hoyo con grava)']] },
+      { k: 'pond', l: 'Profundidad de encharcamiento', t: 'dep', d: { us: 6, si: 15 }, show: v => v.type === 'garden', h: 'Qué tan hondo puede quedar el agua antes de desbordarse. Lo típico es 4–8 pulgadas (10–20 cm).' },
+      { k: 'wdep', l: 'Profundidad de la grava', t: 'len', d: { us: 3, si: 1 }, show: v => v.type === 'well' }
+    ],
+    compute(v, U) {
+      if (!(v.area > 0) || !(v.storm > 0)) return U.empty('Escriba el área que desagua y el tamaño de la tormenta.');
+      const c = COEF[v.surf], V = v.area * (v.storm / 1000) * c; // m³
+      const gal = V * 264.172;
+      const work = [`Escurrimiento = ${U.f(v.area, 'area', 0)} × ${U.f(v.storm, 'wdep', 2)} × ${c} (parte que escurre de ${SURF[v.surf]}) = ${U.f(V, 'vol', 2)} (${U.us ? HM.fmt(gal, 0) + ' gal' : HM.fmt(V * 1000, 0) + ' L'})`];
+      let h = '';
+      if (!(v.ir > 0)) return U.empty('Escriba la velocidad de drenaje.');
+      if (v.type === 'garden') {
+        if (!(v.pond > 0)) return U.empty('Escriba la profundidad de encharcamiento.');
+        const A = V / v.pond, hrs = (v.pond * 1000) / v.ir;
+        h = U.big('Área del jardín de lluvia', U.f(A, 'area', 0), `${HM.fmt(A / v.area * 100, 0)}% del área que desagua hacia él, con agua de hasta ${U.f(v.pond, 'dep', 0)} de profundidad.`);
+        h += U.kv([['Escurrimiento a retener', U.us ? `${HM.fmt(gal, 0)} gal` : `${HM.fmt(V * 1000, 0)} L`], ['Tiempo para drenar', `${HM.fmt(hrs, 0)} horas`], ['Por ejemplo', U.us ? `${HM.fmt(Math.sqrt(A / 0.0929 / 2), 0)} × ${HM.fmt(Math.sqrt(A / 0.0929 * 2), 0)} pies` : `${HM.fmt(Math.sqrt(A / 2), 1)} × ${HM.fmt(Math.sqrt(A * 2), 1)} m`]]);
+        work.push(`Área = ${U.f(V, 'vol', 2)} ÷ ${U.f(v.pond, 'dep', 0)} = ${U.f(A, 'area', 0)}`, `Tiempo para drenar = ${U.f(v.pond, 'dep', 0)} ÷ ${U.f(v.ir, 'rate', 2)} = ${HM.fmt(hrs, 1)} horas`);
+        if (hrs > 48) h += U.note('El agua se quedaría más de dos días: las plantas sufren y se pueden criar mosquitos. Hágalo menos hondo y más grande, agregue un dren por debajo, o escoja otro lugar.', 'bad');
+        else if (hrs > 24) h += U.note('Drena en 1–2 días: aceptable, pero en el fondo ponga plantas que toleren raíces mojadas.');
+        else h += U.note('Drena en un día: bien.', 'good');
+      } else {
+        if (!(v.wdep > 0)) return U.empty('Escriba la profundidad de la grava.');
+        const Vg = V / 0.35, foot = Vg / v.wdep, hrs = (v.wdep * 1000) / v.ir;
+        h = U.big('Volumen de grava', U.f(Vg, 'vol', 2), `Un hoyo de unos ${U.f(foot, 'area', 0)} de área y ${U.f(v.wdep, 'len', 1)} de profundidad, lleno de piedra limpia y lavada.`);
+        h += U.kv([['Escurrimiento a retener', U.us ? `${HM.fmt(gal, 0)} gal` : `${HM.fmt(V * 1000, 0)} L`], ['Peso de la grava (aprox.)', U.f(Vg * 1.6, 'ton', 1)], ['Tiempo para vaciarse por el fondo', `${HM.fmt(hrs, 0)} horas`]]);
+        work.push(`La grava retiene agua en más o menos el 35% de su volumen: ${U.f(V, 'vol', 2)} ÷ 0.35 = ${U.f(Vg, 'vol', 2)}`, `Superficie = ${U.f(Vg, 'vol', 2)} ÷ ${U.f(v.wdep, 'len', 1)} = ${U.f(foot, 'area', 0)}`, `Tiempo para vaciarse (solo por el fondo, conservador) = ${U.f(v.wdep, 'len', 1)} ÷ ${U.f(v.ir, 'rate', 2)} = ${HM.fmt(hrs, 0)} horas`);
+        if (hrs > 72) h += U.note('Este suelo drena demasiado despacio para que un pozo seco se vacíe entre tormentas. Es mejor un diseño menos hondo y más ancho, o un jardín de lluvia con dren por debajo.', 'bad');
+        h += U.note('Forre los lados y la parte de arriba con tela de jardinería (geotextil) para que la tierra no se meta en la grava, y deje una salida para el desborde en tormentas grandes.');
+      }
+      if (v.ir < 0.5 * 25.4) h += U.note('Su suelo drena despacio (menos de ½ pulgada por hora). La infiltración será limitada; ayuda un dren por debajo o una cuenca más grande y menos honda.');
+      h += U.note('Manténgalo por lo menos a 10 pies (3 m) de los cimientos, lejos de fosas sépticas y pozos de agua, y llame al servicio de localización de líneas de servicios (811 en EE. UU.) antes de excavar.', 'good');
+      return { html: h, work };
+    }
+  });
+})();
+</script>
+```
+
+## Cómo hacer un jardín de lluvia
+
+- **Ubicación:** un lugar bajo, por lo menos a 10 pies de la casa, hacia donde ya va el agua, pero no donde se queda estancada por días.
+- **Forma:** más largo que ancho, atravesado a la pendiente, con el fondo a nivel para que el agua se reparta parejo.
+- **Entrada y desborde:** cubra la entrada con piedra para que no se erosione, y dele al desborde un camino seguro para tormentas más grandes que las del diseño.
+- **Plantas:** especies que toleren lo mojado en el fondo, y especies que aguanten la sequía en la orilla. Las plantas nativas de raíces profundas mantienen el suelo abierto.
+- **Suelo:** si su suelo drena mal, mezcle composta en el fondo, pero no haga una "tina" de tierra suelta dentro de arcilla densa. Para suelos muy lentos, la solución es un dren por debajo.

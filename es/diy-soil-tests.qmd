@@ -1,0 +1,155 @@
+---
+title: "Pruebas de suelo caseras: textura, drenaje y la prueba de la cinta"
+description: "Tres pruebas de suelo gratuitas que puede hacer en casa con un frasco, una pala y sus manos: conozca la textura de su suelo, qué tan rápido drena y qué significa para el riego y la siembra."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/diy-soil-tests.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/diy-soil-tests.html">'
+---
+
+::: {.hm-lang}
+[English](../diy-soil-tests.qmd){lang="en"}
+:::
+
+Tres pruebas sencillas le dicen casi todo lo importante de su suelo: de qué está hecho (la textura) y qué tan rápido pasa el agua (el drenaje). La textura decide cada cuánto regar, qué tan rápido entra el agua y cómo se comporta el suelo al excavar.
+
+## Prueba del frasco (textura)
+
+1. Llene un frasco de lados rectos más o menos a un tercio con tierra de la profundidad de las raíces (quite piedras, raíces y basura).
+2. Agregue agua hasta llenar unas dos terceras partes del frasco, más una cucharadita de detergente para lavavajillas o de suavizante de agua sin sal para separar las partículas.
+3. Agite fuerte durante 3–5 minutos, déjelo quieto y ponga un cronómetro.
+4. **Al minuto**, marque la altura de la capa asentada: esa es la arena.
+5. **A las 2 horas**, vuelva a marcar la altura: arena más limo.
+6. **A los 2 días** (cuando el agua se aclare), marque la altura final: todo, incluida la arcilla.
+
+```{=html}
+<div class="hmc" id="jar"></div>
+<script>
+function usdaTexture(S, Si, C) {
+  if (Si + 1.5 * C < 15) return 'sand';
+  if (Si + 2 * C < 30) return 'loamy sand';
+  if ((C >= 7 && C < 20 && S > 52) || (C < 7 && Si < 50)) return 'sandy loam';
+  if (C >= 7 && C < 27 && Si >= 28 && Si < 50 && S <= 52) return 'loam';
+  if (Si >= 80 && C < 12) return 'silt';
+  if ((Si >= 50 && C >= 12 && C < 27) || (Si >= 50 && Si < 80 && C < 12)) return 'silt loam';
+  if (C >= 20 && C < 35 && Si < 28 && S > 45) return 'sandy clay loam';
+  if (C >= 27 && C < 40 && S > 20 && S <= 45) return 'clay loam';
+  if (C >= 27 && C < 40 && S <= 20) return 'silty clay loam';
+  if (C >= 35 && S > 45) return 'sandy clay';
+  if (C >= 40 && Si >= 40) return 'silty clay';
+  return 'clay';
+}
+const TEXNAME = {
+  'sand': 'Arena', 'loamy sand': 'Arena franca', 'sandy loam': 'Franco arenoso', 'loam': 'Franco', 'silt loam': 'Franco limoso', 'silt': 'Limo',
+  'sandy clay loam': 'Franco arcillo-arenoso', 'clay loam': 'Franco arcilloso', 'silty clay loam': 'Franco arcillo-limoso', 'sandy clay': 'Arcilla arenosa',
+  'silty clay': 'Arcilla limosa', 'clay': 'Arcilla'
+};
+const TEXMEAN = {
+  'sand': 'Drena rápido y retiene poca agua y pocos nutrientes. Riegue seguido en cantidades pequeñas; la composta le ayuda a retener más.',
+  'loamy sand': 'Drena rápido y se seca pronto. Riegue más seguido en cantidades más pequeñas; la composta ayuda.',
+  'sandy loam': 'Fácil de trabajar y drena bien, con retención de agua moderada. Bueno para la mayoría de las plantas.',
+  'loam': 'Un buen equilibrio: retiene agua y nutrientes pero drena libremente. Le va bien a la mayoría de las plantas.',
+  'silt loam': 'Retiene bastante agua y es fértil, pero forma costra y se compacta fácilmente. No lo trabaje mojado; cubra la superficie con mantillo.',
+  'silt': 'Retiene bien el agua pero forma costra y se compacta fácilmente. Manténgalo cubierto y no lo trabaje mojado.',
+  'sandy clay loam': 'Retiene agua y nutrientes; puede ponerse firme cuando está seco. Absorbe el agua de forma moderadamente lenta.',
+  'clay loam': 'Retiene bien el agua y los nutrientes pero absorbe el agua despacio y se compacta fácilmente. Riegue en ciclos cortos; no lo excave mojado.',
+  'silty clay loam': 'Retiene mucha agua y la absorbe despacio. Tiende a compactarse y a formar costra.',
+  'sandy clay': 'Pegajoso mojado, duro seco; absorbe el agua despacio.',
+  'silty clay': 'Retiene mucha agua pero la absorbe muy despacio. Riegue en ciclos cortos; el drenaje puede ser malo.',
+  'clay': 'Retiene mucha agua y nutrientes pero absorbe el agua muy despacio, se compacta fácilmente y se queda mojado. Riegue en ciclos cortos, no lo excave mojado, y no le agregue un poco de arena (lo hace más denso).'
+};
+(function () {
+  HM.tool({
+    id: 'jar', step: 'Sus marcas', units: false,
+    inputs: [
+      { k: 'a', l: 'Altura al minuto (arena)', t: 'num', w: 2 },
+      { k: 'b', l: 'A las 2 horas (arena + limo)', t: 'num', w: 2 },
+      { k: 'c', l: 'A los 2 días (total)', t: 'num', w: 2 },
+      { t: 'info', h: 'Puede usar cualquier unidad (pulgadas, cm o mm), siempre que las tres estén en la misma.' }
+    ],
+    compute(v, U) {
+      if (!(v.a >= 0) || !(v.b > 0) || !(v.c > 0)) return U.empty('Escriba las tres alturas.');
+      if (!(v.a <= v.b && v.b <= v.c)) return U.empty('Cada marca debe estar igual o más arriba que la anterior: 1 minuto ≤ 2 horas ≤ 2 días.');
+      const S = v.a / v.c * 100, Si = (v.b - v.a) / v.c * 100, C = 100 - S - Si;
+      const t = usdaTexture(S, Si, C);
+      return {
+        html: U.big('Su suelo es', TEXNAME[t], TEXMEAN[t]) + U.kv([['Arena', HM.fmt(S, 0) + '%'], ['Limo', HM.fmt(Si, 0) + '%'], ['Arcilla', HM.fmt(C, 0) + '%']]) +
+          U.note('La prueba del frasco es aproximada: las capas asentadas se acomodan distinto a las proporciones reales de las partículas. Si el resultado le sorprende, compárelo con la prueba de la cinta de abajo.') +
+          U.note('Siguiente paso: use su textura en el <a href="cycle-and-soak.html">programador de ciclos y remojo</a> para ajustar los tiempos de los aspersores.', 'good'),
+        work: [`Arena = ${HM.fmt(v.a, 2)} ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(S, 1)}%`, `Limo = (${HM.fmt(v.b, 2)} − ${HM.fmt(v.a, 2)}) ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(Si, 1)}%`, `Arcilla = 100 − arena − limo = ${HM.fmt(C, 1)}%`, `Clase textural según el triángulo de texturas del USDA: ${TEXNAME[t].toLowerCase()}`]
+      };
+    }
+  });
+})();
+</script>
+```
+
+## Prueba de la cinta (textura al tacto)
+
+Tome un puño de tierra del tamaño de una nuez, mójelo hasta que quede como masilla y trabájelo en la mano. Luego apriételo entre el pulgar y el índice, empujándolo hacia arriba para formar una cinta hasta que se rompa por su propio peso.
+
+```{=html}
+<div class="hmc" id="rib"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'rib', step: 'Lo que siente', units: false, hash: false,
+    inputs: [
+      { k: 'ball', l: '¿La tierra húmeda se mantiene unida en una bola?', t: 'seg', d: 'yes', opts: [['no', 'No, se desmorona'], ['yes', 'Sí']] },
+      { k: 'rib', l: '¿Qué tan larga es la cinta antes de romperse?', t: 'seg', d: 'short', opts: [['none', 'No forma cinta'], ['short', 'Menos de 1 pulgada (2.5 cm)'], ['mid', '1–2 pulgadas (2.5–5 cm)'], ['long', 'Más de 2 pulgadas (5 cm)']], show: v => v.ball === 'yes' },
+      { k: 'feel', l: 'Frote un poco en la palma con agua. Se siente…', t: 'seg', d: 'neither', opts: [['gritty', 'Rasposa'], ['smooth', 'Suave, como harina'], ['neither', 'Ninguna de las dos']], show: v => v.ball === 'yes' && v.rib !== 'none' }
+    ],
+    compute(v, U) {
+      let t;
+      if (v.ball === 'no') t = 'sand';
+      else if (v.rib === 'none') t = 'loamy sand';
+      else {
+        const M = { short: { gritty: 'sandy loam', smooth: 'silt loam', neither: 'loam' }, mid: { gritty: 'sandy clay loam', smooth: 'silty clay loam', neither: 'clay loam' }, long: { gritty: 'sandy clay', smooth: 'silty clay', neither: 'clay' } };
+        t = M[v.rib][v.feel];
+      }
+      return U.big('Su suelo probablemente es', TEXNAME[t], TEXMEAN[t]);
+    }
+  });
+})();
+</script>
+```
+
+## Prueba de drenaje (percolación)
+
+1. Excave un hoyo de unas 12 pulgadas (30 cm) de profundidad y 6–12 pulgadas de ancho.
+2. Llénelo de agua y deje que drene por completo. Esto moja el suelo alrededor; si se lo salta, el resultado saldrá demasiado rápido.
+3. Llénelo otra vez. Mida la profundidad del agua, espere un tiempo fijo (una hora es fácil) y vuelva a medir.
+
+```{=html}
+<div class="hmc" id="perc"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'perc', step: 'Su resultado', hash: false,
+    inputs: [
+      { k: 'drop', l: 'Cuánto bajó el nivel del agua', t: 'wdep', w: 3 },
+      { k: 'min', l: 'En cuántos minutos', t: 'min', d: 60, w: 3 }
+    ],
+    compute(v, U) {
+      if (!(v.drop >= 0) || !(v.min > 0)) return U.empty('Escriba cuánto bajó y el tiempo.');
+      const r = v.drop / (v.min / 60), inhr = r / 25.4;
+      let g, m;
+      if (inhr > 4) { g = ['warn', 'Muy rápido']; m = 'El agua se va rápido y se lleva los nutrientes. Las plantas se secan pronto: ponga mantillo, agregue composta y riegue poco y seguido.'; }
+      else if (inhr >= 1) { g = ['good', 'Bueno']; m = 'Drena bien. Le va bien a la mayoría de las plantas, y es bueno para un jardín de lluvia.'; }
+      else if (inhr >= 0.5) { g = ['good', 'Moderado']; m = 'Suficiente para la mayoría de las plantas. Un jardín de lluvia funcionará si se hace con un tamaño generoso.'; }
+      else if (inhr >= 0.1) { g = ['warn', 'Lento']; m = 'Mal drenaje: las raíces de muchas plantas sufren después de una lluvia fuerte. Escoja plantas que toleren suelo mojado, plante un poco alto y no riegue de más. Un jardín de lluvia necesitaría un dren por debajo.'; }
+      else { g = ['bad', 'Muy lento']; m = 'El agua casi no se mueve. Busque una capa compactada o dura abajo; las enmiendas no lo van a arreglar. Puede que se necesiten camas elevadas, nivelar el terreno o drenaje.'; }
+      return {
+        html: U.big('Drena a', U.f(r, 'rate', 2), '') + `<p><span class="tag ${g[0]}">${g[1]}</span></p><p class="sub">${m}</p>` +
+          U.note(`¿Va a hacer un jardín de lluvia? Use esta velocidad en la <a href="rain-garden.html?ir=${HM.fmt(r, 2)}">calculadora de jardín de lluvia</a>.`, 'good'),
+        work: [`Velocidad = ${U.f(v.drop, 'wdep', 2)} ÷ ${HM.fmt(v.min / 60, 2)} h = ${U.f(r, 'rate', 2)}`, 'Rangos (pulgadas por hora): más de 4 muy rápido, 1–4 bueno, 0.5–1 moderado, 0.1–0.5 lento, menos de 0.1 muy lento']
+      };
+    }
+  });
+})();
+</script>
+```
+
+Si el hoyo todavía tiene agua al día siguiente, haga la prueba de nuevo en otro lugar y excave más hondo para buscar una capa densa o cementada. Los problemas de drenaje casi siempre se deben a una capa de abajo, no a la tierra donde siembra.

@@ -1,0 +1,61 @@
+---
+title: "Revisión del suelo en casas nuevas"
+description: "¿Las plantas batallan alrededor de una casa nueva? Revise si el constructor dejó una capa delgada de tierra sobre subsuelo compactado, qué hacer al respecto y qué preguntarle al constructor."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/construction-soil-check.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/construction-soil-check.html">'
+---
+
+::: {.hm-lang}
+[English](../construction-soil-check.qmd){lang="en"}
+:::
+
+En muchos lotes de casas nuevas, la tierra vegetal se raspa durante la construcción, el subsuelo queda compactado por la maquinaria pesada, y se esparce una capa delgada de tierra encima antes de poner el pasto en rollo. Después el césped y las plantas batallan durante años. Unas cuantas revisiones sencillas muestran si eso fue lo que pasó.
+
+**Necesita:** una pala, un desarmador largo, y el suelo húmedo (no encharcado), uno o dos días después de una lluvia o un riego.
+
+```{=html}
+<div class="hmc" id="cn"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'cn', step: 'Lo que encuentra', units: false,
+    inputs: [
+      { k: 'top', l: 'Excave un hoyo de 12 pulgadas (30 cm). ¿Qué tan profunda es la tierra oscura y suelta antes de cambiar a un subsuelo más claro y denso?', t: 'select', d: 'unk', opts: [['unk', 'No lo he revisado'], ['0', 'Menos de 2 pulgadas (5 cm)'], ['2', '2–4 pulgadas (5–10 cm)'], ['4', '4–6 pulgadas (10–15 cm)'], ['6', 'Más de 6 pulgadas (15 cm)']] },
+      { k: 'sd', l: 'Meta un desarmador derecho en el suelo húmedo. El desarmador…', t: 'select', d: 'unk', opts: [['unk', 'No lo he revisado'], ['easy', 'Entra fácilmente hasta el mango'], ['hard', 'Se detiene o se pone muy duro después de 2–4 pulgadas'], ['no', 'Casi no entra']] },
+      { k: 'pud', l: 'El agua se queda en el césped o en las camas más de un día después de llover', t: 'check', d: false },
+      { k: 'deb', l: 'Encontró escombro de construcción en el suelo (concreto, tablaroca, alambre, pedazos de madera, grava)', t: 'check', d: false },
+      { k: 'roots', l: 'Las raíces del pasto en rollo no pasan de la capa original del rollo, y el pasto se levanta como alfombra', t: 'check', d: false },
+      { k: 'grade', l: 'El terreno cerca de la casa está plano o baja hacia la casa', t: 'check', d: false },
+      { k: 'warr', l: 'La casa todavía tiene la garantía del constructor', t: 'check', d: false }
+    ],
+    compute(v, U) {
+      const find = [], fix = [], ask = [];
+      let score = 0;
+      if (v.top === '0' || v.top === '2') { score += 2; find.push(`Capa delgada de tierra vegetal (${v.top === '0' ? 'menos de 2 pulgadas' : '2–4 pulgadas'}). El césped y las camas funcionan mejor con por lo menos 4–6 pulgadas de tierra suelta sobre un subsuelo donde puedan entrar las raíces.`); fix.push('Para camas: afloje el subsuelo 8–12 pulgadas y mezcle composta (más o menos 1–2 pulgadas) antes de plantar. Para el césped, airee cada año y cubra con composta; si lo va a renovar, afloje el subsuelo y agregue tierra mezclada con él, no solo esparcida encima.'); ask.push('¿Cuánta tierra vegetal se especificó para el lote, y a qué profundidad se repuso?'); }
+      if (v.sd === 'hard' || v.sd === 'no') { score += 2; find.push('Suelo compactado. Las raíces y el agua no pueden pasar, así que las plantas se quedan con raíces superficiales y se secan o se ahogan.'); fix.push('Rompa la compactación antes de plantar: excavación profunda o una horquilla ancha (broadfork) para camas, y una cultivadora rentada o un subsolado para áreas grandes (con el suelo húmedo, no mojado). En céspedes que ya existen, airee con sacabocados una o dos veces al año.'); ask.push('¿Se aflojó el subsuelo (subsolado o cultivado) antes de poner la tierra y el pasto en rollo?'); }
+      if (v.roots) { score += 1; find.push('Las raíces del pasto no crecen hacia el suelo de abajo, señal de una capa que las raíces no cruzan (compactación, o pasto puesto sobre un suelo muy distinto).'); fix.push('Airee con sacabocados y riegue a fondo pero con menos frecuencia para que las raíces bajen.'); }
+      if (v.pud) { score += 2; find.push('Agua estancada. El subsuelo compactado funciona como un piso; el agua se queda encima.'); fix.push('Muchas veces se arregla aflojando la compactación. Si no, revise la pendiente y dónde descargan las bajantes; vea la <a href="rain-garden.html">calculadora de jardín de lluvia</a>.'); }
+      if (v.deb) { score += 1; find.push('Escombro de construcción. Los restos de lavado de concreto y la tablaroca pueden subir el pH y las sales; el escombro bloquea las raíces.'); fix.push('Quite el escombro donde vaya a plantar. Un <a href="soil-test-translator.html">análisis de suelo</a> mostrará si el pH o las sales están afectados.'); ask.push('¿Pueden quitar el escombro de construcción enterrado en el patio?'); }
+      if (v.grade) { score += 2; find.push('Mala pendiente cerca de la casa. Esto importa más que cualquier otra cosa de esta lista.'); fix.push('Revísela bien con la <a href="foundation-grading.html">revisión de la pendiente alrededor de los cimientos</a>.'); ask.push('¿La pendiente cumple con el plan de nivelación aprobado, y puedo ver el certificado de nivelación?'); }
+      const unk = v.top === 'unk' && v.sd === 'unk';
+      let h;
+      if (!find.length) h = U.big('Resultado', unk ? 'Haga las dos revisiones de arriba' : 'No se encontraron problemas importantes', unk ? 'La profundidad de la tierra y la prueba del desarmador le dicen casi todo lo que necesita.' : 'Su suelo se ve razonable. Los problemas de las plantas pueden ser por el riego, la elección de plantas o plagas.');
+      else h = U.big('Resultado', score >= 4 ? 'Daño típico de la construcción' : 'Algunos problemas', `Se encontr${find.length > 1 ? 'aron' : 'ó'} ${find.length} problema${find.length > 1 ? 's' : ''}.`) +
+        `<h3>Lo que encontró</h3><ul class="plain">${find.map(x => `<li>${x}</li>`).join('')}</ul><h3>Qué hacer</h3><ul class="plain">${fix.map(x => `<li>${x}</li>`).join('')}</ul>`;
+      if (ask.length) h += `<h3>${v.warr ? 'Pregúntele a su constructor (tiene garantía)' : 'Preguntas para su constructor'}</h3><ul class="plain">${ask.map(x => `<li>${x}</li>`).join('')}</ul>` + (v.warr ? U.note('Tome fotos con fecha de sus hoyos de prueba con una cinta métrica dentro, y haga sus preguntas por escrito.', 'good') : '');
+      return h;
+    }
+  });
+})();
+</script>
+```
+
+## Por qué importa
+
+La tierra vegetal es la capa donde las raíces, el agua y la vida del suelo hacen la mayor parte de su trabajo. El subsuelo compactado por camiones y niveladoras puede quedar tan denso como la base de un camino: las raíces no pueden entrar y el agua no puede drenar. El pasto en rollo puesto sobre una capa delgada encima se ve bien una temporada, y luego se adelgaza, se pone café en verano y se inunda después de las tormentas.
+
+Arreglarlo cuesta mucho menos antes de plantar que después, así que revíselo antes de invertir en jardinería.

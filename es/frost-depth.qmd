@@ -1,0 +1,135 @@
+---
+title: "Calculadora de profundidad de congelamiento"
+description: "Qué tan profundo se congela el suelo donde vive, según sus temperaturas de invierno, la superficie y su suelo: para tuberías de agua, cimientos, postes de cerca y levantamiento por heladas. Hecha para casas en la montaña y en climas fríos."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/frost-depth.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/frost-depth.html">'
+---
+
+::: {.hm-lang}
+[English](../frost-depth.qmd){lang="en"}
+:::
+
+En lugares fríos el suelo se puede congelar varios pies hacia abajo. Las tuberías de agua, los cimientos y los postes de cerca que quedan arriba de esa profundidad se pueden reventar, agrietar o ser empujados hacia arriba por las heladas. Esta herramienta estima qué tan hondo llega el congelamiento en un invierno promedio y en uno frío, según su clima, la superficie y su suelo.
+
+**Necesita dos números:** la temperatura promedio de su mes más frío y la de su mes más caluroso. Están en la tabla del clima de su ciudad (en Wikipedia o en su servicio meteorológico). En la montaña, use una estación a una altura parecida: la temperatura baja unos 3.5 °F por cada 1,000 pies (6.5 °C por cada 1,000 m) conforme sube.
+
+```{=html}
+<div class="hmc" id="fd"></div>
+<script>
+(function () {
+  // Seasonal frost depth: two-phase Neumann solution (the exact basis of the modified Berggren equation),
+  // with Kersten (1949) thermal conductivities and the US Army TM 5-852-6 heat capacity and latent heat relations.
+  const FROST = {
+    erfc(x) { // Numerical Recipes erfcc, fractional error < 1.2e-7
+      const z = Math.abs(x), t = 1 / (1 + 0.5 * z);
+      const r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+      return x >= 0 ? r : 2 - r;
+    },
+    // Soil thermal properties from dry density (kg/m3), gravimetric water content (%), and type ('coarse' = sand/gravel, 'fine' = silt/clay)
+    props(rhoD, w, type) {
+      const gd = rhoD / 16.0185, lw = Math.log10(Math.max(w, 0.1)); // lb/ft3
+      const kU = { coarse: (0.7 * lw + 0.4) * Math.pow(10, 0.01 * gd), fine: (0.9 * lw - 0.2) * Math.pow(10, 0.01 * gd) };
+      const kF = { coarse: 0.076 * Math.pow(10, 0.013 * gd) + 0.032 * Math.pow(10, 0.0146 * gd) * w, fine: 0.01 * Math.pow(10, 0.022 * gd) + 0.085 * Math.pow(10, 0.008 * gd) * w };
+      const pick = o => type === 'mixed' ? (o.coarse + o.fine) / 2 : o[type];
+      const BTUin = 0.144228; // 1 BTU·in/(ft²·h·°F) = 0.1442 W/(m·K)
+      const ku = Math.max(0.05, pick(kU)) * BTUin, kf = Math.max(0.05, pick(kF)) * BTUin;
+      const c = 0.17; // specific heat of soil solids, BTU/(lb·°F)
+      const C1 = 67066; // 1 BTU/(ft3·°F) in J/(m3·K)
+      const Cu = gd * (c + 1.0 * w / 100) * C1, Cf = gd * (c + 0.5 * w / 100) * C1;
+      const L = 144 * gd * w / 100 * 37259; // J/m3 (1 BTU/ft3 = 37 259 J/m3)
+      return { ku, kf, Cu, Cf, L };
+    },
+    // F: surface freezing index (°C·days), days: length of freezing season, v0: mean annual ground temperature above 0 °C
+    depth(p, F, days, v0) {
+      const t = days * 86400, dTs = F / days, kapf = p.kf / p.Cf, kapu = p.ku / p.Cu, r = Math.sqrt(kapf / kapu);
+      const Lw = Math.max(p.L, 1); // dry soil: latent heat ~0
+      const f = eta => p.kf * dTs * Math.exp(-eta * eta) / (Math.sqrt(Math.PI * kapf) * (1 - this.erfc(eta)))
+        - p.ku * Math.max(0, v0) * Math.exp(-r * r * eta * eta) / (Math.sqrt(Math.PI * kapu) * this.erfc(r * eta))
+        - Lw * eta * Math.sqrt(kapf);
+      let lo = 1e-6, hi = 20;
+      if (f(lo) <= 0) return { X: 0, Xs: 0, lam: NaN };
+      for (let i = 0; i < 200; i++) { const m = (lo + hi) / 2; if (f(m) > 0) lo = m; else hi = m; }
+      const eta = (lo + hi) / 2, X = 2 * eta * Math.sqrt(kapf * t);
+      const Xs = Math.sqrt(2 * p.kf * F * 86400 / Lw); // Stefan
+      return { X, Xs, lam: X / Xs, alpha: v0 / dTs, mu: dTs * ((p.Cf + p.Cu) / 2) / Lw };
+    },
+    // Annual sinusoid from coldest and warmest monthly means → freezing index, season length, mean
+    fromMonths(tc, tw) {
+      const m = (tc + tw) / 2, a = (tw - tc) / 2; let F = 0, d = 0;
+      for (let i = 0; i < 3650; i++) { const T = m - a * Math.cos(2 * Math.PI * (i + 0.5) / 3650); if (T < 0) { F -= T * 0.1; d += 0.1; } }
+      return { F, days: d, mean: m };
+    }
+  };
+  const SOILS = { gravel: ['coarse', 1750, 8, 'Arena o grava'], loam: ['mixed', 1500, 18, 'Franco o tierra de jardín'], clay: ['fine', 1400, 25, 'Arcilla o limo'], fill: ['coarse', 2000, 5, 'Relleno pedregoso o base de camino'] };
+  const SURF = { lawn: [0.5, 'césped'], bare: [0.7, 'suelo desnudo o una cama de jardín'], paved: [0.75, 'una entrada de autos, un camino o un patio sin nieve'], trees: [0.3, 'el suelo bajo los árboles'] };
+  let last = null; // previous temperatures, to convert when the unit changes
+  const inch = m => Math.round(m / 0.0254), cm = m => Math.round(m * 100);
+  HM.tool({
+    id: 'fd', step: 'Su invierno', units: false,
+    inputs: [
+      { k: 'tu', l: 'Temperaturas en', t: 'seg', d: { us: 'f', si: 'c' }, opts: [['f', '°F'], ['c', '°C']] },
+      { k: 'tc', l: 'Temperatura promedio del mes más frío', t: 'num', d: (u, v) => v.tu === 'c' ? -8 : 18, w: 3, h: 'Por ejemplo, enero en el hemisferio norte.' },
+      { k: 'tw', l: 'Temperatura promedio del mes más caluroso', t: 'num', d: (u, v) => v.tu === 'c' ? 16 : 61, w: 3 },
+      { k: 'surf', l: '¿Dónde va a excavar?', t: 'select', d: 'paved', opts: [['paved', 'Bajo una entrada de autos, un camino o un patio que se mantiene sin nieve'], ['bare', 'Suelo desnudo o una cama de jardín'], ['lawn', 'Bajo el césped'], ['trees', 'Bajo los árboles']], h: 'El pavimento al que se le quita la nieve con pala o máquina es el que se congela más hondo, porque no tiene nieve que lo aísle. Las tuberías de agua muchas veces se congelan primero bajo las entradas de autos.' },
+      { k: 'soil', l: 'Suelo', t: 'select', d: 'loam', opts: Object.entries(SOILS).map(([k, s]) => [k, s[3]]), h: '¿No está seguro? Las <a href="diy-soil-tests.html">pruebas de suelo caseras</a> le enseñan cómo saberlo.' },
+      { k: 'wet', l: '¿Qué tan húmedo está el suelo en invierno?', t: 'seg', d: 'normal', opts: [['dry', 'Seco'], ['normal', 'Normal'], ['wet', 'Húmedo']], h: 'El suelo húmedo se congela menos hondo, porque el agua suelta calor al congelarse. El suelo seco y grueso es el que se congela más hondo.' },
+      { k: 'snow', l: 'La nieve normalmente cubre este lugar casi todo el invierno', t: 'check', d: false }
+    ],
+    example: { tu: 'f', tc: 16, tw: 59, surf: 'paved', soil: 'gravel', wet: 'normal', snow: false },
+    onChange(k, api) {
+      if (k !== 'tu' || !last || last.tu === api.get('tu')) return;
+      const cv = x => api.get('tu') === 'c' ? (x - 32) * 5 / 9 : x * 9 / 5 + 32;
+      ['tc', 'tw'].forEach(q => { if (isFinite(last[q])) api.set(q, +cv(last[q]).toFixed(1)); });
+    },
+    compute(v, U) {
+      last = { tu: v.tu, tc: v.tc, tw: v.tw };
+      if (!isFinite(v.tc) || !isFinite(v.tw)) return U.empty('Escriba los promedios del mes más frío y del más caluroso.');
+      const c = x => v.tu === 'f' ? (x - 32) * 5 / 9 : x;
+      const tc = c(v.tc), tw = c(v.tw);
+      if (tw < tc) return U.empty('El mes más caluroso debe ser más caluroso que el más frío.');
+      const s = SOILS[v.soil], w = s[2] * { dry: 0.6, normal: 1, wet: 1.4 }[v.wet], n = SURF[v.surf][0];
+      const p = FROST.props(s[1], w, s[0]);
+      const run = t => { const a = FROST.fromMonths(t, tw); return a.F > 0 ? { ...FROST.depth(p, n * a.F, a.days, a.mean), F: a.F, days: a.days, mean: a.mean } : { X: 0, F: 0, days: 0, mean: a.mean }; };
+      const avg = run(tc), cold = run(tc - 5);
+      const fmtD = m => v.tu === 'c' ? `${cm(m)} cm (${inch(m)} in)` : `${inch(m)} in (${cm(m)} cm)`;
+      let h;
+      if (cold.X <= 0.02) {
+        h = U.big('Profundidad de congelamiento', 'Muy poca', 'Con estas temperaturas el suelo casi nunca se queda congelado. Aun así se puede congelar unos días en una ola de frío.');
+      } else {
+        h = avg.X < 0.02 ? U.big('En un invierno promedio', 'Poco o nada de congelamiento', `bajo ${SURF[v.surf][1]}, pero un invierno frío puede congelar el suelo.`) : U.big('El congelamiento llega a unas', fmtD(avg.X), `en un invierno promedio, bajo ${SURF[v.surf][1]}.`);
+        h += U.kv([['En un invierno frío (mes más frío 9 °F / 5 °C más frío)', fmtD(cold.X)], ['Rango en invierno frío, con ± 25% por las propiedades del suelo', `${inch(cold.X * 0.75)}–${inch(cold.X * 1.25)} in (${cm(cold.X * 0.75)}–${cm(cold.X * 1.25)} cm)`]]);
+        h += `<h3>Qué hacer con este dato</h3><ul class="plain"><li><b>Tuberías de agua y drenaje:</b> entiérrelas debajo de la profundidad del invierno frío (${fmtD(cold.X)}), y hacia el lado más hondo del rango bajo entradas de autos y caminos que se mantienen sin nieve. Muchos pueblos de montaña piden más; pregunte a su compañía de agua.</li><li><b>Cimientos de terrazas, cobertizos y ampliaciones:</b> su departamento de construcción fija la profundidad legal de congelamiento para cimientos. Use la de ellos; se basa en los inviernos más fríos registrados y muchas veces es más honda que esta.</li><li><b>Postes de cerca y de terrazas:</b> póngalos debajo de la profundidad de congelamiento, con grava en el fondo para el drenaje, o las heladas los pueden levantar un poco cada invierno.</li></ul>`;
+        if (v.soil === 'clay' && v.wet !== 'dry') h += U.note('Los suelos limosos y arcillosos que se mantienen húmedos son los más propensos al <b>levantamiento por heladas</b>: se forman lentes de hielo conforme el agua sube hacia el frente de congelamiento, y levantan losas, escalones y postes. Ayuda un buen drenaje y una base de grava bajo las losas.');
+        if (v.snow) h += U.note('Una capa de nieve que dura aísla el suelo, así que el congelamiento bajo la nieve sin tocar normalmente es mucho menos hondo que el que se muestra aquí. Pero donde se quita la nieve, se aplasta con el paso o se la lleva el viento, espere la profundidad completa.', 'good');
+      }
+      return {
+        html: h,
+        work: cold.X <= 0.02 ? [`Índice de congelamiento (invierno promedio) ≈ ${Math.round(avg.F)} °C·días`] : [
+          `Ciclo anual promedio de temperatura según su mes más frío (${v.tc}°) y su mes más caluroso (${v.tw}°): ${Math.round(avg.days)} días bajo cero, índice de congelamiento ${Math.round(avg.F)} °C·días (${Math.round(avg.F * 1.8)} °F·días)`,
+          `Factor de superficie ${n} para ${SURF[v.surf][1]} (US Army TM 5-852-6): índice de congelamiento en superficie ${Math.round(n * avg.F)} °C·días`,
+          `${s[3]}: densidad seca ${(s[1] / 1000).toFixed(2)} g/cm³, contenido de agua ${Math.round(w)}% → conductividad térmica ${p.kf.toFixed(2)} W/m·K congelado, ${p.ku.toFixed(2)} sin congelar (Kersten 1949); calor latente ${(p.L / 1e6).toFixed(0)} MJ/m³`,
+          `Profundidad de congelamiento según el balance de calor en el frente de congelamiento (solución de Neumann, la base del método de Berggren modificado): ${fmtD(avg.X)}; invierno frío ${fmtD(cold.X)}`
+        ]
+      };
+    }
+  });
+})();
+</script>
+```
+
+## Por qué la profundidad de congelamiento varía tanto
+
+- **El frío, y cuánto dura.** Lo que importa es el *índice de congelamiento*: qué tan abajo de cero está, sumado cada día del invierno. Un frío largo y constante congela más hondo que uno corto e intenso.
+- **La nieve.** Un pie de nieve esponjada aísla más o menos como un par de pulgadas de placa de espuma. Las entradas de autos y los caminos a los que se les quita la nieve pierden esa cobija y se congelan más hondo.
+- **El suelo y la humedad.** El agua suelta mucho calor al congelarse, y eso frena el congelamiento. La grava seca y el relleno pedregoso se congelan mucho más hondo que la arcilla húmeda.
+- **El suelo tibio de abajo.** Donde los veranos son calurosos, el suelo guarda calor que empuja contra el congelamiento desde abajo.
+
+## Sobre esta estimación
+
+Usa la misma física de flujo de calor que los métodos de ingeniería para la profundidad de congelamiento, con propiedades típicas para cada tipo de suelo. Es una estimación para un invierno promedio y uno más frío que el promedio, no un valor de diseño. Las propiedades del suelo por sí solas pueden cambiar la respuesta como en una cuarta parte. Los códigos de construcción fijan las profundidades de congelamiento con los inviernos más fríos de décadas, así que siga su código local para los cimientos.
+
+Para más control (índice de congelamiento, densidad, contenido de agua y factores de superficie), use la [herramienta de profundidad de congelamiento para investigadores](../tools.qmd#frost) (en inglés).

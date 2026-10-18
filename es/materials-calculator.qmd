@@ -1,0 +1,738 @@
+---
+title: "Calculadora de materiales para jardinería"
+description: "¿Cuánta tierra, composta, mantillo, grava, arena, pasto en rollo o semilla de pasto necesita? Para cualquier forma de terreno, con el cálculo a la vista para que pueda revisar una cotización."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/materials-calculator.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/materials-calculator.html">'
+---
+
+::: {.hm-lang}
+[English](../materials-calculator.qmd){lang="en"}
+:::
+
+Mida su área, escoja un material y vea cuánto pedir: en yardas cúbicas, toneladas, bolsas o tarimas. Las formas irregulares no son problema: súmelas pieza por pieza y reste patios o caminos. Cada número muestra cómo se calculó, para que lo pueda comparar con la cotización de un proveedor.
+
+```{=html}
+<style>
+.hmc {
+  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
+  --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f; --warn: #e0a440; --good: #5cc28f; --bad: #e07070;
+  color: var(--ink); font-size: 1.02rem; line-height: 1.5; max-width: 620px; margin: 8px auto 28px;
+}
+body.quarto-light .hmc {
+  --bg: #f7f5f0; --surface: #fffdf9; --surface-2: #efebe2; --ink: #1f1c17; --ink-2: #57514a; --ink-3: #8a8379;
+  --line: #ddd6ca; --accent: #8a4b22; --accent-ink: #ffffff; --accent-soft: #f3e6da; --warn: #9a6400; --good: #1f7a4d; --bad: #b3261e;
+}
+.hmc * { box-sizing: border-box; }
+.hmc .cx { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 12px; }
+.hmc .step { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 0 0 10px; }
+.hmc .hint { font-size: .9rem; color: var(--ink-2); margin: 6px 0 0; }
+.hmc label { display: block; font-size: .9rem; font-weight: 600; color: var(--ink-2); margin: 10px 0 4px; }
+.hmc label .u { font-weight: 400; color: var(--ink-3); }
+.hmc input, .hmc select {
+  width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  font: inherit; padding: 8px 12px;
+}
+.hmc input:focus, .hmc select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.hmc input.bad { border-color: var(--bad); }
+.hmc .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.hmc .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.hmc .seg { display: flex; gap: 6px; flex-wrap: wrap; }
+.hmc .seg button { flex: 1 1 auto; min-height: 42px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+.hmc .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.hmc .shape { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-top: 10px; background: var(--bg); }
+.hmc .shape.sub { border-style: dashed; }
+.hmc .shead { display: grid; grid-template-columns: 1fr 1fr auto; gap: 8px; align-items: center; }
+.hmc .shead button.x { width: 40px; height: 40px; border-radius: 10px; border: 1px solid var(--line); background: transparent; color: var(--ink-2); font-size: 1.2rem; cursor: pointer; }
+.hmc .sarea { margin-top: 8px; font-size: .9rem; color: var(--ink-3); }
+.hmc .sarea b { color: var(--ink); }
+.hmc .sarea.err { color: var(--bad); }
+.hmc .secondary { width: 100%; min-height: 44px; border-radius: 12px; border: 1px dashed var(--line); background: transparent; color: var(--accent); font: inherit; font-weight: 600; margin-top: 10px; cursor: pointer; }
+.hmc .total { margin-top: 12px; font-size: 1rem; color: var(--ink-2); }
+.hmc .total b { color: var(--ink); }
+.hmc .res { border: 2px solid var(--accent); }
+.hmc .res .big { font-size: 2rem; font-weight: 700; line-height: 1.15; margin: 2px 0 6px; font-family: "Source Serif 4", Georgia, serif; }
+.hmc .res .sub { color: var(--ink-2); margin: 0 0 10px; }
+.hmc .res ul { list-style: none; padding: 0; margin: 10px 0 0; }
+.hmc .res li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+.hmc .res li span:first-child { color: var(--ink-2); }
+.hmc .res li span:last-child { font-weight: 600; text-align: right; }
+.hmc .note { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink-2); margin-top: 10px; }
+.hmc .say { margin-top: 12px; background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .95rem; }
+.hmc .say .lab { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; display: block; margin-bottom: 2px; }
+.hmc .linkbtn { background: none; border: none; color: var(--accent); font: inherit; font-weight: 600; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.hmc .empty { color: var(--ink-3); margin: 0; }
+.hmc details.cx { padding: 0; }
+.hmc details summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--accent); list-style: none; }
+.hmc details summary::-webkit-details-marker { display: none; }
+.hmc details summary::before { content: "＋ "; }
+.hmc details[open] summary::before { content: "－ "; }
+.hmc details .db { padding: 0 16px 16px; }
+.hmc .work { font-size: .92rem; color: var(--ink-2); margin: 0; padding-left: 18px; }
+.hmc .work li { margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.hmc .cmp { margin-top: 12px; font-size: .95rem; }
+.hmc .cmp div { display: flex; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--line); }
+.hmc .cmp .win { color: var(--good); font-weight: 700; }
+.hmc .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+.hmc .actions button { min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: .92rem; cursor: pointer; }
+.hmc .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 50; }
+.hmc .toast.on { opacity: 1; }
+.hmc .smallprint { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
+@media (max-width: 420px) { .hmc .shead { grid-template-columns: 1fr auto; } .hmc .shead select[data-sh="op"] { grid-column: 1 / -1; grid-row: 2; } .hmc .row3 { grid-template-columns: 1fr; } }
+@media print { .hmc .actions, .hmc .secondary, .hmc .shead button.x, .hmc .toast { display: none !important; } .hmc details { display: block; } .hmc .cx { break-inside: avoid; } }
+</style>
+
+<div class="hmc" id="hmc">
+  <div class="seg" id="h-units" role="group" aria-label="Unidades">
+    <button type="button" data-u="us">EE. UU. (ft, in, yd³)</button>
+    <button type="button" data-u="si">Métrico (m, cm, m³)</button>
+  </div>
+
+  <section class="cx">
+    <div class="step">1 · Material</div>
+    <select id="h-mat" aria-label="Material"></select>
+    <p class="hint" id="h-mathint"></p>
+  </section>
+
+  <section class="cx">
+    <div class="step">2 · Área</div>
+    <p class="hint" style="margin-top:0">Divida las formas irregulares en piezas y súmelas. Use <em>Restar</em> para patios, caminos o lo que no vaya a cubrir. También funcionan medidas como <code>12'6"</code>.</p>
+    <div id="h-shapes"></div>
+    <button type="button" class="secondary" id="h-add">+ Agregar otra pieza</button>
+    <div class="total">Área total: <b id="h-area">–</b></div>
+  </section>
+
+  <section class="cx" id="h-s3"></section>
+
+  <section class="cx res" id="h-res" aria-live="polite"></section>
+
+  <details class="cx" id="h-price"><summary>Comparar precios</summary><div class="db" id="h-pricebody"></div></details>
+  <details class="cx" id="h-assume"><summary>Supuestos (cámbielos según su proveedor)</summary><div class="db" id="h-assumebody"></div></details>
+  <details class="cx" id="h-work"><summary>Ver el cálculo</summary><div class="db" id="h-workbody"></div></details>
+
+  <div class="actions">
+    <button type="button" id="h-link">Copiar enlace</button>
+    <button type="button" id="h-print">Imprimir</button>
+    <button type="button" id="h-reset">Empezar de nuevo</button>
+  </div>
+  <p class="smallprint">Gratis, sin registro, sin anuncios, y ningún proveedor paga por aparecer aquí. Los números son valores típicos; los datos de peso y cobertura de su proveedor siempre tienen prioridad. Nada de lo que escribe sale de su navegador.</p>
+  <div class="toast" id="h-toast"></div>
+</div>
+
+<script>
+(function () {
+  const root = document.getElementById('hmc');
+  if (!root) return;
+  const $ = s => root.querySelector(s);
+
+  // ---- unit constants (everything is stored internally in SI) ----
+  const FT = 0.3048, IN = 0.0254, FT2 = 0.09290304, YD3 = 0.764554858, CUFT = 0.0283168466,
+        TON = 0.90718474, LBt = 0.00045359237, LBkg = 0.45359237, SEEDF = 4.88242764; // g/m² per lb/1000 ft²
+
+  // ---- materials: density = loose t/m³; extra = % to add for settling/compaction ----
+  const MATS = [
+    { id: 'topsoil', g: 'Tierra y composta', name: 'Tierra vegetal (cernida)', kind: 'vol', din: 4, dcm: 10, extra: 15, dens: 1.30, sold: 'vol',
+      range: { us: 'Típico: 1–2 pulgadas para nivelar un césped, 4–6 pulgadas bajo pasto en rollo o semilla nueva, 6–8 pulgadas para camas nuevas.', si: 'Típico: 2–5 cm para nivelar un césped, 10–15 cm bajo pasto en rollo o semilla nueva, 15–20 cm para camas nuevas.' },
+      bags: { us: [0.75, 1, 1.5, 2], si: [25, 40, 50, 70] }, bag: { us: 1, si: 40 }, why: 'settling' },
+    { id: 'compost', g: 'Tierra y composta', name: 'Composta', kind: 'vol', din: 2, dcm: 5, extra: 15, dens: 0.65, sold: 'vol',
+      range: { us: 'Típico: ¼–½ pulgada para cubrir un césped, 1–3 pulgadas mezcladas en una cama nueva.', si: 'Típico: 0.5–1 cm para cubrir un césped, 2–8 cm mezclados en una cama nueva.' },
+      bags: { us: [0.75, 1, 1.5, 2], si: [25, 40, 50, 70] }, bag: { us: 1, si: 40 }, why: 'settling' },
+    { id: 'gardenmix', g: 'Tierra y composta', name: 'Mezcla para jardín o camas elevadas', kind: 'vol', din: 10, dcm: 25, extra: 20, dens: 1.00, sold: 'vol',
+      range: { us: 'Típico: 8–12 pulgadas para camas elevadas, 6–8 pulgadas para camas en el suelo.', si: 'Típico: 20–30 cm para camas elevadas, 15–20 cm para camas en el suelo.' },
+      bags: { us: [1, 1.5, 2], si: [40, 50, 70] }, bag: { us: 1.5, si: 50 }, why: 'settling' },
+    { id: 'mulch', g: 'Mantillo', name: 'Mantillo de corteza triturada', kind: 'vol', din: 3, dcm: 7.5, extra: 10, dens: 0.40, sold: 'vol',
+      range: { us: 'Típico: 2–3 pulgadas alrededor de las plantas, 3–4 pulgadas para controlar la maleza. Déjelo a unas pulgadas de troncos y tallos.', si: 'Típico: 5–8 cm alrededor de las plantas, 8–10 cm para controlar la maleza. Déjelo a unos cm de troncos y tallos.' },
+      bags: { us: [1.5, 2, 3], si: [50, 60, 70] }, bag: { us: 2, si: 50 }, why: 'settling' },
+    { id: 'chips', g: 'Mantillo', name: 'Astillas de madera', kind: 'vol', din: 3, dcm: 7.5, extra: 10, dens: 0.35, sold: 'vol',
+      range: { us: 'Típico: 3–4 pulgadas para caminos y camas.', si: 'Típico: 8–10 cm para caminos y camas.' },
+      bags: { us: [2, 3], si: [50, 70] }, bag: { us: 2, si: 50 }, why: 'settling' },
+    { id: 'gravel', g: 'Piedra y arena', name: 'Grava / piedra triturada (decorativa)', kind: 'vol', din: 3, dcm: 7.5, extra: 5, dens: 1.60, sold: 'wt',
+      range: { us: 'Típico: 2–3 pulgadas para camas y caminos, sobre tela de jardinería.', si: 'Típico: 5–8 cm para camas y caminos, sobre tela de jardinería.' },
+      bags: { us: [0.5], si: [15, 25] }, bag: { us: 0.5, si: 15 }, why: 'settling' },
+    { id: 'roadbase', g: 'Piedra y arena', name: 'Base para caminos / gravilla fina (compactada)', kind: 'vol', din: 4, dcm: 10, extra: 25, dens: 1.75, sold: 'wt',
+      range: { us: 'Típico: 4–6 pulgadas para caminos y bases de patio, compactadas en capas de 2 pulgadas. Escriba la profundidad final ya compactada.', si: 'Típico: 10–15 cm para caminos y bases de patio, compactados en capas de 5 cm. Escriba la profundidad final ya compactada.' },
+      bags: { us: [0.5], si: [15] }, bag: { us: 0.5, si: 15 }, why: 'compaction' },
+    { id: 'sand', g: 'Piedra y arena', name: 'Arena (cama para adoquines / relleno)', kind: 'vol', din: 1, dcm: 2.5, extra: 15, dens: 1.55, sold: 'wt',
+      range: { us: 'Típico: capa nivelada de 1 pulgada bajo los adoquines.', si: 'Típico: capa nivelada de 2.5–3 cm bajo los adoquines.' },
+      bags: { us: [0.5], si: [15, 25] }, bag: { us: 0.5, si: 15 }, why: 'compaction' },
+    { id: 'rock', g: 'Piedra y arena', name: 'Piedra de río / bola', kind: 'vol', din: 3, dcm: 7.5, extra: 5, dens: 1.50, sold: 'wt',
+      range: { us: 'Típico: 2–4 pulgadas. Las piedras más grandes necesitan una capa más honda para tapar la tela.', si: 'Típico: 5–10 cm. Las piedras más grandes necesitan una capa más honda para tapar la tela.' },
+      bags: { us: [0.5], si: [15] }, bag: { us: 0.5, si: 15 }, why: 'settling' },
+    { id: 'sod', g: 'Césped', name: 'Pasto en rollo', kind: 'sod' },
+    { id: 'seed', g: 'Césped', name: 'Semilla de pasto', kind: 'seed' },
+    { id: 'fabric', g: 'Otros', name: 'Tela de jardinería (antimaleza)', kind: 'fabric' }
+  ];
+  const MAT = Object.fromEntries(MATS.map(m => [m.id, m]));
+
+  // seeding rates, lb per 1,000 ft² (n = new lawn, o = overseeding a thin lawn)
+  const GRASS = [
+    { id: 'kbg', name: 'Pasto azul de Kentucky', n: 2.5, o: 1.5 },
+    { id: 'tf', name: 'Festuca alta', n: 7, o: 4 },
+    { id: 'pr', name: 'Ryegrass perenne (ballico)', n: 7, o: 4 },
+    { id: 'ff', name: 'Festuca fina', n: 4, o: 2.5 },
+    { id: 'mix', name: 'Mezcla para sol (pasto azul / ryegrass / festuca)', n: 5, o: 3 },
+    { id: 'buf', name: 'Pasto búfalo (semilla tratada)', n: 3, o: 1.5 },
+    { id: 'bg', name: 'Navajita azul', n: 2, o: 1 }
+  ];
+  const SEEDBAGS = { us: [1, 3, 5, 7, 10, 25, 50], si: [0.5, 1, 2.5, 5, 10, 20] }; // lb / kg
+  const FABROLLS = { us: [[3, 50], [4, 50], [3, 100], [4, 100], [6, 100]], si: [[1, 10], [1, 25], [2, 25], [2, 50]] };
+
+  const SHAPES = {
+    rect: { name: 'Rectángulo / cuadrado', f: [['L', 'Largo', 'len'], ['W', 'Ancho', 'len']] },
+    circle: { name: 'Círculo', f: [['D', 'Diámetro (de lado a lado por el centro)', 'len']] },
+    tri: { name: 'Triángulo (3 lados)', f: [['A', 'Lado 1', 'len'], ['B', 'Lado 2', 'len'], ['C', 'Lado 3', 'len']] },
+    irr: { name: 'Irregular (midiendo anchos)', f: [['L', 'Largo de una línea recta a lo largo', 'len'], ['W', 'Anchos de lado a lado, a distancias iguales, separados por comas (incluya los dos extremos; 0 si termina en punta)', 'lenlist']] },
+    known: { name: 'Ya sé el área', f: [['A', 'Área', 'area']] }
+  };
+
+  // display types: factor such that SI = displayed × factor
+  const T = {
+    len:   { us: [FT, 'ft'], si: [1, 'm'] },
+    lenlist: { us: [FT, 'ft'], si: [1, 'm'] },
+    dep:   { us: [IN, 'in'], si: [0.01, 'cm'] },
+    area:  { us: [FT2, 'ft²'], si: [1, 'm²'] },
+    pct:   { us: [1, '%'], si: [1, '%'] },
+    dens:  { us: [TON / YD3, 'toneladas por yd³'], si: [1, 't por m³'] },
+    mass:  { us: [LBt, 'lb'], si: [0.001, 'kg'] },
+    vol:   { us: [YD3, 'yd³'], si: [1, 'm³'] },
+    pvol:  { us: [1 / YD3, '$ por yd³'], si: [1, 'por m³'] },
+    pwt:   { us: [1 / TON, '$ por tonelada'], si: [1, 'por tonelada métrica'] },
+    money: { us: [1, '$'], si: [1, ''] },
+    rate:  { us: [SEEDF, 'lb por 1,000 ft²'], si: [1, 'g por m²'] }
+  };
+
+  // ---- state ----
+  let S;
+  function fresh(u) {
+    return { u: u || 'us', m: 'topsoil', shapes: [{ id: 1, t: 'rect', op: 1 }], nid: 2, dm: 'even', sm: 'n', sg: 'tf', f: {} };
+  }
+  let RAW = {};       // what the user typed, per field key (keeps 12'6" as typed)
+  const mat = () => MAT[S.m];
+  const clearRaw = () => Object.keys(RAW).forEach(k => { if (!k.startsWith('sh')) delete RAW[k]; });
+
+  const DEF = {
+    'sod.waste': () => 5,
+    'sod.roll': () => S.u === 'us' ? 10 * FT2 : 1,
+    'sod.pallet': () => S.u === 'us' ? 450 * FT2 : 50,
+    'fab.overlap': () => 10,
+    'truck.pay': () => S.u === 'us' ? 1500 * LBt : 0.7,
+    'truck.bed': () => S.u === 'us' ? 1.5 * YD3 : 1.2,
+    'price.dlv': () => null
+  };
+  function get(key) {
+    if (S.f[key] !== undefined && S.f[key] !== null) return S.f[key];
+    if (DEF[key]) return DEF[key]();
+    let m;
+    if ((m = key.match(/^d[12]\.(.+)$/))) { const M = MAT[m[1]]; return S.u === 'us' ? M.din * IN : M.dcm / 100; }
+    if ((m = key.match(/^ov\.(.+)\.extra$/))) return MAT[m[1]].extra;
+    if ((m = key.match(/^ov\.(.+)\.dens$/))) return MAT[m[1]].dens;
+    if ((m = key.match(/^seed\.rate\.(.+)\.([no])$/))) { const G = GRASS.find(g => g.id === m[1]); return G[m[2]] * SEEDF; }
+    return null;
+  }
+
+  // ---- parsing ----
+  const num = s => { s = String(s).replace(/[$,\s]/g, ''); if (s === '') return null; return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN; };
+  function parseFeet(s) { // returns feet
+    s = String(s).trim().toLowerCase().replace(/[’′]/g, "'").replace(/[”″]/g, '"');
+    if (!s) return null;
+    let m;
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:'|ft|feet|foot)\s*(?:(\d*\.?\d+)\s*(?:"|in|inch|inches)?)?$/))) return +m[1] + (m[2] ? +m[2] / 12 : 0);
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:"|in|inch|inches)$/))) return +m[1] / 12;
+    if ((m = s.match(/^(\d+)\s+(\d*\.?\d+)$/))) return +m[1] + +m[2] / 12;
+    return num(s);
+  }
+  function parseMeters(s) {
+    s = String(s).trim().toLowerCase(); if (!s) return null; let m;
+    if ((m = s.match(/^(\d*\.?\d+)\s*cm$/))) return +m[1] / 100;
+    if ((m = s.match(/^(\d*\.?\d+)\s*mm$/))) return +m[1] / 1000;
+    if ((m = s.match(/^(\d*\.?\d+)\s*m$/))) return +m[1];
+    return num(s);
+  }
+  function parse(type, s) { // -> SI
+    if (type === 'len') { const v = S.u === 'us' ? parseFeet(s) : parseMeters(s); return v == null || isNaN(v) ? v : v * (S.u === 'us' ? FT : 1); }
+    if (type === 'lenlist') {
+      const parts = String(s).includes(',') || String(s).includes(';') ? String(s).split(/[,;]/) : String(s).trim().split(/\s+/);
+      const out = parts.map(p => p.trim()).filter(p => p !== '').map(p => parse('len', p));
+      if (!out.length) return null;
+      return out.some(v => v == null || isNaN(v)) ? NaN : out;
+    }
+    if (type === 'dep') {
+      const str = String(s).trim().toLowerCase();
+      if (S.u === 'us' && /'|ft|feet/.test(str)) { const ft = parseFeet(str); return ft == null || isNaN(ft) ? ft : ft * FT; }
+      if (S.u === 'si' && /\d\s*m$/.test(str) && !/cm|mm/.test(str)) { const mm = num(str.replace(/m$/, '')); return mm == null || isNaN(mm) ? mm : mm; }
+      if (S.u === 'si' && /mm$/.test(str)) { const v = num(str.replace(/mm$/, '')); return v == null || isNaN(v) ? v : v / 1000; }
+      const v = num(str.replace(/("|in|inch|inches|cm)$/, ''));
+      return v == null || isNaN(v) ? v : v * T.dep[S.u][0];
+    }
+    const v = num(s);
+    return v == null || isNaN(v) ? v : v * T[type][S.u][0];
+  }
+
+  // ---- formatting ----
+  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  const fmtFix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+  const disp = (si, type) => si == null ? null : si / T[type][S.u][0];
+  const unit = type => T[type][S.u][1];
+  const money = x => (S.u === 'us' ? '$' : '') + fmtFix(x, 2);
+  const upHalf = x => Math.ceil(x * 2 - 1e-9) / 2;
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const A_ = si => fmt(disp(si, 'area'), si / T.area[S.u][0] < 100 ? 1 : 0) + ' ' + unit('area');
+  const L_ = si => fmt(disp(si, 'len'), 2) + ' ' + unit('len');
+  const D_ = si => fmt(disp(si, 'dep'), 2) + ' ' + unit('dep');
+  const V_ = (si, d = 2) => fmt(disp(si, 'vol'), d) + ' ' + unit('vol');
+  const W_ = t => S.u === 'us' ? fmt(t / TON, 1) + ' toneladas' : fmt(t, 1) + ' t';
+  const bagLabel = v => S.u === 'us' ? fmt(v, 2) + ' pie³' : fmt(v, 0) + ' L';
+  const bagSI = v => S.u === 'us' ? v * CUFT : v / 1000;
+
+  function shownValue(key, type) {
+    if (RAW[key] !== undefined) return RAW[key];
+    const v = get(key);
+    if (v == null) return '';
+    if (Array.isArray(v)) return v.map(x => fmt(disp(x, 'len'), 2)).join(', ');
+    return fmt(disp(v, type), type === 'dens' ? 2 : 3).replace(/,/g, '');
+  }
+  function field(key, label, type, opts = {}) {
+    const u = unit(type);
+    return `<label for="hk-${esc(key)}">${label}${u && type !== 'money' ? ` <span class="u">(${u})</span>` : ''}</label>` +
+      `<input id="hk-${esc(key)}" data-k="${esc(key)}" data-t="${type}" type="text" inputmode="${type === 'lenlist' ? 'text' : 'decimal'}" autocomplete="off" value="${esc(shownValue(key, type))}" placeholder="${esc(opts.ph || '')}">`;
+  }
+
+  // ---- render: material select ----
+  function renderMat() {
+    const groups = [...new Set(MATS.map(m => m.g))];
+    $('#h-mat').innerHTML = groups.map(g => `<optgroup label="${g}">` + MATS.filter(m => m.g === g).map(m => `<option value="${m.id}"${m.id === S.m ? ' selected' : ''}>${m.name}</option>`).join('') + '</optgroup>').join('');
+    const M = mat();
+    const hints = {
+      vol: M.range ? M.range[S.u] : '',
+      sod: 'Los rollos y las tarimas varían según el vivero: revise las medidas de su proveedor en el paso 3.',
+      seed: 'Para céspedes nuevos y para resembrar. La dosis de su bolsa de semilla siempre tiene prioridad.',
+      fabric: 'Barrera contra la maleza para camas de grava y piedra.'
+    };
+    $('#h-mathint').textContent = (hints[M.kind] || '') + ' Su área se conserva si cambia de material.';
+  }
+
+  function renderUnits() {
+    root.querySelectorAll('#h-units button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.u === S.u)));
+  }
+
+  function renderShapes() {
+    $('#h-shapes').innerHTML = S.shapes.map(sh => {
+      const def = SHAPES[sh.t];
+      const fs = def.f.map(([k, lab, type]) => field(`sh${sh.id}.${k}`, lab, type, { ph: type === 'lenlist' ? (S.u === 'us' ? 'p. ej. 0, 8, 11, 9.5, 6' : 'p. ej. 0, 2.4, 3.3, 2.9, 1.8') : '' }));
+      const grid = def.f.length === 3 ? 'row3' : def.f.length === 2 && sh.t === 'rect' ? 'row2' : '';
+      return `<div class="shape${sh.op < 0 ? ' sub' : ''}" data-id="${sh.id}">
+        <div class="shead">
+          <select data-sh="t" aria-label="Forma">${Object.entries(SHAPES).map(([k, v]) => `<option value="${k}"${k === sh.t ? ' selected' : ''}>${v.name}</option>`).join('')}</select>
+          <select data-sh="op" aria-label="Sumar o restar"><option value="1"${sh.op > 0 ? ' selected' : ''}>＋ Sumar</option><option value="-1"${sh.op < 0 ? ' selected' : ''}>− Restar</option></select>
+          ${S.shapes.length > 1 ? '<button type="button" class="x" data-del aria-label="Quitar esta pieza">×</button>' : '<span></span>'}
+        </div>
+        <div class="${grid}">${grid ? fs.map(f => `<div>${f}</div>`).join('') : fs.join('')}</div>
+        <div class="sarea" id="sa-${sh.id}"></div>
+      </div>`;
+    }).join('');
+  }
+
+  function renderStep3() {
+    const M = mat(), m = M.id;
+    let h = '';
+    if (M.kind === 'vol') {
+      h = `<div class="step">3 · Profundidad</div>
+        <div class="seg" role="group" aria-label="Profundidad"><button type="button" data-dm="even" aria-pressed="${S.dm === 'even'}">Profundidad pareja</button><button type="button" data-dm="slope" aria-pressed="${S.dm === 'slope'}">Inclinada (más honda en un lado)</button></div>
+        ${S.dm === 'even' ? field(`d1.${m}`, M.why === 'compaction' ? 'Profundidad final' : 'Profundidad', 'dep')
+          : `<div class="row2"><div>${field(`d1.${m}`, 'Lado menos hondo', 'dep')}</div><div>${field(`d2.${m}`, 'Lado más hondo', 'dep')}</div></div>`}
+        <p class="hint">${M.range[S.u]}</p>
+        <label for="h-bag">Tamaño de la bolsa, si compra en bolsas</label>
+        <select id="h-bag" data-sel="bag.${m}">${M.bags[S.u].map(b => `<option value="${b}"${b === bagSize() ? ' selected' : ''}>${bagLabel(b)}</option>`).join('')}</select>`;
+    } else if (M.kind === 'sod') {
+      h = `<div class="step">3 · Pasto en rollo</div>
+        ${field('sod.waste', 'Extra por cortes y orillas', 'pct')}
+        <div class="row2"><div>${field('sod.roll', 'Área por rollo', 'area')}</div><div>${field('sod.pallet', 'Área por tarima', 'area')}</div></div>
+        <p class="hint">${S.u === 'us' ? 'Un rollo común mide 2 × 5 pies (10 ft²) y una tarima cubre 400–500 ft², pero las medidas varían según el vivero. Pregunte a su proveedor.' : 'Los rollos suelen ser de más o menos 1 m² y las tarimas cubren unos 40–60 m², pero las medidas varían según el vivero. Pregunte a su proveedor.'}</p>`;
+    } else if (M.kind === 'seed') {
+      const G = GRASS.find(g => g.id === S.sg);
+      h = `<div class="step">3 · Semilla</div>
+        <label for="h-grass">Tipo de pasto</label>
+        <select id="h-grass" data-sel="sg">${GRASS.map(g => `<option value="${g.id}"${g.id === S.sg ? ' selected' : ''}>${g.name}</option>`).join('')}</select>
+        <div class="seg" role="group" aria-label="Tipo de siembra" style="margin-top:10px"><button type="button" data-sm="n" aria-pressed="${S.sm === 'n'}">Césped nuevo</button><button type="button" data-sm="o" aria-pressed="${S.sm === 'o'}">Resembrar</button></div>
+        ${field(`seed.rate.${G.id}.${S.sm}`, 'Dosis de siembra', 'rate')}
+        <p class="hint">Dosis típica para ${G.name.toLowerCase()}. Si su bolsa de semilla da otra dosis, escríbala: la etiqueta tiene prioridad.</p>
+        <label for="h-sbag">Tamaño de la bolsa</label>
+        <select id="h-sbag" data-sel="seedbag">${SEEDBAGS[S.u].map(b => `<option value="${b}"${b === seedBag() ? ' selected' : ''}>${fmt(b, 1)} ${S.u === 'us' ? 'lb' : 'kg'}</option>`).join('')}</select>`;
+    } else if (M.kind === 'fabric') {
+      h = `<div class="step">3 · Tela</div>
+        ${field('fab.overlap', 'Extra por traslapes', 'pct')}
+        <label for="h-roll">Tamaño del rollo</label>
+        <select id="h-roll" data-sel="fabroll">${FABROLLS[S.u].map((r, i) => `<option value="${i}"${i === fabRollIdx() ? ' selected' : ''}>${r[0]} × ${r[1]} ${S.u === 'us' ? 'ft' : 'm'}</option>`).join('')}</select>`;
+    }
+    $('#h-s3').innerHTML = h;
+  }
+  function bagSize() { const M = mat(), v = S.f[`bag.${M.id}.${S.u}`]; return M.bags[S.u].includes(v) ? v : M.bag[S.u]; }
+  function seedBag() { const v = S.f[`seedbag.${S.u}`]; return SEEDBAGS[S.u].includes(v) ? v : (S.u === 'us' ? 5 : 2.5); }
+  function fabRollIdx() { const v = S.f[`fabroll.${S.u}`]; return v != null && FABROLLS[S.u][v] ? v : 0; }
+
+  function renderAssume() {
+    const M = mat(), m = M.id;
+    const box = $('#h-assume');
+    if (M.kind !== 'vol') { box.hidden = true; return; }
+    box.hidden = false;
+    $('#h-assumebody').innerHTML =
+      `<div class="row2"><div>${field(`ov.${m}.extra`, M.why === 'compaction' ? 'Extra por compactación' : 'Extra por asentamiento', 'pct')}</div><div>${field(`ov.${m}.dens`, 'Peso suelto', 'dens')}</div></div>
+       <p class="hint">${M.why === 'compaction' ? 'El material suelto se encoge al compactarse, así que necesita más que el volumen final.' : 'El material suelto se asienta después de esparcirlo y regarlo, así que necesita un poco más que el volumen medido.'} El peso varía con la humedad y el origen; pídale a su proveedor el suyo.</p>
+       <div class="row2"><div>${field('truck.pay', 'Carga de la camioneta', 'mass')}</div><div>${field('truck.bed', 'Volumen por viaje', 'vol')}</div></div>
+       <p class="hint">Se usa para estimar los viajes en camioneta. Revise la carga útil en la etiqueta de la puerta.</p>
+       <button type="button" class="linkbtn" id="h-areset">Restablecer supuestos</button>`;
+  }
+
+  function renderPrice() {
+    const M = mat(), m = M.id;
+    let h = '';
+    if (M.kind === 'vol') {
+      h = `<div class="row2"><div>${field(`price.bulk.${m}`, 'Precio a granel', M.sold === 'wt' ? 'pwt' : 'pvol')}</div><div>${field('price.dlv', 'Cargo de entrega', 'money')}</div></div>
+        ${field(`price.bag.${m}`, 'Precio por bolsa', 'money')}`;
+    } else if (M.kind === 'sod') {
+      h = `<div class="row2"><div>${field('price.roll', 'Precio por rollo', 'money')}</div><div>${field('price.pallet', 'Precio por tarima', 'money')}</div></div>`;
+    } else if (M.kind === 'seed') {
+      h = field('price.seedbag', 'Precio por bolsa', 'money');
+    } else {
+      h = field('price.fabroll', 'Precio por rollo', 'money');
+    }
+    $('#h-pricebody').innerHTML = h + '<div class="cmp" id="h-cmp"></div>';
+  }
+
+  function renderAll() { renderUnits(); renderMat(); renderShapes(); renderStep3(); renderAssume(); renderPrice(); compute(); }
+
+  // ---- area of each piece ----
+  function pieceArea(sh) {
+    const g = k => get(`sh${sh.id}.${k}`);
+    const vals = SHAPES[sh.t].f.map(([k]) => g(k));
+    if (vals.some(v => v == null)) return { a: null };
+    if (vals.some(v => (Array.isArray(v) ? false : (isNaN(v) || v < 0)))) return { a: NaN, err: 'Revise los números.' };
+    const s = x => fmt(disp(x, 'len'), 2), U = unit('len'), UA = unit('area');
+    if (sh.t === 'rect') { const [L, W] = vals; return { a: L * W, w: `${s(L)} × ${s(W)} ${U}` }; }
+    if (sh.t === 'circle') { const [D] = vals; return { a: Math.PI * D * D / 4, w: `círculo de ${s(D)} ${U} de diámetro: π × ${s(D)}² ÷ 4` }; }
+    if (sh.t === 'tri') {
+      const [a, b, c] = vals, p = (a + b + c) / 2, q = p * (p - a) * (p - b) * (p - c);
+      if (q <= 0) return { a: NaN, err: 'Esos tres lados no forman un triángulo: los dos lados más cortos deben sumar más que el más largo.' };
+      return { a: Math.sqrt(q), w: `triángulo de ${s(a)}, ${s(b)}, ${s(c)} ${U} (fórmula de Herón)` };
+    }
+    if (sh.t === 'irr') {
+      const [L, W] = vals;
+      if (isNaN(L) || !Array.isArray(W)) return { a: NaN, err: 'Revise los números. Separe los anchos con comas.' };
+      if (W.length < 2) return { a: NaN, err: 'Escriba por lo menos dos anchos: uno en cada extremo.' };
+      const n = W.length - 1, sum = W.reduce((t, w, i) => t + (i === 0 || i === n ? w / 2 : w), 0);
+      return { a: L / n * sum, w: `irregular, ${W.length} anchos a lo largo de ${s(L)} ${U} (cada ${s(L / n)} ${U}, regla del trapecio)` };
+    }
+    if (sh.t === 'known') { const [A] = vals; return { a: A, w: `área escrita` }; }
+    return { a: null };
+  }
+
+  // ---- main calculation ----
+  function compute() {
+    let total = 0, any = false, bad = false;
+    const work = [];
+    S.shapes.forEach(sh => {
+      const r = pieceArea(sh), el = $('#sa-' + sh.id);
+      if (!el) return;
+      el.className = 'sarea';
+      if (r.a == null) { el.textContent = ''; return; }
+      if (isNaN(r.a)) { el.className = 'sarea err'; el.textContent = r.err; bad = true; return; }
+      any = true; total += sh.op * r.a;
+      el.innerHTML = `${sh.op < 0 ? 'Restando' : 'Área'}: <b>${A_(r.a)}</b>`;
+      work.push(`${sh.op < 0 ? '− ' : (work.length ? '+ ' : '')}${r.w} = ${A_(r.a)}`);
+    });
+    // mark bad inputs
+    root.querySelectorAll('input[data-k]').forEach(inp => {
+      const k = inp.dataset.k, v = S.f[k];
+      inp.classList.toggle('bad', RAW[k] !== undefined && RAW[k].trim() !== '' && (v == null || (Array.isArray(v) ? false : isNaN(v))));
+    });
+    $('#h-area').textContent = any ? A_(total) : '–';
+    const R = { total, work };
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    if (!any || total <= 0) {
+      res.innerHTML = `<p class="empty">${any && total <= 0 ? 'Las piezas que resta son más grandes que las que suma. Revise las opciones de Sumar / Restar.' : 'Escriba sus medidas arriba para ver cuánto pedir.'}</p>`;
+      wb.innerHTML = '<p class="empty">Aquí aparecerá el cálculo.</p>';
+      if (cmp) cmp.innerHTML = '';
+      writeHash();
+      return;
+    }
+    const M = mat();
+    if (work.length > 1) work.push(`Área total = ${A_(total)}`); else work[0] = 'Área: ' + work[0];
+    if (M.kind === 'vol') vol(M, R); else if (M.kind === 'sod') sod(R); else if (M.kind === 'seed') seed(R); else fabric(R);
+    writeHash();
+  }
+
+  function li(a, b) { return `<li><span>${a}</span><span>${b}</span></li>`; }
+  function sayBox(txt) { return `<div class="say"><span class="lab">Qué decirle al proveedor</span><span id="h-say">${esc(txt)}</span> <button type="button" class="linkbtn" id="h-copysay">Copiar</button></div>`; }
+
+  function vol(M, R) {
+    const m = M.id, A = R.total;
+    const d1 = get(`d1.${m}`), d2 = get(`d2.${m}`);
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    if (d1 == null || isNaN(d1) || (S.dm === 'slope' && (d2 == null || isNaN(d2))) || d1 <= 0) {
+      res.innerHTML = '<p class="empty">Escriba una profundidad en el paso 3.</p>'; wb.innerHTML = ''; cmp.innerHTML = ''; return;
+    }
+    const d = S.dm === 'even' ? d1 : (d1 + d2) / 2;
+    const X = (get(`ov.${m}.extra`) || 0) / 100, dens = get(`ov.${m}.dens`);
+    const V = A * d, Vo = V * (1 + X), Wt = Vo * dens;
+    const bag = bagSize(), bSI = bagSI(bag), bags = Math.ceil(Vo / bSI - 1e-9);
+    const pay = get('truck.pay'), bed = get('truck.bed');
+    const loads = Math.ceil(Math.max(Wt / pay, Vo / bed) - 1e-9);
+    const weightLimited = Wt / pay > Vo / bed;
+    const Vd = disp(V, 'vol'), Vod = disp(Vo, 'vol'), orderV = upHalf(Vod);
+    const tons = S.u === 'us' ? Wt / TON : Wt, orderT = upHalf(tons);
+    const U = unit('vol'), WU = S.u === 'us' ? 'toneladas' : 'toneladas métricas';
+    const extraWord = M.why === 'compaction' ? 'compactación' : 'asentamiento';
+    let big, sub;
+    if (M.sold === 'wt') {
+      big = `Unas ${fmt(orderT, 1)} ${WU}`;
+      sub = `Son ${fmt(Vod, 2)} ${U} de material suelto (${M.name.toLowerCase().split(' (')[0]}), con ${fmt(X * 100, 0)}% extra por ${extraWord}. La piedra y la arena normalmente se venden por peso.`;
+    } else {
+      big = `${fmt(orderV, 1)} ${U}`;
+      sub = `Necesita ${fmt(Vod, 2)} ${U}, con ${fmt(X * 100, 0)}% extra por ${extraWord} (${fmt(Vd, 2)} ${U} antes del ${extraWord}). Redondeado hacia arriba al siguiente ½ ${U}.`;
+    }
+    const items = [];
+    if (M.sold === 'wt') items.push(li('Volumen suelto', `${fmt(Vod, 2)} ${U}`)); else items.push(li('Peso', `≈ ${W_(Wt)}${S.u === 'us' ? ` (${fmt(Math.round(Wt / LBt / 10) * 10, 0)} lb)` : ''}`));
+    items.push(li('O en bolsas', `${fmt(bags, 0)} bolsas de ${bagLabel(bag)}`));
+    items.push(li('Viajes en camioneta', `≈ ${loads}`));
+    const notes = [];
+    if (Vod < 1 && S.u === 'us' || Vod < 0.75 && S.u === 'si') notes.push('Trabajo pequeño: las bolsas muchas veces salen más baratas que una entrega a granel una vez que se suma el cargo de entrega. Use <em>Comparar precios</em> abajo.');
+    if (weightLimited && loads > 1) notes.push(`Aquí lo que limita cada viaje es el peso, no el espacio: una caja de camioneta que se ve medio llena de ${M.name.toLowerCase().split(' (')[0]} ya puede estar en el límite de carga.`);
+    if (M.id === 'topsoil' || M.id === 'gardenmix') notes.push('Antes de comprar, pregunte si está cernida, de qué está hecha y si la han analizado. Vea la lista para el comprador debajo de la calculadora.');
+    const depthTxt = S.dm === 'even' ? D_(d) : `${D_(d1)} a ${D_(d2)}`;
+    const say = M.sold === 'wt'
+      ? `Necesito unas ${fmt(orderT, 1)} ${WU} de ${M.name.toLowerCase().replace(/ \(.*\)/, '')} (unas ${fmt(Vod, 1)} ${U} sueltas) para cubrir ${A_(A)} a ${depthTxt}${M.why === 'compaction' ? ' ya compactado' : ''}.`
+      : `Necesito ${fmt(orderV, 1)} ${U} de ${M.name.toLowerCase().replace(/ \(.*\)/, '')} para cubrir ${A_(A)} a ${depthTxt}.`;
+    res.innerHTML = `<div class="step">Pedido</div><div class="big">${big}</div><p class="sub">${sub}</p><ul>${items.join('')}</ul>` +
+      notes.map(n => `<div class="note">${n}</div>`).join('') + sayBox(say);
+
+    // working
+    const w = R.work.slice();
+    if (S.dm === 'even') w.push(`Profundidad = ${D_(d)} = ${S.u === 'us' ? fmt(d / FT, 3) + ' ft' : fmt(d, 3) + ' m'}`);
+    else w.push(`Profundidad promedio = (${D_(d1)} + ${D_(d2)}) ÷ 2 = ${D_(d)} (con una pendiente constante el promedio da el volumen)`);
+    if (S.u === 'us') {
+      const ft3 = V / CUFT;
+      w.push(`Volumen = ${fmt(A / FT2, 1)} ft² × ${fmt(d / FT, 3)} ft = ${fmt(ft3, 1)} ft³ ÷ 27 = ${fmt(Vd, 2)} yd³`);
+    } else w.push(`Volumen = ${fmt(A, 2)} m² × ${fmt(d, 3)} m = ${fmt(V, 3)} m³`);
+    w.push(`Con ${fmt(X * 100, 0)}% extra por ${extraWord}: ${fmt(Vd, 2)} × ${fmt(1 + X, 2)} = ${fmt(Vod, 2)} ${U}${M.sold === 'vol' ? ` → pida ${fmt(orderV, 1)} ${U}` : ''}`);
+    w.push(`Peso = ${fmt(Vod, 2)} ${U} × ${fmt(disp(dens, 'dens'), 2)} ${unit('dens')} = ${W_(Wt)}${M.sold === 'wt' ? ` → pida unas ${fmt(orderT, 1)} ${WU}` : ''}`);
+    w.push(S.u === 'us' ? `Bolsas = ${fmt(Vo / CUFT, 1)} ft³ ÷ ${fmt(bag, 2)} ft³ por bolsa = ${fmt(Vo / bSI, 1)} → ${bags} bolsas` : `Bolsas = ${fmt(Vo * 1000, 0)} L ÷ ${fmt(bag, 0)} L por bolsa = ${fmt(Vo / bSI, 1)} → ${bags} bolsas`);
+    w.push(`Viajes en camioneta = el mayor entre ${W_(Wt)} ÷ ${S.u === 'us' ? fmt(pay / LBt, 0) + ' lb' : fmt(pay * 1000, 0) + ' kg'} de carga y ${fmt(Vod, 2)} ÷ ${fmt(disp(bed, 'vol'), 2)} ${U} por viaje → ${loads}`);
+    wb.innerHTML = `<ol class="work">${w.map(x => `<li>${x}</li>`).join('')}</ol>`;
+
+    // prices
+    const pb = get(`price.bulk.${m}`), dl = get('price.dlv') || 0, pbag = get(`price.bag.${m}`);
+    const rows = [];
+    let bulkTot = null, bagTot = null;
+    if (pb != null && !isNaN(pb)) {
+      const pDisp = disp(pb, M.sold === 'wt' ? 'pwt' : 'pvol');
+      bulkTot = (M.sold === 'wt' ? orderT : orderV) * pDisp + dl;
+      rows.push(['A granel' + (dl ? ', con entrega' : ''), bulkTot, `${fmt(M.sold === 'wt' ? orderT : orderV, 1)} ${M.sold === 'wt' ? WU : U} × ${money(pDisp)}${dl ? ' + ' + money(dl) : ''}`]);
+    }
+    if (pbag != null && !isNaN(pbag)) { bagTot = bags * pbag; rows.push(['Bolsas', bagTot, `${bags} × ${money(pbag)}`]); }
+    let h = rows.map(r => `<div><span>${r[0]} <span style="color:var(--ink-3)">${r[2]}</span></span><span class="${rows.length > 1 && r[1] === Math.min(bulkTot, bagTot) ? 'win' : ''}">${money(r[1])}</span></div>`).join('');
+    if (bulkTot != null && bagTot != null) {
+      const cheaper = bulkTot <= bagTot ? 'A granel' : 'En bolsas';
+      h += `<p class="hint">${cheaper} ahorra ${money(Math.abs(bulkTot - bagTot))}.`;
+      const pv = M.sold === 'wt' ? pb * dens : pb;     // bulk price per m³
+      const bagPerM3 = pbag / bSI;
+      if (bagPerM3 > pv && dl > 0) h += ` Las bolsas salen más baratas por debajo de unas ${fmt(disp(dl / (bagPerM3 - pv), 'vol'), 2)} ${U}, donde el cargo de entrega pesa más que el sobreprecio de las bolsas.`;
+      h += '</p>';
+    }
+    if (!rows.length) h = '<p class="hint">Escriba los precios de su proveedor para comparar la entrega a granel con las bolsas.</p>';
+    cmp.innerHTML = h;
+  }
+
+  function sod(R) {
+    const A = R.total, w = (get('sod.waste') || 0) / 100, roll = get('sod.roll'), pal = get('sod.pallet');
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    if (!(roll > 0) || !(pal > 0)) { res.innerHTML = '<p class="empty">Escriba las medidas del rollo y de la tarima en el paso 3.</p>'; return; }
+    const Aw = A * (1 + w), rolls = Math.ceil(Aw / roll - 1e-9), full = Math.floor(Aw / pal + 1e-9);
+    const rem = Math.max(0, Math.ceil((Aw - full * pal) / roll - 1e-9)), allPal = Math.ceil(Aw / pal - 1e-9);
+    const big = full === 0 ? `${rolls} rollos` : rem === 0 ? `${full} tarima${full > 1 ? 's' : ''}` : `${full} tarima${full > 1 ? 's' : ''} + ${rem} rollos`;
+    const items = [li('Pasto necesario', A_(Aw)), li('Todo en rollos', `${rolls} rollos`), li('Todo en tarimas', `${allPal} tarima${allPal > 1 ? 's' : ''} (${A_(allPal * pal)})`)];
+    const say = `Necesito ${big} de pasto en rollo, unos ${A_(Aw)} contando ${fmt(w * 100, 0)}% por cortes.`;
+    res.innerHTML = `<div class="step">Pedido</div><div class="big">${big}</div><p class="sub">Cubre ${A_(A)} más ${fmt(w * 100, 0)}% por cortes y orillas.</p><ul>${items.join('')}</ul>
+      <div class="note">Ponga el pasto el mismo día que llega, sobre suelo aflojado y nivelado. ¿Necesita tierra debajo? <button type="button" class="linkbtn" data-goto="topsoil">Cambiar a tierra vegetal</button> (se conserva su área).</div>` + sayBox(say);
+    wb.innerHTML = `<ol class="work">${R.work.concat([
+      `Con ${fmt(w * 100, 0)}% extra: ${A_(A)} × ${fmt(1 + w, 2)} = ${A_(Aw)}`,
+      `Rollos = ${A_(Aw)} ÷ ${A_(roll)} por rollo = ${fmt(Aw / roll, 1)} → ${rolls}`,
+      `Tarimas = ${A_(Aw)} ÷ ${A_(pal)} por tarima = ${fmt(Aw / pal, 2)} → ${full} tarima${full === 1 ? '' : 's'} completa${full === 1 ? '' : 's'}${rem ? ` + ${rem} rollos para los ${A_(Aw - full * pal)} que faltan` : ''}`
+    ]).map(x => `<li>${x}</li>`).join('')}</ol>`;
+    const pr = get('price.roll'), pp = get('price.pallet'), opts = [];
+    if (pr > 0) opts.push(['Todo en rollos', rolls * pr]);
+    if (pp > 0) opts.push(['Todo en tarimas', allPal * pp]);
+    if (pr > 0 && pp > 0 && full > 0 && rem > 0) opts.push([`${full} tarima${full > 1 ? 's' : ''} + ${rem} rollos`, full * pp + rem * pr]);
+    const best = Math.min(...opts.map(o => o[1]));
+    cmp.innerHTML = opts.length ? opts.map(o => `<div><span>${o[0]}</span><span class="${opts.length > 1 && o[1] === best ? 'win' : ''}">${money(o[1])}</span></div>`).join('') : '<p class="hint">Escriba los precios del rollo y de la tarima para encontrar la combinación más barata.</p>';
+  }
+
+  function seed(R) {
+    const A = R.total, G = GRASS.find(g => g.id === S.sg), rate = get(`seed.rate.${G.id}.${S.sm}`);
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    if (!(rate > 0)) { res.innerHTML = '<p class="empty">Escriba una dosis de siembra en el paso 3.</p>'; return; }
+    const kg = A * rate / 1000, bag = seedBag(), bagKg = S.u === 'us' ? bag * LBkg : bag, bags = Math.ceil(kg / bagKg - 1e-9);
+    const amt = S.u === 'us' ? `${fmt(kg / LBkg, 1)} lb` : `${fmt(kg, 2)} kg`;
+    const say = `Necesito ${amt} de semilla de ${G.name.toLowerCase()} para ${A_(A)} (${S.sm === 'n' ? 'césped nuevo' : 'resiembra'}).`;
+    res.innerHTML = `<div class="step">Comprar</div><div class="big">${amt}</div><p class="sub">${G.name}, ${S.sm === 'n' ? 'césped nuevo' : 'resiembra'}, a ${fmt(disp(rate, 'rate'), 2)} ${unit('rate')}.</p><ul>${li('Bolsas', `${bags} × ${fmt(bag, 1)} ${S.u === 'us' ? 'lb' : 'kg'}`)}</ul>
+      <div class="note">Más semilla no es mejor: sembrar muy tupido da plántulas débiles y amontonadas. Importa más un buen contacto de la semilla con el suelo y humedad constante hasta que se establezca.</div>` + sayBox(say);
+    wb.innerHTML = `<ol class="work">${R.work.concat([
+      S.u === 'us' ? `Semilla = ${fmt(disp(rate, 'rate'), 2)} lb por 1,000 ft² × ${fmt(A / FT2 / 1000, 3)} miles de ft² = ${amt}` : `Semilla = ${fmt(rate, 1)} g/m² × ${fmt(A, 1)} m² = ${fmt(kg * 1000, 0)} g = ${amt}`,
+      `Bolsas = ${amt} ÷ ${fmt(bag, 1)} ${S.u === 'us' ? 'lb' : 'kg'} = ${fmt(kg / bagKg, 2)} → ${bags}`
+    ]).map(x => `<li>${x}</li>`).join('')}</ol>`;
+    const p = get('price.seedbag');
+    cmp.innerHTML = p > 0 ? `<div><span>${bags} bolsas × ${money(p)}</span><span>${money(bags * p)}</span></div>` : '<p class="hint">Escriba el precio por bolsa para ver el costo. Compare el costo por libra entre tamaños de bolsa: las bolsas grandes muchas veces salen mucho más baratas por libra.</p>';
+  }
+
+  function fabric(R) {
+    const A = R.total, ov = (get('fab.overlap') || 0) / 100, r = FABROLLS[S.u][fabRollIdx()];
+    const rollA = S.u === 'us' ? r[0] * r[1] * FT2 : r[0] * r[1];
+    const Aw = A * (1 + ov), rolls = Math.ceil(Aw / rollA - 1e-9);
+    const res = $('#h-res'), wb = $('#h-workbody'), cmp = $('#h-cmp');
+    const rl = `${r[0]} × ${r[1]} ${S.u === 'us' ? 'ft' : 'm'}`;
+    res.innerHTML = `<div class="step">Comprar</div><div class="big">${rolls} rollo${rolls > 1 ? 's' : ''}</div><p class="sub">Rollos de ${rl} para ${A_(A)} más ${fmt(ov * 100, 0)}% por traslapes.</p>
+      <div class="note">Traslape las uniones ${S.u === 'us' ? '6–12 pulgadas' : '15–30 cm'} y ponga una grapa cada ${S.u === 'us' ? '3–4 pies' : 'metro más o menos'}. La tela funciona mejor bajo grava y piedra; bajo mantillo de corteza, el mantillo se descompone encima y la maleza echa raíz ahí de todos modos.</div>` + sayBox(`Necesito ${rolls} rollo${rolls > 1 ? 's' : ''} de tela de jardinería de ${rl}.`);
+    wb.innerHTML = `<ol class="work">${R.work.concat([`Con ${fmt(ov * 100, 0)}% de traslape: ${A_(Aw)}`, `Rollos = ${A_(Aw)} ÷ ${A_(rollA)} por rollo = ${fmt(Aw / rollA, 2)} → ${rolls}`]).map(x => `<li>${x}</li>`).join('')}</ol>`;
+    const p = get('price.fabroll');
+    cmp.innerHTML = p > 0 ? `<div><span>${rolls} × ${money(p)}</span><span>${money(rolls * p)}</span></div>` : '<p class="hint">Escriba el precio por rollo para ver el costo.</p>';
+  }
+
+  // ---- share link (state in the URL hash) ----
+  function writeHash() {
+    try {
+      const pack = JSON.stringify({ v: 1, u: S.u, m: S.m, sh: S.shapes, dm: S.dm, sm: S.sm, sg: S.sg, f: S.f });
+      const h = '#s=' + btoa(unescape(encodeURIComponent(pack))).replace(/=+$/, '');
+      if (location.hash !== h) history.replaceState(null, '', h);
+    } catch (e) { /* ignore */ }
+  }
+  function readHash() {
+    try {
+      const m = location.hash.match(/^#s=(.+)$/);
+      if (!m) return null;
+      const o = JSON.parse(decodeURIComponent(escape(atob(m[1]))));
+      if (!o || o.v !== 1 || !MAT[o.m] || !Array.isArray(o.sh) || !o.sh.length) return null;
+      const st = fresh(o.u === 'si' ? 'si' : 'us');
+      st.m = o.m; st.shapes = o.sh.filter(s => SHAPES[s.t]).map(s => ({ id: +s.id, t: s.t, op: s.op < 0 ? -1 : 1 }));
+      if (!st.shapes.length) return null;
+      st.nid = Math.max(...st.shapes.map(s => s.id)) + 1;
+      st.dm = o.dm === 'slope' ? 'slope' : 'even'; st.sm = o.sm === 'o' ? 'o' : 'n';
+      st.sg = GRASS.some(g => g.id === o.sg) ? o.sg : 'tf';
+      st.f = o.f && typeof o.f === 'object' ? o.f : {};
+      return st;
+    } catch (e) { return null; }
+  }
+
+  function toast(msg) { const t = $('#h-toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('on'), 1800); }
+  function copy(text, msg) {
+    const done = () => toast(msg);
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, () => fallback());
+    else fallback();
+    function fallback() {
+      const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch (e) { window.prompt('Copie esto:', text); }
+      ta.remove();
+    }
+  }
+
+  // ---- events ----
+  root.addEventListener('input', e => {
+    const inp = e.target.closest('input[data-k]');
+    if (!inp) return;
+    const k = inp.dataset.k, t = inp.dataset.t;
+    RAW[k] = inp.value;
+    const v = inp.value.trim() === '' ? null : parse(t, inp.value);
+    if (v == null) delete S.f[k]; else S.f[k] = v;
+    if (/^d1\./.test(k) || /^sh/.test(k)) { /* nothing extra */ }
+    compute();
+  });
+  root.addEventListener('change', e => {
+    const el = e.target;
+    if (el.id === 'h-mat') { S.m = el.value; clearRaw(); renderMat(); renderStep3(); renderAssume(); renderPrice(); compute(); return; }
+    if (el.dataset.sh) {
+      const id = +el.closest('.shape').dataset.id, sh = S.shapes.find(s => s.id === id);
+      if (el.dataset.sh === 't') { sh.t = el.value; renderShapes(); }
+      else { sh.op = +el.value; el.closest('.shape').classList.toggle('sub', sh.op < 0); }
+      compute(); return;
+    }
+    if (el.dataset.sel) {
+      const s = el.dataset.sel;
+      if (s === 'sg') { S.sg = el.value; renderStep3(); }
+      else if (s === 'seedbag') S.f[`seedbag.${S.u}`] = +el.value;
+      else if (s === 'fabroll') S.f[`fabroll.${S.u}`] = +el.value;
+      else if (s.startsWith('bag.')) S.f[`${s}.${S.u}`] = +el.value;
+      compute();
+    }
+  });
+  root.addEventListener('click', e => {
+    const b = e.target.closest('button');
+    if (!b) return;
+    if (b.dataset.u && b.dataset.u !== S.u) {
+      S.u = b.dataset.u; RAW = {};
+      try { localStorage.setItem('ra-units', S.u); } catch (err) { /* ignore */ }
+      renderAll(); return;
+    }
+    if (b.dataset.dm) { S.dm = b.dataset.dm; renderStep3(); compute(); return; }
+    if (b.dataset.sm) { S.sm = b.dataset.sm; renderStep3(); compute(); return; }
+    if (b.dataset.goto) { S.m = b.dataset.goto; clearRaw(); renderMat(); renderStep3(); renderAssume(); renderPrice(); compute(); $('#h-mat').scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    if (b.hasAttribute('data-del')) {
+      const id = +b.closest('.shape').dataset.id;
+      S.shapes = S.shapes.filter(s => s.id !== id);
+      Object.keys(S.f).forEach(k => { if (k.startsWith(`sh${id}.`)) delete S.f[k]; });
+      renderShapes(); compute(); return;
+    }
+    if (b.id === 'h-add') {
+      const id = S.nid++;
+      S.shapes.push({ id, t: 'rect', op: 1 });
+      renderShapes(); compute();
+      const first = root.querySelector(`.shape[data-id="${id}"] input`); if (first) first.focus();
+      return;
+    }
+    if (b.id === 'h-areset') {
+      const m = S.m;
+      [`ov.${m}.extra`, `ov.${m}.dens`, 'truck.pay', 'truck.bed'].forEach(k => { delete S.f[k]; delete RAW[k]; });
+      renderAssume(); compute(); return;
+    }
+    if (b.id === 'h-copysay') { copy($('#h-say').textContent, 'Copiado'); return; }
+    if (b.id === 'h-link') { writeHash(); copy(location.href, 'Enlace copiado'); return; }
+    if (b.id === 'h-print') { root.querySelectorAll('details').forEach(d => d.open = true); window.print(); return; }
+    if (b.id === 'h-reset') { S = fresh(S.u); RAW = {}; history.replaceState(null, '', location.pathname + location.search); renderAll(); return; }
+  });
+
+  // ---- start ----
+  let u0 = 'us';
+  try { const s = localStorage.getItem('ra-units'); if (s === 'si' || s === 'us') u0 = s; } catch (e) { /* ignore */ }
+  S = readHash() || fresh(u0);
+  const qm = new URLSearchParams(location.search).get('m');
+  if (qm && MAT[qm] && !location.hash) S.m = qm;
+  renderAll();
+})();
+</script>
+```
+
+## Cómo medir
+
+- **Rectángulos y cuadrados:** largo × ancho. Una cama en forma de L son dos rectángulos; súmelos como dos piezas.
+- **Círculos:** mida de lado a lado por el centro (el diámetro). Para un anillo alrededor de un árbol, sume el círculo completo y reste el círculo de adentro.
+- **Triángulos:** mida los tres lados. No necesita la altura.
+- **Camas con curvas:** tienda una cinta métrica por la línea recta más larga que cruce la cama. Cada pocos pies, mida de lado a lado en ángulo recto. Escriba esos anchos en orden, incluidos los dos extremos (0 si la cama termina en punta). Entre más anchos mida, más exacta será el área.
+
+## Por qué pedir más de lo que midió
+
+La tierra suelta, la composta y el mantillo se asientan después de esparcirlos y regarlos, y la base para caminos o la arena se encogen al compactarse. La calculadora agrega un margen típico para cada material; lo puede cambiar en *Supuestos*. Luego redondea hacia arriba a la siguiente media unidad, porque los proveedores casi nunca venden menos.
+
+## Yardas cúbicas o toneladas
+
+La tierra, la composta y el mantillo normalmente se venden por **yarda cúbica** (volumen). La piedra, la grava y la arena normalmente se venden por **tonelada** (peso). La misma yarda cúbica puede pesar desde unas 600 lb (mantillo) hasta más de 2,500 lb (grava), así que no se puede comparar un precio por tonelada con un precio por yarda sin saber el peso. Pregúntele a su proveedor cuánto pesa su material por yarda, y ponga ese número en *Supuestos*.
+
+## Antes de comprar tierra vegetal
+
+La "tierra vegetal" (topsoil) no tiene una definición legal, y la calidad varía mucho. Antes de comprar, pregunte:
+
+- **¿Está cernida?** A la tierra cernida se le quitaron piedras, raíces y terrones.
+- **¿Qué contiene?** ¿Tierra natural, una mezcla con composta o arena, o tierra de relleno?
+- **¿La han analizado?** Pida el pH, la materia orgánica, las sales y la textura. Un proveedor serio se lo puede decir.
+- **¿La puedo ver antes?** Fíjese si tiene maleza, escombro de construcción, plástico u olor agrio. Cuando llegue la carga, revise que sea igual a la que vio.
+
+No pague por más de lo que necesita: vale la pena preguntar por una cotización que pida varias veces el volumen que da esta calculadora.

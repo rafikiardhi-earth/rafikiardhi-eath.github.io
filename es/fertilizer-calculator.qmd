@@ -1,0 +1,84 @@
+---
+title: "Calculadora de la etiqueta del fertilizante"
+description: "Entienda los números N-P-K de una bolsa de fertilizante: cuánto producto aplicar en su césped o jardín, cuántas bolsas, y el costo real por libra de nitrógeno."
+lang: es
+anchor-sections: false
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/fertilizer-calculator.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/fertilizer-calculator.html">'
+---
+
+::: {.hm-lang}
+[English](../fertilizer-calculator.qmd){lang="en"}
+:::
+
+Los tres números de una bolsa de fertilizante (N-P-K) son porcentajes por peso. Una bolsa de 20 lb de 24-0-6 contiene 4.8 lb de nitrógeno; el resto son los otros nutrientes y relleno. Esta herramienta convierte la etiqueta en cuánto producto aplicar, y muestra lo que de verdad paga por cada libra de nutriente.
+
+```{=html}
+<div class="hmc" id="fz"></div>
+<script>
+(function () {
+  const NUT = { N: ['nitrógeno (N)', 'n'], P: ['fosfato (P₂O₅)', 'p'], K: ['potasa (K₂O)', 'k'] };
+  HM.tool({
+    id: 'fz', step: 'La bolsa',
+    inputs: [
+      { k: 'n', l: 'N', t: 'num', d: 24, w: 2 }, { k: 'p', l: 'P', t: 'num', d: 0, w: 2 }, { k: 'k', l: 'K', t: 'num', d: 6, w: 2 },
+      { k: 'wt', l: 'Peso de la bolsa', t: 'mass', d: { us: 20, si: 10 }, w: 3 },
+      { k: 'price', l: 'Precio por bolsa', t: 'money', w: 3 },
+      { t: 'sec', l: 'Lo que quiere aplicar' },
+      { k: 'area', l: 'Área', t: 'area' },
+      { k: 'nut', l: 'Dosis basada en', t: 'seg', d: 'N', opts: [['N', 'Nitrógeno'], ['P', 'Fosfato'], ['K', 'Potasa']] },
+      { k: 'rate', l: 'Dosis por aplicación', t: 'arate', d: { us: 1, si: 5 }, h: u => u === 'us' ? 'Césped: normalmente ½–1 lb de nitrógeno por cada 1,000 ft² por aplicación. Para fosfato y potasa, use la recomendación de su análisis de suelo.' : 'Césped: normalmente 2.5–5 g de nitrógeno por m² por aplicación. Para fosfato y potasa, use la recomendación de su análisis de suelo.' },
+      { t: 'sec', l: 'Comparar con otro producto (opcional)' },
+      { k: 'n2', l: 'N', t: 'num', w: 2 }, { k: 'p2', l: 'P', t: 'num', w: 2 }, { k: 'k2', l: 'K', t: 'num', w: 2 },
+      { k: 'wt2', l: 'Peso de la bolsa', t: 'mass', w: 3 }, { k: 'price2', l: 'Precio por bolsa', t: 'money', w: 3 }
+    ],
+    compute(v, U) {
+      const pct = { N: v.n || 0, P: v.p || 0, K: v.k || 0 }, sel = v.nut;
+      if ((pct.N + pct.P + pct.K) > 100) return U.empty('Los tres números no pueden sumar más de 100.');
+      if (!(v.wt > 0)) return U.empty('Escriba el peso de la bolsa.');
+      const bagNut = n => v.wt * pct[n] / 100; // kg of nutrient per bag
+      const costPer = n => v.price > 0 && pct[n] > 0 ? v.price / (U.us ? bagNut(n) / 0.45359237 : bagNut(n)) : null;
+      const work = [`Una bolsa de ${U.f(v.wt, 'mass', 1)} de ${HM.fmt(pct.N, 1)}-${HM.fmt(pct.P, 1)}-${HM.fmt(pct.K, 1)} contiene ${['N', 'P', 'K'].map(n => `${U.f(bagNut(n), 'mass', 2)} de ${n === 'N' ? 'N' : n === 'P' ? 'P₂O₅' : 'K₂O'}`).join(', ')}`];
+      let h = '';
+      if (pct[sel] <= 0) h = U.note(`Este producto no tiene ${NUT[sel][0]}, así que no lo puede aportar. Escoja otro nutriente u otro producto.`, 'bad');
+      else if (v.rate > 0) {
+        const prodRate = v.rate / (pct[sel] / 100); // g/m²
+        work.push(`Dosis de producto = ${U.f(v.rate, 'arate', 2)} ÷ ${HM.fmt(pct[sel], 1)}% = ${U.f(prodRate, 'arate', 2)} de producto`);
+        if (v.area > 0) {
+          const kg = prodRate * v.area / 1000, bags = kg / v.wt;
+          h = U.big('Aplique', U.f(kg, 'mass', 1), `de este producto en ${U.f(v.area, 'area', 0)}: son ${HM.fmt(bags, 2)} bolsa${bags > 1.005 ? 's' : ''}. Ajuste su esparcidora a ${U.f(prodRate, 'arate', 2)} con la tabla de la bolsa.`);
+          h += U.kv(['N', 'P', 'K'].map(n => [n === 'N' ? 'Nitrógeno aplicado' : n === 'P' ? 'Fosfato (P₂O₅) aplicado' : 'Potasa (K₂O) aplicada', `${U.f(prodRate * pct[n] / 100, 'arate', 2)}`]).concat(v.price > 0 ? [['Costo de esta aplicación', U.money(bags * v.price)]] : []));
+          work.push(`Producto para su área = ${U.f(prodRate, 'arate', 2)} × ${U.f(v.area, 'area', 0)} = ${U.f(kg, 'mass', 2)}`, `Bolsas = ${U.f(kg, 'mass', 2)} ÷ ${U.f(v.wt, 'mass', 1)} = ${HM.fmt(bags, 2)}`);
+        } else {
+          h = U.big('Aplique', U.f(prodRate, 'arate', 2), 'de este producto. Escriba su área para ver el total.');
+        }
+      }
+      const cpn = costPer(sel), unitW = U.us ? 'lb' : 'kg';
+      if (cpn != null) { h += U.kv([[`Costo por ${unitW} de ${NUT[sel][0]}`, U.money(cpn)]]); work.push(`Costo por ${unitW} de ${NUT[sel][0]} = ${U.money(v.price)} ÷ ${U.f(bagNut(sel), 'mass', 2)} = ${U.money(cpn)}`); }
+      // second product
+      const p2 = { N: v.n2 || 0, P: v.p2 || 0, K: v.k2 || 0 };
+      if (v.wt2 > 0 && v.price2 > 0 && p2[sel] > 0 && cpn != null) {
+        const c2 = v.price2 / (U.us ? v.wt2 * p2[sel] / 100 / 0.45359237 : v.wt2 * p2[sel] / 100);
+        const better = c2 < cpn ? 'El segundo producto' : 'Este producto';
+        h += `<h3>Comparación</h3>` + U.kv([[`Este producto, por ${unitW} de ${sel}`, U.money(cpn)], [`Segundo producto, por ${unitW} de ${sel}`, U.money(c2)]]) +
+          U.note(`${better} es ${HM.fmt(Math.abs(cpn - c2) / Math.max(cpn, c2) * 100, 0)}% más barato por ${unitW} de ${NUT[sel][0]}. El precio por bolsa no dice nada hasta que lo divide entre el nutriente que contiene.`, 'good');
+        work.push(`Segundo producto: ${U.money(v.price2)} ÷ (${U.f(v.wt2, 'mass', 1)} × ${HM.fmt(p2[sel], 1)}%) = ${U.money(c2)} por ${unitW}`);
+      }
+      if (pct.P > 0) h += U.note('Muchos céspedes y jardines ya tienen suficiente fósforo, y algunos estados y ciudades restringen el fósforo en el césped. Aplíquelo solo si un análisis de suelo muestra que está bajo.');
+      return { html: h || U.empty('Escriba una dosis.'), work };
+    }
+  });
+})();
+</script>
+```
+
+## Cómo leer la etiqueta de un fertilizante
+
+- **N (nitrógeno)** impulsa el crecimiento verde de las hojas. Es el nutriente que más necesita el césped, y no se queda mucho tiempo en el suelo; por eso se aplica con regularidad.
+- **P (fosfato, P₂O₅)** ayuda a las raíces y al establecimiento de las plantas. La etiqueta muestra el fosfato, no el fósforo puro: el P elemental es como el 44% del número de P₂O₅.
+- **K (potasa, K₂O)** ayuda a resistir el estrés. El K elemental es como el 83% del número de K₂O.
+- **Los productos de liberación lenta** u **orgánicos** alimentan durante semanas en vez de días. La cuenta es la misma; solo son más suaves.
+
+Más no es mejor. El nitrógeno de más significa cortar el pasto más seguido, raíces más débiles y nitrato que se va a los ríos y arroyos. Un [análisis de suelo](soil-test-translator.qmd) le dice si de verdad necesita fosfato o potasa.

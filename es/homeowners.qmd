@@ -1,0 +1,116 @@
+---
+title: "Herramientas para su casa y jardín"
+description: "Calculadoras y herramientas gratuitas para el jardín y el patio, hechas por científicos del suelo: materiales, cotizaciones, riego, análisis de suelo, fertilizante, drenaje y árboles. Sin anuncios y sin registro."
+lang: es
+include-in-header:
+  - file: ../_hm-lang.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/homeowners.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/homeowners.html">'
+---
+
+::: {.hm-lang}
+[English](../homeowners.qmd){lang="en"}
+:::
+
+Herramientas gratuitas para su patio y su jardín, hechas por científicos del suelo. Calcule cuánto material necesita de verdad, revise una cotización antes de pagarla, riegue mejor y tome decisiones sobre su suelo viendo cómo se hace cada cálculo.
+
+Sin anuncios, sin registro, y ningún proveedor paga por aparecer aquí. Cada herramienta muestra cómo calcula sus números, para que usted pueda revisarlos.
+
+## Comprar materiales
+
+::: {.cards}
+::: {.card-item}
+### [Calculadora de materiales para jardinería](materials-calculator.qmd)
+Cuánta tierra, composta, mantillo (mulch), grava, base, arena, pasto en rollo o semilla de pasto pedir, para cualquier forma de terreno, en yardas, toneladas, bolsas o tarimas.
+:::
+::: {.card-item}
+### [Revisar una cotización](quote-checker.qmd)
+Vea qué profundidad cubre de verdad una cotización, si es más de lo que necesita, y el precio por yarda y por tonelada. Incluye un convertidor de yardas a toneladas.
+:::
+::: {.card-item}
+### [Tierra para camas elevadas y macetas](planter-soil.qmd)
+Tierra para camas elevadas, macetas y jardineras, cómo llenar camas profundas por menos dinero, y cuánta tierra necesita un árbol.
+:::
+::: {.card-item}
+### [Calculadora de la etiqueta del fertilizante](fertilizer-calculator.qmd)
+Convierta los números N-P-K en cuánto aplicar, y compare el costo real por libra de nutriente.
+:::
+:::
+
+## Riego
+
+::: {.cards}
+::: {.card-item}
+### [Prueba de vasos para aspersores](catch-cup-test.qmd)
+Mida cuánta agua aplica de verdad cada zona, y qué tan parejo, para ajustar los tiempos de riego.
+:::
+::: {.card-item}
+### [Riego por ciclos y remojo](cycle-and-soak.qmd)
+Evite que el agua escurra en suelos arcillosos y pendientes dividiendo el riego en ciclos cortos.
+:::
+::: {.card-item}
+### [Calculadora de riego por goteo](drip-irrigation.qmd)
+Tiempos de riego y goteros por planta, y si la zona puede abastecerlos.
+:::
+::: {.card-item}
+### [Césped o jardín de bajo consumo de agua](lawn-water.qmd)
+Compare el agua y el costo de una temporada para césped, plantas de bajo consumo y mantillo.
+:::
+::: {.card-item}
+### [Calculadora de barriles de lluvia](rain-harvest.qmd)
+Cuánta agua junta su techo por tormenta y por año, y qué tan rápido se llena un barril.
+:::
+:::
+
+## Su suelo
+
+::: {.cards}
+::: {.card-item}
+### [Traductor del análisis de suelo](soil-test-translator.qmd)
+Un reporte de laboratorio en palabras sencillas: qué hacer, y qué no necesita comprar.
+:::
+::: {.card-item}
+### [¿Debo mejorar mi suelo?](should-i-amend.qmd)
+Revise antes de comprar composta, tierra o arena, según lo que va a sembrar.
+:::
+::: {.card-item}
+### [Pruebas de suelo caseras](diy-soil-tests.qmd)
+Pruebas del frasco, de la cinta y del drenaje: conozca la textura de su suelo y qué tan rápido drena.
+:::
+::: {.card-item}
+### [pH del suelo: cal y azufre](ph-adjustment.qmd)
+Cuánto subir o bajar el pH, y cuándo bajarlo no es realista.
+:::
+::: {.card-item}
+### [Calculadora de mezcla para composta](compost-mix.qmd)
+Equilibre materiales verdes y cafés, y arregle una composta que huele mal o va lenta.
+:::
+:::
+
+## Drenaje, construcción y árboles
+
+::: {.cards}
+::: {.card-item}
+### [Pendiente alrededor de los cimientos](foundation-grading.qmd)
+¿El terreno baja lo suficiente alejándose de su casa?, y cuánto relleno se necesita para corregirlo.
+:::
+::: {.card-item}
+### [Jardín de lluvia y pozo seco](rain-garden.qmd)
+Calcule el tamaño de un jardín de lluvia o un pozo seco según el área del techo y qué tan rápido drena su suelo.
+:::
+::: {.card-item}
+### [Revisión del suelo en casas nuevas](construction-soil-check.qmd)
+Averigüe si la construcción le dejó una capa delgada de tierra sobre subsuelo compactado, y qué preguntarle a su constructor.
+:::
+::: {.card-item}
+### [Profundidad de congelamiento](frost-depth.qmd)
+Qué tan profundo se congela el suelo donde vive, para tuberías de agua, cimientos y postes de cerca.
+:::
+::: {.card-item}
+### [Zona de protección de árboles](tree-protection.qmd)
+Cuánto espacio cercar alrededor de un árbol antes de construir o excavar.
+:::
+:::
+
+---
+
+*¿Trabaja en esto profesionalmente? Vea nuestras [herramientas científicas](../tools.qmd) (en inglés) para clasificación de suelos, modelos de perfiles y más.*
