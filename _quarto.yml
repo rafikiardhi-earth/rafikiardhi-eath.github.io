@@ -25,15 +25,17 @@ website:
         text: Services
       - text: Tools
         menu:
+          - text: "For homeowners"
           - href: homeowners.qmd
-            text: For homeowners
+            text: Gardening & landscapes
           - text: "---"
           - text: "For researchers"
           - href: tools.qmd
             text: Research tools
           - href: checks.qmd
             text: Check a result
-          - text: "---" 
+          - text: "---"
+          - text: "Learners"
           - href: soil-keys.qmd
             text: Soil classification
       - href: publications.qmd
