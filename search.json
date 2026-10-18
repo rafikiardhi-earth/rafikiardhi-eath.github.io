@@ -70,179 +70,228 @@
     "text": "Getting a soil test\nMost state university extension services run soil tests for home gardeners at low cost, as do many private labs. Ask for a routine or garden test: it usually covers pH, organic matter, salts, phosphorus, potassium and often nitrate.\n\nSample right. Take 10–15 small cores from across the area, 0–6 in deep for gardens and 0–4 in for lawns, mix them in a clean bucket, and send about two cups.\nSample areas separately. A vegetable bed, a lawn and a shrub border are different soils with different needs.\nEvery 3–4 years is enough for most gardens, unless you’re fixing a problem.\n\nA soil test is the cheapest way to avoid buying fertilizer, compost or lime you don’t need."
   },
   {
-    "objectID": "planter-soil.html",
-    "href": "planter-soil.html",
-    "title": "Raised bed and planter soil calculator",
+    "objectID": "materials-calculator.html",
+    "href": "materials-calculator.html",
+    "title": "Landscape materials calculator",
     "section": "",
-    "text": "Filling raised beds and big planters takes more soil than most people expect, and bags add up fast. This works out the volume for beds, round pots and tree planters, and shows how to cut the cost of deep beds."
+    "text": "Measure your area, pick a material, and see how much to order: in cubic yards, tons, bags or pallets. Odd shapes are fine: add them up piece by piece and subtract patios or paths. Every number shows how it was calculated, so you can check it against a supplier’s quote."
   },
   {
-    "objectID": "planter-soil.html#tips-for-filling-beds",
-    "href": "planter-soil.html#tips-for-filling-beds",
-    "title": "Raised bed and planter soil calculator",
-    "section": "Tips for filling beds",
-    "text": "Tips for filling beds\n\nA raised bed 4 × 8 ft and 12 in deep holds about 1.2 cubic yards (32 ft³) once settled. That’s over 20 bags of 1.5 ft³.\nFill in layers and water each one so the soil settles before you plant.\nTop up each spring. Beds sink as organic matter breaks down; an inch or two of compost each year keeps them full.\nAvoid treated wood scraps as filler, and anything painted or glued."
+    "objectID": "materials-calculator.html#how-to-measure",
+    "href": "materials-calculator.html#how-to-measure",
+    "title": "Landscape materials calculator",
+    "section": "How to measure",
+    "text": "How to measure\n\nRectangles and squares: length × width. An L-shaped bed is two rectangles; add them as two pieces.\nCircles: measure straight across the middle (the diameter). For a ring around a tree, add the full circle and subtract the inner circle.\nTriangles: measure all three sides. You don’t need the height.\nCurvy beds: run a tape measure along the longest straight line through the bed. Every few feet, measure straight across at a right angle. Enter those widths in order, including both ends (0 if the bed comes to a point). The more widths you measure, the more accurate the area."
   },
   {
-    "objectID": "planter-soil.html#pots-and-potting-mix",
-    "href": "planter-soil.html#pots-and-potting-mix",
-    "title": "Raised bed and planter soil calculator",
-    "section": "Pots and potting mix",
-    "text": "Pots and potting mix\n\nPotting mix is sold in quarts or cubic feet in the US (8 qt, 16 qt, 1–2 cu ft) and in litres elsewhere. One cubic foot is about 26 quarts or 28 litres.\nNursery “gallon” sizes are trade sizes, not measurements. A #1 (“1-gallon”) pot holds about 3 quarts; a #5 holds about 4 gallons.\nUse potting mix, not garden soil, in pots. Garden soil packs down in containers and stays waterlogged at the bottom."
+    "objectID": "materials-calculator.html#why-order-more-than-you-measured",
+    "href": "materials-calculator.html#why-order-more-than-you-measured",
+    "title": "Landscape materials calculator",
+    "section": "Why order more than you measured",
+    "text": "Why order more than you measured\nLoose soil, compost and mulch settle once they are spread and watered, and road base or sand shrinks when it is compacted. The calculator adds a typical allowance for each material; you can change it under Assumptions. It then rounds up to the next half unit, because suppliers rarely sell less."
   },
   {
-    "objectID": "should-i-amend.html",
-    "href": "should-i-amend.html",
-    "title": "Should I amend my soil?",
+    "objectID": "materials-calculator.html#cubic-yards-vs-tons",
+    "href": "materials-calculator.html#cubic-yards-vs-tons",
+    "title": "Landscape materials calculator",
+    "section": "Cubic yards vs tons",
+    "text": "Cubic yards vs tons\nSoil, compost and mulch are usually sold by the cubic yard (volume). Stone, gravel and sand are usually sold by the ton (weight). The same cubic yard can weigh anywhere from about 600 lb (mulch) to over 2,500 lb (gravel), so a price per ton and a price per yard cannot be compared without knowing the weight. Ask your supplier what their material weighs per yard, and put that number in Assumptions."
+  },
+  {
+    "objectID": "materials-calculator.html#before-you-buy-topsoil",
+    "href": "materials-calculator.html#before-you-buy-topsoil",
+    "title": "Landscape materials calculator",
+    "section": "Before you buy topsoil",
+    "text": "Before you buy topsoil\n“Topsoil” has no legal definition, and quality varies a lot. Before you buy, ask:\n\nIs it screened? Screened soil has had rocks, roots and clods removed.\nWhat is in it? Native soil, a blend with compost or sand, or fill dirt?\nHas it been tested? Ask for pH, organic matter, salts and texture. A reputable supplier can tell you.\nCan I see it first? Look for weeds, construction debris, plastic or a sour smell. When the load arrives, check that it matches what you saw.\n\nDon’t pay for more than you need: a quote for several times the volume this calculator gives is worth questioning."
+  },
+  {
+    "objectID": "lawn-water.html",
+    "href": "lawn-water.html",
+    "title": "Lawn vs low-water landscape: water use calculator",
     "section": "",
-    "text": "Compost and topsoil are useful, but a lot of money goes on amendments that don’t help, or make things worse. Answer a few questions and this tells you what’s worth doing for what you’re planting."
+    "text": "How much water does a lawn actually use compared with the alternatives? This estimates a season’s irrigation for the same area planted different ways, from your climate and water price."
   },
   {
-    "objectID": "should-i-amend.html#the-short-version",
-    "href": "should-i-amend.html#the-short-version",
-    "title": "Should I amend my soil?",
-    "section": "The short version",
-    "text": "The short version\n\nTrees: never amend the planting hole. Wide hole, native soil, mulch.\nNative and low-water plants: usually nothing. Rich soil works against them.\nVegetables: yes, compost every year.\nLawns: improve the soil before seeding. On an existing lawn, aerate and top-dress lightly.\nClay: compost helps; a little sand makes it worse.\nStanding water: a drainage problem, not a soil-quality one."
+    "objectID": "lawn-water.html#how-this-is-worked-out",
+    "href": "lawn-water.html#how-this-is-worked-out",
+    "title": "Lawn vs low-water landscape: water use calculator",
+    "section": "How this is worked out",
+    "text": "How this is worked out\nPlants lose water through their leaves at a rate set mainly by weather: sun, heat, wind and dry air. Weather networks express that as reference evapotranspiration (ETo): what a well-watered grass would use. Each planting uses a share of it: bluegrass close to 80%, buffalograss under half, established low-water shrubs a third or less. Subtract the rain the plants can use, allow for watering that’s never perfectly efficient, and you have the irrigation.\nThe factors used here are typical values for planning. They’re useful for comparing options, not for setting a controller: for that, use the catch-cup test."
   },
   {
-    "objectID": "tools.html",
-    "href": "tools.html",
-    "title": "Tools for researchers",
+    "objectID": "rain-harvest.html",
+    "href": "rain-harvest.html",
+    "title": "Rain barrel and rainwater harvesting calculator",
     "section": "",
-    "text": "Free tools treat the soil horizon by horizon. Our advanced methods treat it as one connected system, continuous with depth and across the landscape, because that is how water, carbon and energy actually move.\n  \n    🔒 Your data stays yours.\n    Every tool runs on your own computer, in your browser. Files you open here are never sent to us or stored anywhere. We can't see them, even if we wanted to. That makes the tools safe for confidential data, unpublished results and manuscripts under review.\n    Don't take our word for it: once this page has loaded, disconnect from the internet. Every tool still works.\n  \n  Checking your own or a published result? All the plausibility checks are listed on one page →\n\n\n\n  \n    Profiles & mappingProfile harmoniserPedodiversityVariogram & krigingModel evaluationSampling density\n    Watervan GenuchtenWater retentionHydrologic soil group\n    EnergySoil temperatureEnergy balance\n    Soil propertiesTexture classCarbon stocksMunsell colour\n    ChecksCheck a result: yours or a published one →\n    Soil classificationWRB soil key BETA →South African soil key BETA →\n  \n\n\n\n\n\n\n  Profile harmoniser\n  Fit a physics-informed spline (phySpline) to irregular horizon data and harmonise it to standard depth intervals. Works for continuous properties (carbon, pH, clay) and for ordered classes such as texture.\n\n  \n    1. Your data\n    \n    \n      Open CSV🔒 Processed on your device. Nothing is sent or stored.\n      Example: soil carbon\n      Example: texture classes\n    \n    Columns: profile id, top depth (cm), bottom depth (cm), then one or more property columns. Comma, semicolon or tab separated. Up to 20,000 rows.\n  \n\n  \n    2. Settings\n    \n      Property\n      Mode\n        ContinuousOrdered classes\n      Smoothing (λ)\n      Target depths (cm)\n    \n    \n      Class order (finest to coarsest, or any order that makes sense for your classes)\n      \n    \n    Harmonise\n    \n  \n\n  \n    \n      \n        Profile view\n        \n      \n      \n        Observed horizons\n        Spline\n        Harmonised intervals\n      \n      \n    \n    \n      \n        Harmonised values\n        Download CSV\n      \n      Intervals that extend past the bottom of a profile are averaged over the soil that is present and shown in amber. Blank means no soil in that interval.\n      \n    \n  \n\n  \n    Need more than horizon-based harmonisation?\n    Our advanced profile method treats the soil as one continuous system: much faster on large datasets, with uncertainty at every depth and boundary-aware profiles linked to water and heat flux.\n    Get in touch →\n  \n  Method: Flynn, T., Rasaei, Z., Kostecki, R. (2026). Science of the Total Environment. doi:10.1016/j.scitotenv.2026.181621. Open R implementation: rafikisol package.\n\n\n\n\n  Soil carbon stocks\n  Calculate organic carbon stocks for many profiles at once, by summing horizons to fixed depths, with an optional equivalent soil mass basis for comparing sites or sampling dates.\n  \n    1. Your data\n    \n    \n      Open CSV🔒 Processed on your device. Nothing is sent or stored.\n      Load example\n    \n    Columns: id, top (cm), bottom (cm), soc (%), bd (bulk density, g/cm³), and optionally cf (coarse fragments, % by volume).\n  \n  \n    2. Settings\n    \n      Report to depths (cm)\n      Reference soil mass (Mg/ha, optional)\n    \n    Equivalent soil mass: stock in the soil needed to reach the reference mass, regardless of depth. Useful when bulk density differs between sites or dates.\n    Calculate\n    \n  \n  \n    \n      Stocks (Mg C/ha)\n      Download CSV\n    \n    \n    \n    Amber values: the profile is shallower than the reporting depth, so the stock covers only the soil that was sampled.\n  \n  \n    Can the change be detected?\n    Use it when planning a monitoring design, before claiming a change in your own results, or before trusting (or paying for) someone else's: check whether the sampling could detect a change that size. This gives the smallest change a design can reliably detect, and how many samples a claimed change would need.\n    \n      Variability, CV of stocks (%)\n      Samples per sampling time\n      DesignDifferent locations each timeSame locations resampled\n      Correlation between times\n      Significance level0.100.050.01\n      Power80%90%\n      Claimed change (%, optional)\n    \n    Field CVs for soil carbon stocks are typically 20–50%. Resampling the same locations removes much of the spatial variation from the comparison; the correlation says how much (0.5–0.8 is common).\n    \n    \n    \n  Garten, C.T., Wullschleger, S.D. (1999). Soil carbon inventories under a bioenergy crop (switchgrass): measurement limitations. J. Environ. Qual. 28, 1359–1365. doi:10.2134/jeq1999.00472425002800040041x\n  \n  \n    Horizon sums can overestimate stocks\n    Summing horizons assumes each layer is uniform. Our published work shows this can substantially overestimate carbon stocks compared with assessing the profile at every point. For baselines, credits or reporting, we calculate stocks from depth-continuous profiles with uncertainty.\n    Flynn, T., Kostecki, R., Rebi, A., Raza, T. (2024). Accessing global soil raster images and equal-area splines to estimate soil organic carbon stocks on the regional scale. Pedosphere. doi:10.1016/j.pedsph.2024.07.004\n    Get in touch →\n  \n  Stocks: SOC × bulk density × thickness × (1 − coarse fragments), following Poeplau, C., Vos, C., Don, A. (2017). SOIL 3, 61–66. doi:10.5194/soil-3-61-2017 Equivalent soil mass: Ellert, B.H., Bettany, J.R. (1995). Can. J. Soil Sci. 75, 529–538. doi:10.4141/cjss95-075\n\n\n\n\n  Water retention: compare pedotransfer functions\n  Estimate the water retention curve, field capacity, wilting point and available water from texture, carbon and bulk density with six published pedotransfer functions at once. They often disagree, and the spread between them is an honest measure of how uncertain an estimate from texture alone is. Add measured points to see which one fits your soil.\n  \n    \n      Your soil\n      \n        Sand (%)\n        Clay (%)\n        Organic carbon (%)\n        Bulk density (g/cm³)\n        HorizonTopsoilSubsoil\n        Field capacity at33 kPa (pF 2.5)10 kPa (pF 2.0)\n        CEC (cmol(+)/kg, optional)\n        pH in water (optional)\n      \n      \n      Sand 50–2000 µm, silt 2–50 µm, clay &lt; 2 µm. Organic matter is taken as 1.724 × organic carbon, as the original equations assume. Without a bulk density, the Saxton & Rawls estimate for a normally packed soil is used. CEC and pH are needed only for the tropical function (Hodnett & Tomasella). 10 kPa is often a better field capacity for sandy soils.\n      \n    \n    \n      Your measurements (optional)\n      \n      \n        Suction unitkPacm of water (hPa)pF (log₁₀ cm)\n        Water content unitm³/m³% by volume\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n      \n      Two columns: suction and volumetric water content, one measurement per row, for the soil described on the left. Each function is then scored by how closely it matches your points.\n      \n    \n  \n  \n    \n      Retention curves\n      Download CSV\n    \n    \n    \n    \n    \n    \n  \n  \n    Need retention that varies with depth?\n    We build depth-continuous retention profiles and calibrate pedotransfer functions to your own site data, ready for water balance and recharge modelling.\n    Get in touch →\n  \n  Saxton, K.E., Rawls, W.J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. Soil Sci. Soc. Am. J. 70, 1569–1578. doi:10.2136/sssaj2005.0117\n  Rawls, W.J., Brakensiek, D.L. (1985). Prediction of soil water properties for hydrologic modeling. In: Jones, E.B., Ward, T.J. (eds), Watershed Management in the Eighties. ASCE, New York, 293–299.\n  Wösten, J.H.M., Lilly, A., Nemes, A., Le Bas, C. (1999). Development and use of a database of hydraulic properties of European soils. Geoderma 90, 169–185. doi:10.1016/S0016-7061(98)00132-3\n  Vereecken, H., Maes, J., Feyen, J., Darius, P. (1989). Estimating the soil moisture retention characteristic from texture, bulk density, and carbon content. Soil Science 148, 389–403.\n  Hodnett, M.G., Tomasella, J. (2002). Marked differences between van Genuchten soil water-retention parameters for temperate and tropical soils: a new water-retention pedo-transfer functions developed for tropical soils. Geoderma 108, 155–180. doi:10.1016/S0016-7061(02)00105-2\n  Cosby, B.J., Hornberger, G.M., Clapp, R.B., Ginn, T.R. (1984). A statistical exploration of the relationships of soil moisture characteristics to the physical properties of soils. Water Resour. Res. 20, 682–690. doi:10.1029/WR020i006p00682\n\n\n\n\n  van Genuchten curves\n  Explore how the van Genuchten–Mualem parameters shape water retention and unsaturated conductivity. Start from a texture class, convert any of six pedotransfer functions to van Genuchten form, or fit the curve to your own measurements, then adjust.\n  \n    Start from\n    \n      SourceTexture class (typical values)Pedotransfer functionFit to my measurements\n      Texture class\n      Function\n    \n    \n      \n        Sand (%)\n        Clay (%)\n        Organic carbon (%)\n        Bulk density (g/cm³)\n        HorizonTopsoilSubsoil\n        CEC (cmol(+)/kg)\n        pH in water\n      \n      Use the soil from the Water retention tab\n    \n    \n      \n      \n        Suction unitkPacm of water (hPa)pF (log₁₀ cm)\n        Water content unitm³/m³% by volume\n        Measured Ks (cm/day, optional)\n        Residual θrFit itFix at 0\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n        Fit\n      \n      Two columns: suction and volumetric water content. Use 0 for saturation. Fitting four parameters needs at least five points spread from wet to dry; with fewer, or with no points drier than about 1000 kPa, fix θr at 0.\n    \n    \n    \n      θr residual: \n      θs saturated: \n      α (1/cm): \n      n: \n      Ks (cm/day): \n    \n    \n  \n  \n  \n    \n      Water retention θ(h)\n      \n    \n    \n      Hydraulic conductivity K(h)\n      \n    \n  \n  \n    Want parameters for your own soils?\n    We fit hydraulic parameters to your lab or field measurements and carry them into two-dimensional flux, recharge and drainage modelling across hillslopes.\n    Get in touch →\n  \n  van Genuchten, M.Th. (1980). A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. Soil Sci. Soc. Am. J. 44, 892–898. doi:10.2136/sssaj1980.03615995004400050002x Mualem, Y. (1976). A new model for predicting the hydraulic conductivity of unsaturated porous media. Water Resour. Res. 12, 513–522. doi:10.1029/WR012i003p00513 Class parameters: Carsel, R.F., Parrish, R.S. (1988). Developing joint probability distributions of soil water retention characteristics. Water Resour. Res. 24, 755–769. doi:10.1029/WR024i005p00755 Pedotransfer functions: see the Water retention tab. Fitting: least squares on θ, as in RETC (van Genuchten, Leij & Yates 1991).\n\n\n\n\n  Hydrologic soil group and runoff\n  Find a soil's hydrologic soil group (A–D) with the NRCS rules, then see what it means: the runoff curve number for your land cover and how much of a storm runs off.\n  \n    \n      1. The soil\n      \n        Impermeable layerNone within 100 cm (40 in)50–100 cm (20–40 in) downWithin 50 cm (20 in)\n        Seasonal high water tableNone within 100 cm (40 in)60–100 cm (24–40 in) downWithin 60 cm (24 in)\n        Saturated conductivity (Ksat)Estimate from textureI have a measured value\n        Ksat of the least permeable layer\n        Ksat unitsµm/smm/hcm/dayin/h\n        Sand (%)\n        Clay (%)\n        Organic carbon (%)\n      \n      \n      An impermeable layer is bedrock, a hardpan (fragipan, duripan, petrocalcic or other cemented layer), permafrost, or any layer with Ksat below 0.01 µm/s. A seasonal high water table counts if it occurs in any month of the year. Soil surveys list both for each map unit.\n    \n    \n      Hydrologic soil group\n      –\n      \n      \n      \n    \n  \n  \n    2. What it means for runoff\n    \n      Land cover\n      Storm rainfall\n      Rainfall unitsmminches\n    \n    \n    \n    \n  \n  \n    Need hydrologic groups across a whole area?\n    We map hydrologic soil groups continuously from geology, terrain and soil data, including where soil surveys are missing or coarse.\n    Get in touch →\n  \n  Hydrologic soil groups: USDA-NRCS (2009). National Engineering Handbook, Part 630 Hydrology, Chapter 7: Hydrologic Soil Groups (Table 7-1). Curve numbers and runoff equation: USDA-SCS (1986). Urban Hydrology for Small Watersheds, Technical Release 55 (TR-55), Tables 2-2a to 2-2c, average antecedent moisture, initial abstraction 0.2S. Ksat from texture: Saxton, K.E., Rawls, W.J. (2006). Soil Sci. Soc. Am. J. 70, 1569–1578. doi:10.2136/sssaj2005.0117. This is a screening tool, not a replacement for official soil survey data.\n\n\n\n\n  Texture class\n  Classify particle-size fractions on the USDA, European or Australian texture triangle, one sample at a time or a whole file at once, then download the triangle or the classified data.\n  \n    \n      Texture system\n        USDAEuropean (HYPRES / EU Soil Map)Australian\n    \n    \n  \n  \n    \n      \n        One sample\n        \n          Sand (%)\n          Silt (%)\n          Clay (%)\n        \n        \n        –\n        Use in water retention →\n      \n      \n        Many samples\n        \n        \n          Open CSV🔒 Processed on your device. Nothing is sent or stored.\n          Load example\n          Classify\n        \n        Columns must be named sand, silt and clay (in %, any order). An id column is optional and any other columns are kept. Rows that don't add to 100% are rescaled and flagged.\n        \n      \n    \n    \n      \n      \n        Download SVG\n        Download PNG\n      \n    \n  \n  \n    \n      Classified samples\n      Download CSV\n    \n    \n    \n  \n  \n    Texture across a site or catchment?\n    We produce continuous texture surfaces with depth and across landscapes, with uncertainty, and convert between particle-size systems.\n    Get in touch →\n  \n  Class boundaries: USDA-NRCS Soil Survey Manual; HYPRES / European Soil Database texture classes; Australian triangle as implemented in the soiltexture R package (Moeys; coordinates from B. Minasny). Fractions must be measured on the particle-size limits of the chosen system.\n\n\n\n\n  Munsell soil colour\n  See a Munsell notation as an on-screen colour, browse a soil chart page, and learn what the colour usually tells you about the soil.\n  \n    \n      Notation\n      \n        Type a notation\n        Chart page (hue)\n      \n      \n      \n        \n        \n          –\n          \n        \n      \n      \n    \n    \n      Chart page\n      \n      Rows are value (lightness), columns are chroma (strength). Tap a chip to select it.\n    \n  \n  Colours are computed from the Munsell renotation data (illuminant C) and converted to sRGB. Screens vary, so use this for learning, not in place of a physical chart. Chips that fall outside the sRGB range are left out.\n\n\n\n\n  Sampling density\n  Estimate how many samples you need to measure a field or site mean within a chosen margin of error, assuming simple random sampling.\n  \n    \n      Inputs\n      \n        Coefficient of variation (%)\n        Allowable error (% of mean)\n        Confidence\n          90%95%99%\n        Area (ha, optional)\n      \n      No CV to hand? Typical values: pH 5–15%, organic carbon 20–40%, available P or K 40–80%.\n    \n    \n      Result\n      –\n      \n      \n    \n  \n  \n    Sampling for a map: using the variogram\n    The calculator above sizes a sample to estimate one average. For a map, what matters is how far apart samples are compared with the variogram range. This finds how many samples on a regular grid give a chosen kriging error, from a variogram you already have (for example from the variogram tool or a nearby study).\n    \n      Variogram modelSphericalExponentialGaussian\n      Nugget (% of sill)\n      Range, practical (m)\n      Area (ha)\n      Target map error (% of SD)\n    \n    Map error is the root mean kriging error at unsampled locations, as a share of the standard deviation of the property. 100% means no better than the mean; the nugget sets the lowest error any density can reach.\n    Calculate\n    \n    \n  Burgess, T.M., Webster, R., McBratney, A.B. (1981). Optimal interpolation and isarithmic mapping of soil properties. IV. Sampling strategy. J. Soil Sci. 32, 643–659. doi:10.1111/j.1365-2389.1981.tb01737.x McBratney, A.B., Webster, R. (1983). How many observations are needed for regional estimation of soil properties? Soil Science 135, 177–183.\n  \n  \n    Spatial variation changes the answer\n    Random sampling ignores the fact that nearby soils are alike. We design optimised and stratified sampling schemes and management zones that reach the same precision with fewer samples.\n    Get in touch →\n  \n  Sample size for a mean under simple random sampling, n = (t × CV ÷ E)²: Cochran, W.G. (1977). Sampling Techniques, 3rd ed. Wiley.\n\n\n\n\n  Variogram & kriging\n  Fit a variogram to point data and test ordinary kriging by leave-one-out cross-validation: each point is predicted from its neighbours with itself left out, then compared with what was measured.\n  \n    1. Your points\n    \n    \n      Open CSV🔒 Processed on your device. Nothing is sent or stored.\n      Load example\n    \n    Columns: an optional id, coordinates named x and y (projected, e.g. metres) or lon and lat (decimal degrees, converted to km), and one or more numeric properties. Up to 5,000 points.\n  \n  \n    2. Settings\n    \n      Property\n      Variogram model\n        Best fit (spherical or exponential)SphericalExponentialGaussianMatérn (fitted smoothness κ)Matérn, Stein's parameterisation (Ste)\n      Maximum lag (blank = ⅓ of the extent)\n      Estimator\n        Classical (Matheron)Robust (Cressie–Hawkins)\n      Lag classes\n      Transform\n        NoneLog (natural), back-transformed\n      Neighbours used\n    \n    Log suits skewed, positive data (organic carbon, available P, EC). The variogram and kriging run on the logs; predictions are back-transformed to the original units with the lognormal correction, so they are unbiased means, not medians.\n     Set the variogram myself\n    \n      Nugget\n      Partial sill\n      Range (practical)\n      Smoothness κ (Matérn)\n    \n    Fit and cross-validate\n    \n  \n  \n    \n    \n      \n        Variogram\n        Experimental (size = pairs)Fitted model\n        \n      \n      \n        Cross-validation: observed vs predicted\n        Points1:1 line\n        \n      \n    \n    \n      Where the errors are\n      Predicted too highPredicted too lowSize = standardised error\n      \n      Clusters of the same colour suggest a trend or a boundary the variogram doesn't capture. A single large dot is worth checking for a data error.\n    \n    \n      \n        Cross-validation results\n        Download CSV\n      \n      \n    \n  \n  \n    Check a result: yours or a published one\n    Use it before you submit, or when reviewing. Kriging accuracy is set by the variogram and by how far apart the samples are, so a reported error can be checked without the data. This lays out samples at the stated density, works out the kriging variance at each one from the stated variogram, and gives the cross-validation RMSE you should expect if that variogram is right.\n    \n      Variogram modelSphericalExponentialGaussian\n      Standard deviation of the data\n      Nugget (% of sill)\n      Range, practical (m)\n      Number of samples\n      Area (ha)\n      Sample layoutRandomRegular grid\n      Reported RMSE (optional)\n    \n    If the nugget isn't reported, leave it at 0: that is the most generous assumption, so a result that still looks too good really is.\n    CheckLoad example\n    \n    \n  Kriging variance from the variogram and sample layout alone: Burgess, T.M., Webster, R., McBratney, A.B. (1981). J. Soil Sci. 32, 643–659. doi:10.1111/j.1365-2389.1981.tb01737.x Webster, R., Oliver, M.A. (2007). Geostatistics for Environmental Scientists, 2nd ed. Wiley.\n  \n  \n    Reading the results\n    \n      Nugget : sill is the share of variation you can't predict at your sampling scale: measurement error plus variation over distances shorter than your closest samples. Under 25% is strong spatial dependence, 25–75% moderate, over 75% weak.\n      Range is the distance beyond which samples stop telling you about each other. If your samples are mostly further apart than the range, kriging can do little better than the mean, however good the software.\n      RMSE vs. the mean is the real test: it shows how much spatial prediction actually adds. A map made by kriging is only worth its colours if this is clearly above zero.\n      MSDR and interval coverage show whether the uncertainty is honest. MSDR near 1 and coverage near 90% mean the kriging variance can be trusted; otherwise the uncertainty map is too optimistic or too cautious.\n      Two limits that are rarely stated. Cross-validated RMSE can't fall much below the square root of the nugget, because that part of the variation isn't predictable from neighbours. And when samples are further apart than the range, RMSE approaches the standard deviation of the data. A published RMSE well below these limits usually means the validation points weren't independent of the calibration data, the variogram came from a different dataset, or the error was reported on a different scale.\n    \n  \n  \n    Need a map, covariates or uncertainty?\n    We produce kriged and regression-kriged maps with terrain, remote sensing and legacy data, full prediction uncertainty, and sampling designs built from the variogram.\n    Get in touch →\n  \n  Method: classical (Matheron) or robust (Cressie & Hawkins 1980) variogram estimator; model fitted by weighted least squares with weights Nj/hj² (as in gstat); ordinary kriging with the nearest neighbours; Matérn model with fitted smoothness in the standard and Stein (1999) parameterisations; ranges are practical ranges (95% of the sill) for every model; lognormal ordinary kriging back-transform after Journel (1980) and Webster & Oliver (2007); nugget/sill classes after Cambardella et al. (1994).\n\n\n\n\n  Model evaluation\n  Check how well a soil map or model matches independent observations: accuracy and agreement for continuous predictions, prediction-interval coverage, class accuracy, and the confusion index for class probabilities.\n  \n    Continuous\n    Classes\n    Confusion index\n  \n\n  \n    \n      Observed and predicted values\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n        Evaluate\n      \n      Columns named obs and pred. Add sd (prediction standard deviation) for a coverage curve, or lower and upper for the coverage of your own intervals.\n      Your interval's nominal level (%)\n      \n    \n    \n      \n      \n        \n          Observed vs predicted\n          Sites1:1 line\n          \n        \n        \n          Prediction interval coverage (PICP)\n          PICPIdeal (1:1)\n          \n          Points below the line mean the intervals are too narrow (overconfident); above means too wide.\n        \n      \n    \n    \n      Check a result: yours or a published one\n      R² and RMSE constrain each other, and both are limited by how precisely the soil was measured. Enter your own figures before you submit, or the figures from a paper or report, to see whether the numbers can all be true.\n      \n        Reported R²\n        Reported RMSE\n        SD of the observed values\n        Validation points\n        Lab or field repeatability SD (optional)\n      \n      SD of the observed values is often in a summary-statistics table. Repeatability is the SD of repeated measurements of the same sample; labs or method papers report it.\n      CheckLoad example\n      \n      \n    No paper needed: for the same validation data, RMSE ≥ SD × √(1 − R²) follows from the definitions of R² and RMSE, and no model can predict more precisely than the soil was measured.\n  \n  \n\n  \n    \n      Observed and predicted classes\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n        Evaluate\n      \n      Columns named obs and pred, one site per row.\n      \n    \n    \n      \n      Confusion matrix\n      Rows are observed classes, columns are predicted. Producer's accuracy: share of each observed class predicted correctly. User's accuracy: share of each predicted class that is correct.\n      \n    \n    \n      Check an accuracy: yours or a published one\n      An accuracy from a small validation set is uncertain, and it only means something compared with what you would get by guessing. Enter your own figures or a paper's to see the confidence interval and whether the map beats chance or another map.\n      \n        Overall accuracy (%)\n        Validation points\n        Number of classes\n        Largest class share (%, optional)\n        Compare with: accuracy (%, optional)\n        …and its validation points\n      \n      The largest class share is the accuracy of a \"map\" that predicts the most common class everywhere. If it isn't given, an even split between classes is assumed, which flatters the map.\n      CheckLoad example\n      \n      \n    Wilson, E.B. (1927). Probable inference, the law of succession, and statistical inference. J. Am. Stat. Assoc. 22, 209–212. doi:10.1080/01621459.1927.10502953 Foody, G.M. (2009). Classification accuracy comparison: hypothesis tests and the use of confidence intervals in evaluations of difference, equivalence and non-inferiority. Remote Sens. Environ. 113, 1658–1663. doi:10.1016/j.rse.2009.03.014\n  \n  \n\n  \n    \n      Class probabilities\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n        Calculate\n      \n      First column is the site id, then one column of probability per class.\n      \n    \n    \n      \n      Download CSV\n      \n      CI = 1 − (P1 − P2), where P1 and P2 are the two highest class probabilities. 0 means one class clearly wins; 1 means the top two are tied.\n    \n  \n\n  \n    Need uncertainty for a whole map?\n    We build bootstrapped maps with prediction intervals, confusion indices and independent validation, so users know where a map can be trusted and where it can't.\n    Get in touch →\n  \n  Lin, L.I. (1989). Biometrics 45, 255–268. Malone, B.P., McBratney, A.B., Minasny, B. (2011). Geoderma 160, 614–626. Burrough, P.A., van Gaans, P.F.M., Hootsmans, R. (1997). Geoderma 77, 115–135. Open R implementation: rafikisol package.\n\n\n\n\n  Soil temperature waves\n  Daily and seasonal temperature swings at the surface fade and arrive later the deeper you go. See how soil moisture, density and clay control how far heat travels.\n  \n    \n      CycleDailyAnnual\n      Mean surface temperature (°C)\n      Surface amplitude (± °C)\n    \n    \n      Water content:  m³/m³\n      Bulk density:  g/cm³\n      Clay: %\n    \n  \n  \n  \n    \n      Temperature through the day\n      \n      \n    \n    \n      Thermal diffusivity vs water content\n      \n      Diffusivity peaks at intermediate moisture: water first bridges grains and conducts heat well, then extra water mostly adds heat capacity.\n    \n  \n  \n    Real soils are layered and the weather isn't a sine wave\n    We model coupled heat and water movement through layered profiles and across hillslopes, from surface conditions down to depth.\n    Get in touch →\n  \n  Uniform soil with sinusoidal surface temperature (Carslaw & Jaeger). Thermal conductivity: Campbell, G.S. (1985). Soil Physics with BASIC. Heat capacity: de Vries (1963).\n\n\n\n\n  Surface energy balance\n  Follow the sun's energy at a bare soil surface: how much heats the air, how much evaporates water, and how much flows into the ground. Wet the soil and watch evaporation take over.\n  \n    \n      Solar radiation:  W/m²\n      Albedo: \n      Air temperature:  °C\n      Relative humidity: %\n      Wind speed:  m/s\n      Surface water content:  m³/m³\n    \n    \n      Field capacity (m³/m³)\n      Bulk density (g/cm³)\n      Clay (%)\n    \n  \n  \n    Where net radiation goes\n    Sensible heat HEvaporation LEGround heat G\n    \n  \n  \n    Partitioning as the soil wets up\n    HLEGCurrent water content\n    \n  \n  \n    From one point to a whole landscape\n    We map energy and water budgets across fields and catchments, linking soil properties, moisture and terrain to where energy is stored and dissipated.\n    Get in touch →\n  \n  Steady-state bare-soil balance Rn = H + LE + G solved for surface temperature; neutral aerodynamic resistance at 2 m (z₀ = 1 cm); evaporation by the moisture-availability (β = θ/θfc) method; G by conduction over the top 10 cm (Campbell conductivity); sky emissivity after Brutsaert (1975). A teaching model, not a field estimate.\n\n\n\n\n  Pedodiversity\n  Measure the taxonomic diversity of soils in an area: how many soil classes there are, and how evenly the area is shared between them. Compare several sites at once.\n  \n    Your soil classes\n    \n    \n      Open CSV🔒 Processed on your device. Nothing is sent or stored.\n      Load example\n      Calculate\n    \n    A column named class is required (any classification: soil orders, reference soil groups, series, map units). Add area or count to weight each row; without one, every row counts once (for example, one row per profile). Add site to compare several areas.\n    \n  \n  \n    \n      \n        Indices by site\n        Download CSV\n      \n      \n    \n    \n      \n        \n          Indices\n          \n        \n        \n      \n      \n        Share of each class\n        \n      \n    \n    \n      Reading the indices\n      Richness counts classes. Shannon (H′) rises with both more classes and more even shares. Evenness (J′) is Shannon relative to its maximum for that many classes, from 0 (one class dominates) to 1 (all equal). Simpson is the chance that two random points fall in different classes.\n      Hill numbers give the \"effective number of classes\": N1 weights classes by their share, N2 counts only the common ones. Dominance is the share of the most common class.\n    \n  \n  \n    Diversity is more than counting classes\n    Taxonomic indices treat every class as equally different and ignore where soils sit and how they change with depth. Our approach measures pedodiversity from continuous soil properties in three dimensions, as the organisation of energy across the soil system.\n    Get in touch →\n  \n  Ibáñez, J.J., De-Alba, S., Bermúdez, F.F., García-Álvarez, A. (1995). Pedodiversity: concepts and measures. Catena 24, 215–232. Hill, M.O. (1973). Ecology 54, 427–432. Thermodynamic approach: Flynn, T. (2026). Preprint. doi:10.32942/X2H66M."
+    "text": "Roofs collect a surprising amount of water: an inch of rain on 1,000 ft² of roof is about 600 gallons. This works out what your roof collects and how that compares with a rain barrel."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Evidence for decisions about land, soil and water",
+    "objectID": "rain-harvest.html#making-the-most-of-it",
+    "href": "rain-harvest.html#making-the-most-of-it",
+    "title": "Rain barrel and rainwater harvesting calculator",
+    "section": "Making the most of it",
+    "text": "Making the most of it\n\nBarrels fill fast and empty slowly. Use the water between storms so there’s room for the next one.\nA soaker hose or drip line works on barrel pressure if the barrel is raised on blocks; sprinklers don’t.\nFor larger volumes, directing downspouts into planted areas or a rain garden stores water in the soil itself, often more of it than barrels hold, and is allowed almost everywhere."
+  },
+  {
+    "objectID": "diy-soil-tests.html",
+    "href": "diy-soil-tests.html",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
     "section": "",
-    "text": "Environmental analytics\n\n\nRafikiArdhi turns field data, remote sensing and terrain into maps, models and uncertainty estimates that land managers, researchers and development programmes can act on.\nGet in touch"
+    "text": "Three simple tests tell you most of what matters about your soil: what it’s made of (texture) and how fast water moves through it (drainage). Texture decides how often to water, how fast water soaks in, and how the soil behaves when you dig."
   },
   {
-    "objectID": "index.html#what-we-do",
-    "href": "index.html#what-we-do",
-    "title": "Evidence for decisions about land, soil and water",
-    "section": "What we do",
-    "text": "What we do\n\n\nSoil and landscape mapping\nDepth-consistent digital soil maps, soil property surfaces and functional domains, from plot to national scale. \n\n\nHydrology and runoff\nHydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes.  \n\n\nGeostatistics and uncertainty\nVariograms, kriging, mixed models and uncertainty propagation, so every map comes with an honest error estimate. \n\n\nDecision support\nTurning model output and its uncertainty into clear, policy-ready classes and priorities."
+    "objectID": "diy-soil-tests.html#jar-test-texture",
+    "href": "diy-soil-tests.html#jar-test-texture",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "Jar test (texture)",
+    "text": "Jar test (texture)\n\nFill a straight-sided jar about one-third with soil from root depth (pick out stones, roots and debris).\nAdd water until the jar is about two-thirds full, plus a teaspoon of dishwasher detergent or salt-free water softener to separate the particles.\nShake hard for 3–5 minutes, then set it down and start a timer.\nAfter 1 minute, mark the height of the settled layer: that’s the sand.\nAfter 2 hours, mark the height again: sand plus silt.\nAfter 2 days (when the water clears), mark the final height: everything, including clay."
   },
   {
-    "objectID": "index.html#how-we-work",
-    "href": "index.html#how-we-work",
-    "title": "Evidence for decisions about land, soil and water",
-    "section": "How we work",
-    "text": "How we work\nRafikiArdhi takes on environmental problems where existing methods fall short. We develop a method suited to the problem, validate it against real data, and, where agreements allow, release it as an open tool so the knowledge keeps building rather than resetting with each project.\nClients get the solution, and the expertise to apply it to their own data and decisions."
+    "objectID": "diy-soil-tests.html#ribbon-test-texture-by-feel",
+    "href": "diy-soil-tests.html#ribbon-test-texture-by-feel",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "Ribbon test (texture by feel)",
+    "text": "Ribbon test (texture by feel)\nTake a walnut-sized lump of soil, wet it until it’s like putty, and work it in your hand. Then press it between your thumb and finger, pushing it up into a ribbon until it breaks under its own weight."
   },
   {
-    "objectID": "index.html#example-making-gis-depth-aware",
-    "href": "index.html#example-making-gis-depth-aware",
-    "title": "Evidence for decisions about land, soil and water",
-    "section": "Example: making GIS depth-aware",
-    "text": "Example: making GIS depth-aware\nGIS platforms treat soil as a stack of flat layers, so properties jump at every layer boundary and anything between the standard depths is lost. We built a physics-informed depth spline that runs inside Google Earth Engine, turning a spatially explicit platform into one that is also depth-aware. Each pixel carries a continuous, physically consistent profile, so properties can be read at any depth or integrated over the whole profile, and new layers such as moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon from the depth spline: maps at six standard depths (left) and the whole-profile total from integrating each pixel’s continuous profile (right)."
+    "objectID": "diy-soil-tests.html#drainage-percolation-test",
+    "href": "diy-soil-tests.html#drainage-percolation-test",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "Drainage (percolation) test",
+    "text": "Drainage (percolation) test\n\nDig a hole about 12 in (30 cm) deep and 6–12 in wide.\nFill it with water and let it drain completely. This wets the surrounding soil; skip it and the result will be too fast.\nFill it again. Measure the water depth, wait a set time (an hour is easy), and measure again.\n\n\n\nIf the hole still holds water the next day, test again somewhere else and dig deeper to look for a dense or cemented layer. Drainage problems are usually about a layer below, not the soil you plant in."
   },
   {
-    "objectID": "index.html#where-we-work",
-    "href": "index.html#where-we-work",
-    "title": "Evidence for decisions about land, soil and water",
-    "section": "Where we work",
-    "text": "Where we work\nSouthern, East and Central Africa · the Caribbean and Latin America · the Western United States. Work is delivered remotely, personally on site or with local partners in the field.\nSee all services →"
-  },
-  {
-    "objectID": "construction-soil-check.html",
-    "href": "construction-soil-check.html",
-    "title": "New-build yard soil check",
+    "objectID": "services.html",
+    "href": "services.html",
+    "title": "Services",
     "section": "",
-    "text": "On many new-build lots, the topsoil is scraped off during construction, the subsoil is compacted by heavy machinery, and a thin layer of soil is spread back on top before the sod goes down. Lawns and plants then struggle for years. A few simple checks show whether that’s what happened.\nYou’ll need: a shovel, a long screwdriver, and moist (not soggy) soil, a day or two after rain or watering."
+    "text": "RafikiArdhi works with research groups, government agencies, development programmes, NGOs and engineering teams. Each engagement starts with a short written scope: what will be delivered, by when, and on what terms."
   },
   {
-    "objectID": "construction-soil-check.html#why-this-matters",
-    "href": "construction-soil-check.html#why-this-matters",
-    "title": "New-build yard soil check",
-    "section": "Why this matters",
-    "text": "Why this matters\nTopsoil is the layer where roots, water and soil life do most of their work. Subsoil compacted by trucks and graders can be as dense as a road base: roots can’t enter it and water can’t drain through it. Sod laid on a thin layer over it looks fine for a season, then thins out, browns in summer and floods after storms.\nFixing it costs far less before planting than after, so check before you invest in landscaping."
+    "objectID": "services.html#soil-and-landscape-mapping",
+    "href": "services.html#soil-and-landscape-mapping",
+    "title": "Services",
+    "section": "Soil and landscape mapping",
+    "text": "Soil and landscape mapping\n\nDigital soil mapping of soil properties by depth, with uncertainty\nUpdating existing regional maps with new survey data\nSoil functional and fertility domains for planning\nSoil sampling design for mapping and monitoring"
   },
   {
-    "objectID": "privacy.html",
-    "href": "privacy.html",
-    "title": "Privacy",
+    "objectID": "services.html#hydrology-and-runoff-parameters",
+    "href": "services.html#hydrology-and-runoff-parameters",
+    "title": "Services",
+    "section": "Hydrology and runoff parameters",
+    "text": "Hydrology and runoff parameters\n\nHydrologic soil group (HSG) mapping from geology and terrain, as class probabilities\nCurve number and potential maximum retention surfaces with uncertainty, ready for hydrological models\nSoil-water flux modelling along slopes and catenas"
+  },
+  {
+    "objectID": "services.html#geostatistics-and-data-analysis",
+    "href": "services.html#geostatistics-and-data-analysis",
+    "title": "Services",
+    "section": "Geostatistics and data analysis",
+    "text": "Geostatistics and data analysis\n\nVariogram analysis, kriging and regression kriging\nMixed models for nested and repeated soil data\nCross-validation and model checking\nAnalysis of existing datasets, including troubleshooting problem data"
+  },
+  {
+    "objectID": "services.html#decision-support",
+    "href": "services.html#decision-support",
+    "title": "Services",
+    "section": "Decision support",
+    "text": "Decision support\n\nCombining several sources of uncertainty into a single, readable decision map\nPrioritisation of areas for management, restoration or further sampling\nPlain-language summaries for non-specialist decision makers"
+  },
+  {
+    "objectID": "services.html#review-and-training",
+    "href": "services.html#review-and-training",
+    "title": "Services",
+    "section": "Review and training",
+    "text": "Review and training\n\nIndependent technical review of reports, models and maps\nShort courses and workshops in digital soil mapping and geostatistics in R\n\n\nThe scientific work is provided as environmental science and analysis. Where a project requires a licensed professional engineer, RafikiArdhi works alongside the engineering team.\nDiscuss a project →"
+  },
+  {
+    "objectID": "homeowners.html",
+    "href": "homeowners.html",
+    "title": "Homeowners",
     "section": "",
-    "text": "Last updated: October 2026\nThe short version: our tools run entirely in your browser and store nothing; we use Google Analytics to count visits; we don’t have accounts, don’t sell anything about you, and don’t show ads."
+    "text": "Free tools for your yard and garden, built by soil scientists. Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions with the working shown.\nNo ads, no sign-up, and no supplier pays to be listed. Every tool shows how its numbers are calculated, so you can check them yourself."
   },
   {
-    "objectID": "privacy.html#the-tools",
-    "href": "privacy.html#the-tools",
-    "title": "Privacy",
-    "section": "The tools",
-    "text": "The tools\nOur tools run entirely in your web browser. When you open a file, it is read and processed on your own computer, and results are saved directly back to it. No data is transmitted to RafikiArdhi or any third party, and nothing is stored on our servers. We don’t have a database. That makes the tools safe for confidential data, unpublished results and manuscripts under review.\n\nShare links. Some tools put your inputs into the page address so that “Copy link” can recreate your calculation. That address stays in your browser unless you choose to share it.\nYour units. If you switch between US and metric units, your browser remembers the choice on your device. We never see it.\nCheck it yourself. Once a tool page has loaded, disconnect from the internet. The tool still works, because nothing it does depends on our servers."
+    "objectID": "homeowners.html#buying-materials",
+    "href": "homeowners.html#buying-materials",
+    "title": "Homeowners",
+    "section": "Buying materials",
+    "text": "Buying materials\n\n\nLandscape materials calculator\nHow much topsoil, compost, mulch, gravel, road base, sand, sod or grass seed to order, for any shape of yard, in yards, tons, bags or pallets.\n\n\nQuote checker\nSee what depth a quote really covers, whether it’s more than you need, and the price per yard and per ton. Includes a yards-to-tons converter.\n\n\nRaised bed and planter soil\nSoil for raised beds, pots and planters, how to fill deep beds for less, and how much soil a tree needs.\n\n\nFertilizer label calculator\nTurn the N-P-K numbers into how much to spread, and compare the real cost per pound of nutrient."
   },
   {
-    "objectID": "privacy.html#visit-statistics",
-    "href": "privacy.html#visit-statistics",
-    "title": "Privacy",
-    "section": "Visit statistics",
-    "text": "Visit statistics\nWe use Google Analytics to understand how the site is used: which pages are visited, how people find us (for example from a search engine or another website), and roughly where visitors are and what devices they use. This helps us decide which tools to improve or build next.\n\nGoogle Analytics uses cookies and collects information such as the pages you view, your browser and device type, the website that referred you, and your approximate location (city or country level).\nOur site analytics record only page visits, never the contents of files or anything you enter into a tool. We have configured Google Analytics not to record the share-link part of page addresses.\nWe can’t see who you are. We only see totals and trends.\nGoogle processes this data under its own privacy policy: policies.google.com/privacy. You can see how Google uses data from sites that use its services at policies.google.com/technologies/partner-sites.\n\nTo opt out, you can block cookies in your browser settings, use a browser or extension that blocks trackers, or install Google’s Analytics opt-out add-on. The site and all the tools work exactly the same without them."
+    "objectID": "homeowners.html#watering",
+    "href": "homeowners.html#watering",
+    "title": "Homeowners",
+    "section": "Watering",
+    "text": "Watering\n\n\nSprinkler catch-cup test\nMeasure what each zone really puts down, and how evenly, to set run times.\n\n\nCycle-and-soak scheduler\nStop runoff on clay and slopes by splitting watering into short cycles.\n\n\nDrip irrigation calculator\nRun times and emitters per plant, and whether the zone can supply them.\n\n\nLawn vs low-water landscape\nCompare a season’s water use and cost for lawns, low-water plantings and mulch.\n\n\nRain barrel calculator\nHow much your roof collects per storm and per year, and how fast a barrel fills."
   },
   {
-    "objectID": "privacy.html#if-you-contact-us",
-    "href": "privacy.html#if-you-contact-us",
-    "title": "Privacy",
-    "section": "If you contact us",
-    "text": "If you contact us\nIf you email us, we use your name, address and message only to reply and to carry out any work you ask us for. We don’t add you to mailing lists or share your details."
+    "objectID": "homeowners.html#your-soil",
+    "href": "homeowners.html#your-soil",
+    "title": "Homeowners",
+    "section": "Your soil",
+    "text": "Your soil\n\n\nSoil test translator\nA lab report in plain English: what to do, and what you don’t need to buy.\n\n\nShould I amend my soil?\nCheck before you buy compost, topsoil or sand, for what you’re planting.\n\n\nDIY soil tests\nJar, ribbon and drainage tests: find your texture and how fast your soil drains.\n\n\nSoil pH: lime and sulfur\nHow much to raise or lower pH, and when lowering it isn’t realistic.\n\n\nCompost mix calculator\nBalance greens and browns, and fix a smelly or slow pile."
   },
   {
-    "objectID": "privacy.html#client-projects",
-    "href": "privacy.html#client-projects",
-    "title": "Privacy",
-    "section": "Client projects",
-    "text": "Client projects\nData from paid projects is handled under the agreement for that project. It stays confidential, and results funded by a client are published only with their agreement."
+    "objectID": "homeowners.html#drainage-building-and-trees",
+    "href": "homeowners.html#drainage-building-and-trees",
+    "title": "Homeowners",
+    "section": "Drainage, building and trees",
+    "text": "Drainage, building and trees\n\n\nFoundation grading check\nDoes the ground slope away from your house enough, and how much fill to fix it.\n\n\nRain garden and dry well\nSize a rain garden or dry well from your roof area and how fast your soil drains.\n\n\nNew-build yard soil check\nFind out if construction left you thin topsoil over compacted subsoil, and what to ask your builder.\n\n\nFrost depth\nHow deep the ground freezes where you live, for water lines, footings and fence posts.\n\n\nTree protection zone\nHow much space to fence off around a tree before construction or digging.\n\n\n\nWorking professionally? See our scientific tools for soil classification, profile modelling and more."
   },
   {
-    "objectID": "privacy.html#children",
-    "href": "privacy.html#children",
-    "title": "Privacy",
-    "section": "Children",
-    "text": "Children\nThis site isn’t aimed at children, and we don’t knowingly collect information from them."
-  },
-  {
-    "objectID": "privacy.html#changes",
-    "href": "privacy.html#changes",
-    "title": "Privacy",
-    "section": "Changes",
-    "text": "Changes\nIf we change how the site handles information, we’ll update this page and the date at the top."
-  },
-  {
-    "objectID": "privacy.html#contact",
-    "href": "privacy.html#contact",
-    "title": "Privacy",
-    "section": "Contact",
-    "text": "Contact\nRafikiArdhi LLC, Carbondale, Colorado, USA. Questions about privacy are welcome through our contact page."
-  },
-  {
-    "objectID": "foundation-grading.html",
-    "href": "foundation-grading.html",
-    "title": "Foundation grading check",
+    "objectID": "rain-garden.html",
+    "href": "rain-garden.html",
+    "title": "Rain garden and dry well calculator",
     "section": "",
-    "text": "Water pooling against a foundation is one of the most expensive problems a house can have. The common building-code guideline is that ground should fall at least 6 inches over the first 10 feet from the house (about 5%). You can check it in an afternoon.\nHow to measure: drive a stake against the foundation and another 10 ft (3 m) out. Tie a string between them and level it with a line level. At each stake, measure from the string down to the ground. The drop is the outer measurement minus the inner one. Repeat every 10–15 ft along each wall."
+    "text": "A rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a drainage test first."
   },
   {
-    "objectID": "foundation-grading.html#other-signs-of-a-grading-problem",
-    "href": "foundation-grading.html#other-signs-of-a-grading-problem",
-    "title": "Foundation grading check",
-    "section": "Other signs of a grading problem",
-    "text": "Other signs of a grading problem\n\nWater standing next to the foundation after rain or irrigation.\nMulch or soil piled up against the siding, often built up over years.\nDownspouts that empty right at the wall.\nPatios, walks or window wells that have settled so they tip toward the house.\nDamp patches, efflorescence (white crust) or musty smells in a basement or crawlspace.\n\nMost of these are cheap to fix compared with foundation repairs."
+    "objectID": "rain-garden.html#building-a-rain-garden",
+    "href": "rain-garden.html#building-a-rain-garden",
+    "title": "Rain garden and dry well calculator",
+    "section": "Building a rain garden",
+    "text": "Building a rain garden\n\nLocation: a low spot at least 10 ft from the house, where water already heads, but not where it stands for days.\nShape: longer than it is wide, across the slope, with a level bottom so water spreads evenly.\nInlet and overflow: line the inlet with stone so it doesn’t erode, and give the overflow a safe path for storms bigger than the design.\nPlants: wet-tolerant species in the bottom, drought-tolerant ones on the rim. Native plants with deep roots keep the soil open.\nSoil: if your soil drains poorly, mix compost into the bottom, but don’t create a “bathtub” of loose soil in dense clay. An underdrain is the fix for very slow soils."
   },
   {
-    "objectID": "fertilizer-calculator.html",
-    "href": "fertilizer-calculator.html",
-    "title": "Fertilizer label calculator",
+    "objectID": "tree-protection.html",
+    "href": "tree-protection.html",
+    "title": "Tree protection zone calculator",
     "section": "",
-    "text": "The three numbers on a fertilizer bag (N-P-K) are percentages by weight. A 20 lb bag of 24-0-6 contains 4.8 lb of nitrogen; the rest is the other nutrients and filler. This turns the label into how much product to spread, and shows what you’re really paying per pound of nutrient."
+    "text": "Most of a tree’s roots are in the top 12–18 inches of soil and spread well beyond the branches. Driving, stockpiling, trenching or changing the grade over them can kill a mature tree, often a few years later. Before any work, fence off a protection zone.\nMeasure the trunk at 4½ ft (1.4 m) above the ground. Wrap a tape around it for the circumference, or measure the diameter directly."
   },
   {
-    "objectID": "fertilizer-calculator.html#reading-a-fertilizer-label",
-    "href": "fertilizer-calculator.html#reading-a-fertilizer-label",
-    "title": "Fertilizer label calculator",
-    "section": "Reading a fertilizer label",
-    "text": "Reading a fertilizer label\n\nN (nitrogen) drives green leafy growth. It’s the nutrient lawns need most, and it doesn’t stay in soil long, which is why it’s applied regularly.\nP (phosphate, P₂O₅) supports roots and establishment. The label shows phosphate, not pure phosphorus: elemental P is about 44% of the P₂O₅ number.\nK (potash, K₂O) helps with stress tolerance. Elemental K is about 83% of the K₂O number.\nSlow-release or organic products feed over weeks rather than days. The arithmetic is the same; they’re just gentler.\n\nMore is not better. Extra nitrogen means more mowing, weaker roots and nitrate washing into waterways. A soil test tells you whether you need phosphate or potash at all."
+    "objectID": "tree-protection.html#why-trees-die-after-construction",
+    "href": "tree-protection.html#why-trees-die-after-construction",
+    "title": "Tree protection zone calculator",
+    "section": "Why trees die after construction",
+    "text": "Why trees die after construction\nRoots need air as much as water. Compaction from vehicles crushes the pore spaces; fill soil buries roots too deep; trenching cuts them. The tree may look fine for a season or two, using stored energy, then decline from the top down. By the time you see dieback, the damage was done years before.\nThe zone here scales with the trunk, the tree’s age and how well the species copes, following a widely used arborist approach. The simpler rule of thumb, one foot of radius per inch of trunk diameter, is shown in the working for comparison."
+  },
+  {
+    "objectID": "ph-adjustment.html",
+    "href": "ph-adjustment.html",
+    "title": "Soil pH calculator: lime and sulfur",
+    "section": "",
+    "text": "Changing soil pH takes more material on clay than on sand, and it happens slowly. This estimates how much ground limestone (to raise pH) or elemental sulfur (to lower it) you need, and tells you when lowering pH isn’t realistic."
+  },
+  {
+    "objectID": "ph-adjustment.html#why-ph-changes-slowly",
+    "href": "ph-adjustment.html#why-ph-changes-slowly",
+    "title": "Soil pH calculator: lime and sulfur",
+    "section": "Why pH changes slowly",
+    "text": "Why pH changes slowly\nSoil is buffered: clay and organic matter hold large reserves of acidity (or alkalinity) that resist change. That’s why clay needs two or three times as much lime as sand, and why the same amount works slowly.\nLowering pH in alkaline soils is a special case. Many soils in dry regions contain free lime (calcium carbonate), which fizzes in vinegar. Any acid you add, including sulfur as it breaks down, is used up dissolving that lime before the pH moves. Even 1% lime takes well over 100 lb of sulfur per 1,000 ft² just to neutralise. That’s why gardeners in those regions do better choosing plants suited to their soil.\nThe rates here are typical extension values for the top 6 inches. A lab “lime requirement” or “buffer pH” result is more accurate for your soil when you have one."
+  },
+  {
+    "objectID": "drip-irrigation.html",
+    "href": "drip-irrigation.html",
+    "title": "Drip irrigation calculator",
+    "section": "",
+    "text": "Drip puts water at the roots, but run times are usually guesses. Enter what each plant needs and what your emitters deliver; this works out the run time and checks that the zone can supply it."
+  },
+  {
+    "objectID": "drip-irrigation.html#tips",
+    "href": "drip-irrigation.html#tips",
+    "title": "Drip irrigation calculator",
+    "section": "Tips",
+    "text": "Tips\n\nWater deeply, less often. Infrequent, longer runs wet a deeper root zone than daily short ones, and deep roots handle heat better.\nEmitters belong at the edge of the roots, not against the trunk or stem. For trees and shrubs that means moving them outward as the plant grows.\nNew plantings need more frequent water for their first season. Established native and low-water plants often need little or none outside drought.\nCheck the filter and flush the lines each spring. Clogged emitters are the most common reason a drip zone stops working."
   },
   {
     "objectID": "checks.html",
@@ -308,228 +357,200 @@
     "text": "Coordinates and distances\nA degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and “metres” computed from degrees are wrong. Convert a distance, or paste coordinates to check them.\n\n\n\nMethod\nNo paper needed: standard spherical geometry (haversine formula, mean Earth radius 6,371 km)."
   },
   {
-    "objectID": "drip-irrigation.html",
-    "href": "drip-irrigation.html",
-    "title": "Drip irrigation calculator",
+    "objectID": "fertilizer-calculator.html",
+    "href": "fertilizer-calculator.html",
+    "title": "Fertilizer label calculator",
     "section": "",
-    "text": "Drip puts water at the roots, but run times are usually guesses. Enter what each plant needs and what your emitters deliver; this works out the run time and checks that the zone can supply it."
+    "text": "The three numbers on a fertilizer bag (N-P-K) are percentages by weight. A 20 lb bag of 24-0-6 contains 4.8 lb of nitrogen; the rest is the other nutrients and filler. This turns the label into how much product to spread, and shows what you’re really paying per pound of nutrient."
   },
   {
-    "objectID": "drip-irrigation.html#tips",
-    "href": "drip-irrigation.html#tips",
-    "title": "Drip irrigation calculator",
-    "section": "Tips",
-    "text": "Tips\n\nWater deeply, less often. Infrequent, longer runs wet a deeper root zone than daily short ones, and deep roots handle heat better.\nEmitters belong at the edge of the roots, not against the trunk or stem. For trees and shrubs that means moving them outward as the plant grows.\nNew plantings need more frequent water for their first season. Established native and low-water plants often need little or none outside drought.\nCheck the filter and flush the lines each spring. Clogged emitters are the most common reason a drip zone stops working."
+    "objectID": "fertilizer-calculator.html#reading-a-fertilizer-label",
+    "href": "fertilizer-calculator.html#reading-a-fertilizer-label",
+    "title": "Fertilizer label calculator",
+    "section": "Reading a fertilizer label",
+    "text": "Reading a fertilizer label\n\nN (nitrogen) drives green leafy growth. It’s the nutrient lawns need most, and it doesn’t stay in soil long, which is why it’s applied regularly.\nP (phosphate, P₂O₅) supports roots and establishment. The label shows phosphate, not pure phosphorus: elemental P is about 44% of the P₂O₅ number.\nK (potash, K₂O) helps with stress tolerance. Elemental K is about 83% of the K₂O number.\nSlow-release or organic products feed over weeks rather than days. The arithmetic is the same; they’re just gentler.\n\nMore is not better. Extra nitrogen means more mowing, weaker roots and nitrate washing into waterways. A soil test tells you whether you need phosphate or potash at all."
   },
   {
-    "objectID": "ph-adjustment.html",
-    "href": "ph-adjustment.html",
-    "title": "Soil pH calculator: lime and sulfur",
+    "objectID": "foundation-grading.html",
+    "href": "foundation-grading.html",
+    "title": "Foundation grading check",
     "section": "",
-    "text": "Changing soil pH takes more material on clay than on sand, and it happens slowly. This estimates how much ground limestone (to raise pH) or elemental sulfur (to lower it) you need, and tells you when lowering pH isn’t realistic."
+    "text": "Water pooling against a foundation is one of the most expensive problems a house can have. The common building-code guideline is that ground should fall at least 6 inches over the first 10 feet from the house (about 5%). You can check it in an afternoon.\nHow to measure: drive a stake against the foundation and another 10 ft (3 m) out. Tie a string between them and level it with a line level. At each stake, measure from the string down to the ground. The drop is the outer measurement minus the inner one. Repeat every 10–15 ft along each wall."
   },
   {
-    "objectID": "ph-adjustment.html#why-ph-changes-slowly",
-    "href": "ph-adjustment.html#why-ph-changes-slowly",
-    "title": "Soil pH calculator: lime and sulfur",
-    "section": "Why pH changes slowly",
-    "text": "Why pH changes slowly\nSoil is buffered: clay and organic matter hold large reserves of acidity (or alkalinity) that resist change. That’s why clay needs two or three times as much lime as sand, and why the same amount works slowly.\nLowering pH in alkaline soils is a special case. Many soils in dry regions contain free lime (calcium carbonate), which fizzes in vinegar. Any acid you add, including sulfur as it breaks down, is used up dissolving that lime before the pH moves. Even 1% lime takes well over 100 lb of sulfur per 1,000 ft² just to neutralise. That’s why gardeners in those regions do better choosing plants suited to their soil.\nThe rates here are typical extension values for the top 6 inches. A lab “lime requirement” or “buffer pH” result is more accurate for your soil when you have one."
+    "objectID": "foundation-grading.html#other-signs-of-a-grading-problem",
+    "href": "foundation-grading.html#other-signs-of-a-grading-problem",
+    "title": "Foundation grading check",
+    "section": "Other signs of a grading problem",
+    "text": "Other signs of a grading problem\n\nWater standing next to the foundation after rain or irrigation.\nMulch or soil piled up against the siding, often built up over years.\nDownspouts that empty right at the wall.\nPatios, walks or window wells that have settled so they tip toward the house.\nDamp patches, efflorescence (white crust) or musty smells in a basement or crawlspace.\n\nMost of these are cheap to fix compared with foundation repairs."
   },
   {
-    "objectID": "tree-protection.html",
-    "href": "tree-protection.html",
-    "title": "Tree protection zone calculator",
+    "objectID": "privacy.html",
+    "href": "privacy.html",
+    "title": "Privacy",
     "section": "",
-    "text": "Most of a tree’s roots are in the top 12–18 inches of soil and spread well beyond the branches. Driving, stockpiling, trenching or changing the grade over them can kill a mature tree, often a few years later. Before any work, fence off a protection zone.\nMeasure the trunk at 4½ ft (1.4 m) above the ground. Wrap a tape around it for the circumference, or measure the diameter directly."
+    "text": "Last updated: October 2026\nThe short version: our tools run entirely in your browser and store nothing; we use Google Analytics to count visits; we don’t have accounts, don’t sell anything about you, and don’t show ads."
   },
   {
-    "objectID": "tree-protection.html#why-trees-die-after-construction",
-    "href": "tree-protection.html#why-trees-die-after-construction",
-    "title": "Tree protection zone calculator",
-    "section": "Why trees die after construction",
-    "text": "Why trees die after construction\nRoots need air as much as water. Compaction from vehicles crushes the pore spaces; fill soil buries roots too deep; trenching cuts them. The tree may look fine for a season or two, using stored energy, then decline from the top down. By the time you see dieback, the damage was done years before.\nThe zone here scales with the trunk, the tree’s age and how well the species copes, following a widely used arborist approach. The simpler rule of thumb, one foot of radius per inch of trunk diameter, is shown in the working for comparison."
+    "objectID": "privacy.html#the-tools",
+    "href": "privacy.html#the-tools",
+    "title": "Privacy",
+    "section": "The tools",
+    "text": "The tools\nOur tools run entirely in your web browser. When you open a file, it is read and processed on your own computer, and results are saved directly back to it. No data is transmitted to RafikiArdhi or any third party, and nothing is stored on our servers. We don’t have a database. That makes the tools safe for confidential data, unpublished results and manuscripts under review.\n\nShare links. Some tools put your inputs into the page address so that “Copy link” can recreate your calculation. That address stays in your browser unless you choose to share it.\nYour units. If you switch between US and metric units, your browser remembers the choice on your device. We never see it.\nCheck it yourself. Once a tool page has loaded, disconnect from the internet. The tool still works, because nothing it does depends on our servers."
   },
   {
-    "objectID": "rain-garden.html",
-    "href": "rain-garden.html",
-    "title": "Rain garden and dry well calculator",
+    "objectID": "privacy.html#visit-statistics",
+    "href": "privacy.html#visit-statistics",
+    "title": "Privacy",
+    "section": "Visit statistics",
+    "text": "Visit statistics\nWe use Google Analytics to understand how the site is used: which pages are visited, how people find us (for example from a search engine or another website), and roughly where visitors are and what devices they use. This helps us decide which tools to improve or build next.\n\nGoogle Analytics uses cookies and collects information such as the pages you view, your browser and device type, the website that referred you, and your approximate location (city or country level).\nOur site analytics record only page visits, never the contents of files or anything you enter into a tool. We have configured Google Analytics not to record the share-link part of page addresses.\nWe can’t see who you are. We only see totals and trends.\nGoogle processes this data under its own privacy policy: policies.google.com/privacy. You can see how Google uses data from sites that use its services at policies.google.com/technologies/partner-sites.\n\nTo opt out, you can block cookies in your browser settings, use a browser or extension that blocks trackers, or install Google’s Analytics opt-out add-on. The site and all the tools work exactly the same without them."
+  },
+  {
+    "objectID": "privacy.html#if-you-contact-us",
+    "href": "privacy.html#if-you-contact-us",
+    "title": "Privacy",
+    "section": "If you contact us",
+    "text": "If you contact us\nIf you email us, we use your name, address and message only to reply and to carry out any work you ask us for. We don’t add you to mailing lists or share your details."
+  },
+  {
+    "objectID": "privacy.html#client-projects",
+    "href": "privacy.html#client-projects",
+    "title": "Privacy",
+    "section": "Client projects",
+    "text": "Client projects\nData from paid projects is handled under the agreement for that project. It stays confidential, and results funded by a client are published only with their agreement."
+  },
+  {
+    "objectID": "privacy.html#children",
+    "href": "privacy.html#children",
+    "title": "Privacy",
+    "section": "Children",
+    "text": "Children\nThis site isn’t aimed at children, and we don’t knowingly collect information from them."
+  },
+  {
+    "objectID": "privacy.html#changes",
+    "href": "privacy.html#changes",
+    "title": "Privacy",
+    "section": "Changes",
+    "text": "Changes\nIf we change how the site handles information, we’ll update this page and the date at the top."
+  },
+  {
+    "objectID": "privacy.html#contact",
+    "href": "privacy.html#contact",
+    "title": "Privacy",
+    "section": "Contact",
+    "text": "Contact\nRafikiArdhi LLC, Carbondale, Colorado, USA. Questions about privacy are welcome through our contact page."
+  },
+  {
+    "objectID": "construction-soil-check.html",
+    "href": "construction-soil-check.html",
+    "title": "New-build yard soil check",
     "section": "",
-    "text": "A rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a drainage test first."
+    "text": "On many new-build lots, the topsoil is scraped off during construction, the subsoil is compacted by heavy machinery, and a thin layer of soil is spread back on top before the sod goes down. Lawns and plants then struggle for years. A few simple checks show whether that’s what happened.\nYou’ll need: a shovel, a long screwdriver, and moist (not soggy) soil, a day or two after rain or watering."
   },
   {
-    "objectID": "rain-garden.html#building-a-rain-garden",
-    "href": "rain-garden.html#building-a-rain-garden",
-    "title": "Rain garden and dry well calculator",
-    "section": "Building a rain garden",
-    "text": "Building a rain garden\n\nLocation: a low spot at least 10 ft from the house, where water already heads, but not where it stands for days.\nShape: longer than it is wide, across the slope, with a level bottom so water spreads evenly.\nInlet and overflow: line the inlet with stone so it doesn’t erode, and give the overflow a safe path for storms bigger than the design.\nPlants: wet-tolerant species in the bottom, drought-tolerant ones on the rim. Native plants with deep roots keep the soil open.\nSoil: if your soil drains poorly, mix compost into the bottom, but don’t create a “bathtub” of loose soil in dense clay. An underdrain is the fix for very slow soils."
+    "objectID": "construction-soil-check.html#why-this-matters",
+    "href": "construction-soil-check.html#why-this-matters",
+    "title": "New-build yard soil check",
+    "section": "Why this matters",
+    "text": "Why this matters\nTopsoil is the layer where roots, water and soil life do most of their work. Subsoil compacted by trucks and graders can be as dense as a road base: roots can’t enter it and water can’t drain through it. Sod laid on a thin layer over it looks fine for a season, then thins out, browns in summer and floods after storms.\nFixing it costs far less before planting than after, so check before you invest in landscaping."
   },
   {
-    "objectID": "homeowners.html",
-    "href": "homeowners.html",
-    "title": "Gardening and landscapes",
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Evidence for decisions about land, soil and water",
     "section": "",
-    "text": "Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions you can stand behind. Every tool shows how its numbers are calculated, so you can check them yourself. No ads, no sign-up, and no supplier pays to be listed."
+    "text": "Environmental analytics\n\n\nRafikiArdhi turns field data, remote sensing and terrain into maps, models and uncertainty estimates that land managers, researchers and development programmes can act on.\nGet in touch"
   },
   {
-    "objectID": "homeowners.html#buying-materials",
-    "href": "homeowners.html#buying-materials",
-    "title": "Gardening and landscapes",
-    "section": "Buying materials",
-    "text": "Buying materials\n\n\nLandscape materials calculator\nHow much topsoil, compost, mulch, gravel, road base, sand, sod or grass seed to order, for any shape of yard, in yards, tons, bags or pallets.\n\n\nQuote checker\nSee what depth a quote really covers, whether it’s more than you need, and the price per yard and per ton. Includes a yards-to-tons converter.\n\n\nRaised bed and planter soil\nSoil for raised beds, pots and planters, how to fill deep beds for less, and how much soil a tree needs.\n\n\nFertilizer label calculator\nTurn the N-P-K numbers into how much to spread, and compare the real cost per pound of nutrient."
+    "objectID": "index.html#what-we-do",
+    "href": "index.html#what-we-do",
+    "title": "Evidence for decisions about land, soil and water",
+    "section": "What we do",
+    "text": "What we do\n\n\nSoil and landscape mapping\nDepth-consistent digital soil maps, soil property surfaces and functional domains, from plot to national scale. \n\n\nHydrology and runoff\nHydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes.  \n\n\nGeostatistics and uncertainty\nVariograms, kriging, mixed models and uncertainty propagation, so every map comes with an honest error estimate. \n\n\nDecision support\nTurning model output and its uncertainty into clear, policy-ready classes and priorities."
   },
   {
-    "objectID": "homeowners.html#watering",
-    "href": "homeowners.html#watering",
-    "title": "Gardening and landscapes",
-    "section": "Watering",
-    "text": "Watering\n\n\nSprinkler catch-cup test\nMeasure what each zone really puts down, and how evenly, to set run times.\n\n\nCycle-and-soak scheduler\nStop runoff on clay and slopes by splitting watering into short cycles.\n\n\nDrip irrigation calculator\nRun times and emitters per plant, and whether the zone can supply them.\n\n\nLawn vs low-water landscape\nCompare a season’s water use and cost for lawns, low-water plantings and mulch.\n\n\nRain barrel calculator\nHow much your roof collects per storm and per year, and how fast a barrel fills."
+    "objectID": "index.html#how-we-work",
+    "href": "index.html#how-we-work",
+    "title": "Evidence for decisions about land, soil and water",
+    "section": "How we work",
+    "text": "How we work\nRafikiArdhi takes on environmental problems where existing methods fall short. We develop a method suited to the problem, validate it against real data, and, where agreements allow, release it as an open tool so the knowledge keeps building rather than resetting with each project.\nClients get the solution, and the expertise to apply it to their own data and decisions."
   },
   {
-    "objectID": "homeowners.html#your-soil",
-    "href": "homeowners.html#your-soil",
-    "title": "Gardening and landscapes",
-    "section": "Your soil",
-    "text": "Your soil\n\n\nSoil test translator\nA lab report in plain English: what to do, and what you don’t need to buy.\n\n\nShould I amend my soil?\nCheck before you buy compost, topsoil or sand, for what you’re planting.\n\n\nDIY soil tests\nJar, ribbon and drainage tests: find your texture and how fast your soil drains.\n\n\nSoil pH: lime and sulfur\nHow much to raise or lower pH, and when lowering it isn’t realistic.\n\n\nCompost mix calculator\nBalance greens and browns, and fix a smelly or slow pile."
+    "objectID": "index.html#example-making-gis-depth-aware",
+    "href": "index.html#example-making-gis-depth-aware",
+    "title": "Evidence for decisions about land, soil and water",
+    "section": "Example: making GIS depth-aware",
+    "text": "Example: making GIS depth-aware\nGIS platforms treat soil as a stack of flat layers, so properties jump at every layer boundary and anything between the standard depths is lost. We built a physics-informed depth spline that runs inside Google Earth Engine, turning a spatially explicit platform into one that is also depth-aware. Each pixel carries a continuous, physically consistent profile, so properties can be read at any depth or integrated over the whole profile, and new layers such as moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon from the depth spline: maps at six standard depths (left) and the whole-profile total from integrating each pixel’s continuous profile (right)."
   },
   {
-    "objectID": "homeowners.html#drainage-building-and-trees",
-    "href": "homeowners.html#drainage-building-and-trees",
-    "title": "Gardening and landscapes",
-    "section": "Drainage, building and trees",
-    "text": "Drainage, building and trees\n\n\nFoundation grading check\nDoes the ground slope away from your house enough, and how much fill to fix it.\n\n\nRain garden and dry well\nSize a rain garden or dry well from your roof area and how fast your soil drains.\n\n\nNew-build yard soil check\nFind out if construction left you thin topsoil over compacted subsoil, and what to ask your builder.\n\n\nTree protection zone\nHow much space to fence off around a tree before construction or digging.\n\n\n\nWorking professionally? See our scientific tools for soil classification, profile modelling and more."
+    "objectID": "index.html#where-we-work",
+    "href": "index.html#where-we-work",
+    "title": "Evidence for decisions about land, soil and water",
+    "section": "Where we work",
+    "text": "Where we work\nSouthern, East and Central Africa · the Caribbean and Latin America · the Western United States. Work is delivered remotely, personally on site or with local partners in the field.\nSee all services →"
   },
   {
-    "objectID": "services.html",
-    "href": "services.html",
-    "title": "Services",
+    "objectID": "tools.html",
+    "href": "tools.html",
+    "title": "Tools for researchers",
     "section": "",
-    "text": "RafikiArdhi works with research groups, government agencies, development programmes, NGOs and engineering teams. Each engagement starts with a short written scope: what will be delivered, by when, and on what terms."
+    "text": "Free tools treat the soil horizon by horizon. Our advanced methods treat it as one connected system, continuous with depth and across the landscape, because that is how water, carbon and energy actually move.\n  \n    🔒 Your data stays yours.\n    Every tool runs on your own computer, in your browser. Files you open here are never sent to us or stored anywhere. We can't see them, even if we wanted to. That makes the tools safe for confidential data, unpublished results and manuscripts under review.\n    Don't take our word for it: once this page has loaded, disconnect from the internet. Every tool still works.\n  \n  Checking your own or a published result? All the plausibility checks are listed on one page →\n\n\n\n  \n    Profiles & mappingProfile harmoniserPedodiversityVariogram & krigingModel evaluationSampling density\n    Watervan GenuchtenWater retentionHydrologic soil group\n    Energy & climateSoil temperatureEnergy balanceEvapotranspirationFrost depthDay length & sun\n    Soil propertiesTexture classCarbon stocksMunsell colour\n    ChecksCheck a result: yours or a published one →\n    Soil classificationWRB soil key BETA →South African soil key BETA →\n  \n\n\n\n\n\n\n  Profile harmoniser\n  Fit a physics-informed spline (phySpline) to irregular horizon data and harmonise it to standard depth intervals. Works for continuous properties (carbon, pH, clay) and for ordered classes such as texture.\n\n  \n    1. Your data\n    \n    \n      Open CSV🔒 Processed on your device. Nothing is sent or stored.\n      Example: soil carbon\n      Example: texture classes\n    \n    Columns: profile id, top depth (cm), bottom depth (cm), then one or more property columns. Comma, semicolon or tab separated. Up to 20,000 rows.\n  \n\n  \n    2. Settings\n    \n      Property\n      Mode\n        ContinuousOrdered classes\n      Smoothing (λ)\n      Target depths (cm)\n    \n    \n      Class order (finest to coarsest, or any order that makes sense for your classes)\n      \n    \n    Harmonise\n    \n  \n\n  \n    \n      \n        Profile view\n        \n      \n      \n        Observed horizons\n        Spline\n        Harmonised intervals\n      \n      \n    \n    \n      \n        Harmonised values\n        Download CSV\n      \n      Intervals that extend past the bottom of a profile are averaged over the soil that is present and shown in amber. Blank means no soil in that interval.\n      \n    \n  \n\n  \n    Need more than horizon-based harmonisation?\n    Our advanced profile method treats the soil as one continuous system: much faster on large datasets, with uncertainty at every depth and boundary-aware profiles linked to water and heat flux.\n    Get in touch →\n  \n  Method: Flynn, T., Rasaei, Z., Kostecki, R. (2026). Science of the Total Environment. doi:10.1016/j.scitotenv.2026.181621. Open R implementation: rafikisol package.\n\n\n\n\n  Soil carbon stocks\n  Calculate organic carbon stocks for many profiles at once, by summing horizons to fixed depths, with an optional equivalent soil mass basis for comparing sites or sampling dates.\n  \n    1. Your data\n    \n    \n      Open CSV🔒 Processed on your device. Nothing is sent or stored.\n      Load example\n    \n    Columns: id, top (cm), bottom (cm), soc (%), bd (bulk density, g/cm³), and optionally cf (coarse fragments, % by volume).\n  \n  \n    2. Settings\n    \n      Report to depths (cm)\n      Reference soil mass (Mg/ha, optional)\n    \n    Equivalent soil mass: stock in the soil needed to reach the reference mass, regardless of depth. Useful when bulk density differs between sites or dates.\n    Calculate\n    \n  \n  \n    \n      Stocks (Mg C/ha)\n      Download CSV\n    \n    \n    \n    Amber values: the profile is shallower than the reporting depth, so the stock covers only the soil that was sampled.\n  \n  \n    Can the change be detected?\n    Use it when planning a monitoring design, before claiming a change in your own results, or before trusting (or paying for) someone else's: check whether the sampling could detect a change that size. This gives the smallest change a design can reliably detect, and how many samples a claimed change would need.\n    \n      Variability, CV of stocks (%)\n      Samples per sampling time\n      DesignDifferent locations each timeSame locations resampled\n      Correlation between times\n      Significance level0.100.050.01\n      Power80%90%\n      Claimed change (%, optional)\n    \n    Field CVs for soil carbon stocks are typically 20–50%. Resampling the same locations removes much of the spatial variation from the comparison; the correlation says how much (0.5–0.8 is common).\n    \n    \n    \n  Garten, C.T., Wullschleger, S.D. (1999). Soil carbon inventories under a bioenergy crop (switchgrass): measurement limitations. J. Environ. Qual. 28, 1359–1365. doi:10.2134/jeq1999.00472425002800040041x\n  \n  \n    Horizon sums can overestimate stocks\n    Summing horizons assumes each layer is uniform. Our published work shows this can substantially overestimate carbon stocks compared with assessing the profile at every point. For baselines, credits or reporting, we calculate stocks from depth-continuous profiles with uncertainty.\n    Flynn, T., Kostecki, R., Rebi, A., Raza, T. (2024). Accessing global soil raster images and equal-area splines to estimate soil organic carbon stocks on the regional scale. Pedosphere. doi:10.1016/j.pedsph.2024.07.004\n    Get in touch →\n  \n  Stocks: SOC × bulk density × thickness × (1 − coarse fragments), following Poeplau, C., Vos, C., Don, A. (2017). SOIL 3, 61–66. doi:10.5194/soil-3-61-2017 Equivalent soil mass: Ellert, B.H., Bettany, J.R. (1995). Can. J. Soil Sci. 75, 529–538. doi:10.4141/cjss95-075\n\n\n\n\n  Water retention: compare pedotransfer functions\n  Estimate the water retention curve, field capacity, wilting point and available water from texture, carbon and bulk density with six published pedotransfer functions at once. They often disagree, and the spread between them is an honest measure of how uncertain an estimate from texture alone is. Add measured points to see which one fits your soil.\n  \n    \n      Your soil\n      \n        Sand (%)\n        Clay (%)\n        Organic carbon (%)\n        Bulk density (g/cm³)\n        HorizonTopsoilSubsoil\n        Field capacity at33 kPa (pF 2.5)10 kPa (pF 2.0)\n        CEC (cmol(+)/kg, optional)\n        pH in water (optional)\n      \n      \n      Sand 50–2000 µm, silt 2–50 µm, clay &lt; 2 µm. Organic matter is taken as 1.724 × organic carbon, as the original equations assume. Without a bulk density, the Saxton & Rawls estimate for a normally packed soil is used. CEC and pH are needed only for the tropical function (Hodnett & Tomasella). 10 kPa is often a better field capacity for sandy soils.\n      \n    \n    \n      Your measurements (optional)\n      \n      \n        Suction unitkPacm of water (hPa)pF (log₁₀ cm)\n        Water content unitm³/m³% by volume\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n      \n      Two columns: suction and volumetric water content, one measurement per row, for the soil described on the left. Each function is then scored by how closely it matches your points.\n      \n    \n  \n  \n    \n      Retention curves\n      Download CSV\n    \n    \n    \n    \n    \n    \n  \n  \n    Need retention that varies with depth?\n    We build depth-continuous retention profiles and calibrate pedotransfer functions to your own site data, ready for water balance and recharge modelling.\n    Get in touch →\n  \n  Saxton, K.E., Rawls, W.J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. Soil Sci. Soc. Am. J. 70, 1569–1578. doi:10.2136/sssaj2005.0117\n  Rawls, W.J., Brakensiek, D.L. (1985). Prediction of soil water properties for hydrologic modeling. In: Jones, E.B., Ward, T.J. (eds), Watershed Management in the Eighties. ASCE, New York, 293–299.\n  Wösten, J.H.M., Lilly, A., Nemes, A., Le Bas, C. (1999). Development and use of a database of hydraulic properties of European soils. Geoderma 90, 169–185. doi:10.1016/S0016-7061(98)00132-3\n  Vereecken, H., Maes, J., Feyen, J., Darius, P. (1989). Estimating the soil moisture retention characteristic from texture, bulk density, and carbon content. Soil Science 148, 389–403.\n  Hodnett, M.G., Tomasella, J. (2002). Marked differences between van Genuchten soil water-retention parameters for temperate and tropical soils: a new water-retention pedo-transfer functions developed for tropical soils. Geoderma 108, 155–180. doi:10.1016/S0016-7061(02)00105-2\n  Cosby, B.J., Hornberger, G.M., Clapp, R.B., Ginn, T.R. (1984). A statistical exploration of the relationships of soil moisture characteristics to the physical properties of soils. Water Resour. Res. 20, 682–690. doi:10.1029/WR020i006p00682\n\n\n\n\n  van Genuchten curves\n  Explore how the van Genuchten–Mualem parameters shape water retention and unsaturated conductivity. Start from a texture class, convert any of six pedotransfer functions to van Genuchten form, or fit the curve to your own measurements, then adjust.\n  \n    Start from\n    \n      SourceTexture class (typical values)Pedotransfer functionFit to my measurements\n      Texture class\n      Function\n    \n    \n      \n        Sand (%)\n        Clay (%)\n        Organic carbon (%)\n        Bulk density (g/cm³)\n        HorizonTopsoilSubsoil\n        CEC (cmol(+)/kg)\n        pH in water\n      \n      Use the soil from the Water retention tab\n    \n    \n      \n      \n        Suction unitkPacm of water (hPa)pF (log₁₀ cm)\n        Water content unitm³/m³% by volume\n        Measured Ks (cm/day, optional)\n        Residual θrFit itFix at 0\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n        Fit\n      \n      Two columns: suction and volumetric water content. Use 0 for saturation. Fitting four parameters needs at least five points spread from wet to dry; with fewer, or with no points drier than about 1000 kPa, fix θr at 0.\n    \n    \n    \n      θr residual: \n      θs saturated: \n      α (1/cm): \n      n: \n      Ks (cm/day): \n    \n    \n  \n  \n  \n    \n      Water retention θ(h)\n      \n    \n    \n      Hydraulic conductivity K(h)\n      \n    \n  \n  \n    Want parameters for your own soils?\n    We fit hydraulic parameters to your lab or field measurements and carry them into two-dimensional flux, recharge and drainage modelling across hillslopes.\n    Get in touch →\n  \n  van Genuchten, M.Th. (1980). A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. Soil Sci. Soc. Am. J. 44, 892–898. doi:10.2136/sssaj1980.03615995004400050002x Mualem, Y. (1976). A new model for predicting the hydraulic conductivity of unsaturated porous media. Water Resour. Res. 12, 513–522. doi:10.1029/WR012i003p00513 Class parameters: Carsel, R.F., Parrish, R.S. (1988). Developing joint probability distributions of soil water retention characteristics. Water Resour. Res. 24, 755–769. doi:10.1029/WR024i005p00755 Pedotransfer functions: see the Water retention tab. Fitting: least squares on θ, as in RETC (van Genuchten, Leij & Yates 1991).\n\n\n\n\n  Hydrologic soil group and runoff\n  Find a soil's hydrologic soil group (A–D) with the NRCS rules, then see what it means: the runoff curve number for your land cover and how much of a storm runs off.\n  \n    \n      1. The soil\n      \n        Impermeable layerNone within 100 cm (40 in)50–100 cm (20–40 in) downWithin 50 cm (20 in)\n        Seasonal high water tableNone within 100 cm (40 in)60–100 cm (24–40 in) downWithin 60 cm (24 in)\n        Saturated conductivity (Ksat)Estimate from textureI have a measured value\n        Ksat of the least permeable layer\n        Ksat unitsµm/smm/hcm/dayin/h\n        Sand (%)\n        Clay (%)\n        Organic carbon (%)\n      \n      \n      An impermeable layer is bedrock, a hardpan (fragipan, duripan, petrocalcic or other cemented layer), permafrost, or any layer with Ksat below 0.01 µm/s. A seasonal high water table counts if it occurs in any month of the year. Soil surveys list both for each map unit.\n    \n    \n      Hydrologic soil group\n      –\n      \n      \n      \n    \n  \n  \n    2. What it means for runoff\n    \n      Land cover\n      Storm rainfall\n      Rainfall unitsmminches\n    \n    \n    \n    \n  \n  \n    Need hydrologic groups across a whole area?\n    We map hydrologic soil groups continuously from geology, terrain and soil data, including where soil surveys are missing or coarse.\n    Get in touch →\n  \n  Hydrologic soil groups: USDA-NRCS (2009). National Engineering Handbook, Part 630 Hydrology, Chapter 7: Hydrologic Soil Groups (Table 7-1). Curve numbers and runoff equation: USDA-SCS (1986). Urban Hydrology for Small Watersheds, Technical Release 55 (TR-55), Tables 2-2a to 2-2c, average antecedent moisture, initial abstraction 0.2S. Ksat from texture: Saxton, K.E., Rawls, W.J. (2006). Soil Sci. Soc. Am. J. 70, 1569–1578. doi:10.2136/sssaj2005.0117. This is a screening tool, not a replacement for official soil survey data.\n\n\n\n\n  Texture class\n  Classify particle-size fractions on the USDA, European or Australian texture triangle, one sample at a time or a whole file at once, then download the triangle or the classified data.\n  \n    \n      Texture system\n        USDAEuropean (HYPRES / EU Soil Map)Australian\n    \n    \n  \n  \n    \n      \n        One sample\n        \n          Sand (%)\n          Silt (%)\n          Clay (%)\n        \n        \n        –\n        Use in water retention →\n      \n      \n        Many samples\n        \n        \n          Open CSV🔒 Processed on your device. Nothing is sent or stored.\n          Load example\n          Classify\n        \n        Columns must be named sand, silt and clay (in %, any order). An id column is optional and any other columns are kept. Rows that don't add to 100% are rescaled and flagged.\n        \n      \n    \n    \n      \n      \n        Download SVG\n        Download PNG\n      \n    \n  \n  \n    \n      Classified samples\n      Download CSV\n    \n    \n    \n  \n  \n    Texture across a site or catchment?\n    We produce continuous texture surfaces with depth and across landscapes, with uncertainty, and convert between particle-size systems.\n    Get in touch →\n  \n  Class boundaries: USDA-NRCS Soil Survey Manual; HYPRES / European Soil Database texture classes; Australian triangle as implemented in the soiltexture R package (Moeys; coordinates from B. Minasny). Fractions must be measured on the particle-size limits of the chosen system.\n\n\n\n\n  Munsell soil colour\n  See a Munsell notation as an on-screen colour, browse a soil chart page, and learn what the colour usually tells you about the soil.\n  \n    \n      Notation\n      \n        Type a notation\n        Chart page (hue)\n      \n      \n      \n        \n        \n          –\n          \n        \n      \n      \n    \n    \n      Chart page\n      \n      Rows are value (lightness), columns are chroma (strength). Tap a chip to select it.\n    \n  \n  Colours are computed from the Munsell renotation data (illuminant C) and converted to sRGB. Screens vary, so use this for learning, not in place of a physical chart. Chips that fall outside the sRGB range are left out.\n\n\n\n\n  Sampling density\n  Estimate how many samples you need to measure a field or site mean within a chosen margin of error, assuming simple random sampling.\n  \n    \n      Inputs\n      \n        Coefficient of variation (%)\n        Allowable error (% of mean)\n        Confidence\n          90%95%99%\n        Area (ha, optional)\n      \n      No CV to hand? Typical values: pH 5–15%, organic carbon 20–40%, available P or K 40–80%.\n    \n    \n      Result\n      –\n      \n      \n    \n  \n  \n    Sampling for a map: using the variogram\n    The calculator above sizes a sample to estimate one average. For a map, what matters is how far apart samples are compared with the variogram range. This finds how many samples on a regular grid give a chosen kriging error, from a variogram you already have (for example from the variogram tool or a nearby study).\n    \n      Variogram modelSphericalExponentialGaussian\n      Nugget (% of sill)\n      Range, practical (m)\n      Area (ha)\n      Target map error (% of SD)\n    \n    Map error is the root mean kriging error at unsampled locations, as a share of the standard deviation of the property. 100% means no better than the mean; the nugget sets the lowest error any density can reach.\n    Calculate\n    \n    \n  Burgess, T.M., Webster, R., McBratney, A.B. (1981). Optimal interpolation and isarithmic mapping of soil properties. IV. Sampling strategy. J. Soil Sci. 32, 643–659. doi:10.1111/j.1365-2389.1981.tb01737.x McBratney, A.B., Webster, R. (1983). How many observations are needed for regional estimation of soil properties? Soil Science 135, 177–183.\n  \n  \n    Spatial variation changes the answer\n    Random sampling ignores the fact that nearby soils are alike. We design optimised and stratified sampling schemes and management zones that reach the same precision with fewer samples.\n    Get in touch →\n  \n  Sample size for a mean under simple random sampling, n = (t × CV ÷ E)²: Cochran, W.G. (1977). Sampling Techniques, 3rd ed. Wiley.\n\n\n\n\n  Variogram & kriging\n  Fit a variogram to point data and test ordinary kriging by leave-one-out cross-validation: each point is predicted from its neighbours with itself left out, then compared with what was measured.\n  \n    1. Your points\n    \n    \n      Open CSV🔒 Processed on your device. Nothing is sent or stored.\n      Load example\n    \n    Columns: an optional id, coordinates named x and y (projected, e.g. metres) or lon and lat (decimal degrees, converted to km), and one or more numeric properties. Up to 5,000 points.\n  \n  \n    2. Settings\n    \n      Property\n      Variogram model\n        Best fit (spherical or exponential)SphericalExponentialGaussianMatérn (fitted smoothness κ)Matérn, Stein's parameterisation (Ste)\n      Maximum lag (blank = ⅓ of the extent)\n      Estimator\n        Classical (Matheron)Robust (Cressie–Hawkins)\n      Lag classes\n      Transform\n        NoneLog (natural), back-transformed\n      Neighbours used\n    \n    Log suits skewed, positive data (organic carbon, available P, EC). The variogram and kriging run on the logs; predictions are back-transformed to the original units with the lognormal correction, so they are unbiased means, not medians.\n     Set the variogram myself\n    \n      Nugget\n      Partial sill\n      Range (practical)\n      Smoothness κ (Matérn)\n    \n    Fit and cross-validate\n    \n  \n  \n    \n    \n      \n        Variogram\n        Experimental (size = pairs)Fitted model\n        \n      \n      \n        Cross-validation: observed vs predicted\n        Points1:1 line\n        \n      \n    \n    \n      Where the errors are\n      Predicted too highPredicted too lowSize = standardised error\n      \n      Clusters of the same colour suggest a trend or a boundary the variogram doesn't capture. A single large dot is worth checking for a data error.\n    \n    \n      \n        Cross-validation results\n        Download CSV\n      \n      \n    \n  \n  \n    Check a result: yours or a published one\n    Use it before you submit, or when reviewing. Kriging accuracy is set by the variogram and by how far apart the samples are, so a reported error can be checked without the data. This lays out samples at the stated density, works out the kriging variance at each one from the stated variogram, and gives the cross-validation RMSE you should expect if that variogram is right.\n    \n      Variogram modelSphericalExponentialGaussian\n      Standard deviation of the data\n      Nugget (% of sill)\n      Range, practical (m)\n      Number of samples\n      Area (ha)\n      Sample layoutRandomRegular grid\n      Reported RMSE (optional)\n    \n    If the nugget isn't reported, leave it at 0: that is the most generous assumption, so a result that still looks too good really is.\n    CheckLoad example\n    \n    \n  Kriging variance from the variogram and sample layout alone: Burgess, T.M., Webster, R., McBratney, A.B. (1981). J. Soil Sci. 32, 643–659. doi:10.1111/j.1365-2389.1981.tb01737.x Webster, R., Oliver, M.A. (2007). Geostatistics for Environmental Scientists, 2nd ed. Wiley.\n  \n  \n    Reading the results\n    \n      Nugget : sill is the share of variation you can't predict at your sampling scale: measurement error plus variation over distances shorter than your closest samples. Under 25% is strong spatial dependence, 25–75% moderate, over 75% weak.\n      Range is the distance beyond which samples stop telling you about each other. If your samples are mostly further apart than the range, kriging can do little better than the mean, however good the software.\n      RMSE vs. the mean is the real test: it shows how much spatial prediction actually adds. A map made by kriging is only worth its colours if this is clearly above zero.\n      MSDR and interval coverage show whether the uncertainty is honest. MSDR near 1 and coverage near 90% mean the kriging variance can be trusted; otherwise the uncertainty map is too optimistic or too cautious.\n      Two limits that are rarely stated. Cross-validated RMSE can't fall much below the square root of the nugget, because that part of the variation isn't predictable from neighbours. And when samples are further apart than the range, RMSE approaches the standard deviation of the data. A published RMSE well below these limits usually means the validation points weren't independent of the calibration data, the variogram came from a different dataset, or the error was reported on a different scale.\n    \n  \n  \n    Need a map, covariates or uncertainty?\n    We produce kriged and regression-kriged maps with terrain, remote sensing and legacy data, full prediction uncertainty, and sampling designs built from the variogram.\n    Get in touch →\n  \n  Method: classical (Matheron) or robust (Cressie & Hawkins 1980) variogram estimator; model fitted by weighted least squares with weights Nj/hj² (as in gstat); ordinary kriging with the nearest neighbours; Matérn model with fitted smoothness in the standard and Stein (1999) parameterisations; ranges are practical ranges (95% of the sill) for every model; lognormal ordinary kriging back-transform after Journel (1980) and Webster & Oliver (2007); nugget/sill classes after Cambardella et al. (1994).\n\n\n\n\n  Model evaluation\n  Check how well a soil map or model matches independent observations: accuracy and agreement for continuous predictions, prediction-interval coverage, class accuracy, and the confusion index for class probabilities.\n  \n    Continuous\n    Classes\n    Confusion index\n  \n\n  \n    \n      Observed and predicted values\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n        Evaluate\n      \n      Columns named obs and pred. Add sd (prediction standard deviation) for a coverage curve, or lower and upper for the coverage of your own intervals.\n      Your interval's nominal level (%)\n      \n    \n    \n      \n      \n        \n          Observed vs predicted\n          Sites1:1 line\n          \n        \n        \n          Prediction interval coverage (PICP)\n          PICPIdeal (1:1)\n          \n          Points below the line mean the intervals are too narrow (overconfident); above means too wide.\n        \n      \n    \n    \n      Check a result: yours or a published one\n      R² and RMSE constrain each other, and both are limited by how precisely the soil was measured. Enter your own figures before you submit, or the figures from a paper or report, to see whether the numbers can all be true.\n      \n        Reported R²\n        Reported RMSE\n        SD of the observed values\n        Validation points\n        Lab or field repeatability SD (optional)\n      \n      SD of the observed values is often in a summary-statistics table. Repeatability is the SD of repeated measurements of the same sample; labs or method papers report it.\n      CheckLoad example\n      \n      \n    No paper needed: for the same validation data, RMSE ≥ SD × √(1 − R²) follows from the definitions of R² and RMSE, and no model can predict more precisely than the soil was measured.\n  \n  \n\n  \n    \n      Observed and predicted classes\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n        Evaluate\n      \n      Columns named obs and pred, one site per row.\n      \n    \n    \n      \n      Confusion matrix\n      Rows are observed classes, columns are predicted. Producer's accuracy: share of each observed class predicted correctly. User's accuracy: share of each predicted class that is correct.\n      \n    \n    \n      Check an accuracy: yours or a published one\n      An accuracy from a small validation set is uncertain, and it only means something compared with what you would get by guessing. Enter your own figures or a paper's to see the confidence interval and whether the map beats chance or another map.\n      \n        Overall accuracy (%)\n        Validation points\n        Number of classes\n        Largest class share (%, optional)\n        Compare with: accuracy (%, optional)\n        …and its validation points\n      \n      The largest class share is the accuracy of a \"map\" that predicts the most common class everywhere. If it isn't given, an even split between classes is assumed, which flatters the map.\n      CheckLoad example\n      \n      \n    Wilson, E.B. (1927). Probable inference, the law of succession, and statistical inference. J. Am. Stat. Assoc. 22, 209–212. doi:10.1080/01621459.1927.10502953 Foody, G.M. (2009). Classification accuracy comparison: hypothesis tests and the use of confidence intervals in evaluations of difference, equivalence and non-inferiority. Remote Sens. Environ. 113, 1658–1663. doi:10.1016/j.rse.2009.03.014\n  \n  \n\n  \n    \n      Class probabilities\n      \n      \n        Open CSV🔒 Processed on your device. Nothing is sent or stored.\n        Load example\n        Calculate\n      \n      First column is the site id, then one column of probability per class.\n      \n    \n    \n      \n      Download CSV\n      \n      CI = 1 − (P1 − P2), where P1 and P2 are the two highest class probabilities. 0 means one class clearly wins; 1 means the top two are tied.\n    \n  \n\n  \n    Need uncertainty for a whole map?\n    We build bootstrapped maps with prediction intervals, confusion indices and independent validation, so users know where a map can be trusted and where it can't.\n    Get in touch →\n  \n  Lin, L.I. (1989). Biometrics 45, 255–268. Malone, B.P., McBratney, A.B., Minasny, B. (2011). Geoderma 160, 614–626. Burrough, P.A., van Gaans, P.F.M., Hootsmans, R. (1997). Geoderma 77, 115–135. Open R implementation: rafikisol package.\n\n\n\n\n  Soil temperature waves\n  Daily and seasonal temperature swings at the surface fade and arrive later the deeper you go. See how soil moisture, density and clay control how far heat travels.\n  \n    \n      CycleDailyAnnual\n      Mean surface temperature (°C)\n      Surface amplitude (± °C)\n    \n    \n      Water content:  m³/m³\n      Bulk density:  g/cm³\n      Clay: %\n    \n  \n  \n  \n    \n      Temperature through the day\n      \n      \n    \n    \n      Thermal diffusivity vs water content\n      \n      Diffusivity peaks at intermediate moisture: water first bridges grains and conducts heat well, then extra water mostly adds heat capacity.\n    \n  \n  \n    Real soils are layered and the weather isn't a sine wave\n    We model coupled heat and water movement through layered profiles and across hillslopes, from surface conditions down to depth.\n    Get in touch →\n  \n  Uniform soil with sinusoidal surface temperature (Carslaw & Jaeger). Thermal conductivity: Campbell, G.S. (1985). Soil Physics with BASIC. Heat capacity: de Vries (1963).\n\n\n\n\n  Surface energy balance\n  Follow the sun's energy at a bare soil surface: how much heats the air, how much evaporates water, and how much flows into the ground. Wet the soil and watch evaporation take over.\n  \n    \n      Solar radiation:  W/m²\n      Albedo: \n      Air temperature:  °C\n      Relative humidity: %\n      Wind speed:  m/s\n      Surface water content:  m³/m³\n    \n    \n      Field capacity (m³/m³)\n      Bulk density (g/cm³)\n      Clay (%)\n    \n  \n  \n    Where net radiation goes\n    Sensible heat HEvaporation LEGround heat G\n    \n  \n  \n    Partitioning as the soil wets up\n    HLEGCurrent water content\n    \n  \n  \n    From one point to a whole landscape\n    We map energy and water budgets across fields and catchments, linking soil properties, moisture and terrain to where energy is stored and dissipated.\n    Get in touch →\n  \n  Steady-state bare-soil balance Rn = H + LE + G solved for surface temperature; neutral aerodynamic resistance at 2 m (z₀ = 1 cm); evaporation by the moisture-availability (β = θ/θfc) method; G by conduction over the top 10 cm (Campbell conductivity); sky emissivity after Brutsaert (1975). A teaching model, not a field estimate.\n\n\n\n\n  Evapotranspiration and crop water use\n  Daily reference evapotranspiration (ET₀) by the FAO-56 Penman–Monteith method, with Hargreaves for comparison, then crop water use and how long the soil's water lasts before the crop needs irrigating. Every step of the calculation is shown.\n  \n    \n      1. Place and day\n      \n        Latitude (°, south negative)\n        Elevation (m)\n        Date\n        Temperature unit°C°F\n        Maximum temperature\n        Minimum temperature\n      \n      2. Weather data you have\n      \n        HumidityRH max and minMean RHDew pointNone\n        RH max (%)\n        RH min (%)\n        Windm/skm/hmphNone\n        Wind speed\n        Measured at height (m)\n        Sunshine or radiationHours of bright sunshineSolar radiation (MJ/m² per day)None (estimate from temperature)\n        Sunshine hours\n        LocationInlandCoastal\n      \n      Use values for one day (or averages for a period). Missing data are filled in the FAO-56 way: dew point taken as the minimum temperature, wind as 2 m/s, and radiation from the daily temperature range. Each substitution adds uncertainty, and the results say which were used.\n      \n    \n    \n      Reference evapotranspiration\n      \n      \n      \n    \n  \n  \n    3. Crop water use and irrigation interval\n    \n      Crop\n      Growth stageInitial (planting to ~10% cover)Mid-season (full cover)Late season (ripening)\n      Soil waterAvailable water (mm per m)Field capacity and wilting point\n      Available water (mm per m of soil)\n      Field capacity (m³/m³)\n      Wilting point (m³/m³)\n      Rooting depth (m)\n    \n    Use the soil from the Water retention tab\n    Typical available water: sands 50–100, loams 120–200, clays 150–200 mm per metre. The rooting depth starts at the FAO-56 typical value for the crop; shallower soils, compaction or young plants make it less.\n    \n    \n  \n  \n    Need water balances for a field, farm or catchment?\n    We run daily soil water balances with measured or gridded weather, soil maps and crop calendars, for irrigation planning and water accounting.\n    Get in touch →\n  \n  Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). Crop Evapotranspiration: Guidelines for Computing Crop Water Requirements. FAO Irrigation and Drainage Paper 56. FAO, Rome. Equations 7–53 (ET₀), Table 12 (Kc; the midpoint where a range is given, and the crop-group initial value where no crop value is listed), Table 22 (rooting depth and depletion fraction), equations 82–84 (TAW, RAW). Checked against FAO-56 Example 18 (Brussels, 6 July: ET₀ 3.9 mm/day). Hargreaves, G.H., Samani, Z.A. (1985). Reference crop evapotranspiration from temperature. Applied Engineering in Agriculture 1, 96–99.\n\n\n\n\n  Frost depth\n  How deep the ground freezes in a winter, from the freezing index, the surface and the soil's density and moisture. Uses the two-phase Neumann solution, the exact basis of the modified Berggren equation, so the Stefan estimate and the Berggren λ correction are shown alongside.\n  \n    \n      1. Winter\n      \n        Climate inputColdest and warmest monthFreezing index\n        Coldest month mean (°C)\n        Warmest month mean (°C)\n        Air freezing index (°C·days)\n        Freezing season length (days)\n        Mean annual temperature (°C)\n        Surface (n-factor)Concrete, cleared of snow (0.75)Asphalt or bare soil, cleared (0.7)Shaded (0.9)Turf (0.5)Under trees (0.3)Custom\n        n-factor\n      \n      2. Soil\n      \n        Soil typeSand and gravel (fines &lt; 20%)Mixed (fines 20–50%)Silt and clay (fines ≥ 50%)\n        Dry bulk density (g/cm³)\n        Water content (% by dry weight)\n      \n      The n-factor converts the air freezing index to the surface (values from TM 5-852-6, Table 2-4). Snow cover insulates the ground and can make frost much shallower; this calculation assumes the surface is kept clear or has no lasting snow. Water content is the average over the freezing depth in winter.\n      \n    \n    \n      Frost depth\n      \n      \n      \n    \n  \n  \n    Frost heave, foundations or permafrost?\n    We model freezing and thawing through layered soils with snow, moisture and heat flow, for foundations, pipelines and slopes.\n    Get in touch →\n  \n  Method: two-phase Neumann solution for freezing of a semi-infinite medium (Carslaw, H.S., Jaeger, J.C. (1959). Conduction of Heat in Solids, 2nd ed. Oxford University Press), which underlies the modified Berggren equation (Aldrich, H.P., Paynter, H.M. (1953). Analytical studies of freezing and thawing of soils. Arctic Construction and Frost Effects Laboratory, Technical Report 42). Thermal conductivity: Kersten, M.S. (1949). Laboratory Research for the Determination of the Thermal Properties of Soils. University of Minnesota Engineering Experiment Station; reproduces the published example values for silt (0.72 and 0.80 BTU/h·ft·°F unfrozen and frozen) and is uncertain by about ±25%. Heat capacity, latent heat and n-factors: US Army (1988). Arctic and Subarctic Construction: Calculation Methods for Determination of Depths of Freeze and Thaw in Soils, TM 5-852-6.\n\n\n\n\n  Day length and solar radiation\n  Day length, sunrise and sunset, the noon sun angle and the solar energy reaching the top of the atmosphere and the ground on a clear day, for any latitude and date, with the whole year shown.\n  \n    \n      Latitude (°, south negative)\n      Elevation (m)\n      Date\n    \n    \n    Sunrise and sunset are in local solar time (solar noon = 12:00); clock time differs with your position in the time zone and daylight saving. Day length is from sunrise to sunset of the sun's centre, without refraction, as in FAO-56, so published sunrise tables give a few minutes more.\n  \n  \n    \n      Day length through the year\n      \n    \n    \n      Daily solar radiation\n      Top of atmosphere (Ra)Clear-sky at the ground (Rso)\n      \n    \n  \n  Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). FAO Irrigation and Drainage Paper 56, equations 21–25, 34 and 37. Checked against FAO-56 Example 8 (20° S, 3 September: Ra 32.2 MJ/m² per day).\n\n\n\n\n\n  Pedodiversity\n  Measure the taxonomic diversity of soils in an area: how many soil classes there are, and how evenly the area is shared between them. Compare several sites at once.\n  \n    Your soil classes\n    \n    \n      Open CSV🔒 Processed on your device. Nothing is sent or stored.\n      Load example\n      Calculate\n    \n    A column named class is required (any classification: soil orders, reference soil groups, series, map units). Add area or count to weight each row; without one, every row counts once (for example, one row per profile). Add site to compare several areas.\n    \n  \n  \n    \n      \n        Indices by site\n        Download CSV\n      \n      \n    \n    \n      \n        \n          Indices\n          \n        \n        \n      \n      \n        Share of each class\n        \n      \n    \n    \n      Reading the indices\n      Richness counts classes. Shannon (H′) rises with both more classes and more even shares. Evenness (J′) is Shannon relative to its maximum for that many classes, from 0 (one class dominates) to 1 (all equal). Simpson is the chance that two random points fall in different classes.\n      Hill numbers give the \"effective number of classes\": N1 weights classes by their share, N2 counts only the common ones. Dominance is the share of the most common class.\n    \n  \n  \n    Diversity is more than counting classes\n    Taxonomic indices treat every class as equally different and ignore where soils sit and how they change with depth. Our approach measures pedodiversity from continuous soil properties in three dimensions, as the organisation of energy across the soil system.\n    Get in touch →\n  \n  Ibáñez, J.J., De-Alba, S., Bermúdez, F.F., García-Álvarez, A. (1995). Pedodiversity: concepts and measures. Catena 24, 215–232. Hill, M.O. (1973). Ecology 54, 427–432. Thermodynamic approach: Flynn, T. (2026). Preprint. doi:10.32942/X2H66M."
   },
   {
-    "objectID": "services.html#soil-and-landscape-mapping",
-    "href": "services.html#soil-and-landscape-mapping",
-    "title": "Services",
-    "section": "Soil and landscape mapping",
-    "text": "Soil and landscape mapping\n\nDigital soil mapping of soil properties by depth, with uncertainty\nUpdating existing regional maps with new survey data\nSoil functional and fertility domains for planning\nSoil sampling design for mapping and monitoring"
-  },
-  {
-    "objectID": "services.html#hydrology-and-runoff-parameters",
-    "href": "services.html#hydrology-and-runoff-parameters",
-    "title": "Services",
-    "section": "Hydrology and runoff parameters",
-    "text": "Hydrology and runoff parameters\n\nHydrologic soil group (HSG) mapping from geology and terrain, as class probabilities\nCurve number and potential maximum retention surfaces with uncertainty, ready for hydrological models\nSoil-water flux modelling along slopes and catenas"
-  },
-  {
-    "objectID": "services.html#geostatistics-and-data-analysis",
-    "href": "services.html#geostatistics-and-data-analysis",
-    "title": "Services",
-    "section": "Geostatistics and data analysis",
-    "text": "Geostatistics and data analysis\n\nVariogram analysis, kriging and regression kriging\nMixed models for nested and repeated soil data\nCross-validation and model checking\nAnalysis of existing datasets, including troubleshooting problem data"
-  },
-  {
-    "objectID": "services.html#decision-support",
-    "href": "services.html#decision-support",
-    "title": "Services",
-    "section": "Decision support",
-    "text": "Decision support\n\nCombining several sources of uncertainty into a single, readable decision map\nPrioritisation of areas for management, restoration or further sampling\nPlain-language summaries for non-specialist decision makers"
-  },
-  {
-    "objectID": "services.html#review-and-training",
-    "href": "services.html#review-and-training",
-    "title": "Services",
-    "section": "Review and training",
-    "text": "Review and training\n\nIndependent technical review of reports, models and maps\nShort courses and workshops in digital soil mapping and geostatistics in R\n\n\nThe scientific work is provided as environmental science and analysis. Where a project requires a licensed professional engineer, RafikiArdhi works alongside the engineering team.\nDiscuss a project →"
-  },
-  {
-    "objectID": "diy-soil-tests.html",
-    "href": "diy-soil-tests.html",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "objectID": "should-i-amend.html",
+    "href": "should-i-amend.html",
+    "title": "Should I amend my soil?",
     "section": "",
-    "text": "Three simple tests tell you most of what matters about your soil: what it’s made of (texture) and how fast water moves through it (drainage). Texture decides how often to water, how fast water soaks in, and how the soil behaves when you dig."
+    "text": "Compost and topsoil are useful, but a lot of money goes on amendments that don’t help, or make things worse. Answer a few questions and this tells you what’s worth doing for what you’re planting."
   },
   {
-    "objectID": "diy-soil-tests.html#jar-test-texture",
-    "href": "diy-soil-tests.html#jar-test-texture",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "Jar test (texture)",
-    "text": "Jar test (texture)\n\nFill a straight-sided jar about one-third with soil from root depth (pick out stones, roots and debris).\nAdd water until the jar is about two-thirds full, plus a teaspoon of dishwasher detergent or salt-free water softener to separate the particles.\nShake hard for 3–5 minutes, then set it down and start a timer.\nAfter 1 minute, mark the height of the settled layer: that’s the sand.\nAfter 2 hours, mark the height again: sand plus silt.\nAfter 2 days (when the water clears), mark the final height: everything, including clay."
+    "objectID": "should-i-amend.html#the-short-version",
+    "href": "should-i-amend.html#the-short-version",
+    "title": "Should I amend my soil?",
+    "section": "The short version",
+    "text": "The short version\n\nTrees: never amend the planting hole. Wide hole, native soil, mulch.\nNative and low-water plants: usually nothing. Rich soil works against them.\nVegetables: yes, compost every year.\nLawns: improve the soil before seeding. On an existing lawn, aerate and top-dress lightly.\nClay: compost helps; a little sand makes it worse.\nStanding water: a drainage problem, not a soil-quality one."
   },
   {
-    "objectID": "diy-soil-tests.html#ribbon-test-texture-by-feel",
-    "href": "diy-soil-tests.html#ribbon-test-texture-by-feel",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "Ribbon test (texture by feel)",
-    "text": "Ribbon test (texture by feel)\nTake a walnut-sized lump of soil, wet it until it’s like putty, and work it in your hand. Then press it between your thumb and finger, pushing it up into a ribbon until it breaks under its own weight."
-  },
-  {
-    "objectID": "diy-soil-tests.html#drainage-percolation-test",
-    "href": "diy-soil-tests.html#drainage-percolation-test",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "Drainage (percolation) test",
-    "text": "Drainage (percolation) test\n\nDig a hole about 12 in (30 cm) deep and 6–12 in wide.\nFill it with water and let it drain completely. This wets the surrounding soil; skip it and the result will be too fast.\nFill it again. Measure the water depth, wait a set time (an hour is easy), and measure again.\n\n\n\nIf the hole still holds water the next day, test again somewhere else and dig deeper to look for a dense or cemented layer. Drainage problems are usually about a layer below, not the soil you plant in."
-  },
-  {
-    "objectID": "rain-harvest.html",
-    "href": "rain-harvest.html",
-    "title": "Rain barrel and rainwater harvesting calculator",
+    "objectID": "planter-soil.html",
+    "href": "planter-soil.html",
+    "title": "Raised bed and planter soil calculator",
     "section": "",
-    "text": "Roofs collect a surprising amount of water: an inch of rain on 1,000 ft² of roof is about 600 gallons. This works out what your roof collects and how that compares with a rain barrel."
+    "text": "Filling raised beds and big planters takes more soil than most people expect, and bags add up fast. This works out the volume for beds, round pots and tree planters, and shows how to cut the cost of deep beds."
   },
   {
-    "objectID": "rain-harvest.html#making-the-most-of-it",
-    "href": "rain-harvest.html#making-the-most-of-it",
-    "title": "Rain barrel and rainwater harvesting calculator",
-    "section": "Making the most of it",
-    "text": "Making the most of it\n\nBarrels fill fast and empty slowly. Use the water between storms so there’s room for the next one.\nA soaker hose or drip line works on barrel pressure if the barrel is raised on blocks; sprinklers don’t.\nFor larger volumes, directing downspouts into planted areas or a rain garden stores water in the soil itself, often more of it than barrels hold, and is allowed almost everywhere."
+    "objectID": "planter-soil.html#tips-for-filling-beds",
+    "href": "planter-soil.html#tips-for-filling-beds",
+    "title": "Raised bed and planter soil calculator",
+    "section": "Tips for filling beds",
+    "text": "Tips for filling beds\n\nA raised bed 4 × 8 ft and 12 in deep holds about 1.2 cubic yards (32 ft³) once settled. That’s over 20 bags of 1.5 ft³.\nFill in layers and water each one so the soil settles before you plant.\nTop up each spring. Beds sink as organic matter breaks down; an inch or two of compost each year keeps them full.\nAvoid treated wood scraps as filler, and anything painted or glued."
   },
   {
-    "objectID": "lawn-water.html",
-    "href": "lawn-water.html",
-    "title": "Lawn vs low-water landscape: water use calculator",
+    "objectID": "planter-soil.html#pots-and-potting-mix",
+    "href": "planter-soil.html#pots-and-potting-mix",
+    "title": "Raised bed and planter soil calculator",
+    "section": "Pots and potting mix",
+    "text": "Pots and potting mix\n\nPotting mix is sold in quarts or cubic feet in the US (8 qt, 16 qt, 1–2 cu ft) and in litres elsewhere. One cubic foot is about 26 quarts or 28 litres.\nNursery “gallon” sizes are trade sizes, not measurements. A #1 (“1-gallon”) pot holds about 3 quarts; a #5 holds about 4 gallons.\nUse potting mix, not garden soil, in pots. Garden soil packs down in containers and stays waterlogged at the bottom."
+  },
+  {
+    "objectID": "frost-depth.html",
+    "href": "frost-depth.html",
+    "title": "Frost depth calculator",
     "section": "",
-    "text": "How much water does a lawn actually use compared with the alternatives? This estimates a season’s irrigation for the same area planted different ways, from your climate and water price."
+    "text": "In cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.\nYou need two numbers: the average temperature of your coldest month and of your warmest month. They are in the climate table for your town (on Wikipedia or your weather service). In the mountains, use a station at a similar elevation: temperatures drop about 3.5 °F per 1,000 ft (6.5 °C per 1,000 m) as you go up."
   },
   {
-    "objectID": "lawn-water.html#how-this-is-worked-out",
-    "href": "lawn-water.html#how-this-is-worked-out",
-    "title": "Lawn vs low-water landscape: water use calculator",
-    "section": "How this is worked out",
-    "text": "How this is worked out\nPlants lose water through their leaves at a rate set mainly by weather: sun, heat, wind and dry air. Weather networks express that as reference evapotranspiration (ETo): what a well-watered grass would use. Each planting uses a share of it: bluegrass close to 80%, buffalograss under half, established low-water shrubs a third or less. Subtract the rain the plants can use, allow for watering that’s never perfectly efficient, and you have the irrigation.\nThe factors used here are typical values for planning. They’re useful for comparing options, not for setting a controller: for that, use the catch-cup test."
+    "objectID": "frost-depth.html#why-frost-depth-varies-so-much",
+    "href": "frost-depth.html#why-frost-depth-varies-so-much",
+    "title": "Frost depth calculator",
+    "section": "Why frost depth varies so much",
+    "text": "Why frost depth varies so much\n\nCold, and how long it lasts. What matters is the freezing index: how far below freezing it is, added up over every day of winter. A long, steady cold freezes deeper than a short, sharp one.\nSnow. A foot of fluffy snow insulates about as well as a couple of inches of foam board. Plowed driveways and shoveled paths lose that blanket and freeze deepest.\nSoil and moisture. Water gives off a lot of heat as it freezes, which slows the frost. Dry gravel and rocky fill freeze much deeper than wet clay.\nWarm ground below. Where summers are warm, the ground stores heat that pushes back against the frost from below."
   },
   {
-    "objectID": "materials-calculator.html",
-    "href": "materials-calculator.html",
-    "title": "Landscape materials calculator",
-    "section": "",
-    "text": "Measure your area, pick a material, and see how much to order: in cubic yards, tons, bags or pallets. Odd shapes are fine: add them up piece by piece and subtract patios or paths. Every number shows how it was calculated, so you can check it against a supplier’s quote."
-  },
-  {
-    "objectID": "materials-calculator.html#how-to-measure",
-    "href": "materials-calculator.html#how-to-measure",
-    "title": "Landscape materials calculator",
-    "section": "How to measure",
-    "text": "How to measure\n\nRectangles and squares: length × width. An L-shaped bed is two rectangles; add them as two pieces.\nCircles: measure straight across the middle (the diameter). For a ring around a tree, add the full circle and subtract the inner circle.\nTriangles: measure all three sides. You don’t need the height.\nCurvy beds: run a tape measure along the longest straight line through the bed. Every few feet, measure straight across at a right angle. Enter those widths in order, including both ends (0 if the bed comes to a point). The more widths you measure, the more accurate the area."
-  },
-  {
-    "objectID": "materials-calculator.html#why-order-more-than-you-measured",
-    "href": "materials-calculator.html#why-order-more-than-you-measured",
-    "title": "Landscape materials calculator",
-    "section": "Why order more than you measured",
-    "text": "Why order more than you measured\nLoose soil, compost and mulch settle once they are spread and watered, and road base or sand shrinks when it is compacted. The calculator adds a typical allowance for each material; you can change it under Assumptions. It then rounds up to the next half unit, because suppliers rarely sell less."
-  },
-  {
-    "objectID": "materials-calculator.html#cubic-yards-vs-tons",
-    "href": "materials-calculator.html#cubic-yards-vs-tons",
-    "title": "Landscape materials calculator",
-    "section": "Cubic yards vs tons",
-    "text": "Cubic yards vs tons\nSoil, compost and mulch are usually sold by the cubic yard (volume). Stone, gravel and sand are usually sold by the ton (weight). The same cubic yard can weigh anywhere from about 600 lb (mulch) to over 2,500 lb (gravel), so a price per ton and a price per yard cannot be compared without knowing the weight. Ask your supplier what their material weighs per yard, and put that number in Assumptions."
-  },
-  {
-    "objectID": "materials-calculator.html#before-you-buy-topsoil",
-    "href": "materials-calculator.html#before-you-buy-topsoil",
-    "title": "Landscape materials calculator",
-    "section": "Before you buy topsoil",
-    "text": "Before you buy topsoil\n“Topsoil” has no legal definition, and quality varies a lot. Before you buy, ask:\n\nIs it screened? Screened soil has had rocks, roots and clods removed.\nWhat is in it? Native soil, a blend with compost or sand, or fill dirt?\nHas it been tested? Ask for pH, organic matter, salts and texture. A reputable supplier can tell you.\nCan I see it first? Look for weeds, construction debris, plastic or a sour smell. When the load arrives, check that it matches what you saw.\n\nDon’t pay for more than you need: a quote for several times the volume this calculator gives is worth questioning."
+    "objectID": "frost-depth.html#about-this-estimate",
+    "href": "frost-depth.html#about-this-estimate",
+    "title": "Frost depth calculator",
+    "section": "About this estimate",
+    "text": "About this estimate\nThis uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.\nFor more control (freezing index, density, water content and surface factors), use the frost depth tool for researchers."
   },
   {
     "objectID": "publications.html",
