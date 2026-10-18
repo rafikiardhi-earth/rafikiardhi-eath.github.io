@@ -675,34 +675,56 @@ window.HM = (function () {
 </header>
 
 
-<p>Before you submit, or when you review, check that the numbers can all be true. Each check takes the figures a paper or report gives (or your own) and tests them against what the method allows. Nothing you enter leaves your browser.</p>
 <style>
-.ck-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 14px 0 28px; }
+#ck-hub .ck-intro { font-size: 1.05rem; max-width: 70ch; }
+#ck-hub h2 { font-size: 1.25rem; margin: 26px 0 4px; border: none; }
+#ck-hub .ck-sub { opacity: .75; margin: 0 0 8px; font-size: .95rem; }
+.ck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; margin: 10px 0 8px; }
 .ck-grid a { display: block; text-decoration: none; border: 1px solid var(--bs-border-color, #3a352f); border-left: 4px solid #d98b56; border-radius: 10px; padding: 12px 14px; color: inherit; }
 body.quarto-light .ck-grid a { border-left-color: #8a4b22; }
 .ck-grid a:hover { background: rgba(217,139,86,.08); }
 .ck-grid b { display: block; margin-bottom: 2px; }
 .ck-grid span { font-size: .9rem; opacity: .8; }
-.ck-grid small { display: block; margin-top: 6px; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; opacity: .65; }
+.ck-grid small { display: block; margin-top: 6px; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; opacity: .6; }
+.ck-back { display: inline-block; margin: 4px 0 10px; font-weight: 600; text-decoration: none; }
+.ck-rel { margin-top: 30px; border-top: 1px solid var(--bs-border-color, #3a352f); padding-top: 14px; }
+.ck-rel h3 { font-size: 1.05rem; margin: 0 0 6px; }
+.ck-sec[hidden], #ck-hub[hidden] { display: none !important; }
 </style>
-<div class="ck-grid">
-  <a href="tools.html#eval/ev-check-cont"><b>R², RMSE and SD</b><span>Can the reported R² and RMSE both be true? Are they better than the lab precision allows?</span><small>Model evaluation</small></a>
-  <a href="tools.html#eval/ev-check-cat"><b>Classification accuracy</b><span>Confidence interval, chance baseline, and whether one map really beats another.</span><small>Model evaluation</small></a>
-  <a href="tools.html#eval"><b>Honest uncertainty</b><span>Do prediction intervals cover what they claim (PICP)?</span><small>Model evaluation</small></a>
-  <a href="tools.html#krige/kr-check"><b>Kriging error vs. variogram</b><span>Is a reported kriging RMSE possible, given the range, nugget and sample spacing?</span><small>Variogram &amp; kriging</small></a>
-  <a href="tools.html#sampling/s-check"><b>Samples for a map</b><span>How many samples a target map error needs, from the variogram.</span><small>Sampling density</small></a>
-  <a href="tools.html#carbon/c-check"><b>Detectable change</b><span>Could the sampling design detect the change in soil carbon being claimed?</span><small>Carbon stocks</small></a>
-  <a href="#pixel-size"><b>Finding the right pixel size</b><span>Coarsest legible, finest legible and recommended resolution for a map.</span><small>On this page</small></a>
-  <a href="#back-transform"><b>Back-transformation</b><span>Was a log-scale result reported as the median or the mean?</span><small>On this page</small></a>
-  <a href="#stock-arithmetic"><b>Carbon stock arithmetic</b><span>Rebuild a stock from its inputs and catch unit and stone-fraction slips.</span><small>On this page</small></a>
-  <a href="#area-estimation"><b>Area from a confusion matrix</b><span>Unbiased class areas with confidence intervals, instead of pixel counts.</span><small>On this page</small></a>
-  <a href="#effective-sample-size"><b>Effective sample size</b><span>How much clustered samples are really worth.</span><small>On this page</small></a>
-  <a href="#spatial-cv"><b>Spatial cross-validation and leakage</b><span>Is the validation optimistic? A guided checklist.</span><small>On this page</small></a>
-  <a href="#lab-conversions"><b>Lab method conversions</b><span>Walkley–Black, organic matter factors, pH in CaCl₂ vs. water, oxides.</span><small>On this page</small></a>
-  <a href="#coordinates"><b>Coordinates and distances</b><span>Degrees treated as metres, and how far a degree really is.</span><small>On this page</small></a>
+<div id="ck-hub">
+  <p class="ck-intro">Before you submit, or when you review, check that the numbers can all be true. Each check takes the figures a paper or report gives (or your own) and tests them against what the method allows. Nothing you enter leaves your browser.</p>
+  <div id="ck-groups"></div>
 </div>
-<section id="pixel-size" class="level2">
-<h2 data-anchor-id="pixel-size">Finding the right pixel size</h2>
+<script>
+window.CK = {
+  groups: [
+    ['acc', 'Model accuracy and validation', 'Is the model as good as the paper says?'],
+    ['spat', 'Spatial structure and sampling', 'Do the variogram, the sampling and the map fit together?'],
+    ['data', 'Soil data and units', 'Do the numbers follow from the inputs?']
+  ],
+  items: {
+    'r2': { g: 'acc', t: 'R², RMSE and SD', d: 'Can the reported R² and RMSE both be true? Are they better than the lab precision allows?', href: 'tools.html#eval/ev-check-cont', where: 'Model evaluation' },
+    'acc': { g: 'acc', t: 'Classification accuracy', d: 'Confidence interval, chance baseline, and whether one map really beats another.', href: 'tools.html#eval/ev-check-cat', where: 'Model evaluation' },
+    'picp': { g: 'acc', t: 'Honest uncertainty', d: 'Do prediction intervals cover what they claim (PICP)?', href: 'tools.html#eval', where: 'Model evaluation' },
+    'area-estimation': { g: 'acc', t: 'Area from a confusion matrix', d: 'Unbiased class areas with confidence intervals, instead of pixel counts.', rel: ['acc', 'spatial-cv', 'pixel-size'] },
+    'spatial-cv': { g: 'acc', t: 'Spatial cross-validation and leakage', d: 'Is the validation optimistic? A guided checklist.', rel: ['r2', 'krig', 'effective-sample-size'] },
+    'krig': { g: 'spat', t: 'Kriging error vs. variogram', d: 'Is a reported kriging RMSE possible, given the range, nugget and sample spacing?', href: 'tools.html#krige/kr-check', where: 'Variogram & kriging' },
+    'smap': { g: 'spat', t: 'Samples for a map', d: 'How many samples a target map error needs, from the variogram.', href: 'tools.html#sampling/s-check', where: 'Sampling density' },
+    'effective-sample-size': { g: 'spat', t: 'Effective sample size', d: 'How much clustered samples are really worth.', rel: ['smap', 'detect', 'spatial-cv'] },
+    'detect': { g: 'spat', t: 'Detectable change', d: 'Could the sampling design detect the change in soil carbon being claimed?', href: 'tools.html#carbon/c-check', where: 'Carbon stocks' },
+    'pixel-size': { g: 'spat', t: 'Finding the right pixel size', d: 'Coarsest legible, finest legible and recommended resolution for a map.', rel: ['smap', 'coordinates', 'krig'] },
+    'stock-arithmetic': { g: 'data', t: 'Carbon stock arithmetic', d: 'Rebuild a stock from its inputs and catch unit and stone-fraction slips.', rel: ['lab-conversions', 'detect', 'back-transform'] },
+    'back-transform': { g: 'data', t: 'Back-transformation', d: 'Was a log-scale result reported as the median or the mean?', rel: ['stock-arithmetic', 'krig', 'r2'] },
+    'lab-conversions': { g: 'data', t: 'Lab method conversions', d: 'Walkley–Black, organic matter factors, pH in CaCl₂ vs. water, oxides.', rel: ['stock-arithmetic', 'back-transform'] },
+    'coordinates': { g: 'data', t: 'Coordinates and distances', d: 'Degrees treated as metres, and how far a degree really is.', rel: ['pixel-size', 'krig', 'effective-sample-size'] }
+  },
+  card(id) { const c = this.items[id]; return `<a href="${c.href || '#' + id}"><b>${c.t}</b><span>${c.d}</span>${c.href ? '<small>Opens in ' + c.where + '</small>' : ''}</a>`; }
+};
+document.getElementById('ck-groups').innerHTML = CK.groups.map(([g, title, sub]) => `<h2>${title}</h2><p class="ck-sub">${sub}</p><div class="ck-grid">${Object.keys(CK.items).filter(id => CK.items[id].g === g).map(id => CK.card(id)).join('')}</div>`).join('');
+</script>
+<div id="pixel-size" class="ck-sec">
+<section id="finding-the-right-pixel-size" class="level2">
+<h2 data-anchor-id="finding-the-right-pixel-size">Finding the right pixel size</h2>
 <p>Grid resolution is often chosen by habit (30 m because that’s Landsat). Hengl (2006) set out rules that tie it to what the data can actually support. For each aspect of a dataset they give a <strong>coarsest legible</strong> resolution (the largest pixel that still represents it), a <strong>finest legible</strong> resolution (below which pixels “are probably just waste of memory”) and a <strong>recommended compromise</strong>. Fill in whatever you know; the overall range is where the rules agree.</p>
 <div class="hmc" id="px"></div>
 <script>
@@ -770,8 +792,10 @@ body.quarto-light .ck-grid a { border-left-color: #8a4b22; }
 })();
 </script>
 </section>
-<section id="back-transform" class="level2">
-<h2 data-anchor-id="back-transform">Back-transformation</h2>
+</div>
+<div id="back-transform" class="ck-sec">
+<section id="back-transformation" class="level2">
+<h2 data-anchor-id="back-transformation">Back-transformation</h2>
 <p>A mean calculated on log values, then exponentiated, is the <strong>median</strong> (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter what the paper gives on the log scale.</p>
 <div class="hmc" id="bt"></div>
 <script>
@@ -808,8 +832,10 @@ body.quarto-light .ck-grid a { border-left-color: #8a4b22; }
 })();
 </script>
 </section>
-<section id="stock-arithmetic" class="level2">
-<h2 data-anchor-id="stock-arithmetic">Carbon stock arithmetic</h2>
+</div>
+<div id="stock-arithmetic" class="ck-sec">
+<section id="carbon-stock-arithmetic" class="level2">
+<h2 data-anchor-id="carbon-stock-arithmetic">Carbon stock arithmetic</h2>
 <p>Rebuild a reported stock from its inputs. If it doesn’t match, the check tries the common slips (% vs g/kg, stones ignored or on the wrong basis, organic matter instead of carbon, kg/m² vs Mg/ha) and tells you which one reproduces the reported number.</p>
 <div class="hmc" id="sa"></div>
 <script>
@@ -875,8 +901,10 @@ body.quarto-light .ck-grid a { border-left-color: #8a4b22; }
 })();
 </script>
 </section>
-<section id="area-estimation" class="level2">
-<h2 data-anchor-id="area-estimation">Area from a confusion matrix</h2>
+</div>
+<div id="area-estimation" class="ck-sec">
+<section id="area-from-a-confusion-matrix" class="level2">
+<h2 data-anchor-id="area-from-a-confusion-matrix">Area from a confusion matrix</h2>
 <p>Counting pixels in a map gives biased class areas, because every map has errors. With a stratified accuracy sample, the confusion matrix gives unbiased areas with confidence intervals (Olofsson et al.&nbsp;2014). Rows are <strong>map</strong> classes, columns are <strong>reference</strong> classes, and the last column is each map class’s mapped area.</p>
 <div class="hmc" id="oa"></div>
 <script>
@@ -930,7 +958,8 @@ Stable non-forest,2,1,9,313,6450000`;
 })();
 </script>
 </section>
-<section id="effective-sample-size" class="level2">
+</div>
+<section id="effective-sample-size" class="level2 ck-sec">
 <h2 data-anchor-id="effective-sample-size">Effective sample size</h2>
 <p>Samples close together carry overlapping information. For estimating an average, a cluster of ten nearby samples can be worth little more than one. This uses the variogram to work out how many independent samples your layout is really worth.</p>
 <div class="hmc" id="es"></div>
@@ -969,8 +998,9 @@ Stable non-forest,2,1,9,313,6450000`;
 })();
 </script>
 </section>
-<section id="spatial-cv" class="level2">
-<h2 data-anchor-id="spatial-cv">Spatial cross-validation and leakage</h2>
+<div id="spatial-cv" class="ck-sec">
+<section id="spatial-cross-validation-and-leakage" class="level2">
+<h2 data-anchor-id="spatial-cross-validation-and-leakage">Spatial cross-validation and leakage</h2>
 <p>Random cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won’t achieve between samples. Tick anything that applies to the study you’re checking.</p>
 <div class="hmc" id="cv"></div>
 <script>
@@ -1011,8 +1041,10 @@ Stable non-forest,2,1,9,313,6450000`;
 })();
 </script>
 </section>
-<section id="lab-conversions" class="level2">
-<h2 data-anchor-id="lab-conversions">Lab method conversions</h2>
+</div>
+<div id="lab-conversions" class="ck-sec">
+<section id="lab-method-conversions" class="level2">
+<h2 data-anchor-id="lab-method-conversions">Lab method conversions</h2>
 <p>Results from different methods aren’t directly comparable. These are the common conversion factors, with the assumption behind each stated, so you can see what you’re accepting when you convert.</p>
 <div class="hmc" id="lc"></div>
 <script>
@@ -1051,8 +1083,10 @@ Stable non-forest,2,1,9,313,6450000`;
 })();
 </script>
 </section>
-<section id="coordinates" class="level2">
-<h2 data-anchor-id="coordinates">Coordinates and distances</h2>
+</div>
+<div id="coordinates" class="ck-sec">
+<section id="coordinates-and-distances" class="level2">
+<h2 data-anchor-id="coordinates-and-distances">Coordinates and distances</h2>
 <p>A degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and “metres” computed from degrees are wrong. Convert a distance, or paste coordinates to check them.</p>
 <div class="hmc" id="co"></div>
 <script>
@@ -1094,9 +1128,30 @@ Stable non-forest,2,1,9,313,6450000`;
   });
 })();
 </script>
-
-
 </section>
+</div>
+<script>
+(function () {
+  const secs = [...document.querySelectorAll('.ck-sec')], hub = document.getElementById('ck-hub');
+  secs.forEach(sec => {
+    const back = document.createElement('a'); back.className = 'ck-back'; back.href = '#'; back.textContent = '← All checks';
+    sec.insertBefore(back, sec.firstChild);
+    const rel = (CK.items[sec.id] || {}).rel || [];
+    if (rel.length) { const d = document.createElement('div'); d.className = 'ck-rel'; d.innerHTML = `<h3>Related checks</h3><div class="ck-grid">${rel.map(id => CK.card(id)).join('')}</div><a class="ck-back" href="#">← All checks</a>`; sec.appendChild(d); }
+  });
+  function show(scroll) {
+    const id = decodeURIComponent(location.hash.slice(1)), target = secs.find(s => s.id === id);
+    secs.forEach(s => { s.hidden = s !== target; });
+    hub.hidden = !!target;
+    const title = document.querySelector('#title-block-header, header.quarto-title-block');
+    if (scroll) window.scrollTo({ top: 0 });
+  }
+  show(false);
+  window.addEventListener('hashchange', () => show(true));
+})();
+</script>
+
+
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">

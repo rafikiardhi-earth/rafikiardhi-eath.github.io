@@ -252,29 +252,29 @@
     "text": "Before you submit, or when you review, check that the numbers can all be true. Each check takes the figures a paper or report gives (or your own) and tests them against what the method allows. Nothing you enter leaves your browser."
   },
   {
-    "objectID": "checks.html#pixel-size",
-    "href": "checks.html#pixel-size",
+    "objectID": "checks.html#finding-the-right-pixel-size",
+    "href": "checks.html#finding-the-right-pixel-size",
     "title": "Check a result",
     "section": "Finding the right pixel size",
     "text": "Finding the right pixel size\nGrid resolution is often chosen by habit (30 m because that’s Landsat). Hengl (2006) set out rules that tie it to what the data can actually support. For each aspect of a dataset they give a coarsest legible resolution (the largest pixel that still represents it), a finest legible resolution (below which pixels “are probably just waste of memory”) and a recommended compromise. Fill in whatever you know; the overall range is where the rules agree."
   },
   {
-    "objectID": "checks.html#back-transform",
-    "href": "checks.html#back-transform",
+    "objectID": "checks.html#back-transformation",
+    "href": "checks.html#back-transformation",
     "title": "Check a result",
     "section": "Back-transformation",
     "text": "Back-transformation\nA mean calculated on log values, then exponentiated, is the median (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter what the paper gives on the log scale."
   },
   {
-    "objectID": "checks.html#stock-arithmetic",
-    "href": "checks.html#stock-arithmetic",
+    "objectID": "checks.html#carbon-stock-arithmetic",
+    "href": "checks.html#carbon-stock-arithmetic",
     "title": "Check a result",
     "section": "Carbon stock arithmetic",
     "text": "Carbon stock arithmetic\nRebuild a reported stock from its inputs. If it doesn’t match, the check tries the common slips (% vs g/kg, stones ignored or on the wrong basis, organic matter instead of carbon, kg/m² vs Mg/ha) and tells you which one reproduces the reported number."
   },
   {
-    "objectID": "checks.html#area-estimation",
-    "href": "checks.html#area-estimation",
+    "objectID": "checks.html#area-from-a-confusion-matrix",
+    "href": "checks.html#area-from-a-confusion-matrix",
     "title": "Check a result",
     "section": "Area from a confusion matrix",
     "text": "Area from a confusion matrix\nCounting pixels in a map gives biased class areas, because every map has errors. With a stratified accuracy sample, the confusion matrix gives unbiased areas with confidence intervals (Olofsson et al. 2014). Rows are map classes, columns are reference classes, and the last column is each map class’s mapped area."
@@ -287,22 +287,22 @@
     "text": "Effective sample size\nSamples close together carry overlapping information. For estimating an average, a cluster of ten nearby samples can be worth little more than one. This uses the variogram to work out how many independent samples your layout is really worth."
   },
   {
-    "objectID": "checks.html#spatial-cv",
-    "href": "checks.html#spatial-cv",
+    "objectID": "checks.html#spatial-cross-validation-and-leakage",
+    "href": "checks.html#spatial-cross-validation-and-leakage",
     "title": "Check a result",
     "section": "Spatial cross-validation and leakage",
     "text": "Spatial cross-validation and leakage\nRandom cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won’t achieve between samples. Tick anything that applies to the study you’re checking."
   },
   {
-    "objectID": "checks.html#lab-conversions",
-    "href": "checks.html#lab-conversions",
+    "objectID": "checks.html#lab-method-conversions",
+    "href": "checks.html#lab-method-conversions",
     "title": "Check a result",
     "section": "Lab method conversions",
     "text": "Lab method conversions\nResults from different methods aren’t directly comparable. These are the common conversion factors, with the assumption behind each stated, so you can see what you’re accepting when you convert."
   },
   {
-    "objectID": "checks.html#coordinates",
-    "href": "checks.html#coordinates",
+    "objectID": "checks.html#coordinates-and-distances",
+    "href": "checks.html#coordinates-and-distances",
     "title": "Check a result",
     "section": "Coordinates and distances",
     "text": "Coordinates and distances\nA degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and “metres” computed from degrees are wrong. Convert a distance, or paste coordinates to check them."

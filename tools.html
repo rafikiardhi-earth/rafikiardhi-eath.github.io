@@ -3354,6 +3354,7 @@ function openFromHash() {
 }
 openFromHash();
 window.addEventListener("hashchange", openFromHash);
+["kr-check", "ev-check-cont", "ev-check-cat", "c-check", "s-check"].forEach(id => { const c = document.getElementById(id); if (!c) return; const p = document.createElement("p"); p.className = "hint"; p.style.marginTop = "12px"; p.innerHTML = '<a href="checks.html">More plausibility checks →</a>'; c.appendChild(p); });
 })();
 </script>
 </div>
