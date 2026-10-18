@@ -512,7 +512,7 @@ body.quarto-dark .rk-tools {
     <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" data-tip="Turn horizon data into standard depth intervals (0–5, 5–15 cm…) with a smooth profile." aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" data-tip="How many soil classes an area has and how evenly they share it." aria-selected="false">Pedodiversity</button><button role="tab" data-tab="krige" data-tip="Fit a variogram to point data and test kriging by cross-validation." aria-selected="false">Variogram &amp; kriging</button><button role="tab" data-tab="eval" data-tip="How well a map or model matches independent observations: accuracy, uncertainty, classes." aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" data-tip="How many samples you need for a field mean, or for a map." aria-selected="false">Sampling density</button></div>
     <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="van Genuchten–Mualem curves from a texture class, a pedotransfer function, or fitted to your own measurements." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from six pedotransfer functions, compared side by side." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D), its curve number for your land cover, and how much of a storm runs off." aria-selected="false">Hydrologic soil group</button></div>
     <div class="tgroup"><span class="tglabel">Energy &amp; climate</span><button role="tab" data-tab="soiltemp" data-tip="How daily and seasonal temperature swings travel down into the soil." aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" data-tip="Where the sun's energy goes at a bare soil surface as it wets up." aria-selected="false">Energy balance</button><button role="tab" data-tab="et" data-tip="Daily reference evapotranspiration (FAO-56), crop water use and days between irrigations." aria-selected="false">Evapotranspiration</button><button role="tab" data-tab="frost" data-tip="How deep the ground freezes, from the winter, the surface and the soil." aria-selected="false">Frost depth</button><button role="tab" data-tab="sun" data-tip="Day length, sunrise and sunset, and solar radiation for any latitude and date." aria-selected="false">Day length &amp; sun</button></div>
-    <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" data-tip="Texture class from sand, silt and clay, one sample or a whole file." aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" data-tip="Carbon stocks to fixed depths or equivalent soil mass, and whether a change is detectable." aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" data-tip="A Munsell notation as an on-screen colour, and what it tells you about the soil." aria-selected="false">Munsell colour</button></div>
+    <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" data-tip="Texture class from sand, silt and clay, one sample or a whole file." aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" data-tip="Carbon stocks to fixed depths or equivalent soil mass, and whether a change is detectable." aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" data-tip="A Munsell notation as an on-screen colour, what it says about the soil, and Munsell from colour-sensor readings." aria-selected="false">Munsell colour</button></div>
     <div class="tgroup"><span class="tglabel">Checks</span><a class="tglink" href="checks.html">Check a result: yours or a published one →</a></div>
     <div class="tgroup"><span class="tglabel">Soil classification</span><a class="tglink" href="soil-keys.html#wrb">WRB soil key <span style="font-size:.7rem; color:var(--warn); font-weight:700">BETA</span> →</a><a class="tglink" href="soil-keys.html#sa">South African soil key <span style="font-size:.7rem; color:var(--warn); font-weight:700">BETA</span> →</a></div>
   </div>
@@ -888,7 +888,7 @@ body.quarto-dark .rk-tools {
 <!-- ============ MUNSELL ============ -->
 <section class="tool" id="tab-munsell">
   <h2>Munsell soil colour</h2>
-  <p class="lede">See a Munsell notation as an on-screen colour, browse a soil chart page, and learn what the colour usually tells you about the soil.</p>
+  <p class="lede">See a Munsell notation as an on-screen colour, browse a soil chart page, learn what the colour usually tells you about the soil, and convert colour-sensor readings (L*a*b*, RGB or XYZ) to Munsell, one at a time or a whole file.</p>
   <div class="two">
     <div class="rk-card">
       <h3>Notation</h3>
@@ -912,7 +912,34 @@ body.quarto-dark .rk-tools {
       <p class="hint">Rows are value (lightness), columns are chroma (strength). Tap a chip to select it.</p>
     </div>
   </div>
-  <p class="refs">Colours are computed from the Munsell renotation data (illuminant C) and converted to sRGB. Screens vary, so use this for learning, not in place of a physical chart. Chips that fall outside the sRGB range are left out.</p>
+  <div class="rk-card">
+    <h3>From a colour sensor or colorimeter</h3>
+    <p class="hint" style="margin-top:0">Instruments such as colorimeters, spectrophotometers and pocket colour sensors report colour as three numbers, usually CIELAB (L*, a*, b*) or RGB. This finds the nearest chip on the soil and gley chart pages, how close it is, and the Munsell value calculated directly from lightness.</p>
+    <div class="rk-grid">
+      <div><label for="mc-mode">The numbers are</label><select id="mc-mode"><option value="lab">CIELAB L*, a*, b*</option><option value="rgb">RGB (0–255)</option><option value="hex">Hex code (#rrggbb)</option><option value="xyz">CIE XYZ (Y from 0 to 100)</option></select></div>
+      <div class="mc-ill"><label for="mc-ill">Illuminant set on the instrument</label><select id="mc-ill"><option value="D65">D65 (daylight)</option><option value="D50">D50</option><option value="C">C</option></select></div>
+      <div class="mc-3"><label for="mc-1" id="mc-1l">L*</label><input type="number" id="mc-1" value="45.2" step="any"></div>
+      <div class="mc-3"><label for="mc-2" id="mc-2l">a*</label><input type="number" id="mc-2" value="8.1" step="any"></div>
+      <div class="mc-3"><label for="mc-3" id="mc-3l">b*</label><input type="number" id="mc-3" value="21.4" step="any"></div>
+      <div class="mc-hex"><label for="mc-hex">Hex code</label><input type="text" id="mc-hex" value="#7a5c3e"></div>
+    </div>
+    <div class="msg" id="mc-msg" role="status"></div>
+    <div id="mc-res" style="margin-top:12px"></div>
+    <h3 style="margin-top:18px">Many samples</h3>
+    <textarea id="mc-data" spellcheck="false" aria-label="Colour measurements as CSV" placeholder="id,L,a,b
+H1,32.5,4.2,12.8
+H2,48.9,9.6,24.1"></textarea>
+    <div class="rk-row">
+      <label class="file-label">Open CSV<input type="file" id="mc-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
+      <button class="rk-btn" id="mc-ex">Load example</button>
+      <button class="rk-btn primary" id="mc-run">Convert</button>
+      <button class="rk-btn" id="mc-dl" hidden="">Download CSV</button>
+    </div>
+    <p class="hint">Columns named <b>L, a, b</b> (or L*, a*, b*), <b>R, G, B</b>, <b>X, Y, Z</b>, or <b>hex</b>, plus an optional <b>id</b> column. The illuminant setting above applies to L*a*b* and XYZ. RGB and hex are taken as standard sRGB.</p>
+    <div class="msg" id="mc-bmsg" role="status"></div>
+    <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:8px"><div id="mc-table"></div></div>
+  </div>
+  <p class="refs">Colours are computed from the Munsell renotation data (illuminant C) and converted to sRGB. Screens vary, so use this for learning, not in place of a physical chart. Chips that fall outside the sRGB range are left out. Matching uses the CIEDE2000 colour difference against the chips on the soil and gley pages; Munsell value from luminance follows ASTM D1535. A ΔE₀₀ under about 2 is hard to tell apart by eye; above 5, no chip is a good match. Instrument readings depend on moisture, grinding and the light source, so record the conditions as you would for a chart reading.</p>
 </section>
 
 <!-- ============ SAMPLING ============ -->
@@ -3036,6 +3063,111 @@ mHue.addEventListener("change", () => {
   if (!page[mKey(v, c)]) { const k = Object.keys(page)[Math.floor(Object.keys(page).length / 2)].split("/").map(Number); v = k[0]; c = k[1]; }
   mSel = { hue: mHue.value, v, c }; $("m-text").value = mSel.hue === "N" ? `N ${v}/` : `${mSel.hue} ${v}/${c}`; mRender();
 });
+
+
+/* colour sensor → Munsell */
+const CLR = {
+  W: { D65: [95.047, 100, 108.883], D50: [96.422, 100, 82.521], C: [98.074, 100, 118.232] },
+  lin: c => { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); },
+  rgb2xyz(r, g, b) { const R = this.lin(r), G = this.lin(g), B = this.lin(b); return [100 * (0.4124 * R + 0.3576 * G + 0.1805 * B), 100 * (0.2126 * R + 0.7152 * G + 0.0722 * B), 100 * (0.0193 * R + 0.1192 * G + 0.9505 * B)]; },
+  xyz2lab([X, Y, Z], W) { const f = t => t > 216 / 24389 ? Math.cbrt(t) : (24389 / 27 * t + 16) / 116; const fx = f(X / W[0]), fy = f(Y / W[1]), fz = f(Z / W[2]); return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)]; },
+  lab2xyz([L, a, b], W) { const fy = (L + 16) / 116, fx = fy + a / 500, fz = fy - b / 200, g = t => t * t * t > 216 / 24389 ? t * t * t : (116 * t - 16) / (24389 / 27); return [W[0] * g(fx), W[1] * g(fy), W[2] * g(fz)]; },
+  adapt(xyz, from, to) { // Bradford
+    if (from === to) return xyz;
+    const M = [[0.8951, 0.2664, -0.1614], [-0.7502, 1.7135, 0.0367], [0.0389, -0.0685, 1.0296]], Mi = [[0.9869929, -0.1470543, 0.1599627], [0.4323053, 0.5183603, 0.0492912], [-0.0085287, 0.0400428, 0.9684867]];
+    const mv = (m, v) => m.map(r => r[0] * v[0] + r[1] * v[1] + r[2] * v[2]);
+    const s = mv(M, this.W[from]), d = mv(M, this.W[to]), c = mv(M, xyz);
+    return mv(Mi, c.map((x, i) => x * d[i] / s[i]));
+  },
+  de2000(l1, l2) {
+    const [L1, a1, b1] = l1, [L2, a2, b2] = l2, rad = Math.PI / 180;
+    const C1 = Math.hypot(a1, b1), C2 = Math.hypot(a2, b2), Cb = (C1 + C2) / 2, G = 0.5 * (1 - Math.sqrt(Math.pow(Cb, 7) / (Math.pow(Cb, 7) + Math.pow(25, 7))));
+    const a1p = (1 + G) * a1, a2p = (1 + G) * a2, C1p = Math.hypot(a1p, b1), C2p = Math.hypot(a2p, b2);
+    const h = (b, a) => { if (b === 0 && a === 0) return 0; const x = Math.atan2(b, a) / rad; return x < 0 ? x + 360 : x; };
+    const h1p = h(b1, a1p), h2p = h(b2, a2p), dL = L2 - L1, dC = C2p - C1p;
+    let dh = 0; if (C1p * C2p !== 0) { dh = h2p - h1p; if (dh > 180) dh -= 360; else if (dh < -180) dh += 360; }
+    const dH = 2 * Math.sqrt(C1p * C2p) * Math.sin(dh / 2 * rad), Lb = (L1 + L2) / 2, Cbp = (C1p + C2p) / 2;
+    let hb = h1p + h2p; if (C1p * C2p !== 0) { if (Math.abs(h1p - h2p) > 180) hb += h1p + h2p < 360 ? 360 : -360; hb /= 2; }
+    const T = 1 - 0.17 * Math.cos((hb - 30) * rad) + 0.24 * Math.cos(2 * hb * rad) + 0.32 * Math.cos((3 * hb + 6) * rad) - 0.20 * Math.cos((4 * hb - 63) * rad);
+    const dT = 30 * Math.exp(-Math.pow((hb - 275) / 25, 2)), RC = 2 * Math.sqrt(Math.pow(Cbp, 7) / (Math.pow(Cbp, 7) + Math.pow(25, 7)));
+    const SL = 1 + 0.015 * Math.pow(Lb - 50, 2) / Math.sqrt(20 + Math.pow(Lb - 50, 2)), SC = 1 + 0.045 * Cbp, SH = 1 + 0.015 * Cbp * T, RT = -Math.sin(2 * dT * rad) * RC;
+    return Math.sqrt(Math.pow(dL / SL, 2) + Math.pow(dC / SC, 2) + Math.pow(dH / SH, 2) + RT * (dC / SC) * (dH / SH));
+  },
+  // ASTM D1535: Y = 1.1914V − 0.22533V² + 0.23352V³ − 0.020484V⁴ + 0.00081939V⁵, solved for V
+  valueFromY(Y) { let V = 5; for (let i = 0; i < 50; i++) { const f = 1.1914 * V - 0.22533 * V * V + 0.23352 * V ** 3 - 0.020484 * V ** 4 + 0.00081939 * V ** 5 - Y, d = 1.1914 - 0.45066 * V + 0.70056 * V * V - 0.081936 * V ** 3 + 0.00409695 * V ** 4; V -= f / d; V = Math.max(0, Math.min(10, V)); } return V; }
+};
+const M_CHIPS = [];
+Object.entries(MUNSELL).forEach(([hue, page]) => Object.entries(page).forEach(([k, hx]) => {
+  const [v, c] = k.split("/").map(Number), r = parseInt(hx.slice(0, 2), 16), g = parseInt(hx.slice(2, 4), 16), b = parseInt(hx.slice(4, 6), 16);
+  M_CHIPS.push({ hue, v, c, hx, lab: CLR.xyz2lab(CLR.rgb2xyz(r, g, b), CLR.W.D65), name: hue === "N" ? `N ${v}/` : `${hue} ${v}/${c}` });
+}));
+function mcToLab(mode, ill, x1, x2, x3, hex) {
+  let xyz;
+  if (mode === "hex") { const m = String(hex || "").trim().replace(/^#/, ""); if (!/^[0-9a-f]{6}$/i.test(m)) return null; xyz = CLR.rgb2xyz(parseInt(m.slice(0, 2), 16), parseInt(m.slice(2, 4), 16), parseInt(m.slice(4, 6), 16)); }
+  else if (mode === "rgb") { if (![x1, x2, x3].every(v => isFinite(v) && v >= 0 && v <= 255)) return null; xyz = CLR.rgb2xyz(x1, x2, x3); }
+  else if (mode === "lab") { if (![x1, x2, x3].every(isFinite) || x1 < 0 || x1 > 100) return null; xyz = CLR.adapt(CLR.lab2xyz([x1, x2, x3], CLR.W[ill]), ill, "D65"); }
+  else { if (![x1, x2, x3].every(v => isFinite(v) && v >= 0)) return null; xyz = CLR.adapt([x1, x2, x3], ill, "D65"); }
+  return { lab: CLR.xyz2lab(xyz, CLR.W.D65), Y: xyz[1] };
+}
+function mcMatch(lab, Y) {
+  const ranked = M_CHIPS.map(ch => ({ ch, de: CLR.de2000(lab, ch.lab) })).sort((a, b) => a.de - b.de);
+  return { best: ranked[0], next: ranked.slice(1, 3), V: CLR.valueFromY(Y) };
+}
+function mcSingle() {
+  const mode = $("mc-mode").value;
+  document.querySelectorAll("#tab-munsell .mc-ill").forEach(e => e.style.display = mode === "lab" || mode === "xyz" ? "" : "none");
+  document.querySelectorAll("#tab-munsell .mc-3").forEach(e => e.style.display = mode === "hex" ? "none" : "");
+  document.querySelectorAll("#tab-munsell .mc-hex").forEach(e => e.style.display = mode === "hex" ? "" : "none");
+  const labs = { lab: ["L*", "a*", "b*"], rgb: ["R", "G", "B"], xyz: ["X", "Y", "Z"] }[mode];
+  if (labs) labs.forEach((l, i) => $("mc-" + (i + 1) + "l").textContent = l);
+  const msg = $("mc-msg"); msg.className = "msg"; msg.textContent = "";
+  const r = mcToLab(mode, $("mc-ill").value, num($("mc-1").value), num($("mc-2").value), num($("mc-3").value), $("mc-hex").value);
+  if (!r) { msg.className = "msg err"; msg.textContent = mode === "hex" ? "Use a six-digit hex code like #7a5c3e." : mode === "rgb" ? "RGB values run from 0 to 255." : "Enter all three numbers (L* from 0 to 100)."; $("mc-res").innerHTML = ""; return; }
+  const m = mcMatch(r.lab, r.Y), b = m.best;
+  const sw = hx => `<span style="display:inline-block; width:22px; height:22px; border-radius:5px; border:1px solid var(--line); vertical-align:middle; margin-right:6px; background:#${hx}"></span>`;
+  const good = b.de < 2 ? "very close" : b.de < 5 ? "close" : "not a good match to any chip";
+  $("mc-res").innerHTML = `<div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap">
+      <div style="width:72px; height:72px; border-radius:10px; border:1px solid var(--line); background:#${b.ch.hx}"></div>
+      <div><div class="hint" style="margin:0">Nearest chart chip</div><div class="big" style="margin:0">${b.ch.name}</div><div class="hint" style="margin:0">ΔE₀₀ ${fmt(b.de, 1)}: ${good}</div></div>
+      <div><div class="hint" style="margin:0">Munsell value from lightness</div><div class="big" style="margin:0">${fmt(m.V, 1)}</div><div class="hint" style="margin:0">L* ${fmt(r.lab[0], 1)}, a* ${fmt(r.lab[1], 1)}, b* ${fmt(r.lab[2], 1)} (D65)</div></div>
+    </div>
+    <p class="hint" style="margin:10px 0 4px">Next closest: ${m.next.map(n => `${sw(n.ch.hx)}${n.ch.name} (ΔE₀₀ ${fmt(n.de, 1)})`).join(" &nbsp; ")}</p>
+    ${b.de >= 5 ? '<p class="msg err" style="margin:6px 0">No chip on the soil or gley pages is close. Check the instrument settings (illuminant, specular included or excluded), or the colour may be outside the chart.</p>' : ""}
+    <div class="rk-row"><button class="rk-btn" id="mc-show">Show it on the chart</button></div>`;
+  $("mc-show").addEventListener("click", () => { mSel = { hue: b.ch.hue, v: b.ch.v, c: b.ch.c }; $("m-text").value = b.ch.name; mRender(); $("m-swatch").scrollIntoView({ behavior: "smooth", block: "center" }); });
+}
+let mcOut = null;
+function mcBatch() {
+  const msg = $("mc-bmsg"); msg.className = "msg"; msg.textContent = ""; $("mc-dl").hidden = true; mcOut = null;
+  const P = parseCSV($("mc-data").value);
+  if (!P.rows.length) { msg.className = "msg err"; msg.textContent = "Paste or open a CSV with a header row."; $("mc-table").innerHTML = ""; return; }
+  const h = P.header.map(x => x.trim().toLowerCase().replace(/[*\s]/g, "")), ix = n => h.indexOf(n);
+  let mode, cols;
+  if (ix("l") >= 0 && ix("a") >= 0 && ix("b") >= 0) { mode = "lab"; cols = [ix("l"), ix("a"), ix("b")]; }
+  else if (ix("r") >= 0 && ix("g") >= 0 && ix("b") >= 0) { mode = "rgb"; cols = [ix("r"), ix("g"), ix("b")]; }
+  else if (ix("x") >= 0 && ix("y") >= 0 && ix("z") >= 0) { mode = "xyz"; cols = [ix("x"), ix("y"), ix("z")]; }
+  else if (ix("hex") >= 0) { mode = "hex"; cols = [ix("hex")]; }
+  else { msg.className = "msg err"; msg.textContent = "Couldn't find L, a, b or R, G, B or X, Y, Z or hex columns."; $("mc-table").innerHTML = ""; return; }
+  const idc = ["id", "sample", "name", "horizon"].map(ix).find(i => i >= 0) ?? -1, ill = $("mc-ill").value;
+  const rows = []; let bad = 0;
+  P.rows.forEach((r, i) => {
+    const id = idc >= 0 ? r[idc] : String(i + 1);
+    const res = mode === "hex" ? mcToLab("hex", ill, 0, 0, 0, r[cols[0]]) : mcToLab(mode, ill, num(r[cols[0]]), num(r[cols[1]]), num(r[cols[2]]));
+    if (!res) { bad++; rows.push([id, "–", "–", "–", "–", "–", "–", "–", "unreadable"]); return; }
+    const m = mcMatch(res.lab, res.Y);
+    rows.push([id, +res.lab[0].toFixed(2), +res.lab[1].toFixed(2), +res.lab[2].toFixed(2), m.best.ch.name, +m.best.de.toFixed(2), +m.V.toFixed(2), m.next[0].ch.name, m.best.de >= 5 ? "no close chip" : m.best.de >= 2 ? "close" : "very close"]);
+  });
+  const header = ["id", "L* (D65)", "a* (D65)", "b* (D65)", "nearest chip", "ΔE00", "value from lightness", "second nearest", "match"];
+  setTable($("mc-table"), header, rows);
+  mcOut = { header, rows }; $("mc-dl").hidden = false;
+  msg.textContent = `${rows.length - bad} sample${rows.length - bad === 1 ? "" : "s"} converted from ${mode === "lab" ? "L*a*b* (" + ill + ")" : mode === "xyz" ? "XYZ (" + ill + ")" : mode === "rgb" ? "sRGB" : "hex"}.` + (bad ? ` ${bad} row${bad > 1 ? "s" : ""} could not be read.` : "");
+}
+["mc-mode", "mc-ill", "mc-1", "mc-2", "mc-3", "mc-hex"].forEach(id => $(id).addEventListener("input", mcSingle));
+$("mc-run").addEventListener("click", mcBatch);
+$("mc-ex").addEventListener("click", () => { $("mc-data").value = "id,L,a,b\nAp,34.1,4.6,13.2\nBt1,47.8,13.9,26.5\nBt2,52.3,16.8,30.1\nBg,58.6,0.8,9.4\nC,63.2,5.1,17.9"; mcBatch(); });
+readFileInto($("mc-file"), $("mc-data"), mcBatch);
+$("mc-dl").addEventListener("click", () => mcOut && download("munsell_from_sensor.csv", toCSV(mcOut.header, mcOut.rows)));
+mcSingle();
 
 /* ============ MODEL EVALUATION ============ */
 const EV_EX = {"cont": "id,obs,pred,sd\nS1,2.14,1.73,0.427\nS2,2.65,2.14,0.513\nS3,1.96,1.3,0.413\nS4,1.82,1.78,0.442\nS5,2.81,2.23,0.483\nS6,1.9,1.67,0.476\nS7,2.32,2.17,0.484\nS8,2.21,2.07,0.55\nS9,2.81,2.63,0.571\nS10,1.66,1.44,0.429\nS11,3.27,2.62,0.571\nS12,1.45,1.28,0.38\nS13,2.39,1.47,0.493\nS14,2.26,1.45,0.443\nS15,1.39,0.8,0.408\nS16,2.49,1.79,0.437\nS17,1.73,1.67,0.466\nS18,1.15,0.75,0.374\nS19,2.64,2.13,0.557\nS20,0.93,1.35,0.442\nS21,1.27,1.04,0.401\nS22,1.95,1.97,0.474\nS23,2.8,2.06,0.489\nS24,2.56,2.13,0.515\nS25,2.12,1.51,0.445\nS26,0.76,0.64,0.316\nS27,1.42,1.58,0.491\nS28,1.58,0.81,0.421\nS29,1.12,1.2,0.384\nS30,0.65,0.75,0.38\nS31,1.99,1.53,0.414\nS32,2.6,1.72,0.489\nS33,1.52,1.39,0.417\nS34,2.78,2.19,0.535\nS35,0.86,0.92,0.415\nS36,1.09,1.03,0.43\nS37,1.97,2.29,0.49\nS38,1.45,1.23,0.465\nS39,2.5,1.79,0.452\nS40,2.31,2.06,0.46", "cat": "id,obs,pred\nS1,SC,SC\nS2,SCL,SCL\nS3,C,LS\nS4,C,LS\nS5,SCL,SCL\nS6,LS,LS\nS7,SL,SL\nS8,SCL,SCL\nS9,SL,SL\nS10,LS,LS\nS11,SL,SC\nS12,SL,SL\nS13,SCL,SL\nS14,LS,LS\nS15,LS,LS\nS16,SC,SL\nS17,LS,SCL\nS18,LS,LS\nS19,SCL,SCL\nS20,SCL,SCL\nS21,C,C\nS22,SC,SC\nS23,SCL,SCL\nS24,SL,SL\nS25,SC,SC\nS26,SL,SL\nS27,LS,LS\nS28,SL,SL\nS29,SL,SC\nS30,C,C\nS31,SL,SL\nS32,SL,SL\nS33,SC,SC\nS34,LS,LS\nS35,SL,SL\nS36,SCL,SCL\nS37,C,C\nS38,LS,LS\nS39,SCL,SCL\nS40,SL,SL\nS41,SL,SC\nS42,SL,SL\nS43,SL,SL\nS44,SC,SL\nS45,SL,C\nS46,SCL,SCL\nS47,SC,SL\nS48,SC,SC\nS49,SL,SL\nS50,C,SL", "ci": "id,SL,SCL,SC,C\nS1,0.326,0.463,0.153,0.058\nS2,0.511,0.329,0.101,0.060\nS3,0.285,0.341,0.059,0.316\nS4,0.321,0.384,0.286,0.009\nS5,0.606,0.284,0.048,0.062\nS6,0.646,0.232,0.056,0.066\nS7,0.465,0.363,0.052,0.121\nS8,0.620,0.180,0.190,0.010\nS9,0.302,0.278,0.011,0.408\nS10,0.767,0.072,0.095,0.066\nS11,0.610,0.004,0.253,0.133\nS12,0.439,0.420,0.027,0.114\nS13,0.400,0.400,0.150,0.050"};
