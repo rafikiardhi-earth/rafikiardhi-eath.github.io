@@ -111,7 +111,8 @@ body.quarto-light .hmc {
   width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
   font: inherit; padding: 8px 12px;
 }
-.hmc input:focus, .hmc select:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.hmc textarea { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: .88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px 12px; resize: vertical; }
+.hmc input:focus, .hmc select:focus, .hmc textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .hmc input.bad { border-color: var(--bad); }
 .hmc .chk { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0 2px; font-weight: 500; color: var(--ink); font-size: .98rem; }
 .hmc .chk input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--accent); flex: none; }
@@ -184,7 +185,7 @@ window.HM = (function () {
     pton: { us: [1 / 0.90718474, '$ per ton'], si: [1, 'per tonne'] },
     pwater: { us: [1 / 3.785411784, '$ per 1,000 gal'], si: [1, 'per m³'] }
   };
-  const UNITLESS = ['num', 'pct', 'min', 'money', 'select', 'seg', 'check', 'info', 'sec', 'text'];
+  const UNITLESS = ['num', 'pct', 'min', 'money', 'select', 'seg', 'check', 'info', 'sec', 'text', 'textarea'];
 
   const num = s => { s = String(s).replace(/[$,\s%]/g, ''); if (s === '') return null; return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN; };
   function feet(s) {
@@ -230,7 +231,7 @@ window.HM = (function () {
     function siDefault(i) {
       const d = defOf(i);
       if (d == null) return null;
-      if (['select', 'seg', 'check', 'text'].includes(i.t)) return d;
+      if (['select', 'seg', 'check', 'text', 'textarea'].includes(i.t)) return d;
       const fac = C[unitOf(i)][u][0];
       return Array.isArray(d) ? d.map(x => x * fac) : d * fac;
     }
@@ -275,6 +276,7 @@ window.HM = (function () {
         const opts = typeof i.opts === 'function' ? i.opts(u) : i.opts, cur = String(read()[i.k]);
         return `<div${w} data-w="${i.k}">${i.l ? `<label>${lab(i)}</label>` : ''}<div class="seg" role="group">${opts.map(o => `<button type="button" data-seg="${i.k}" data-v="${esc(o[0])}" aria-pressed="${String(o[0]) === cur}">${esc(o[1])}</button>`).join('')}</div>${hint}</div>`;
       }
+      if (i.t === 'textarea') { const val = read()[i.k] ?? ''; return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><textarea id="${id}" data-k="${i.k}" rows="${i.rows || 6}" spellcheck="false" placeholder="${esc(typeof i.ph === 'function' ? i.ph(u) : (i.ph || ''))}">${esc(val)}</textarea>${hint}</div>`; }
       if (i.t === 'check') return `<div${w} data-w="${i.k}"><label class="chk"><input type="checkbox" data-k="${i.k}"${read()[i.k] ? ' checked' : ''}> <span>${lab(i)}</span></label>${hint}</div>`;
       const un = C[unitOf(i)][u][1];
       const ph = typeof i.ph === 'function' ? i.ph(u) : (i.ph || '');
@@ -297,7 +299,7 @@ window.HM = (function () {
       h += `<section class="cx res" aria-live="polite"></section>
         <details class="cx hm-work"><summary>Show the working</summary><div class="db"></div></details>
         ${cfg.after || ''}
-        <div class="actions"><button type="button" data-act="link">Copy link</button><button type="button" data-act="print">Print</button><button type="button" data-act="reset">Start over</button></div>
+        <div class="actions" style="grid-template-columns:repeat(${(cfg.example ? 1 : 0) + (cfg.hash === false ? 0 : 1) + 2},1fr)">${cfg.example ? '<button type="button" data-act="example">Example</button>' : ''}${cfg.hash === false ? '' : '<button type="button" data-act="link">Copy link</button>'}<button type="button" data-act="print">Print</button><button type="button" data-act="reset">Start over</button></div>
         <p class="smallprint">${cfg.smallprint || 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.'}</p><div class="toast"></div>`;
       root.innerHTML = h;
       run();
@@ -354,6 +356,8 @@ window.HM = (function () {
     const api = { set, setDisp, setChoice, get: k => read()[k], units: () => u, rerender: render };
 
     root.addEventListener('input', e => {
+      const ta = e.target.closest('textarea[data-k]');
+      if (ta) { f[ta.dataset.k] = ta.value; if (cfg.onChange) cfg.onChange(ta.dataset.k, api); run(); return; }
       const inp = e.target.closest('input[type=text][data-k]');
       if (!inp) return;
       const i = byK[inp.dataset.k];
@@ -382,6 +386,11 @@ window.HM = (function () {
       if (a === 'link') copy(root, location.href, 'Link copied');
       else if (a === 'print') { root.querySelectorAll('details').forEach(d => d.open = true); window.print(); }
       else if (a === 'reset') { f = {}; raw = {}; history.replaceState(null, '', location.pathname + location.search); render(); }
+      else if (a === 'example' && cfg.example) {
+        f = {}; raw = {};
+        Object.entries(cfg.example).forEach(([k, val]) => { const i = byK[k]; if (!i) return; f[k] = (typeof val === 'number' && !['select', 'seg', 'check'].includes(i.t)) ? val * C[unitOf(i)][u][0] : val; });
+        render();
+      }
       else if (a === 'say') { const s = root.querySelector('.hm-say'); if (s) copy(root, s.textContent, 'Copied'); }
       else if (cfg.onAction) cfg.onAction(a, api, b);
     });
@@ -605,6 +614,10 @@ window.HM = (function () {
         <li>
     <a class="dropdown-item" href="./soil-keys.html">
  <span class="dropdown-text">Soil classification keys</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./checks.html">
+ <span class="dropdown-text">Check a result</span></a>
   </li>  
     </ul>
   </li>
