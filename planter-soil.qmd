@@ -11,7 +11,11 @@ Filling raised beds and big planters takes more soil than most people expect, an
 <div class="hmc" id="pl"></div>
 <script>
 (function () {
-  const CUFT = 0.0283168466, YD3 = 0.764554858;
+  const CUFT = 0.0283168466, YD3 = 0.764554858, QT = 0.000946352946, GAL = 0.003785411784;
+  // potting-mix bag sizes as sold: quarts and cubic feet in the US, litres elsewhere (values in m³)
+  const PBAG = { us: [['8qt', '8 qt', 8 * QT], ['16qt', '16 qt', 16 * QT], ['1cf', '1 cu ft (≈ 26 qt)', CUFT], ['1.5cf', '1.5 cu ft (≈ 39 qt)', 1.5 * CUFT], ['2cf', '2 cu ft (≈ 52 qt)', 2 * CUFT]],
+                 si: [['L10', '10 L', 0.01], ['L20', '20 L', 0.02], ['L40', '40 L', 0.04], ['L50', '50 L', 0.05], ['L70', '70 L', 0.07]] };
+  const pbagOf = (u, val) => PBAG[u].find(b => b[0] === val) || PBAG[u][1];
   HM.tool({
     id: 'pl', step: 'Container',
     inputs: [
@@ -24,7 +28,8 @@ Filling raised beds and big planters takes more soil than most people expect, an
       { k: 'n', l: 'How many', t: 'num', d: 1, w: 3, show: v => v.shape !== 'tree' },
       { k: 'fill', l: 'Bottom filler (for beds deeper than about 18 in)', t: 'select', d: '0', show: v => v.shape === 'bed', opts: [['0', 'None: all soil'], ['25', 'Bottom quarter with logs, branches or native soil'], ['33', 'Bottom third with logs, branches or native soil']], h: 'Most vegetable roots work in the top 12–18 in. Filling the bottom of deep beds with untreated logs and branches or ordinary soil from the yard saves money. Woody fill settles as it rots, so top up each year.' },
       { k: 'canopy', l: 'Expected canopy width when mature', t: 'len', show: v => v.shape === 'tree', h: 'From the plant tag or a nursery reference. Small trees 15–20 ft, medium 25–35 ft, large 40 ft or more.' },
-      { k: 'bag', l: 'Bag size', t: 'cuft', d: { us: 1.5, si: 50 }, show: v => v.shape !== 'tree' }
+      { k: 'bag', l: 'Bag size', t: 'cuft', d: { us: 1.5, si: 50 }, show: v => v.shape === 'bed' },
+      { k: 'pbag', l: 'Potting mix bag size', t: 'select', d: { us: '16qt', si: 'L20' }, opts: u => PBAG[u].map(b => [b[0], b[1]]), show: v => v.shape === 'round' }
     ],
     compute(v, U) {
       if (v.shape === 'tree') {
@@ -50,13 +55,24 @@ Filling raised beds and big planters takes more soil than most people expect, an
         w = v.D2 > 0 ? `Tapered pot: π × depth ÷ 3 × (R² + R·r + r²) = ${U.f(V1, 'cuft', 2)} each` : `π × (${U.f(v.D1, 'dia')} ÷ 2)² × ${U.f(v.H, 'dia')} = ${U.f(V1, 'cuft', 2)} each`;
       }
       const fillPct = v.shape === 'bed' ? +v.fill : 0;
-      const Vsoil = V1 * n * (1 - fillPct / 100), Vorder = Vsoil * 1.2, bags = Math.ceil(Vorder / (v.bag || 1) - 1e-9);
-      const small = Vorder < 0.2;
-      let h = U.big('You need', small ? U.f(Vorder, 'cuft', 1) : U.f(Vorder, 'vol', 2), `${small ? (U.us ? `about ${HM.fmt(Vorder / 0.000946353, 0)} quarts` : '') : `${U.f(Vorder, 'cuft', 0)}`}, including 20% extra because the mix settles after filling and watering.`);
-      h += U.kv([['Or in bags', `${bags} × ${U.f(v.bag, 'cuft', 1)}`], fillPct ? ['Volume saved by bottom filler', U.f(V1 * n * fillPct / 100 * 1.2, 'vol', 2)] : null]);
+      const Vsoil = V1 * n * (1 - fillPct / 100), Vorder = Vsoil * 1.2;
+      const pot = v.shape === 'round', pb = pbagOf(U.us ? 'us' : 'si', v.pbag);
+      const bagVol = pot ? pb[2] : (v.bag || 1), bagTxt = pot ? pb[1].replace(/ \(.*\)/, '') : U.f(v.bag, 'cuft', 1);
+      const bags = Math.ceil(Vorder / bagVol - 1e-9);
+      const small = pot || Vorder < 0.2;
+      let h;
+      if (small) {
+        const L = Vorder * 1000, q = Vorder / QT, g = Vorder / GAL;
+        h = U.big('You need', U.us ? `${HM.fmt(q, q < 10 ? 1 : 0)} quarts` : `${HM.fmt(L, L < 10 ? 1 : 0)} litres`, `of ${pot ? 'potting mix' : 'mix'}${n > 1 ? ` for ${n} containers` : ''}, including 20% extra because it settles after filling and watering.`);
+        h += U.kv([['Litres', HM.fmt(L, 1) + ' L'], ['US quarts', HM.fmt(q, 1) + ' qt'], ['US gallons', HM.fmt(g, 2) + ' gal'], ['Cubic feet', HM.fmt(Vorder / CUFT, 2) + ' ft³'], ['Bags', `${bags} × ${bagTxt}`]]);
+        if (pot) h += U.note(`Nursery pot sizes aren't true gallons: a "1-gallon" nursery pot holds about 3 quarts (2.8 L), and a "5-gallon" about 4 gallons (15 L). Measure your pot rather than going by its label.`);
+      } else {
+        h = U.big('You need', U.f(Vorder, 'vol', 2), `${U.f(Vorder, 'cuft', 0)}, including 20% extra because the mix settles after filling and watering.`);
+        h += U.kv([['Or in bags', `${bags} × ${bagTxt}`], fillPct ? ['Volume saved by bottom filler', U.f(V1 * n * fillPct / 100 * 1.2, 'vol', 2)] : null]);
+      }
       if (!small && Vorder > 0.75) h += U.note('At this size a bulk delivery of garden mix is usually much cheaper than bags. Compare in the <a href="materials-calculator.qmd?m=gardenmix">materials calculator</a>.', 'good');
       h += U.note('For pots, use a potting mix, not garden soil: soil packs down in containers and drains poorly. Raised beds can use a garden or raised-bed mix.');
-      return { html: h, work: [w, n > 1 ? `× ${n} = ${U.f(V1 * n, 'cuft', 1)}` : null, fillPct ? `Minus ${fillPct}% bottom filler = ${U.f(Vsoil, 'cuft', 1)}` : null, `+ 20% for settling = ${U.f(Vorder, 'cuft', 1)} (${U.f(Vorder, 'vol', 2)})`, `Bags = ${U.f(Vorder, 'cuft', 1)} ÷ ${U.f(v.bag, 'cuft', 1)} → ${bags}`].filter(Boolean) };
+      return { html: h, work: [w, n > 1 ? `× ${n} = ${U.f(V1 * n, 'cuft', 1)}` : null, fillPct ? `Minus ${fillPct}% bottom filler = ${U.f(Vsoil, 'cuft', 1)}` : null, `+ 20% for settling = ${U.f(Vorder, 'cuft', 1)} (${U.f(Vorder, 'vol', 2)})`, pot ? `Bags = ${HM.fmt(Vorder * 1000, 1)} L ÷ ${HM.fmt(bagVol * 1000, 1)} L per bag (${bagTxt}) → ${bags}` : `Bags = ${U.f(Vorder, 'cuft', 1)} ÷ ${U.f(v.bag, 'cuft', 1)} → ${bags}`].filter(Boolean) };
     }
   });
 })();
@@ -69,3 +85,9 @@ Filling raised beds and big planters takes more soil than most people expect, an
 - **Fill in layers and water each one** so the soil settles before you plant.
 - **Top up each spring.** Beds sink as organic matter breaks down; an inch or two of compost each year keeps them full.
 - **Avoid treated wood scraps** as filler, and anything painted or glued.
+
+## Pots and potting mix
+
+- **Potting mix is sold in quarts or cubic feet in the US** (8 qt, 16 qt, 1–2 cu ft) and in litres elsewhere. One cubic foot is about 26 quarts or 28 litres.
+- **Nursery "gallon" sizes are trade sizes, not measurements.** A #1 ("1-gallon") pot holds about 3 quarts; a #5 holds about 4 gallons.
+- **Use potting mix, not garden soil, in pots.** Garden soil packs down in containers and stays waterlogged at the bottom.
