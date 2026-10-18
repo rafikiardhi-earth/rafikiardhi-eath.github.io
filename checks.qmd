@@ -1,5 +1,5 @@
 ---
-title: "Check a result"
+title: "Research checks"
 description: "Plausibility checks for soil and environmental results: kriging error, R² vs RMSE, classification accuracy, detectable change, back-transformation, carbon stock arithmetic, area estimation, effective sample size, spatial cross-validation, lab conversions and coordinates."
 anchor-sections: false
 include-in-header: _hm-head.html
