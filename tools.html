@@ -578,7 +578,7 @@ body.quarto-dark .rk-tools {
   </div>
   <div class="rk-card">
     <h3>Can the change be detected?</h3>
-    <p class="hint" style="margin-top:0">Before trusting (or paying for) a reported change in soil carbon, check whether the sampling could detect a change that size. This gives the smallest change a design can reliably detect, and how many samples a claimed change would need.</p>
+    <p class="hint" style="margin-top:0">Use it when planning a monitoring design, before claiming a change in your own results, or before trusting (or paying for) someone else's: check whether the sampling could detect a change that size. This gives the smallest change a design can reliably detect, and how many samples a claimed change would need.</p>
     <div class="rk-grid">
       <div><label for="cm-cv">Variability, CV of stocks (%)</label><input type="number" id="cm-cv" value="30" min="1" step="any"></div>
       <div><label for="cm-n">Samples per sampling time</label><input type="number" id="cm-n" value="20" min="2" step="1"></div>
@@ -894,8 +894,8 @@ body.quarto-dark .rk-tools {
     </div>
   </div>
   <div class="rk-card" id="kr-check">
-    <h3>Check a published result</h3>
-    <p class="hint" style="margin-top:0">Kriging accuracy is set by the variogram and by how far apart the samples are, so a reported error can be checked without the data. This lays out samples at the stated density, works out the kriging variance at each one from the stated variogram, and gives the cross-validation RMSE you should expect if that variogram is right.</p>
+    <h3>Check a result: yours or a published one</h3>
+    <p class="hint" style="margin-top:0">Use it before you submit, or when reviewing. Kriging accuracy is set by the variogram and by how far apart the samples are, so a reported error can be checked without the data. This lays out samples at the stated density, works out the kriging variance at each one from the stated variogram, and gives the cross-validation RMSE you should expect if that variogram is right.</p>
     <div class="rk-grid">
       <div><label for="kc-model">Variogram model</label><select id="kc-model"><option value="sph">Spherical</option><option value="exp">Exponential</option><option value="gau">Gaussian</option></select></div>
       <div><label for="kc-sd">Standard deviation of the data</label><input type="number" id="kc-sd" min="0" step="any"></div>
@@ -969,8 +969,8 @@ body.quarto-dark .rk-tools {
       </div>
     </div>
     <div class="rk-card">
-      <h3>Check a published result</h3>
-      <p class="hint" style="margin-top:0">R² and RMSE constrain each other, and both are limited by how precisely the soil was measured. Enter what a paper or report gives to see whether the numbers can all be true.</p>
+      <h3>Check a result: yours or a published one</h3>
+      <p class="hint" style="margin-top:0">R² and RMSE constrain each other, and both are limited by how precisely the soil was measured. Enter your own figures before you submit, or the figures from a paper or report, to see whether the numbers can all be true.</p>
       <div class="rk-grid">
         <div><label for="ec-r2">Reported R²</label><input type="number" id="ec-r2" min="0" max="1" step="any"></div>
         <div><label for="ec-rmse">Reported RMSE</label><input type="number" id="ec-rmse" min="0" step="any"></div>
@@ -1004,8 +1004,8 @@ body.quarto-dark .rk-tools {
       <div class="rk-table-wrap" id="ev-cat-table"></div>
     </div>
     <div class="rk-card">
-      <h3>Check a published accuracy</h3>
-      <p class="hint" style="margin-top:0">An accuracy from a small validation set is uncertain, and it only means something compared with what you would get by guessing. Enter the reported figures to see the confidence interval and whether the map beats chance or another map.</p>
+      <h3>Check an accuracy: yours or a published one</h3>
+      <p class="hint" style="margin-top:0">An accuracy from a small validation set is uncertain, and it only means something compared with what you would get by guessing. Enter your own figures or a paper's to see the confidence interval and whether the map beats chance or another map.</p>
       <div class="rk-grid">
         <div><label for="cc-acc">Overall accuracy (%)</label><input type="number" id="cc-acc" min="0" max="100" step="any"></div>
         <div><label for="cc-n">Validation points</label><input type="number" id="cc-n" min="5" step="1"></div>
