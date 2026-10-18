@@ -854,9 +854,10 @@ function batchView() {
 function formView() {
   const site = F.site;
   let h = `<div class="step">Enter profile data</div>
-    <div class="wk-card"><h1 style="font-size:1.15rem">Upload a CSV</h1>
+    <div class="wk-card"><h1 style="font-size:1.15rem">Open a CSV</h1>
       <p>One row per horizon, using the soilKey R package column names, so the same file works in both. Add an <b>id</b> column to classify several profiles at once. <a href="wrb_profiles_template.csv" download>Download example CSV</a></p>
       <label class="secondary" style="display:flex; align-items:center; justify-content:center; margin-top:4px">Choose CSV file<input type="file" id="csvin" accept=".csv,.tsv,.txt" style="display:none"></label>
+      <p style="font-size:.85rem; margin:6px 0 0; text-align:center">🔒 Processed on your device. Nothing is sent or stored.</p>
       <details><summary>Columns it reads</summary><ul style="margin:8px 0 0; padding-left:18px">
       <li><b>id</b>, <b>top_cm</b>, <b>bottom_cm</b>: profile and depths (the order and observation depth come from these; a last horizon reaching 150 cm counts as continuing to 1.5 m).</li>
       <li><b>horizon</b> (optional): a horizon name, e.g. orthic A, red apedal. When filled, it is used as given; when empty, the horizon is identified from the columns below.</li>
@@ -1395,7 +1396,7 @@ function intro() {
     <div class="modes">
       <button id="sgo"><b>Identify the soil form</b><span>Topsoil, then subsoil horizons, then family.</span></button>
       <button id="sdesc"><b>Describe the profile</b><span>Type it in your own words, e.g. “orthic A over a neocutanic B, no signs of wetness”.</span></button>
-      <button id="scsv"><b>Upload a CSV</b><span>Many profiles at once: one row per horizon, in order. Download the results as a CSV.</span></button>
+      <button id="scsv"><b>Open a CSV</b><span>Many profiles at once: one row per horizon, in order. Download the results as a CSV.</span></button>
     </div>
     <ul class="intro" style="margin-top:14px"><li>This covers natural soils (Section A). For soils strongly altered by people (Anthrosols, Technosols), use Section B of the book.</li><li>Horizon descriptions here are short summaries. Always check the full definitions in the book.</li><li>The ARC also publishes an official app, <a href="https://play.google.com/store/apps/details?id=arc.ict.digitalsoilclassification" target="_blank" rel="noopener">Digital Soil Classification</a> (Android).</li></ul>`);
   $("sdepth").oninput = e => { S.depth = e.target.value; };
@@ -1844,7 +1845,7 @@ function saBatchFromCSV(text, opts = {}) {
   });
 }
 function csvQ() {
-  let h = `<div class="step">Upload a CSV</div>` + card(`<h1>Classify many profiles</h1>
+  let h = `<div class="step">Open a CSV</div>` + card(`<h1>Classify many profiles</h1>
     <p>One row per horizon, from the surface down. Give each horizon's <b>properties</b> (colour, structure, clay, organic carbon…) and the key identifies the diagnostic horizons from the book's criteria, or give the <b>horizon name</b> yourself.</p>
     <details><summary>Columns it reads</summary><ul style="margin:8px 0 0; padding-left:18px">
       <li><b>horizon</b> (required): the horizon name, e.g. orthic A, red apedal B, soft plinthic, saprolite.</li>
@@ -1853,6 +1854,7 @@ function csvQ() {
       <li><b>description</b>: optional notes for that horizon, e.g. dark, bleached, dystrophic, luvic, calcareous, no wetness. These fill family answers where they can.</li>
       <li>Other columns are ignored.</li></ul></details>
     <label class="secondary" style="display:flex; align-items:center; justify-content:center; margin-top:12px; cursor:pointer">Choose CSV file<input type="file" id="sacsvin" accept=".csv,.tsv,.txt" style="display:none"></label>
+    <p style="font-size:.85rem; margin:6px 0 0; text-align:center">🔒 Processed on your device. Nothing is sent or stored.</p>
     <button class="secondary" id="satpl">Download an example CSV</button>
     <label style="display:flex; gap:10px; align-items:flex-start; margin-top:14px; padding:12px; border:1px solid var(--line); border-radius:10px; cursor:pointer; font-size:.93rem; color:var(--ink)">
       <input type="checkbox" id="sablank" ${SA_BLANKS_ABSENT ? "checked" : ""} style="width:20px; height:20px; margin-top:2px; flex:none; accent-color:var(--accent)">

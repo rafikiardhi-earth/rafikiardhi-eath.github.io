@@ -41,6 +41,12 @@ body.quarto-dark .rk-tools {
 .rk-tools .rk-hero h1 { font-size: clamp(1.7rem, 4.5vw, 2.4rem); line-height: 1.15; margin: 0 0 12px; letter-spacing: -.01em; }
 .rk-tools .rk-hero p { margin: 0 0 10px; color: var(--ink-2); max-width: 62ch; }
 .rk-tools .privacy { font-size: .9rem; color: var(--ink-3); }
+.rk-tools .privacy-box { border: 1px solid var(--good); border-left: 4px solid var(--good); background: color-mix(in srgb, var(--good) 8%, transparent); border-radius: 10px; padding: 12px 16px; margin: 6px 0 12px; }
+.rk-tools .privacy-box strong { display: block; margin-bottom: 4px; }
+.rk-tools .privacy-box p { margin: 0 0 6px; color: var(--ink-2); font-size: .95rem; }
+.rk-tools .privacy-box p.proof { margin: 0; font-weight: 600; color: var(--ink); }
+.rk-tools .lock { font-size: .8rem; color: var(--ink-3); align-self: center; }
+.rk-tools .rk-card { scroll-margin-top: 80px; }
 .rk-tools nav.rk-tabs { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); }
 .rk-tools nav.rk-tabs .rk-wrap { display: flex; gap: 6px; overflow-x: auto; padding-top: 10px; padding-bottom: 10px; scrollbar-width: none; }
 .rk-tools nav.rk-tabs .rk-wrap::-webkit-scrollbar { display: none; }
@@ -132,7 +138,12 @@ body.quarto-dark .rk-tools {
 <div class="rk-tools">
 <div class="rk-wrap rk-hero">
   <p>Free tools treat the soil horizon by horizon. Our advanced methods treat it as one connected system, continuous with depth and across the landscape, because that is how water, carbon and energy actually move.</p>
-  <p class="privacy">Everything runs in your browser. Uploaded data never leaves your device.</p>
+  <div class="privacy-box">
+    <strong>🔒 Your data stays yours.</strong>
+    <p>Every tool runs on your own computer, in your browser. Files you open here are never sent to us or stored anywhere. We can't see them, even if we wanted to. That makes the tools safe for confidential data, unpublished results and manuscripts under review.</p>
+    <p class="proof">Don't take our word for it: once this page has loaded, disconnect from the internet. Every tool still works.</p>
+  </div>
+  <p class="privacy">Checking your own or a published result? <a href="checks.qmd">All the plausibility checks are listed on one page →</a></p>
 </div>
 
 <nav class="rk-tabs" aria-label="Tools">
@@ -156,7 +167,7 @@ body.quarto-dark .rk-tools {
     <h3>1. Your data</h3>
     <textarea id="sp-data" spellcheck="false" aria-label="Profile data as CSV"></textarea>
     <div class="rk-row">
-      <label class="file-label">Upload CSV<input type="file" id="sp-file" accept=".csv,.txt,.tsv"></label>
+      <label class="file-label">Open CSV<input type="file" id="sp-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
       <button class="rk-btn" id="sp-ex-cont">Example: soil carbon</button>
       <button class="rk-btn" id="sp-ex-class">Example: texture classes</button>
     </div>
@@ -219,7 +230,7 @@ body.quarto-dark .rk-tools {
     <h3>1. Your data</h3>
     <textarea id="c-data" spellcheck="false" aria-label="Carbon data as CSV"></textarea>
     <div class="rk-row">
-      <label class="file-label">Upload CSV<input type="file" id="c-file" accept=".csv,.txt,.tsv"></label>
+      <label class="file-label">Open CSV<input type="file" id="c-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
       <button class="rk-btn" id="c-ex">Load example</button>
     </div>
     <p class="hint">Columns: id, top (cm), bottom (cm), soc (%), bd (bulk density, g/cm³), and optionally cf (coarse fragments, % by volume).</p>
@@ -243,7 +254,7 @@ body.quarto-dark .rk-tools {
     <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:12px"><div id="c-table"></div></div>
     <p class="hint">Amber values: the profile is shallower than the reporting depth, so the stock covers only the soil that was sampled.</p>
   </div>
-  <div class="rk-card">
+  <div class="rk-card" id="c-check">
     <h3>Can the change be detected?</h3>
     <p class="hint" style="margin-top:0">Use it when planning a monitoring design, before claiming a change in your own results, or before trusting (or paying for) someone else's: check whether the sampling could detect a change that size. This gives the smallest change a design can reliably detect, and how many samples a claimed change would need.</p>
     <div class="rk-grid">
@@ -389,7 +400,7 @@ body.quarto-dark .rk-tools {
         <h3>Many samples</h3>
         <textarea id="t-data" spellcheck="false" aria-label="Particle-size data as CSV" style="min-height:120px"></textarea>
         <div class="rk-row">
-          <label class="file-label">Upload CSV<input type="file" id="t-file" accept=".csv,.txt,.tsv"></label>
+          <label class="file-label">Open CSV<input type="file" id="t-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
           <button class="rk-btn" id="t-ex">Load example</button>
           <button class="rk-btn primary" id="t-run">Classify</button>
         </div>
@@ -474,7 +485,7 @@ body.quarto-dark .rk-tools {
       <div class="rk-table-wrap"><div id="s-table"></div></div>
     </div>
   </div>
-  <div class="rk-card">
+  <div class="rk-card" id="s-check">
     <h3>Sampling for a map: using the variogram</h3>
     <p class="hint" style="margin-top:0">The calculator above sizes a sample to estimate one average. For a map, what matters is how far apart samples are compared with the variogram range. This finds how many samples on a regular grid give a chosen kriging error, from a variogram you already have (for example from the <a href="#krige" data-goto-tab="krige">variogram tool</a> or a nearby study).</p>
     <div class="rk-grid">
@@ -504,7 +515,7 @@ body.quarto-dark .rk-tools {
     <h3>1. Your points</h3>
     <textarea id="kr-data" spellcheck="false" aria-label="Point data as CSV"></textarea>
     <div class="rk-row">
-      <label class="file-label">Upload CSV<input type="file" id="kr-file" accept=".csv,.txt,.tsv"></label>
+      <label class="file-label">Open CSV<input type="file" id="kr-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
       <button class="rk-btn" id="kr-ex">Load example</button>
     </div>
     <p class="hint">Columns: an optional <b>id</b>, coordinates named <b>x</b> and <b>y</b> (projected, e.g. metres) or <b>lon</b> and <b>lat</b> (decimal degrees, converted to km), and one or more numeric properties. Up to 5,000 points.</p>
@@ -516,6 +527,8 @@ body.quarto-dark .rk-tools {
       <div><label for="kr-model">Variogram model</label>
         <select id="kr-model"><option value="auto">Best fit (spherical or exponential)</option><option value="sph">Spherical</option><option value="exp">Exponential</option><option value="gau">Gaussian</option><option value="mat">Matérn (fitted smoothness κ)</option><option value="ste">Matérn, Stein's parameterisation (Ste)</option></select></div>
       <div><label for="kr-cut">Maximum lag (blank = ⅓ of the extent)</label><input type="number" id="kr-cut" min="0" step="any"></div>
+      <div><label for="kr-est">Estimator</label>
+        <select id="kr-est"><option value="mat">Classical (Matheron)</option><option value="ch">Robust (Cressie–Hawkins)</option></select></div>
       <div><label for="kr-bins">Lag classes</label><input type="number" id="kr-bins" value="15" min="5" max="40" step="1"></div>
       <div><label for="kr-tf">Transform</label>
         <select id="kr-tf"><option value="none">None</option><option value="log">Log (natural), back-transformed</option></select></div>
@@ -593,7 +606,7 @@ body.quarto-dark .rk-tools {
     <p>We produce kriged and regression-kriged maps with terrain, remote sensing and legacy data, full prediction uncertainty, and sampling designs built from the variogram.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Geostatistics%20and%20mapping">Get in touch →</a>
   </div>
-  <p class="refs">Method: classical (Matheron) variogram estimator; model fitted by weighted least squares with weights N<sub>j</sub>/h<sub>j</sub>² (as in gstat); ordinary kriging with the nearest neighbours; Matérn model with fitted smoothness in the standard and Stein (1999) parameterisations; ranges are practical ranges (95% of the sill) for every model; lognormal ordinary kriging back-transform after Journel (1980) and Webster &amp; Oliver (2007); nugget/sill classes after Cambardella et al. (1994).</p>
+  <p class="refs">Method: classical (Matheron) or robust (Cressie &amp; Hawkins 1980) variogram estimator; model fitted by weighted least squares with weights N<sub>j</sub>/h<sub>j</sub>² (as in gstat); ordinary kriging with the nearest neighbours; Matérn model with fitted smoothness in the standard and Stein (1999) parameterisations; ranges are practical ranges (95% of the sill) for every model; lognormal ordinary kriging back-transform after Journel (1980) and Webster &amp; Oliver (2007); nugget/sill classes after Cambardella et al. (1994).</p>
 </section>
 
 <!-- ============ MODEL EVALUATION ============ -->
@@ -611,7 +624,7 @@ body.quarto-dark .rk-tools {
       <h3>Observed and predicted values</h3>
       <textarea id="ev-cont-data" spellcheck="false" aria-label="Observed and predicted values as CSV"></textarea>
       <div class="rk-row">
-        <label class="file-label">Upload CSV<input type="file" id="ev-cont-file" accept=".csv,.txt,.tsv"></label>
+        <label class="file-label">Open CSV<input type="file" id="ev-cont-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
         <button class="rk-btn" id="ev-cont-ex">Load example</button>
         <button class="rk-btn primary" id="ev-cont-run">Evaluate</button>
       </div>
@@ -635,7 +648,7 @@ body.quarto-dark .rk-tools {
         </div>
       </div>
     </div>
-    <div class="rk-card">
+    <div class="rk-card" id="ev-check-cont">
       <h3>Check a result: yours or a published one</h3>
       <p class="hint" style="margin-top:0">R² and RMSE constrain each other, and both are limited by how precisely the soil was measured. Enter your own figures before you submit, or the figures from a paper or report, to see whether the numbers can all be true.</p>
       <div class="rk-grid">
@@ -657,7 +670,7 @@ body.quarto-dark .rk-tools {
       <h3>Observed and predicted classes</h3>
       <textarea id="ev-cat-data" spellcheck="false" aria-label="Observed and predicted classes as CSV"></textarea>
       <div class="rk-row">
-        <label class="file-label">Upload CSV<input type="file" id="ev-cat-file" accept=".csv,.txt,.tsv"></label>
+        <label class="file-label">Open CSV<input type="file" id="ev-cat-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
         <button class="rk-btn" id="ev-cat-ex">Load example</button>
         <button class="rk-btn primary" id="ev-cat-run">Evaluate</button>
       </div>
@@ -670,7 +683,7 @@ body.quarto-dark .rk-tools {
       <p class="hint" style="margin-top:0">Rows are observed classes, columns are predicted. Producer's accuracy: share of each observed class predicted correctly. User's accuracy: share of each predicted class that is correct.</p>
       <div class="rk-table-wrap" id="ev-cat-table"></div>
     </div>
-    <div class="rk-card">
+    <div class="rk-card" id="ev-check-cat">
       <h3>Check an accuracy: yours or a published one</h3>
       <p class="hint" style="margin-top:0">An accuracy from a small validation set is uncertain, and it only means something compared with what you would get by guessing. Enter your own figures or a paper's to see the confidence interval and whether the map beats chance or another map.</p>
       <div class="rk-grid">
@@ -693,7 +706,7 @@ body.quarto-dark .rk-tools {
       <h3>Class probabilities</h3>
       <textarea id="ev-ci-data" spellcheck="false" aria-label="Class probabilities as CSV"></textarea>
       <div class="rk-row">
-        <label class="file-label">Upload CSV<input type="file" id="ev-ci-file" accept=".csv,.txt,.tsv"></label>
+        <label class="file-label">Open CSV<input type="file" id="ev-ci-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
         <button class="rk-btn" id="ev-ci-ex">Load example</button>
         <button class="rk-btn primary" id="ev-ci-run">Calculate</button>
       </div>
@@ -798,7 +811,7 @@ body.quarto-dark .rk-tools {
     <h3>Your soil classes</h3>
     <textarea id="pd-data" spellcheck="false" aria-label="Soil classes as CSV"></textarea>
     <div class="rk-row">
-      <label class="file-label">Upload CSV<input type="file" id="pd-file" accept=".csv,.txt,.tsv"></label>
+      <label class="file-label">Open CSV<input type="file" id="pd-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
       <button class="rk-btn" id="pd-ex">Load example</button>
       <button class="rk-btn primary" id="pd-run">Calculate</button>
     </div>
@@ -2401,18 +2414,23 @@ function updEnergy() {
     return m.c0 + m.c1 * f;
   }
 
-  function experimental(xs, ys, zs, cutoff, nb) {
+  // classical (Matheron) estimator, or Cressie–Hawkins robust estimator when robust is true
+  function experimental(xs, ys, zs, cutoff, nb, robust) {
     const n = xs.length, w = cutoff / nb;
-    const sum = new Array(nb).fill(0), cnt = new Array(nb).fill(0), dsum = new Array(nb).fill(0);
+    const sum = new Array(nb).fill(0), cnt = new Array(nb).fill(0), dsum = new Array(nb).fill(0), rsum = new Array(nb).fill(0);
     for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
       const d = Math.hypot(xs[i] - xs[j], ys[i] - ys[j]);
       if (d > cutoff || d === 0) continue;
       const b = Math.min(nb - 1, Math.floor(d / w));
       const dz = zs[i] - zs[j];
-      sum[b] += dz * dz; cnt[b]++; dsum[b] += d;
+      sum[b] += dz * dz; rsum[b] += Math.sqrt(Math.abs(dz)); cnt[b]++; dsum[b] += d;
     }
     const out = [];
-    for (let b = 0; b < nb; b++) if (cnt[b] > 0) out.push({ h: dsum[b] / cnt[b], g: sum[b] / (2 * cnt[b]), n: cnt[b] });
+    for (let b = 0; b < nb; b++) if (cnt[b] > 0) {
+      const N = cnt[b];
+      const g = robust ? Math.pow(rsum[b] / N, 4) / (2 * (0.457 + 0.494 / N)) : sum[b] / (2 * N);
+      out.push({ h: dsum[b] / N, g, n: N });
+    }
     return out;
   }
 
@@ -2670,7 +2688,7 @@ function krCompute(D) {
   const cutIn = num($("kr-cut").value), cutoff = isFinite(cutIn) && cutIn > 0 ? cutIn : maxd / 3;
   const nb = Math.max(5, Math.min(40, Math.round(num($("kr-bins").value) || 15)));
   const nmax = Math.max(4, Math.min(64, Math.round(num($("kr-nmax").value) || 16)));
-  const ev = Krige.experimental(xs, ys, zs, cutoff, nb);
+  const ev = Krige.experimental(xs, ys, zs, cutoff, nb, $("kr-est").value === "ch");
   let m, rmax = cutoff * 2, rmin = Math.max(mind, cutoff / 50);
   if ($("kr-man").checked) {
     const c0 = num($("kr-c0").value), c1 = num($("kr-c1").value), r = num($("kr-r").value), t = $("kr-model").value === "auto" ? "sph" : $("kr-model").value;
@@ -2728,6 +2746,8 @@ function krCompute(D) {
   else if (!lg && Math.abs(skew) > 1) notes.push(`The data are skewed (skewness ${fmt(skew, 1)}), which can distort the variogram.`);
   if (lg) notes.push(`Kriged on natural logs (skewness ${fmt(skew, 1)} before, ${fmt(skewT, 1)} after). Predictions are back-transformed as exp(ŷ + σ²/2 − μ), where μ is the kriging Lagrange multiplier, which gives unbiased means; plain exp(ŷ) would give medians and underestimate. The 90% limits are back-transformed log-scale limits, so they are not symmetric.`);
   if (D.geo) notes.push("Longitude and latitude were converted to kilometres around the centre of your data.");
+  if ($("kr-est").value === "ch") notes.push("Robust (Cressie–Hawkins) estimator: it damps the effect of a few extreme values on the variogram, which helps with skewed properties such as available P.");
+  else if (Math.abs(skew) > 1.5) notes.push("With outliers or strong skew, try the robust (Cressie–Hawkins) estimator: a few extreme values can inflate the classical variogram.");
   if (ev.some(p => p.n < 30)) notes.push("Some lag classes have fewer than 30 pairs (small dots on the variogram), so treat them with caution.");
   $("kr-note").textContent = notes.join(" ");
   if ($("kr-nnv")) { $("kr-nnv").textContent = fmt(krNN, krNN < 10 ? 2 : 0); $("kr-nnv").nextElementSibling.textContent = du + ", median to nearest point"; }
@@ -2794,7 +2814,7 @@ function drawKr() {
   evHover(svg, $("kr-map-tip"), W, Hm, mp, k => lab[k]);
 }
 readFileInto($("kr-file"), $("kr-data"), () => { krText = ""; krRun(); });
-$("kr-ex").addEventListener("click", () => { $("kr-data").value = KR_EX; krText = ""; $("kr-cut").value = ""; $("kr-tf").value = "none"; $("kr-model").value = "auto"; $("kr-man").checked = false; $("kr-manbox").style.display = "none"; krRun(); });
+$("kr-ex").addEventListener("click", () => { $("kr-data").value = KR_EX; krText = ""; $("kr-cut").value = ""; $("kr-tf").value = "none"; $("kr-est").value = "mat"; $("kr-model").value = "auto"; $("kr-man").checked = false; $("kr-manbox").style.display = "none"; krRun(); });
 $("kr-run").addEventListener("click", krRun);
 $("kr-data").addEventListener("change", () => { krText = $("kr-data").value; krRefresh(); });
 const krNuVis = () => { $("kr-nubox").style.display = ["mat", "ste"].includes($("kr-model").value) ? "" : "none"; };
@@ -2972,8 +2992,18 @@ updSoilTemp(); updEnergy();
 $("ev-cont-data").value = EV_EX.cont; $("ev-cat-data").value = EV_EX.cat; $("ev-ci-data").value = EV_EX.ci;
 updWater(); vgLoad(); updHSG(); updSampling();
 let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawEvCharts(); drawKr(); updSoilTemp(); updEnergy(); }, 150); });
-const start = location.hash.slice(1);
-if ([...tabs].some(b => b.dataset.tab === start)) showTab(start, false);
+function openFromHash() {
+  const [tab, card] = location.hash.slice(1).split("/");
+  if (![...tabs].some(b => b.dataset.tab === tab)) return;
+  showTab(tab, false);
+  if (!card) return;
+  const c = $(card); if (!c) return;
+  const panel = c.closest(".ev-panel");
+  if (panel && panel.hidden) { const b = document.querySelector(`[data-ev="${panel.id.replace("ev-", "")}"]`); if (b) b.click(); }
+  setTimeout(() => c.scrollIntoView({ behavior: "smooth", block: "start" }), 120);
+}
+openFromHash();
+window.addEventListener("hashchange", openFromHash);
 })();
 </script>
 </div>
