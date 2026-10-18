@@ -1,0 +1,127 @@
+---
+title: "Frost depth calculator"
+description: "How deep the ground freezes where you live, from your winter temperatures, the surface and your soil: for water lines, footings, fence posts and frost heave. Built for mountain and cold-climate homes."
+anchor-sections: false
+include-in-header: _hm-head.html
+---
+
+In cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.
+
+**You need two numbers:** the average temperature of your coldest month and of your warmest month. They are in the climate table for your town (on Wikipedia or your weather service). In the mountains, use a station at a similar elevation: temperatures drop about 3.5 °F per 1,000 ft (6.5 °C per 1,000 m) as you go up.
+
+```{=html}
+<div class="hmc" id="fd"></div>
+<script>
+(function () {
+  // Seasonal frost depth: two-phase Neumann solution (the exact basis of the modified Berggren equation),
+  // with Kersten (1949) thermal conductivities and the US Army TM 5-852-6 heat capacity and latent heat relations.
+  const FROST = {
+    erfc(x) { // Numerical Recipes erfcc, fractional error < 1.2e-7
+      const z = Math.abs(x), t = 1 / (1 + 0.5 * z);
+      const r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+      return x >= 0 ? r : 2 - r;
+    },
+    // Soil thermal properties from dry density (kg/m3), gravimetric water content (%), and type ('coarse' = sand/gravel, 'fine' = silt/clay)
+    props(rhoD, w, type) {
+      const gd = rhoD / 16.0185, lw = Math.log10(Math.max(w, 0.1)); // lb/ft3
+      const kU = { coarse: (0.7 * lw + 0.4) * Math.pow(10, 0.01 * gd), fine: (0.9 * lw - 0.2) * Math.pow(10, 0.01 * gd) };
+      const kF = { coarse: 0.076 * Math.pow(10, 0.013 * gd) + 0.032 * Math.pow(10, 0.0146 * gd) * w, fine: 0.01 * Math.pow(10, 0.022 * gd) + 0.085 * Math.pow(10, 0.008 * gd) * w };
+      const pick = o => type === 'mixed' ? (o.coarse + o.fine) / 2 : o[type];
+      const BTUin = 0.144228; // 1 BTU·in/(ft²·h·°F) = 0.1442 W/(m·K)
+      const ku = Math.max(0.05, pick(kU)) * BTUin, kf = Math.max(0.05, pick(kF)) * BTUin;
+      const c = 0.17; // specific heat of soil solids, BTU/(lb·°F)
+      const C1 = 67066; // 1 BTU/(ft3·°F) in J/(m3·K)
+      const Cu = gd * (c + 1.0 * w / 100) * C1, Cf = gd * (c + 0.5 * w / 100) * C1;
+      const L = 144 * gd * w / 100 * 37259; // J/m3 (1 BTU/ft3 = 37 259 J/m3)
+      return { ku, kf, Cu, Cf, L };
+    },
+    // F: surface freezing index (°C·days), days: length of freezing season, v0: mean annual ground temperature above 0 °C
+    depth(p, F, days, v0) {
+      const t = days * 86400, dTs = F / days, kapf = p.kf / p.Cf, kapu = p.ku / p.Cu, r = Math.sqrt(kapf / kapu);
+      const Lw = Math.max(p.L, 1); // dry soil: latent heat ~0
+      const f = eta => p.kf * dTs * Math.exp(-eta * eta) / (Math.sqrt(Math.PI * kapf) * (1 - this.erfc(eta)))
+        - p.ku * Math.max(0, v0) * Math.exp(-r * r * eta * eta) / (Math.sqrt(Math.PI * kapu) * this.erfc(r * eta))
+        - Lw * eta * Math.sqrt(kapf);
+      let lo = 1e-6, hi = 20;
+      if (f(lo) <= 0) return { X: 0, Xs: 0, lam: NaN };
+      for (let i = 0; i < 200; i++) { const m = (lo + hi) / 2; if (f(m) > 0) lo = m; else hi = m; }
+      const eta = (lo + hi) / 2, X = 2 * eta * Math.sqrt(kapf * t);
+      const Xs = Math.sqrt(2 * p.kf * F * 86400 / Lw); // Stefan
+      return { X, Xs, lam: X / Xs, alpha: v0 / dTs, mu: dTs * ((p.Cf + p.Cu) / 2) / Lw };
+    },
+    // Annual sinusoid from coldest and warmest monthly means → freezing index, season length, mean
+    fromMonths(tc, tw) {
+      const m = (tc + tw) / 2, a = (tw - tc) / 2; let F = 0, d = 0;
+      for (let i = 0; i < 3650; i++) { const T = m - a * Math.cos(2 * Math.PI * (i + 0.5) / 3650); if (T < 0) { F -= T * 0.1; d += 0.1; } }
+      return { F, days: d, mean: m };
+    }
+  };
+  const SOILS = { gravel: ['coarse', 1750, 8, 'Sand or gravel'], loam: ['mixed', 1500, 18, 'Loam or garden soil'], clay: ['fine', 1400, 25, 'Clay or silt'], fill: ['coarse', 2000, 5, 'Rocky fill or road base'] };
+  const SURF = { lawn: [0.5, 'a lawn'], bare: [0.7, 'bare soil or a garden bed'], paved: [0.75, 'a driveway, path or patio cleared of snow'], trees: [0.3, 'ground under trees'] };
+  let last = null; // previous temperatures, to convert when the unit changes
+  const inch = m => Math.round(m / 0.0254), cm = m => Math.round(m * 100);
+  HM.tool({
+    id: 'fd', step: 'Your winter', units: false,
+    inputs: [
+      { k: 'tu', l: 'Temperatures in', t: 'seg', d: { us: 'f', si: 'c' }, opts: [['f', '°F'], ['c', '°C']] },
+      { k: 'tc', l: 'Average temperature of the coldest month', t: 'num', d: (u, v) => v.tu === 'c' ? -8 : 18, w: 3, h: 'For example, January in the Northern Hemisphere.' },
+      { k: 'tw', l: 'Average temperature of the warmest month', t: 'num', d: (u, v) => v.tu === 'c' ? 16 : 61, w: 3 },
+      { k: 'surf', l: 'Where are you digging?', t: 'select', d: 'paved', opts: [['paved', 'Under a driveway, path or patio kept clear of snow'], ['bare', 'Bare soil or a garden bed'], ['lawn', 'Under a lawn'], ['trees', 'Under trees']], h: 'Pavement that is plowed or shoveled freezes deepest, because there is no snow to insulate it. Water lines often freeze under driveways first.' },
+      { k: 'soil', l: 'Soil', t: 'select', d: 'loam', opts: Object.entries(SOILS).map(([k, s]) => [k, s[3]]), h: 'Not sure? The <a href="diy-soil-tests.html">DIY soil tests</a> show how to tell.' },
+      { k: 'wet', l: 'How wet is the soil in winter?', t: 'seg', d: 'normal', opts: [['dry', 'Dry'], ['normal', 'Normal'], ['wet', 'Wet']], h: 'Wet soil freezes less deep, because freezing water releases heat. Dry, coarse soil freezes deepest.' },
+      { k: 'snow', l: 'Snow usually covers this spot for most of the winter', t: 'check', d: false }
+    ],
+    example: { tu: 'f', tc: 16, tw: 59, surf: 'paved', soil: 'gravel', wet: 'normal', snow: false },
+    onChange(k, api) {
+      if (k !== 'tu' || !last || last.tu === api.get('tu')) return;
+      const cv = x => api.get('tu') === 'c' ? (x - 32) * 5 / 9 : x * 9 / 5 + 32;
+      ['tc', 'tw'].forEach(q => { if (isFinite(last[q])) api.set(q, +cv(last[q]).toFixed(1)); });
+    },
+    compute(v, U) {
+      last = { tu: v.tu, tc: v.tc, tw: v.tw };
+      if (!isFinite(v.tc) || !isFinite(v.tw)) return U.empty('Enter the coldest and warmest monthly averages.');
+      const c = x => v.tu === 'f' ? (x - 32) * 5 / 9 : x;
+      const tc = c(v.tc), tw = c(v.tw);
+      if (tw < tc) return U.empty('The warmest month should be warmer than the coldest.');
+      const s = SOILS[v.soil], w = s[2] * { dry: 0.6, normal: 1, wet: 1.4 }[v.wet], n = SURF[v.surf][0];
+      const p = FROST.props(s[1], w, s[0]);
+      const run = t => { const a = FROST.fromMonths(t, tw); return a.F > 0 ? { ...FROST.depth(p, n * a.F, a.days, a.mean), F: a.F, days: a.days, mean: a.mean } : { X: 0, F: 0, days: 0, mean: a.mean }; };
+      const avg = run(tc), cold = run(tc - 5);
+      const fmtD = m => v.tu === 'c' ? `${cm(m)} cm (${inch(m)} in)` : `${inch(m)} in (${cm(m)} cm)`;
+      let h;
+      if (cold.X <= 0.02) {
+        h = U.big('Frost depth', 'Very shallow', 'With these temperatures the ground rarely stays frozen. It can still freeze for a few days in a cold snap.');
+      } else {
+        h = avg.X < 0.02 ? U.big('In an average winter', 'Little or no frost', `under ${SURF[v.surf][1]}, but a cold winter can freeze the ground.`) : U.big('Frost goes down about', fmtD(avg.X), `in an average winter, under ${SURF[v.surf][1]}.`);
+        h += U.kv([['In a cold winter (coldest month 9 °F / 5 °C colder)', fmtD(cold.X)], ['Cold-winter range, allowing ± 25% for soil properties', `${inch(cold.X * 0.75)}–${inch(cold.X * 1.25)} in (${cm(cold.X * 0.75)}–${cm(cold.X * 1.25)} cm)`]]);
+        h += `<h3>What to do with it</h3><ul class="plain"><li><b>Water and sewer lines:</b> bury them below the cold-winter depth (${fmtD(cold.X)}), and towards the deep end of the range under driveways and paths kept clear of snow. Many mountain towns require more; check with your water utility.</li><li><b>Footings for decks, sheds and additions:</b> your building department sets the legal frost depth for footings. Use theirs; it is based on the coldest winters on record and is often deeper than this.</li><li><b>Fence and deck posts:</b> set them below the frost depth, with gravel at the bottom for drainage, or frost can lift them a little every winter.</li></ul>`;
+        if (v.soil === 'clay' && v.wet !== 'dry') h += U.note('Silty and clayey soils that stay wet are the most prone to <b>frost heave</b>: ice lenses grow as water is drawn up to the freezing front, lifting slabs, steps and posts. Good drainage and a gravel base under slabs help.');
+        if (v.snow) h += U.note('A lasting snow cover insulates the ground, so frost under undisturbed snow is usually much shallower than shown here. But anywhere the snow is cleared, packed by traffic or blown off, expect the full depth.', 'good');
+      }
+      return {
+        html: h,
+        work: cold.X <= 0.02 ? [`Freezing index (average winter) ≈ ${Math.round(avg.F)} °C·days`] : [
+          `Average yearly temperature cycle from your coldest (${v.tc}°) and warmest (${v.tw}°) months: ${Math.round(avg.days)} days below freezing, freezing index ${Math.round(avg.F)} °C·days (${Math.round(avg.F * 1.8)} °F·days)`,
+          `Surface factor ${n} for ${SURF[v.surf][1]} (US Army TM 5-852-6): surface freezing index ${Math.round(n * avg.F)} °C·days`,
+          `${s[3]}: dry density ${(s[1] / 1000).toFixed(2)} g/cm³, water content ${Math.round(w)}% → thermal conductivity ${p.kf.toFixed(2)} W/m·K frozen, ${p.ku.toFixed(2)} unfrozen (Kersten 1949); latent heat ${(p.L / 1e6).toFixed(0)} MJ/m³`,
+          `Frost depth from the heat balance at the freezing front (Neumann solution, the basis of the modified Berggren method): ${fmtD(avg.X)}; cold winter ${fmtD(cold.X)}`
+        ]
+      };
+    }
+  });
+})();
+</script>
+```
+
+## Why frost depth varies so much
+
+- **Cold, and how long it lasts.** What matters is the *freezing index*: how far below freezing it is, added up over every day of winter. A long, steady cold freezes deeper than a short, sharp one.
+- **Snow.** A foot of fluffy snow insulates about as well as a couple of inches of foam board. Plowed driveways and shoveled paths lose that blanket and freeze deepest.
+- **Soil and moisture.** Water gives off a lot of heat as it freezes, which slows the frost. Dry gravel and rocky fill freeze much deeper than wet clay.
+- **Warm ground below.** Where summers are warm, the ground stores heat that pushes back against the frost from below.
+
+## About this estimate
+
+This uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.
+
+For more control (freezing index, density, water content and surface factors), use the [frost depth tool for researchers](tools.qmd#frost).

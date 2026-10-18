@@ -68,7 +68,7 @@ body.quarto-dark .rk-tools {
 .rk-tools .rk-grid select { width: 100%; min-width: 0; text-overflow: ellipsis; }
 .rk-tools .two > * { min-width: 0; }
 .rk-tools label { display: block; font-size: .85rem; color: var(--ink-2); margin-bottom: 4px; }
-.rk-tools input[type=number], .rk-tools input[type=text], .rk-tools select, .rk-tools textarea {
+.rk-tools input[type=number], .rk-tools input[type=text], .rk-tools input[type=date], .rk-tools select, .rk-tools textarea {
   width: 100%; font: inherit; color: var(--ink); background: var(--bg);
   border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
 }
@@ -96,6 +96,7 @@ body.quarto-dark .rk-tools {
 .rk-tools table { border-collapse: collapse; width: 100%; font-size: .85rem; font-variant-numeric: tabular-nums; }
 .rk-tools th, .rk-tools td { padding: 6px 10px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
 .rk-tools th:first-child, .rk-tools td:first-child { text-align: left; }
+#et-work td:last-child, #fr-work td:last-child, #w-table td:nth-last-child(-n+2) { white-space: normal; text-align: left; min-width: 160px; }
 .rk-tools th { background: var(--surface-2); font-weight: 600; color: var(--ink-2); position: sticky; top: 0; }
 .rk-tools tr:last-child td { border-bottom: none; }
 .rk-tools td.na { color: var(--ink-3); }
@@ -161,7 +162,7 @@ body.quarto-dark .rk-tools {
   <div class="rk-wrap" role="tablist">
     <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" data-tip="Turn horizon data into standard depth intervals (0–5, 5–15 cm…) with a smooth profile." aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" data-tip="How many soil classes an area has and how evenly they share it." aria-selected="false">Pedodiversity</button><button role="tab" data-tab="krige" data-tip="Fit a variogram to point data and test kriging by cross-validation." aria-selected="false">Variogram &amp; kriging</button><button role="tab" data-tab="eval" data-tip="How well a map or model matches independent observations: accuracy, uncertainty, classes." aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" data-tip="How many samples you need for a field mean, or for a map." aria-selected="false">Sampling density</button></div>
     <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="van Genuchten–Mualem curves from a texture class, a pedotransfer function, or fitted to your own measurements." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from six pedotransfer functions, compared side by side." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D), its curve number for your land cover, and how much of a storm runs off." aria-selected="false">Hydrologic soil group</button></div>
-    <div class="tgroup"><span class="tglabel">Energy</span><button role="tab" data-tab="soiltemp" data-tip="How daily and seasonal temperature swings travel down into the soil." aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" data-tip="Where the sun's energy goes at a bare soil surface as it wets up." aria-selected="false">Energy balance</button></div>
+    <div class="tgroup"><span class="tglabel">Energy &amp; climate</span><button role="tab" data-tab="soiltemp" data-tip="How daily and seasonal temperature swings travel down into the soil." aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" data-tip="Where the sun's energy goes at a bare soil surface as it wets up." aria-selected="false">Energy balance</button><button role="tab" data-tab="et" data-tip="Daily reference evapotranspiration (FAO-56), crop water use and days between irrigations." aria-selected="false">Evapotranspiration</button><button role="tab" data-tab="frost" data-tip="How deep the ground freezes, from the winter, the surface and the soil." aria-selected="false">Frost depth</button><button role="tab" data-tab="sun" data-tip="Day length, sunrise and sunset, and solar radiation for any latitude and date." aria-selected="false">Day length &amp; sun</button></div>
     <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" data-tip="Texture class from sand, silt and clay, one sample or a whole file." aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" data-tip="Carbon stocks to fixed depths or equivalent soil mass, and whether a change is detectable." aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" data-tip="A Munsell notation as an on-screen colour, and what it tells you about the soil." aria-selected="false">Munsell colour</button></div>
     <div class="tgroup"><span class="tglabel">Checks</span><a class="tglink" href="checks.html">Check a result: yours or a published one →</a></div>
     <div class="tgroup"><span class="tglabel">Soil classification</span><a class="tglink" href="soil-keys.html#wrb">WRB soil key <span style="font-size:.7rem; color:var(--warn); font-weight:700">BETA</span> →</a><a class="tglink" href="soil-keys.html#sa">South African soil key <span style="font-size:.7rem; color:var(--warn); font-weight:700">BETA</span> →</a></div>
@@ -903,6 +904,136 @@ body.quarto-dark .rk-tools {
   <p class="refs">Steady-state bare-soil balance Rn = H + LE + G solved for surface temperature; neutral aerodynamic resistance at 2 m (z₀ = 1 cm); evaporation by the moisture-availability (β = θ/θfc) method; G by conduction over the top 10 cm (Campbell conductivity); sky emissivity after Brutsaert (1975). A teaching model, not a field estimate.</p>
 </section>
 
+<!-- ============ EVAPOTRANSPIRATION ============ -->
+<section class="tool" id="tab-et">
+  <h2>Evapotranspiration and crop water use</h2>
+  <p class="lede">Daily reference evapotranspiration (ET₀) by the FAO-56 Penman–Monteith method, with Hargreaves for comparison, then crop water use and how long the soil's water lasts before the crop needs irrigating. Every step of the calculation is shown.</p>
+  <div class="two">
+    <div class="rk-card">
+      <h3>1. Place and day</h3>
+      <div class="rk-grid">
+        <div><label for="et-lat">Latitude (°, south negative)</label><input type="number" id="et-lat" value="39.4" min="-66" max="66" step="any"></div>
+        <div><label for="et-z">Elevation (m)</label><input type="number" id="et-z" value="1900" min="-400" max="6000" step="any"></div>
+        <div><label for="et-date">Date</label><input type="date" id="et-date"></div>
+        <div><label for="et-tu">Temperature unit</label><select id="et-tu"><option value="c">°C</option><option value="f">°F</option></select></div>
+        <div><label for="et-tmax">Maximum temperature</label><input type="number" id="et-tmax" value="29" step="any"></div>
+        <div><label for="et-tmin">Minimum temperature</label><input type="number" id="et-tmin" value="9" step="any"></div>
+      </div>
+      <h3 style="margin-top:16px">2. Weather data you have</h3>
+      <div class="rk-grid">
+        <div><label for="et-hm">Humidity</label><select id="et-hm"><option value="rhmm">RH max and min</option><option value="rhm">Mean RH</option><option value="td">Dew point</option><option value="none">None</option></select></div>
+        <div class="et-h1"><label for="et-h1" id="et-h1-l">RH max (%)</label><input type="number" id="et-h1" value="70" min="0" max="100" step="any"></div>
+        <div class="et-h2"><label for="et-h2">RH min (%)</label><input type="number" id="et-h2" value="20" min="0" max="100" step="any"></div>
+        <div><label for="et-wm">Wind</label><select id="et-wm"><option value="ms">m/s</option><option value="kmh">km/h</option><option value="mph">mph</option><option value="none">None</option></select></div>
+        <div class="et-w"><label for="et-u">Wind speed</label><input type="number" id="et-u" value="2.5" min="0" step="any"></div>
+        <div class="et-w"><label for="et-uz">Measured at height (m)</label><input type="number" id="et-uz" value="2" min="0.5" step="any"></div>
+        <div><label for="et-rm">Sunshine or radiation</label><select id="et-rm"><option value="n">Hours of bright sunshine</option><option value="rs">Solar radiation (MJ/m² per day)</option><option value="none">None (estimate from temperature)</option></select></div>
+        <div class="et-r"><label for="et-r" id="et-r-l">Sunshine hours</label><input type="number" id="et-r" value="11" min="0" step="any"></div>
+        <div class="et-k"><label for="et-krs">Location</label><select id="et-krs"><option value="0.16">Inland</option><option value="0.19">Coastal</option></select></div>
+      </div>
+      <p class="hint">Use values for one day (or averages for a period). Missing data are filled in the FAO-56 way: dew point taken as the minimum temperature, wind as 2 m/s, and radiation from the daily temperature range. Each substitution adds uncertainty, and the results say which were used.</p>
+      <div class="msg" id="et-msg" role="status"></div>
+    </div>
+    <div class="rk-card">
+      <h3>Reference evapotranspiration</h3>
+      <div class="stats" id="et-stats"></div>
+      <div class="rk-table-wrap" style="margin-top:12px"><div id="et-work"></div></div>
+      <p class="hint" id="et-why"></p>
+    </div>
+  </div>
+  <div class="rk-card">
+    <h3>3. Crop water use and irrigation interval</h3>
+    <div class="rk-grid">
+      <div><label for="et-crop">Crop</label><select id="et-crop"></select></div>
+      <div><label for="et-stage">Growth stage</label><select id="et-stage"><option value="0">Initial (planting to ~10% cover)</option><option value="1" selected>Mid-season (full cover)</option><option value="2">Late season (ripening)</option></select></div>
+      <div><label for="et-awm">Soil water</label><select id="et-awm"><option value="aw">Available water (mm per m)</option><option value="fcwp">Field capacity and wilting point</option></select></div>
+      <div class="et-aw"><label for="et-aw">Available water (mm per m of soil)</label><input type="number" id="et-aw" value="150" min="0" step="any"></div>
+      <div class="et-fcwp"><label for="et-fc">Field capacity (m³/m³)</label><input type="number" id="et-fc" value="0.28" min="0" max="1" step="any"></div>
+      <div class="et-fcwp"><label for="et-wp">Wilting point (m³/m³)</label><input type="number" id="et-wp" value="0.13" min="0" max="1" step="any"></div>
+      <div><label for="et-zr">Rooting depth (m)</label><input type="number" id="et-zr" min="0.05" max="3" step="any"></div>
+    </div>
+    <div class="rk-row"><button class="rk-btn" id="et-fromw">Use the soil from the Water retention tab</button></div>
+    <p class="hint">Typical available water: sands 50–100, loams 120–200, clays 150–200 mm per metre. The rooting depth starts at the FAO-56 typical value for the crop; shallower soils, compaction or young plants make it less.</p>
+    <div class="stats" id="et-cstats" style="margin-top:12px"></div>
+    <p class="hint" id="et-cwhy"></p>
+  </div>
+  <div class="advanced">
+    <strong>Need water balances for a field, farm or catchment?</strong>
+    <p>We run daily soil water balances with measured or gridded weather, soil maps and crop calendars, for irrigation planning and water accounting.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Soil%20water%20balance">Get in touch →</a>
+  </div>
+  <p class="refs">Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). <i>Crop Evapotranspiration: Guidelines for Computing Crop Water Requirements</i>. FAO Irrigation and Drainage Paper 56. FAO, Rome. Equations 7–53 (ET₀), Table 12 (Kc; the midpoint where a range is given, and the crop-group initial value where no crop value is listed), Table 22 (rooting depth and depletion fraction), equations 82–84 (TAW, RAW). Checked against FAO-56 Example 18 (Brussels, 6 July: ET₀ 3.9 mm/day). Hargreaves, G.H., Samani, Z.A. (1985). Reference crop evapotranspiration from temperature. <i>Applied Engineering in Agriculture</i> 1, 96–99.</p>
+</section>
+
+<!-- ============ FROST DEPTH ============ -->
+<section class="tool" id="tab-frost">
+  <h2>Frost depth</h2>
+  <p class="lede">How deep the ground freezes in a winter, from the freezing index, the surface and the soil's density and moisture. Uses the two-phase Neumann solution, the exact basis of the modified Berggren equation, so the Stefan estimate and the Berggren λ correction are shown alongside.</p>
+  <div class="two">
+    <div class="rk-card">
+      <h3>1. Winter</h3>
+      <div class="rk-grid">
+        <div><label for="fr-mode">Climate input</label><select id="fr-mode"><option value="months">Coldest and warmest month</option><option value="fi">Freezing index</option></select></div>
+        <div class="fr-m"><label for="fr-tc">Coldest month mean (°C)</label><input type="number" id="fr-tc" value="-9" step="any"></div>
+        <div class="fr-m"><label for="fr-tw">Warmest month mean (°C)</label><input type="number" id="fr-tw" value="14" step="any"></div>
+        <div class="fr-f"><label for="fr-fi">Air freezing index (°C·days)</label><input type="number" id="fr-fi" value="900" min="0" step="any"></div>
+        <div class="fr-f"><label for="fr-days">Freezing season length (days)</label><input type="number" id="fr-days" value="150" min="1" max="366" step="any"></div>
+        <div class="fr-f"><label for="fr-maat">Mean annual temperature (°C)</label><input type="number" id="fr-maat" value="2" step="any"></div>
+        <div><label for="fr-n">Surface (n-factor)</label><select id="fr-n"><option value="0.75">Concrete, cleared of snow (0.75)</option><option value="0.7" selected>Asphalt or bare soil, cleared (0.7)</option><option value="0.9">Shaded (0.9)</option><option value="0.5">Turf (0.5)</option><option value="0.3">Under trees (0.3)</option><option value="custom">Custom</option></select></div>
+        <div class="fr-nc"><label for="fr-nv">n-factor</label><input type="number" id="fr-nv" value="0.7" min="0.05" max="1.5" step="any"></div>
+      </div>
+      <h3 style="margin-top:16px">2. Soil</h3>
+      <div class="rk-grid">
+        <div><label for="fr-type">Soil type</label><select id="fr-type"><option value="coarse">Sand and gravel (fines &lt; 20%)</option><option value="mixed">Mixed (fines 20–50%)</option><option value="fine" selected>Silt and clay (fines ≥ 50%)</option></select></div>
+        <div><label for="fr-rho">Dry bulk density (g/cm³)</label><input type="number" id="fr-rho" value="1.5" min="0.8" max="2.3" step="any"></div>
+        <div><label for="fr-w">Water content (% by dry weight)</label><input type="number" id="fr-w" value="18" min="0.5" max="80" step="any"></div>
+      </div>
+      <p class="hint">The n-factor converts the air freezing index to the surface (values from TM 5-852-6, Table 2-4). Snow cover insulates the ground and can make frost much shallower; this calculation assumes the surface is kept clear or has no lasting snow. Water content is the average over the freezing depth in winter.</p>
+      <div class="msg" id="fr-msg" role="status"></div>
+    </div>
+    <div class="rk-card">
+      <h3>Frost depth</h3>
+      <div class="stats" id="fr-stats"></div>
+      <div class="rk-table-wrap" style="margin-top:12px"><div id="fr-work"></div></div>
+      <p class="hint" id="fr-why"></p>
+    </div>
+  </div>
+  <div class="advanced">
+    <strong>Frost heave, foundations or permafrost?</strong>
+    <p>We model freezing and thawing through layered soils with snow, moisture and heat flow, for foundations, pipelines and slopes.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Frost%20and%20ground%20freezing">Get in touch →</a>
+  </div>
+  <p class="refs">Method: two-phase Neumann solution for freezing of a semi-infinite medium (Carslaw, H.S., Jaeger, J.C. (1959). <i>Conduction of Heat in Solids</i>, 2nd ed. Oxford University Press), which underlies the modified Berggren equation (Aldrich, H.P., Paynter, H.M. (1953). Analytical studies of freezing and thawing of soils. Arctic Construction and Frost Effects Laboratory, Technical Report 42). Thermal conductivity: Kersten, M.S. (1949). <i>Laboratory Research for the Determination of the Thermal Properties of Soils</i>. University of Minnesota Engineering Experiment Station; reproduces the published example values for silt (0.72 and 0.80 BTU/h·ft·°F unfrozen and frozen) and is uncertain by about ±25%. Heat capacity, latent heat and n-factors: US Army (1988). <i>Arctic and Subarctic Construction: Calculation Methods for Determination of Depths of Freeze and Thaw in Soils</i>, TM 5-852-6.</p>
+</section>
+
+<!-- ============ SUN AND DAY LENGTH ============ -->
+<section class="tool" id="tab-sun">
+  <h2>Day length and solar radiation</h2>
+  <p class="lede">Day length, sunrise and sunset, the noon sun angle and the solar energy reaching the top of the atmosphere and the ground on a clear day, for any latitude and date, with the whole year shown.</p>
+  <div class="rk-card">
+    <div class="rk-grid">
+      <div><label for="sun-lat">Latitude (°, south negative)</label><input type="number" id="sun-lat" value="39.4" min="-90" max="90" step="any"></div>
+      <div><label for="sun-z">Elevation (m)</label><input type="number" id="sun-z" value="1900" min="-400" max="8000" step="any"></div>
+      <div><label for="sun-date">Date</label><input type="date" id="sun-date"></div>
+    </div>
+    <div class="stats" id="sun-stats" style="margin-top:12px"></div>
+    <p class="hint">Sunrise and sunset are in local solar time (solar noon = 12:00); clock time differs with your position in the time zone and daylight saving. Day length is from sunrise to sunset of the sun's centre, without refraction, as in FAO-56, so published sunrise tables give a few minutes more.</p>
+  </div>
+  <div class="two">
+    <div class="rk-card">
+      <h3>Day length through the year</h3>
+      <div class="chart-box"><svg class="chart" id="sun-c1" role="img" aria-label="Day length through the year"></svg><div class="tip" id="sun-c1-tip"></div></div>
+    </div>
+    <div class="rk-card">
+      <h3>Daily solar radiation</h3>
+      <div class="legend"><span><i style="background:var(--s4)"></i>Top of atmosphere (Ra)</span><span><i style="background:var(--s1)"></i>Clear-sky at the ground (Rso)</span></div>
+      <div class="chart-box"><svg class="chart" id="sun-c2" role="img" aria-label="Daily solar radiation through the year"></svg><div class="tip" id="sun-c2-tip"></div></div>
+    </div>
+  </div>
+  <p class="refs">Allen, R.G., Pereira, L.S., Raes, D., Smith, M. (1998). FAO Irrigation and Drainage Paper 56, equations 21–25, 34 and 37. Checked against FAO-56 Example 8 (20° S, 3 September: Ra 32.2 MJ/m² per day).</p>
+</section>
+
+
 <!-- ============ PEDODIVERSITY ============ -->
 <section class="tool" id="tab-pedodiv">
   <h2>Pedodiversity</h2>
@@ -1365,6 +1496,7 @@ function showTab(name, push) {
   if (name === "krige") drawKr();
   if (name === "soiltemp") updSoilTemp();
   if (name === "energy") updEnergy();
+  if (name === "sun") updSun();
   if (name === "spline" && lastSpline) drawProfile();
 }
 tabs.forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab, true)));
@@ -3501,8 +3633,246 @@ $("pd-data").value = PD_EX;
 $("kr-data").value = KR_EX; krText = KR_EX; krRefresh();
 updSoilTemp(); updEnergy();
 $("ev-cont-data").value = EV_EX.cont; $("ev-cat-data").value = EV_EX.cat; $("ev-ci-data").value = EV_EX.ci;
-updWater(); vgLoad(); updHSG(); updSampling();
-let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawWater(); drawEvCharts(); drawKr(); updSoilTemp(); updEnergy(); }, 150); });
+/* ============ EVAPOTRANSPIRATION (FAO-56) ============ */
+// FAO-56 (Allen et al. 1998) daily reference evapotranspiration and solar geometry.
+const FAO = {
+  es: T => 0.6108 * Math.exp(17.27 * T / (T + 237.3)),                         // eq 11, kPa
+  delta: T => 4098 * 0.6108 * Math.exp(17.27 * T / (T + 237.3)) / Math.pow(T + 237.3, 2), // eq 13
+  pres: z => 101.3 * Math.pow((293 - 0.0065 * z) / 293, 5.26),                 // eq 7
+  sun(latDeg, J) {                                                            // eqs 21–25, 34
+    const phi = latDeg * Math.PI / 180, dr = 1 + 0.033 * Math.cos(2 * Math.PI * J / 365);
+    const dec = 0.409 * Math.sin(2 * Math.PI * J / 365 - 1.39);
+    const x = -Math.tan(phi) * Math.tan(dec), ws = Math.acos(Math.max(-1, Math.min(1, x)));
+    const Ra = 24 * 60 / Math.PI * 0.0820 * dr * (ws * Math.sin(phi) * Math.sin(dec) + Math.cos(phi) * Math.cos(dec) * Math.sin(ws));
+    return { dr, dec, ws, Ra: Math.max(0, Ra), N: 24 / Math.PI * ws, noonElev: 90 - Math.abs(latDeg - dec * 180 / Math.PI) };
+  },
+  u2: (u, z) => u * 4.87 / Math.log(67.8 * z - 5.42),                          // eq 47
+  // Daily ET0. o: {lat, z, J, tmax, tmin, ea?, rhmax?, rhmin?, rhmean?, tdew?, u2?, n?, rs?, krs}
+  et0(o) {
+    const T = (o.tmax + o.tmin) / 2, P = this.pres(o.z), gam = 0.665e-3 * P, D = this.delta(T);
+    const esx = this.es(o.tmax), esn = this.es(o.tmin), es = (esx + esn) / 2;
+    let ea, eaHow;
+    if (isFinite(o.tdew)) { ea = this.es(o.tdew); eaHow = "from dew point (eq. 14)"; }
+    else if (isFinite(o.rhmax) && isFinite(o.rhmin)) { ea = (esn * o.rhmax / 100 + esx * o.rhmin / 100) / 2; eaHow = "from RHmax and RHmin (eq. 17)"; }
+    else if (isFinite(o.rhmean)) { ea = o.rhmean / 100 * es; eaHow = "from mean RH (eq. 19)"; }
+    else { ea = this.es(o.tmin); eaHow = "assumed dew point = Tmin (no humidity data)"; }
+    const s = this.sun(o.lat, o.J), Rso = (0.75 + 2e-5 * o.z) * s.Ra;
+    let Rs, rsHow;
+    if (isFinite(o.rs)) { Rs = o.rs; rsHow = "measured"; }
+    else if (isFinite(o.n)) { Rs = (0.25 + 0.50 * Math.min(o.n, s.N) / s.N) * s.Ra; rsHow = "from sunshine hours (eq. 35)"; }
+    else { Rs = (o.krs || 0.16) * Math.sqrt(Math.max(0, o.tmax - o.tmin)) * s.Ra; rsHow = `from temperature range, kRs ${o.krs || 0.16} (eq. 50)`; }
+    Rs = Math.min(Rs, Rso);
+    const Rns = 0.77 * Rs, sig = 4.903e-9;
+    const Rnl = sig * (Math.pow(o.tmax + 273.16, 4) + Math.pow(o.tmin + 273.16, 4)) / 2 * (0.34 - 0.14 * Math.sqrt(Math.max(0, ea))) * (1.35 * (Rso > 0 ? Rs / Rso : 0.5) - 0.35);
+    const Rn = Rns - Rnl, G = 0;
+    const u2 = isFinite(o.u2) ? o.u2 : 2, uHow = isFinite(o.u2) ? "" : "assumed 2 m/s (no wind data)";
+    const et0 = (0.408 * D * (Rn - G) + gam * 900 / (T + 273) * u2 * (es - ea)) / (D + gam * (1 + 0.34 * u2));
+    const hg = 0.0023 * (T + 17.8) * Math.sqrt(Math.max(0, o.tmax - o.tmin)) * 0.408 * s.Ra; // eq 52
+    return { et0: Math.max(0, et0), hg: Math.max(0, hg), T, P, gam, D, es, ea, vpd: es - ea, Ra: s.Ra, N: s.N, Rso, Rs, Rns, Rnl, Rn, u2, eaHow, rsHow, uHow };
+  }
+};
+
+/* ============ FROST DEPTH ============ */
+// Seasonal frost depth: two-phase Neumann solution (the exact basis of the modified Berggren equation),
+// with Kersten (1949) thermal conductivities and the US Army TM 5-852-6 heat capacity and latent heat relations.
+const FROST = {
+  erfc(x) { // Numerical Recipes erfcc, fractional error < 1.2e-7
+    const z = Math.abs(x), t = 1 / (1 + 0.5 * z);
+    const r = t * Math.exp(-z * z - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 + t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+    return x >= 0 ? r : 2 - r;
+  },
+  // Soil thermal properties from dry density (kg/m3), gravimetric water content (%), and type ('coarse' = sand/gravel, 'fine' = silt/clay)
+  props(rhoD, w, type) {
+    const gd = rhoD / 16.0185, lw = Math.log10(Math.max(w, 0.1)); // lb/ft3
+    const kU = { coarse: (0.7 * lw + 0.4) * Math.pow(10, 0.01 * gd), fine: (0.9 * lw - 0.2) * Math.pow(10, 0.01 * gd) };
+    const kF = { coarse: 0.076 * Math.pow(10, 0.013 * gd) + 0.032 * Math.pow(10, 0.0146 * gd) * w, fine: 0.01 * Math.pow(10, 0.022 * gd) + 0.085 * Math.pow(10, 0.008 * gd) * w };
+    const pick = o => type === 'mixed' ? (o.coarse + o.fine) / 2 : o[type];
+    const BTUin = 0.144228; // 1 BTU·in/(ft²·h·°F) = 0.1442 W/(m·K)
+    const ku = Math.max(0.05, pick(kU)) * BTUin, kf = Math.max(0.05, pick(kF)) * BTUin;
+    const c = 0.17; // specific heat of soil solids, BTU/(lb·°F)
+    const C1 = 67066; // 1 BTU/(ft3·°F) in J/(m3·K)
+    const Cu = gd * (c + 1.0 * w / 100) * C1, Cf = gd * (c + 0.5 * w / 100) * C1;
+    const L = 144 * gd * w / 100 * 37259; // J/m3 (1 BTU/ft3 = 37 259 J/m3)
+    return { ku, kf, Cu, Cf, L };
+  },
+  // F: surface freezing index (°C·days), days: length of freezing season, v0: mean annual ground temperature above 0 °C
+  depth(p, F, days, v0) {
+    const t = days * 86400, dTs = F / days, kapf = p.kf / p.Cf, kapu = p.ku / p.Cu, r = Math.sqrt(kapf / kapu);
+    const Lw = Math.max(p.L, 1); // dry soil: latent heat ~0
+    const f = eta => p.kf * dTs * Math.exp(-eta * eta) / (Math.sqrt(Math.PI * kapf) * (1 - this.erfc(eta)))
+      - p.ku * Math.max(0, v0) * Math.exp(-r * r * eta * eta) / (Math.sqrt(Math.PI * kapu) * this.erfc(r * eta))
+      - Lw * eta * Math.sqrt(kapf);
+    let lo = 1e-6, hi = 20;
+    if (f(lo) <= 0) return { X: 0, Xs: 0, lam: NaN };
+    for (let i = 0; i < 200; i++) { const m = (lo + hi) / 2; if (f(m) > 0) lo = m; else hi = m; }
+    const eta = (lo + hi) / 2, X = 2 * eta * Math.sqrt(kapf * t);
+    const Xs = Math.sqrt(2 * p.kf * F * 86400 / Lw); // Stefan
+    return { X, Xs, lam: X / Xs, alpha: v0 / dTs, mu: dTs * ((p.Cf + p.Cu) / 2) / Lw };
+  },
+  // Annual sinusoid from coldest and warmest monthly means → freezing index, season length, mean
+  fromMonths(tc, tw) {
+    const m = (tc + tw) / 2, a = (tw - tc) / 2; let F = 0, d = 0;
+    for (let i = 0; i < 3650; i++) { const T = m - a * Math.cos(2 * Math.PI * (i + 0.5) / 3650); if (T < 0) { F -= T * 0.1; d += 0.1; } }
+    return { F, days: d, mean: m };
+  }
+};
+
+// FAO-56 Table 12 (Kc ini, mid, end; group values for Kc ini where the table gives none) and Table 22 (Zr range m, p)
+const ET_CROPS = [
+  ["Maize (grain)", [0.3, 1.20, 0.60], [1.0, 1.7], 0.55], ["Sweet corn", [0.3, 1.15, 1.05], [0.8, 1.2], 0.50],
+  ["Spring wheat", [0.3, 1.15, 0.30], [1.0, 1.5], 0.55], ["Winter wheat", [0.7, 1.15, 0.30], [1.5, 1.8], 0.55],
+  ["Barley", [0.3, 1.15, 0.25], [1.0, 1.5], 0.55], ["Sorghum (grain)", [0.3, 1.05, 0.55], [1.0, 2.0], 0.55],
+  ["Soybeans", [0.4, 1.15, 0.50], [0.6, 1.3], 0.50], ["Dry beans", [0.4, 1.15, 0.35], [0.6, 0.9], 0.45],
+  ["Green beans", [0.5, 1.05, 0.90], [0.5, 0.7], 0.45], ["Potato", [0.5, 1.15, 0.75], [0.4, 0.6], 0.35],
+  ["Tomato", [0.6, 1.15, 0.80], [0.7, 1.5], 0.40], ["Lettuce", [0.7, 1.00, 0.95], [0.3, 0.5], 0.30],
+  ["Onion (dry)", [0.7, 1.05, 0.75], [0.3, 0.6], 0.30], ["Small vegetables (general)", [0.7, 1.05, 0.95], [0.3, 1.0], 0.35],
+  ["Sugar beet", [0.35, 1.20, 0.70], [0.7, 1.2], 0.55], ["Sunflower", [0.35, 1.05, 0.35], [0.8, 1.5], 0.45],
+  ["Cotton", [0.35, 1.18, 0.60], [1.0, 1.7], 0.65], ["Alfalfa hay (averaged over cuttings)", [0.40, 0.95, 0.90], [1.0, 2.0], 0.55],
+  ["Grazing pasture (rotated)", [0.40, 0.95, 0.85], [0.5, 1.5], 0.60], ["Lawn, cool-season grass", [0.90, 0.95, 0.95], [0.5, 1.0], 0.40],
+  ["Lawn, warm-season grass", [0.80, 0.85, 0.85], [0.5, 1.0], 0.50], ["Apples, cherries, pears (no ground cover)", [0.45, 0.95, 0.70], [1.0, 2.0], 0.50],
+  ["Citrus (70% canopy, no ground cover)", [0.70, 0.65, 0.70], [1.2, 1.5], 0.50], ["Grapes (table or raisin)", [0.30, 0.85, 0.45], [1.0, 2.0], 0.35]
+];
+const toC = (v, u) => u === "f" ? (v - 32) * 5 / 9 : v;
+let etLast = null;
+function updET() {
+  const tu = $("et-tu").value, hm = $("et-hm").value, wm = $("et-wm").value, rm = $("et-rm").value;
+  document.querySelectorAll("#tab-et .et-h1").forEach(e => e.style.display = hm === "none" ? "none" : "");
+  document.querySelectorAll("#tab-et .et-h2").forEach(e => e.style.display = hm === "rhmm" ? "" : "none");
+  $("et-h1-l").textContent = hm === "rhmm" ? "RH max (%)" : hm === "rhm" ? "Mean RH (%)" : `Dew point (${tu === "f" ? "°F" : "°C"})`;
+  document.querySelectorAll("#tab-et .et-w").forEach(e => e.style.display = wm === "none" ? "none" : "");
+  document.querySelectorAll("#tab-et .et-r").forEach(e => e.style.display = rm === "none" ? "none" : "");
+  document.querySelectorAll("#tab-et .et-k").forEach(e => e.style.display = rm === "none" ? "" : "none");
+  $("et-r-l").textContent = rm === "n" ? "Sunshine hours" : "Solar radiation (MJ/m² per day)";
+  const msg = $("et-msg"); msg.className = "msg"; msg.textContent = "";
+  const lat = num($("et-lat").value), z = num($("et-z").value), tmax = toC(num($("et-tmax").value), tu), tmin = toC(num($("et-tmin").value), tu);
+  const d = $("et-date").value ? new Date($("et-date").value + "T12:00:00") : new Date();
+  const J = Math.round((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+  if (![lat, z, tmax, tmin].every(isFinite) || Math.abs(lat) > 66.5) { msg.className = "msg err"; msg.textContent = "Enter latitude (within the polar circles), elevation and both temperatures."; $("et-stats").innerHTML = ""; $("et-work").innerHTML = ""; etLast = null; updCrop(); return; }
+  if (tmin > tmax) { msg.className = "msg err"; msg.textContent = "The minimum temperature is above the maximum."; etLast = null; updCrop(); return; }
+  const o = { lat, z, J, tmax, tmin, krs: +$("et-krs").value };
+  const h1 = num($("et-h1").value), h2 = num($("et-h2").value);
+  if (hm === "rhmm") { o.rhmax = h1; o.rhmin = h2; } else if (hm === "rhm") o.rhmean = h1; else if (hm === "td") o.tdew = toC(h1, tu);
+  if (wm !== "none") { const u = num($("et-u").value) * (wm === "kmh" ? 1 / 3.6 : wm === "mph" ? 0.44704 : 1), uz = num($("et-uz").value); if (isFinite(u) && uz > 0) o.u2 = uz === 2 ? u : FAO.u2(u, uz); }
+  if (rm === "n") o.n = num($("et-r").value); else if (rm === "rs") o.rs = num($("et-r").value);
+  const r = FAO.et0(o);
+  etLast = r;
+  const stat = (k, v, s) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${s}</div></div>`;
+  $("et-stats").innerHTML = stat("ET₀, Penman–Monteith", fmt(r.et0, 1) + " mm/day", `${fmt(r.et0 / 25.4, 2)} in/day · ${fmt(r.et0 * 7, 0)} mm per week`) +
+    stat("ET₀, Hargreaves", fmt(r.hg, 1) + " mm/day", "temperature and latitude only");
+  const fx = (v, dd = 3) => fmt(v, dd);
+  setTable($("et-work"), ["Step", "Value", "Note"], [
+    ["Day of year", J, d.toDateString().slice(4)],
+    ["Extraterrestrial radiation Ra", fx(r.Ra, 2) + " MJ/m²", "eq. 21"],
+    ["Maximum sunshine hours N", fx(r.N, 1) + " h", "eq. 34"],
+    ["Solar radiation Rs", fx(r.Rs, 2) + " MJ/m²", r.rsHow],
+    ["Clear-sky radiation Rso", fx(r.Rso, 2) + " MJ/m²", "eq. 37"],
+    ["Net shortwave Rns = 0.77 Rs", fx(r.Rns, 2) + " MJ/m²", "albedo 0.23 (eq. 38)"],
+    ["Net longwave Rnl", fx(r.Rnl, 2) + " MJ/m²", "eq. 39"],
+    ["Net radiation Rn", fx(r.Rn, 2) + " MJ/m²", "soil heat flux G = 0 for a day"],
+    ["Atmospheric pressure", fx(r.P, 1) + " kPa", "eq. 7"],
+    ["Psychrometric constant γ", fx(r.gam, 4) + " kPa/°C", "eq. 8"],
+    ["Slope of vapour pressure curve Δ", fx(r.D, 4) + " kPa/°C", "eq. 13"],
+    ["Saturation vapour pressure es", fx(r.es) + " kPa", "eq. 12"],
+    ["Actual vapour pressure ea", fx(r.ea) + " kPa", r.eaHow],
+    ["Vapour pressure deficit", fx(r.vpd) + " kPa", ""],
+    ["Wind speed at 2 m, u₂", fx(r.u2, 2) + " m/s", r.uHow || "eq. 47"]
+  ]);
+  const subs = [r.eaHow.includes("assumed") ? "humidity" : null, r.uHow ? "wind" : null, r.rsHow.includes("temperature") ? "radiation" : null].filter(Boolean);
+  $("et-why").textContent = `ET₀ is the water use of a well-watered, clipped grass reference surface. ` +
+    (subs.length ? `Estimated, not measured: ${subs.join(", ")}. ` : "") +
+    (r.et0 > 0 ? `Hargreaves differs from Penman–Monteith by ${fmt((r.hg - r.et0) / r.et0 * 100, 0)}%; it tends to overestimate in humid climates and underestimate in windy, dry ones.` : "");
+  updCrop();
+}
+(function () {
+  $("et-crop").innerHTML = ET_CROPS.map((c, i) => `<option value="${i}">${c[0]}</option>`).join(""); $("et-crop").value = "19";
+  const today = new Date(), iso = new Date(today.getFullYear(), 6, 15).toISOString().slice(0, 10);
+  $("et-date").value = iso;
+})();
+function updCrop() {
+  const c = ET_CROPS[+$("et-crop").value], st = +$("et-stage").value, awm = $("et-awm").value;
+  document.querySelectorAll("#tab-et .et-aw").forEach(e => e.style.display = awm === "aw" ? "" : "none");
+  document.querySelectorAll("#tab-et .et-fcwp").forEach(e => e.style.display = awm === "fcwp" ? "" : "none");
+  if (!(num($("et-zr").value) > 0) || $("et-zr").dataset.crop !== $("et-crop").value) { $("et-zr").value = +((c[2][0] + c[2][1]) / 2).toFixed(2); $("et-zr").dataset.crop = $("et-crop").value; }
+  const stat = (k, v, s) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${s}</div></div>`;
+  if (!etLast) { $("et-cstats").innerHTML = ""; $("et-cwhy").textContent = ""; return; }
+  const kc = c[1][st], etc = kc * etLast.et0;
+  const aw = awm === "aw" ? num($("et-aw").value) : (num($("et-fc").value) - num($("et-wp").value)) * 1000, zr = num($("et-zr").value);
+  let h = stat("Crop coefficient Kc", fmt(kc, 2), ["initial", "mid-season", "late season"][st] + ", FAO-56 Table 12") + stat("Crop water use ETc", fmt(etc, 1) + " mm/day", `${fmt(etc / 25.4, 2)} in/day · ${fmt(etc * 7, 0)} mm per week`);
+  let why = "ETc = Kc × ET₀. ";
+  if (aw > 0 && zr > 0 && etc > 0) {
+    const taw = aw * zr, p = Math.min(0.8, Math.max(0.1, c[3] + 0.04 * (5 - etc))), raw = p * taw, days = raw / etc;
+    h += stat("Readily available water", fmt(raw, 0) + " mm", `${fmt(raw / 25.4, 1)} in · ${fmt(p * 100, 0)}% of ${fmt(taw, 0)} mm in the root zone`) + stat("Days between irrigations", days < 1 ? "< 1" : fmt(days, days < 10 ? 1 : 0), `apply about ${fmt(raw, 0)} mm (${fmt(raw / 25.4, 1)} in) net each time`);
+    why += `Total available water = ${fmt(aw, 0)} mm/m × ${fmt(zr, 2)} m = ${fmt(taw, 0)} mm. The crop can use p = ${fmt(p, 2)} of it before it starts to suffer (FAO-56 Table 22, adjusted for ETc). Without rain, that lasts ${fmt(days, 1)} days at today's rate. Add for application losses: drip is about 90% efficient, sprinklers 70–80%.`;
+  } else why += "Enter the soil water and rooting depth to get the irrigation interval.";
+  $("et-cstats").innerHTML = h; $("et-cwhy").textContent = why;
+}
+["et-lat", "et-z", "et-date", "et-tu", "et-tmax", "et-tmin", "et-hm", "et-h1", "et-h2", "et-wm", "et-u", "et-uz", "et-rm", "et-r", "et-krs"].forEach(id => $(id).addEventListener("input", updET));
+["et-crop", "et-stage", "et-awm", "et-aw", "et-fc", "et-wp", "et-zr"].forEach(id => $(id).addEventListener("input", updCrop));
+$("et-tu").addEventListener("change", () => { const to = $("et-tu").value; ["et-tmax", "et-tmin"].concat($("et-hm").value === "td" ? ["et-h1"] : []).forEach(id => { const v = num($(id).value); if (isFinite(v)) $(id).value = +(to === "f" ? v * 9 / 5 + 32 : (v - 32) * 5 / 9).toFixed(1); }); updET(); });
+$("et-fromw").addEventListener("click", () => {
+  if (!wLast || !wLast.ok.length) return;
+  const fc = wLast.ok.map(z => z.fc).sort((a, b) => a - b), wp = wLast.ok.map(z => z.wp).sort((a, b) => a - b), med = a => a[Math.floor((a.length - 1) / 2)] / 2 + a[Math.ceil((a.length - 1) / 2)] / 2;
+  $("et-awm").value = "fcwp"; $("et-fc").value = fmt(med(fc), 3); $("et-wp").value = fmt(med(wp), 3); updCrop();
+  $("et-cwhy").textContent = `Field capacity and wilting point set to the median of the pedotransfer functions on the Water retention tab. ` + $("et-cwhy").textContent;
+});
+
+/* frost tab */
+function updFrost() {
+  const mode = $("fr-mode").value, nsel = $("fr-n").value;
+  document.querySelectorAll("#tab-frost .fr-m").forEach(e => e.style.display = mode === "months" ? "" : "none");
+  document.querySelectorAll("#tab-frost .fr-f").forEach(e => e.style.display = mode === "fi" ? "" : "none");
+  document.querySelectorAll("#tab-frost .fr-nc").forEach(e => e.style.display = nsel === "custom" ? "" : "none");
+  const msg = $("fr-msg"); msg.className = "msg"; msg.textContent = "";
+  const n = nsel === "custom" ? num($("fr-nv").value) : +nsel, rho = num($("fr-rho").value) * 1000, w = num($("fr-w").value), type = $("fr-type").value;
+  let F, days, maat;
+  if (mode === "months") { const tc = num($("fr-tc").value), tw = num($("fr-tw").value); if (!isFinite(tc) || !isFinite(tw) || tw < tc) { msg.className = "msg err"; msg.textContent = "Enter the coldest and warmest monthly means (warmest at least as warm as coldest)."; $("fr-stats").innerHTML = ""; return; } const s = FROST.fromMonths(tc, tw); F = s.F; days = s.days; maat = s.mean; }
+  else { F = num($("fr-fi").value); days = num($("fr-days").value); maat = num($("fr-maat").value); }
+  if (![n, rho, w, F, days, maat].every(isFinite) || n <= 0 || rho <= 0 || w <= 0 || days <= 0) { msg.className = "msg err"; msg.textContent = "Check the inputs."; $("fr-stats").innerHTML = ""; return; }
+  const stat = (k, v, s) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${s}</div></div>`;
+  if (F <= 0) { $("fr-stats").innerHTML = stat("Frost depth", "0", "no average month below freezing"); $("fr-work").innerHTML = ""; $("fr-why").textContent = "With every monthly mean above 0 °C, the ground may freeze briefly in cold snaps but not for a season. Monthly means hide cold spells, so use a freezing index from daily data for marginal climates."; return; }
+  const p = FROST.props(rho, w, type), r = FROST.depth(p, n * F, days, maat);
+  const cm = x => `${fmt(x * 100, 0)} cm (${fmt(x / 0.0254, 0)} in)`;
+  $("fr-stats").innerHTML = stat("Frost depth", fmt(r.X, 2) + " m", cm(r.X)) + stat("Stefan estimate", fmt(r.Xs, 2) + " m", "latent heat only; always deeper") + stat("Berggren λ", fmt(r.lam, 2), `α ${fmt(r.alpha, 2)}, μ ${fmt(r.mu, 2)}`);
+  setTable($("fr-work"), ["Quantity", "Value"], [
+    ["Air freezing index", `${fmt(F, 0)} °C·days over ${fmt(days, 0)} days`],
+    ["Surface freezing index (× n " + fmt(n, 2) + ")", `${fmt(n * F, 0)} °C·days; mean surface ${fmt(-n * F / days, 1)} °C`],
+    ["Mean annual temperature", `${fmt(maat, 1)} °C`],
+    ["Conductivity frozen / unfrozen", `${fmt(p.kf, 2)} / ${fmt(p.ku, 2)} W/m·K`],
+    ["Heat capacity frozen / unfrozen", `${fmt(p.Cf / 1e6, 2)} / ${fmt(p.Cu / 1e6, 2)} MJ/m³·K`],
+    ["Latent heat of soil water", `${fmt(p.L / 1e6, 1)} MJ/m³`]
+  ]);
+  $("fr-why").textContent = `The front stops where the heat drawn out through the frozen layer balances the latent heat of the freezing water and the heat flowing up from warmer ground below (α = ${fmt(r.alpha, 2)} is the ratio of that warmth to the surface cold). Wetter soil has more water to freeze, so frost goes less deep; dry gravel and plowed pavement freeze deepest. ` +
+    (mode === "months" ? "Monthly means are turned into a smooth annual cycle, which hides cold snaps; design frost depths use the freezing index of the coldest winters in 10 to 100 years, which is deeper." : "Use the design freezing index (for example the coldest winter in 10 years) for structures.") +
+    (r.alpha > 5 ? " The winter is mild relative to the mean annual temperature, so the λ correction is large and the result is sensitive to the inputs." : "");
+}
+["fr-mode", "fr-tc", "fr-tw", "fr-fi", "fr-days", "fr-maat", "fr-n", "fr-nv", "fr-type", "fr-rho", "fr-w"].forEach(id => $(id).addEventListener("input", updFrost));
+
+/* sun tab */
+function updSun() {
+  const lat = num($("sun-lat").value), z = num($("sun-z").value);
+  const d = $("sun-date").value ? new Date($("sun-date").value + "T12:00:00") : new Date();
+  const J = Math.round((d - new Date(d.getFullYear(), 0, 0)) / 86400000);
+  const stat = (k, v, s) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${s}</div></div>`;
+  if (!isFinite(lat) || Math.abs(lat) > 90) { $("sun-stats").innerHTML = ""; return; }
+  const zz = isFinite(z) ? z : 0, s = FAO.sun(Math.max(-89.99, Math.min(89.99, lat)), J), rso = (0.75 + 2e-5 * zz) * s.Ra;
+  const hm = h => { const t = Math.round(h * 60); return `${Math.floor(t / 60)}:${String(t % 60).padStart(2, "0")}`; };
+  const polar = s.N >= 23.99 ? "Sun up all day" : s.N <= 0.01 ? "Sun below the horizon all day" : "";
+  $("sun-stats").innerHTML = stat("Day length", polar ? (s.N > 12 ? "24 h" : "0 h") : `${Math.floor(s.N)} h ${Math.round((s.N % 1) * 60)} min`, d.toDateString().slice(4)) +
+    stat("Sunrise / sunset", polar || `${hm(12 - s.N / 2)} / ${hm(12 + s.N / 2)}`, "local solar time") +
+    stat("Noon sun height", `${fmt(Math.max(0, s.noonElev), 1)}°`, "above the horizon") +
+    stat("Solar energy", `${fmt(s.Ra, 1)} MJ/m²`, `top of atmosphere; clear-sky ground ${fmt(rso, 1)} MJ/m² (${fmt(rso / 0.0864, 0)} W/m² average)`);
+  if (!$("tab-sun").classList.contains("active")) return;
+  const xs = Array.from({ length: 365 }, (_, i) => i + 1), sun = xs.map(j => FAO.sun(Math.max(-89.99, Math.min(89.99, lat)), j));
+  const mon = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], starts = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
+  const xFmt = j => { let m = 0; while (m < 11 && j >= starts[m + 1]) m++; return `${mon[m]} ${j - starts[m] + 1}`; };
+  lineChart($("sun-c1"), $("sun-c1-tip"), { xs, series: [{ name: "Day length", color: "var(--s4)", ys: sun.map(q => q.N) }], xlab: "", ylab: "hours", ylo: 0, yhi: 24, xTicks: [1, 91, 182, 274], xFmt, yFmt: v => typeof v === "number" ? (Number.isInteger(v) ? v : v.toFixed(1)) : v, marker: J });
+  lineChart($("sun-c2"), $("sun-c2-tip"), { xs, series: [{ name: "Ra", color: "var(--s4)", ys: sun.map(q => q.Ra) }, { name: "Rso", color: "var(--s1)", ys: sun.map(q => (0.75 + 2e-5 * zz) * q.Ra) }], xlab: "", ylab: "MJ/m² per day", ylo: 0, xTicks: [1, 91, 182, 274], xFmt, yFmt: v => typeof v === "number" ? (Number.isInteger(v) ? v : v.toFixed(1)) : v, marker: J });
+}
+$("sun-date").value = new Date().toISOString().slice(0, 10);
+["sun-lat", "sun-z", "sun-date"].forEach(id => $(id).addEventListener("input", updSun));
+
+updWater(); vgLoad(); updHSG(); updSampling(); updET(); updFrost(); updSun();
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawWater(); drawEvCharts(); drawKr(); updSoilTemp(); updEnergy(); updSun(); }, 150); });
 function openFromHash() {
   const [tab, card] = location.hash.slice(1).split("/");
   if (![...tabs].some(b => b.dataset.tab === tab)) return;

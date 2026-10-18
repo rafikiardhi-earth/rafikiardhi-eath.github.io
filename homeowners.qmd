@@ -1,10 +1,11 @@
 ---
-title: "Gardening and landscapes"
-description: "Free calculators and decision tools for yards and gardens, built by soil scientists: materials, quotes, irrigation, soil tests, fertilizer, drainage and trees."
-page-layout: full
+title: "Homeowners"
+description: "Free calculators and decision tools for yards and gardens, built by soil scientists: materials, quotes, irrigation, soil tests, fertilizer, drainage and trees. No ads, no sign-up."
 ---
 
-Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions you can stand behind. Every tool shows how its numbers are calculated, so you can check them yourself. No ads, no sign-up, and no supplier pays to be listed.
+Free tools for your yard and garden, built by soil scientists. Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions with the working shown.
+
+No ads, no sign-up, and no supplier pays to be listed. Every tool shows how its numbers are calculated, so you can check them yourself.
 
 ## Buying materials
 
@@ -91,6 +92,10 @@ Size a rain garden or dry well from your roof area and how fast your soil drains
 ::: {.card-item}
 ### [New-build yard soil check](construction-soil-check.qmd)
 Find out if construction left you thin topsoil over compacted subsoil, and what to ask your builder.
+:::
+::: {.card-item}
+### [Frost depth](frost-depth.qmd)
+How deep the ground freezes where you live, for water lines, footings and fence posts.
 :::
 ::: {.card-item}
 ### [Tree protection zone](tree-protection.qmd)
