@@ -2,8 +2,15 @@
 title: "Landscape quote checker"
 description: "Got a quote for topsoil, mulch, gravel or road base? See what depth it actually covers, whether it's more than you need, and the real price per yard and per ton."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/quote-checker.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/quote-checker.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/quote-checker.qmd){lang="es"}
+:::
 
 Enter your area, the depth you want, and up to three quotes. The checker shows the depth each quote would actually cover, whether it's more (or less) than you need, and the price per unit, so quotes in yards, tons and bags can be compared fairly.
 
@@ -28,7 +35,7 @@ Enter your area, the depth you want, and up to three quotes. The checker shows t
     id: 'qc', step: 'Your job',
     inputs: [
       { k: 'mat', l: 'Material', t: 'select', opts: Object.entries(MATS).map(([k, m]) => [k, m[0]]), d: 'topsoil' },
-      { k: 'area', l: 'Area to cover', t: 'area', w: 3, h: 'Odd shape? Work it out in the <a href="materials-calculator.qmd">materials calculator</a>.' },
+      { k: 'area', l: 'Area to cover', t: 'area', w: 3, h: 'Odd shape? Work it out in the <a href="materials-calculator.html">materials calculator</a>.' },
       { k: 'dep', l: 'Depth you want', t: 'dep', d: { us: 4, si: 10 }, w: 3 },
       ...quote(1), ...quote(2), ...quote(3)
     ],

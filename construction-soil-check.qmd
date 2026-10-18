@@ -2,8 +2,15 @@
 title: "New-build yard soil check"
 description: "Plants struggling around a new house? Check whether the builder left thin topsoil over compacted subsoil, what to do about it, and what to ask your builder."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/construction-soil-check.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/construction-soil-check.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/construction-soil-check.qmd){lang="es"}
+:::
 
 On many new-build lots, the topsoil is scraped off during construction, the subsoil is compacted by heavy machinery, and a thin layer of soil is spread back on top before the sod goes down. Lawns and plants then struggle for years. A few simple checks show whether that's what happened.
 
@@ -30,9 +37,9 @@ On many new-build lots, the topsoil is scraped off during construction, the subs
       if (v.top === '0' || v.top === '2') { score += 2; find.push(`Thin topsoil (${v.top === '0' ? 'under 2 in' : '2–4 in'}). Lawns and beds do best with at least 4–6 in of loose topsoil over subsoil roots can enter.`); fix.push('For beds: loosen the subsoil 8–12 in deep and mix in compost (about 1–2 in) before planting. For lawns, aerate yearly and top-dress with compost; if renovating, loosen the subsoil and add topsoil mixed into it, not just spread on top.'); ask.push('How much topsoil was specified for the lot, and how deep was it replaced?'); }
       if (v.sd === 'hard' || v.sd === 'no') { score += 2; find.push('Compacted soil. Roots and water can\'t get through, so plants stay shallow and dry out or drown.'); fix.push('Break up compaction before planting: deep digging or a broadfork for beds, rental tiller or ripping for larger areas (when the soil is moist, not wet). On existing lawns, core aerate once or twice a year.'); ask.push('Was the subsoil loosened (ripped or tilled) before topsoil and sod went down?'); }
       if (v.roots) { score += 1; find.push('Sod roots not growing into the soil below, a sign of a layer the roots won\'t cross (compaction, or sod laid on very different soil).'); fix.push('Core aerate and water deeply but less often to encourage roots down.'); }
-      if (v.pud) { score += 2; find.push('Standing water. Compacted subsoil acts like a floor; water perches on top of it.'); fix.push('Loosening compaction often fixes it. If not, look at grading and where downspouts empty; see the <a href="rain-garden.qmd">rain garden calculator</a>.'); }
-      if (v.deb) { score += 1; find.push('Construction debris. Concrete washout and drywall can raise pH and salts; debris blocks roots.'); fix.push('Remove debris where you\'ll plant. A <a href="soil-test-translator.qmd">soil test</a> will show if pH or salts are affected.'); ask.push('Can you remove buried construction debris from the yard?'); }
-      if (v.grade) { score += 2; find.push('Poor grading near the house. This matters more than anything else on this list.'); fix.push('Check it properly with the <a href="foundation-grading.qmd">foundation grading check</a>.'); ask.push('Does the grading meet the approved grading plan, and can I see the grading certificate?'); }
+      if (v.pud) { score += 2; find.push('Standing water. Compacted subsoil acts like a floor; water perches on top of it.'); fix.push('Loosening compaction often fixes it. If not, look at grading and where downspouts empty; see the <a href="rain-garden.html">rain garden calculator</a>.'); }
+      if (v.deb) { score += 1; find.push('Construction debris. Concrete washout and drywall can raise pH and salts; debris blocks roots.'); fix.push('Remove debris where you\'ll plant. A <a href="soil-test-translator.html">soil test</a> will show if pH or salts are affected.'); ask.push('Can you remove buried construction debris from the yard?'); }
+      if (v.grade) { score += 2; find.push('Poor grading near the house. This matters more than anything else on this list.'); fix.push('Check it properly with the <a href="foundation-grading.html">foundation grading check</a>.'); ask.push('Does the grading meet the approved grading plan, and can I see the grading certificate?'); }
       const unk = v.top === 'unk' && v.sd === 'unk';
       let h;
       if (!find.length) h = U.big('Result', unk ? 'Do the two checks above' : 'No major problems found', unk ? 'The topsoil depth and screwdriver tests tell you most of what you need.' : 'Your soil looks reasonable. Plant problems may be watering, plant choice or pests.');

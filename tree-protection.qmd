@@ -2,8 +2,15 @@
 title: "Tree protection zone calculator"
 description: "How much space to fence off around a tree during construction, digging or landscaping, based on trunk size, age and species tolerance."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/tree-protection.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/tree-protection.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/tree-protection.qmd){lang="es"}
+:::
 
 Most of a tree's roots are in the top 12–18 inches of soil and spread well beyond the branches. Driving, stockpiling, trenching or changing the grade over them can kill a mature tree, often a few years later. Before any work, fence off a protection zone.
 

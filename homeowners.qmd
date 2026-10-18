@@ -1,7 +1,14 @@
 ---
 title: "Homeowners"
 description: "Free calculators and decision tools for yards and gardens, built by soil scientists: materials, quotes, irrigation, soil tests, fertilizer, drainage and trees. No ads, no sign-up."
+include-in-header:
+  - file: _hm-lang.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/homeowners.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/homeowners.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/homeowners.qmd){lang="es"}
+:::
 
 Free tools for your yard and garden, built by soil scientists. Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions with the working shown.
 

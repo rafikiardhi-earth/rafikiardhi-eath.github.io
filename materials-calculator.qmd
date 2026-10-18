@@ -2,7 +2,14 @@
 title: "Landscape materials calculator"
 description: "How much topsoil, compost, mulch, gravel, sand, sod or grass seed do you need? Any shape of yard, with the working shown so you can check a quote."
 anchor-sections: false
+include-in-header:
+  - file: _hm-lang.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/materials-calculator.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/materials-calculator.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/materials-calculator.qmd){lang="es"}
+:::
 
 Measure your area, pick a material, and see how much to order: in cubic yards, tons, bags or pallets. Odd shapes are fine: add them up piece by piece and subtract patios or paths. Every number shows how it was calculated, so you can check it against a supplier's quote.
 

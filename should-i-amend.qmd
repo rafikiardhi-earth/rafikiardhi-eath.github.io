@@ -2,8 +2,15 @@
 title: "Should I amend my soil?"
 description: "Before you buy compost, topsoil or sand, check whether your soil needs it. A free decision tool from soil scientists, for lawns, vegetable beds, shrubs, trees and native plants."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/should-i-amend.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/should-i-amend.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/should-i-amend.qmd){lang="es"}
+:::
 
 Compost and topsoil are useful, but a lot of money goes on amendments that don't help, or make things worse. Answer a few questions and this tells you what's worth doing for what you're planting.
 
@@ -15,7 +22,7 @@ Compost and topsoil are useful, but a lot of money goes on amendments that don't
     id: 'am', step: 'What you\'re planting', units: false,
     inputs: [
       { k: 'plant', l: 'Planting', t: 'select', d: 'veg', opts: [['veg', 'Vegetable or fruit bed'], ['beds', 'Flower beds or shrubs'], ['native', 'Native or low-water plants'], ['tree', 'Planting a tree or shrub (the planting hole)'], ['newlawn', 'New lawn (seed or sod)'], ['lawn', 'Improving an existing lawn']] },
-      { t: 'sec', l: 'Your soil', h: 'Answer what you can. <a href="diy-soil-tests.qmd">DIY soil tests</a> help with texture and drainage.' },
+      { t: 'sec', l: 'Your soil', h: 'Answer what you can. <a href="diy-soil-tests.html">DIY soil tests</a> help with texture and drainage.' },
       { k: 'om', l: 'Organic matter (from a soil test)', t: 'select', d: 'unk', opts: [['unk', 'Don\'t know'], ['low', 'Under 2%'], ['mid', '2–5%'], ['high', 'Over 5%']] },
       { k: 'tex', l: 'Texture', t: 'select', d: 'unk', opts: [['unk', 'Don\'t know'], ['sand', 'Sandy (gritty, falls apart)'], ['loam', 'Loamy (in between)'], ['clay', 'Clay (sticky when wet, hard when dry)']] },
       { k: 'drain', l: 'After heavy rain or a drainage test, water…', t: 'select', d: 'unk', opts: [['unk', 'Don\'t know'], ['ok', 'Drains within a few hours'], ['slow', 'Puddles for most of a day'], ['bad', 'Stands for more than a day']] },
@@ -29,11 +36,11 @@ Compost and topsoil are useful, but a lot of money goes on amendments that don't
       // blockers first
       if (v.drain === 'bad') {
         verdict = 'Fix drainage first'; sub = 'Standing water is caused by what\'s below, usually a compacted or dense layer, or water flowing in from elsewhere. No amendment mixed into the top few inches will fix it.'; cls = 'bad';
-        doL.push('Dig a test hole to find out why: a hard layer you can break up, or water arriving from a downspout or slope you can redirect.', 'Consider raised beds, regrading, a <a href="rain-garden.qmd">rain garden</a>, or plants that tolerate wet roots.');
+        doL.push('Dig a test hole to find out why: a hard layer you can break up, or water arriving from a downspout or slope you can redirect.', 'Consider raised beds, regrading, a <a href="rain-garden.html">rain garden</a>, or plants that tolerate wet roots.');
       }
       if (v.comp || v.new) {
         doL.push(P === 'lawn' ? 'Core aerate (pull plugs) when the soil is moist; repeat yearly until the screwdriver goes in easily.' : 'Loosen compacted soil first, as deep and wide as you can (8–12 in for beds), before adding anything.');
-        if (v.new) doL.push('New-build lots often have thin topsoil over compacted subsoil. The <a href="construction-soil-check.qmd">construction soil check</a> walks through it.');
+        if (v.new) doL.push('New-build lots often have thin topsoil over compacted subsoil. The <a href="construction-soil-check.html">construction soil check</a> walks through it.');
       }
       if (P === 'tree') {
         verdict = verdict || 'Don\'t amend the planting hole'; sub = sub || 'Roots grow best when the hole is backfilled with the soil that came out of it. Rich backfill acts like a pot: water collects in it and roots circle instead of spreading.';
@@ -45,7 +52,7 @@ Compost and topsoil are useful, but a lot of money goes on amendments that don't
         doL.push('Loosen compacted soil, plant, and mulch with gravel or a thin layer of wood chips (as the plants prefer).');
       } else if (P === 'veg') {
         if (high) { verdict = verdict || 'Not much'; sub = sub || 'Your organic matter is already high. A thin top-up keeps it there.'; doL.push('Spread about ½ in of compost each year, or grow a cover crop.'); dontL.push('Large compost or topsoil deliveries.'); }
-        else { verdict = verdict || 'Yes: compost'; sub = sub || 'Vegetables do best in soil with plenty of organic matter (around 5% or more).'; cls = cls || 'good'; doL.push(`Mix ${low || unk ? '2' : '1'} in of compost into the top 6–8 in each year. One inch over 1,000 ft² is about 3 cubic yards: the <a href="materials-calculator.qmd?m=compost">materials calculator</a> does the sum.`); }
+        else { verdict = verdict || 'Yes: compost'; sub = sub || 'Vegetables do best in soil with plenty of organic matter (around 5% or more).'; cls = cls || 'good'; doL.push(`Mix ${low || unk ? '2' : '1'} in of compost into the top 6–8 in each year. One inch over 1,000 ft² is about 3 cubic yards: the <a href="materials-calculator.html?m=compost">materials calculator</a> does the sum.`); }
       } else if (P === 'beds') {
         if (high) { verdict = verdict || 'No'; sub = sub || 'Organic matter is already high.'; dontL.push('Compost or soil conditioner.'); doL.push('Just mulch: as it breaks down it feeds the soil.'); }
         else if (low) { verdict = verdict || 'Once, then mulch'; sub = sub || 'Low organic matter is worth fixing once when you make the bed.'; cls = cls || 'good'; doL.push('Mix 1–2 in of compost into the top 8 in when you make the bed, then keep it mulched.'); }
@@ -64,7 +71,7 @@ Compost and topsoil are useful, but a lot of money goes on amendments that don't
       if (v.tex === 'sand' && P !== 'native' && P !== 'tree') doL.push('Sandy soil gains most from compost: it holds water and nutrients the sand can\'t.');
       dontL.push('Gypsum, unless a lab test shows sodium. It doesn\'t loosen ordinary clay.');
       return U.big('Verdict', verdict, sub) + `<h3>Worth doing</h3><ul class="plain">${doL.map(x => `<li>${x}</li>`).join('')}</ul>` + (dontL.length ? `<h3>Skip</h3><ul class="plain">${dontL.map(x => `<li>${x}</li>`).join('')}</ul>` : '') +
-        (unk && P !== 'tree' && P !== 'native' ? U.note('A <a href="soil-test-translator.qmd">soil test</a> would firm this up: organic matter is the key number.') : '');
+        (unk && P !== 'tree' && P !== 'native' ? U.note('A <a href="soil-test-translator.html">soil test</a> would firm this up: organic matter is the key number.') : '');
     }
   });
 })();

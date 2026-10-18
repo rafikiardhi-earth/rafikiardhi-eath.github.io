@@ -2,8 +2,15 @@
 title: "Rain garden and dry well calculator"
 description: "How big should a rain garden or dry well be for your roof or driveway? Size it from the drainage area, rainfall and how fast your soil drains."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/rain-garden.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/rain-garden.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/rain-garden.qmd){lang="es"}
+:::
 
 A rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a [drainage test](diy-soil-tests.qmd) first.
 

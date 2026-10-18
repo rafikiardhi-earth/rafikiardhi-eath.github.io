@@ -2,8 +2,15 @@
 title: "Cycle-and-soak sprinkler scheduler"
 description: "Stop sprinkler runoff on clay soil and slopes. Split watering into short cycles with soak time, based on your soil, slope and sprinkler type."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/cycle-and-soak.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/cycle-and-soak.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/cycle-and-soak.qmd){lang="es"}
+:::
 
 If water runs down the sidewalk while the sprinklers are on, your heads are putting water down faster than the soil can take it in. The fix costs nothing: run the same total time in shorter cycles, with a soak in between. This works out how short, and how many.
 
@@ -33,9 +40,9 @@ If water runs down the sidewalk while the sprinklers are on, your heads are putt
     id: 'cs', step: 'Sprinklers',
     inputs: [
       { k: 'head', l: 'Sprinkler type', t: 'select', d: qpr ? 'measured' : 'spray', opts: [['spray', 'Spray heads (pop-up, fixed spray)'], ['rotor', 'Rotors (gear-driven, rotating stream)'], ['rotary', 'Rotary nozzles (multi-stream, e.g. MP-type)'], ['measured', 'I measured it (catch-cup test)']] },
-      { k: 'pr', l: 'Application rate', t: 'rate', d: (u, v) => { if (qpr) return u === 'us' ? qpr / 25.4 : qpr; const r = HEADS[(v && v.head) || 'spray'] || 1.5; return u === 'us' ? r : r * 25.4; }, h: 'Typical for this head type. Your own catch-cup result is better: <a href="catch-cup-test.qmd">measure it</a>.' },
+      { k: 'pr', l: 'Application rate', t: 'rate', d: (u, v) => { if (qpr) return u === 'us' ? qpr / 25.4 : qpr; const r = HEADS[(v && v.head) || 'spray'] || 1.5; return u === 'us' ? r : r * 25.4; }, h: 'Typical for this head type. Your own catch-cup result is better: <a href="catch-cup-test.html">measure it</a>.' },
       { t: 'sec', l: 'Soil and slope' },
-      { k: 'tex', l: 'Soil texture', t: 'select', d: 'loam', opts: [['sand', 'Sand or loamy sand (gritty, falls apart)'], ['sandyloam', 'Sandy loam'], ['loam', 'Loam'], ['siltloam', 'Silt loam (smooth, floury)'], ['clayloam', 'Clay loam'], ['clay', 'Clay (sticky, shiny when rubbed)']], h: 'Not sure? Try the <a href="diy-soil-tests.qmd">ribbon or jar test</a>.' },
+      { k: 'tex', l: 'Soil texture', t: 'select', d: 'loam', opts: [['sand', 'Sand or loamy sand (gritty, falls apart)'], ['sandyloam', 'Sandy loam'], ['loam', 'Loam'], ['siltloam', 'Silt loam (smooth, floury)'], ['clayloam', 'Clay loam'], ['clay', 'Clay (sticky, shiny when rubbed)']], h: 'Not sure? Try the <a href="diy-soil-tests.html">ribbon or jar test</a>.' },
       { k: 'slope', l: 'Slope', t: 'select', d: '0', opts: [['0', 'Flat or gentle (0–5%)'], ['1', 'Moderate (5–8%)'], ['2', 'Steep (8–12%)'], ['3', 'Very steep (over 12%)']], h: 'A 5% slope drops 6 in over 10 ft; 12% drops about 1.5 ft over 10 ft.' },
       { k: 'bare', l: 'Bare soil or new seed (no established cover)', t: 'check', d: false },
       { k: 'comp', l: 'Compacted, or a hard layer close to the surface (common around new houses)', t: 'check', d: false },

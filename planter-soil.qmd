@@ -2,8 +2,15 @@
 title: "Raised bed and planter soil calculator"
 description: "How much soil to fill raised beds, pots and tree planters, in bags or bulk, and how much soil a tree really needs to grow well."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/planter-soil.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/planter-soil.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/planter-soil.qmd){lang="es"}
+:::
 
 Filling raised beds and big planters takes more soil than most people expect, and bags add up fast. This works out the volume for beds, round pots and tree planters, and shows how to cut the cost of deep beds.
 
@@ -70,7 +77,7 @@ Filling raised beds and big planters takes more soil than most people expect, an
         h = U.big('You need', U.f(Vorder, 'vol', 2), `${U.f(Vorder, 'cuft', 0)}, including 20% extra because the mix settles after filling and watering.`);
         h += U.kv([['Or in bags', `${bags} × ${bagTxt}`], fillPct ? ['Volume saved by bottom filler', U.f(V1 * n * fillPct / 100 * 1.2, 'vol', 2)] : null]);
       }
-      if (!small && Vorder > 0.75) h += U.note('At this size a bulk delivery of garden mix is usually much cheaper than bags. Compare in the <a href="materials-calculator.qmd?m=gardenmix">materials calculator</a>.', 'good');
+      if (!small && Vorder > 0.75) h += U.note('At this size a bulk delivery of garden mix is usually much cheaper than bags. Compare in the <a href="materials-calculator.html?m=gardenmix">materials calculator</a>.', 'good');
       h += U.note('For pots, use a potting mix, not garden soil: soil packs down in containers and drains poorly. Raised beds can use a garden or raised-bed mix.');
       return { html: h, work: [w, n > 1 ? `× ${n} = ${U.f(V1 * n, 'cuft', 1)}` : null, fillPct ? `Minus ${fillPct}% bottom filler = ${U.f(Vsoil, 'cuft', 1)}` : null, `+ 20% for settling = ${U.f(Vorder, 'cuft', 1)} (${U.f(Vorder, 'vol', 2)})`, pot ? `Bags = ${HM.fmt(Vorder * 1000, 1)} L ÷ ${HM.fmt(bagVol * 1000, 1)} L per bag (${bagTxt}) → ${bags}` : `Bags = ${U.f(Vorder, 'cuft', 1)} ÷ ${U.f(v.bag, 'cuft', 1)} → ${bags}`].filter(Boolean) };
     }

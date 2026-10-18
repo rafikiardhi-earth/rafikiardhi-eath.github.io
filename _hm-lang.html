@@ -1,0 +1,19 @@
+<script>
+/* English / Español toggle for the homeowner pages: keeps what you typed when you switch, and remembers your choice. */
+(function () {
+  const es = (document.documentElement.lang || '').toLowerCase().startsWith('es');
+  const here = es ? 'es' : 'en';
+  const other = p => es ? p.replace(/\/es\/([^/]*)$/, '/$1') : p.replace(/\/([^/]*)$/, '/es/$1');
+  let pref = null; try { pref = localStorage.getItem('ra-hm-lang'); } catch (e) { }
+  if (pref === 'en' || pref === 'es') if (pref !== here) { // every page that loads this has a version in the other language
+
+    location.replace(other(location.pathname) + location.search + location.hash); return;
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('.hm-lang a'); if (!a) return;
+    e.preventDefault();
+    try { localStorage.setItem('ra-hm-lang', es ? 'en' : 'es'); } catch (err) { }
+    location.href = other(location.pathname) + location.search + location.hash;
+  });
+})();
+</script>

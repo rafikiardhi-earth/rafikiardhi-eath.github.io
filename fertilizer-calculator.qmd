@@ -2,8 +2,15 @@
 title: "Fertilizer label calculator"
 description: "Decode the N-P-K numbers on a fertilizer bag: how much product to spread for your lawn or garden, how many bags, and the real cost per pound of nitrogen."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/fertilizer-calculator.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/fertilizer-calculator.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/fertilizer-calculator.qmd){lang="es"}
+:::
 
 The three numbers on a fertilizer bag (N-P-K) are percentages by weight. A 20 lb bag of 24-0-6 contains 4.8 lb of nitrogen; the rest is the other nutrients and filler. This turns the label into how much product to spread, and shows what you're really paying per pound of nutrient.
 

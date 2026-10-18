@@ -2,8 +2,15 @@
 title: "Soil pH calculator: lime and sulfur"
 description: "How much lime to raise soil pH, or sulfur to lower it, for your soil type and area. Includes the check most calculators skip: whether lowering pH is realistic at all."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/ph-adjustment.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/ph-adjustment.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/ph-adjustment.qmd){lang="es"}
+:::
 
 Changing soil pH takes more material on clay than on sand, and it happens slowly. This estimates how much ground limestone (to raise pH) or elemental sulfur (to lower it) you need, and tells you when lowering pH isn't realistic.
 

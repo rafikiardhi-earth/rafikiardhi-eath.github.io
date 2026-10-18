@@ -25,25 +25,22 @@ website:
         text: Services
       - text: Tools
         menu:
-          - text: "For homeowners"
           - href: homeowners.qmd
-            text: Gardening & landscapes
-          - text: "---"
-          - text: "For researchers"
+            text: For homeowners
+          - href: es/homeowners.qmd
+            text: Para propietarios (en español)
           - href: tools.qmd
-            text: Research tools
-          - href: checks.qmd
-            text: Research checks
-          - text: "---"
-          - text: "Learners"
+            text: For researchers
           - href: soil-keys.qmd
-            text: Soil classification
+            text: Soil classification keys
+          - href: checks.qmd
+            text: Check a result
       - href: publications.qmd
         text: Research
       - href: contact.qmd
         text: Contact
   page-footer:
-    left: "© 2026 RafikiArdhi LLC · Carbondale, Colorado · [Privacy](privacy.qmd)"
+    left: "© 2026 RafikiArdhi LLC · Carbondale, Colorado · [Privacy](/privacy.qmd)"
     right: "*Rafiki Ardhi* — short for “friend of the land”"
 
 format:

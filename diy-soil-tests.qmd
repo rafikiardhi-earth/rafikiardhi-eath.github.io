@@ -2,8 +2,15 @@
 title: "DIY soil tests: texture, drainage and the ribbon test"
 description: "Three free soil tests you can do at home with a jar, a shovel and your hands: find your soil texture, how fast it drains, and what that means for watering and planting."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/diy-soil-tests.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/diy-soil-tests.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/diy-soil-tests.qmd){lang="es"}
+:::
 
 Three simple tests tell you most of what matters about your soil: what it's made of (texture) and how fast water moves through it (drainage). Texture decides how often to water, how fast water soaks in, and how the soil behaves when you dig.
 
@@ -64,7 +71,7 @@ const TEXMEAN = {
       return {
         html: U.big('Your soil is', t.charAt(0).toUpperCase() + t.slice(1), TEXMEAN[t]) + U.kv([['Sand', HM.fmt(S, 0) + '%'], ['Silt', HM.fmt(Si, 0) + '%'], ['Clay', HM.fmt(C, 0) + '%']]) +
           U.note('The jar test is approximate: settled layers pack differently from the particles\' true proportions. If the result surprises you, cross-check with the ribbon test below.') +
-          U.note('Next: use your texture in the <a href="cycle-and-soak.qmd">cycle-and-soak scheduler</a> to set sprinkler run times.', 'good'),
+          U.note('Next: use your texture in the <a href="cycle-and-soak.html">cycle-and-soak scheduler</a> to set sprinkler run times.', 'good'),
         work: [`Sand = ${HM.fmt(v.a, 2)} ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(S, 1)}%`, `Silt = (${HM.fmt(v.b, 2)} − ${HM.fmt(v.a, 2)}) ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(Si, 1)}%`, `Clay = 100 − sand − silt = ${HM.fmt(C, 1)}%`, `Texture class from the USDA soil texture triangle: ${t}`]
       };
     }
@@ -130,7 +137,7 @@ Take a walnut-sized lump of soil, wet it until it's like putty, and work it in y
       else { g = ['bad', 'Very slow']; m = 'Water barely moves. Look for a compacted or hard layer below; amendments won\'t fix this. Raised beds, regrading or drainage may be needed.'; }
       return {
         html: U.big('Drains at', U.f(r, 'rate', 2), '') + `<p><span class="tag ${g[0]}">${g[1]}</span></p><p class="sub">${m}</p>` +
-          U.note(`Planning a rain garden? Use this rate in the <a href="rain-garden.qmd?ir=${HM.fmt(r, 2)}">rain garden calculator</a>.`, 'good'),
+          U.note(`Planning a rain garden? Use this rate in the <a href="rain-garden.html?ir=${HM.fmt(r, 2)}">rain garden calculator</a>.`, 'good'),
         work: [`Rate = ${U.f(v.drop, 'wdep', 2)} ÷ ${HM.fmt(v.min / 60, 2)} hr = ${U.f(r, 'rate', 2)}`, 'Bands (in/hr): over 4 very fast, 1–4 good, 0.5–1 moderate, 0.1–0.5 slow, under 0.1 very slow']
       };
     }

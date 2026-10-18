@@ -2,8 +2,15 @@
 title: "Lawn vs low-water landscape: water use calculator"
 description: "Compare how much water a bluegrass lawn, tall fescue, buffalograss, low-water planting or mulch uses each season, and what it costs."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/lawn-water.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/lawn-water.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/lawn-water.qmd){lang="es"}
+:::
 
 How much water does a lawn actually use compared with the alternatives? This estimates a season's irrigation for the same area planted different ways, from your climate and water price.
 
@@ -44,7 +51,7 @@ How much water does a lawn actually use compared with the alternatives? This est
       let h = `<div class="step">Irrigation per season for ${U.f(v.area, 'area', 0)}</div><table class="tt"><thead><tr><th>Planting</th><th class="r">Water</th>${v.price > 0 ? '<th class="r">Cost</th>' : ''}</tr></thead><tbody>` +
         rows.map(r => `<tr><td>${r.o[0]}${r.L < base && base > 0 ? `<br><span class="tag good">${HM.fmt((1 - r.L / base) * 100, 0)}% less</span>` : ''}</td><td class="r">${g(r.L)}<br><span style="color:var(--ink-3)">${U.f(r.depth, 'wdep', 1)}</span></td>${v.price > 0 ? `<td class="r">${U.money(r.cost)}</td>` : ''}</tr>`).join('') + '</tbody></table>';
       if (rows[0].L === 0) h += U.note('Rain covers all the plants\' needs in this climate, so none of them needs irrigation in an average season.', 'good');
-      h += U.note('Estimates for an average season with efficient watering. Real use is often higher: overwatering, leaks and poor coverage are common. The <a href="catch-cup-test.qmd">catch-cup test</a> shows how efficient your system is.');
+      h += U.note('Estimates for an average season with efficient watering. Real use is often higher: overwatering, leaks and poor coverage are common. The <a href="catch-cup-test.html">catch-cup test</a> shows how efficient your system is.');
       h += U.note('Low-water plantings use most of their water in the first one or two years while they establish.', 'good');
       return { html: h, work: [`Water need = plant factor × reference ET; irrigation = (need − usable rain) ÷ watering efficiency`].concat(rows.map(r => `${r.o[0]}: (${r.o[1]} × ${U.f(v.eto, 'wdep', 1)} − ${U.f(rain, 'wdep', 1)}) ÷ ${r.o[2]} = ${U.f(r.depth, 'wdep', 1)} → × ${U.f(v.area, 'area', 0)} = ${g(r.L)}`)) };
     }

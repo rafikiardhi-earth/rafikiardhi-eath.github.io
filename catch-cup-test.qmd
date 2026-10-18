@@ -2,8 +2,15 @@
 title: "Sprinkler catch-cup test"
 description: "Find out how much water your sprinklers really put down, how evenly, and how long to run each zone. A free catch-cup (can) test calculator."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/catch-cup-test.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/catch-cup-test.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/catch-cup-test.qmd){lang="es"}
+:::
 
 Most people guess their sprinkler run times. A catch-cup test measures what each zone actually puts down, in about 20 minutes, with a few cups and a ruler.
 
@@ -42,8 +49,8 @@ Most people guess their sprinkler run times. A catch-cup test measures what each
       ]);
       if (du < 0.55) h += U.note('Coverage is uneven. Before adding minutes, look for tilted, sunken, blocked or mismatched heads and fix those: it saves more water than any schedule.', 'bad');
       else if (du < 0.7) h += U.note('Coverage is fair. Straightening heads and clearing grass from around them usually improves it.');
-      if (rate > 0.75 * 25.4) h += U.note(`This zone applies water quickly. On clay or slopes it will run off before it soaks in: use the <a href="cycle-and-soak.qmd?pr=${HM.fmt(rate, 2)}">cycle-and-soak scheduler</a> to split it into shorter cycles.`);
-      else h += U.note(`Check for runoff on clay or slopes with the <a href="cycle-and-soak.qmd?pr=${HM.fmt(rate, 2)}">cycle-and-soak scheduler</a>.`, 'good');
+      if (rate > 0.75 * 25.4) h += U.note(`This zone applies water quickly. On clay or slopes it will run off before it soaks in: use the <a href="cycle-and-soak.html?pr=${HM.fmt(rate, 2)}">cycle-and-soak scheduler</a> to split it into shorter cycles.`);
+      else h += U.note(`Check for runoff on clay or slopes with the <a href="cycle-and-soak.html?pr=${HM.fmt(rate, 2)}">cycle-and-soak scheduler</a>.`, 'good');
       return {
         html: h, work: [
           `Average catch = ${U.f(avg, 'wdep', 3)} in ${HM.fmt(v.min, 1)} min (${n} cups)`,

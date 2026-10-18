@@ -2,8 +2,15 @@
 title: "Soil test translator"
 description: "Turn a soil lab report into plain English: what's low, what's high, what to do, and what you don't need to buy. pH, organic matter, salts, phosphorus, potassium and nitrate."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/soil-test-translator.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/soil-test-translator.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/soil-test-translator.qmd){lang="es"}
+:::
 
 Copy the numbers from your soil test report. You don't need all of them: leave blanks for anything your report doesn't have. The translator explains each result and, just as usefully, tells you what you *don't* need to buy.
 
@@ -37,8 +44,8 @@ Copy the numbers from your soil test report. You don't need all of them: leave b
       const calc = v.lime === 'yes' || (v.lime === 'unk' && v.ph >= 7.8);
       if (v.ph != null) {
         let t, m;
-        if (v.ph < 5.5) { t = ['bad', 'Strongly acid']; m = 'Too acid for most lawns and vegetables; nutrients become less available.'; todo.push('Raise pH with ground limestone. Use the <a href="ph-adjustment.qmd">pH calculator</a> for the amount.'); }
-        else if (v.ph < 6.0) { t = ['warn', 'Moderately acid']; m = 'Fine for many plants; lawns and vegetables prefer a little higher.'; if (!native) todo.push('Optional: a small lime application to bring pH toward 6.5. See the <a href="ph-adjustment.qmd">pH calculator</a>.'); }
+        if (v.ph < 5.5) { t = ['bad', 'Strongly acid']; m = 'Too acid for most lawns and vegetables; nutrients become less available.'; todo.push('Raise pH with ground limestone. Use the <a href="ph-adjustment.html">pH calculator</a> for the amount.'); }
+        else if (v.ph < 6.0) { t = ['warn', 'Moderately acid']; m = 'Fine for many plants; lawns and vegetables prefer a little higher.'; if (!native) todo.push('Optional: a small lime application to bring pH toward 6.5. See the <a href="ph-adjustment.html">pH calculator</a>.'); }
         else if (v.ph <= 7.5) { t = ['good', 'Good']; m = 'Suits most lawns, gardens and landscape plants.'; skip.push('Lime or sulfur: your pH is already in the good range.'); }
         else if (v.ph <= 8.4) { t = ['warn', 'Alkaline']; m = 'Common in dry regions. Most adapted plants are fine; some (maples, pin oaks, blueberries, azaleas) develop yellow leaves from iron shortage.'; todo.push('Choose plants suited to alkaline soil. For yellowing between leaf veins on susceptible plants, use a chelated iron product (EDDHA type works in high pH).'); }
         else { t = ['bad', 'Very alkaline']; m = 'Above 8.4 often means sodium. Ask the lab for sodium (SAR or ESP) before planting.'; todo.push('Ask your lab to test for sodium.'); }
@@ -47,7 +54,7 @@ Copy the numbers from your soil test report. You don't need all of them: leave b
       }
       if (v.om != null) {
         let t, m;
-        if (v.om < 2) { t = ['bad', 'Low']; m = 'Low organic matter means poor structure and less water and nutrient holding.'; if (!native) todo.push(lawn ? 'For lawns: core aerate and top-dress with ¼ in of compost; repeat yearly.' : 'Mix 1–2 in of compost into the top 6–8 in of beds. The <a href="materials-calculator.qmd?m=compost">materials calculator</a> gives the amount.'); }
+        if (v.om < 2) { t = ['bad', 'Low']; m = 'Low organic matter means poor structure and less water and nutrient holding.'; if (!native) todo.push(lawn ? 'For lawns: core aerate and top-dress with ¼ in of compost; repeat yearly.' : 'Mix 1–2 in of compost into the top 6–8 in of beds. The <a href="materials-calculator.html?m=compost">materials calculator</a> gives the amount.'); }
         else if (v.om < 5) { t = ['good', 'Moderate']; m = veg ? 'Reasonable; vegetable beds do best around 5% or more.' : 'Fine for lawns and landscape plants.'; if (veg) todo.push('Add about 1 in of compost to vegetable beds each year.'); else skip.push('Compost or topsoil for soil improvement: organic matter is already adequate.'); }
         else { t = ['good', 'High']; m = 'Plenty of organic matter.'; skip.push('Compost, peat or "soil conditioner": you have plenty of organic matter already.'); }
         if (native && v.om >= 2) skip.push('Amendments for native plants: they generally do better without rich soil.');

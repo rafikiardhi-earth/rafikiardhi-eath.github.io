@@ -2,8 +2,15 @@
 title: "Frost depth calculator"
 description: "How deep the ground freezes where you live, from your winter temperatures, the surface and your soil: for water lines, footings, fence posts and frost heave. Built for mountain and cold-climate homes."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/frost-depth.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/frost-depth.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/frost-depth.qmd){lang="es"}
+:::
 
 In cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.
 

@@ -2,8 +2,15 @@
 title: "Rain barrel and rainwater harvesting calculator"
 description: "How much rainwater your roof can collect per storm and per year, how fast a rain barrel fills, and how many barrels make sense."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/rain-harvest.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/rain-harvest.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/rain-harvest.qmd){lang="es"}
+:::
 
 Roofs collect a surprising amount of water: an inch of rain on 1,000 ft² of roof is about 600 gallons. This works out what your roof collects and how that compares with a rain barrel.
 
@@ -33,7 +40,7 @@ Roofs collect a surprising amount of water: an inch of rain on 1,000 ft² of roo
         storm != null && v.barrel > 0 ? ['Barrels filled by that storm', HM.fmt(storm / v.barrel, 1)] : null,
         yr != null ? ['Collected per year', L(yr)] : null
       ]);
-      if (fill != null && fill < 6) h += U.note(`A single barrel fills in the first ${U.f(fill, 'wdep', 2)} of rain; the rest overflows. Make sure the overflow is directed at least 5–10 ft (1.5–3 m) away from the foundation, or into a <a href="rain-garden.qmd">rain garden</a>.`);
+      if (fill != null && fill < 6) h += U.note(`A single barrel fills in the first ${U.f(fill, 'wdep', 2)} of rain; the rest overflows. Make sure the overflow is directed at least 5–10 ft (1.5–3 m) away from the foundation, or into a <a href="rain-garden.html">rain garden</a>.`);
       h += U.note('Rainwater collection rules vary by state and country. In Colorado, for example, a single-family home may use up to two barrels with a combined capacity of 110 gallons. Check your local rules before buying.');
       h += U.note('Use it for gardens and landscapes, not drinking. Keep barrels covered (mosquitoes), and empty them before freezing weather.', 'good');
       return { html: h, work: [`Each ${U.us ? 'inch' : 'mm'} of rain on ${U.f(v.area, 'area', 0)} × ${HM.fmt(e * 100, 0)}% collected = ${U.us ? HM.fmt(perMm * 25.4 / 3.785411784, 0) + ' gal per inch' : HM.fmt(perMm, 0) + ' L per mm'}`, U.us ? 'For reference: 1 in of rain on 1 ft² is 0.623 gal' : 'For reference: 1 mm of rain on 1 m² is 1 L'] };

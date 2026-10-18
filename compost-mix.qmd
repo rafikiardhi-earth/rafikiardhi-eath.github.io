@@ -2,8 +2,15 @@
 title: "Compost mix calculator (greens and browns)"
 description: "Balance your compost pile: estimate the carbon-to-nitrogen ratio and moisture of your greens and browns, and what to add to fix a smelly or slow pile."
 anchor-sections: false
-include-in-header: _hm-head.html
+include-in-header:
+  - file: _hm-lang.html
+  - file: _hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/compost-mix.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/compost-mix.html">'
 ---
+
+::: {.hm-lang}
+[Español](es/compost-mix.qmd){lang="es"}
+:::
 
 A compost pile works fastest at a carbon-to-nitrogen (C:N) ratio of about 25–35 and moisture like a wrung-out sponge. Too much nitrogen (greens) and it smells; too much carbon (browns) and it barely heats up. Enter what you're adding, by the bucket or any equal measure.
 
