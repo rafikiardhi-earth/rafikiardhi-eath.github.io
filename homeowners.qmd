@@ -1,6 +1,7 @@
 ---
 title: "Gardening and landscapes"
 description: "Free calculators and decision tools for yards and gardens, built by soil scientists: materials, quotes, irrigation, soil tests, fertilizer, drainage and trees."
+page-layout: full
 ---
 
 Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions you can stand behind. Every tool shows how its numbers are calculated, so you can check them yourself. No ads, no sign-up, and no supplier pays to be listed.
