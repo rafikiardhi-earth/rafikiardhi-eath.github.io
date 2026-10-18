@@ -33,7 +33,7 @@ website:
           - href: tools.qmd
             text: Research tools
           - href: checks.qmd
-            text: Check a result
+            text: Research checks
           - text: "---"
           - text: "Learners"
           - href: soil-keys.qmd
