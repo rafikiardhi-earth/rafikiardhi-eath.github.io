@@ -12,11 +12,14 @@ anchor-sections: false
 .keyswitch button[aria-selected="true"] { background: #d98b56; border-color: #d98b56; color: #1a1410; }
 body.quarto-light .keyswitch button[aria-selected="true"] { background: #8a4b22; border-color: #8a4b22; color: #fff; }
 .keypane[hidden] { display: none !important; }
+.key-lang { border: 1px solid var(--line, #3a352f); background: transparent; color: var(--ink-2, inherit); border-radius: 999px; padding: 5px 28px 5px 12px; font: inherit; font-size: .85rem; cursor: pointer; appearance: none; -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: right 13px center, right 8px center; background-size: 5px 5px; background-repeat: no-repeat; }
+.key-lang option { color: #1f1c17; background: #fff; }
+.key-hd-right { display: flex; gap: 8px; align-items: center; }
 </style>
 <div class="keyswitch" role="tablist" aria-label="Classification system">
   <button role="tab" data-key="wrb" aria-selected="true">WRB 2022 (international)</button>
   <button role="tab" data-key="sa" aria-selected="false">South Africa (2018)</button>
-  <a href="soil-keys-fa.html" lang="fa" style="align-self:center; margin-left:6px; font-weight:600">WRB به فارسی ←</a>
 </div>
 <div class="keypane" data-pane="wrb">
 <style>
@@ -113,10 +116,14 @@ body.quarto-light .wrbk {
 <div class="wk-app">
   <header>
     <div class="brand"><span class="beta" style="margin-left:0">Beta</span> <span style="font-weight:400; font-size:.85rem; color:var(--ink-3)">Learning and screening aid</span></div>
-    <button id="restart" hidden>Start over</button>
+    <div class="key-hd-right">
+      <select class="key-lang" id="wrb-lang" aria-label="Language"><option value="en" selected>English</option><option value="fa" lang="fa">فارسی</option></select>
+      <button id="restart" hidden>Start over</button>
+    </div>
   </header>
   <div class="wk-progress" aria-hidden="true"><div id="bar" style="width:0%"></div></div>
   <main id="view"></main>
+  <script>document.getElementById("wrb-lang").onchange = e => { const pages = { fa: "soil-keys-fa.html" }; if (pages[e.target.value]) location.href = pages[e.target.value]; };</script>
   <div class="foot"><a href="tools.html">← Back to Tools</a><br>
     <b>Beta</b> learning aid. It does not replace the WRB text or a qualified soil scientist.<br>
     <b>Source:</b> IUSS Working Group WRB (2022). <i>World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps</i>, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria. <a href="https://wrb.isric.org/documents.html" target="_blank" rel="noopener">wrb.isric.org</a><br>
@@ -1041,17 +1048,14 @@ body.quarto-light .sakey {
 
 </style>
 <style>
-.sakey .sa-lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
-.sakey .sa-lang button { border: 0; background: transparent; color: var(--ink-2); padding: 5px 11px; font: inherit; font-size: .82rem; cursor: pointer; }
-.sakey .sa-lang button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
 .sakey .sa-lang-note { font-size: .82rem; color: var(--ink-3); margin: 0 0 6px; }
 </style>
 <div class="sakey">
 <div class="wk-app">
   <header style="display:flex; align-items:center; justify-content:space-between; padding:6px 0 10px">
     <div class="brand"><span class="beta" style="margin-left:0">Beta</span> <span style="font-weight:400; font-size:.85rem; color:var(--ink-3)">Learning and field aid</span></div>
-    <div style="display:flex; gap:8px; align-items:center">
-      <div class="sa-lang" role="group" aria-label="Language / Taal"><button type="button" data-lang="en" aria-pressed="true">English</button><button type="button" data-lang="af" aria-pressed="false" lang="af">Afrikaans</button></div>
+    <div class="key-hd-right">
+      <select class="key-lang" id="sa-lang" aria-label="Language / Taal"><option value="en">English</option><option value="af" lang="af">Afrikaans</option></select>
       <button id="sa-restart" hidden>Start over</button>
     </div>
   </header>
@@ -2039,7 +2043,7 @@ render();
   }
   function apply(node) {
     if (lang === "en") return;
-    const w = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement && n.parentElement.closest("script,style,textarea,.sa-lang,[data-ex]") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
+    const w = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, { acceptNode: n => n.parentElement && n.parentElement.closest("script,style,textarea,select,[data-ex]") ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT });
     const list = []; while (w.nextNode()) list.push(w.currentNode);
     list.forEach(n => { const src = orig.has(n) ? orig.get(n) : n.nodeValue; const t = tr(src); if (t !== null && t !== n.nodeValue) { if (!orig.has(n)) orig.set(n, n.nodeValue); n.nodeValue = t; } });
     (node.querySelectorAll ? node.querySelectorAll("[placeholder]") : []).forEach(e => { const k = e.getAttribute("placeholder"), t = L().exact[k]; if (t) { origAttr.set(e, k); e.setAttribute("placeholder", t); } });
@@ -2047,16 +2051,16 @@ render();
   function restore() { orig.forEach((v, n) => { if (n.isConnected) n.nodeValue = v; }); orig.clear(); origAttr.forEach((v, e) => { if (e.isConnected) e.setAttribute("placeholder", v); }); origAttr.clear(); }
   new MutationObserver(ms => { if (lang === "en") return; ms.forEach(m => m.addedNodes.forEach(n => { if (n.nodeType === 1) apply(n); else if (n.nodeType === 3 && n.parentElement) apply(n.parentElement); })); })
     .observe(root, { childList: true, subtree: true });
-  const btns = root.querySelectorAll(".sa-lang [data-lang]"), noteEl = root.querySelector(".sa-lang-note");
+  const sel = document.getElementById("sa-lang"), noteEl = root.querySelector(".sa-lang-note");
   function set(l) {
     if (!SA_LANG[l] && l !== "en") return;
     restore(); lang = l; try { localStorage.setItem("ra-sa-lang", l); } catch (e) { }
-    btns.forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === l)));
+    if (sel) sel.value = l;
     if (noteEl) noteEl.hidden = l === "en";
     root.setAttribute("lang", l === "en" ? "en" : l);
     apply(root);
   }
-  btns.forEach(b => b.onclick = () => set(b.dataset.lang));
+  if (sel) sel.onchange = () => set(sel.value);
   set(lang);
 })();
 </script>

@@ -19,7 +19,9 @@ anchor-sections: false
 .fa-wrap .wrbk .qadd input { direction: ltr; text-align: left; }
 .fa-wrap .wrbk summary::before { content: "＋ "; }
 .fa-wrap .wrbk .foot { line-height: 1.9; }
-.fa-wrap .en-link { display: inline-block; margin-top: 4px; font-family: system-ui, sans-serif; }
+.key-lang { border: 1px solid var(--line); background: transparent; color: var(--ink-2); border-radius: 999px; padding: 5px 12px 5px 28px; font: inherit; font-size: .85rem; cursor: pointer; appearance: none; -webkit-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: left 8px center, left 13px center; background-size: 5px 5px; background-repeat: no-repeat; }
+.key-lang option { color: #1f1c17; background: #fff; }
 #title-block-header .title, #title-block-header .subtitle { font-family: "Vazirmatn", Tahoma, sans-serif; }
 #title-block-header .subtitle { direction: ltr; text-align: left; font-size: 1rem; opacity: .7; }
 #title-block-header .title, #title-block-header .description { direction: rtl; text-align: right; font-family: "Vazirmatn", Tahoma, sans-serif; }
@@ -28,7 +30,6 @@ anchor-sections: false
 <div class="fa-intro">
   <p>این کلید گام‌به‌گام شما را به گروه مرجع خاک (Reference Soil Group) در سامانهٔ جهانی رده‌بندی خاک WRB 2022 می‌رساند. نام گروه‌ها و توصیفگرها، همان‌گونه که در WRB آمده، به انگلیسی نوشته شده و معادل فارسی آن‌ها در پرانتز آمده است.</p>
   <p>همهٔ محاسبات روی دستگاه شما انجام می‌شود و هیچ داده‌ای فرستاده یا ذخیره نمی‌شود.</p>
-  <a class="en-link" href="soil-keys.html#wrb" lang="en" dir="ltr">English version →</a>
 </div>
 <style>
 .wrbk {
@@ -124,10 +125,14 @@ body.quarto-light .wrbk {
 <div class="wk-app">
   <header>
     <div class="brand"><span class="beta" style="margin-right:0">آزمایشی</span> <span style="font-weight:400; font-size:.85rem; color:var(--ink-3)">ابزار آموزشی و غربالگری</span></div>
-    <button id="restart" hidden>شروع دوباره</button>
+    <div style="display:flex; gap:8px; align-items:center">
+      <select class="key-lang" id="wrb-lang" aria-label="زبان / Language"><option value="en" lang="en">English</option><option value="fa" selected>فارسی</option></select>
+      <button id="restart" hidden>شروع دوباره</button>
+    </div>
   </header>
   <div class="wk-progress" aria-hidden="true"><div id="bar" style="width:0%"></div></div>
   <main id="view"></main>
+  <script>document.getElementById("wrb-lang").onchange = e => { const pages = { en: "soil-keys.html#wrb" }; if (pages[e.target.value]) location.href = pages[e.target.value]; };</script>
   <div class="foot"><a href="tools.html">→ بازگشت به ابزارها</a><br>
     <b>آزمایشی:</b> ابزار آموزشی است و جایگزین متن WRB یا متخصص خاک نیست.<br>
     <b>منبع:</b> <span dir="ltr" lang="en">IUSS Working Group WRB (2022). <i>World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps</i>, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria.</span> <a href="https://wrb.isric.org/documents.html" target="_blank" rel="noopener">wrb.isric.org</a><br>
