@@ -1,9 +1,8 @@
 ---
-title: "Research checks"
+title: "Check a result"
 description: "Plausibility checks for soil and environmental results: kriging error, R² vs RMSE, classification accuracy, detectable change, back-transformation, carbon stock arithmetic, area estimation, effective sample size, spatial cross-validation, lab conversions and coordinates."
 anchor-sections: false
 include-in-header: _hm-head.html
-page-layout: full
 ---
 
 ```{=html}
@@ -11,13 +10,8 @@ page-layout: full
 #ck-hub .ck-intro { font-size: 1.05rem; max-width: 70ch; }
 #ck-hub h2 { font-size: 1.25rem; margin: 26px 0 4px; border: none; }
 #ck-hub .ck-sub { opacity: .75; margin: 0 0 8px; font-size: .95rem; }
-.ck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; margin: 10px 0 8px; }
-.ck-grid a { display: block; text-decoration: none; border: 1px solid var(--bs-border-color, #3a352f); border-left: 4px solid #d98b56; border-radius: 10px; padding: 12px 14px; color: inherit; }
-body.quarto-light .ck-grid a { border-left-color: #8a4b22; }
-.ck-grid a:hover { background: rgba(217,139,86,.08); }
-.ck-grid b { display: block; margin-bottom: 2px; }
-.ck-grid span { font-size: .9rem; opacity: .8; }
-.ck-grid small { display: block; margin-top: 6px; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; opacity: .6; }
+.ck-cards h3 a { text-decoration: none; }
+.ck-cards small { display: block; margin-top: 8px; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; opacity: .6; }
 .ck-back { display: inline-block; margin: 4px 0 10px; font-weight: 600; text-decoration: none; }
 .ck-rel { margin-top: 30px; border-top: 1px solid var(--bs-border-color, #3a352f); padding-top: 14px; }
 .ck-rel h3 { font-size: 1.05rem; margin: 0 0 6px; }
@@ -33,7 +27,7 @@ body.quarto-light .ck-grid a { border-left-color: #8a4b22; }
 <script>
 window.CK = {
   groups: [
-    ['acc', 'Model accuracy and validation', 'Are the results too good to be true?'],
+    ['acc', 'Model accuracy and validation', 'Is the model as good as the paper says?'],
     ['spat', 'Spatial structure and sampling', 'Do the variogram, the sampling and the map fit together?'],
     ['data', 'Soil data and units', 'Do the numbers follow from the inputs?']
   ],
@@ -53,9 +47,9 @@ window.CK = {
     'lab-conversions': { g: 'data', t: 'Lab method conversions', d: 'Walkley–Black, organic matter factors, pH in CaCl₂ vs. water, oxides.', rel: ['stock-arithmetic', 'back-transform'] },
     'coordinates': { g: 'data', t: 'Coordinates and distances', d: 'Degrees treated as metres, and how far a degree really is.', rel: ['pixel-size', 'krig', 'effective-sample-size'] }
   },
-  card(id) { const c = this.items[id]; return `<a href="${c.href || '#' + id}"><b>${c.t}</b><span>${c.d}</span>${c.href ? '<small>Opens in ' + c.where + '</small>' : ''}</a>`; }
+  card(id) { const c = this.items[id]; return `<div class="card-item"><h3><a href="${c.href || '#' + id}">${c.t}</a></h3><p>${c.d}</p>${c.href ? '<small>Opens in ' + c.where + '</small>' : ''}</div>`; }
 };
-document.getElementById('ck-groups').innerHTML = CK.groups.map(([g, title, sub]) => `<h2>${title}</h2><p class="ck-sub">${sub}</p><div class="ck-grid">${Object.keys(CK.items).filter(id => CK.items[id].g === g).map(id => CK.card(id)).join('')}</div>`).join('');
+document.getElementById('ck-groups').innerHTML = CK.groups.map(([g, title, sub]) => `<h2>${title}</h2><p class="ck-sub">${sub}</p><div class="cards ck-cards">${Object.keys(CK.items).filter(id => CK.items[id].g === g).map(id => CK.card(id)).join('')}</div>`).join('');
 </script>
 ```
 
@@ -591,7 +585,7 @@ No paper needed: standard spherical geometry (haversine formula, mean Earth radi
     const back = document.createElement('a'); back.className = 'ck-back'; back.href = '#'; back.textContent = '← All checks';
     sec.insertBefore(back, sec.firstChild);
     const rel = (CK.items[sec.id] || {}).rel || [];
-    if (rel.length) { const d = document.createElement('div'); d.className = 'ck-rel'; d.innerHTML = `<h3>Related checks</h3><div class="ck-grid">${rel.map(id => CK.card(id)).join('')}</div><a class="ck-back" href="#">← All checks</a>`; sec.appendChild(d); }
+    if (rel.length) { const d = document.createElement('div'); d.className = 'ck-rel'; d.innerHTML = `<h3>Related checks</h3><div class="cards ck-cards">${rel.map(id => CK.card(id)).join('')}</div><a class="ck-back" href="#">← All checks</a>`; sec.appendChild(d); }
   });
   function show(scroll) {
     const id = decodeURIComponent(location.hash.slice(1)), target = secs.find(s => s.id === id);
