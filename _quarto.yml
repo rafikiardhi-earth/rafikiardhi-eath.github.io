@@ -27,12 +27,15 @@ website:
         menu:
           - href: homeowners.qmd
             text: For homeowners
+          - text: "---"
+          - text: "For researchers"
           - href: tools.qmd
-            text: For researchers
-          - href: soil-keys.qmd
-            text: Soil classification keys
+            text: Research tools
           - href: checks.qmd
-            text: "  ↳ Check a result"
+            text: Check a result
+          - text: "---" 
+          - href: soil-keys.qmd
+            text: Soil classification
       - href: publications.qmd
         text: Research
       - href: contact.qmd
