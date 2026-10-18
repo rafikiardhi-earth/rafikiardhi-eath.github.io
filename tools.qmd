@@ -271,13 +271,15 @@ body.quarto-dark .rk-tools {
     <div class="stats" id="cm-stats" style="margin-top:12px"></div>
     <div id="cm-verdict" style="margin-top:12px"></div>
     <p class="hint" id="cm-why"></p>
+  <p class="refs">Garten, C.T., Wullschleger, S.D. (1999). Soil carbon inventories under a bioenergy crop (switchgrass): measurement limitations. <i>J. Environ. Qual.</i> 28, 1359–1365. <a href="https://doi.org/10.2134/jeq1999.00472425002800040041x">doi:10.2134/jeq1999.00472425002800040041x</a></p>
   </div>
   <div class="advanced">
     <strong>Horizon sums can overestimate stocks</strong>
     <p>Summing horizons assumes each layer is uniform. Our published work shows this can substantially overestimate carbon stocks compared with assessing the profile at every point. For baselines, credits or reporting, we calculate stocks from depth-continuous profiles with uncertainty.</p>
-    <!-- TODO: add citation for the discrete-vs-integrated stocks paper -->
+    <p class="refs" style="margin-top:6px">Flynn, T., Kostecki, R., Rebi, A., Raza, T. (2024). Accessing global soil raster images and equal-area splines to estimate soil organic carbon stocks on the regional scale. <i>Pedosphere</i>. <a href="https://doi.org/10.1016/j.pedsph.2024.07.004">doi:10.1016/j.pedsph.2024.07.004</a></p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Depth-continuous%20carbon%20stocks">Get in touch →</a>
   </div>
+  <p class="refs">Stocks: SOC × bulk density × thickness × (1 − coarse fragments), following Poeplau, C., Vos, C., Don, A. (2017). <i>SOIL</i> 3, 61–66. <a href="https://doi.org/10.5194/soil-3-61-2017">doi:10.5194/soil-3-61-2017</a> Equivalent soil mass: Ellert, B.H., Bettany, J.R. (1995). <i>Can. J. Soil Sci.</i> 75, 529–538. <a href="https://doi.org/10.4141/cjss95-075">doi:10.4141/cjss95-075</a></p>
 </section>
 
 <!-- ============ WATER RETENTION ============ -->
@@ -500,12 +502,14 @@ body.quarto-dark .rk-tools {
     <div class="rk-row"><button class="rk-btn primary" id="sv-run">Calculate</button></div>
     <div class="msg" id="sv-msg" role="status"></div>
     <div id="sv-res" hidden><div class="stats" id="sv-stats" style="margin-top:12px"></div><div class="rk-table-wrap" style="margin-top:12px"><div id="sv-table"></div></div><p class="hint" id="sv-why"></p></div>
+  <p class="refs">Burgess, T.M., Webster, R., McBratney, A.B. (1981). Optimal interpolation and isarithmic mapping of soil properties. IV. Sampling strategy. <i>J. Soil Sci.</i> 32, 643–659. <a href="https://doi.org/10.1111/j.1365-2389.1981.tb01737.x">doi:10.1111/j.1365-2389.1981.tb01737.x</a> McBratney, A.B., Webster, R. (1983). How many observations are needed for regional estimation of soil properties? <i>Soil Science</i> 135, 177–183.</p>
   </div>
   <div class="advanced">
     <strong>Spatial variation changes the answer</strong>
     <p>Random sampling ignores the fact that nearby soils are alike. We design optimised and stratified sampling schemes and management zones that reach the same precision with fewer samples.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Sampling%20design">Get in touch →</a>
   </div>
+  <p class="refs">Sample size for a mean under simple random sampling, n = (t × CV ÷ E)²: Cochran, W.G. (1977). <i>Sampling Techniques</i>, 3rd ed. Wiley.</p>
 </section>
 
 <!-- ============ VARIOGRAM & KRIGING ============ -->
@@ -591,6 +595,7 @@ body.quarto-dark .rk-tools {
     <div class="rk-row"><button class="rk-btn primary" id="kc-run">Check</button><button class="rk-btn" id="kc-ex">Load example</button></div>
     <div class="msg" id="kc-msg" role="status"></div>
     <div id="kc-res" hidden><div class="stats" id="kc-stats" style="margin-top:12px"></div><p id="kc-verdict" style="margin:12px 0 0"></p><p class="hint" id="kc-why"></p></div>
+  <p class="refs">Kriging variance from the variogram and sample layout alone: Burgess, T.M., Webster, R., McBratney, A.B. (1981). <i>J. Soil Sci.</i> 32, 643–659. <a href="https://doi.org/10.1111/j.1365-2389.1981.tb01737.x">doi:10.1111/j.1365-2389.1981.tb01737.x</a> Webster, R., Oliver, M.A. (2007). <i>Geostatistics for Environmental Scientists</i>, 2nd ed. Wiley.</p>
   </div>
   <div class="rk-card">
     <h3>Reading the results</h3>
@@ -663,7 +668,8 @@ body.quarto-dark .rk-tools {
       <div class="rk-row"><button class="rk-btn primary" id="ec-run">Check</button><button class="rk-btn" id="ec-ex">Load example</button></div>
       <div class="msg" id="ec-msg" role="status"></div>
       <div id="ec-res" hidden><div class="stats" id="ec-stats" style="margin-top:12px"></div><div id="ec-verdict" style="margin-top:12px"></div><p class="hint" id="ec-why"></p></div>
-    </div>
+    <p class="refs">No paper needed: for the same validation data, RMSE ≥ SD × √(1 − R²) follows from the definitions of R² and RMSE, and no model can predict more precisely than the soil was measured.</p>
+  </div>
   </div>
 
   <div class="ev-panel" id="ev-cat" hidden>
@@ -699,7 +705,8 @@ body.quarto-dark .rk-tools {
       <div class="rk-row"><button class="rk-btn primary" id="cc-run">Check</button><button class="rk-btn" id="cc-ex">Load example</button></div>
       <div class="msg" id="cc-msg" role="status"></div>
       <div id="cc-res" hidden><div class="stats" id="cc-stats" style="margin-top:12px"></div><div id="cc-verdict" style="margin-top:12px"></div></div>
-    </div>
+    <p class="refs">Wilson, E.B. (1927). Probable inference, the law of succession, and statistical inference. <i>J. Am. Stat. Assoc.</i> 22, 209–212. <a href="https://doi.org/10.1080/01621459.1927.10502953">doi:10.1080/01621459.1927.10502953</a> Foody, G.M. (2009). Classification accuracy comparison: hypothesis tests and the use of confidence intervals in evaluations of difference, equivalence and non-inferiority. <i>Remote Sens. Environ.</i> 113, 1658–1663. <a href="https://doi.org/10.1016/j.rse.2009.03.014">doi:10.1016/j.rse.2009.03.014</a></p>
+  </div>
   </div>
 
   <div class="ev-panel" id="ev-ci" hidden>
