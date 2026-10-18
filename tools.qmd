@@ -90,6 +90,7 @@ body.quarto-dark .rk-tools {
 .rk-tools tr:last-child td { border-bottom: none; }
 .rk-tools td.na { color: var(--ink-3); }
 .rk-tools td.part { color: var(--warn); }
+.rk-tools td.warn { color: var(--warn); font-weight: 600; }
 .rk-tools .chart { width: 100%; height: auto; display: block; }
 .rk-tools .chart text { fill: var(--ink-2); font-size: 11px; font-family: inherit; }
 .rk-tools .chart .axis line, .rk-tools .chart .axis path { stroke: var(--line); }
@@ -136,7 +137,7 @@ body.quarto-dark .rk-tools {
 
 <nav class="rk-tabs" aria-label="Tools">
   <div class="rk-wrap" role="tablist">
-    <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" aria-selected="false">Pedodiversity</button><button role="tab" data-tab="eval" aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" aria-selected="false">Sampling density</button></div>
+    <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" aria-selected="false">Pedodiversity</button><button role="tab" data-tab="krige" aria-selected="false">Variogram &amp; kriging</button><button role="tab" data-tab="eval" aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" aria-selected="false">Sampling density</button></div>
     <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" aria-selected="false">Hydrologic soil group</button></div>
     <div class="tgroup"><span class="tglabel">Energy</span><button role="tab" data-tab="soiltemp" aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" aria-selected="false">Energy balance</button></div>
     <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" aria-selected="false">Munsell colour</button></div>
@@ -461,6 +462,78 @@ body.quarto-dark .rk-tools {
     <p>Random sampling ignores the fact that nearby soils are alike. We design optimised and stratified sampling schemes and management zones that reach the same precision with fewer samples.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Sampling%20design">Get in touch →</a>
   </div>
+</section>
+
+<!-- ============ VARIOGRAM & KRIGING ============ -->
+<section class="tool" id="tab-krige">
+  <h2>Variogram &amp; kriging</h2>
+  <p class="lede">Fit a variogram to point data and test ordinary kriging by leave-one-out cross-validation: each point is predicted from its neighbours with itself left out, then compared with what was measured.</p>
+  <div class="rk-card">
+    <h3>1. Your points</h3>
+    <textarea id="kr-data" spellcheck="false" aria-label="Point data as CSV"></textarea>
+    <div class="rk-row">
+      <label class="file-label">Upload CSV<input type="file" id="kr-file" accept=".csv,.txt,.tsv"></label>
+      <button class="rk-btn" id="kr-ex">Load example</button>
+    </div>
+    <p class="hint">Columns: an optional <b>id</b>, coordinates named <b>x</b> and <b>y</b> (projected, e.g. metres) or <b>lon</b> and <b>lat</b> (decimal degrees, converted to km), and one or more numeric properties. Up to 5,000 points.</p>
+  </div>
+  <div class="rk-card">
+    <h3>2. Settings</h3>
+    <div class="rk-grid">
+      <div><label for="kr-var">Property</label><select id="kr-var"></select></div>
+      <div><label for="kr-model">Variogram model</label>
+        <select id="kr-model"><option value="auto">Best fit (spherical or exponential)</option><option value="sph">Spherical</option><option value="exp">Exponential</option><option value="gau">Gaussian</option><option value="mat">Matérn (fitted smoothness κ)</option><option value="ste">Matérn, Stein's parameterisation (Ste)</option></select></div>
+      <div><label for="kr-cut">Maximum lag (blank = ⅓ of the extent)</label><input type="number" id="kr-cut" min="0" step="any"></div>
+      <div><label for="kr-bins">Lag classes</label><input type="number" id="kr-bins" value="15" min="5" max="40" step="1"></div>
+      <div><label for="kr-tf">Transform</label>
+        <select id="kr-tf"><option value="none">None</option><option value="log">Log (natural), back-transformed</option></select></div>
+      <div><label for="kr-nmax">Neighbours used</label><input type="number" id="kr-nmax" value="16" min="4" max="64" step="1"></div>
+    </div>
+    <p class="hint">Log suits skewed, positive data (organic carbon, available P, EC). The variogram and kriging run on the logs; predictions are back-transformed to the original units with the lognormal correction, so they are unbiased means, not medians.</p>
+    <label style="display:flex; gap:8px; align-items:center; margin-top:12px; font-weight:500"><input type="checkbox" id="kr-man" style="width:auto"> Set the variogram myself</label>
+    <div class="rk-grid" id="kr-manbox" style="margin-top:8px; display:none">
+      <div><label for="kr-c0">Nugget</label><input type="number" id="kr-c0" min="0" step="any"></div>
+      <div><label for="kr-c1">Partial sill</label><input type="number" id="kr-c1" min="0" step="any"></div>
+      <div><label for="kr-r">Range (practical)</label><input type="number" id="kr-r" min="0" step="any"></div>
+      <div id="kr-nubox"><label for="kr-nu">Smoothness κ (Matérn)</label><input type="number" id="kr-nu" min="0.05" max="20" step="any" value="0.5"></div>
+    </div>
+    <div class="rk-row"><button class="rk-btn primary" id="kr-run">Fit and cross-validate</button></div>
+    <div class="msg" id="kr-msg" role="status"></div>
+  </div>
+  <div id="kr-res" hidden>
+    <div class="rk-card"><div class="stats" id="kr-stats"></div><p class="hint" id="kr-note" style="margin-top:12px"></p></div>
+    <div class="two">
+      <div class="rk-card">
+        <h3>Variogram</h3>
+        <div class="legend"><span><i style="background:var(--s1); height:8px; width:8px; border-radius:50%"></i>Experimental (size = pairs)</span><span><i style="background:var(--s2)"></i>Fitted model</span></div>
+        <div class="chart-box"><svg class="chart" id="kr-vg" role="img" aria-label="Experimental and fitted variogram"></svg><div class="tip" id="kr-vg-tip"></div></div>
+      </div>
+      <div class="rk-card">
+        <h3>Cross-validation: observed vs predicted</h3>
+        <div class="legend"><span><i style="background:var(--s1); height:8px; width:8px; border-radius:50%"></i>Points</span><span><i style="background:var(--ink-3)"></i>1:1 line</span></div>
+        <div class="chart-box"><svg class="chart" id="kr-sc" role="img" aria-label="Observed against cross-validated predictions"></svg><div class="tip" id="kr-sc-tip"></div></div>
+      </div>
+    </div>
+    <div class="rk-card">
+      <h3>Where the errors are</h3>
+      <div class="legend"><span><i style="background:var(--s2); height:8px; width:8px; border-radius:50%"></i>Predicted too high</span><span><i style="background:var(--s1); height:8px; width:8px; border-radius:50%"></i>Predicted too low</span><span>Size = standardised error</span></div>
+      <div class="chart-box"><svg class="chart" id="kr-map" role="img" aria-label="Map of cross-validation errors"></svg><div class="tip" id="kr-map-tip"></div></div>
+      <p class="hint">Clusters of the same colour suggest a trend or a boundary the variogram doesn't capture. A single large dot is worth checking for a data error.</p>
+    </div>
+    <div class="rk-card">
+      <div class="rk-row" style="margin-top:0; justify-content:space-between">
+        <h3 style="margin:0">Cross-validation results</h3>
+        <button class="rk-btn" id="kr-dl">Download CSV</button>
+      </div>
+      <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:8px"><div id="kr-table"></div></div>
+    </div>
+  </div>
+  <div class="advanced">
+    <strong>Need a map, covariates or uncertainty?</strong>
+    <p>We produce kriged and regression-kriged maps with terrain, remote sensing and legacy data, full prediction uncertainty, and sampling designs built from the variogram.</p>
+    <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Geostatistics%20and%20mapping">Get in touch →</a>
+  </div>
+  <p class="refs">Method: classical (Matheron) variogram estimator; model fitted by weighted least squares with weights N<sub>j</sub>/h<sub>j</sub>² (as in gstat); ordinary kriging with the nearest neighbours; Matérn model with fitted smoothness in the standard and Stein (1999) parameterisations; ranges are practical ranges (95% of the sill) for every model; lognormal ordinary kriging back-transform after Journel (1980) and Webster &amp; Oliver (2007); nugget/sill classes after Cambardella et al. (1994).</p>
 </section>
 
 <!-- ============ MODEL EVALUATION ============ -->
@@ -1084,6 +1157,7 @@ function showTab(name, push) {
   if (name === "texture") updTexture();
   if (name === "munsell") updMunsell();
   if (name === "eval") drawEvCharts();
+  if (name === "krige") drawKr();
   if (name === "soiltemp") updSoilTemp();
   if (name === "energy") updEnergy();
   if (name === "spline" && lastSpline) drawProfile();
@@ -2169,14 +2243,478 @@ function updEnergy() {
 }
 ["eb-rs", "eb-alb", "eb-ta", "eb-rh", "eb-u", "eb-theta", "eb-fc", "eb-bd", "eb-clay"].forEach(id => $(id).addEventListener("input", updEnergy));
 
+// Variogram fitting and ordinary kriging with leave-one-out cross-validation.
+// Every model is parameterised by its practical range r (where it reaches 95% of the sill),
+// so ranges are comparable between models. Matérn also has a smoothness kappa (nu).
+(function (root) {
+  function lgam(x) {
+    const g = 7, c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (x < 0.5) return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * x))) - lgam(1 - x);
+    x -= 1; let a = c[0]; const t = x + g + 0.5;
+    for (let i = 1; i < 9; i++) a += c[i] / (x + i);
+    return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a);
+  }
+  // Modified Bessel function of the second kind, K_nu(x), from its integral representation
+  // K_nu(x) = ∫0^∞ exp(−x cosh t) cosh(nu t) dt (trapezoid rule; the integrand decays doubly exponentially).
+  function besselK(nu, x) {
+    const h = 0.05; let s = 0.5 * Math.exp(-x), t = 0;
+    for (let i = 1; i < 4000; i++) {
+      t += h;
+      const term = Math.exp(-x * Math.cosh(t) + nu * t) * 0.5 * (1 + Math.exp(-2 * nu * t));
+      s += term;
+      if (term < 1e-17 * s && x * Math.cosh(t) > nu * t + 5) break;
+    }
+    return s * h;
+  }
+  // Matérn correlation in the standard form rho(u) = 2^(1−nu)/Gamma(nu) · u^nu · K_nu(u)
+  function maternRho(nu, u) {
+    if (u < 1e-10) return 1;
+    if (u > 700) return 0;
+    return Math.exp((1 - nu) * Math.LN2 - lgam(nu) + nu * Math.log(u)) * besselK(nu, u);
+  }
+  const U95 = {};
+  function u95(nu) { // u at which rho = 0.05
+    if (U95[nu]) return U95[nu];
+    let lo = 1e-6, hi = 200;
+    for (let i = 0; i < 80; i++) { const mid = Math.sqrt(lo * hi); if (maternRho(nu, mid) > 0.05) lo = mid; else hi = mid; }
+    return (U95[nu] = Math.sqrt(lo * hi));
+  }
+  const MAT = (h, r, nu) => 1 - maternRho(nu, h * u95(nu) / r);
+  const MODELS = {
+    sph: { name: 'Spherical', f: (h, r) => h >= r ? 1 : 1.5 * h / r - 0.5 * Math.pow(h / r, 3) },
+    exp: { name: 'Exponential', f: (h, r) => 1 - Math.exp(-3 * h / r) },
+    gau: { name: 'Gaussian', f: (h, r) => 1 - Math.exp(-3 * (h / r) * (h / r)) },
+    mat: { name: 'Matérn', f: MAT, kappa: true },
+    ste: { name: 'Matérn (Stein)', f: MAT, kappa: true }
+  };
+  const KAPPAS = [0.2, 0.3, 0.4, 0.5, 0.6, 0.8, 1, 1.25, 1.5, 2, 2.5, 3, 4, 5, 7, 10];
+  // range parameter "a" as gstat reports it: Mat uses u = h/a, Ste uses u = 2·sqrt(nu)·h/a
+  const rangeParam = m => m.type === 'mat' ? m.r / u95(m.nu) : m.type === 'ste' ? 2 * Math.sqrt(m.nu) * m.r / u95(m.nu) : m.r;
+  const practicalFromParam = (type, a, nu) => type === 'mat' ? a * u95(nu) : type === 'ste' ? a * u95(nu) / (2 * Math.sqrt(nu)) : a;
+
+  // Matérn is costly to evaluate, so kriging uses a fine lookup table of the fitted model.
+  function prepare(m) {
+    if (!MODELS[m.type].kappa) return m;
+    const N = 4000, max = 8, tab = new Float64Array(N + 1);
+    for (let i = 0; i <= N; i++) tab[i] = MAT(i / N * max * m.r, m.r, m.nu);
+    m._tab = tab; m._step = max * m.r / N; m._max = max * m.r;
+    return m;
+  }
+  function gamma(m, h) {
+    if (h <= 0) return 0;
+    let f;
+    if (m._tab) {
+      if (h >= m._max) f = 1;
+      else { const x = h / m._step, i = Math.floor(x), w = x - i; f = m._tab[i] * (1 - w) + m._tab[i + 1] * w; }
+    } else f = MODELS[m.type].f(h, m.r, m.nu);
+    return m.c0 + m.c1 * f;
+  }
+
+  function experimental(xs, ys, zs, cutoff, nb) {
+    const n = xs.length, w = cutoff / nb;
+    const sum = new Array(nb).fill(0), cnt = new Array(nb).fill(0), dsum = new Array(nb).fill(0);
+    for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) {
+      const d = Math.hypot(xs[i] - xs[j], ys[i] - ys[j]);
+      if (d > cutoff || d === 0) continue;
+      const b = Math.min(nb - 1, Math.floor(d / w));
+      const dz = zs[i] - zs[j];
+      sum[b] += dz * dz; cnt[b]++; dsum[b] += d;
+    }
+    const out = [];
+    for (let b = 0; b < nb; b++) if (cnt[b] > 0) out.push({ h: dsum[b] / cnt[b], g: sum[b] / (2 * cnt[b]), n: cnt[b] });
+    return out;
+  }
+
+  // Weighted least squares (weights N/h², gstat's default). Grid search over practical range
+  // (and kappa for Matérn); nugget and partial sill solved linearly and kept non-negative.
+  function fitModel(ev, type, rmin, rmax, fixedNu) {
+    const pts = ev.filter(p => p.n >= 5 && p.h > 0);
+    if (pts.length < 3) return null;
+    const w = pts.map(p => p.n / (p.h * p.h));
+    const nus = MODELS[type].kappa ? (fixedNu ? [fixedNu] : KAPPAS) : [undefined];
+    let best = null;
+    const K = MODELS[type].kappa ? 80 : 120;
+    nus.forEach(nu => {
+      for (let k = 0; k < K; k++) {
+        const r = rmin * Math.pow(rmax / rmin, k / (K - 1));
+        const f = pts.map(p => MODELS[type].f(p.h, r, nu));
+        let Sw = 0, Sf = 0, Sff = 0, Sg = 0, Sfg = 0;
+        pts.forEach((p, i) => { Sw += w[i]; Sf += w[i] * f[i]; Sff += w[i] * f[i] * f[i]; Sg += w[i] * p.g; Sfg += w[i] * f[i] * p.g; });
+        const det = Sw * Sff - Sf * Sf;
+        let c0, c1;
+        if (Math.abs(det) > 1e-30) { c0 = (Sff * Sg - Sf * Sfg) / det; c1 = (Sw * Sfg - Sf * Sg) / det; } else { c0 = 0; c1 = Sfg / Sff; }
+        if (c0 < 0) { c0 = 0; c1 = Sfg / Sff; }
+        if (c1 < 0) { c1 = 0; c0 = Sg / Sw; }
+        let sse = 0;
+        pts.forEach((p, i) => { const e = p.g - (c0 + c1 * f[i]); sse += w[i] * e * e; });
+        if (!best || sse < best.sse) best = { type, c0, c1, r, nu, sse };
+      }
+    });
+    return best;
+  }
+
+  function solve(A, b) {
+    const n = b.length, M = A.map((row, i) => row.concat([b[i]]));
+    for (let c = 0; c < n; c++) {
+      let p = c;
+      for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;
+      if (Math.abs(M[p][c]) < 1e-14) return null;
+      if (p !== c) { const t = M[c]; M[c] = M[p]; M[p] = t; }
+      for (let r = c + 1; r < n; r++) {
+        const f = M[r][c] / M[c][c];
+        if (f) for (let k = c; k <= n; k++) M[r][k] -= f * M[c][k];
+      }
+    }
+    const x = new Array(n).fill(0);
+    for (let r = n - 1; r >= 0; r--) { let s = M[r][n]; for (let k = r + 1; k < n; k++) s -= M[r][k] * x[k]; x[r] = s / M[r][r]; }
+    return x;
+  }
+
+  // Ordinary kriging at (x0, y0) from the given neighbour indices. Returns the estimate,
+  // the kriging variance and the Lagrange multiplier (needed for the lognormal back-transform).
+  function okAt(xs, ys, zs, idx, x0, y0, m) {
+    const k = idx.length, sill = m.c0 + m.c1, eps = 1e-10 * (sill || 1);
+    const A = Array.from({ length: k + 1 }, () => new Array(k + 1).fill(0)), b = new Array(k + 1).fill(0);
+    for (let a = 0; a < k; a++) {
+      for (let c = a + 1; c < k; c++) {
+        const g = gamma(m, Math.hypot(xs[idx[a]] - xs[idx[c]], ys[idx[a]] - ys[idx[c]]));
+        A[a][c] = g; A[c][a] = g;
+      }
+      A[a][a] = -eps; A[a][k] = 1; A[k][a] = 1;
+      b[a] = gamma(m, Math.hypot(xs[idx[a]] - x0, ys[idx[a]] - y0));
+    }
+    b[k] = 1;
+    const sol = solve(A, b);
+    if (!sol) return null;
+    let pred = 0, v = sol[k];
+    for (let a = 0; a < k; a++) { pred += sol[a] * zs[idx[a]]; v += sol[a] * b[a]; }
+    return { pred, var: Math.max(0, v), mu: sol[k] };
+  }
+
+  function loocv(xs, ys, zs, m, nmax) {
+    prepare(m);
+    const n = xs.length, out = [];
+    for (let i = 0; i < n; i++) {
+      const d = [];
+      for (let j = 0; j < n; j++) if (j !== i) d.push([Math.hypot(xs[i] - xs[j], ys[i] - ys[j]), j]);
+      d.sort((a, b) => a[0] - b[0]);
+      const idx = d.slice(0, Math.min(nmax, d.length)).map(q => q[1]);
+      const r = okAt(xs, ys, zs, idx, xs[i], ys[i], m);
+      out.push(r ? { pred: r.pred, var: r.var, sd: Math.sqrt(r.var), mu: r.mu } : { pred: NaN, var: NaN, sd: NaN, mu: NaN });
+    }
+    return out;
+  }
+
+  root.Krige = { MODELS, KAPPAS, gamma, prepare, experimental, fitModel, okAt, loocv, rangeParam, practicalFromParam, maternRho, besselK };
+  if (typeof module !== 'undefined') module.exports = root.Krige;
+})(typeof window !== 'undefined' ? window : globalThis);
+
+/* ============ VARIOGRAM & KRIGING ============ */
+const KR_EX = `id,x,y,soc_pct
+S001,917,204,1.79
+S002,446,60,1.97
+S003,176,369,2.14
+S004,362,891,1.71
+S005,980,657,2.07
+S006,140,35,1.71
+S007,18,910,2.01
+S008,21,636,1.85
+S009,482,730,2.32
+S010,75,546,2.56
+S011,737,900,2.01
+S012,793,915,1.88
+S013,352,685,2.52
+S014,417,791,2.09
+S015,863,573,1.64
+S016,583,609,2.0
+S017,80,639,2.2
+S018,728,388,1.79
+S019,735,581,1.45
+S020,84,750,2.05
+S021,30,601,2.05
+S022,698,497,1.71
+S023,615,920,2.14
+S024,301,678,2.21
+S025,203,170,1.85
+S026,442,892,1.81
+S027,327,666,2.32
+S028,806,914,2.08
+S029,880,384,1.62
+S030,136,496,2.31
+S031,837,849,1.95
+S032,277,169,1.59
+S033,451,275,1.88
+S034,626,494,1.81
+S035,315,839,1.94
+S036,75,31,1.73
+S037,873,41,1.93
+S038,309,792,1.91
+S039,19,136,1.87
+S040,830,237,1.72
+S041,141,47,1.76
+S042,630,655,1.81
+S043,807,958,1.98
+S044,475,179,2.02
+S045,11,472,2.53
+S046,272,346,1.69
+S047,697,520,1.58
+S048,394,792,2.05
+S049,906,87,2.04
+S050,130,454,2.45
+S051,626,910,2.05
+S052,879,797,2.09
+S053,944,464,1.73
+S054,722,818,1.92
+S055,642,718,1.96
+S056,980,977,2.06
+S057,537,791,2.14
+S058,856,349,1.84
+S059,83,441,2.56
+S060,487,28,1.99
+S061,809,64,1.96
+S062,335,788,2.01
+S063,141,149,1.68
+S064,840,689,1.8
+S065,946,493,1.82
+S066,221,527,1.92
+S067,290,729,2.07
+S068,844,560,1.59
+S069,312,381,1.76
+S070,208,851,1.73
+S071,968,524,1.82
+S072,536,503,1.85
+S073,605,28,2.32
+S074,401,801,2.09
+S075,563,491,1.79
+S076,539,414,1.65
+S077,957,923,1.88
+S078,127,434,2.64
+S079,816,901,1.93
+S080,191,618,1.96
+S081,925,129,1.87
+S082,194,227,1.71
+S083,687,322,1.82
+S084,105,731,2.07
+S085,123,510,2.34
+S086,530,437,1.75
+S087,376,413,1.56
+S088,204,631,1.94
+S089,638,530,1.81
+S090,857,233,1.59
+S091,741,811,2.01
+S092,315,923,1.6
+S093,218,998,1.74
+S094,239,727,2.0
+S095,259,97,1.86
+S096,790,126,1.85
+S097,403,685,2.58
+S098,682,911,2.08
+S099,968,115,1.81
+S100,503,686,2.49
+S101,189,71,1.85
+S102,552,515,1.91
+S103,569,147,2.26
+S104,840,990,2.04
+S105,927,95,2.12
+S106,462,765,2.41
+S107,327,467,1.58
+S108,601,13,2.2
+S109,701,844,2.04
+S110,739,405,1.86
+S111,195,165,1.74
+S112,893,802,2.02
+S113,705,861,1.96
+S114,600,504,1.72
+S115,983,805,1.96
+S116,744,778,2.08
+S117,815,406,1.86
+S118,695,767,1.8
+S119,765,406,1.77
+S120,342,469,1.63`;
+let krLast = null, krText = "";
+function krCols() {
+  const P = parseCSV($("kr-data").value), h = P.header.map(s => s.trim().toLowerCase());
+  const fx = h.findIndex(s => s === "x" || s === "easting"), fy = h.findIndex(s => s === "y" || s === "northing");
+  const flon = h.findIndex(s => ["lon", "long", "lng", "longitude"].includes(s)), flat = h.findIndex(s => ["lat", "latitude"].includes(s));
+  const geo = !(fx >= 0 && fy >= 0) && flon >= 0 && flat >= 0;
+  const ix = geo ? flon : fx, iy = geo ? flat : fy, iid = h.findIndex(s => s === "id" || s === "site" || s === "name");
+  const vars = P.header.map((s, j) => j).filter(j => j !== ix && j !== iy && j !== iid && P.rows.some(r => isFinite(num(r[j]))));
+  return { P, ix, iy, iid, geo, vars };
+}
+function krRefresh() {
+  const c = krCols(), sel = $("kr-var"), prev = sel.value;
+  sel.innerHTML = c.vars.map(j => `<option value="${j}">${c.P.header[j]}</option>`).join("");
+  if ([...sel.options].some(o => o.value === prev)) sel.value = prev;
+}
+function krRun() {
+  const msg = $("kr-msg"); msg.className = "msg"; msg.textContent = "";
+  if ($("kr-data").value !== krText) { krText = $("kr-data").value; krRefresh(); }
+  const c = krCols();
+  if (c.ix < 0 || c.iy < 0) { msg.className = "msg err"; msg.textContent = "Coordinate columns are needed: x and y, or lon and lat."; $("kr-res").hidden = true; return; }
+  const vj = +$("kr-var").value;
+  if (!c.vars.includes(vj)) { msg.className = "msg err"; msg.textContent = "No numeric property column found."; $("kr-res").hidden = true; return; }
+  let id = [], xs = [], ys = [], zs = [], skipped = 0;
+  c.P.rows.forEach((r, k) => {
+    const x = num(r[c.ix]), y = num(r[c.iy]), z = num(r[vj]);
+    if (!isFinite(x) || !isFinite(y) || !isFinite(z)) { skipped++; return; }
+    id.push(c.iid >= 0 ? r[c.iid] : String(k + 1)); xs.push(x); ys.push(y); zs.push(z);
+  });
+  if (xs.length > 5000) { msg.className = "msg err"; msg.textContent = "More than 5,000 points: get in touch for large datasets."; $("kr-res").hidden = true; return; }
+  if (xs.length < 15) { msg.className = "msg err"; msg.textContent = "At least 15 points are needed (50 or more gives a reliable variogram)."; $("kr-res").hidden = true; return; }
+  let unit = "map units";
+  if (c.geo) {
+    const lat0 = ys.reduce((a, b) => a + b, 0) / ys.length * Math.PI / 180, lon0 = xs.reduce((a, b) => a + b, 0) / xs.length, R = 6371.0088;
+    const yy = ys.map(v => v * Math.PI / 180 * R), xx = xs.map(v => (v - lon0) * Math.PI / 180 * R * Math.cos(lat0));
+    xs = xx; ys = yy; unit = "km";
+  }
+  msg.textContent = xs.length > 1500 ? "Working… large datasets take a few seconds." : "";
+  setTimeout(() => krCompute({ id, xs, ys, zs, unit, skipped, geo: c.geo, name: c.P.header[vj] }), 20);
+}
+function krCompute(D) {
+  const msg = $("kr-msg"), { xs, ys } = D, raw = D.zs, n = xs.length, lg = $("kr-tf").value === "log";
+  if (lg && raw.some(v => !(v > 0))) { msg.className = "msg err"; msg.textContent = "The log transform needs every value to be above zero."; $("kr-res").hidden = true; return; }
+  const zs = lg ? raw.map(Math.log) : raw;
+  let maxd = 0, mind = Infinity;
+  for (let i = 0; i < n; i++) for (let j = i + 1; j < n; j++) { const d = Math.hypot(xs[i] - xs[j], ys[i] - ys[j]); if (d > maxd) maxd = d; if (d > 0 && d < mind) mind = d; }
+  const cutIn = num($("kr-cut").value), cutoff = isFinite(cutIn) && cutIn > 0 ? cutIn : maxd / 3;
+  const nb = Math.max(5, Math.min(40, Math.round(num($("kr-bins").value) || 15)));
+  const nmax = Math.max(4, Math.min(64, Math.round(num($("kr-nmax").value) || 16)));
+  const ev = Krige.experimental(xs, ys, zs, cutoff, nb);
+  let m, rmax = cutoff * 2, rmin = Math.max(mind, cutoff / 50);
+  if ($("kr-man").checked) {
+    const c0 = num($("kr-c0").value), c1 = num($("kr-c1").value), r = num($("kr-r").value), t = $("kr-model").value === "auto" ? "sph" : $("kr-model").value;
+    if (!(c0 >= 0) || !(c1 >= 0) || !(r > 0) || c0 + c1 <= 0) { msg.className = "msg err"; msg.textContent = "Enter a nugget, partial sill and range (all zero or more, range above zero)."; return; }
+    let nu;
+    if (Krige.MODELS[t].kappa) { nu = num($("kr-nu").value); if (!(nu > 0 && nu <= 20)) { msg.className = "msg err"; msg.textContent = "Enter a smoothness κ between 0.05 and 20."; return; } }
+    m = { type: t, c0, c1, r, nu };
+  } else {
+    const types = $("kr-model").value === "auto" ? ["sph", "exp"] : [$("kr-model").value];
+    types.forEach(t => { const f = Krige.fitModel(ev, t, rmin, rmax); if (f && (!m || f.sse < m.sse)) m = f; });
+    if (!m) { msg.className = "msg err"; msg.textContent = "Too few point pairs to fit a variogram. Try a larger maximum lag or fewer lag classes."; $("kr-res").hidden = true; return; }
+    $("kr-c0").value = +m.c0.toPrecision(4); $("kr-c1").value = +m.c1.toPrecision(4); $("kr-r").value = +m.r.toPrecision(4);
+    if (m.nu) $("kr-nu").value = m.nu;
+  }
+  const cv = Krige.loocv(xs, ys, zs, m, nmax);
+  const ok = cv.map((q, i) => isFinite(q.pred) ? i : -1).filter(i => i >= 0);
+  const Z90 = 1.6448536;
+  cv.forEach(q => {
+    if (!isFinite(q.pred)) return;
+    if (lg) { q.mean = Math.exp(q.pred + q.var / 2 - q.mu); q.median = Math.exp(q.pred); q.lo = Math.exp(q.pred - Z90 * q.sd); q.hi = Math.exp(q.pred + Z90 * q.sd); }
+    else { q.mean = q.pred; q.lo = q.pred - Z90 * q.sd; q.hi = q.pred + Z90 * q.sd; }
+  });
+  const obs = ok.map(i => raw[i]), pred = ok.map(i => cv[i].mean);
+  const st = EvalStats.contStats(obs, pred);
+  const sum = raw.reduce((a, b) => a + b, 0), e0 = raw.map(z => (sum - z) / (n - 1) - z);
+  const rmse0 = Math.sqrt(e0.reduce((a, b) => a + b * b, 0) / n);
+  const zst = ok.map(i => cv[i].sd > 0 ? (cv[i].pred - zs[i]) / cv[i].sd : NaN).filter(isFinite);
+  const msdr = zst.reduce((a, b) => a + b * b, 0) / zst.length;
+  const p90 = 100 * ok.filter(i => raw[i] >= cv[i].lo && raw[i] <= cv[i].hi).length / ok.length;
+  const sill = m.c0 + m.c1, nr = sill > 0 ? m.c0 / sill * 100 : 0;
+  const dep = nr < 25 ? "strong" : nr <= 75 ? "moderate" : "weak";
+  const d = Math.max(...raw.map(Math.abs)) < 10 ? 3 : 2, du = D.unit;
+  const skewOf = a => { const mu = a.reduce((p, q) => p + q, 0) / a.length, s = Math.sqrt(a.reduce((p, q) => p + (q - mu) ** 2, 0) / a.length); return s > 0 ? a.reduce((p, q) => p + ((q - mu) / s) ** 3, 0) / a.length : 0; };
+  const skew = skewOf(raw), skewT = lg ? skewOf(zs) : skew;
+  $("kr-stats").innerHTML = evStat("Points", n) + evStat("Model", Krige.MODELS[m.type].name, (m.nu ? "κ = " + m.nu + ", " : "") + ($("kr-man").checked ? "set by you" : "weighted least squares")) +
+    evStat("Nugget", fmt(m.c0, 4), lg ? "log scale" : "") + evStat("Partial sill", fmt(m.c1, 4), lg ? "log scale" : "") + evStat("Range", fmt(m.r, m.r < 10 ? 2 : 0), du + (m.type === "sph" ? "" : ", practical")) +
+    (Krige.MODELS[m.type].kappa ? evStat("Range parameter a", fmt(Krige.rangeParam(m), Krige.rangeParam(m) < 10 ? 3 : 1), m.type === "ste" ? "as gstat \"Ste\" reports it" : "as gstat \"Mat\" reports it") : "") +
+    evStat("Nugget : sill", fmt(nr, 0) + "%", dep + " spatial dependence") +
+    evStat("RMSE", fmt(st.rmse, d), "leave-one-out") + evStat("vs. using the mean", fmt((1 - st.rmse / rmse0) * 100, 0) + "%", "lower error than the mean (RMSE " + fmt(rmse0, d) + ")") +
+    evStat("Bias (ME)", fmt(st.me, d), "mean of pred − obs") + evStat("R²", fmt(st.r2, 3)) + evStat("Lin's CCC", fmt(st.ccc, 3)) +
+    evStat("MSDR", fmt(msdr, 2), "ideal ≈ 1" + (lg ? ", log scale" : "")) + evStat("90% interval coverage", fmt(p90, 0) + "%", "ideal ≈ 90%");
+  const notes = [];
+  if (st.rmse >= rmse0) notes.push("Kriging does no better than the mean here: there is little spatial structure at this sampling density, or the variogram needs adjusting.");
+  if (!$("kr-man").checked && m.r >= rmax * 0.98) notes.push("The fitted range hit the search limit: the variogram is still rising at the maximum lag. That often signals a trend across the area; try a larger maximum lag, or remove the trend first.");
+  if (Krige.MODELS[m.type].kappa && !$("kr-man").checked && m.nu >= Krige.KAPPAS[Krige.KAPPAS.length - 1]) notes.push(`κ reached its upper limit (${m.nu}): the variogram is very smooth near the origin and behaves almost like a Gaussian model.`);
+  if (Krige.MODELS[m.type].kappa && !$("kr-man").checked && m.nu <= Krige.KAPPAS[0]) notes.push(`κ reached its lower limit (${m.nu}): the variogram is very rough near the origin.`);
+  if (m.type === "gau" && nr < 5) notes.push("A Gaussian model with almost no nugget is very smooth and tends to understate kriging errors; compare with spherical or exponential.");
+  if (msdr > 1.5) notes.push("MSDR is well above 1: errors are larger than the kriging variance predicts (intervals too narrow).");
+  else if (msdr < 0.6) notes.push("MSDR is well below 1: the kriging variance overstates the errors (intervals too wide).");
+  if (!lg && skew > 1 && raw.every(v => v > 0)) notes.push(`The data are skewed (skewness ${fmt(skew, 1)}). Try the log transform: it usually gives a better variogram.`);
+  else if (!lg && Math.abs(skew) > 1) notes.push(`The data are skewed (skewness ${fmt(skew, 1)}), which can distort the variogram.`);
+  if (lg) notes.push(`Kriged on natural logs (skewness ${fmt(skew, 1)} before, ${fmt(skewT, 1)} after). Predictions are back-transformed as exp(ŷ + σ²/2 − μ), where μ is the kriging Lagrange multiplier, which gives unbiased means; plain exp(ŷ) would give medians and underestimate. The 90% limits are back-transformed log-scale limits, so they are not symmetric.`);
+  if (D.geo) notes.push("Longitude and latitude were converted to kilometres around the centre of your data.");
+  if (ev.some(p => p.n < 30)) notes.push("Some lag classes have fewer than 30 pairs (small dots on the variogram), so treat them with caution.");
+  $("kr-note").textContent = notes.join(" ");
+  if (D.skipped) msg.textContent = `${D.skipped} row${D.skipped > 1 ? "s" : ""} skipped because of missing values.`; else msg.textContent = "";
+  krLast = { D, ev, m, cv, cutoff, ok, lg, zs };
+  const f = (v, k) => isFinite(v) ? fmt(v, k) : "";
+  const rows = D.id.map((s, i) => {
+    const q = cv[i], e = q.mean - raw[i], z = q.sd > 0 ? (q.pred - zs[i]) / q.sd : NaN;
+    const base = [s, +(D.xs[i]).toFixed(3), +(D.ys[i]).toFixed(3), raw[i], f(q.mean, d + 1)];
+    return base.concat(lg ? [f(q.median, d + 1)] : [], [f(q.var, 6), f(q.sd, 5), f(q.lo, d + 1), f(q.hi, d + 1), f(e, d + 1), f(z, 2)]);
+  });
+  krLast.rows = rows;
+  krLast.header = ["id", D.geo ? "x_km" : "x", D.geo ? "y_km" : "y", "observed", lg ? "predicted_mean" : "predicted"].concat(lg ? ["predicted_median", "kriging_variance_log", "kriging_sd_log"] : ["kriging_variance", "kriging_sd"], ["lower_90", "upper_90", "error", "z_score"]);
+  const zc = krLast.header.length - 1;
+  setTable($("kr-table"), krLast.header, rows, (i, j, v) => j === zc && Math.abs(+v) > 2.5 ? "warn" : "");
+  $("kr-res").hidden = false;
+  drawKr();
+}
+function drawKr() {
+  if (!krLast || !$("tab-krige").classList.contains("active")) return;
+  const { D, ev, m, cv, cutoff, ok } = krLast;
+  const m0 = { l: 52, r: 14, t: 22, b: 40 }, H = 300;
+  // variogram
+  let svg = $("kr-vg"); svg.innerHTML = "";
+  let W = Math.max(280, svg.clientWidth || 420); svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const gmax = Math.max(...ev.map(p => p.g), m.c0 + m.c1) * 1.1;
+  const X = v => m0.l + v / cutoff * (W - m0.l - m0.r), Y = v => H - m0.b - v / gmax * (H - m0.t - m0.b);
+  evAxes(svg, W, H, m0, X, Y, 0, 0, `Distance (${D.unit})`, krLast.lg ? "Semivariance (log values)" : "Semivariance", niceTicks(0, cutoff, 5).filter(v => v <= cutoff), niceTicks(0, gmax, 5).filter(v => v <= gmax).map(v => +v.toPrecision(3)));
+  let path = ""; for (let k = 0; k <= 120; k++) { const h = cutoff * k / 120; path += (k ? "L" : "M") + X(h).toFixed(1) + "," + Y(Krige.gamma(m, h || 1e-12)).toFixed(1); }
+  el("path", { d: path, stroke: "var(--s2)", "stroke-width": 2.2, fill: "none" }, svg);
+  const nmaxp = Math.max(...ev.map(p => p.n));
+  const vp = ev.map(p => [X(p.h), Y(p.g)]);
+  ev.forEach((p, i) => el("circle", { cx: vp[i][0], cy: vp[i][1], r: 2.5 + 4.5 * Math.sqrt(p.n / nmaxp), fill: "var(--s1)", "fill-opacity": p.n < 30 ? 0.4 : 0.85, stroke: "var(--surface)", "stroke-width": 1 }, svg));
+  evHover(svg, $("kr-vg-tip"), W, H, vp, i => `${fmt(ev[i].h, ev[i].h < 10 ? 2 : 0)} ${D.unit} · γ ${ev[i].g.toPrecision(3)} · ${ev[i].n} pairs`);
+  // scatter
+  svg = $("kr-sc"); svg.innerHTML = "";
+  W = Math.max(280, svg.clientWidth || 420); svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const obs = ok.map(i => D.zs[i]), pr = ok.map(i => cv[i].mean), all = obs.concat(pr);
+  let lo = Math.min(...all), hi = Math.max(...all); const pad = (hi - lo) * 0.06 || 1; lo -= pad; hi += pad;
+  const tk = niceTicks(lo, hi, 5).filter(v => v >= lo && v <= hi);
+  const X2 = v => m0.l + (v - lo) / (hi - lo) * (W - m0.l - m0.r), Y2 = v => H - m0.b - (v - lo) / (hi - lo) * (H - m0.t - m0.b);
+  evAxes(svg, W, H, m0, X2, Y2, lo, hi, "Observed", "Predicted (leave-one-out)", tk, tk);
+  el("line", { x1: X2(lo), y1: Y2(lo), x2: X2(hi), y2: Y2(hi), stroke: "var(--ink-3)", "stroke-width": 1.5, "stroke-dasharray": "5 4" }, svg);
+  const sp = obs.map((o, k) => [X2(o), Y2(pr[k])]);
+  sp.forEach(p => el("circle", { cx: p[0], cy: p[1], r: 4, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 1.2, "fill-opacity": 0.8 }, svg));
+  evHover(svg, $("kr-sc-tip"), W, H, sp, k => `${D.id[ok[k]]} · obs ${obs[k]} · pred ${fmt(pr[k], 3)}`);
+  // error map (equal scale)
+  svg = $("kr-map"); svg.innerHTML = "";
+  W = Math.max(280, svg.clientWidth || 600);
+  const xs = D.xs, ys = D.ys, x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  const mm = { l: 14, r: 14, t: 14, b: 14 }, sx = (x1 - x0) || 1, sy = (y1 - y0) || 1;
+  const Hm = Math.min(520, Math.max(220, (W - mm.l - mm.r) * sy / sx + mm.t + mm.b));
+  const s = Math.min((W - mm.l - mm.r) / sx, (Hm - mm.t - mm.b) / sy);
+  const ox = (W - sx * s) / 2, oy = (Hm - sy * s) / 2;
+  svg.setAttribute("viewBox", `0 0 ${W} ${Hm}`);
+  el("rect", { x: ox - 6, y: oy - 6, width: sx * s + 12, height: sy * s + 12, fill: "none", stroke: "var(--line)", rx: 6 }, svg);
+  const mp = [], lab = [];
+  ok.forEach(i => {
+    const q = cv[i], e = q.mean - D.zs[i], z = q.sd > 0 ? (q.pred - krLast.zs[i]) / q.sd : 0;
+    const cx = ox + (xs[i] - x0) * s, cy = oy + (y1 - ys[i]) * s;
+    el("circle", { cx, cy, r: 2.5 + Math.min(3, Math.abs(z)) * 2.2, fill: e > 0 ? "var(--s2)" : "var(--s1)", "fill-opacity": 0.75, stroke: "var(--surface)", "stroke-width": 1 }, svg);
+    mp.push([cx, cy]); lab.push(`${D.id[i]} · error ${fmt(e, 3)} · z ${fmt(z, 2)}`);
+  });
+  evHover(svg, $("kr-map-tip"), W, Hm, mp, k => lab[k]);
+}
+readFileInto($("kr-file"), $("kr-data"), () => { krText = ""; krRun(); });
+$("kr-ex").addEventListener("click", () => { $("kr-data").value = KR_EX; krText = ""; $("kr-cut").value = ""; $("kr-tf").value = "none"; $("kr-model").value = "auto"; $("kr-man").checked = false; $("kr-manbox").style.display = "none"; krRun(); });
+$("kr-run").addEventListener("click", krRun);
+$("kr-data").addEventListener("change", () => { krText = $("kr-data").value; krRefresh(); });
+const krNuVis = () => { $("kr-nubox").style.display = ["mat", "ste"].includes($("kr-model").value) ? "" : "none"; };
+$("kr-man").addEventListener("change", () => { $("kr-manbox").style.display = $("kr-man").checked ? "grid" : "none"; krNuVis(); });
+$("kr-model").addEventListener("change", krNuVis); krNuVis();
+$("kr-dl").addEventListener("click", () => { if (krLast) download("kriging_loocv.csv", toCSV(krLast.header, krLast.rows)); });
+
 /* ---------------- init ---------------- */
 $("sp-data").value = EX_CONT; spLastText = EX_CONT; spRefreshColumns();
 $("c-data").value = EX_CARBON;
 $("pd-data").value = PD_EX;
+$("kr-data").value = KR_EX; krText = KR_EX; krRefresh();
 updSoilTemp(); updEnergy();
 $("ev-cont-data").value = EV_EX.cont; $("ev-cat-data").value = EV_EX.cat; $("ev-ci-data").value = EV_EX.ci;
 updWater(); vgLoad(); updHSG(); updSampling();
-let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawEvCharts(); updSoilTemp(); updEnergy(); }, 150); });
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawEvCharts(); drawKr(); updSoilTemp(); updEnergy(); }, 150); });
 const start = location.hash.slice(1);
 if ([...tabs].some(b => b.dataset.tab === start)) showTab(start, false);
 })();
