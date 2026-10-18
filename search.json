@@ -296,63 +296,63 @@
   {
     "objectID": "checks.html",
     "href": "checks.html",
-    "title": "Check a result",
+    "title": "Research checks",
     "section": "",
     "text": "Before you submit, or when you review, check that the numbers can all be true. Each check takes the figures a paper or report gives (or your own) and tests them against what the method allows. Nothing you enter leaves your browser."
   },
   {
     "objectID": "checks.html#finding-the-right-pixel-size",
     "href": "checks.html#finding-the-right-pixel-size",
-    "title": "Check a result",
+    "title": "Research checks",
     "section": "Finding the right pixel size",
     "text": "Finding the right pixel size\nGrid resolution is often chosen by habit (30 m because that’s Landsat). Hengl (2006) set out rules that tie it to what the data can actually support. For each aspect of a dataset they give a coarsest legible resolution (the largest pixel that still represents it), a finest legible resolution (below which pixels “are probably just waste of memory”) and a recommended compromise. Fill in whatever you know; the overall range is where the rules agree.\n\n\n\nReference\nHengl, T. (2006). Finding the right pixel size. Computers & Geosciences 32, 1283–1298. doi:10.1016/j.cageo.2005.11.008"
   },
   {
     "objectID": "checks.html#back-transformation",
     "href": "checks.html#back-transformation",
-    "title": "Check a result",
+    "title": "Research checks",
     "section": "Back-transformation",
     "text": "Back-transformation\nA mean calculated on log values, then exponentiated, is the median (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter what the paper gives on the log scale.\n\n\n\nReferences\nAitchison, J., Brown, J.A.C. (1957). The Lognormal Distribution. Cambridge University Press.\nJournel, A.G. (1980). The lognormal approach to predicting local distributions of selective mining unit grades. Mathematical Geology 12, 285–303. doi:10.1007/BF01029417\nWebster, R., Oliver, M.A. (2007). Geostatistics for Environmental Scientists, 2nd ed. Wiley."
   },
   {
     "objectID": "checks.html#carbon-stock-arithmetic",
     "href": "checks.html#carbon-stock-arithmetic",
-    "title": "Check a result",
+    "title": "Research checks",
     "section": "Carbon stock arithmetic",
     "text": "Carbon stock arithmetic\nRebuild a reported stock from its inputs. If it doesn’t match, the check tries the common slips (% vs g/kg, stones ignored or on the wrong basis, organic matter instead of carbon, kg/m² vs Mg/ha) and tells you which one reproduces the reported number.\n\n\n\nReferences\nPoeplau, C., Vos, C., Don, A. (2017). Soil organic carbon stocks are systematically overestimated by misuse of the parameters bulk density and rock fragment content. SOIL 3, 61–66. doi:10.5194/soil-3-61-2017\nPribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. Geoderma 156, 75–83. doi:10.1016/j.geoderma.2010.02.003"
   },
   {
     "objectID": "checks.html#area-from-a-confusion-matrix",
     "href": "checks.html#area-from-a-confusion-matrix",
-    "title": "Check a result",
+    "title": "Research checks",
     "section": "Area from a confusion matrix",
     "text": "Area from a confusion matrix\nCounting pixels in a map gives biased class areas, because every map has errors. With a stratified accuracy sample, the confusion matrix gives unbiased areas with confidence intervals (Olofsson et al. 2014). Rows are map classes, columns are reference classes, and the last column is each map class’s mapped area.\n\n\n\nReference\nOlofsson, P., Foody, G.M., Herold, M., Stehman, S.V., Woodcock, C.E., Wulder, M.A. (2014). Good practices for estimating area and assessing accuracy of land change. Remote Sensing of Environment 148, 42–57. doi:10.1016/j.rse.2014.02.015"
   },
   {
     "objectID": "checks.html#effective-sample-size",
     "href": "checks.html#effective-sample-size",
-    "title": "Check a result",
+    "title": "Research checks",
     "section": "Effective sample size",
     "text": "Effective sample size\nSamples close together carry overlapping information. For estimating an average, a cluster of ten nearby samples can be worth little more than one. This uses the variogram to work out how many independent samples your layout is really worth.\n\n\n\nReferences\nCressie, N.A.C. (1993). Statistics for Spatial Data, revised ed. Wiley. Section 1.3.\nWebster, R., Oliver, M.A. (2007). Geostatistics for Environmental Scientists, 2nd ed. Wiley."
   },
   {
     "objectID": "checks.html#spatial-cross-validation-and-leakage",
     "href": "checks.html#spatial-cross-validation-and-leakage",
-    "title": "Check a result",
+    "title": "Research checks",
     "section": "Spatial cross-validation and leakage",
     "text": "Spatial cross-validation and leakage\nRandom cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won’t achieve between samples. Tick anything that applies to the study you’re checking.\n\n\n\nReferences\nRoberts, D.R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. Ecography 40, 913–929. doi:10.1111/ecog.02881\nMeyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution 12, 1620–1633. doi:10.1111/2041-210X.13650\nMilà, C., Mateu, J., Pebesma, E., Meyer, H. (2022). Nearest neighbour distance matching leave-one-out cross-validation for map validation. Methods in Ecology and Evolution 13, 1304–1316. doi:10.1111/2041-210X.13851"
   },
   {
     "objectID": "checks.html#lab-method-conversions",
     "href": "checks.html#lab-method-conversions",
-    "title": "Check a result",
+    "title": "Research checks",
     "section": "Lab method conversions",
     "text": "Lab method conversions\nResults from different methods aren’t directly comparable. These are the common conversion factors, with the assumption behind each stated, so you can see what you’re accepting when you convert.\n\n\n\nReferences\nWalkley, A., Black, I.A. (1934). An examination of the Degtjareff method for determining soil organic matter, and a proposed modification of the chromic acid titration method. Soil Science 37, 29–38.\nPribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. Geoderma 156, 75–83. doi:10.1016/j.geoderma.2010.02.003\nAhern, C.R., Baker, D.E., Aitken, R.L. (1995). Models for relating pH measurements in water and calcium chloride for a wide range of pH, soil types and depths. Plant and Soil 171, 47–52. doi:10.1007/BF00009563\nOxide and unit conversions are exact, from molar masses."
   },
   {
     "objectID": "checks.html#coordinates-and-distances",
     "href": "checks.html#coordinates-and-distances",
-    "title": "Check a result",
+    "title": "Research checks",
     "section": "Coordinates and distances",
     "text": "Coordinates and distances\nA degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and “metres” computed from degrees are wrong. Convert a distance, or paste coordinates to check them.\n\n\n\nMethod\nNo paper needed: standard spherical geometry (haversine formula, mean Earth radius 6,371 km)."
   },
