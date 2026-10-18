@@ -1,5 +1,5 @@
 ---
-title: "Tools"
+title: "Tools for researchers"
 page-layout: full
 anchor-sections: false
 ---
