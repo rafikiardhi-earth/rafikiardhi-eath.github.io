@@ -51,6 +51,16 @@ We build on existing knowledge rather than replacing it. Every map and piece of 
 
 We do not use AI to replace human expertise. Where others reach for black-box AI, we use “glass box” functions: methods that are easy to interpret, scale to large problems, and are benchmarked against AI models.
 
+## Acknowledgements
+
+The free tools on this site were co-authors, improved by people who tested them, checked the methods and suggested changes. Thank you to:
+
+- **Rosana Kostecki, PhD**
+- **Zahra Rasaei, PhD** 
+- **Sara Merzoug** ([LinkedIn](https://www.linkedin.com/in/saramerzoug/?isSelfProfile=false)), Affiliation: 2GBEI Laboratory, Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco
+
+Any remaining errors are ours. Found one, or want to suggest a tool? [Get in touch](contact.qmd).
+
 ## The name
 
 *Rafiki ardhi* is Kiswahili for "friend of the land".
