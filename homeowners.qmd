@@ -1,5 +1,5 @@
 ---
-title: "Homeowners"
+title: "Gardening and landscapes"
 description: "Free calculators and decision tools for yards and gardens, built by soil scientists: materials, quotes, irrigation, soil tests, fertilizer, drainage and trees."
 ---
 
