@@ -47,8 +47,8 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ba38ce498b7ba985051d24ae6851d00c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-bdd2f71b0baae5f8e9a37a252d37403c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-497f696ea2edbbae50d97a8a420c9b60.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-01cb702539942a538c6ae8ed2353f351.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -86,6 +86,25 @@ gtag('js', new Date());
 gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
+<script>
+/* English / Español toggle for the homeowner pages: keeps what you typed when you switch, and remembers your choice. */
+(function () {
+  const es = (document.documentElement.lang || '').toLowerCase().startsWith('es');
+  const here = es ? 'es' : 'en';
+  const other = p => es ? p.replace(/\/es\/([^/]*)$/, '/$1') : p.replace(/\/([^/]*)$/, '/es/$1');
+  let pref = null; try { pref = localStorage.getItem('ra-hm-lang'); } catch (e) { }
+  if (pref === 'en' || pref === 'es') if (pref !== here) { // every page that loads this has a version in the other language
+
+    location.replace(other(location.pathname) + location.search + location.hash); return;
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('.hm-lang a'); if (!a) return;
+    e.preventDefault();
+    try { localStorage.setItem('ra-hm-lang', es ? 'en' : 'es'); } catch (err) { }
+    location.href = other(location.pathname) + location.search + location.hash;
+  });
+})();
+</script>
 <style>
 .hmc {
   --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
@@ -161,6 +180,16 @@ body.quarto-light .hmc {
 <script>
 /* RafikiArdhi Homeowners tools: shared helpers and form framework. Everything runs in the browser. */
 window.HM = (function () {
+  const ES = (document.documentElement.lang || '').toLowerCase().startsWith('es');
+  const T = ES ? {
+    units: 'Unidades', us: 'Unidades de EE. UU.', si: 'Métricas', yours: 'Sus datos', work: 'Ver el cálculo', example: 'Ejemplo', link: 'Copiar enlace', print: 'Imprimir', reset: 'Empezar de nuevo',
+    small: 'Gratis, sin registro, sin anuncios, y nada de lo que escribe sale de su navegador. Los valores típicos son un punto de partida; cámbielos según su situación.',
+    sayLab: 'Copie esto', copy: 'Copiar', linkCopied: 'Enlace copiado', copied: 'Copiado', check: 'Revise sus números.', copyThis: 'Copie esto:'
+  } : {
+    units: 'Units', us: 'US units', si: 'Metric', yours: 'Your numbers', work: 'Show the working', example: 'Example', link: 'Copy link', print: 'Print', reset: 'Start over',
+    small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.',
+    sayLab: 'Copy this', copy: 'Copy', linkCopied: 'Link copied', copied: 'Copied', check: 'Check your numbers.', copyThis: 'Copy this:'
+  };
   // SI value = displayed value × factor
   const C = {
     len: { us: [0.3048, 'ft'], si: [1, 'm'] },
@@ -173,17 +202,17 @@ window.HM = (function () {
     wdep: { us: [25.4, 'in'], si: [1, 'mm'] },
     rate: { us: [25.4, 'in/hr'], si: [1, 'mm/hr'] },
     mass: { us: [0.45359237, 'lb'], si: [1, 'kg'] },
-    ton: { us: [0.90718474, 'tons'], si: [1, 't'] },
-    arate: { us: [4.88242764, 'lb per 1,000 ft²'], si: [1, 'g/m²'] },
+    ton: { us: [0.90718474, (ES ? 'toneladas' : 'tons')], si: [1, 't'] },
+    arate: { us: [4.88242764, (ES ? 'lb por 1,000 ft²' : 'lb per 1,000 ft²')], si: [1, 'g/m²'] },
     flow: { us: [3.785411784, 'gal/hr'], si: [1, 'L/hr'] },
-    dens: { us: [1.18655, 'tons per yd³'], si: [1, 't per m³'] },
+    dens: { us: [1.18655, (ES ? 'toneladas por yd³' : 'tons per yd³')], si: [1, (ES ? 't por m³' : 't per m³')] },
     pct: { us: [1, '%'], si: [1, '%'] },
     num: { us: [1, ''], si: [1, ''] },
     min: { us: [1, 'min'], si: [1, 'min'] },
     money: { us: [1, '$'], si: [1, ''] },
-    pvol: { us: [1 / 0.764554858, '$ per yd³'], si: [1, 'per m³'] },
-    pton: { us: [1 / 0.90718474, '$ per ton'], si: [1, 'per tonne'] },
-    pwater: { us: [1 / 3.785411784, '$ per 1,000 gal'], si: [1, 'per m³'] }
+    pvol: { us: [1 / 0.764554858, (ES ? '$ por yd³' : '$ per yd³')], si: [1, (ES ? 'por m³' : 'per m³')] },
+    pton: { us: [1 / 0.90718474, (ES ? '$ por tonelada' : '$ per ton')], si: [1, (ES ? 'por tonelada métrica' : 'per tonne')] },
+    pwater: { us: [1 / 3.785411784, (ES ? '$ por 1,000 gal' : '$ per 1,000 gal')], si: [1, (ES ? 'por m³' : 'per m³')] }
   };
   const UNITLESS = ['num', 'pct', 'min', 'money', 'select', 'seg', 'check', 'info', 'sec', 'text', 'textarea'];
 
@@ -191,8 +220,8 @@ window.HM = (function () {
   function feet(s) {
     s = String(s).trim().toLowerCase().replace(/[’′]/g, "'").replace(/[”″]/g, '"');
     if (!s) return null; let m;
-    if ((m = s.match(/^(\d*\.?\d+)\s*(?:'|ft|feet|foot)\s*(?:(\d*\.?\d+)\s*(?:"|in|inch|inches)?)?$/))) return +m[1] + (m[2] ? +m[2] / 12 : 0);
-    if ((m = s.match(/^(\d*\.?\d+)\s*(?:"|in|inch|inches)$/))) return +m[1] / 12;
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:'|ft|feet|foot|pies?)\s*(?:(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)?)?$/))) return +m[1] + (m[2] ? +m[2] / 12 : 0);
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)$/))) return +m[1] / 12;
     if ((m = s.match(/^(\d+)\s+(\d*\.?\d+)$/))) return +m[1] + +m[2] / 12;
     return num(s);
   }
@@ -204,7 +233,7 @@ window.HM = (function () {
   function toast(root, msg) { const t = root.querySelector('.toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); }
   function copy(root, text, msg) {
     const done = () => toast(root, msg);
-    const fb = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { window.prompt('Copy this:', text); } ta.remove(); };
+    const fb = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { window.prompt(T.copyThis, text); } ta.remove(); };
     if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fb); else fb();
   }
 
@@ -284,12 +313,12 @@ window.HM = (function () {
     }
 
     function render() {
-      let h = hasUnits ? `<div class="seg" role="group" aria-label="Units"><button type="button" data-u="us" aria-pressed="${u === 'us'}">US units</button><button type="button" data-u="si" aria-pressed="${u === 'si'}">Metric</button></div>` : '';
+      let h = hasUnits ? `<div class="seg" role="group" aria-label="${T.units}"><button type="button" data-u="us" aria-pressed="${u === 'us'}">${T.us}</button><button type="button" data-u="si" aria-pressed="${u === 'si'}">${T.si}</button></div>` : '';
       let open = false;
       inputs.forEach((i, n) => {
         if (i.t === 'sec' || n === 0) {
           if (open) h += '</div></section>';
-          h += `<section class="cx"${i.t === 'sec' && i.k ? ` data-sec="${i.k}"` : ''}><div class="step">${i.t === 'sec' ? lab(i) : (cfg.step || 'Your numbers')}</div>${i.t === 'sec' && i.h ? `<p class="hint" style="margin-top:0">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : ''}<div class="fg">`;
+          h += `<section class="cx"${i.t === 'sec' && i.k ? ` data-sec="${i.k}"` : ''}><div class="step">${i.t === 'sec' ? lab(i) : (cfg.step || T.yours)}</div>${i.t === 'sec' && i.h ? `<p class="hint" style="margin-top:0">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : ''}<div class="fg">`;
           open = true;
           if (i.t === 'sec') return;
         }
@@ -297,10 +326,10 @@ window.HM = (function () {
       });
       if (open) h += '</div></section>';
       h += `<section class="cx res" aria-live="polite"></section>
-        <details class="cx hm-work"><summary>Show the working</summary><div class="db"></div></details>
+        <details class="cx hm-work"><summary>${T.work}</summary><div class="db"></div></details>
         ${cfg.after || ''}
-        <div class="actions" style="grid-template-columns:repeat(${(cfg.example ? 1 : 0) + (cfg.hash === false ? 0 : 1) + 2},1fr)">${cfg.example ? '<button type="button" data-act="example">Example</button>' : ''}${cfg.hash === false ? '' : '<button type="button" data-act="link">Copy link</button>'}<button type="button" data-act="print">Print</button><button type="button" data-act="reset">Start over</button></div>
-        <p class="smallprint">${cfg.smallprint || 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.'}</p><div class="toast"></div>`;
+        <div class="actions" style="grid-template-columns:repeat(${(cfg.example ? 1 : 0) + (cfg.hash === false ? 0 : 1) + 2},1fr)">${cfg.example ? `<button type="button" data-act="example">${T.example}</button>` : ''}${cfg.hash === false ? '' : `<button type="button" data-act="link">${T.link}</button>`}<button type="button" data-act="print">${T.print}</button><button type="button" data-act="reset">${T.reset}</button></div>
+        <p class="smallprint">${cfg.smallprint || T.small}</p><div class="toast"></div>`;
       root.innerHTML = h;
       run();
     }
@@ -315,7 +344,7 @@ window.HM = (function () {
       kv: rows => `<ul class="kv">${rows.filter(Boolean).map(r => `<li><span>${r[0]}</span><span>${r[1]}</span></li>`).join('')}</ul>`,
       note: (h, cls) => `<div class="note${cls ? ' ' + cls : ''}">${h}</div>`,
       big: (label, val, sub) => `<div class="step">${label}</div><div class="big">${val}</div>${sub ? `<p class="sub">${sub}</p>` : ''}`,
-      say: t => `<div class="say"><span class="lab">${cfg.sayLabel || 'Copy this'}</span><span class="hm-say">${esc(t)}</span> <button type="button" class="linkbtn" data-act="say">Copy</button></div>`,
+      say: t => `<div class="say"><span class="lab">${cfg.sayLabel || T.sayLab}</span><span class="hm-say">${esc(t)}</span> <button type="button" class="linkbtn" data-act="say">${T.copy}</button></div>`,
       empty: t => `<p class="empty">${t}</p>`,
       esc
     };
@@ -336,7 +365,7 @@ window.HM = (function () {
       const clean = {};
       Object.keys(v).forEach(k => { const x = v[k]; clean[k] = (typeof x === 'number' && isNaN(x)) ? null : x; });
       let out;
-      try { out = cfg.compute(clean, U) || {}; } catch (e) { out = { html: U.empty('Check your numbers.') }; console.warn(e); }
+      try { out = cfg.compute(clean, U) || {}; } catch (e) { out = { html: U.empty(T.check) }; console.warn(e); }
       if (typeof out === 'string') out = { html: out };
       root.querySelector('.res').innerHTML = out.html || '';
       const wd = root.querySelector('.hm-work');
@@ -383,7 +412,7 @@ window.HM = (function () {
         run(); return;
       }
       const a = b.dataset.act;
-      if (a === 'link') copy(root, location.href, 'Link copied');
+      if (a === 'link') copy(root, location.href, T.linkCopied);
       else if (a === 'print') { root.querySelectorAll('details').forEach(d => d.open = true); window.print(); }
       else if (a === 'reset') { f = {}; raw = {}; history.replaceState(null, '', location.pathname + location.search); render(); }
       else if (a === 'example' && cfg.example) {
@@ -391,7 +420,7 @@ window.HM = (function () {
         Object.entries(cfg.example).forEach(([k, val]) => { const i = byK[k]; if (!i) return; f[k] = (typeof val === 'number' && !['select', 'seg', 'check'].includes(i.t)) ? val * C[unitOf(i)][u][0] : val; });
         render();
       }
-      else if (a === 'say') { const s = root.querySelector('.hm-say'); if (s) copy(root, s.textContent, 'Copied'); }
+      else if (a === 'say') { const s = root.querySelector('.hm-say'); if (s) copy(root, s.textContent, T.copied); }
       else if (cfg.onAction) cfg.onAction(a, api, b);
     });
     render();
@@ -401,6 +430,7 @@ window.HM = (function () {
   return { tool, C, fmt, fix, num, feet, esc };
 })();
 </script>
+<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/fertilizer-calculator.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/fertilizer-calculator.html">
 
 
 </head>
@@ -603,26 +633,25 @@ window.HM = (function () {
  <span class="menu-text">Tools</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-tools">    
-        <li class="dropdown-header">For homeowners</li>
         <li>
     <a class="dropdown-item" href="./homeowners.html">
- <span class="dropdown-text">Gardening &amp; landscapes</span></a>
+ <span class="dropdown-text">For homeowners</span></a>
   </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">For researchers</li>
+        <li>
+    <a class="dropdown-item" href="./es/homeowners.html">
+ <span class="dropdown-text">Para propietarios (en español)</span></a>
+  </li>  
         <li>
     <a class="dropdown-item" href="./tools.html">
- <span class="dropdown-text">Research tools</span></a>
+ <span class="dropdown-text">For researchers</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./soil-keys.html">
+ <span class="dropdown-text">Soil classification keys</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./checks.html">
- <span class="dropdown-text">Research checks</span></a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">Learners</li>
-        <li>
-    <a class="dropdown-item" href="./soil-keys.html">
- <span class="dropdown-text">Soil classification</span></a>
+ <span class="dropdown-text">Check a result</span></a>
   </li>  
     </ul>
   </li>
@@ -675,6 +704,9 @@ window.HM = (function () {
 </header>
 
 
+<div class="hm-lang">
+<p><a href="./es/fertilizer-calculator.html" lang="es">Español</a></p>
+</div>
 <p>The three numbers on a fertilizer bag (N-P-K) are percentages by weight. A 20 lb bag of 24-0-6 contains 4.8 lb of nitrogen; the rest is the other nutrients and filler. This turns the label into how much product to spread, and shows what you’re really paying per pound of nutrient.</p>
 <div class="hmc" id="fz"></div>
 <script>

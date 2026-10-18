@@ -48,8 +48,8 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ba38ce498b7ba985051d24ae6851d00c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-bdd2f71b0baae5f8e9a37a252d37403c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-497f696ea2edbbae50d97a8a420c9b60.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-01cb702539942a538c6ae8ed2353f351.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -87,6 +87,26 @@ gtag('js', new Date());
 gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
+<script>
+/* English / Español toggle for the homeowner pages: keeps what you typed when you switch, and remembers your choice. */
+(function () {
+  const es = (document.documentElement.lang || '').toLowerCase().startsWith('es');
+  const here = es ? 'es' : 'en';
+  const other = p => es ? p.replace(/\/es\/([^/]*)$/, '/$1') : p.replace(/\/([^/]*)$/, '/es/$1');
+  let pref = null; try { pref = localStorage.getItem('ra-hm-lang'); } catch (e) { }
+  if (pref === 'en' || pref === 'es') if (pref !== here) { // every page that loads this has a version in the other language
+
+    location.replace(other(location.pathname) + location.search + location.hash); return;
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('.hm-lang a'); if (!a) return;
+    e.preventDefault();
+    try { localStorage.setItem('ra-hm-lang', es ? 'en' : 'es'); } catch (err) { }
+    location.href = other(location.pathname) + location.search + location.hash;
+  });
+})();
+</script>
+<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/homeowners.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/homeowners.html">
 
 
 </head>
@@ -289,26 +309,25 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
  <span class="menu-text">Tools</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-tools">    
-        <li class="dropdown-header">For homeowners</li>
         <li>
     <a class="dropdown-item" href="./homeowners.html">
- <span class="dropdown-text">Gardening &amp; landscapes</span></a>
+ <span class="dropdown-text">For homeowners</span></a>
   </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">For researchers</li>
+        <li>
+    <a class="dropdown-item" href="./es/homeowners.html">
+ <span class="dropdown-text">Para propietarios (en español)</span></a>
+  </li>  
         <li>
     <a class="dropdown-item" href="./tools.html">
- <span class="dropdown-text">Research tools</span></a>
+ <span class="dropdown-text">For researchers</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./soil-keys.html">
+ <span class="dropdown-text">Soil classification keys</span></a>
   </li>  
         <li>
     <a class="dropdown-item" href="./checks.html">
- <span class="dropdown-text">Research checks</span></a>
-  </li>  
-        <li><hr class="dropdown-divider"></li>
-        <li class="dropdown-header">Learners</li>
-        <li>
-    <a class="dropdown-item" href="./soil-keys.html">
- <span class="dropdown-text">Soil classification</span></a>
+ <span class="dropdown-text">Check a result</span></a>
   </li>  
     </ul>
   </li>
@@ -361,6 +380,9 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </header>
 
 
+<div class="hm-lang">
+<p><a href="./es/homeowners.html" lang="es">Español</a></p>
+</div>
 <p>Free tools for your yard and garden, built by soil scientists. Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions with the working shown.</p>
 <p>No ads, no sign-up, and no supplier pays to be listed. Every tool shows how its numbers are calculated, so you can check them yourself.</p>
 <section id="buying-materials" class="level2">
