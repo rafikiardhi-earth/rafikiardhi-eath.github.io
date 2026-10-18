@@ -509,7 +509,7 @@ body.quarto-dark .rk-tools {
 <nav class="rk-tabs" aria-label="Tools">
   <div class="rk-wrap" role="tablist">
     <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" data-tip="Turn horizon data into standard depth intervals (0–5, 5–15 cm…) with a smooth profile." aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" data-tip="How many soil classes an area has and how evenly they share it." aria-selected="false">Pedodiversity</button><button role="tab" data-tab="krige" data-tip="Fit a variogram to point data and test kriging by cross-validation." aria-selected="false">Variogram &amp; kriging</button><button role="tab" data-tab="eval" data-tip="How well a map or model matches independent observations: accuracy, uncertainty, classes." aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" data-tip="How many samples you need for a field mean, or for a map." aria-selected="false">Sampling density</button></div>
-    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="See how van Genuchten parameters shape water retention and conductivity." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from six pedotransfer functions, compared side by side." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D), its curve number for your land cover, and how much of a storm runs off." aria-selected="false">Hydrologic soil group</button></div>
+    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="van Genuchten–Mualem curves from a texture class, a pedotransfer function, or fitted to your own measurements." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from six pedotransfer functions, compared side by side." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D), its curve number for your land cover, and how much of a storm runs off." aria-selected="false">Hydrologic soil group</button></div>
     <div class="tgroup"><span class="tglabel">Energy</span><button role="tab" data-tab="soiltemp" data-tip="How daily and seasonal temperature swings travel down into the soil." aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" data-tip="Where the sun's energy goes at a bare soil surface as it wets up." aria-selected="false">Energy balance</button></div>
     <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" data-tip="Texture class from sand, silt and clay, one sample or a whole file." aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" data-tip="Carbon stocks to fixed depths or equivalent soil mass, and whether a change is detectable." aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" data-tip="A Munsell notation as an on-screen colour, and what it tells you about the soil." aria-selected="false">Munsell colour</button></div>
     <div class="tgroup"><span class="tglabel">Checks</span><a class="tglink" href="checks.html">Check a result: yours or a published one →</a></div>
@@ -708,18 +708,55 @@ body.quarto-dark .rk-tools {
 <!-- ============ VAN GENUCHTEN ============ -->
 <section class="tool" id="tab-vg">
   <h2>van Genuchten curves</h2>
-  <p class="lede">Explore how the van Genuchten–Mualem parameters shape water retention and unsaturated conductivity. Start from a texture class and adjust.</p>
+  <p class="lede">Explore how the van Genuchten–Mualem parameters shape water retention and unsaturated conductivity. Start from a texture class, convert any of six pedotransfer functions to van Genuchten form, or fit the curve to your own measurements, then adjust.</p>
   <div class="rk-card">
+    <h3>Start from</h3>
     <div class="rk-grid">
-      <div><label for="vg-preset">Start from texture class</label><select id="vg-preset"></select></div>
+      <div><label for="vg-src">Source</label><select id="vg-src"><option value="class">Texture class (typical values)</option><option value="ptf">Pedotransfer function</option><option value="fit">Fit to my measurements</option></select></div>
+      <div class="vg-s-class"><label for="vg-preset">Texture class</label><select id="vg-preset"></select></div>
+      <div class="vg-s-ptf"><label for="vg-ptf">Function</label><select id="vg-ptf"></select></div>
     </div>
+    <div class="vg-s-ptf">
+      <div class="rk-grid" style="margin-top:12px">
+        <div><label for="vg-sand">Sand (%)</label><input type="number" id="vg-sand" value="40" min="0" max="100" step="any"></div>
+        <div><label for="vg-clay">Clay (%)</label><input type="number" id="vg-clay" value="20" min="0" max="100" step="any"></div>
+        <div><label for="vg-oc">Organic carbon (%)</label><input type="number" id="vg-oc" value="1.5" min="0" step="any"></div>
+        <div><label for="vg-bd">Bulk density (g/cm³)</label><input type="number" id="vg-bd" placeholder="estimated if blank" min="0.5" max="2.2" step="any"></div>
+        <div><label for="vg-top">Horizon</label><select id="vg-top"><option value="1">Topsoil</option><option value="0">Subsoil</option></select></div>
+        <div><label for="vg-cec">CEC (cmol(+)/kg)</label><input type="number" id="vg-cec" min="0" step="any" placeholder="tropical function only"></div>
+        <div><label for="vg-ph">pH in water</label><input type="number" id="vg-ph" min="2" max="11" step="any" placeholder="tropical function only"></div>
+      </div>
+      <div class="rk-row"><button class="rk-btn" id="vg-fromw">Use the soil from the Water retention tab</button></div>
+    </div>
+    <div class="vg-s-fit">
+      <textarea id="vg-obs" spellcheck="false" aria-label="Measured suction and water content" placeholder="suction, water content
+0, 0.45
+10, 0.40
+33, 0.31
+100, 0.24
+1500, 0.13"></textarea>
+      <div class="rk-grid">
+        <div><label for="vg-obs-h">Suction unit</label><select id="vg-obs-h"><option value="kpa">kPa</option><option value="cm">cm of water (hPa)</option><option value="pf">pF (log₁₀ cm)</option></select></div>
+        <div><label for="vg-obs-t">Water content unit</label><select id="vg-obs-t"><option value="v">m³/m³</option><option value="p">% by volume</option></select></div>
+        <div><label for="vg-obs-ks">Measured Ks (cm/day, optional)</label><input type="number" id="vg-obs-ks" min="0" step="any"></div>
+        <div><label for="vg-fixr">Residual θr</label><select id="vg-fixr"><option value="free">Fit it</option><option value="zero">Fix at 0</option></select></div>
+      </div>
+      <div class="rk-row">
+        <label class="file-label">Open CSV<input type="file" id="vg-obs-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
+        <button class="rk-btn" id="vg-obs-ex">Load example</button>
+        <button class="rk-btn primary" id="vg-fit">Fit</button>
+      </div>
+      <p class="hint">Two columns: suction and volumetric water content. Use 0 for saturation. Fitting four parameters needs at least five points spread from wet to dry; with fewer, or with no points drier than about 1000 kPa, fix θr at 0.</p>
+    </div>
+    <div class="msg" id="vg-msg" role="status"></div>
     <div class="rk-grid" style="margin-top:12px">
-      <div><label for="vg-tr">θr residual: <b id="vg-tr-v"></b></label><input type="range" id="vg-tr" min="0" max="0.2" step="0.001"></div>
-      <div><label for="vg-ts">θs saturated: <b id="vg-ts-v"></b></label><input type="range" id="vg-ts" min="0.25" max="0.6" step="0.001"></div>
-      <div><label for="vg-a">α (1/cm): <b id="vg-a-v"></b></label><input type="range" id="vg-a" min="-3" max="-0.5" step="0.01"></div>
-      <div><label for="vg-n">n: <b id="vg-n-v"></b></label><input type="range" id="vg-n" min="1.05" max="3" step="0.01"></div>
-      <div><label for="vg-ks">Ks (cm/day): <b id="vg-ks-v"></b></label><input type="range" id="vg-ks" min="-1" max="3" step="0.01"></div>
+      <div><label for="vg-tr">θr residual: <b id="vg-tr-v"></b></label><input type="range" id="vg-tr" min="0" max="0.4" step="0.001"></div>
+      <div><label for="vg-ts">θs saturated: <b id="vg-ts-v"></b></label><input type="range" id="vg-ts" min="0.2" max="0.75" step="0.001"></div>
+      <div><label for="vg-a">α (1/cm): <b id="vg-a-v"></b></label><input type="range" id="vg-a" min="-3.5" max="0" step="0.001"></div>
+      <div><label for="vg-n">n: <b id="vg-n-v"></b></label><input type="range" id="vg-n" min="1.02" max="3.5" step="0.001"></div>
+      <div><label for="vg-ks">Ks (cm/day): <b id="vg-ks-v"></b></label><input type="range" id="vg-ks" min="-2" max="3.5" step="0.001"></div>
     </div>
+    <p class="hint" id="vg-src-note"></p>
   </div>
   <div class="rk-card"><div class="stats" id="vg-out"></div></div>
   <div class="two">
@@ -737,7 +774,7 @@ body.quarto-dark .rk-tools {
     <p>We fit hydraulic parameters to your lab or field measurements and carry them into two-dimensional flux, recharge and drainage modelling across hillslopes.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Hydraulic%20parameters%20and%20flux%20modelling">Get in touch →</a>
   </div>
-  <p class="refs">van Genuchten, M.Th. (1980). Soil Sci. Soc. Am. J. 44, 892–898. Class parameters: Carsel, R.F., Parrish, R.S. (1988). Water Resour. Res. 24, 755–769.</p>
+  <p class="refs">van Genuchten, M.Th. (1980). A closed-form equation for predicting the hydraulic conductivity of unsaturated soils. <i>Soil Sci. Soc. Am. J.</i> 44, 892–898. <a href="https://doi.org/10.2136/sssaj1980.03615995004400050002x">doi:10.2136/sssaj1980.03615995004400050002x</a> Mualem, Y. (1976). A new model for predicting the hydraulic conductivity of unsaturated porous media. <i>Water Resour. Res.</i> 12, 513–522. <a href="https://doi.org/10.1029/WR012i003p00513">doi:10.1029/WR012i003p00513</a> Class parameters: Carsel, R.F., Parrish, R.S. (1988). Developing joint probability distributions of soil water retention characteristics. <i>Water Resour. Res.</i> 24, 755–769. <a href="https://doi.org/10.1029/WR024i005p00755">doi:10.1029/WR024i005p00755</a> Pedotransfer functions: see the Water retention tab. Fitting: least squares on θ, as in RETC (van Genuchten, Leij &amp; Yates 1991).</p>
 </section>
 
 <!-- ============ HSG ============ -->
@@ -2306,13 +2343,117 @@ const CP = {
 const vgSel = $("vg-preset");
 Object.keys(CP).forEach(k => { const o = document.createElement("option"); o.value = k; o.textContent = k; vgSel.appendChild(o); });
 vgSel.value = "Loam";
+const vgSet = (p) => {
+  const cl = (v, a, b) => Math.min(b, Math.max(a, v));
+  $("vg-tr").value = cl(p.tr, 0, 0.4); $("vg-ts").value = cl(p.ts, 0.2, 0.75); $("vg-a").value = cl(Math.log10(p.a), -3.5, 0); $("vg-n").value = cl(p.n, 1.02, 3.5);
+  if (p.ks > 0) $("vg-ks").value = cl(Math.log10(p.ks), -2, 3.5);
+};
+let vgRef = null; // { f: θ(h) of the source curve, points: [...] }
+// Least-squares fit of van Genuchten (m = 1 − 1/n) to points {h (cm), v (θ)} by Nelder–Mead on transformed parameters
+function vgFit(pts, fixR) {
+  const unpack = q => ({ tr: fixR ? 0 : q[0], ts: q[1], a: Math.pow(10, q[2]), n: 1 + Math.exp(q[3]) });
+  const sse = q => { const p = unpack(q); if (p.tr < 0 || p.ts > 1 || p.tr >= p.ts - 0.01 || p.n > 15) return 1e9; let s = 0; pts.forEach(o => { const e = vgTheta(p, o.h) - o.v; s += e * e; }); return s; };
+  const nm = x0 => {
+    const N = 4; let S = [x0]; const step = [0.03, 0.03, 0.4, 0.4];
+    for (let i = 0; i < N; i++) { const x = x0.slice(); x[i] += step[i]; S.push(x); }
+    let F = S.map(sse);
+    for (let it = 0; it < 4000; it++) {
+      const idx = F.map((f, i) => i).sort((a, b) => F[a] - F[b]); S = idx.map(i => S[i]); F = idx.map(i => F[i]);
+      if (Math.abs(F[N] - F[0]) < 1e-14 && it > 200) break;
+      const c = Array(N).fill(0); for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) c[j] += S[i][j] / N;
+      const pt = k => c.map((v, j) => v + k * (S[N][j] - v));
+      const xr = pt(-1), fr = sse(xr);
+      if (fr < F[0]) { const xe = pt(-2), fe = sse(xe); if (fe < fr) { S[N] = xe; F[N] = fe; } else { S[N] = xr; F[N] = fr; } }
+      else if (fr < F[N - 1]) { S[N] = xr; F[N] = fr; }
+      else { const xc = pt(0.5), fc = sse(xc); if (fc < F[N]) { S[N] = xc; F[N] = fc; } else { for (let i = 1; i <= N; i++) { S[i] = S[i].map((v, j) => S[0][j] + 0.5 * (v - S[0][j])); F[i] = sse(S[i]); } } }
+    }
+    return { x: S[0], f: F[0] };
+  };
+  const vmax = Math.max(...pts.map(o => o.v)), vmin = Math.min(...pts.map(o => o.v));
+  let best = null;
+  [-2.3, -1.6, -0.9].forEach(la => [-1.5, -0.5, 0.3].forEach(ln => { const r = nm([fixR ? 0 : vmin * 0.5, Math.min(0.95, vmax + 0.01), la, ln]); if (!best || r.f < best.f) best = r; }));
+  const p = unpack(best.x), rmse = Math.sqrt(best.f / pts.length);
+  const mean = pts.reduce((s, o) => s + o.v, 0) / pts.length, sst = pts.reduce((s, o) => s + (o.v - mean) * (o.v - mean), 0);
+  return { p, rmse, r2: sst > 0 ? 1 - best.f / sst : NaN };
+}
+function vgShowSrc() {
+  const s = $("vg-src").value;
+  document.querySelectorAll("#tab-vg .vg-s-class").forEach(e => e.style.display = s === "class" ? "" : "none");
+  document.querySelectorAll("#tab-vg .vg-s-ptf").forEach(e => e.style.display = s === "ptf" ? "" : "none");
+  document.querySelectorAll("#tab-vg .vg-s-fit").forEach(e => e.style.display = s === "fit" ? "" : "none");
+}
 function vgLoad() {
-  const [tr, ts, a, n, ks] = CP[vgSel.value];
-  $("vg-tr").value = tr; $("vg-ts").value = ts; $("vg-a").value = Math.log10(a); $("vg-n").value = n; $("vg-ks").value = Math.log10(ks);
+  vgShowSrc();
+  const s = $("vg-src").value, msg = $("vg-msg"), note = $("vg-src-note");
+  msg.className = "msg"; msg.textContent = ""; note.textContent = "";
+  if (s === "class") {
+    const [tr, ts, a, n, ks] = CP[vgSel.value];
+    vgSet({ tr, ts, a, n, ks }); vgRef = null;
+    note.textContent = `Average values for ${vgSel.value.toLowerCase()} soils in the US (Carsel & Parrish 1988). Individual soils within a class vary widely.`;
+  } else if (s === "ptf") vgFromPTF();
+  else { vgRef = null; note.textContent = "Enter measurements and press Fit."; }
   drawVG();
 }
+function vgFromPTF() {
+  const msg = $("vg-msg"), note = $("vg-src-note");
+  msg.className = "msg"; msg.textContent = ""; note.textContent = "";
+  const sand = num($("vg-sand").value), clay = num($("vg-clay").value), oc = num($("vg-oc").value);
+  if (![sand, clay, oc].every(isFinite) || sand < 0 || clay < 0 || oc < 0 || sand + clay > 100) { msg.className = "msg err"; msg.textContent = "Enter sand, clay and organic carbon (sand plus clay at most 100%)."; vgRef = null; return; }
+  const silt = 100 - sand - clay, base = { sand, silt, clay, oc, top: $("vg-top").value === "1", cec: num($("vg-cec").value), ph: num($("vg-ph").value) };
+  let bd = num($("vg-bd").value); const est = !(bd > 0); if (est) bd = PTFS[0].fit({ ...base, bd: 1.4 }).bdNormal;
+  const x = { ...base, bd }, P = PTFS.find(q => q.id === $("vg-ptf").value);
+  const miss = P.needs.filter(k => !(x[k] > 0));
+  if (miss.length) { msg.className = "msg err"; msg.textContent = `${P.name} needs ${miss.map(k => ({ bd: "bulk density", cec: "CEC", ph: "pH" })[k]).join(" and ")}.`; vgRef = null; return; }
+  const r = P.fit(x);
+  if (r.error) { msg.className = "msg err"; msg.textContent = `${P.name} ${r.error}.`; vgRef = null; return; }
+  const hs = []; for (let i = 0; i <= 50; i++) hs.push(Math.pow(10, i / 50 * 4.2));
+  const pts = hs.map(h => ({ h, v: r.theta(h) }));
+  const fit = vgFit(pts, false);
+  const ksCm = r.ks ? r.ks * 2.4 : null; // mm/h → cm/day
+  vgSet({ ...fit.p, ks: ksCm || 0 });
+  vgRef = { f: r.theta, points: [] };
+  const exact = P.id === "wo" || P.id === "ht";
+  note.textContent = `${P.name}, calibrated on ${P.where}${est ? `; bulk density estimated at ${fmt(bd, 2)} g/cm³` : ""}. ` +
+    (exact ? "This function is already in van Genuchten form, so the parameters are its own." : `Its curve (${P.model}) is converted to van Genuchten form by least squares from 1 to 16,000 cm; the dashed line is the original, and the fit is within ${fmt(fit.rmse, 3)} m³/m³ on average.`) +
+    (ksCm ? ` Ks ${fmt(ksCm, 1)} cm/day from the same function.` : " This function gives no Ks, so the Ks slider is unchanged.");
+  if (r.flags.length) { msg.className = "msg"; msg.textContent = "Outside the soils this function was calibrated on: " + r.flags.join(", ") + "."; }
+}
+function vgObs() {
+  const hu = $("vg-obs-h").value, pct = $("vg-obs-t").value === "p", pts = [];
+  $("vg-obs").value.replace(/\r/g, "").split("\n").forEach(l => {
+    const c = l.split(/[,;\t ]+/).filter(Boolean); if (c.length < 2) return;
+    let h = Number(c[0]), v = Number(c[1]); if (!isFinite(h) || !isFinite(v)) return;
+    h = hu === "kpa" ? h * KPA : hu === "pf" ? Math.pow(10, h) : h; if (pct) v /= 100;
+    if (h >= 0 && v >= 0 && v <= 1) pts.push({ h, v });
+  });
+  return pts;
+}
+function vgDoFit() {
+  const msg = $("vg-msg"), note = $("vg-src-note"), pts = vgObs(), fixR = $("vg-fixr").value === "zero";
+  msg.className = "msg"; msg.textContent = "";
+  if (pts.length < (fixR ? 3 : 4)) { msg.className = "msg err"; msg.textContent = `Need at least ${fixR ? 3 : 4} usable points (two columns: suction, water content).`; return; }
+  const fit = vgFit(pts, fixR), ks = num($("vg-obs-ks").value);
+  vgSet({ ...fit.p, ks: ks > 0 ? ks : 0 });
+  vgRef = { f: null, points: pts };
+  const dry = Math.max(...pts.map(o => o.h)) / KPA;
+  note.textContent = `Fitted to ${pts.length} points: θr ${fmt(fit.p.tr, 3)}, θs ${fmt(fit.p.ts, 3)}, α ${fit.p.a.toPrecision(3)} /cm, n ${fmt(fit.p.n, 3)}. RMSE ${fmt(fit.rmse, 4)} m³/m³, R² ${fmt(fit.r2, 3)}.` +
+    (ks > 0 ? " Ks set from your measurement." : " Ks is not fitted from retention data; enter a measured Ks or set the slider.") +
+    (!fixR && pts.length < 5 ? " With so few points the four parameters are poorly determined." : "") +
+    (!fixR && dry < 1000 ? " No points drier than 1000 kPa, so θr is a guess; consider fixing it at 0." : "");
+  drawVG();
+}
+$("vg-src").addEventListener("change", vgLoad);
 vgSel.addEventListener("change", vgLoad);
-["vg-tr", "vg-ts", "vg-a", "vg-n", "vg-ks"].forEach(id => $(id).addEventListener("input", drawVG));
+const VG_PTF_IDS = ["sand", "clay", "oc", "bd", "top", "cec", "ph"];
+$("vg-ptf").innerHTML = PTFS.map(q => `<option value="${q.id}">${q.name}</option>`).join(""); $("vg-ptf").value = "wo";
+["vg-ptf"].concat(VG_PTF_IDS.map(k => "vg-" + k)).forEach(id => $(id).addEventListener("input", () => { if ($("vg-src").value === "ptf") { vgFromPTF(); drawVG(); } }));
+$("vg-fromw").addEventListener("click", () => {
+  [["sand", "w-sand"], ["clay", "w-clay"], ["oc", "w-oc"], ["bd", "w-bd"], ["top", "w-top"], ["cec", "w-cec"], ["ph", "w-ph"]].forEach(([a, b]) => $("vg-" + a).value = $(b).value);
+  vgFromPTF(); drawVG();
+});
+$("vg-fit").addEventListener("click", vgDoFit);
+$("vg-obs-ex").addEventListener("click", () => { $("vg-obs").value = "suction_kPa,theta\n0,0.452\n1,0.441\n3,0.418\n10,0.371\n33,0.305\n100,0.238\n300,0.187\n1500,0.128"; $("vg-obs-h").value = "kpa"; $("vg-obs-t").value = "v"; vgDoFit(); });
+readFileInto($("vg-obs-file"), $("vg-obs"), vgDoFit);
 function vgParams() {
   return { tr: +$("vg-tr").value, ts: +$("vg-ts").value, a: Math.pow(10, +$("vg-a").value), n: +$("vg-n").value, ks: Math.pow(10, +$("vg-ks").value) };
 }
@@ -2338,7 +2479,9 @@ function logChart(svg, tipEl, opts) {
   const floor = opts.ylog ? Math.pow(10, ylo) : -Infinity;
   let path = "", pen = false;
   hs.forEach((h, i) => { if (!(ys[i] >= floor)) { pen = false; return; } path += (pen ? "L" : "M") + X(h).toFixed(1) + "," + Y(ys[i]).toFixed(1); pen = true; });
+  (opts.extra || []).forEach(x => { let d = "", on = false; hs.forEach(h => { const v = x.f(h); if (!(v >= floor) || !isFinite(v)) { on = false; return; } d += (on ? "L" : "M") + X(h).toFixed(1) + "," + Y(v).toFixed(1); on = true; }); el("path", { d, stroke: x.color || "var(--ink-3)", "stroke-width": 1.6, "stroke-dasharray": "5 4", fill: "none" }, svg); });
   el("path", { d: path, stroke: "var(--s1)", "stroke-width": 2, fill: "none" }, svg);
+  (opts.points || []).forEach(o => el("circle", { cx: X(Math.max(o.h, Math.pow(10, -0.5))), cy: Y(o.v), r: 4, fill: "var(--ink)", stroke: "var(--surface)", "stroke-width": 1.5 }, svg));
   const dot = el("circle", { r: 4.5, fill: "var(--s1)", stroke: "var(--surface)", "stroke-width": 2, visibility: "hidden" }, svg);
   const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
   const move = ev => {
@@ -2356,13 +2499,13 @@ function drawVG() {
   const p = vgParams();
   if (p.tr >= p.ts) { p.tr = p.ts - 0.01; $("vg-tr").value = p.tr; }
   $("vg-tr-v").textContent = p.tr.toFixed(3); $("vg-ts-v").textContent = p.ts.toFixed(3);
-  $("vg-a-v").textContent = p.a.toPrecision(3); $("vg-n-v").textContent = p.n.toFixed(2); $("vg-ks-v").textContent = p.ks.toPrecision(3);
+  $("vg-a-v").textContent = p.a.toPrecision(3); $("vg-n-v").textContent = p.n.toFixed(3); $("vg-ks-v").textContent = p.ks.toPrecision(3);
   const fc = vgTheta(p, 336.5), wp = vgTheta(p, 15296);
   const stat = (k, v, u) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${u}</div></div>`;
   $("vg-out").innerHTML = stat("θ at field capacity", fmt(fc, 3), "m³/m³ at 33 kPa") + stat("θ at wilting point", fmt(wp, 3), "m³/m³ at 1500 kPa") +
     stat("Available water", fmt(fc - wp, 3), `m³/m³ · ${fmt((fc - wp) * 1000, 0)} mm per m`) + stat("K at field capacity", vgK(p, 336.5).toExponential(2), "cm/day");
   if (!$("tab-vg").classList.contains("active")) return;
-  logChart($("vg-ret"), $("vg-ret-tip"), { f: h => vgTheta(p, h), ylo: 0, yhi: 0.6, label: v => `θ = ${v.toFixed(3)}` });
+  logChart($("vg-ret"), $("vg-ret-tip"), { f: h => vgTheta(p, h), ylo: 0, yhi: Math.max(0.6, Math.ceil((p.ts + 0.02) * 10) / 10), label: v => `θ = ${v.toFixed(3)}`, extra: vgRef && vgRef.f ? [{ f: vgRef.f }] : [], points: vgRef ? vgRef.points : [] });
   const kmax = Math.ceil(Math.log10(p.ks));
   logChart($("vg-k"), $("vg-k-tip"), { f: h => vgK(p, h), ylog: true, ylo: kmax - 12, yhi: kmax, label: v => `K = ${v.toExponential(2)} cm/day` });
 }
