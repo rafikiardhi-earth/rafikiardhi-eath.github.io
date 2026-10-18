@@ -861,6 +861,34 @@ body.quarto-dark .rk-tools {
       <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:8px"><div id="kr-table"></div></div>
     </div>
   </div>
+  <div class="rk-card" id="kr-check">
+    <h3>Check a published result</h3>
+    <p class="hint" style="margin-top:0">Kriging accuracy is set by the variogram and by how far apart the samples are, so a reported error can be checked without the data. This lays out samples at the stated density, works out the kriging variance at each one from the stated variogram, and gives the cross-validation RMSE you should expect if that variogram is right.</p>
+    <div class="rk-grid">
+      <div><label for="kc-model">Variogram model</label><select id="kc-model"><option value="sph">Spherical</option><option value="exp">Exponential</option><option value="gau">Gaussian</option></select></div>
+      <div><label for="kc-sd">Standard deviation of the data</label><input type="number" id="kc-sd" min="0" step="any"></div>
+      <div><label for="kc-nug">Nugget (% of sill)</label><input type="number" id="kc-nug" value="0" min="0" max="100" step="any"></div>
+      <div><label for="kc-r">Range, practical (m)</label><input type="number" id="kc-r" min="0" step="any"></div>
+      <div><label for="kc-n">Number of samples</label><input type="number" id="kc-n" min="10" step="1"></div>
+      <div><label for="kc-area">Area (ha)</label><input type="number" id="kc-area" min="0" step="any"></div>
+      <div><label for="kc-lay">Sample layout</label><select id="kc-lay"><option value="random">Random</option><option value="grid">Regular grid</option></select></div>
+      <div><label for="kc-rmse">Reported RMSE (optional)</label><input type="number" id="kc-rmse" min="0" step="any"></div>
+    </div>
+    <p class="hint">If the nugget isn't reported, leave it at 0: that is the most generous assumption, so a result that still looks too good really is.</p>
+    <div class="rk-row"><button class="rk-btn primary" id="kc-run">Check</button><button class="rk-btn" id="kc-ex">Load example</button></div>
+    <div class="msg" id="kc-msg" role="status"></div>
+    <div id="kc-res" hidden=""><div class="stats" id="kc-stats" style="margin-top:12px"></div><p id="kc-verdict" style="margin:12px 0 0"></p><p class="hint" id="kc-why"></p></div>
+  </div>
+  <div class="rk-card">
+    <h3>Reading the results</h3>
+    <ul style="margin:0; padding-left:20px; color:var(--ink-2); font-size:.95rem">
+      <li style="margin-bottom:8px"><b>Nugget : sill</b> is the share of variation you can't predict at your sampling scale: measurement error plus variation over distances shorter than your closest samples. Under 25% is strong spatial dependence, 25–75% moderate, over 75% weak.</li>
+      <li style="margin-bottom:8px"><b>Range</b> is the distance beyond which samples stop telling you about each other. If your samples are mostly further apart than the range, kriging can do little better than the mean, however good the software.</li>
+      <li style="margin-bottom:8px"><b>RMSE vs. the mean</b> is the real test: it shows how much spatial prediction actually adds. A map made by kriging is only worth its colours if this is clearly above zero.</li>
+      <li style="margin-bottom:8px"><b>MSDR and interval coverage</b> show whether the uncertainty is honest. MSDR near 1 and coverage near 90% mean the kriging variance can be trusted; otherwise the uncertainty map is too optimistic or too cautious.</li>
+      <li><b>Two limits that are rarely stated.</b> Cross-validated RMSE can't fall much below the square root of the nugget, because that part of the variation isn't predictable from neighbours. And when samples are further apart than the range, RMSE approaches the standard deviation of the data. A published RMSE well below these limits usually means the validation points weren't independent of the calibration data, the variogram came from a different dataset, or the error was reported on a different scale.</li>
+    </ul>
+  </div>
   <div class="advanced">
     <strong>Need a map, covariates or uncertainty?</strong>
     <p>We produce kriged and regression-kriged maps with terrain, remote sensing and legacy data, full prediction uncertainty, and sampling designs built from the variogram.</p>
@@ -2864,7 +2892,7 @@ S117,815,406,1.86
 S118,695,767,1.8
 S119,765,406,1.77
 S120,342,469,1.63`;
-let krLast = null, krText = "";
+let krLast = null, krText = "", krNN = null;
 function krCols() {
   const P = parseCSV($("kr-data").value), h = P.header.map(s => s.trim().toLowerCase());
   const fx = h.findIndex(s => s === "x" || s === "easting"), fy = h.findIndex(s => s === "y" || s === "northing");
@@ -2947,7 +2975,7 @@ function krCompute(D) {
   const d = Math.max(...raw.map(Math.abs)) < 10 ? 3 : 2, du = D.unit;
   const skewOf = a => { const mu = a.reduce((p, q) => p + q, 0) / a.length, s = Math.sqrt(a.reduce((p, q) => p + (q - mu) ** 2, 0) / a.length); return s > 0 ? a.reduce((p, q) => p + ((q - mu) / s) ** 3, 0) / a.length : 0; };
   const skew = skewOf(raw), skewT = lg ? skewOf(zs) : skew;
-  $("kr-stats").innerHTML = evStat("Points", n) + evStat("Model", Krige.MODELS[m.type].name, (m.nu ? "κ = " + m.nu + ", " : "") + ($("kr-man").checked ? "set by you" : "weighted least squares")) +
+  $("kr-stats").innerHTML = evStat("Points", n) + evStat("Typical spacing", "", "") .replace('<div class="v"></div>', '<div class="v" id="kr-nnv">–</div>') + evStat("Model", Krige.MODELS[m.type].name, (m.nu ? "κ = " + m.nu + ", " : "") + ($("kr-man").checked ? "set by you" : "weighted least squares")) +
     evStat("Nugget", fmt(m.c0, 4), lg ? "log scale" : "") + evStat("Partial sill", fmt(m.c1, 4), lg ? "log scale" : "") + evStat("Range", fmt(m.r, m.r < 10 ? 2 : 0), du + (m.type === "sph" ? "" : ", practical")) +
     (Krige.MODELS[m.type].kappa ? evStat("Range parameter a", fmt(Krige.rangeParam(m), Krige.rangeParam(m) < 10 ? 3 : 1), m.type === "ste" ? "as gstat \"Ste\" reports it" : "as gstat \"Mat\" reports it") : "") +
     evStat("Nugget : sill", fmt(nr, 0) + "%", dep + " spatial dependence") +
@@ -2955,6 +2983,10 @@ function krCompute(D) {
     evStat("Bias (ME)", fmt(st.me, d), "mean of pred − obs") + evStat("R²", fmt(st.r2, 3)) + evStat("Lin's CCC", fmt(st.ccc, 3)) +
     evStat("MSDR", fmt(msdr, 2), "ideal ≈ 1" + (lg ? ", log scale" : "")) + evStat("90% interval coverage", fmt(p90, 0) + "%", "ideal ≈ 90%");
   const notes = [];
+  { const nnd = []; for (let i = 0; i < n; i++) { let b = Infinity; for (let j = 0; j < n; j++) if (j !== i) { const dd = Math.hypot(xs[i] - xs[j], ys[i] - ys[j]); if (dd < b) b = dd; } nnd.push(b); } nnd.sort((a, b) => a - b);
+    const med = nnd[Math.floor(n / 2)]; krNN = med;
+    if (med > m.r) notes.push(`Half your points are more than ${fmt(med, med < 10 ? 2 : 0)} ${du} from their nearest neighbour, beyond the range (${fmt(m.r, m.r < 10 ? 2 : 0)} ${du}): kriging can add little over the mean at this density.`);
+    else if (med > m.r / 2) notes.push(`The typical distance to the nearest point (${fmt(med, med < 10 ? 2 : 0)} ${du}) is over half the range, so predictions lean heavily on the mean.`); }
   if (st.rmse >= rmse0) notes.push("Kriging does no better than the mean here: there is little spatial structure at this sampling density, or the variogram needs adjusting.");
   if (!$("kr-man").checked && m.r >= rmax * 0.98) notes.push("The fitted range hit the search limit: the variogram is still rising at the maximum lag. That often signals a trend across the area; try a larger maximum lag, or remove the trend first.");
   if (Krige.MODELS[m.type].kappa && !$("kr-man").checked && m.nu >= Krige.KAPPAS[Krige.KAPPAS.length - 1]) notes.push(`κ reached its upper limit (${m.nu}): the variogram is very smooth near the origin and behaves almost like a Gaussian model.`);
@@ -2968,6 +3000,7 @@ function krCompute(D) {
   if (D.geo) notes.push("Longitude and latitude were converted to kilometres around the centre of your data.");
   if (ev.some(p => p.n < 30)) notes.push("Some lag classes have fewer than 30 pairs (small dots on the variogram), so treat them with caution.");
   $("kr-note").textContent = notes.join(" ");
+  if ($("kr-nnv")) { $("kr-nnv").textContent = fmt(krNN, krNN < 10 ? 2 : 0); $("kr-nnv").nextElementSibling.textContent = du + ", median to nearest point"; }
   if (D.skipped) msg.textContent = `${D.skipped} row${D.skipped > 1 ? "s" : ""} skipped because of missing values.`; else msg.textContent = "";
   krLast = { D, ev, m, cv, cutoff, ok, lg, zs };
   const f = (v, k) => isFinite(v) ? fmt(v, k) : "";
@@ -3038,6 +3071,52 @@ const krNuVis = () => { $("kr-nubox").style.display = ["mat", "ste"].includes($(
 $("kr-man").addEventListener("change", () => { $("kr-manbox").style.display = $("kr-man").checked ? "grid" : "none"; krNuVis(); });
 $("kr-model").addEventListener("change", krNuVis); krNuVis();
 $("kr-dl").addEventListener("click", () => { if (krLast) download("kriging_loocv.csv", toCSV(krLast.header, krLast.rows)); });
+/* plausibility check for a published kriging result */
+function kcRun() {
+  const msg = $("kc-msg"); msg.className = "msg"; msg.textContent = "";
+  const sd = num($("kc-sd").value), nugP = num($("kc-nug").value) || 0, r = num($("kc-r").value), n = Math.round(num($("kc-n").value)), ha = num($("kc-area").value), rep = num($("kc-rmse").value);
+  if (!(sd > 0) || !(r > 0) || !(n >= 10) || !(ha > 0) || nugP < 0 || nugP > 100) { msg.className = "msg err"; msg.textContent = "Enter the standard deviation, range, number of samples (10 or more) and area."; $("kc-res").hidden = true; return; }
+  const sill = sd * sd, m = Krige.prepare({ type: $("kc-model").value, c0: sill * nugP / 100, c1: sill * (1 - nugP / 100), r });
+  const A = ha * 10000, spacing = Math.sqrt(A / n);
+  // simulate at most 400 samples at the same density; with more, only interior points are scored
+  const nn = Math.min(n, 400), side = Math.sqrt(nn) * spacing, grid = $("kc-lay").value === "grid";
+  const reps = grid ? 1 : 25, rm = [];
+  let seed = 12345; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let t = 0; t < reps; t++) {
+    const xs = [], ys = [];
+    if (grid) { const k = Math.round(Math.sqrt(nn)); for (let i = 0; i < k; i++) for (let j = 0; j < k; j++) { xs.push((i + 0.5) * spacing); ys.push((j + 0.5) * spacing); } }
+    else for (let i = 0; i < nn; i++) { xs.push(rnd() * side); ys.push(rnd() * side); }
+    const zs = xs.map(() => 0), L = xs.length, edge = n > 400 ? side * 0.2 : -1;
+    let sv = 0, cnt = 0;
+    for (let i = 0; i < L; i++) {
+      if (edge > 0 && (xs[i] < edge || ys[i] < edge || xs[i] > side - edge || ys[i] > side - edge)) continue;
+      const d = []; for (let j = 0; j < L; j++) if (j !== i) d.push([Math.hypot(xs[i] - xs[j], ys[i] - ys[j]), j]);
+      d.sort((a, b) => a[0] - b[0]);
+      const q = Krige.okAt(xs, ys, zs, d.slice(0, 16).map(p => p[1]), xs[i], ys[i], m);
+      if (q) { sv += q.var; cnt++; }
+    }
+    rm.push(Math.sqrt(sv / cnt));
+  }
+  rm.sort((a, b) => a - b);
+  const pct = p => rm[Math.min(rm.length - 1, Math.max(0, Math.round(p * (rm.length - 1))))];
+  const lo = pct(0.05), mid = pct(0.5), hi = pct(0.95), floor = Math.sqrt(m.c0);
+  const d = sd < 10 ? 3 : 2;
+  $("kc-stats").innerHTML = evStat("Sample spacing", fmt(spacing, 0) + " m", grid ? "grid" : "average, random layout") + evStat("Spacing ÷ range", fmt(spacing / r, 2), spacing > r ? "samples beyond the range" : "within the range") +
+    evStat("Expected RMSE", fmt(mid, d), grid ? "from the kriging variance" : `5–95%: ${fmt(lo, d)}–${fmt(hi, d)}`) + evStat("Lowest possible", fmt(floor, d), "√nugget") + evStat("No spatial skill", fmt(sd, d), "standard deviation") +
+    (isFinite(rep) && rep > 0 ? evStat("Reported RMSE", fmt(rep, d), fmt(rep / mid * 100, 0) + "% of expected") : "");
+  let v = "", why = `Expected RMSE is the square root of the average ordinary kriging variance at each sample, predicted from its 16 nearest neighbours with itself left out, using the stated variogram${grid ? "" : `, over ${reps} random layouts`}.`;
+  if (isFinite(rep) && rep > 0) {
+    const lowLim = grid ? mid * 0.8 : lo * 0.85, hiLim = grid ? mid * 1.25 : hi * 1.15;
+    if (rep < Math.max(floor * 0.95, lowLim)) v = `<b style="color:#c0392b">Implausibly low.</b> With a range of ${fmt(r, 0)} m and samples about ${fmt(spacing, 0)} m apart, kriging should give an RMSE of about ${fmt(mid, d)}${spacing > r ? ", close to the standard deviation itself, because most samples are beyond the range of each other" : ""}. A reported ${fmt(rep, d)} needs explaining: validation points that weren't independent, a variogram or SD from a different dataset, or errors on a transformed scale.`;
+    else if (rep > hiLim) v = `<b style="color:var(--warn)">Worse than the variogram implies.</b> Possible causes: a poorly fitted variogram, outliers, a trend, or a nugget larger than stated.`;
+    else v = `<b style="color:var(--good)">Consistent</b> with the stated variogram and sampling density.`;
+  } else if (spacing > r) v = `Samples are further apart than the range, so kriging can do little better than the mean here: expect an RMSE near ${fmt(mid, d)}, compared with a standard deviation of ${fmt(sd, d)}.`;
+  $("kc-verdict").innerHTML = v; $("kc-why").textContent = why;
+  $("kc-res").hidden = false;
+}
+$("kc-run").addEventListener("click", kcRun);
+$("kc-ex").addEventListener("click", () => { $("kc-model").value = "sph"; $("kc-sd").value = 8; $("kc-nug").value = 0; $("kc-r").value = 46; $("kc-n").value = 100; $("kc-area").value = 50; $("kc-lay").value = "random"; $("kc-rmse").value = 3; kcRun(); });
+
 
 /* ---------------- init ---------------- */
 $("sp-data").value = EX_CONT; spLastText = EX_CONT; spRefreshColumns();
