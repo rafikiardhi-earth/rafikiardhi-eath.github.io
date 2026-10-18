@@ -22,6 +22,7 @@ anchor-sections: false
   --s3: #1baf7a;
   --s4: #eda100;
   --s5: #e87ba4;
+  --s6: #7a5cc9;
   --obs: #b9b1a4;
   --good: #1f7a4d;
   --warn: #9a6400;
@@ -30,7 +31,7 @@ anchor-sections: false
 body.quarto-dark .rk-tools {
   --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1;
   --ink-3: #8f887d; --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f;
-  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --obs: #5d564d; --good: #5cc28f; --warn: #e0a440;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --s4: #c98500; --s5: #d55181; --s6: #9a80ec; --obs: #5d564d; --good: #5cc28f; --warn: #e0a440;
 }
 .rk-tools a { color: var(--accent); }
 .rk-tools td.diag { font-weight: 700; background: var(--accent-soft); }
@@ -128,11 +129,12 @@ body.quarto-dark .rk-tools {
 .rk-tools .tglabel { flex: 0 0 100%; font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--ink-3); font-weight: 600; }
 .rk-tools nav.rk-tabs button { font-size: .88rem; padding: 6px 12px; }
 .rk-tools nav.rk-tabs button[data-tip] { position: relative; }
-.rk-tools nav.rk-tabs button[data-tip]::after { content: attr(data-tip); position: absolute; left: 0; top: calc(100% + 8px); width: max-content; max-width: 240px; padding: 8px 10px; border-radius: 8px; background: var(--ink); color: var(--surface); font-size: .8rem; line-height: 1.35; font-weight: 400; text-align: left; white-space: normal; box-shadow: 0 4px 14px rgba(0,0,0,.25); opacity: 0; visibility: hidden; transition: opacity .12s ease .25s; pointer-events: none; z-index: 20; }
-@media (hover: hover) { .rk-tools nav.rk-tabs button[data-tip]:hover::after { opacity: 1; visibility: visible; } }
+.rk-tools nav.rk-tabs button[data-tip]::after { content: attr(data-tip); position: absolute; left: 0; top: calc(100% + 8px); width: max-content; max-width: 240px; padding: 8px 10px; border-radius: 8px; background: var(--ink); color: var(--surface); font-size: .8rem; line-height: 1.35; font-weight: 400; text-align: left; white-space: normal; box-shadow: 0 4px 14px rgba(0,0,0,.25); display: none; pointer-events: none; z-index: 20; animation: tipIn .12s ease .3s both; }
+@keyframes tipIn { from { opacity: 0; } to { opacity: 1; } }
+@media (hover: hover) { .rk-tools nav.rk-tabs button[data-tip]:hover::after { display: block; } }
 
 .rk-tools nav.rk-tabs button[data-tip].tip-r::after { left: auto; right: 0; }
-.rk-tools nav.rk-tabs button[data-tip]:focus-visible::after { opacity: 1; visibility: visible; }
+.rk-tools nav.rk-tabs button[data-tip]:focus-visible::after { display: block; }
 .rk-tools .rk-wrap { max-width: none; padding: 0; }
 .rk-tools .rk-hero { padding: 0 0 12px; }
 .rk-tools .rk-card h3, .rk-tools h2 { margin-top: 0; }
@@ -155,7 +157,7 @@ body.quarto-dark .rk-tools {
 <nav class="rk-tabs" aria-label="Tools">
   <div class="rk-wrap" role="tablist">
     <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" data-tip="Turn horizon data into standard depth intervals (0–5, 5–15 cm…) with a smooth profile." aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" data-tip="How many soil classes an area has and how evenly they share it." aria-selected="false">Pedodiversity</button><button role="tab" data-tab="krige" data-tip="Fit a variogram to point data and test kriging by cross-validation." aria-selected="false">Variogram &amp; kriging</button><button role="tab" data-tab="eval" data-tip="How well a map or model matches independent observations: accuracy, uncertainty, classes." aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" data-tip="How many samples you need for a field mean, or for a map." aria-selected="false">Sampling density</button></div>
-    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="See how van Genuchten parameters shape water retention and conductivity." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from sand, clay and organic matter." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D) for runoff estimates." aria-selected="false">Hydrologic soil group</button></div>
+    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="See how van Genuchten parameters shape water retention and conductivity." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from six pedotransfer functions, compared side by side." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D) for runoff estimates." aria-selected="false">Hydrologic soil group</button></div>
     <div class="tgroup"><span class="tglabel">Energy</span><button role="tab" data-tab="soiltemp" data-tip="How daily and seasonal temperature swings travel down into the soil." aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" data-tip="Where the sun's energy goes at a bare soil surface as it wets up." aria-selected="false">Energy balance</button></div>
     <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" data-tip="Texture class from sand, silt and clay, one sample or a whole file." aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" data-tip="Carbon stocks to fixed depths or equivalent soil mass, and whether a change is detectable." aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" data-tip="A Munsell notation as an on-screen colour, and what it tells you about the soil." aria-selected="false">Munsell colour</button></div>
     <div class="tgroup"><span class="tglabel">Checks</span><a class="tglink" href="checks.html">Check a result: yours or a published one →</a></div>
@@ -290,30 +292,62 @@ body.quarto-dark .rk-tools {
 
 <!-- ============ WATER RETENTION ============ -->
 <section class="tool" id="tab-water">
-  <h2>Water retention from texture</h2>
-  <p class="lede">Estimate field capacity, wilting point, available water and saturated conductivity from sand, clay and organic matter, using the Saxton &amp; Rawls (2006) pedotransfer functions.</p>
+  <h2>Water retention: compare pedotransfer functions</h2>
+  <p class="lede">Estimate the water retention curve, field capacity, wilting point and available water from texture, carbon and bulk density with six published pedotransfer functions at once. They often disagree, and the spread between them is an honest measure of how uncertain an estimate from texture alone is. Add measured points to see which one fits your soil.</p>
   <div class="two">
     <div class="rk-card">
-      <h3>Inputs</h3>
+      <h3>Your soil</h3>
       <div class="rk-grid">
-        <div><label for="w-sand">Sand (%)</label><input type="number" id="w-sand" value="40" min="0" max="100"></div>
-        <div><label for="w-clay">Clay (%)</label><input type="number" id="w-clay" value="20" min="0" max="100"></div>
-        <div><label for="w-om">Organic matter (%)</label><input type="number" id="w-om" value="2.5" min="0" max="8" step="0.1"></div>
+        <div><label for="w-sand">Sand (%)</label><input type="number" id="w-sand" value="40" min="0" max="100" step="any"></div>
+        <div><label for="w-clay">Clay (%)</label><input type="number" id="w-clay" value="20" min="0" max="100" step="any"></div>
+        <div><label for="w-oc">Organic carbon (%)</label><input type="number" id="w-oc" value="1.5" min="0" max="20" step="any"></div>
+        <div><label for="w-bd">Bulk density (g/cm³)</label><input type="number" id="w-bd" placeholder="estimated if blank" min="0.5" max="2.2" step="any"></div>
+        <div><label for="w-top">Horizon</label><select id="w-top"><option value="1">Topsoil</option><option value="0">Subsoil</option></select></div>
+        <div><label for="w-fc">Field capacity at</label><select id="w-fc"><option value="33">33 kPa (pF 2.5)</option><option value="10">10 kPa (pF 2.0)</option></select></div>
+        <div><label for="w-cec">CEC (cmol(+)/kg, optional)</label><input type="number" id="w-cec" min="0" step="any"></div>
+        <div><label for="w-ph">pH in water (optional)</label><input type="number" id="w-ph" min="2" max="11" step="any"></div>
       </div>
-      <p class="hint">Valid for organic matter up to about 8% and clay up to about 60%.</p>
+      <p class="hint" id="w-silt"></p>
+      <p class="hint">Sand 50–2000 µm, silt 2–50 µm, clay &lt; 2 µm. Organic matter is taken as 1.724 × organic carbon, as the original equations assume. Without a bulk density, the Saxton &amp; Rawls estimate for a normally packed soil is used. CEC and pH are needed only for the tropical function (Hodnett &amp; Tomasella). 10 kPa is often a better field capacity for sandy soils.</p>
       <div class="msg" id="w-msg" role="status"></div>
     </div>
     <div class="rk-card">
-      <h3>Estimates</h3>
-      <div class="stats" id="w-out"></div>
+      <h3>Your measurements (optional)</h3>
+      <textarea id="w-obs" spellcheck="false" aria-label="Measured suction and water content" placeholder="suction, water content&#10;10, 0.36&#10;33, 0.29&#10;1500, 0.14"></textarea>
+      <div class="rk-grid">
+        <div><label for="w-obs-h">Suction unit</label><select id="w-obs-h"><option value="kpa">kPa</option><option value="cm">cm of water (hPa)</option><option value="pf">pF (log₁₀ cm)</option></select></div>
+        <div><label for="w-obs-t">Water content unit</label><select id="w-obs-t"><option value="v">m³/m³</option><option value="p">% by volume</option></select></div>
+      </div>
+      <div class="rk-row">
+        <label class="file-label">Open CSV<input type="file" id="w-obs-file" accept=".csv,.txt,.tsv"></label><span class="lock">🔒 Processed on your device. Nothing is sent or stored.</span>
+        <button class="rk-btn" id="w-ex">Load example</button>
+      </div>
+      <p class="hint">Two columns: suction and volumetric water content, one measurement per row, for the soil described on the left. Each function is then scored by how closely it matches your points.</p>
+      <div class="msg" id="w-obs-msg" role="status"></div>
     </div>
+  </div>
+  <div class="rk-card">
+    <div class="rk-row" style="margin-top:0; justify-content:space-between">
+      <h3 style="margin:0">Retention curves</h3>
+      <button class="rk-btn" id="w-dl">Download CSV</button>
+    </div>
+    <div class="legend" id="w-legend"></div>
+    <div class="chart-box"><svg class="chart" id="w-chart" role="img" aria-label="Water retention curves from six pedotransfer functions"></svg><div class="tip" id="w-tip"></div></div>
+    <div class="stats" id="w-stats" style="margin-top:12px"></div>
+    <div class="rk-table-wrap" style="margin-top:12px"><div id="w-table"></div></div>
+    <p class="hint" id="w-why"></p>
   </div>
   <div class="advanced">
     <strong>Need retention that varies with depth?</strong>
     <p>We build depth-continuous retention profiles and calibrate pedotransfer functions to your own site data, ready for water balance and recharge modelling.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Site-calibrated%20water%20retention">Get in touch →</a>
   </div>
-  <p class="refs">Saxton, K.E., Rawls, W.J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. Soil Sci. Soc. Am. J. 70, 1569–1578.</p>
+  <p class="refs">Saxton, K.E., Rawls, W.J. (2006). Soil water characteristic estimates by texture and organic matter for hydrologic solutions. <i>Soil Sci. Soc. Am. J.</i> 70, 1569–1578. <a href="https://doi.org/10.2136/sssaj2005.0117">doi:10.2136/sssaj2005.0117</a><br>
+  Rawls, W.J., Brakensiek, D.L. (1985). Prediction of soil water properties for hydrologic modeling. In: Jones, E.B., Ward, T.J. (eds), <i>Watershed Management in the Eighties</i>. ASCE, New York, 293–299.<br>
+  Wösten, J.H.M., Lilly, A., Nemes, A., Le Bas, C. (1999). Development and use of a database of hydraulic properties of European soils. <i>Geoderma</i> 90, 169–185. <a href="https://doi.org/10.1016/S0016-7061(98)00132-3">doi:10.1016/S0016-7061(98)00132-3</a><br>
+  Vereecken, H., Maes, J., Feyen, J., Darius, P. (1989). Estimating the soil moisture retention characteristic from texture, bulk density, and carbon content. <i>Soil Science</i> 148, 389–403.<br>
+  Hodnett, M.G., Tomasella, J. (2002). Marked differences between van Genuchten soil water-retention parameters for temperate and tropical soils: a new water-retention pedo-transfer functions developed for tropical soils. <i>Geoderma</i> 108, 155–180. <a href="https://doi.org/10.1016/S0016-7061(02)00105-2">doi:10.1016/S0016-7061(02)00105-2</a><br>
+  Cosby, B.J., Hornberger, G.M., Clapp, R.B., Ginn, T.R. (1984). A statistical exploration of the relationships of soil moisture characteristics to the physical properties of soils. <i>Water Resour. Res.</i> 20, 682–690. <a href="https://doi.org/10.1029/WR020i006p00682">doi:10.1029/WR020i006p00682</a></p>
 </section>
 
 <!-- ============ VAN GENUCHTEN ============ -->
@@ -1272,6 +1306,7 @@ function showTab(name, push) {
   document.querySelectorAll("section.tool").forEach(s => s.classList.toggle("active", s.id === "tab-" + name));
   if (push) history.replaceState(null, "", "#" + name);
   if (name === "vg") drawVG();
+  if (name === "water") drawWater();
   if (name === "texture") updTexture();
   if (name === "munsell") updMunsell();
   if (name === "eval") drawEvCharts();
@@ -1644,38 +1679,247 @@ function runCarbon() {
 $("c-run").addEventListener("click", runCarbon);
 $("c-dl").addEventListener("click", () => carbonOut && download("carbon_stocks.csv", toCSV(carbonOut.header, carbonOut.rows.map(r => r.map(v => typeof v === "number" ? +v.toFixed(3) : v)))));
 
-/* ============ WATER RETENTION (Saxton & Rawls 2006) ============ */
-function saxtonRawls(sandPct, clayPct, om) {
-  const S = sandPct / 100, C = clayPct / 100;
-  const t1500t = -0.024 * S + 0.487 * C + 0.006 * om + 0.005 * S * om - 0.013 * C * om + 0.068 * S * C + 0.031;
-  const t1500 = t1500t + (0.14 * t1500t - 0.02);
-  const t33t = -0.251 * S + 0.195 * C + 0.011 * om + 0.006 * S * om - 0.027 * C * om + 0.452 * S * C + 0.299;
-  const t33 = t33t + (1.283 * t33t * t33t - 0.374 * t33t - 0.015);
-  const ts33t = 0.278 * S + 0.034 * C + 0.022 * om - 0.018 * S * om - 0.027 * C * om - 0.584 * S * C + 0.078;
-  const ts33 = ts33t + (0.636 * ts33t - 0.107);
-  const ts = t33 + ts33 - 0.097 * S + 0.043;
-  const bd = (1 - ts) * 2.65;
-  const B = (Math.log(1500) - Math.log(33)) / (Math.log(t33) - Math.log(t1500));
-  const lambda = 1 / B;
-  const ks = 1930 * Math.pow(ts - t33, 3 - lambda); // mm/h
-  return { wp: t1500, fc: t33, sat: ts, awc: t33 - t1500, bd, ks };
+/* ============ WATER RETENTION: pedotransfer function comparison ============ */
+// Pedotransfer functions for water retention. Suction h in cm of water throughout.
+// Inputs: sand, silt, clay (%), oc (organic carbon, %), bd (g/cm3), top (1 topsoil / 0 subsoil), cec (cmol/kg), ph (water).
+const KPA = 10.197; // cm of water per kPa
+const vg = (h, tr, ts, a, n, m) => h <= 0 ? ts : tr + (ts - tr) / Math.pow(1 + Math.pow(a * h, n), m == null ? 1 - 1 / n : m);
+const PTFS = [
+  {
+    id: 'sr', name: 'Saxton & Rawls (2006)', where: 'US soils (USDA–NRCS)', model: 'Power curve, 33–1500 kPa',
+    needs: [],
+    fit(x) {
+      const S = x.sand / 100, C = x.clay / 100, OM = x.oc * 1.724;
+      const t1500t = -0.024 * S + 0.487 * C + 0.006 * OM + 0.005 * S * OM - 0.013 * C * OM + 0.068 * S * C + 0.031;
+      const t1500 = t1500t + (0.14 * t1500t - 0.02);
+      const t33t = -0.251 * S + 0.195 * C + 0.011 * OM + 0.006 * S * OM - 0.027 * C * OM + 0.452 * S * C + 0.299;
+      const t33 = t33t + (1.283 * t33t * t33t - 0.374 * t33t - 0.015);
+      const ts33t = 0.278 * S + 0.034 * C + 0.022 * OM - 0.018 * S * OM - 0.027 * C * OM - 0.584 * S * C + 0.078;
+      const ts33 = ts33t + (0.636 * ts33t - 0.107);
+      const ts = t33 + ts33 - 0.097 * S + 0.043;
+      const B = (Math.log(1500) - Math.log(33)) / (Math.log(t33) - Math.log(t1500));
+      const A = Math.exp(Math.log(33) + B * Math.log(t33));
+      const pet = -21.67 * S - 27.93 * C - 81.97 * ts33 + 71.12 * S * ts33 + 8.29 * C * ts33 + 14.05 * S * C + 27.16;
+      const pe = Math.max(0, pet + (0.02 * pet * pet - 0.113 * pet - 0.7));
+      const ks = 1930 * Math.pow(ts - t33, 3 - 1 / B); // mm/h
+      const flags = [];
+      if (OM > 8) flags.push('organic matter above 8%');
+      if (x.clay > 60) flags.push('clay above 60%');
+      return {
+        ts, ks, bdNormal: (1 - ts) * 2.65,
+        theta(h) {
+          const p = h / KPA;
+          if (p <= pe) return ts;
+          if (p < 33) return t33 + (33 - p) * (ts - t33) / (33 - pe);
+          return Math.pow(p / A, -1 / B);
+        },
+        params: `θs ${ts.toFixed(3)}, A ${A.toPrecision(3)}, B ${B.toFixed(2)}, ψe ${pe.toFixed(1)} kPa`,
+        flags
+      };
+    }
+  },
+  {
+    id: 'rb', name: 'Rawls & Brakensiek (1985)', where: 'US soils', model: 'Brooks–Corey',
+    needs: ['bd'],
+    fit(x) {
+      const S = x.sand, C = x.clay, p = 1 - x.bd / 2.65;
+      const hb = Math.exp(5.3396738 + 0.1845038 * C - 2.48394546 * p - 0.00213853 * C * C - 0.04356349 * S * p - 0.61745089 * C * p
+        + 0.00143598 * S * S * p * p - 0.00855375 * C * C * p * p - 0.00001282 * S * S * C + 0.00895359 * C * C * p
+        - 0.00072472 * S * S * p + 0.0000054 * C * C * S + 0.50028060 * p * p * C);
+      const lam = Math.exp(-0.7842831 + 0.0177544 * S - 1.062498 * p - 0.00005304 * S * S - 0.00273493 * C * C + 1.11134946 * p * p
+        - 0.03088295 * S * p + 0.00026587 * S * S * p * p - 0.00610522 * C * C * p * p - 0.00000235 * S * S * C
+        + 0.00798746 * C * C * p - 0.00674491 * p * p * C);
+      const tr = Math.max(0, -0.0182482 + 0.00087269 * S + 0.00513488 * C + 0.02939286 * p - 0.00015395 * C * C - 0.0010827 * S * p
+        - 0.00018233 * C * C * p * p + 0.00030703 * C * C * p - 0.0023584 * p * p * C);
+      const ts = p;
+      const flags = [];
+      if (S < 5 || S > 70) flags.push('sand outside 5–70%');
+      if (C < 5 || C > 60) flags.push('clay outside 5–60%');
+      return {
+        ts, theta: h => h <= hb ? ts : tr + (ts - tr) * Math.pow(hb / h, lam),
+        params: `θr ${tr.toFixed(3)}, θs ${ts.toFixed(3)}, hb ${hb.toFixed(1)} cm, λ ${lam.toFixed(3)}`, flags
+      };
+    }
+  },
+  {
+    id: 'wo', name: 'Wösten et al. (1999), HYPRES', where: 'European soils', model: 'van Genuchten, m = 1 − 1/n',
+    needs: ['bd'],
+    fit(x) {
+      const C = x.clay, Si = x.silt, OM = x.oc * 1.724, D = x.bd, T = x.top ? 1 : 0;
+      if (!(Si > 0) || !(OM > 0) || !(C > 0)) return { error: 'needs silt, clay and organic carbon above zero' };
+      const ts = 0.7919 + 0.001691 * C - 0.29619 * D - 0.000001491 * Si * Si + 0.0000821 * OM * OM + 0.02427 / C + 0.01113 / Si
+        + 0.01472 * Math.log(Si) - 0.0000733 * OM * C - 0.000619 * D * C - 0.001183 * D * OM - 0.0001664 * T * Si;
+      const as = -14.96 + 0.03135 * C + 0.0351 * Si + 0.646 * OM + 15.29 * D - 0.192 * T - 4.671 * D * D - 0.000781 * C * C
+        - 0.00687 * OM * OM + 0.0449 / OM + 0.0663 * Math.log(Si) + 0.1482 * Math.log(OM) - 0.04546 * D * Si - 0.4852 * D * OM + 0.00673 * T * C;
+      const ns = -25.23 - 0.02195 * C + 0.0074 * Si - 0.1940 * OM + 45.5 * D - 7.24 * D * D + 0.0003658 * C * C + 0.002885 * OM * OM
+        - 12.81 / D - 0.1524 / Si - 0.01958 / OM - 0.2876 * Math.log(Si) - 0.0709 * Math.log(OM) - 44.6 * Math.log(D)
+        - 0.02264 * D * C + 0.0896 * D * OM + 0.00718 * T * C;
+      const a = Math.exp(as), n = Math.exp(ns) + 1, tr = 0.01;
+      return { ts, theta: h => vg(h, tr, ts, a, n), params: `θr ${tr}, θs ${ts.toFixed(3)}, α ${a.toPrecision(3)} /cm, n ${n.toFixed(3)}`, flags: [] };
+    }
+  },
+  {
+    id: 've', name: 'Vereecken et al. (1989)', where: 'Belgian soils', model: 'van Genuchten, m = 1',
+    needs: ['bd'],
+    fit(x) {
+      const S = x.sand, C = x.clay, OC = x.oc, D = x.bd;
+      const ts = 0.81 - 0.283 * D + 0.001 * C, tr = Math.max(0, 0.015 + 0.005 * C + 0.014 * OC);
+      const a = Math.exp(-2.486 + 0.025 * S - 0.351 * OC - 2.617 * D - 0.023 * C);
+      const n = Math.exp(0.053 - 0.009 * S - 0.013 * C + 0.00015 * S * S);
+      return { ts, theta: h => vg(h, tr, ts, a, n, 1), params: `θr ${tr.toFixed(3)}, θs ${ts.toFixed(3)}, α ${a.toPrecision(3)} /cm, n ${n.toFixed(3)}`, flags: [] };
+    }
+  },
+  {
+    id: 'ht', name: 'Hodnett & Tomasella (2002)', where: 'Tropical soils', model: 'van Genuchten, m = 1 − 1/n',
+    needs: ['bd', 'cec', 'ph'],
+    fit(x) {
+      const S = x.sand, Si = x.silt, C = x.clay, OC = x.oc, D = x.bd, CEC = x.cec, pH = x.ph;
+      const lna = (-2.294 - 3.526 * Si + 2.440 * OC - 0.076 * CEC - 11.331 * pH + 0.019 * Si * Si) / 100;
+      const lnn = (62.986 - 0.833 * C - 0.529 * OC + 0.593 * pH + 0.007 * C * C - 0.014 * S * Si) / 100;
+      const ts = (81.799 + 0.099 * C - 31.42 * D + 0.018 * CEC + 0.451 * pH - 0.0005 * S * C) / 100;
+      const tr = Math.max(0, (22.733 - 0.164 * S + 0.235 * CEC - 0.831 * pH + 0.0018 * C * C + 0.0026 * S * C) / 100);
+      const a = Math.exp(lna) / KPA, n = Math.exp(lnn); // α converted from 1/kPa to 1/cm
+      if (!(n > 1)) return { error: 'gives n ≤ 1 for these inputs' };
+      return { ts, theta: h => vg(h, tr, ts, a, n), params: `θr ${tr.toFixed(3)}, θs ${ts.toFixed(3)}, α ${(a * KPA).toPrecision(3)} /kPa, n ${n.toFixed(3)}`, flags: [] };
+    }
+  },
+  {
+    id: 'co', name: 'Cosby et al. (1984)', where: 'US soils', model: 'Campbell power curve',
+    needs: [],
+    fit(x) {
+      const S = x.sand, Si = x.silt, C = x.clay;
+      const b = 3.10 + 0.157 * C - 0.003 * S, ps = Math.pow(10, 1.54 - 0.0095 * S + 0.0063 * Si); // cm
+      const ts = 0.505 - 0.00142 * S - 0.00037 * C;
+      const ks = 25.4 * Math.pow(10, -0.60 + 0.0126 * S - 0.0064 * C); // in/h → mm/h
+      return { ts, ks, theta: h => h <= ps ? ts : ts * Math.pow(h / ps, -1 / b), params: `θs ${ts.toFixed(3)}, ψs ${ps.toFixed(1)} cm, b ${b.toFixed(2)}`, flags: [] };
+    }
+  }
+];
+
+const W_COL = { sr: "var(--s1)", rb: "var(--s2)", wo: "var(--s3)", ve: "var(--s4)", ht: "var(--s5)", co: "var(--s6)" };
+const W_EX = "suction_kPa,theta\n1,0.43\n10,0.36\n33,0.29\n100,0.23\n500,0.17\n1500,0.14";
+let wLast = null;
+function wObs() {
+  const msg = $("w-obs-msg"); msg.className = "msg"; msg.textContent = "";
+  const txt = $("w-obs").value.trim(); if (!txt) return [];
+  const hu = $("w-obs-h").value, pct = $("w-obs-t").value === "p", pts = []; let bad = 0;
+  txt.replace(/\r/g, "").split("\n").forEach(l => {
+    const c = l.split(/[,;\t ]+/).filter(Boolean); if (c.length < 2) return;
+    let h = Number(c[0]), th = Number(c[1]); if (!isFinite(h) || !isFinite(th)) { return; }
+    h = hu === "kpa" ? h * KPA : hu === "pf" ? Math.pow(10, h) : h;
+    if (pct) th /= 100;
+    if (h > 0 && th >= 0 && th <= 1) pts.push({ h, th }); else bad++;
+  });
+  if (bad) { msg.textContent = `${bad} row${bad > 1 ? "s" : ""} skipped (suction must be above 0 and water content between 0 and 1 m³/m³).`; }
+  if (!pts.length) { msg.className = "msg err"; msg.textContent = "No usable measurements. Use two columns: suction, water content."; }
+  return pts;
 }
 function updWater() {
-  const s = num($("w-sand").value), c = num($("w-clay").value), om = num($("w-om").value);
+  const sand = num($("w-sand").value), clay = num($("w-clay").value), oc = num($("w-oc").value);
+  let bd = num($("w-bd").value);
+  const cec = num($("w-cec").value), ph = num($("w-ph").value), top = $("w-top").value === "1", fcK = Number($("w-fc").value);
   const msg = $("w-msg"); msg.className = "msg"; msg.textContent = "";
-  if (![s, c, om].every(isFinite) || s < 0 || c < 0 || om < 0 || s + c > 100) { msg.className = "msg err"; msg.textContent = "Sand plus clay must be 100% or less."; $("w-out").innerHTML = ""; return; }
-  if (om > 8 || c > 60) { msg.textContent = "Outside the range the equations were fitted to; treat results with caution."; }
-  const r = saxtonRawls(s, c, Math.min(om, 8));
+  if (![sand, clay, oc].every(isFinite) || sand < 0 || clay < 0 || oc < 0 || sand + clay > 100) {
+    msg.className = "msg err"; msg.textContent = "Enter sand, clay and organic carbon; sand plus clay must be 100% or less.";
+    $("w-stats").innerHTML = ""; $("w-table").innerHTML = ""; $("w-chart").innerHTML = ""; $("w-legend").innerHTML = ""; $("w-why").textContent = ""; wLast = null; return;
+  }
+  const silt = 100 - sand - clay;
+  const base = { sand, silt, clay, oc, top, cec, ph };
+  const sr0 = PTFS[0].fit({ ...base, bd: 1.4 });
+  const bdEst = !(bd > 0);
+  if (bdEst) bd = sr0.bdNormal;
+  $("w-silt").textContent = `Silt ${fmt(silt, 1)}% (by difference). Bulk density ${bdEst ? "estimated at " + fmt(bd, 2) + " g/cm³ (Saxton & Rawls, normal packing)" : fmt(bd, 2) + " g/cm³"}.`;
+  const x = { ...base, bd };
+  const obs = wObs();
+  const hFC = fcK * KPA, hWP = 1500 * KPA;
+  const res = PTFS.map(p => {
+    const miss = p.needs.filter(k => !(x[k] > 0));
+    if (miss.length) return { p, error: "needs " + miss.map(k => ({ bd: "bulk density", cec: "CEC", ph: "pH" })[k]).join(" and ") };
+    const r = p.fit(x);
+    if (r.error) return { p, error: r.error };
+    const fc = r.theta(hFC), wp = r.theta(hWP);
+    let rmse = NaN, bias = NaN;
+    if (obs.length) { let s2 = 0, s1 = 0; obs.forEach(o => { const e = r.theta(o.h) - o.th; s2 += e * e; s1 += e; }); rmse = Math.sqrt(s2 / obs.length); bias = s1 / obs.length; }
+    return { p, r, fc, wp, aw: fc - wp, rmse, bias };
+  });
+  const ok = res.filter(z => !z.error);
+  wLast = { res, ok, obs, x, fcK };
+  // legend
+  $("w-legend").innerHTML = res.map(z => `<span style="${z.error ? "opacity:.45" : ""}"><i style="background:${W_COL[z.p.id]}"></i>${z.p.name}</span>`).join("") + (obs.length ? `<span><i style="background:var(--ink); width:8px; height:8px; border-radius:50%"></i>Your measurements</span>` : "");
+  // summary
   const stat = (k, v, u) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${u}</div></div>`;
-  $("w-out").innerHTML =
-    stat("Field capacity (33 kPa)", fmt(r.fc, 3), "m³/m³") +
-    stat("Wilting point (1500 kPa)", fmt(r.wp, 3), "m³/m³") +
-    stat("Available water", fmt(r.awc, 3), `m³/m³ · ${fmt(r.awc * 1000, 0)} mm per m`) +
-    stat("Saturation", fmt(r.sat, 3), "m³/m³") +
-    stat("Saturated conductivity", fmt(r.ks, 1), "mm/h") +
-    stat("Bulk density (normal)", fmt(r.bd, 2), "g/cm³");
+  if (ok.length) {
+    const lo = a => Math.min(...ok.map(a)), hi = a => Math.max(...ok.map(a));
+    let st = stat(`Field capacity (${fcK} kPa)`, `${fmt(lo(z => z.fc), 2)}–${fmt(hi(z => z.fc), 2)}`, "m³/m³ across functions") +
+      stat("Wilting point (1500 kPa)", `${fmt(lo(z => z.wp), 2)}–${fmt(hi(z => z.wp), 2)}`, "m³/m³ across functions") +
+      stat("Available water", `${fmt(lo(z => z.aw) * 1000, 0)}–${fmt(hi(z => z.aw) * 1000, 0)}`, "mm per m of soil");
+    if (obs.length) { const best = ok.reduce((a, b) => a.rmse <= b.rmse ? a : b); st += stat("Closest to your data", best.p.name.replace(/ \(.*$/, "").replace(" et al.", " et al."), `RMSE ${fmt(best.rmse, 3)} m³/m³`); }
+    $("w-stats").innerHTML = st;
+  } else $("w-stats").innerHTML = "";
+  // table
+  const head = ["Function", "Calibrated on", "θ saturation", `θ ${fcK} kPa`, "θ 1500 kPa", "Available water (mm/m)"].concat(obs.length ? ["RMSE vs. data", "Bias"] : []).concat(["Parameters", "Notes"]);
+  const best = obs.length && ok.length ? ok.reduce((a, b) => a.rmse <= b.rmse ? a : b) : null;
+  const rows = res.map(z => z.error ? [z.p.name, z.p.where, "–", "–", "–", "–"].concat(obs.length ? ["–", "–"] : []).concat(["", "Not shown: " + z.error])
+    : [z.p.name, z.p.where, fmt(z.r.ts, 3), fmt(z.fc, 3), fmt(z.wp, 3), fmt(z.aw * 1000, 0)].concat(obs.length ? [(z === best ? "★ " : "") + fmt(z.rmse, 3), (z.bias > 0 ? "+" : "") + fmt(z.bias, 3)] : [])
+      .concat([`${z.p.model}: ${z.r.params}`, z.r.flags.length ? "Outside calibration: " + z.r.flags.join(", ") : (z.r.ks ? `Ks ${fmt(z.r.ks, 1)} mm/h` : "")]));
+  setTable($("w-table"), head, rows);
+  // explanation
+  let why = "";
+  if (ok.length > 1) {
+    const aw = ok.map(z => z.aw * 1000), spread = Math.max(...aw) - Math.min(...aw), mean = aw.reduce((a, b) => a + b, 0) / aw.length;
+    why = `For the same soil, available water differs by ${fmt(spread, 0)} mm per metre between functions (${fmt(spread / mean * 100, 0)}% of the average). `;
+    why += obs.length ? "The RMSE shows which function reproduces your measurements; a positive bias means it predicts a wetter soil than you measured. A function that fits several of your samples well is a defensible choice for the rest of the site."
+      : "Without measurements there is no way to know which is right for your soil. Choose a function calibrated on soils like yours, report which one you used, and treat the range as the uncertainty.";
+  }
+  $("w-why").textContent = why;
+  drawWater();
 }
-["w-sand", "w-clay", "w-om"].forEach(id => $(id).addEventListener("input", updWater));
+function drawWater() {
+  const svg = $("w-chart"), tipEl = $("w-tip");
+  if (!wLast || !$("tab-water").classList.contains("active")) return;
+  const { ok, obs, fcK } = wLast;
+  svg.innerHTML = "";
+  const W = Math.max(280, svg.clientWidth || 600), H = 320, m = { l: 52, r: 14, t: 12, b: 40 };
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const x0 = 0, x1 = 6.5, X = h => m.l + (Math.log10(Math.max(h, 1)) - x0) / (x1 - x0) * (W - m.l - m.r);
+  const yhi = Math.ceil((Math.max(0.3, ...ok.map(z => z.r.ts), ...obs.map(o => o.th)) + 0.02) * 10) / 10, Y = v => m.t + (1 - v / yhi) * (H - m.t - m.b);
+  const g = el("g", { class: "grid" }, svg);
+  for (let e = 0; e <= 6; e++) { el("line", { x1: X(Math.pow(10, e)), x2: X(Math.pow(10, e)), y1: m.t, y2: H - m.b }, g); const t = el("text", { x: X(Math.pow(10, e)), y: H - m.b + 16, "text-anchor": "middle" }, svg); t.textContent = e === 0 ? "1" : "10" + "⁰¹²³⁴⁵⁶"[e]; }
+  const xl = el("text", { x: (m.l + W - m.r) / 2, y: H - 4, "text-anchor": "middle" }, svg); xl.textContent = "Suction h (cm of water, log scale)";
+  niceTicks(0, yhi, 5).forEach(v => { el("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v) }, g); const t = el("text", { x: m.l - 6, y: Y(v) + 4, "text-anchor": "end" }, svg); t.textContent = v; });
+  const yl = el("text", { x: 12, y: (m.t + H - m.b) / 2, "text-anchor": "middle", transform: `rotate(-90 12 ${(m.t + H - m.b) / 2})` }, svg); yl.textContent = "θ (m³/m³)";
+  [[fcK * KPA, "FC"], [1500 * KPA, "WP"]].forEach(([h, l]) => { el("line", { x1: X(h), x2: X(h), y1: m.t, y2: H - m.b, stroke: "var(--ink-3)", "stroke-dasharray": "4 3" }, svg); const t = el("text", { x: X(h) + 4, y: m.t + 12 }, svg); t.textContent = l; });
+  const hs = []; for (let i = 0; i <= 260; i++) hs.push(Math.pow(10, x0 + i / 260 * (x1 - x0)));
+  ok.forEach(z => { let d = ""; hs.forEach((h, i) => { const v = z.r.theta(h); if (isFinite(v)) d += (d ? "L" : "M") + X(h).toFixed(1) + "," + Y(Math.max(0, v)).toFixed(1); }); el("path", { d, stroke: W_COL[z.p.id], "stroke-width": 2, fill: "none" }, svg); });
+  obs.forEach(o => el("circle", { cx: X(o.h), cy: Y(o.th), r: 4.5, fill: "var(--ink)", stroke: "var(--surface)", "stroke-width": 1.5 }, svg));
+  const vline = el("line", { y1: m.t, y2: H - m.b, stroke: "var(--ink-2)", visibility: "hidden" }, svg);
+  const hit = el("rect", { x: m.l, y: m.t, width: W - m.l - m.r, height: H - m.t - m.b, fill: "transparent" }, svg);
+  const move = ev => {
+    const p = ev.touches ? ev.touches[0] : ev, rect = svg.getBoundingClientRect(), sx = (p.clientX - rect.left) * W / rect.width;
+    const h = Math.pow(10, Math.max(x0, Math.min(x1, x0 + (sx - m.l) / (W - m.l - m.r) * (x1 - x0))));
+    vline.setAttribute("x1", X(h)); vline.setAttribute("x2", X(h)); vline.setAttribute("visibility", "visible");
+    const hk = h / KPA;
+    tipEl.style.display = "block";
+    tipEl.innerHTML = `<b>h = ${h < 10 ? h.toFixed(1) : Math.round(h)} cm · ${hk < 10 ? hk.toFixed(2) : Math.round(hk)} kPa · pF ${Math.log10(h).toFixed(2)}</b><br>` + ok.map(z => `<span style="color:${W_COL[z.p.id]}">●</span> ${z.p.name.replace(/ \(.*$/, "")}: ${z.r.theta(h).toFixed(3)}`).join("<br>");
+    const left = X(h) * rect.width / W; tipEl.style.left = (left > rect.width / 2 ? left - tipEl.offsetWidth - 12 : left + 12) + "px"; tipEl.style.top = "8px";
+  };
+  const leave = () => { vline.setAttribute("visibility", "hidden"); tipEl.style.display = "none"; };
+  hit.addEventListener("mousemove", move); hit.addEventListener("touchmove", move, { passive: true }); hit.addEventListener("touchstart", move, { passive: true });
+  hit.addEventListener("mouseleave", leave); hit.addEventListener("touchend", leave);
+}
+["w-sand", "w-clay", "w-oc", "w-bd", "w-top", "w-fc", "w-cec", "w-ph", "w-obs", "w-obs-h", "w-obs-t"].forEach(id => $(id).addEventListener("input", updWater));
+$("w-ex").addEventListener("click", () => { $("w-obs").value = W_EX; $("w-obs-h").value = "kpa"; $("w-obs-t").value = "v"; updWater(); });
+readFileInto($("w-obs-file"), $("w-obs"), updWater);
+$("w-dl").addEventListener("click", () => {
+  if (!wLast || !wLast.ok.length) return;
+  const kp = [0, 1, 3, 6, 10, 20, 33, 100, 200, 500, 1000, 1500];
+  const header = ["function", "calibrated_on", "model", "parameters"].concat(kp.map(k => `theta_${k}kPa`));
+  const rows = wLast.ok.map(z => [z.p.name, z.p.where, z.p.model, z.r.params].concat(kp.map(k => +z.r.theta(k * KPA).toFixed(4))));
+  const x = wLast.x;
+  rows.push([`inputs: sand ${x.sand}%, silt ${+x.silt.toFixed(1)}%, clay ${x.clay}%, OC ${x.oc}%, BD ${+x.bd.toFixed(2)} g/cm3, ${x.top ? "topsoil" : "subsoil"}${x.cec > 0 ? ", CEC " + x.cec : ""}${x.ph > 0 ? ", pH " + x.ph : ""}`]);
+  download("water_retention_ptfs.csv", toCSV(header, rows));
+});
+updWater();
 
 /* ============ VAN GENUCHTEN ============ */
 // Carsel & Parrish (1988): thr, ths, alpha (1/cm), n, Ks (cm/day)
@@ -3005,7 +3249,7 @@ $("kr-data").value = KR_EX; krText = KR_EX; krRefresh();
 updSoilTemp(); updEnergy();
 $("ev-cont-data").value = EV_EX.cont; $("ev-cat-data").value = EV_EX.cat; $("ev-ci-data").value = EV_EX.ci;
 updWater(); vgLoad(); updHSG(); updSampling();
-let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawEvCharts(); drawKr(); updSoilTemp(); updEnergy(); }, 150); });
+let rz; window.addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(() => { if (lastSpline) drawProfile(); drawVG(); drawWater(); drawEvCharts(); drawKr(); updSoilTemp(); updEnergy(); }, 150); });
 function openFromHash() {
   const [tab, card] = location.hash.slice(1).split("/");
   if (![...tabs].some(b => b.dataset.tab === tab)) return;
