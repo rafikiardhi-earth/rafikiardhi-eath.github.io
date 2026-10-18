@@ -413,6 +413,9 @@ body.quarto-dark .rk-tools {
 .rk-tools .rk-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; }
 .rk-tools .rk-card h3 { font-size: 1rem; margin: 0 0 10px; }
 .rk-tools .rk-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.rk-tools .rk-grid > div { min-width: 0; }
+.rk-tools .rk-grid select { width: 100%; min-width: 0; text-overflow: ellipsis; }
+.rk-tools .two > * { min-width: 0; }
 .rk-tools label { display: block; font-size: .85rem; color: var(--ink-2); margin-bottom: 4px; }
 .rk-tools input[type=number], .rk-tools input[type=text], .rk-tools select, .rk-tools textarea {
   width: 100%; font: inherit; color: var(--ink); background: var(--bg);
@@ -506,7 +509,7 @@ body.quarto-dark .rk-tools {
 <nav class="rk-tabs" aria-label="Tools">
   <div class="rk-wrap" role="tablist">
     <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" data-tip="Turn horizon data into standard depth intervals (0–5, 5–15 cm…) with a smooth profile." aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" data-tip="How many soil classes an area has and how evenly they share it." aria-selected="false">Pedodiversity</button><button role="tab" data-tab="krige" data-tip="Fit a variogram to point data and test kriging by cross-validation." aria-selected="false">Variogram &amp; kriging</button><button role="tab" data-tab="eval" data-tip="How well a map or model matches independent observations: accuracy, uncertainty, classes." aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" data-tip="How many samples you need for a field mean, or for a map." aria-selected="false">Sampling density</button></div>
-    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="See how van Genuchten parameters shape water retention and conductivity." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from six pedotransfer functions, compared side by side." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D) for runoff estimates." aria-selected="false">Hydrologic soil group</button></div>
+    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="See how van Genuchten parameters shape water retention and conductivity." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from six pedotransfer functions, compared side by side." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D), its curve number for your land cover, and how much of a storm runs off." aria-selected="false">Hydrologic soil group</button></div>
     <div class="tgroup"><span class="tglabel">Energy</span><button role="tab" data-tab="soiltemp" data-tip="How daily and seasonal temperature swings travel down into the soil." aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" data-tip="Where the sun's energy goes at a bare soil surface as it wets up." aria-selected="false">Energy balance</button></div>
     <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" data-tip="Texture class from sand, silt and clay, one sample or a whole file." aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" data-tip="Carbon stocks to fixed depths or equivalent soil mass, and whether a change is detectable." aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" data-tip="A Munsell notation as an on-screen colour, and what it tells you about the soil." aria-selected="false">Munsell colour</button></div>
     <div class="tgroup"><span class="tglabel">Checks</span><a class="tglink" href="checks.html">Check a result: yours or a published one →</a></div>
@@ -739,32 +742,49 @@ body.quarto-dark .rk-tools {
 
 <!-- ============ HSG ============ -->
 <section class="tool" id="tab-hsg">
-  <h2>Hydrologic soil group</h2>
-  <p class="lede">Assign a hydrologic soil group (A–D) for runoff estimation from depth to a restrictive layer, depth to the seasonal high water table, and saturated conductivity.</p>
+  <h2>Hydrologic soil group and runoff</h2>
+  <p class="lede">Find a soil's hydrologic soil group (A–D) with the NRCS rules, then see what it means: the runoff curve number for your land cover and how much of a storm runs off.</p>
   <div class="two">
     <div class="rk-card">
-      <h3>Inputs</h3>
+      <h3>1. The soil</h3>
       <div class="rk-grid">
-        <div><label for="h-rest">Depth to restrictive layer (cm)</label><input type="number" id="h-rest" value="150" min="0"></div>
-        <div><label for="h-wt">Depth to high water table (cm)</label><input type="number" id="h-wt" value="200" min="0"></div>
-        <div><label for="h-ks">Ksat of least permeable layer</label><input type="number" id="h-ks" value="5" min="0" step="any"></div>
-        <div><label for="h-unit">Ksat units</label>
-          <select id="h-unit"><option value="1">µm/s</option><option value="0.2777778">mm/h</option><option value="0.1157407">cm/day</option><option value="7.0555556">in/h</option></select></div>
+        <div><label for="h-rest">Impermeable layer</label><select id="h-rest"><option value="deep">None within 100 cm (40 in)</option><option value="mid">50–100 cm (20–40 in) down</option><option value="shallow">Within 50 cm (20 in)</option></select></div>
+        <div><label for="h-wt">Seasonal high water table</label><select id="h-wt"><option value="deep">None within 100 cm (40 in)</option><option value="mid">60–100 cm (24–40 in) down</option><option value="shallow">Within 60 cm (24 in)</option></select></div>
+        <div><label for="h-ksmode">Saturated conductivity (Ksat)</label><select id="h-ksmode"><option value="tex">Estimate from texture</option><option value="meas">I have a measured value</option></select></div>
+        <div class="h-meas"><label for="h-ks">Ksat of the least permeable layer</label><input type="number" id="h-ks" value="5" min="0" step="any"></div>
+        <div class="h-meas"><label for="h-unit">Ksat units</label><select id="h-unit"><option value="1">µm/s</option><option value="0.2777778">mm/h</option><option value="0.1157407">cm/day</option><option value="7.0555556">in/h</option></select></div>
+        <div class="h-tex"><label for="h-sand">Sand (%)</label><input type="number" id="h-sand" value="40" min="0" max="100" step="any"></div>
+        <div class="h-tex"><label for="h-clay">Clay (%)</label><input type="number" id="h-clay" value="20" min="0" max="100" step="any"></div>
+        <div class="h-tex"><label for="h-oc">Organic carbon (%)</label><input type="number" id="h-oc" value="1" min="0" step="any"></div>
       </div>
-      <p class="hint">Use the least permeable layer in the top 50 cm if a restriction or water table lies within 100 cm, otherwise in the top 100 cm. No restriction? Enter a large depth such as 300.</p>
+      <p class="hint" id="h-layer"></p>
+      <p class="hint">An impermeable layer is bedrock, a hardpan (fragipan, duripan, petrocalcic or other cemented layer), permafrost, or any layer with Ksat below 0.01 µm/s. A seasonal high water table counts if it occurs in any month of the year. Soil surveys list both for each map unit.</p>
     </div>
     <div class="rk-card">
-      <h3>Result</h3>
+      <h3>Hydrologic soil group</h3>
       <div class="big" id="h-group">–</div>
+      <p id="h-desc" style="margin:0 0 8px; font-weight:600"></p>
       <p id="h-why" style="margin:0; color:var(--ink-2)"></p>
+      <div class="rk-table-wrap" style="margin-top:12px"><div id="h-rules"></div></div>
     </div>
+  </div>
+  <div class="rk-card">
+    <h3>2. What it means for runoff</h3>
+    <div class="rk-grid">
+      <div><label for="h-lc">Land cover</label><select id="h-lc"></select></div>
+      <div><label for="h-p">Storm rainfall</label><input type="number" id="h-p" value="50" min="0" step="any"></div>
+      <div><label for="h-pu">Rainfall units</label><select id="h-pu"><option value="mm">mm</option><option value="in">inches</option></select></div>
+    </div>
+    <div class="stats" id="h-stats" style="margin-top:12px"></div>
+    <div class="rk-table-wrap" style="margin-top:12px"><div id="h-cntable"></div></div>
+    <p class="hint" id="h-cnwhy"></p>
   </div>
   <div class="advanced">
     <strong>Need hydrologic groups across a whole area?</strong>
     <p>We map hydrologic soil groups continuously from geology, terrain and soil data, including where soil surveys are missing or coarse.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Hydrologic%20soil%20group%20mapping">Get in touch →</a>
   </div>
-  <p class="refs">Criteria follow USDA-NRCS National Engineering Handbook Part 630, Chapter 7 (2009). This is a screening tool, not a replacement for official survey data.</p>
+  <p class="refs">Hydrologic soil groups: USDA-NRCS (2009). <i>National Engineering Handbook</i>, Part 630 Hydrology, Chapter 7: Hydrologic Soil Groups (Table 7-1). Curve numbers and runoff equation: USDA-SCS (1986). <i>Urban Hydrology for Small Watersheds</i>, Technical Release 55 (TR-55), Tables 2-2a to 2-2c, average antecedent moisture, initial abstraction 0.2S. Ksat from texture: Saxton, K.E., Rawls, W.J. (2006). <i>Soil Sci. Soc. Am. J.</i> 70, 1569–1578. <a href="https://doi.org/10.2136/sssaj2005.0117">doi:10.2136/sssaj2005.0117</a>. This is a screening tool, not a replacement for official soil survey data.</p>
 </section>
 
 <!-- ============ TEXTURE ============ -->
@@ -2347,31 +2367,126 @@ function drawVG() {
   logChart($("vg-k"), $("vg-k-tip"), { f: h => vgK(p, h), ylog: true, ylo: kmax - 12, yhi: kmax, label: v => `K = ${v.toExponential(2)} cm/day` });
 }
 
-/* ============ HSG (NEH 630 Ch. 7) ============ */
-function hsgClass(ks, strict) {
-  // ks in um/s
+/* ============ HSG (NEH 630 Ch. 7, Table 7-1) and TR-55 runoff ============ */
+// Curve numbers for groups A, B, C, D (TR-55, average antecedent moisture)
+const CN_TABLE = [
+  ["Urban and developed", [
+    ["Lawns, parks, cemeteries: good (grass > 75%)", [39, 61, 74, 80]],
+    ["Lawns, parks, cemeteries: fair (grass 50–75%)", [49, 69, 79, 84]],
+    ["Lawns, parks, cemeteries: poor (grass < 50%)", [68, 79, 86, 89]],
+    ["Paved parking, roofs, driveways", [98, 98, 98, 98]],
+    ["Paved roads with open ditches (incl. right-of-way)", [83, 89, 92, 93]],
+    ["Gravel roads", [76, 85, 89, 91]],
+    ["Dirt roads", [72, 82, 87, 89]],
+    ["Commercial and business (85% impervious)", [89, 92, 94, 95]],
+    ["Industrial (72% impervious)", [81, 88, 91, 93]],
+    ["Residential, 1/8 acre lots (65% impervious)", [77, 85, 90, 92]],
+    ["Residential, 1/4 acre lots (38% impervious)", [61, 75, 83, 87]],
+    ["Residential, 1/3 acre lots (30% impervious)", [57, 72, 81, 86]],
+    ["Residential, 1/2 acre lots (25% impervious)", [54, 70, 80, 85]],
+    ["Residential, 1 acre lots (20% impervious)", [51, 68, 79, 84]],
+    ["Residential, 2 acre lots (12% impervious)", [46, 65, 77, 82]],
+    ["Newly graded, bare (no vegetation)", [77, 86, 91, 94]]]],
+  ["Farmland", [
+    ["Fallow, bare soil", [77, 86, 91, 94]],
+    ["Row crops, straight rows, poor condition", [72, 81, 88, 91]],
+    ["Row crops, straight rows, good condition", [67, 78, 85, 89]],
+    ["Row crops, contoured, good condition", [65, 75, 82, 86]],
+    ["Pasture or range, poor (heavily grazed)", [68, 79, 86, 89]],
+    ["Pasture or range, fair", [49, 69, 79, 84]],
+    ["Pasture or range, good (lightly grazed)", [39, 61, 74, 80]],
+    ["Meadow, mowed for hay, not grazed", [30, 58, 71, 78]]]],
+  ["Woodland", [
+    ["Woods, poor (litter and brush removed by grazing or burning)", [45, 66, 77, 83]],
+    ["Woods, fair", [36, 60, 73, 79]],
+    ["Woods, good (litter and brush cover the soil)", [30, 55, 70, 77]]]]
+];
+(function () {
+  const sel = $("h-lc");
+  sel.innerHTML = CN_TABLE.map(([g, rows], gi) => `<optgroup label="${g}">` + rows.map((r, ri) => `<option value="${gi}.${ri}">${r[0]}</option>`).join("") + "</optgroup>").join("");
+  sel.value = "0.10";
+})();
+const HSG_DESC = {
+  A: "Low runoff potential. Water soaks in freely; typically sands and gravels.",
+  B: "Moderately low runoff potential. Typically loamy sands and sandy loams.",
+  C: "Moderately high runoff potential. Water movement is somewhat restricted; typically loams and clay loams.",
+  D: "High runoff potential. Water movement is restricted by clay, a shallow impermeable layer or a high water table."
+};
+function hsgClass(ks, strict) { // ks in µm/s
   if (strict) return ks > 40 ? "A" : ks > 10 ? "B" : ks > 1 ? "C" : "D";
   return ks > 10 ? "A" : ks > 4 ? "B" : ks > 0.4 ? "C" : "D";
 }
-function updHSG() {
-  const rest = num($("h-rest").value), wt = num($("h-wt").value), ks = num($("h-ks").value) * Number($("h-unit").value);
-  const out = $("h-group"), why = $("h-why");
-  if (![rest, wt, ks].every(isFinite) || ks < 0) { out.textContent = "–"; why.textContent = "Enter all three values."; return; }
-  let g, txt;
-  const ksTxt = `Ksat ${ks < 1 ? ks.toPrecision(2) : ks.toFixed(1)} µm/s`;
-  if (rest < 50) { g = "D"; txt = "A restrictive layer within 50 cm puts the soil in group D regardless of conductivity."; }
-  else {
-    const strict = rest <= 100 || wt <= 100;
-    const base = hsgClass(ks, strict);
-    const rule = strict ? "restriction or water table within 100 cm, so the stricter thresholds apply (A > 40, B > 10, C > 1 µm/s)" : "no restriction or water table within 100 cm (A > 10, B > 4, C > 0.4 µm/s)";
-    if (wt < 60) {
-      g = base === "D" ? "D" : base + "/D";
-      txt = base === "D" ? `Water table within 60 cm and ${ksTxt}: group D.` : `Water table within 60 cm: group D when undrained, ${base} if adequately drained (${ksTxt}; ${rule}).`;
-    } else { g = base; txt = `${ksTxt}; ${rule}.`; }
-  }
-  out.textContent = g; why.textContent = txt;
+function scsRunoff(P, CN) { // P and result in mm
+  if (CN >= 100) return P;
+  const S = 25400 / CN - 254, Ia = 0.2 * S;
+  return P > Ia ? (P - Ia) * (P - Ia) / (P - Ia + S) : 0;
 }
-["h-rest", "h-wt", "h-ks", "h-unit"].forEach(id => $(id).addEventListener("input", updHSG));
+let hsgLast = null;
+function updHSG() {
+  const rest = $("h-rest").value, wt = $("h-wt").value, tex = $("h-ksmode").value === "tex";
+  document.querySelectorAll("#tab-hsg .h-meas").forEach(e => e.style.display = tex ? "none" : "");
+  document.querySelectorAll("#tab-hsg .h-tex").forEach(e => e.style.display = tex ? "" : "none");
+  const out = $("h-group"), why = $("h-why"), desc = $("h-desc");
+  // which Table 7-1 row applies
+  let row, strict, depthTxt;
+  if (rest === "shallow") { row = 0; }
+  else if (rest === "mid") { row = wt === "shallow" ? 1 : 2; strict = true; depthTxt = wt === "shallow" ? "top 60 cm (24 in)" : "top 50 cm (20 in)"; }
+  else { row = wt === "shallow" ? 3 : wt === "mid" ? 4 : 5; strict = row === 4; depthTxt = row === 4 ? "top 50 cm (20 in)" : "top 100 cm (40 in)"; }
+  $("h-layer").textContent = row === 0 ? "With an impermeable layer this shallow, Ksat doesn't matter: the soil is group D." : `Use the Ksat of the least permeable layer in the ${depthTxt}.`;
+  let ks;
+  if (row === 0) ks = NaN;
+  else if (tex) {
+    const s = num($("h-sand").value), c = num($("h-clay").value), oc = num($("h-oc").value);
+    if (![s, c, oc].every(isFinite) || s < 0 || c < 0 || oc < 0 || s + c > 100) { out.textContent = "–"; desc.textContent = ""; why.textContent = "Enter sand, clay and organic carbon (sand plus clay at most 100%)."; hsgLast = null; updCN(); return; }
+    ks = PTFS[0].fit({ sand: s, clay: c, silt: 100 - s - c, oc }).ks / 3.6; // mm/h → µm/s
+  } else {
+    ks = num($("h-ks").value) * Number($("h-unit").value);
+    if (!isFinite(ks) || ks < 0) { out.textContent = "–"; desc.textContent = ""; why.textContent = "Enter the Ksat."; hsgLast = null; updCN(); return; }
+  }
+  const ksTxt = `Ksat ${ks < 1 ? ks.toPrecision(2) : ks.toFixed(1)} µm/s (${(ks * 0.1417).toPrecision(2)} in/h)${tex ? ", estimated from texture with Saxton & Rawls (2006)" : ""}`;
+  let g, drained = null, txt;
+  if (row === 0) { g = "D"; txt = "An impermeable layer within 50 cm puts the soil in group D, whatever its conductivity."; }
+  else {
+    const base = hsgClass(ks, strict);
+    const thr = strict ? "A > 40, B > 10, C > 1 µm/s" : "A > 10, B > 4, C > 0.4 µm/s";
+    if (wt === "shallow" && base !== "D") { g = base + "/D"; drained = base; txt = `${ksTxt}. A water table within 60 cm makes the soil group D as it is; if it is drained so the water table stays below 60 cm, it behaves as group ${base} (thresholds ${thr}).`; }
+    else { g = base; txt = `${ksTxt}. Thresholds for this case: ${thr}.${wt === "shallow" ? " The water table is within 60 cm, and Ksat already puts the soil in group D." : ""}`; }
+  }
+  out.textContent = g;
+  desc.textContent = drained ? `Undrained: ${HSG_DESC.D.split(".")[0]}. Drained: ${HSG_DESC[drained].split(".")[0].toLowerCase()}.` : HSG_DESC[g];
+  why.textContent = txt;
+  const rules = [
+    ["< 50 cm", "any", "–", "D"],
+    ["50–100 cm", "< 60 cm", "top 60 cm", "A/D > 40 · B/D > 10 · C/D > 1 · D"],
+    ["50–100 cm", "≥ 60 cm", "top 50 cm", "A > 40 · B > 10 · C > 1 · D"],
+    ["> 100 cm", "< 60 cm", "top 100 cm", "A/D > 10 · B/D > 4 · C/D > 0.4 · D"],
+    ["> 100 cm", "60–100 cm", "top 50 cm", "A > 40 · B > 10 · C > 1 · D"],
+    ["> 100 cm", "> 100 cm", "top 100 cm", "A > 10 · B > 4 · C > 0.4 · D"]
+  ];
+  setTable($("h-rules"), ["Impermeable layer", "Water table", "Ksat layer", "Group by Ksat (µm/s)"], rules.map((r, i) => i === row ? r.map(c => "▶ " + c) : r));
+  hsgLast = { g, drained, base: drained ? "D" : g };
+  updCN();
+}
+function updCN() {
+  const [gi, ri] = $("h-lc").value.split(".").map(Number), lc = CN_TABLE[gi][1][ri];
+  const inch = $("h-pu").value === "in", Praw = num($("h-p").value), P = inch ? Praw * 25.4 : Praw;
+  const u = v => inch ? `${fmt(v / 25.4, 2)} in` : `${fmt(v, v < 10 ? 1 : 0)} mm`;
+  if (!(P >= 0)) { $("h-stats").innerHTML = ""; $("h-cntable").innerHTML = ""; $("h-cnwhy").textContent = "Enter the storm rainfall."; return; }
+  const G = ["A", "B", "C", "D"], stat = (k, v, s) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${s}</div></div>`;
+  let st = "";
+  if (hsgLast) {
+    const show = hsgLast.drained ? [["Undrained (D)", "D"], [`Drained (${hsgLast.drained})`, hsgLast.drained]] : [[`Group ${hsgLast.g}`, hsgLast.g]];
+    show.forEach(([lab, gg]) => { const cn = lc[1][G.indexOf(gg)], q = scsRunoff(P, cn); st += stat(`Curve number, ${lab}`, cn, lc[0].split(":")[0]) + stat(`Runoff, ${lab}`, u(q), `${fmt(P > 0 ? q / P * 100 : 0, 0)}% of the ${u(P)} storm`); });
+  }
+  $("h-stats").innerHTML = st;
+  const mine = hsgLast ? (hsgLast.drained ? ["D", hsgLast.drained] : [hsgLast.g]) : [];
+  setTable($("h-cntable"), ["Soil group", "Curve number", "Runoff", "Share of rain", "Rain that soaks in or is held"], G.map((gg, i) => { const cn = lc[1][i], q = scsRunoff(P, cn); return [(mine.includes(gg) ? "▶ " : "") + gg, cn, u(q), fmt(P > 0 ? q / P * 100 : 0, 0) + "%", u(P - q)]; }));
+  const cnB = lc[1][1], S = 25400 / cnB - 254;
+  $("h-cnwhy").textContent = `Runoff Q = (P − 0.2S)² ÷ (P + 0.8S), with S = 25,400 ÷ CN − 254 mm (= 1000 ÷ CN − 10 in); no runoff until rainfall passes 0.2S (for example ${u(0.2 * S)} for group B under this cover). The table shows the same storm on all four groups for comparison. Curve numbers assume average moisture before the storm; runoff is higher on soil that is already wet. For a single storm, not annual totals.`;
+}
+["h-rest", "h-wt", "h-ksmode", "h-ks", "h-unit", "h-sand", "h-clay", "h-oc"].forEach(id => $(id).addEventListener("input", updHSG));
+["h-lc", "h-p", "h-pu"].forEach(id => $(id).addEventListener("input", updCN));
+$("h-pu").addEventListener("change", () => { const v = num($("h-p").value); if (isFinite(v)) $("h-p").value = $("h-pu").value === "in" ? +(v / 25.4).toFixed(2) : +(v * 25.4).toFixed(0); updCN(); });
 
 /* ============ TEXTURE ============ */
 const T_EX = `id,sand,silt,clay
