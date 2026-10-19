@@ -27,13 +27,17 @@ website:
             text: All services
           - text: "---"
           - href: services-review.qmd
-            text: "Review: second opinions"
+            text: "Independent Review"
+            text: Third party review
           - href: services-build.qmd
-            text: "Build: methods & assessments"
+            text: "Build" 
+            text: Landscapes & models
           - href: services-partner.qmd
-            text: "Partner: research collaboration"
+            text: "Partner"
+            text: Research collaboration
           - href: services-learn.qmd
-            text: "Learn: training"
+            text: "Learn"
+            text: Training
       - text: Tools
         menu:
           - text: "For homeowners"
