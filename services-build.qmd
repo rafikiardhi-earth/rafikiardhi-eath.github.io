@@ -1,46 +1,49 @@
 ---
-title: "Build: methods and assessments"
-description: "Method development, data-scarce assessments, data harmonisation, analysis and decision support, delivered with uncertainty."
+title: "Build: problem solving"
+description: "Answers to environmental questions that don't have an off-the-shelf solution, built on existing knowledge, with honest uncertainty."
 ---
 
-For questions that off-the-shelf methods don't answer, or places where the usual data doesn't exist. Every result comes with its uncertainty, so you know how far it can be trusted.
+Some environmental questions don't have an off-the-shelf answer. That's where we start.
 
 ::: {.cards}
 
 ::: {.card-item}
-### Method development
-Designing, validating and documenting a method for a problem without an established solution.
+### When the data runs out
+No survey, no gauges, no budget for fieldwork. We build defensible answers from what already exists, and we're honest about what that costs in certainty.
 :::
 
 ::: {.card-item}
-### Assessments in data-scarce settings
-Soil and landscape maps, hydrologic soil groups, curve number and retention surfaces for hydrological models, soil-water flux, and carbon stocks.
+### Don't start over
+Old surveys and past projects are worth more than people think. We update and combine what has already been paid for instead of starting again.
 :::
 
 ::: {.card-item}
-### Updating and harmonising data
-Bringing legacy surveys, mixed depths and mixed methods into one consistent dataset. Maps are updated, not started again.
+### New problem, new method
+When no method fits, we design one, test it and write it down so others can check it.
 :::
 
 ::: {.card-item}
-### Geostatistics and analysis
-Kriging, mixed models, model validation, and fixing problem datasets.
+### How sure are we?
+Every answer comes with its uncertainty. Knowing where a map can't be trusted is as valuable as the map.
 :::
 
 ::: {.card-item}
-### Decision support
-Combining sources of uncertainty into decision maps, prioritising areas, and plain-language summaries for the people who have to act.
+### From results to decisions
+Turning model outputs into choices people can act on, explained so your funder, your council and your neighbour all understand it.
 :::
 
 ::: {.card-item}
-### Advanced versions of our tools
-Continuous rather than discrete calculations, uncertainty propagation, and custom builds of the free tools.
+### Glass box, not black box
+Methods you can open up and audit, tested against AI rather than replaced by it.
+:::
+
+::: {.card-item}
+### Beyond the free tools
+The deeper version of any tool on this site, built for your problem.
 :::
 
 :::
 
-Methods are interpretable "glass-box" functions benchmarked against machine-learning alternatives, so every result can be traced and checked. Clients receive a licence to use the methods and results built for them. RafikiArdhi keeps the methods themselves and may later release an open version.
+You receive a licence to use the methods and results built for you. RafikiArdhi keeps the methods themselves and may later release an open version. Engineering work that requires a licensed professional engineer is carried out alongside that engineer.
 
-Engineering work that requires a licensed professional engineer is carried out alongside that engineer.
-
-[Discuss a project →](contact.qmd){.btn-earth}
+[Bring us a problem →](contact.qmd){.btn-earth}
