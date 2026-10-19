@@ -1,9 +1,11 @@
 ---
 title: "Services"
-description: "Independent review, methods and assessments, research partnerships and training for environmental questions."
+description: "Independent review, problem solving, research partnerships and training for environmental questions."
 ---
 
 The tools on this site are free. What we charge for is the thinking behind them: working out what a question really needs, building methods where none exist, and checking that conclusions hold up.
+
+For homeowners, we bring actual science to everyday decisions about soil, water and gardens, so you're not guessing or relying on a sales pitch. For researchers, we bring creativity: new angles on hard problems, without giving up rigour. Either way, some questions don't have an off-the-shelf answer, and that's where we start.
 
 Every engagement starts with a short written scope that sets out the question, deliverables, timeline and price before any work begins.
 
@@ -16,7 +18,7 @@ Independent second opinions on grant proposals, research designs, models, data, 
 
 ::: {.card-item}
 ### [Build](services-build.qmd)
-Methods and assessments for questions that off-the-shelf approaches don't answer, or places where the usual data doesn't exist. Uncertainty included.
+Answers to environmental questions without an off-the-shelf solution, built on what already exists and honest about uncertainty.
 :::
 
 ::: {.card-item}
@@ -26,7 +28,7 @@ Ongoing analytical collaboration with research groups and projects, and methods 
 
 ::: {.card-item}
 ### [Learn](services-learn.qmd)
-Workshops in soil classification, digital soil mapping, data harmonisation, uncertainty and R, in several languages.
+Workshops in soil classification, do-it-yourself landscaping, research creativity and research validation, in several languages.
 :::
 
 :::
