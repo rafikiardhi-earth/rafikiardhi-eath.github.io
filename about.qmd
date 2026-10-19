@@ -51,22 +51,22 @@ We build on existing knowledge rather than replacing it. Every map and piece of 
 
 We do not use AI to replace human expertise. Where others reach for black-box AI, we use “glass box” functions: methods that are easy to interpret, scale to large problems, and are benchmarked against AI models.
 
-## Acknowledgements
+## Contibutor and acknowledgements
 
-The free tools on this site were co-authors, improved by people who tested them, checked the methods and suggested changes. Thank you to:
+The free tools on this site developed with co-authors, improved by people who tested them, checked the methods and suggested changes.
 
-- **Rosana Kostecki, PhD**
-- **Zahra Rasaei, PhD** 
-- **Sara Merzoug** ([LinkedIn](https://www.linkedin.com/in/saramerzoug/?isSelfProfile=false)), Affiliation: 2GBEI Laboratory, Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco
+- **Rosana Kostecki, PhD** ([Profile](https://www.soilconsultoriasocioambiental.com/?utm_source=linktree_profile_share&utm_medium=social&utm_content=link_in_bio)), Affiliation: Soil Consultoria Socioambiental (Soil Socio-Environmental Consulting), Londrina, Paraná, Brasil
+- **Zahra Rasaei, PhD** ([Profile}(https://www.linkedin.com/in/zahra-rasaei-76aa9378/?isSelfProfile=false), Affiliation: Faculty of Agriculture, The University of Birjand, South Khorasan, Iran
+- **Sara Merzoug** ([Profile](https://www.linkedin.com/in/saramerzoug/?isSelfProfile=false)), Affiliation: Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco
 
 Any remaining errors are ours. Found one, or want to suggest a tool? [Get in touch](contact.qmd).
 
 ## The name
 
-*Rafiki ardhi* is Kiswahili for "friend of the land".
+*Rafiki ardhi* is Kiswahili for "Land friend".
 
 <a class="btn-earth" href="tools.html">Try the tools</a>&nbsp; <a class="btn-earth" href="contact.html">Get in touch</a>
 
 ---
 
-*Founded by Trevan Flynn, PhD, soil scientist. See [Research](publications.qmd) for the research behind our methods.*
+*Founded by Trevan Flynn, PhD, soil scientist. See [Research](publications.qmd) for the published research behind our methods.*
