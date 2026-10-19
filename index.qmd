@@ -16,6 +16,10 @@ page-layout: full
 
 ## What we do
 
+RafikiArdhi takes on environmental problems where existing methods fall short. We develop a method suited to the problem, validate it against real data, and, where agreements allow, release it as an open tool so the knowledge keeps building rather than resetting with each project.
+
+Clients get the solution, and the expertise to apply it to their own data and decisions.
+
 ::: {.cards}
 ::: {.card-item}
 ### Soil and landscape mapping
@@ -42,12 +46,6 @@ Turning model output and its uncertainty into clear, policy-ready classes and pr
 ![Flooding and drought hotspots.](images/triangle-texas.jpg)
 :::
 :::
-
-## How we work
-
-RafikiArdhi takes on environmental problems where existing methods fall short. We develop a method suited to the problem, validate it against real data, and, where agreements allow, release it as an open tool so the knowledge keeps building rather than resetting with each project.
-
-Clients get the solution, and the expertise to apply it to their own data and decisions.
 
 ## Example: making GIS depth-aware
 
