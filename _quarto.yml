@@ -26,17 +26,17 @@ website:
           - href: services.qmd
             text: All services
           - text: "---"
+          - text: "Independent Review"
           - href: services-review.qmd
-            text: "Independent Review"
             text: Third party review
+          - text: "Build"
           - href: services-build.qmd
-            text: "Build" 
             text: Landscapes & models
+          - text: "Partner"
           - href: services-partner.qmd
-            text: "Partner"
             text: Research collaboration
+          - text: "Learn"
           - href: services-learn.qmd
-            text: "Learn"
             text: Training
       - text: Tools
         menu:
