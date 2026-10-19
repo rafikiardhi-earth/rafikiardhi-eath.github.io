@@ -2,11 +2,10 @@
 title: "Contact"
 ---
 
-Email: **[tflynn@rafikiardhi.earth](mailto:tflynn@rafikiardhi.earth)**
-Message: **[WhatsApp](https://wa.me/RafikiArdhi)**
+[]{.bi .bi-envelope} **[tflynn@rafikiardhi.earth](mailto:tflynn@rafikiardhi.earth)**
+[]{.bi .bi-whatsapp} **[(@RafikiArdhi)](https://wa.me/RafikiArdhi)**
 
-Please include a few lines on the project, the area and the timeline. You'll get a reply with questions or a short proposed scope.
-
+Trevan Flynn, PhD
 RafikiArdhi LLC
 Carbondale, Colorado, USA
 
