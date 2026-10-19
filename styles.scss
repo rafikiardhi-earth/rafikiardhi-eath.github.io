@@ -85,6 +85,12 @@ body { font-size: 1.06rem; line-height: 1.65; }
 .card-item h3 { font-size: 1.15rem; margin-top: 0; }
 .card-item p { margin-bottom: 0; color: $ra-ink-2; font-size: .98rem; }
 
+// Icons
+// Icons (page content only, so navbar/footer icons keep Quarto's sizing)
+main .bi { font-size: 1.15em; margin-right: .4em; vertical-align: -0.1em; }
+.bi-whatsapp { color: #25D366; }
+.bi-envelope { color: $ra-accent; }
+
 // Language link (English / Español) on homeowner pages
 .hm-lang { text-align: right; margin: -0.5rem 0 0.75rem; font-size: .9rem; }
 .hm-lang p { margin: 0; }
