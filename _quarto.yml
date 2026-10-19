@@ -45,7 +45,12 @@ website:
   page-footer:
     left: "© 2026 RafikiArdhi LLC · Carbondale, Colorado · [Privacy](/privacy.qmd)"
     right: "*Rafiki Ardhi* — Kiswahili for “land friend”"
-
+      - icon: envelope
+        href: mailto:tflynn@rafikiardhi.earth
+        aria-label: Email
+      - icon: whatsapp
+        href: https://wa.me/RafikiArdhi
+        aria-label: WhatsApp
 format:
   html:
     theme:
