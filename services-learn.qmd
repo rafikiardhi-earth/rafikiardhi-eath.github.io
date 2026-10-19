@@ -1,9 +1,9 @@
 ---
 title: "Learn: training"
-description: "Workshops in soil classification, digital soil mapping, data harmonisation, uncertainty and R, tailored to the group and available in several languages."
+description: "Workshops in soil classification, do-it-yourself landscaping, research creativity and research validation, tailored to the group and available in several languages."
 ---
 
-Workshops tailored to the group, from field teams to research students, and available in several languages.
+Workshops tailored to the group, from homeowners and field teams to research students, and available in several languages.
 
 ::: {.cards}
 
@@ -13,18 +13,18 @@ Describing and classifying soils in the field with WRB and national systems, usi
 :::
 
 ::: {.card-item}
-### Digital soil mapping
-From covariates and sampling to predictions and their uncertainty.
+### Do-it-yourself landscaping
+Put our homeowner tools together and make home gardening both fun and scientific, without the stress.
 :::
 
 ::: {.card-item}
-### Data harmonisation
-Combining legacy and new data across depths, methods and surveys.
+### Research creativity
+Think outside the box while keeping scientific rigour, to solve complex environmental challenges.
 :::
 
 ::: {.card-item}
-### Uncertainty and R
-Quantifying, propagating and communicating uncertainty, with reproducible workflows in R.
+### Research validation
+Quantifying, propagating, communicating and visualising scientific results for every audience, from your mother to the neighbour who doesn't speak your language.
 :::
 
 :::
