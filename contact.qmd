@@ -18,6 +18,7 @@ Carbondale, Colorado, USA
 [ORCID](https://orcid.org/0000-0002-5187-9946) · [LinkedIn](https://linkedin.com/in/trevan-flynn) · [ResearchGate](https://researchgate.net/profile/Trevan-Flynn)
 :::
 
+::: {}
 ::: {.card-item}
 ### Get in touch about
 
@@ -34,6 +35,13 @@ Carbondale, Colorado, USA
 []{.bi .bi-check2-circle} Workshops and training
 
 []{.bi .bi-check2-circle} Home and garden questions
+:::
+
+::: {.card-item .mt-3}
+### Contribute to the tools
+
+Our classification keys and tools are offered in several languages so more people can use them in their own. If you would like to translate or review a tool in your language, or co-develop a new key or tool, we would like to hear from you. Contributors are acknowledged on the tools they help build.
+:::
 :::
 
 :::
