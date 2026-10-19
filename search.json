@@ -1015,18 +1015,18 @@
     "text": "Approach\nWe build on existing knowledge rather than replacing it. Every map and piece of information is updated, not reset; every estimate propagates its uncertainty; and every result is explained in terms the decision maker can use.\nWe do not use AI to replace human expertise. Where others reach for black-box AI, we use “glass box” functions: methods that are easy to interpret, scale to large problems, and are benchmarked against AI models."
   },
   {
-    "objectID": "about.html#acknowledgements",
-    "href": "about.html#acknowledgements",
+    "objectID": "about.html#contibutor-and-acknowledgements",
+    "href": "about.html#contibutor-and-acknowledgements",
     "title": "About",
-    "section": "Acknowledgements",
-    "text": "Acknowledgements\nThe free tools on this site were co-authors, improved by people who tested them, checked the methods and suggested changes. Thank you to:\n\nRosana Kostecki, PhD\nZahra Rasaei, PhD\nSara Merzoug (LinkedIn), Affiliation: 2GBEI Laboratory, Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco\n\nAny remaining errors are ours. Found one, or want to suggest a tool? Get in touch."
+    "section": "Contibutor and acknowledgements",
+    "text": "Contibutor and acknowledgements\nThe free tools on this site developed with co-authors, improved by people who tested them, checked the methods and suggested changes.\n\nRosana Kostecki, PhD (Profile), Affiliation: Soil Consultoria Socioambiental (Soil Socio-Environmental Consulting), Londrina, Paraná, Brasil\nZahra Rasaei, PhD ([Profile}(https://www.linkedin.com/in/zahra-rasaei-76aa9378/?isSelfProfile=false), Affiliation: Faculty of Agriculture, The University of Birjand, South Khorasan, Iran\nSara Merzoug (Profile), Affiliation: Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco\n\nAny remaining errors are ours. Found one, or want to suggest a tool? Get in touch."
   },
   {
     "objectID": "about.html#the-name",
     "href": "about.html#the-name",
     "title": "About",
     "section": "The name",
-    "text": "The name\nRafiki ardhi is Kiswahili for “friend of the land”.\nTry the tools  Get in touch\n\nFounded by Trevan Flynn, PhD, soil scientist. See Research for the research behind our methods."
+    "text": "The name\nRafiki ardhi is Kiswahili for “Land friend”.\nTry the tools  Get in touch\n\nFounded by Trevan Flynn, PhD, soil scientist. See Research for the published research behind our methods."
   },
   {
     "objectID": "contact.html",
