@@ -1,42 +1,47 @@
 ---
 title: "Services"
+description: "Independent review, methods and assessments, and research partnerships for environmental questions, from research groups to homeowners."
 ---
 
-RafikiArdhi works with research groups, government agencies, development programmes, NGOs and engineering teams. Each engagement starts with a short written scope: what will be delivered, by when, and on what terms.
+The tools on this site are free. What we charge for is the thinking behind them: working out what a question really needs, building methods where none exist, and checking that conclusions hold up.
 
-## Soil and landscape mapping
+Every engagement starts with a short written scope that sets out the question, deliverables, timeline and price before any work begins.
 
-- Digital soil mapping of soil properties by depth, with uncertainty
-- Updating existing regional maps with new survey data
-- Soil functional and fertility domains for planning
-- Soil sampling design for mapping and monitoring
+## Review: independent second opinions
 
-## Hydrology and runoff parameters
+A fixed-scope, fixed-price check by someone with no stake in the outcome. It's the simplest way to work with us.
 
-- Hydrologic soil group (HSG) mapping from geology and terrain, as class probabilities
-- Curve number and potential maximum retention surfaces with uncertainty, ready for hydrological models
-- Soil-water flux modelling along slopes and catenas
+- **Grant proposals.** Pre-submission review of aims, methods, feasibility and whether the budget matches the work.
+- **Research and sampling design.** Sample size, spatial layout, statistical power, and whether the design can answer the question being asked.
+- **Models.** Statistical, geostatistical and process models: assumptions, validation, overfitting and data leakage, and how uncertainty is handled.
+- **Data.** Quality, gaps, harmonisation problems, and whether the data supports the claims made from it.
+- **Reports and manuscripts.** Pre-submission review of the analysis and the inference drawn from it.
+- **Consultant deliverables.** A check of a study you have paid for, such as a flood, soil or site assessment, before you act on it. Short second opinions are available for homeowners as well.
 
-## Geostatistics and data analysis
+We only review work for the people who own it: applicants, authors or clients. We don't take paid reviews of proposals or manuscripts we are assessing for a funder or journal, and everything you share stays confidential.
 
-- Variogram analysis, kriging and regression kriging
-- Mixed models for nested and repeated soil data
-- Cross-validation and model checking
-- Analysis of existing datasets, including troubleshooting problem data
+## Build: methods and assessments
 
-## Decision support
+For questions that off-the-shelf methods don't answer, or places where the usual data doesn't exist.
 
-- Combining several sources of uncertainty into a single, readable decision map
-- Prioritisation of areas for management, restoration or further sampling
-- Plain-language summaries for non-specialist decision makers
+- **Method development.** Designing, validating and documenting a method for a problem without an established solution.
+- **Assessments in data-scarce settings.** Soil and landscape maps, hydrologic soil groups, curve number and retention surfaces for hydrological models, soil-water flux, and carbon stocks, all delivered with uncertainty.
+- **Updating and harmonising existing data.** Bringing legacy surveys, mixed depths and mixed methods into one consistent dataset. Maps are updated, not started again.
+- **Geostatistics and analysis.** Kriging, mixed models, model validation, and fixing problem datasets.
+- **Decision support.** Combining sources of uncertainty into decision maps, prioritising areas, and plain-language summaries for the people who have to act.
+- **Advanced versions of our tools.** Continuous rather than discrete calculations, uncertainty propagation, and custom builds of the free tools.
 
-## Review and training
+Methods are interpretable "glass-box" functions benchmarked against machine-learning alternatives, so every result can be traced and checked. Clients receive a licence to use the methods and results built for them. RafikiArdhi keeps the methods themselves and may later release an open version.
 
-- Independent technical review of reports, models and maps
-- Short courses and workshops in digital soil mapping and geostatistics in R
+Engineering work that requires a licensed professional engineer is carried out alongside that engineer.
 
----
+## Partner: research collaboration
 
-The scientific work is provided as environmental science and analysis. Where a project requires a licensed professional engineer, RafikiArdhi works alongside the engineering team.
+- **Analytical partnerships.** Ongoing methods, analysis and modelling support for research groups and projects, with co-authorship where the contribution warrants it.
+- **Methods lead on proposals.** Writing the methods and analysis sections of a proposal, with RafikiArdhi named in the team and budget as the analytical partner.
+
+## Learn: training
+
+- **Workshops** in soil classification, digital soil mapping, data harmonisation, uncertainty and R, tailored to the group and available in several languages.
 
 [Discuss a project →](contact.qmd)
