@@ -31,7 +31,7 @@ website:
             text: Third party review
           - text: "Build"
           - href: services-build.qmd
-            text: Landscapes & models
+            text: Problem solving
           - text: "Partner"
           - href: services-partner.qmd
             text: Research collaboration
