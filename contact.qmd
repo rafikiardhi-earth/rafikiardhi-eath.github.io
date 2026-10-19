@@ -2,14 +2,38 @@
 title: "Contact"
 ---
 
+::: {.cards}
+
+::: {}
 []{.bi .bi-envelope} **[Email](mailto:tflynn@rafikiardhi.earth)**
 
 []{.bi .bi-whatsapp} **[WhatsApp](https://wa.me/RafikiArdhi)**
 
-Trevan Flynn, PhD
+&nbsp;
 
 RafikiArdhi LLC
 
 Carbondale, Colorado, USA
 
 [ORCID](https://orcid.org/0000-0002-5187-9946) · [LinkedIn](https://linkedin.com/in/trevan-flynn) · [ResearchGate](https://researchgate.net/profile/Trevan-Flynn)
+:::
+
+::: {.card-item}
+### Get in touch about
+
+[]{.bi .bi-check2-circle} A quote for a review or project
+
+[]{.bi .bi-check2-circle} How to use one of the tools
+
+[]{.bi .bi-check2-circle} A problem or error in a tool
+
+[]{.bi .bi-check2-circle} Questions about our methods
+
+[]{.bi .bi-check2-circle} Research partnerships and proposals
+
+[]{.bi .bi-check2-circle} Workshops and training
+
+[]{.bi .bi-check2-circle} Home and garden questions
+:::
+
+:::
