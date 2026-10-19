@@ -2,8 +2,8 @@
 title: "Contact"
 ---
 
-[]{.bi .bi-envelope} **[tflynn@rafikiardhi.earth](mailto:tflynn@rafikiardhi.earth)**
-[]{.bi .bi-whatsapp} **[(@RafikiArdhi)](https://wa.me/RafikiArdhi)**
+[]{.bi .bi-envelope} **[Email](mailto:tflynn@rafikiardhi.earth)**
+[]{.bi .bi-whatsapp} **[WhatsApp](https://wa.me/RafikiArdhi)**
 
 Trevan Flynn, PhD
 RafikiArdhi LLC
