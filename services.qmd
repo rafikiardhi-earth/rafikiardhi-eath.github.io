@@ -1,47 +1,34 @@
 ---
 title: "Services"
-description: "Independent review, methods and assessments, and research partnerships for environmental questions, from research groups to homeowners."
+description: "Independent review, methods and assessments, research partnerships and training for environmental questions."
 ---
 
 The tools on this site are free. What we charge for is the thinking behind them: working out what a question really needs, building methods where none exist, and checking that conclusions hold up.
 
 Every engagement starts with a short written scope that sets out the question, deliverables, timeline and price before any work begins.
 
-## Review: independent second opinions
+::: {.cards}
 
-A fixed-scope, fixed-price check by someone with no stake in the outcome. It's the simplest way to work with us.
+::: {.card-item}
+### [Review](services-review.qmd)
+Independent second opinions on grant proposals, research designs, models, data, reports and consultant deliverables. Fixed scope, fixed price.
+:::
 
-- **Grant proposals.** Pre-submission review of aims, methods, feasibility and whether the budget matches the work.
-- **Research and sampling design.** Sample size, spatial layout, statistical power, and whether the design can answer the question being asked.
-- **Models.** Statistical, geostatistical and process models: assumptions, validation, overfitting and data leakage, and how uncertainty is handled.
-- **Data.** Quality, gaps, harmonisation problems, and whether the data supports the claims made from it.
-- **Reports and manuscripts.** Pre-submission review of the analysis and the inference drawn from it.
-- **Consultant deliverables.** A check of a study you have paid for, such as a flood, soil or site assessment, before you act on it. Short second opinions are available for homeowners as well.
+::: {.card-item}
+### [Build](services-build.qmd)
+Methods and assessments for questions that off-the-shelf approaches don't answer, or places where the usual data doesn't exist. Uncertainty included.
+:::
 
-We only review work for the people who own it: applicants, authors or clients. We don't take paid reviews of proposals or manuscripts we are assessing for a funder or journal, and everything you share stays confidential.
+::: {.card-item}
+### [Partner](services-partner.qmd)
+Ongoing analytical collaboration with research groups and projects, and methods leadership on proposals.
+:::
 
-## Build: methods and assessments
+::: {.card-item}
+### [Learn](services-learn.qmd)
+Workshops in soil classification, digital soil mapping, data harmonisation, uncertainty and R, in several languages.
+:::
 
-For questions that off-the-shelf methods don't answer, or places where the usual data doesn't exist.
+:::
 
-- **Method development.** Designing, validating and documenting a method for a problem without an established solution.
-- **Assessments in data-scarce settings.** Soil and landscape maps, hydrologic soil groups, curve number and retention surfaces for hydrological models, soil-water flux, and carbon stocks, all delivered with uncertainty.
-- **Updating and harmonising existing data.** Bringing legacy surveys, mixed depths and mixed methods into one consistent dataset. Maps are updated, not started again.
-- **Geostatistics and analysis.** Kriging, mixed models, model validation, and fixing problem datasets.
-- **Decision support.** Combining sources of uncertainty into decision maps, prioritising areas, and plain-language summaries for the people who have to act.
-- **Advanced versions of our tools.** Continuous rather than discrete calculations, uncertainty propagation, and custom builds of the free tools.
-
-Methods are interpretable "glass-box" functions benchmarked against machine-learning alternatives, so every result can be traced and checked. Clients receive a licence to use the methods and results built for them. RafikiArdhi keeps the methods themselves and may later release an open version.
-
-Engineering work that requires a licensed professional engineer is carried out alongside that engineer.
-
-## Partner: research collaboration
-
-- **Analytical partnerships.** Ongoing methods, analysis and modelling support for research groups and projects, with co-authorship where the contribution warrants it.
-- **Methods lead on proposals.** Writing the methods and analysis sections of a proposal, with RafikiArdhi named in the team and budget as the analytical partner.
-
-## Learn: training
-
-- **Workshops** in soil classification, digital soil mapping, data harmonisation, uncertainty and R, tailored to the group and available in several languages.
-
-[Discuss a project →](contact.qmd)
+[Discuss a project →](contact.qmd){.btn-earth}

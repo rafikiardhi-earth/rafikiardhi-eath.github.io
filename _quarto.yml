@@ -21,8 +21,19 @@ website:
         text: Home
       - href: about.qmd
         text: About
-      - href: services.qmd
-        text: Services
+      - text: Services
+        menu:
+          - href: services.qmd
+            text: All services
+          - text: "---"
+          - href: services-review.qmd
+            text: "Review: second opinions"
+          - href: services-build.qmd
+            text: "Build: methods & assessments"
+          - href: services-partner.qmd
+            text: "Partner: research collaboration"
+          - href: services-learn.qmd
+            text: "Learn: training"
       - text: Tools
         menu:
           - text: "For homeowners"

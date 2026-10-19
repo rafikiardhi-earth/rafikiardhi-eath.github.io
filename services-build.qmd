@@ -1,0 +1,46 @@
+---
+title: "Build: methods and assessments"
+description: "Method development, data-scarce assessments, data harmonisation, analysis and decision support, delivered with uncertainty."
+---
+
+For questions that off-the-shelf methods don't answer, or places where the usual data doesn't exist. Every result comes with its uncertainty, so you know how far it can be trusted.
+
+::: {.cards}
+
+::: {.card-item}
+### Method development
+Designing, validating and documenting a method for a problem without an established solution.
+:::
+
+::: {.card-item}
+### Assessments in data-scarce settings
+Soil and landscape maps, hydrologic soil groups, curve number and retention surfaces for hydrological models, soil-water flux, and carbon stocks.
+:::
+
+::: {.card-item}
+### Updating and harmonising data
+Bringing legacy surveys, mixed depths and mixed methods into one consistent dataset. Maps are updated, not started again.
+:::
+
+::: {.card-item}
+### Geostatistics and analysis
+Kriging, mixed models, model validation, and fixing problem datasets.
+:::
+
+::: {.card-item}
+### Decision support
+Combining sources of uncertainty into decision maps, prioritising areas, and plain-language summaries for the people who have to act.
+:::
+
+::: {.card-item}
+### Advanced versions of our tools
+Continuous rather than discrete calculations, uncertainty propagation, and custom builds of the free tools.
+:::
+
+:::
+
+Methods are interpretable "glass-box" functions benchmarked against machine-learning alternatives, so every result can be traced and checked. Clients receive a licence to use the methods and results built for them. RafikiArdhi keeps the methods themselves and may later release an open version.
+
+Engineering work that requires a licensed professional engineer is carried out alongside that engineer.
+
+[Discuss a project →](contact.qmd){.btn-earth}

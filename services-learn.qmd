@@ -1,0 +1,32 @@
+---
+title: "Learn: training"
+description: "Workshops in soil classification, digital soil mapping, data harmonisation, uncertainty and R, tailored to the group and available in several languages."
+---
+
+Workshops tailored to the group, from field teams to research students, and available in several languages.
+
+::: {.cards}
+
+::: {.card-item}
+### Soil classification
+Describing and classifying soils in the field with WRB and national systems, using our free classification keys.
+:::
+
+::: {.card-item}
+### Digital soil mapping
+From covariates and sampling to predictions and their uncertainty.
+:::
+
+::: {.card-item}
+### Data harmonisation
+Combining legacy and new data across depths, methods and surveys.
+:::
+
+::: {.card-item}
+### Uncertainty and R
+Quantifying, propagating and communicating uncertainty, with reproducible workflows in R.
+:::
+
+:::
+
+[Plan a workshop →](contact.qmd){.btn-earth}

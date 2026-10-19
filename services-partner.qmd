@@ -1,0 +1,22 @@
+---
+title: "Partner: research collaboration"
+description: "Analytical partnerships with research groups and projects, and methods leadership on proposals."
+---
+
+For research groups and projects that need analytical depth over months rather than weeks.
+
+::: {.cards}
+
+::: {.card-item}
+### Analytical partnerships
+Ongoing methods, analysis and modelling support for research groups and projects, with co-authorship where the contribution warrants it.
+:::
+
+::: {.card-item}
+### Methods lead on proposals
+Writing the methods and analysis sections of a proposal, with RafikiArdhi named in the team and budget as the analytical partner.
+:::
+
+:::
+
+[Discuss a partnership →](contact.qmd){.btn-earth}
