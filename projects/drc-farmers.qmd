@@ -3,6 +3,7 @@ date: 2020-01-01
 title: "Democratic Republic of the Congo"
 description: "Working with women farmers on heavily leached soils."
 categories: [Socio-ecological, Central Africa]
+draft: true
 ---
 
 Working with women farmers on heavily leached soils, with very limited resources.
