@@ -380,28 +380,35 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Evidence for decisions about land, soil and water",
+    "title": "Answers for environmental questions that don’t come off the shelf",
     "section": "",
-    "text": "Environmental analytics\n\n\nRafikiArdhi turns field data, remote sensing and terrain into maps, models and uncertainty estimates that land managers, researchers and development programmes can act on.\nGet in touch"
+    "text": "Free tools · Paid thinking · No gatekeeping\n\n\nRafikiArdhi brings real science to homeowners and real creativity to researchers. The tools are free. When a question needs more, we bring the thinking.\nUse the free tools   Bring us a problem →"
   },
   {
-    "objectID": "index.html#what-we-do",
-    "href": "index.html#what-we-do",
-    "title": "Evidence for decisions about land, soil and water",
-    "section": "What we do",
-    "text": "What we do\nRafikiArdhi takes on environmental problems where existing methods fall short. We develop a method suited to the problem, validate it against real data, and, where agreements allow, release it as an open tool so the knowledge keeps building rather than resetting with each project.\nClients get the solution, and the expertise to apply it to their own data and decisions.\n\n\nSoil and landscape mapping\nDepth-consistent digital soil maps, soil property surfaces and functional domains, from plot to national scale. \n\n\nHydrology and runoff\nHydrologic soil groups, curve numbers and runoff parameters, and soil-water flux modelling across hillslopes.  \n\n\nGeostatistics and uncertainty\nVariograms, kriging, mixed models and uncertainty propagation, so every map comes with an honest error estimate. \n\n\nDecision support\nTurning model output and its uncertainty into clear, policy-ready classes and priorities."
+    "objectID": "index.html#what-we-believe",
+    "href": "index.html#what-we-believe",
+    "title": "Answers for environmental questions that don’t come off the shelf",
+    "section": "What we believe",
+    "text": "What we believe\n\nBuild on what exists. Old surveys and past projects are worth more than people think. We update knowledge instead of starting over.\nHonest uncertainty. Every answer comes with how far it can be trusted.\nNo AI, no black boxes. Our methods follow the processes behind the environment, so every result can be traced and checked.\nScience in your own language. Our tools and keys come in the languages people actually speak, not only English."
   },
   {
-    "objectID": "index.html#example-making-gis-depth-aware",
-    "href": "index.html#example-making-gis-depth-aware",
-    "title": "Evidence for decisions about land, soil and water",
-    "section": "Example: making GIS depth-aware",
-    "text": "Example: making GIS depth-aware\nGIS platforms treat soil as a stack of flat layers, so properties jump at every layer boundary and anything between the standard depths is lost. We built a physics-informed depth spline that runs inside Google Earth Engine, turning a spatially explicit platform into one that is also depth-aware. Each pixel carries a continuous, physically consistent profile, so properties can be read at any depth or integrated over the whole profile, and new layers such as moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon from the depth spline: maps at six standard depths (left) and the whole-profile total from integrating each pixel’s continuous profile (right)."
+    "objectID": "index.html#how-we-can-help",
+    "href": "index.html#how-we-can-help",
+    "title": "Answers for environmental questions that don’t come off the shelf",
+    "section": "How we can help",
+    "text": "How we can help\n\n\nReview\nIndependent second opinions on grants, research designs, models, data and reports.\n\n\nBuild\nAnswers to questions without an off-the-shelf solution, honest about uncertainty.\n\n\nPartner\nOngoing analytical collaboration with research groups and projects.\n\n\nLearn\nWorkshops from do-it-yourself landscaping to research creativity and validation."
+  },
+  {
+    "objectID": "index.html#example-making-maps-depth-aware",
+    "href": "index.html#example-making-maps-depth-aware",
+    "title": "Answers for environmental questions that don’t come off the shelf",
+    "section": "Example: making maps depth-aware",
+    "text": "Example: making maps depth-aware\nThe problem. Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.\nThe insight. Soil isn’t layered like a spreadsheet. It forms as one connected profile, so a map should carry it that way.\nThe result. Every pixel now holds a continuous, physically consistent profile. Properties can be read at any depth or totalled over the whole profile, and moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon: maps at six standard depths (left) and the whole-profile total (right)."
   },
   {
     "objectID": "index.html#where-we-work",
     "href": "index.html#where-we-work",
-    "title": "Evidence for decisions about land, soil and water",
+    "title": "Answers for environmental questions that don’t come off the shelf",
     "section": "Where we work",
     "text": "Where we work\nSouthern, East and Central Africa · the Caribbean and Latin America · the Western United States. Work is delivered remotely, personally on site or with local partners in the field.\nSee all services →"
   },
