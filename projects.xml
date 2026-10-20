@@ -121,7 +121,7 @@
   <media:content url="https://rafikiardhi.earth/images/yard-after-card.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
-  <title>Mpumalanga, South Africa (under NDA)</title>
+  <title>World Bank (under NDA)</title>
   <link>https://rafikiardhi.earth/projects/mpumalanga-carbon.html</link>
   <description><![CDATA[ 
 
@@ -129,7 +129,14 @@
 
 
 
-<p>Carbon modelling for a World Bank–funded carbon credit programme.</p>
+<p>Carbon credits depend on knowing how much carbon is in the soil before anything changes. For a World Bank–funded carbon credit programme in Mpumalanga, South Africa, we created the baseline soil carbon stock maps using spatial mixed models, which account for how carbon varies across the landscape and how confident each estimate is.</p>
+<p>These baselines are the reference that every future change in soil carbon is measured against.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rafikiardhi.earth/images/soc-depth-spline.jpg" class="img-fluid figure-img" alt="Six small maps of soil organic carbon at depths from 0–20 cm to 100–150 cm, decreasing with depth, beside a larger map of the whole-profile total."></p>
+<figcaption>Illustrative example of soil organic carbon mapped with depth and summed over the whole profile, from separate work. Maps from the World Bank programme are under NDA and not shown.</figcaption>
+</figure>
+</div>
 
 
 
