@@ -3,7 +3,7 @@ date: 2026-05-01
 title: "Our own backyard, Colorado"
 description: "Doing it ourselves: gravel, raised beds and drip irrigation, worked out with our own homeowner tools."
 categories: [Homeowners, Water, Western US]
-image: ../images/yard-before-after.jpg
+image: ../images/yard-after-card.jpg
 ---
 
 We test our homeowner tools where it matters most to us: at home. A patch of lawn and bare ground became gravel paths, raised beds and drip irrigation, with every quantity of soil, mulch and gravel worked out first with the same free calculators on our [Homeowners page](../homeowners.qmd).
