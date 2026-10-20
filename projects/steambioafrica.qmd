@@ -1,12 +1,12 @@
 ---
 date: 2023-06-01
-title: "De-bushing and soil carbon"
-description: "Modelling how clearing invasive bush and pesticide use change soil carbon across Namibia, Botswana and South Africa."
-categories: [Carbon, Socio-ecological, Partnerships, Southern Africa]
+title: "De-bushing and the soil system"
+description: "Predicted how clearing invasive bush and pesticide use changed soil carbon and water across Namibia, Botswana and South Africa."
+categories: [Carbon, Water, Socio-ecological, Partnerships, Southern Africa]
 image: ../images/bush-thinning-card.jpg
 ---
 
-Invasive bush is spreading across Southern African rangelands, choking grazing land and water. Clearing it can restore land, livelihoods and can be used as a source of biofuel for cooking or energy; however, what does it do to the very ecosystem?
+Invasive bush is spreading across Southern African rangelands, choking grazing land and water. Clearing it can restore land, livelihoods and can be used as a source of biofuel for cooking or energy; however, what does it do to the ecosystem we cannot see?
 
 As a research consultant to [SLU](https://www.slu.se/en/research/research-catalogue/projekt/s/steambioafrica/) (the Swedish University of Agricultural Sciences) on SteamBioAfrica, an EU Horizon 2020 project turning invasive woody biomass into products that benefit local communities, we modelled soil carbon dynamics during and after de-bushing and pesticide use in Namibia, Botswana and South Africa.
 
