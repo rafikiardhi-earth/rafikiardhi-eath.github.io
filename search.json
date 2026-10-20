@@ -1047,7 +1047,7 @@
     "href": "projects/southern-africa-depth.html",
     "title": "Integrated Soil Profile Mapping (Southern Africa)",
     "section": "",
-    "text": "(../images/SA-area.jpg){fig-alt=“Mapped area showing agricultural land and non-agricultural land}\nSoil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary."
+    "text": "{fig-alt=“Mapped area showing agricultural land and non-agricultural land}\nSoil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary."
   },
   {
     "objectID": "projects/multilingual-keys.html",

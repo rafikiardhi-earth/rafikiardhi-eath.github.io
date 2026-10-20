@@ -138,7 +138,7 @@
 
 
 
-<p>(../images/SA-area.jpg){fig-alt=“Mapped area showing agricultural land and non-agricultural land}</p>
+<p><img src="https://rafikiardhi.earth/images/SA-area.jpg" class="img-fluid" alt="produced map.">{fig-alt=“Mapped area showing agricultural land and non-agricultural land}</p>
 <p>Soil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary.</p>
 
 
