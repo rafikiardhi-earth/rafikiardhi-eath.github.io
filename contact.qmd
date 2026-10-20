@@ -2,8 +2,7 @@
 title: "Contact"
 ---
 
-![](images/sopris-banner.jpg){.page-banner fig-alt="Autumn trail below Mount Sopris near Carbondale, Colorado"}
-
+![](images/husky-aspens-banner.jpg){.page-banner fig-alt="A husky looking back over his shoulder in a meadow below golden aspens in autumn"}
 
 ::: {.cards}
 
