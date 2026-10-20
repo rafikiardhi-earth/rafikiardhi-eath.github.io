@@ -20,4 +20,6 @@ Sampling was sparse, only two horizons were sampled per profile, and the environ
 ![Desert: dunes of the Namib. Soil organic carbon, organisms and water are present under the surface.](../images/sa-namib-dunes.jpg){fig-alt="A tall red sand dune with a few camel thorn trees on a flat gravel plain under a clear blue sky."}
 :::
 
+![Texture profiles in Malawi drawn as continuous curves with depth, beside the site's climate and elevation (Flynn et al., 2026).](../images/malawi-profiles-figure.jpg){fig-alt="Left: a map of a Malawi study area shaded by rainfall, temperature and elevation, with numbered sample sites. Right: six soil profiles showing texture classes as coloured bands, with clay, sand and silt drawn as smooth curves down to about 150 cm."}
+
 **Preprint:** [Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands](https://doi.org/10.31223/X5JN5T)
