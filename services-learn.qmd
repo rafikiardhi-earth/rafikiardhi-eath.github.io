@@ -3,7 +3,7 @@ title: "Learn: training"
 description: "Workshops in soil classification, do-it-yourself landscaping, research creativity and research validation, tailored to the group and available in several languages."
 ---
 
-![](images/eswatini-overlook-banner.jpg){.page-banner fig-alt="A hiker sitting on granite boulders above a green valley in eSwatini"}
+![](images/rio-talk-banner.jpg){.page-banner fig-alt="Trevan Flynn presenting soil mapping methods at a conference in Rio de Janeiro"}
 
 
 Workshops tailored to the group, from homeowners and field teams to research students, and available in several languages.
