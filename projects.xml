@@ -129,7 +129,7 @@
   <media:content url="https://rafikiardhi.earth/images/yard-after-card.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
-  <title>World Bank (under NDA)</title>
+  <title>World Bank carbon credits</title>
   <link>https://rafikiardhi.earth/projects/mpumalanga-carbon.html</link>
   <description><![CDATA[ 
 
@@ -149,6 +149,7 @@
 
 
  ]]></description>
+  <category>NDA</category>
   <category>Carbon</category>
   <category>Southern Africa</category>
   <guid>https://rafikiardhi.earth/projects/mpumalanga-carbon.html</guid>
