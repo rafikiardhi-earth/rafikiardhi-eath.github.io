@@ -18,13 +18,13 @@ page-layout: full
 ::: {.card-item}
 ### [Homeowners: real science](homeowners.qmd)
 Everyday decisions about soil, water and gardens, answered with the same science researchers use, without the sales pitch.
-![Hopi Land.](images/hopi-land.jpg)
+![A husky inspecting a new raised garden bed with drip irrigation.](images/raised-bed-drip-card.jpg)
 :::
 
 ::: {.card-item}
 ### [Researchers: real creativity](tools.qmd)
 Free research tools and checks, and new angles on hard environmental problems, with the rigour kept intact.
-![Soil texture with depth.](images/physpline.jpg)
+![Harvested wheatlands in the Swartland, Western Cape, with dust blowing off the fields.](images/swartland-card.jpg)
 :::
 :::
 
@@ -70,6 +70,8 @@ Workshops from do-it-yourself landscaping to research creativity and validation.
 ![Soil organic carbon: maps at six standard depths (left) and the whole-profile total (right).](images/soc-depth-spline.jpg){fig-alt="Six small maps of soil organic carbon across a watershed at depths from 0–20 cm to 100–150 cm, decreasing with depth, beside one larger map of the depth-integrated total showing high values in the north and along drainage lines."}
 
 ## Where we work
+
+![](images/valley-overlook-wide.jpg){.page-banner fig-alt="Looking out over a valley in eSwatini, where settlement is growing into the landscape under a passing rainstorm"}
 
 [Southern, East and Central Africa · the Caribbean and Latin America · the Western United States. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
 

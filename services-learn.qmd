@@ -3,6 +3,9 @@ title: "Learn: training"
 description: "Workshops in soil classification, do-it-yourself landscaping, research creativity and research validation, tailored to the group and available in several languages."
 ---
 
+![](images/valley-overlook-wide.jpg){.page-banner fig-alt="Looking out over a valley in eSwatini, where settlement is growing into the landscape under a passing rainstorm"}
+
+
 Workshops tailored to the group, from homeowners and field teams to research students, and available in several languages.
 
 ::: {.cards}
