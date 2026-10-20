@@ -12,6 +12,6 @@ We're working on the opposite: updating what is known as new data arrives, so th
 
 ![Soil fertility domains across Limpopo Province, South Africa, ordered from lowest (1) to highest (9) fertility, from updating a regional map with a continental survey.](../images/sfd-limpopo.jpg){fig-alt="Map of Limpopo Province coloured into nine soil fertility domains, from dark purple and blue for lower fertility to orange and dark red for higher fertility, with large connected regions following the landscape."}
 
-The method is an updated version of our [ISPM](southern-africa-depth.qmd) digital soil mapping framework, which updates maps based on the idea that the whole is greater than the sum of its parts.
+The method is an updated version of our [ISPM](southern-africa-depth.qmd) digital soil mapping framework, built on the idea that the whole is greater than the sum of its parts. The updating is physics-based: it obeys the laws of thermodynamics and is solved exactly with calculus, rather than learned by AI. Every update can be traced, checked and explained, and the knowledge it adds is never lost to a black box.
 
-(Under production)
+(Manuscript under production)
