@@ -42,7 +42,7 @@ Workshops in soil classification, do-it-yourself landscaping, research creativit
 
 ## Why be creative in science?
 
-**[An example]**{.small .text-muted}
+**[An example]{.small .text-muted}**
 
 **The problem.** Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.
 
