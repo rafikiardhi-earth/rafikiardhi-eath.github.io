@@ -46,8 +46,8 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-11f8c19ec4c6d8d624b44fdf59ecf830.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-46ff8ec74b031f5ee00be3d93eee33ae.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-1af3ba3cbcc220d38f162e81ebbe0204.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-70e671414630c3dbce14a53613db9d4c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -998,11 +998,15 @@ H2,48.9,9.6,24.1"></textarea>
     <p class="hint" style="margin-top:0">The calculator above sizes a sample to estimate one average. For a map, what matters is how far apart samples are compared with the variogram range. This finds how many samples on a regular grid give a chosen kriging error, from a variogram you already have (for example from the <a href="#krige" data-goto-tab="krige">variogram tool</a> or a nearby study).</p>
     <div class="rk-grid">
       <div><label for="sv-model">Variogram model</label><select id="sv-model"><option value="sph">Spherical</option><option value="exp">Exponential</option><option value="gau">Gaussian</option></select></div>
-      <div><label for="sv-nug">Nugget (% of sill)</label><input type="number" id="sv-nug" value="20" min="0" max="99" step="any"></div>
+      <div><label for="sv-vform">Variogram reported as</label><select id="sv-vform"><option value="ratio">Nugget : sill ratio</option><option value="sill">Nugget and sill</option><option value="psill">Nugget and partial sill</option></select></div>
+      <div id="sv-ratiof"><label for="sv-ratio">Nugget : sill (0–1)</label><input type="number" id="sv-ratio" value="0.2" min="0" max="1" step="any"></div>
+      <div id="sv-c0f" style="display:none"><label for="sv-c0">Nugget</label><input type="number" id="sv-c0" min="0" step="any"></div>
+      <div id="sv-s2f" style="display:none"><label for="sv-s2" id="sv-s2lab">Sill</label><input type="number" id="sv-s2" min="0" step="any"></div>
       <div><label for="sv-r">Range, practical (m)</label><input type="number" id="sv-r" value="250" min="1" step="any"></div>
       <div><label for="sv-area">Area (ha)</label><input type="number" id="sv-area" value="50" min="0.01" step="any"></div>
       <div><label for="sv-target">Target map error (% of SD)</label><input type="number" id="sv-target" value="60" min="1" max="100" step="any"></div>
     </div>
+    <p class="hint">Enter the variogram the way it was reported: as the nugget : sill ratio, as the nugget and sill, or as the nugget and partial sill (the sill minus the nugget; gstat reports this as psill, and many papers do too). The sill is the total: nugget + partial sill. Only the ratio matters here, so any of the three gives the same answer.</p>
     <p class="hint">Map error is the root mean kriging error at unsampled locations, as a share of the standard deviation of the property. 100% means no better than the mean; the nugget sets the lowest error any density can reach.</p>
     <div class="rk-row"><button class="rk-btn primary" id="sv-run">Calculate</button></div>
     <div class="msg" id="sv-msg" role="status"></div>
@@ -1089,13 +1093,17 @@ H2,48.9,9.6,24.1"></textarea>
     <div class="rk-grid">
       <div><label for="kc-model">Variogram model</label><select id="kc-model"><option value="sph">Spherical</option><option value="exp">Exponential</option><option value="gau">Gaussian</option></select></div>
       <div><label for="kc-sd">Standard deviation of the data</label><input type="number" id="kc-sd" min="0" step="any"></div>
-      <div><label for="kc-nug">Nugget (% of sill)</label><input type="number" id="kc-nug" value="0" min="0" max="100" step="any"></div>
+      <div><label for="kc-vform">Variogram reported as</label><select id="kc-vform"><option value="ratio">Nugget : sill ratio</option><option value="sill">Nugget and sill</option><option value="psill">Nugget and partial sill</option></select></div>
+      <div id="kc-ratiof"><label for="kc-ratio">Nugget : sill (0–1)</label><input type="number" id="kc-ratio" value="0" min="0" max="1" step="any"></div>
+      <div id="kc-c0f" style="display:none"><label for="kc-c0">Nugget</label><input type="number" id="kc-c0" min="0" step="any"></div>
+      <div id="kc-s2f" style="display:none"><label for="kc-s2" id="kc-s2lab">Sill</label><input type="number" id="kc-s2" min="0" step="any"></div>
       <div><label for="kc-r">Range, practical (m)</label><input type="number" id="kc-r" min="0" step="any"></div>
       <div><label for="kc-n">Number of samples</label><input type="number" id="kc-n" min="10" step="1"></div>
       <div><label for="kc-area">Area (ha)</label><input type="number" id="kc-area" min="0" step="any"></div>
       <div><label for="kc-lay">Sample layout</label><select id="kc-lay"><option value="random">Random</option><option value="grid">Regular grid</option></select></div>
       <div><label for="kc-rmse">Reported RMSE (optional)</label><input type="number" id="kc-rmse" min="0" step="any"></div>
     </div>
+    <p class="hint">Enter the variogram the way it was reported: as the nugget : sill ratio, as the nugget and sill, or as the nugget and partial sill (the sill minus the nugget; gstat reports this as psill, and many papers do too). The sill is the total: nugget + partial sill. With the ratio, the sill is taken as the variance of the data (SD²); with a nugget and sill, the stated sill is used, and the standard deviation becomes optional.</p>
     <p class="hint">If the nugget isn't reported, leave it at 0: that is the most generous assumption, so a result that still looks too good really is.</p>
     <div class="rk-row"><button class="rk-btn primary" id="kc-run">Check</button><button class="rk-btn" id="kc-ex">Load example</button></div>
     <div class="msg" id="kc-msg" role="status"></div>
@@ -3981,12 +3989,37 @@ const krNuVis = () => { $("kr-nubox").style.display = ["mat", "ste"].includes($(
 $("kr-man").addEventListener("change", () => { $("kr-manbox").style.display = $("kr-man").checked ? "grid" : "none"; krNuVis(); });
 $("kr-model").addEventListener("change", krNuVis); krNuVis();
 $("kr-dl").addEventListener("click", () => { if (krLast) download("kriging_loocv.csv", toCSV(krLast.header, krLast.rows)); });
+/* variogram entry: nugget : sill ratio, nugget + sill, or nugget + partial sill */
+function vgShow(px) {
+  const f = $(px + "-vform").value;
+  $(px + "-ratiof").style.display = f === "ratio" ? "" : "none";
+  $(px + "-c0f").style.display = $(px + "-s2f").style.display = f === "ratio" ? "none" : "";
+  $(px + "-s2lab").textContent = f === "psill" ? "Partial sill" : "Sill";
+}
+function vgRead(px) {
+  const f = $(px + "-vform").value;
+  if (f === "ratio") {
+    const q = num($(px + "-ratio").value);
+    const ratio = isFinite(q) ? q : 0;
+    if (!(ratio >= 0 && ratio <= 1)) return { err: "The nugget : sill ratio must be between 0 and 1 (for example 0.25, not 25%)." };
+    return { ratio, sill: null };
+  }
+  const c0 = num($(px + "-c0").value), v = num($(px + "-s2").value), nug = isFinite(c0) ? c0 : 0;
+  if (!(nug >= 0) || !(v >= 0)) return { err: f === "psill" ? "Enter the nugget and partial sill (zero or more)." : "Enter the nugget and sill (zero or more)." };
+  const sill = f === "psill" ? nug + v : v;
+  if (!(sill > 0)) return { err: "The sill must be above zero." };
+  if (nug > sill) return { err: "The nugget can't be larger than the sill. If your value is the partial sill, choose \"Nugget and partial sill\"." };
+  return { ratio: nug / sill, sill };
+}
+["kc", "sv"].forEach(px => { $(px + "-vform").addEventListener("change", () => vgShow(px)); vgShow(px); });
 /* plausibility check for a published kriging result */
 function kcRun() {
   const msg = $("kc-msg"); msg.className = "msg"; msg.textContent = "";
-  const sd = num($("kc-sd").value), nugP = num($("kc-nug").value) || 0, r = num($("kc-r").value), n = Math.round(num($("kc-n").value)), ha = num($("kc-area").value), rep = num($("kc-rmse").value);
-  if (!(sd > 0) || !(r > 0) || !(n >= 10) || !(ha > 0) || nugP < 0 || nugP > 100) { msg.className = "msg err"; msg.textContent = "Enter the standard deviation, range, number of samples (10 or more) and area."; $("kc-res").hidden = true; return; }
-  const sill = sd * sd, m = { type: $("kc-model").value, c0: sill * nugP / 100, c1: sill * (1 - nugP / 100), r };
+  const V = vgRead("kc"), sdIn = num($("kc-sd").value), r = num($("kc-r").value), n = Math.round(num($("kc-n").value)), ha = num($("kc-area").value), rep = num($("kc-rmse").value);
+  if (V.err) { msg.className = "msg err"; msg.textContent = V.err; $("kc-res").hidden = true; return; }
+  const sd = V.sill != null && !(sdIn > 0) ? Math.sqrt(V.sill) : sdIn;
+  if (!(sd > 0) || !(r > 0) || !(n >= 10) || !(ha > 0)) { msg.className = "msg err"; msg.textContent = V.sill != null ? "Enter the range, number of samples (10 or more) and area." : "Enter the standard deviation, range, number of samples (10 or more) and area."; $("kc-res").hidden = true; return; }
+  const sill = V.sill != null ? V.sill : sd * sd, m = { type: $("kc-model").value, c0: sill * V.ratio, c1: sill * (1 - V.ratio), r };
   const grid = $("kc-lay").value === "grid", reps = grid ? 1 : 25;
   const E = krExpected(m, n, ha, grid, reps, "loo"), spacing = E.spacing, lo = E.lo, mid = E.mid, hi = E.hi, floor = Math.sqrt(m.c0);
   const d = sd < 10 ? 3 : 2;
@@ -4004,7 +4037,7 @@ function kcRun() {
   $("kc-res").hidden = false;
 }
 $("kc-run").addEventListener("click", kcRun);
-$("kc-ex").addEventListener("click", () => { $("kc-model").value = "sph"; $("kc-sd").value = 8; $("kc-nug").value = 0; $("kc-r").value = 46; $("kc-n").value = 100; $("kc-area").value = 50; $("kc-lay").value = "random"; $("kc-rmse").value = 3; kcRun(); });
+$("kc-ex").addEventListener("click", () => { $("kc-model").value = "sph"; $("kc-sd").value = 8; $("kc-vform").value = "ratio"; vgShow("kc"); $("kc-ratio").value = 0; $("kc-r").value = 46; $("kc-n").value = 100; $("kc-area").value = 50; $("kc-lay").value = "random"; $("kc-rmse").value = 3; kcRun(); });
 
 
 
@@ -4123,9 +4156,10 @@ cmRun();
 /* sampling: variogram-based density for a map */
 function svRun() {
   const msg = $("sv-msg"); msg.className = "msg"; msg.textContent = "";
-  const nug = num($("sv-nug").value), r = num($("sv-r").value), ha = num($("sv-area").value), tgt = num($("sv-target").value) / 100;
-  if (!(nug >= 0 && nug < 100) || !(r > 0) || !(ha > 0) || !(tgt > 0 && tgt <= 1)) { msg.className = "msg err"; msg.textContent = "Enter the nugget, range, area and target error."; $("sv-res").hidden = true; return; }
-  const m = { type: $("sv-model").value, c0: nug / 100, c1: 1 - nug / 100, r };
+  const V = vgRead("sv"), r = num($("sv-r").value), ha = num($("sv-area").value), tgt = num($("sv-target").value) / 100;
+  if (V.err) { msg.className = "msg err"; msg.textContent = V.err; $("sv-res").hidden = true; return; }
+  if (!(V.ratio < 1) || !(r > 0) || !(ha > 0) || !(tgt > 0 && tgt <= 1)) { msg.className = "msg err"; msg.textContent = !(V.ratio < 1) ? "With a nugget equal to the sill there is no spatial structure to map: every density gives the same error." : "Enter the range, area and target error."; $("sv-res").hidden = true; return; }
+  const m = { type: $("sv-model").value, c0: V.ratio, c1: 1 - V.ratio, r };
   const floor = Math.sqrt(m.c0);
   const err = n => krExpected(m, n, ha, true, 1, "map").mid;
   const rows = [], cand = [9, 16, 25, 36, 49, 64, 100, 144, 225, 400, 625, 900, 1600, 2500, 4900, 10000];
