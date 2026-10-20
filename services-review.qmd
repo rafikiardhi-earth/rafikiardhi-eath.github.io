@@ -1,5 +1,5 @@
 ---
-title: "Review: third party analysis"
+title: "Review: independent third-party assessment"
 description: "Fixed-scope, fixed-price independent review of grant proposals, research designs, models, data, reports and consultant deliverables."
 ---
 
