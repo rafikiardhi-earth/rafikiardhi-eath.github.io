@@ -1,8 +1,8 @@
 ---
 date: 2025-06-01
-title: "Integrated Soil Profile Mapping (Southern Africa)"
-description: "Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands."
-categories: [Knowledge, Southern Africa]
+title: "Soils4Africa mapping (Southern Africa)"
+description: "Integrated Soil Profile Mapping (ISPM) reveals regional patterns of soil condition across Southern African agricultural lands."
+categories: [Under review, Knowledge, Southern Africa]
 image: ../images/namib-road-card.jpg
 ---
 
