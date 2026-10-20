@@ -3,19 +3,8 @@ title: "Projects"
 description: "What we're working on now, and the places and people behind our work."
 listing:
   id: project-list
-  contents:
-    - projects/cumulative-knowledge.qmd
-    - projects/southern-africa-depth.qmd
-    - projects/multilingual-keys.qmd
-    - projects/mpumalanga-carbon.qmd
-    - projects/caribbean-flood.qmd
-    - projects/drc-farmers.qmd
-    - projects/consortia.qmd
-    - projects/eswatini.qmd
-    - projects/centurion.qmd
-    - projects/hopi-land.qmd
-    - projects/western-us-drought.qmd
-  sort: false
+  contents: projects
+  sort: "date desc"
   type: grid
   grid-columns: 2
   categories: true
