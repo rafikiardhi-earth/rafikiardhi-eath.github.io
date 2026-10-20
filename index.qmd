@@ -7,9 +7,9 @@ page-layout: full
 ::: {.hero}
 [Free tools · Paid thinking · No gatekeeping]{.tagline}
 
-# Answers for environmental questions that don't come off the shelf
+# Your land friend for researchers and homeowners
 
-[RafikiArdhi brings real science to homeowners and real creativity to researchers. The tools are free. When a question needs more, we bring the thinking.]{.lead}
+[Answers for environmental questions that don't come off the shelf. RafikiArdhi brings real science to homeowners and real creativity to researchers. The tools are free. When a question needs more, we bring the thinking.]{.lead}
 
 [Use the free tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
 :::
