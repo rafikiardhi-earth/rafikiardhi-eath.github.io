@@ -24,7 +24,7 @@ Everyday decisions about soil, water and gardens, answered with the same science
 ::: {.card-item}
 ### [Researchers: real creativity](tools.qmd)
 Free research tools and checks, and new angles on hard environmental problems, with the rigour kept intact.
-![Harvested wheatlands in the Swartland, Western Cape, with dust blowing off the fields.](images/swartland-card.jpg)
+![Subsoil texture, temperature and precipitation combined in one colour map of Texas.](images/texas-rgb-card.jpg)
 :::
 :::
 
