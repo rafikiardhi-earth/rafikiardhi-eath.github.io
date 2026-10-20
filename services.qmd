@@ -34,6 +34,8 @@ Ongoing analytical collaboration with research groups and projects, and methods 
 Workshops in soil classification, do-it-yourself landscaping, research creativity and research validation, in several languages.
 :::
 
+:::
+
 ## Why be creative in science?
 
 **The problem.** Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.
