@@ -24,7 +24,7 @@ Practical home and landscape decisions informed by the same scientific principle
 
 ::: {.card-item}
 ### [Researchers: real creativity](tools.qmd)
-Real creativity for difficult environmental problems. Free research tools and checks to explore new ideas without compromising rigour.
+Let your mind explore the scientific landscape, without compromising scientific rigour. Discover free research tools and checks, creative approaches to difficult environmental problems, and new ways to challenge the possible.
 
 ![Subsoil texture, temperature and precipitation combined in one colour map of Texas.](images/texas-rgb-card.jpg)
 :::
