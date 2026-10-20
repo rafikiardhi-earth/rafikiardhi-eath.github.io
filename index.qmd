@@ -34,7 +34,7 @@ Free research tools and checks, and new angles on hard environmental problems, w
 - **Honest uncertainty.** Every answer comes with how far it can be trusted.
 - **No AI, no black boxes.** Our methods follow the processes behind the environment, so every result can be traced and checked.
 - **Science in your own language.** Our tools and keys come in the languages people actually speak, not only English.
-- **Land is shared.** Healthy land includes the animals that live on it.
+- **Land is shared.** Healthy land includes the animals that live with us.
 
 ## How we can help
 
