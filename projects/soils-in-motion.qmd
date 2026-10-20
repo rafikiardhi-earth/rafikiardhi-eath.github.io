@@ -1,0 +1,13 @@
+---
+date: 2026-10-10
+title: "Soils in motion"
+description: "How water, heat and energy move through soils, and how soils organise themselves around that flow, across climates worldwide."
+categories: [Upcoming, NDA, Water, Knowledge, Global]
+image: ../images/deadvlei-card.jpg
+---
+
+Most soil science treats soil as something that sits still. We are treating it as a system in motion: water moving through it in drought and in flood, heat and energy flowing with it, and the soil organising itself around that flow over time.
+
+To do that, we are bringing mathematics from outside soil science into it, linking how water moves with how soils organise and how resilient they are. The work spans drylands to the tropics, from the Western United States to Morocco, with a PhD student leading parts of it.
+
+Details stay under wraps until the work is published.
