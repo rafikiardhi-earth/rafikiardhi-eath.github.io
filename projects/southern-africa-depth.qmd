@@ -12,6 +12,12 @@ Soil properties mapped consistently with depth across Eswatini, Lesotho, Namibia
 
 Sampling was sparse, only two horizons were sampled per profile, and the environmental gradients were extreme, so we developed a new method for the project: Integrated Soil Profile Mapping (ISPM). It builds on our earlier physics-informed depth spline ([phySpline](https://doi.org/10.1016/j.scitotenv.2026.181621)) and is now being extended to update existing soil maps and support decisions. See [Cumulative knowledge](cumulative-knowledge.qmd). 
 
-![Highlands of eSwatini at dusk.](../images/eswatini-dusk.jpg){fig-alt="Green rolling hills and forested valleys at dusk, with banana plants on the left and an aloe in the foreground."}
+::: {layout-ncol=3}
+![Humid highlands: eSwatini, near Sheba Rock.](../images/sa-eswatini-highlands.jpg){fig-alt="Green rolling hills and forested valleys at dusk, with an aloe in the foreground."}
+
+![Savanna: a storm over a dry sand river in Kruger.](../images/sa-kruger-storm.jpg){fig-alt="Lightning striking beyond a wide dry sandy riverbed lined with bush, under dark storm clouds."}
+
+![Desert: dunes of the Namib. Soil organic carbon, organisms and water are present under the surface.](../images/sa-namib-dunes.jpg){fig-alt="A tall red sand dune with a few camel thorn trees on a flat gravel plain under a clear blue sky."}
+:::
 
 **Preprint:** [Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands](https://doi.org/10.31223/X5JN5T)
