@@ -1,0 +1,9 @@
+---
+date: 2026-03-01
+title: "Mpumalanga, South Africa (under NDA)"
+description: "Carbon modelling."
+categories: [Carbon, Southern Africa]
+image: ../images/blyde-canyon-card.jpg
+---
+
+Carbon modelling for a World Bank–funded carbon credit programme.

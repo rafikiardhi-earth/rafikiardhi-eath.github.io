@@ -1,0 +1,9 @@
+---
+title: "Western United States"
+description: "How drought changes the way water moves through soils, and what that means for the people who depend on it."
+categories: [Water, Socio-ecological, Western US]
+image: ../images/desert-camp-card.jpg
+draft: true
+---
+
+TODO: a few lines on the drought and water flux work.

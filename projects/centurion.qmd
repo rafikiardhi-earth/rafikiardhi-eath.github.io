@@ -1,0 +1,9 @@
+---
+title: "Centurion, South Africa"
+description: "Urban runoff and eutrophication. (TODO: one line on what you did)"
+categories: [Socio-ecological, Water, Southern Africa]
+image: ../images/woodland-pond-card.jpg
+draft: true
+---
+
+TODO: a few lines on the work in Centurion.

@@ -1,0 +1,9 @@
+---
+title: "eSwatini"
+description: "Settlement and landscape. (TODO: one line on what you did)"
+categories: [Socio-ecological, Southern Africa]
+image: ../images/valley-overlook-card.jpg
+draft: true
+---
+
+TODO: a few lines on the work in eSwatini.

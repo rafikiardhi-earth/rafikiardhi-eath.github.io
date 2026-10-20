@@ -1,0 +1,8 @@
+---
+title: "Hopi land"
+description: "TODO: one line, once the community has agreed to it being shared."
+categories: [Socio-ecological, Water, Western US]
+draft: true
+---
+
+TODO: shared with the community's permission.

@@ -1,0 +1,10 @@
+---
+date: 2026-10-02
+title: "Soil keys in your language"
+description: "Soil classification in Farsi, Kiswahili and the South African system, with more languages to come."
+categories: [In progress, Languages, Socio-ecological]
+---
+
+Soil classification keys in Farsi, Kiswahili and the South African system, built with soil scientists who speak those languages. Language matters as much as the logic: a key is only useful if people can read it in their own words.
+
+[Try the keys →](../soil-keys.qmd)
