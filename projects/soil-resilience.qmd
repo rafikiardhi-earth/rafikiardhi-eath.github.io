@@ -2,7 +2,7 @@
 date: 2026-09-15
 title: "Soil resilience"
 description: "Reading how soils organise themselves, and what that says about resilience and the many functions soils perform."
-categories: [In progress, Knowledge, Socio-ecological, Western US]
+categories: [Under review, Knowledge, Socio-ecological, Western US]
 image: ../images/soil-resilience-card.jpg
 ---
 
