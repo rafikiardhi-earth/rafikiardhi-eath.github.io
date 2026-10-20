@@ -2,7 +2,7 @@
 date: 2026-10-01
 title: "Caribbean (under NDA)"
 description: "Flood and runoff modelling."
-categories: [In progress, Water, Caribbean]
+categories: .../images/carib-area.jpg
 ---
 
 Flood and runoff modelling inputs for an island without a soil survey.
