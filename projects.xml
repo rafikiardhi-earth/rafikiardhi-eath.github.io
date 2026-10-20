@@ -10,6 +10,129 @@
 <atom:link href="https://rafikiardhi.earth/projects.xml" rel="self" type="application/rss+xml"/>
 <description>What we&#39;re working on now, and the places and people behind our work.</description>
 <generator>quarto-1.10.19</generator>
-<lastBuildDate>Tue, 20 Oct 2026 01:45:24 GMT</lastBuildDate>
+<lastBuildDate>Sat, 03 Oct 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Now: cumulative knowledge</title>
+  <link>https://rafikiardhi.earth/projects/cumulative-knowledge.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Environmental knowledge keeps getting reset. A new survey, a new map or a new project arrives, and the last one is quietly replaced, along with everything it cost and everything it knew.</p>
+<p>We’re working on the opposite: updating what is known as new data arrives, so that knowledge accumulates and uncertainty falls with each round instead of starting over. In Limpopo, South Africa, a continental soil survey is used to update regional soil fertility maps into domains that support land-use decisions.</p>
+<p><a href="PREPRINT-LINK">Read the preprint →</a></p>
+
+
+
+ ]]></description>
+  <category>In progress</category>
+  <category>Knowledge</category>
+  <category>Southern Africa</category>
+  <guid>https://rafikiardhi.earth/projects/cumulative-knowledge.html</guid>
+  <pubDate>Sat, 03 Oct 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://rafikiardhi.earth/images/swartland-card.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Soil keys in your language</title>
+  <link>https://rafikiardhi.earth/projects/multilingual-keys.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Soil classification keys in Farsi, Kiswahili and the South African system, built with soil scientists who speak those languages. Language matters as much as the logic: a key is only useful if people can read it in their own words.</p>
+<p><a href="../soil-keys.html">Try the keys →</a></p>
+
+
+
+ ]]></description>
+  <category>In progress</category>
+  <category>Languages</category>
+  <category>Socio-ecological</category>
+  <guid>https://rafikiardhi.earth/projects/multilingual-keys.html</guid>
+  <pubDate>Fri, 02 Oct 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Caribbean (under NDA)</title>
+  <link>https://rafikiardhi.earth/projects/caribbean-flood.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Flood and runoff modelling inputs for an island without a soil survey.</p>
+
+
+
+ ]]></description>
+  <category>In progress</category>
+  <category>Water</category>
+  <category>Caribbean</category>
+  <guid>https://rafikiardhi.earth/projects/caribbean-flood.html</guid>
+  <pubDate>Thu, 01 Oct 2026 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Mpumalanga, South Africa (under NDA)</title>
+  <link>https://rafikiardhi.earth/projects/mpumalanga-carbon.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Carbon modelling for a World Bank–funded carbon credit programme.</p>
+
+
+
+ ]]></description>
+  <category>Carbon</category>
+  <category>Southern Africa</category>
+  <guid>https://rafikiardhi.earth/projects/mpumalanga-carbon.html</guid>
+  <pubDate>Sun, 01 Mar 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://rafikiardhi.earth/images/blyde-canyon-card.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Southern Africa</title>
+  <link>https://rafikiardhi.earth/projects/southern-africa-depth.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Soil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary.</p>
+
+
+
+ ]]></description>
+  <category>Knowledge</category>
+  <category>Southern Africa</category>
+  <guid>https://rafikiardhi.earth/projects/southern-africa-depth.html</guid>
+  <pubDate>Sun, 01 Jun 2025 00:00:00 GMT</pubDate>
+  <media:content url="https://rafikiardhi.earth/images/namib-road-card.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Democratic Republic of the Congo</title>
+  <link>https://rafikiardhi.earth/projects/drc-farmers.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Working with women farmers on heavily leached soils, with very limited resources.</p>
+
+
+
+ ]]></description>
+  <category>Socio-ecological</category>
+  <category>Central Africa</category>
+  <guid>https://rafikiardhi.earth/projects/drc-farmers.html</guid>
+  <pubDate>Wed, 01 Jan 2020 00:00:00 GMT</pubDate>
+</item>
 </channel>
 </rss>
