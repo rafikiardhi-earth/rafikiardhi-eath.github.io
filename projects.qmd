@@ -1,0 +1,32 @@
+---
+title: "Projects"
+description: "What we're working on now, and the places and people behind our work."
+listing:
+  id: project-list
+  contents:
+    - projects/cumulative-knowledge.qmd
+    - projects/southern-africa-depth.qmd
+    - projects/multilingual-keys.qmd
+    - projects/mpumalanga-carbon.qmd
+    - projects/caribbean-flood.qmd
+    - projects/drc-farmers.qmd
+    - projects/consortia.qmd
+    - projects/eswatini.qmd
+    - projects/centurion.qmd
+    - projects/hopi-land.qmd
+    - projects/western-us-drought.qmd
+  sort: false
+  type: grid
+  grid-columns: 2
+  categories: true
+  fields: [image, title, categories, description]
+  image-height: 200px
+  feed: true
+---
+
+Environmental knowledge is about land and the people who live on it. Our projects start with a question someone actually has, build on what is already known, and end with knowledge people can use in their own place and their own language.
+
+Newest work comes first. Some projects are under non-disclosure agreements, so we describe them only briefly.
+
+::: {#project-list}
+:::
