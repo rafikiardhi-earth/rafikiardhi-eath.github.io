@@ -1,5 +1,5 @@
 ---
-title: "Review: independent second opinions"
+title: "Review: third party analysis"
 description: "Fixed-scope, fixed-price independent review of grant proposals, research designs, models, data, reports and consultant deliverables."
 ---
 
