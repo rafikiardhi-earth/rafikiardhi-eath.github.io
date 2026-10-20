@@ -6,6 +6,6 @@ categories: [Knowledge, Southern Africa]
 image: ../images/namib-road-card.jpg
 ---
 
-(../images/SA-area.jpg){fig-alt="Mapped area showing agricultural land and non-agricultural land}
+![produced map.](../images/SA-area.jpg){fig-alt="Mapped area showing agricultural land and non-agricultural land}
 
 Soil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary.
