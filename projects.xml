@@ -76,7 +76,7 @@
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="https://rafikiardhi.earth/images/hsg-tool-screenshot.png" class="img-fluid figure-img" alt="Screenshot of the RafikiArdhi hydrologic soil group tool: soil inputs on the left, and on the right the result, group C, with the saturated conductivity estimate and the NRCS decision table."></p>
-<figcaption>Our free hydrologic soil group tool applies the standard NRCS rules to a single soil. The project goes further, with no soil survey to start from and uncertainty carried through every step.</figcaption>
+<figcaption>Our free hydrologic soil group tool applies the standard NRCS rules to a single soil. The project goes further, with no soil survey to start from and uncertainty carried through and informs every step.</figcaption>
 </figure>
 </div>
 <p><a href="../tools.html#hsg">Try the free tool →</a></p>
