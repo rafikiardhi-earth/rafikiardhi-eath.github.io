@@ -44,6 +44,5 @@ Workshops in soil classification, do-it-yourself landscaping, research creativit
 
 ![Soil organic carbon: maps at six standard depths (left) and the whole-profile total (right).](images/soc-depth-spline.jpg){fig-alt="Six small maps of soil organic carbon across a watershed at depths from 0–20 cm to 100–150 cm, decreasing with depth, beside one larger map of the depth-integrated total showing high values in the north and along drainage lines."}
 
-:::
 
 [Discuss a project →](contact.qmd){.btn-earth}
