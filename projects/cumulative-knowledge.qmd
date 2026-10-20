@@ -3,11 +3,11 @@ date: 2026-10-03
 title: "Now: cumulative knowledge"
 description: "Environmental knowledge keeps getting reset. We're building it up instead."
 categories: [In progress, Knowledge, Southern Africa]
-image: ../images/swartland-card.jpg
+image: ../images/cumulative-knowledge-card.jpg
 ---
 
 Environmental knowledge keeps getting reset. A new survey, a new map or a new project arrives, and the last one is quietly replaced, along with everything it cost and everything it knew.
 
 We're working on the opposite: updating what is known as new data arrives, so that knowledge accumulates and uncertainty falls with each round instead of starting over. In Limpopo, South Africa, a continental soil survey is used to update regional soil fertility maps into domains that support land-use decisions.
 
-[Read the preprint →](PREPRINT-LINK)
+(Under production)
