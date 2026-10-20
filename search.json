@@ -466,7 +466,7 @@
     "href": "projects.html",
     "title": "Projects",
     "section": "",
-    "text": "Environmental knowledge is about land and the people who live on it. Our projects start with a question someone actually has, build on what is already known, and end with knowledge people can use in their own place and their own language.\nNewest work comes first. Some projects are under non-disclosure agreements, so we describe them only briefly.\n\n\n\n\n\n\n\n\n\n\nCumulative knowledge\n\n\n\nIn progress\n\nKnowledge\n\nSouthern Africa\n\n\n\nEnvironmental knowledge keeps getting reset. We’re building it up instead.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil keys in your language\n\n\n\nIn progress\n\nLanguages\n\nSocio-ecological\n\n\n\nSoil classification in Farsi, Kiswahili and the South African system, with more languages to come.\n\n\n\n\n\n\n\n\n\n\n\n\nCaribbean pedohydrology\n\n\n\nNDA\n\nIn progress\n\nWater\n\nSocio-ecological\n\nCaribbean\n\n\n\nSoil water retention and runoff for flood modelling on an island without a soil survey, guided by uncertainty.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil resilience\n\n\n\nUnder review\n\nKnowledge\n\nSocio-ecological\n\nWestern US\n\n\n\nReading how soils organise themselves, and what that says about resilience and the many functions soils perform.\n\n\n\n\n\n\n\n\n\n\n\n\nOur own backyard, Colorado\n\n\n\nHomeowners\n\nWater\n\nWestern US\n\n\n\nDoing it ourselves: gravel, raised beds and drip irrigation, worked out with our own homeowner tools.\n\n\n\n\n\n\n\n\n\n\n\n\nWorld Bank carbon credits\n\n\n\nNDA\n\nCarbon\n\nSouthern Africa\n\n\n\nBaseline soil carbon stock maps for a carbon credit programme in Mpumalanga, South Africa.\n\n\n\n\n\n\n\n\n\n\n\n\nSoils4Africa mapping\n\n\n\nUnder review\n\nKnowledge\n\nSouthern Africa\n\n\n\nIntegrated Soil Profile Mapping (ISPM) reveals regional patterns of soil condition across Southern African agricultural lands.\n\n\n\n\n\nNo matching items"
+    "text": "Environmental knowledge is about land and the people who live on it. Our projects start with a question someone actually has, build on what is already known, and end with knowledge people can use in their own place and their own language.\nNewest work comes first. Some projects are under non-disclosure agreements, so we describe them only briefly.\n\n\n\n\n\n\n\n\n\n\nCumulative knowledge\n\n\n\nIn progress\n\nKnowledge\n\nSouthern Africa\n\n\n\nEnvironmental knowledge keeps getting reset. We’re building it up instead.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil keys in your language\n\n\n\nIn progress\n\nLanguages\n\nSocio-ecological\n\n\n\nSoil classification in Farsi, Kiswahili and the South African system, with more languages to come.\n\n\n\n\n\n\n\n\n\n\n\n\nCaribbean pedohydrology\n\n\n\nNDA\n\nIn progress\n\nWater\n\nSocio-ecological\n\nCaribbean\n\n\n\nSoil water retention and runoff for flood modelling on an island without a soil survey, guided by uncertainty.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil resilience\n\n\n\nUnder review\n\nKnowledge\n\nSocio-ecological\n\nWestern US\n\n\n\nReading how soils organise themselves, and what that says about resilience and the many functions soils perform.\n\n\n\n\n\n\n\n\n\n\n\n\nOur own backyard, Colorado\n\n\n\nHomeowners\n\nWater\n\nWestern US\n\n\n\nDoing it ourselves: gravel, raised beds and drip irrigation, worked out with our own homeowner tools.\n\n\n\n\n\n\n\n\n\n\n\n\nWorld Bank carbon credits\n\n\n\nNDA\n\nCarbon\n\nSouthern Africa\n\n\n\nBaseline soil carbon stock maps for a carbon credit programme in Mpumalanga, South Africa.\n\n\n\n\n\n\n\n\n\n\n\n\nSoils4Africa mapping\n\n\n\nUnder review\n\nKnowledge\n\nSouthern Africa\n\n\n\nIntegrated Soil Profile Mapping (ISPM) reveals regional patterns of soil condition across Southern African agricultural lands.\n\n\n\n\n\n\n\n\n\n\n\n\nDe-bushing and soil carbon\n\n\n\nCarbon\n\nSocio-ecological\n\nPartnerships\n\nSouthern Africa\n\n\n\nModelling how clearing invasive bush and pesticide use change soil carbon across Namibia, Botswana and South Africa.\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "diy-soil-tests.html",
@@ -581,11 +581,18 @@
     "text": "Agricultural land across the study area in Namibia, South Africa, Lesotho and Eswatini.\n\n\nSoil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary. The research formed part of Soils4Africa, an EU Horizon 2020 project building an open-data Soil Information System to help farmers, agri-businesses, scientists and policymakers by improving the quality and availability of African soil data.\nSampling was sparse, only two horizons were sampled per profile, and the environmental gradients were extreme, so we developed a new method for the project: Integrated Soil Profile Mapping (ISPM). It builds on our earlier physics-informed depth spline (phySpline) and is now being extended to update existing soil maps and support decisions. See Cumulative knowledge.\nPreprint: Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands"
   },
   {
-    "objectID": "projects/caribbean-flood.html",
-    "href": "projects/caribbean-flood.html",
-    "title": "Caribbean pedohydrology",
+    "objectID": "projects/multilingual-keys.html",
+    "href": "projects/multilingual-keys.html",
+    "title": "Soil keys in your language",
     "section": "",
-    "text": "The island has never had a soil survey, yet flood models need to know how much water the soil holds and how much runs off. What makes this project different is that uncertainty propagation guides every step: the hydropedological assumptions, the models, and the decisions built on them.\n\n\n\nOur free hydrologic soil group tool applies the standard NRCS rules to a single soil. The project goes further, with no soil survey to start from and uncertainty carried through and informs every step.\n\n\nTry the free tool →"
+    "text": "Soil classification keys in Farsi, Kiswahili and the South African system, built with soil scientists who speak those languages. Language matters as much as the logic: a key is only useful if people can read it in their own words.\nTry the keys →"
+  },
+  {
+    "objectID": "contact.html",
+    "href": "contact.html",
+    "title": "Contact",
+    "section": "",
+    "text": "Email\n WhatsApp\n \nRafikiArdhi LLC\nCarbondale, Colorado, USA\nORCID · LinkedIn · ResearchGate\n\n\n\nGet in touch about\n A quote for a review or project\n How to use one of the tools\n A problem or error in a tool\n Questions about our methods\n Research partnerships and proposals\n Workshops and training\n Home and garden questions\n\n\nContribute to the tools\nOur classification keys and tools are offered in several languages so more people can use them in their own. If you would like to translate or review a tool in your language, or co-develop a new key or tool, we would like to hear from you. Contributors are acknowledged on the tools they help build."
   },
   {
     "objectID": "frost-depth.html",
@@ -609,18 +616,18 @@
     "text": "About this estimate\nThis uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.\nFor more control (freezing index, density, water content and surface factors), use the frost depth tool for researchers."
   },
   {
-    "objectID": "contact.html",
-    "href": "contact.html",
-    "title": "Contact",
+    "objectID": "projects/caribbean-flood.html",
+    "href": "projects/caribbean-flood.html",
+    "title": "Caribbean pedohydrology",
     "section": "",
-    "text": "Email\n WhatsApp\n \nRafikiArdhi LLC\nCarbondale, Colorado, USA\nORCID · LinkedIn · ResearchGate\n\n\n\nGet in touch about\n A quote for a review or project\n How to use one of the tools\n A problem or error in a tool\n Questions about our methods\n Research partnerships and proposals\n Workshops and training\n Home and garden questions\n\n\nContribute to the tools\nOur classification keys and tools are offered in several languages so more people can use them in their own. If you would like to translate or review a tool in your language, or co-develop a new key or tool, we would like to hear from you. Contributors are acknowledged on the tools they help build."
+    "text": "The island has never had a soil survey, yet flood models need to know how much water the soil holds and how much runs off. What makes this project different is that uncertainty propagation guides every step: the hydropedological assumptions, the models, and the decisions built on them.\n\n\n\nOur free hydrologic soil group tool applies the standard NRCS rules to a single soil. The project goes further, with no soil survey to start from and uncertainty carried through and informs every step.\n\n\nTry the free tool →"
   },
   {
-    "objectID": "projects/multilingual-keys.html",
-    "href": "projects/multilingual-keys.html",
-    "title": "Soil keys in your language",
+    "objectID": "projects/steambioafrica.html",
+    "href": "projects/steambioafrica.html",
+    "title": "De-bushing and soil carbon",
     "section": "",
-    "text": "Soil classification keys in Farsi, Kiswahili and the South African system, built with soil scientists who speak those languages. Language matters as much as the logic: a key is only useful if people can read it in their own words.\nTry the keys →"
+    "text": "Invasive bush is spreading across Southern African rangelands, choking grazing land and water. Clearing it can restore land and livelihoods, but what does it do to the carbon stored in the soil?\nAs a research consultant on SteamBioAfrica, an EU Horizon 2020 project turning invasive woody biomass into products that benefit local communities, we modelled soil carbon dynamics after de-bushing and pesticide use in Namibia, Botswana and South Africa.\n\n\n\nCrop residue left on bare soil after clearing: what stays on the surface shapes how much carbon the soil keeps."
   },
   {
     "objectID": "projects/mpumalanga-carbon.html",
