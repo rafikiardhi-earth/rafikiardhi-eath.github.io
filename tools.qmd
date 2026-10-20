@@ -674,6 +674,17 @@ body.quarto-dark .rk-tools {
   </div>
   <div id="kr-res" hidden>
     <div class="rk-card"><div class="stats" id="kr-stats"></div><p class="hint" id="kr-note" style="margin-top:12px"></p></div>
+    <div class="rk-card">
+      <h3>Area under the variogram</h3>
+      <p class="hint" style="margin-top:0">Integrates the fitted model between two lag distances, to compare spatial structure over a chosen range of distances, for example short-range against long-range, or the same interval across sites, depths or studies.</p>
+      <div class="rk-grid">
+        <div><label for="kr-h1">From lag</label><input type="number" id="kr-h1" value="0" min="0" step="any"></div>
+        <div><label for="kr-h2">To lag</label><input type="number" id="kr-h2" min="0" step="any"></div>
+      </div>
+      <div class="msg" id="kr-auc-msg" role="status"></div>
+      <div class="stats" id="kr-auc" style="margin-top:12px"></div>
+      <p class="hint" id="kr-auc-why"></p>
+    </div>
     <div class="two">
       <div class="rk-card">
         <h3>Variogram</h3>
@@ -3534,6 +3545,8 @@ function krCompute(D) {
   if ($("kr-nnv")) { $("kr-nnv").textContent = fmt(krNN, krNN < 10 ? 2 : 0); $("kr-nnv").nextElementSibling.textContent = du + ", median to nearest point"; }
   if (D.skipped) msg.textContent = `${D.skipped} row${D.skipped > 1 ? "s" : ""} skipped because of missing values.`; else msg.textContent = "";
   krLast = { D, ev, m, cv, cutoff, ok, lg, zs };
+  if (!(num($("kr-h2").value) > 0)) $("kr-h2").value = +cutoff.toPrecision(3);
+  krAuc();
   const f = (v, k) => isFinite(v) ? fmt(v, k) : "";
   const rows = D.id.map((s, i) => {
     const q = cv[i], e = q.mean - raw[i], z = q.sd > 0 ? (q.pred - zs[i]) / q.sd : NaN;
@@ -3602,6 +3615,33 @@ const krNuVis = () => { $("kr-nubox").style.display = ["mat", "ste"].includes($(
 $("kr-man").addEventListener("change", () => { $("kr-manbox").style.display = $("kr-man").checked ? "grid" : "none"; krNuVis(); });
 $("kr-model").addEventListener("change", krNuVis); krNuVis();
 $("kr-dl").addEventListener("click", () => { if (krLast) download("kriging_loocv.csv", toCSV(krLast.header, krLast.rows)); });
+/* area under the fitted variogram between two lags, plus the integral range */
+function krSimpson(f, a, b, n) {
+  if (n % 2) n++;
+  const h = (b - a) / n; let t = f(a) + f(b);
+  for (let i = 1; i < n; i++) t += (i % 2 ? 4 : 2) * f(a + i * h);
+  return t * h / 3;
+}
+function krAuc() {
+  const msg = $("kr-auc-msg"); msg.className = "msg"; msg.textContent = "";
+  if (!krLast || !krLast.m) { $("kr-auc").innerHTML = ""; $("kr-auc-why").textContent = ""; return; }
+  const m = krLast.m, sill = m.c0 + m.c1, du = krLast.D.unit, lg = krLast.lg;
+  const h1 = num($("kr-h1").value), h2 = num($("kr-h2").value);
+  if (!(h1 >= 0) || !(h2 > h1)) { msg.className = "msg err"; msg.textContent = "Enter a starting lag of zero or more and an end lag above it."; $("kr-auc").innerHTML = ""; return; }
+  const g = h => Krige.gamma(m, h > 0 ? h : 1e-12);
+  const area = krSimpson(g, h1, h2, 400), std = sill > 0 ? area / sill : NaN, meanR = std / (h2 - h1);
+  // integral range: area under the correlogram rho(h) = 1 - gamma(h)/sill from 0 to where the model has levelled off
+  const hEnd = m.r * (m.type === "sph" ? 1 : 20);
+  const ir = sill > 0 ? krSimpson(h => 1 - g(h) / sill, 0, hEnd, 2000) : NaN;
+  const dA = Math.abs(area) < 10 ? 4 : 1, dD = v => Math.abs(v) < 10 ? 3 : 1;
+  $("kr-auc").innerHTML = evStat("Area", fmt(area, dA), "property² × " + du + (lg ? ", log scale" : "")) +
+    evStat("Standardised area", fmt(std, dD(std)), du + " (area ÷ sill)") +
+    evStat("Mean γ ÷ sill", fmt(meanR, 2), "over " + fmt(h1, h1 < 10 ? 2 : 0) + "–" + fmt(h2, h2 < 10 ? 2 : 0) + " " + du) +
+    evStat("Integral range", fmt(ir, dD(ir)), du + ", area under the correlogram");
+  const out = h2 > krLast.cutoff ? ` The end lag is beyond the maximum lag used for fitting (${fmt(krLast.cutoff, krLast.cutoff < 10 ? 2 : 0)} ${du}), so that part of the area comes from the model alone, not from your data.` : "";
+  $("kr-auc-why").textContent = `Area is the integral of the fitted semivariogram from ${fmt(h1, h1 < 10 ? 2 : 0)} to ${fmt(h2, h2 < 10 ? 2 : 0)} ${du}, including the nugget. It grows with the variance and with the interval, so only compare areas over the same lags and for the same property and units. The standardised area divides by the sill, and mean γ ÷ sill divides that by the interval, giving a 0–1 value comparable between properties: low means strong spatial dependence over that interval. The integral range (the area under 1 − γ/sill) doesn't depend on any cut-off; it is the effective distance of correlation, lowered by the nugget.` + out;
+}
+["kr-h1", "kr-h2"].forEach(id => $(id).addEventListener("input", krAuc));
 /* variogram entry: nugget : sill ratio, nugget + sill, or nugget + partial sill */
 function vgShow(px) {
   const f = $(px + "-vform").value;
