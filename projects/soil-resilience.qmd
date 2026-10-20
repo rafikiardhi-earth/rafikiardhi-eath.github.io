@@ -3,7 +3,7 @@ date: 2026-09-15
 title: "Soil resilience"
 description: "Reading how soils organise themselves, and what that says about resilience and the many functions soils perform."
 categories: [Under review, Knowledge, Socio-ecological, Western US]
-image: ../images/soil-resilience-card.jpg
+image: ../images/termite-mound-card.jpg
 ---
 
 Soils are not random mixtures. They organise themselves over time, using and releasing energy as water, heat and carbon move through them, and that organisation is what lets a soil absorb shocks and keep doing many jobs at once. We measure it with thermodynamics rather than by counting soil types: pedodiversity reflects how a soil dissipates energy relative to what it has available.
