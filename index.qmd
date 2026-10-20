@@ -9,7 +9,7 @@ page-layout: full
 
 # Your land friend for researchers and homeowners
 
-[Answers for environmental questions that don't come off the shelf. RafikiArdhi brings real science to homeowners and real creativity to researchers. The tools are free. When a question needs more, we bring the thinking.]{.lead, style="color: black;"}
+[Answers for environmental questions that don't come off the shelf. We bring scientific understanding to practical problems and creative thinking to complex ones. Our tools are free and our methods open. When a question needs more, we bring the thinking.]{.lead, style="color: black;"}
 
 [Use the free tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
 :::
