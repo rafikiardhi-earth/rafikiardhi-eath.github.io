@@ -1,8 +1,8 @@
 ---
 date: 2026-03-01
-title: "World Bank (under NDA)"
+title: "World Bank carbon credits"
 description: "Baseline soil carbon stock maps for a carbon credit programme in Mpumalanga, South Africa."
-categories: [Carbon, Southern Africa]
+categories: [NDA, Carbon, Southern Africa]
 image: ../images/blyde-canyon-card.jpg
 ---
 
