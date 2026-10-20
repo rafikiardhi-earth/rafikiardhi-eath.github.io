@@ -10,4 +10,4 @@ We test our homeowner tools where it matters most to us: at home. A patch of law
 
 ![Before and after: bare ground and lawn edges turned into gravel beds and a raised garden bed.](../images/yard-before-after.jpg){fig-alt="Two photos side by side of the same backyard with a blue shed: before, with bare ground and a rough bed by the fence; after, with neat gravel borders, a raised bed and a hose."}
 
-![The site inspector checks the new raised bed. The wet circles show where each drip emitter waters the soil.](../images/raised-bed-drip-card.jpg){fig-alt="A husky sniffing a raised garden bed of dark soil with drip irrigation emitters, each surrounded by a circle of wet soil."}
+![The legal boss and site inspector checks the new raised bed. The wet circles show where each drip emitter waters the soil.](../images/raised-bed-drip-card.jpg){fig-alt="A husky sniffing a raised garden bed of dark soil with drip irrigation emitters, each surrounded by a circle of wet soil."}
