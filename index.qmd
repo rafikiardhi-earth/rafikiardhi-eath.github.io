@@ -18,7 +18,7 @@ page-layout: full
 ::: {.card-item}
 ### [Homeowners: real science](homeowners.qmd)
 Everyday decisions about soil, water and gardens, answered with the same science researchers use, without the sales pitch.
-![A husky inspecting a new raised garden bed with drip irrigation.](images/raised-bed-drip-card.jpg)
+![Dry-stacked retaining walls, built without mortar and still holding the slope.](images/drystack-walls-card.jpg)
 :::
 
 ::: {.card-item}
