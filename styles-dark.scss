@@ -102,6 +102,11 @@ body { font-size: 1.06rem; line-height: 1.65; }
   @media (max-width: 640px) { height: 170px; }
 }
 
+//text
+.text-black {
+  color: #000000 !important;
+}
+
 // Icons
 main .bi { font-size: 1.15em; margin-right: .4em; vertical-align: -0.1em; }
 .bi-whatsapp { color: #25D366; }
