@@ -12,7 +12,7 @@
 <generator>quarto-1.10.19</generator>
 <lastBuildDate>Sat, 03 Oct 2026 00:00:00 GMT</lastBuildDate>
 <item>
-  <title>Now: cumulative knowledge</title>
+  <title>Cumulative knowledge</title>
   <link>https://rafikiardhi.earth/projects/cumulative-knowledge.html</link>
   <description><![CDATA[ 
 
@@ -22,6 +22,13 @@
 
 <p>Environmental knowledge keeps getting reset. A new survey, a new map or a new project arrives, and the last one is quietly replaced, along with everything it cost and everything it knew.</p>
 <p>We’re working on the opposite: updating what is known as new data arrives, so that knowledge accumulates and uncertainty falls with each round instead of starting over. In Limpopo, South Africa, a continental soil survey is used to update regional soil fertility maps into domains that support land-use decisions.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://rafikiardhi.earth/images/sfd-limpopo.jpg" class="img-fluid figure-img" alt="Map of Limpopo Province coloured into nine soil fertility domains, from dark purple and blue for lower fertility to orange and dark red for higher fertility, with large connected regions following the landscape."></p>
+<figcaption>Soil fertility domains across Limpopo Province, South Africa, ordered from lowest (1) to highest (9) fertility, from updating a regional map with a continental survey.</figcaption>
+</figure>
+</div>
+<p>The method is an updated version of our <a href="../projects/southern-africa-depth.html">ISPM</a> digital soil mapping framework, which updates maps based on the idea that the whole is greater than the sum of its parts.</p>
 <p>(Under production)</p>
 
 
