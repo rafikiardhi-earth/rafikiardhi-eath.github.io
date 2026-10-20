@@ -9,7 +9,7 @@ page-layout: full
 
 # Your land friend for researchers and homeowners
 
-[Answers for environmental questions that don't come off the shelf. RafikiArdhi brings real science to homeowners and real creativity to researchers. The tools are free. When a question needs more, we bring the thinking.]{.lead}
+[Answers for environmental questions that don't come off the shelf. RafikiArdhi brings real science to homeowners and real creativity to researchers. The tools are free. When a question needs more, we bring the thinking.]{.lead, style="color: black;"}
 
 [Use the free tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
 :::
@@ -19,7 +19,7 @@ page-layout: full
 ### [Homeowners: real science](homeowners.qmd)
 Practical home and landscape decisions informed by the same scientific principles researchers use—from applying Darcy’s and Jurin’s laws to irrigation design to using calculus to estimate sod quantities for irregular lawns.
 
-![Dry-stacked retaining walls, built without mortar and still holding the slope.](images/drystack-walls-card.jpg)
+![Dry-stacked retaining walls, built without mortar and still holding the slope after 15 years.](images/drystack-walls-card.jpg)
 :::
 
 ::: {.card-item}
@@ -43,7 +43,7 @@ Let your mind explore the scientific landscape, without compromising scientific 
 ::: {.cards}
 ::: {.card-item}
 ### [Review](services-review.qmd)
-Independent second opinions on grants, research designs, models, data and reports.
+Independent assessments on grants, research designs, models, data and reports.
 :::
 
 ::: {.card-item}
