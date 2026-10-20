@@ -6,7 +6,7 @@ categories: [Knowledge, Southern Africa]
 image: ../images/namib-road-card.jpg
 ---
 
-![Agricultural land across the study area in Namibia, South Africa, Lesotho and Eswatini.](../images/southern-africa-landuse-map.jpg){width="65%" fig-align="center" fig-alt="Map of southern Africa showing agricultural land in dark grey and non-agricultural land in light grey across Namibia, South Africa, Lesotho and Eswatini."}
+![Agricultural land across the study area in Namibia, South Africa, Lesotho and Eswatini.](../images/sa-landuse-map.jpg){width="65%" fig-align="center" fig-alt="Map of southern Africa showing agricultural land in dark grey and non-agricultural land in light grey across Namibia, South Africa, Lesotho and Eswatini."}
 
 Soil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary. The research formed part of [Soils4Africa](https://www.soils4africa-h2020.eu/), an EU Horizon 2020 project building an open-data Soil Information System to help farmers, agri-businesses, scientists and policymakers by improving the quality and availability of African soil data.
 
