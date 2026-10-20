@@ -7,11 +7,11 @@ description: "Independent review, problem solving, research partnerships and tra
 
 The tools on this site are free. What we charge for is the thinking behind them: working out what a question really needs, building methods where none exist, and checking that conclusions hold up. 
 
-Thesis and dissertation advice is offered only with the approval of the student’s supervisor and under an agreement with the university. 
-
 For homeowners, we bring actual science to everyday decisions about soil, water and gardens, so you're not guessing or relying on a sales pitch. For researchers, we bring creativity: new angles on hard problems, without giving up rigour. Either way, some questions don't have an off-the-shelf answer, and that's where we start.
 
 Every engagement starts with a short written scope that sets out the question, deliverables, timeline and price before any work begins.
+
+Thesis and dissertation advice is offered only with the approval of the student’s supervisor and under an agreement with the university. 
 
 ::: {.cards}
 
