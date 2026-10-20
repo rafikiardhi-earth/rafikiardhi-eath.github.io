@@ -57,11 +57,11 @@ We do not use AI to replace human expertise. Where others reach for black-box AI
 
 The free tools on this site developed with co-authors, improved by people who tested them, checked the methods and suggested changes.
 
-- **Rosana Kostecki, PhD** ([Profile](https://www.soilconsultoriasocioambiental.com/?utm_source=linktree_profile_share&utm_medium=social&utm_content=link_in_bio)) 
+- **Rosana Kostecki, PhD** ([Profile](https://www.soilconsultoriasocioambiental.com/?utm_source=linktree_profile_share&utm_medium=social&utm_content=link_in_bio)). 
 Soil Consultoria Socioambiental (Soil Socio-Environmental Consulting), Londrina, Paraná, Brazil
-- **Zahra Rasaei, PhD** ([Profile](https://www.linkedin.com/in/zahra-rasaei-76aa9378/?isSelfProfile=false))
+- **Zahra Rasaei, PhD** ([Profile](https://www.linkedin.com/in/zahra-rasaei-76aa9378/?isSelfProfile=false)).
 Faculty of Agriculture, The University of Birjand, South Khorasan, Iran
-- **Sara Merzoug** ([Profile](https://www.linkedin.com/in/saramerzoug/?isSelfProfile=false))
+- **Sara Merzoug** ([Profile](https://www.linkedin.com/in/saramerzoug/?isSelfProfile=false)).
 Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco
 
 Any remaining errors are ours. Found one, or want to suggest a tool? [Get in touch](contact.qmd).
