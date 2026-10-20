@@ -1048,7 +1048,7 @@ H2,48.9,9.6,24.1"></textarea>
     <label style="display:flex; gap:8px; align-items:center; margin-top:12px; font-weight:500"><input type="checkbox" id="kr-man" style="width:auto"> Set the variogram myself</label>
     <div class="rk-grid" id="kr-manbox" style="margin-top:8px; display:none">
       <div><label for="kr-c0">Nugget</label><input type="number" id="kr-c0" min="0" step="any"></div>
-      <div><label for="kr-c1">Partial sill</label><input type="number" id="kr-c1" min="0" step="any"></div>
+      <div><label for="kr-c1">Sill</label><input type="number" id="kr-c1" min="0" step="any"></div>
       <div><label for="kr-r">Range (practical)</label><input type="number" id="kr-r" min="0" step="any"></div>
       <div id="kr-nubox"><label for="kr-nu">Smoothness κ (Matérn)</label><input type="number" id="kr-nu" min="0.05" max="20" step="any" value="0.5"></div>
     </div>
@@ -1105,7 +1105,7 @@ H2,48.9,9.6,24.1"></textarea>
   <div class="rk-card">
     <h3>Reading the results</h3>
     <ul style="margin:0; padding-left:20px; color:var(--ink-2); font-size:.95rem">
-      <li style="margin-bottom:8px"><b>Nugget : sill</b> is the share of variation you can't predict at your sampling scale: measurement error plus variation over distances shorter than your closest samples. Under 25% is strong spatial dependence, 25–75% moderate, over 75% weak.</li>
+      <li style="margin-bottom:8px"><b>Nugget : sill</b> is the share of variation you can't predict at your sampling scale: measurement error plus variation over distances shorter than your closest samples. Under 0.25 is strong spatial dependence, 0.25–0.75 moderate, over 0.75 weak.</li>
       <li style="margin-bottom:8px"><b>Range</b> is the distance beyond which samples stop telling you about each other. If your samples are mostly further apart than the range, kriging can do little better than the mean, however good the software.</li>
       <li style="margin-bottom:8px"><b>RMSE vs. the mean</b> is the real test: it shows how much spatial prediction actually adds. A map made by kriging is only worth its colours if this is clearly above zero.</li>
       <li style="margin-bottom:8px"><b>MSDR and interval coverage</b> show whether the uncertainty is honest. MSDR near 1 and coverage near 90% mean the kriging variance can be trusted; otherwise the uncertainty map is too optimistic or too cautious.</li>
@@ -3851,8 +3851,8 @@ function krCompute(D) {
   const ev = Krige.experimental(xs, ys, zs, cutoff, nb, $("kr-est").value === "ch");
   let m, rmax = cutoff * 2, rmin = Math.max(mind, cutoff / 50);
   if ($("kr-man").checked) {
-    const c0 = num($("kr-c0").value), c1 = num($("kr-c1").value), r = num($("kr-r").value), t = $("kr-model").value === "auto" ? "sph" : $("kr-model").value;
-    if (!(c0 >= 0) || !(c1 >= 0) || !(r > 0) || c0 + c1 <= 0) { msg.className = "msg err"; msg.textContent = "Enter a nugget, partial sill and range (all zero or more, range above zero)."; return; }
+    const c0 = num($("kr-c0").value), sl = num($("kr-c1").value), c1 = sl - c0, r = num($("kr-r").value), t = $("kr-model").value === "auto" ? "sph" : $("kr-model").value;
+    if (!(c0 >= 0) || !(sl > 0) || !(c1 >= 0) || !(r > 0)) { msg.className = "msg err"; msg.textContent = "Enter a nugget, sill and range: nugget zero or more, sill above zero and at least the nugget, range above zero."; return; }
     let nu;
     if (Krige.MODELS[t].kappa) { nu = num($("kr-nu").value); if (!(nu > 0 && nu <= 20)) { msg.className = "msg err"; msg.textContent = "Enter a smoothness κ between 0.05 and 20."; return; } }
     m = { type: t, c0, c1, r, nu };
@@ -3860,7 +3860,7 @@ function krCompute(D) {
     const types = $("kr-model").value === "auto" ? ["sph", "exp"] : [$("kr-model").value];
     types.forEach(t => { const f = Krige.fitModel(ev, t, rmin, rmax); if (f && (!m || f.sse < m.sse)) m = f; });
     if (!m) { msg.className = "msg err"; msg.textContent = "Too few point pairs to fit a variogram. Try a larger maximum lag or fewer lag classes."; $("kr-res").hidden = true; return; }
-    $("kr-c0").value = +m.c0.toPrecision(4); $("kr-c1").value = +m.c1.toPrecision(4); $("kr-r").value = +m.r.toPrecision(4);
+    $("kr-c0").value = +m.c0.toPrecision(4); $("kr-c1").value = +(m.c0 + m.c1).toPrecision(4); $("kr-r").value = +m.r.toPrecision(4);
     if (m.nu) $("kr-nu").value = m.nu;
   }
   const cv = Krige.loocv(xs, ys, zs, m, nmax);
@@ -3878,15 +3878,15 @@ function krCompute(D) {
   const zst = ok.map(i => cv[i].sd > 0 ? (cv[i].pred - zs[i]) / cv[i].sd : NaN).filter(isFinite);
   const msdr = zst.reduce((a, b) => a + b * b, 0) / zst.length;
   const p90 = 100 * ok.filter(i => raw[i] >= cv[i].lo && raw[i] <= cv[i].hi).length / ok.length;
-  const sill = m.c0 + m.c1, nr = sill > 0 ? m.c0 / sill * 100 : 0;
-  const dep = nr < 25 ? "strong" : nr <= 75 ? "moderate" : "weak";
+  const sill = m.c0 + m.c1, nr = sill > 0 ? m.c0 / sill : 0;
+  const dep = nr < 0.25 ? "strong" : nr <= 0.75 ? "moderate" : "weak";
   const d = Math.max(...raw.map(Math.abs)) < 10 ? 3 : 2, du = D.unit;
   const skewOf = a => { const mu = a.reduce((p, q) => p + q, 0) / a.length, s = Math.sqrt(a.reduce((p, q) => p + (q - mu) ** 2, 0) / a.length); return s > 0 ? a.reduce((p, q) => p + ((q - mu) / s) ** 3, 0) / a.length : 0; };
   const skew = skewOf(raw), skewT = lg ? skewOf(zs) : skew;
   $("kr-stats").innerHTML = evStat("Points", n) + evStat("Typical spacing", "", "") .replace('<div class="v"></div>', '<div class="v" id="kr-nnv">–</div>') + evStat("Model", Krige.MODELS[m.type].name, (m.nu ? "κ = " + m.nu + ", " : "") + ($("kr-man").checked ? "set by you" : "weighted least squares")) +
-    evStat("Nugget", fmt(m.c0, 4), lg ? "log scale" : "") + evStat("Partial sill", fmt(m.c1, 4), lg ? "log scale" : "") + evStat("Range", fmt(m.r, m.r < 10 ? 2 : 0), du + (m.type === "sph" ? "" : ", practical")) +
+    evStat("Nugget", fmt(m.c0, 4), lg ? "log scale" : "") + evStat("Sill", fmt(sill, 4), lg ? "log scale" : "") + evStat("Range", fmt(m.r, m.r < 10 ? 2 : 0), du + (m.type === "sph" ? "" : ", practical")) +
     (Krige.MODELS[m.type].kappa ? evStat("Range parameter a", fmt(Krige.rangeParam(m), Krige.rangeParam(m) < 10 ? 3 : 1), m.type === "ste" ? "as gstat \"Ste\" reports it" : "as gstat \"Mat\" reports it") : "") +
-    evStat("Nugget : sill", fmt(nr, 0) + "%", dep + " spatial dependence") +
+    evStat("Nugget : sill", fmt(nr, 2), dep + " spatial dependence") +
     evStat("RMSE", fmt(st.rmse, d), "leave-one-out") + evStat("vs. using the mean", fmt((1 - st.rmse / rmse0) * 100, 0) + "%", "lower error than the mean (RMSE " + fmt(rmse0, d) + ")") +
     evStat("Bias (ME)", fmt(st.me, d), "mean of pred − obs") + evStat("R²", fmt(st.r2, 3)) + evStat("Lin's CCC", fmt(st.ccc, 3)) +
     evStat("MSDR", fmt(msdr, 2), "ideal ≈ 1" + (lg ? ", log scale" : "")) + evStat("90% interval coverage", fmt(p90, 0) + "%", "ideal ≈ 90%");
@@ -3899,7 +3899,7 @@ function krCompute(D) {
   if (!$("kr-man").checked && m.r >= rmax * 0.98) notes.push("The fitted range hit the search limit: the variogram is still rising at the maximum lag. That often signals a trend across the area; try a larger maximum lag, or remove the trend first.");
   if (Krige.MODELS[m.type].kappa && !$("kr-man").checked && m.nu >= Krige.KAPPAS[Krige.KAPPAS.length - 1]) notes.push(`κ reached its upper limit (${m.nu}): the variogram is very smooth near the origin and behaves almost like a Gaussian model.`);
   if (Krige.MODELS[m.type].kappa && !$("kr-man").checked && m.nu <= Krige.KAPPAS[0]) notes.push(`κ reached its lower limit (${m.nu}): the variogram is very rough near the origin.`);
-  if (m.type === "gau" && nr < 5) notes.push("A Gaussian model with almost no nugget is very smooth and tends to understate kriging errors; compare with spherical or exponential.");
+  if (m.type === "gau" && nr < 0.05) notes.push("A Gaussian model with almost no nugget is very smooth and tends to understate kriging errors; compare with spherical or exponential.");
   if (msdr > 1.5) notes.push("MSDR is well above 1: errors are larger than the kriging variance predicts (intervals too narrow).");
   else if (msdr < 0.6) notes.push("MSDR is well below 1: the kriging variance overstates the errors (intervals too wide).");
   if (!lg && skew > 1 && raw.every(v => v > 0)) notes.push(`The data are skewed (skewness ${fmt(skew, 1)}). Try the log transform: it usually gives a better variogram.`);
