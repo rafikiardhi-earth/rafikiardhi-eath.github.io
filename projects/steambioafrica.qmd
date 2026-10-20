@@ -10,4 +10,4 @@ Invasive bush is spreading across Southern African rangelands, choking grazing l
 
 As a research consultant to [SLU](https://www.slu.se/en/research/research-catalogue/projekt/s/steambioafrica/) (the Swedish University of Agricultural Sciences) on SteamBioAfrica, an EU Horizon 2020 project turning invasive woody biomass into products that benefit local communities, we modelled soil carbon dynamics during and after de-bushing and pesticide use in Namibia, Botswana and South Africa.
 
-![Crop residue left on bare soil after clearing: what stays on the surface shapes how much carbon the soil keeps.](../images/residue-cover-card.jpg){fig-alt="Close-up of dark bare soil partly covered with dry straw and residue after clearing."}
+![Crop residue left on bare soil after clearing: what stays on the surface shapes whats underneath your feet.](../images/residue-cover-card.jpg){fig-alt="Close-up of dark bare soil partly covered with dry straw and residue after clearing."}
