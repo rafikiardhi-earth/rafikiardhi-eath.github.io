@@ -58,7 +58,7 @@ body { font-size: 1.06rem; line-height: 1.65; }
   border-radius: 10px;
   background:
     linear-gradient(90deg, rgba(247,245,240,.5) 0%, rgba(247,245,240,.25) 55%, rgba(247,245,240,0) 100%),
-    url("/images/bgd.jpg") center / cover no-repeat;
+    url("/images/blyde-canyon-banner.jpg") center / cover no-repeat;
 }
 .hero h1 { font-size: 2.6rem; margin-bottom: .6rem; }
 .hero .lead { font-size: 1.25rem; color: $ra-ink-2; max-width: 46rem; }
@@ -89,7 +89,13 @@ body { font-size: 1.06rem; line-height: 1.65; }
 main .bi { font-size: 1.15em; margin-right: .4em; vertical-align: -0.1em; }
 .bi-whatsapp { color: #25D366; }
 .bi-envelope { color: $ra-accent; }
-.bi-check2-circle { color: $ra-accent; }
+
+// Page banner photos (wide images at the top of a page)
+.page-banner {
+  width: 100%; height: 260px; object-fit: cover;
+  border-radius: 10px; margin: 0 0 1.5rem; display: block;
+  @media (max-width: 640px) { height: 170px; }
+}
 
 // Language link (English / Español) on homeowner pages
 .hm-lang { text-align: right; margin: -0.5rem 0 0.75rem; font-size: .9rem; }

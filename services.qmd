@@ -3,6 +3,9 @@ title: "Services"
 description: "Independent review, problem solving, research partnerships and training for environmental questions."
 ---
 
+![](images/swartland-banner.jpg){.page-banner fig-alt="Harvested wheatlands in the Swartland, Western Cape, South Africa, with dust blowing off the fields"}
+
+
 The tools on this site are free. What we charge for is the thinking behind them: working out what a question really needs, building methods where none exist, and checking that conclusions hold up.
 
 For homeowners, we bring actual science to everyday decisions about soil, water and gardens, so you're not guessing or relying on a sales pitch. For researchers, we bring creativity: new angles on hard problems, without giving up rigour. Either way, some questions don't have an off-the-shelf answer, and that's where we start.

@@ -3,6 +3,9 @@ title: "Partner: research collaboration"
 description: "Analytical partnerships with research groups and projects, and methods leadership on proposals."
 ---
 
+![](images/desert-camp-banner.jpg){.page-banner fig-alt="A field camp among juniper and slickrock at dusk, with the La Sal Mountains on the horizon"}
+
+
 For research groups and projects that need analytical depth over months rather than weeks.
 
 ::: {.cards}

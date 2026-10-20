@@ -2,6 +2,9 @@
 title: "Contact"
 ---
 
+![](images/sopris-banner.jpg){.page-banner fig-alt="Autumn trail below Mount Sopris near Carbondale, Colorado"}
+
+
 ::: {.cards}
 
 ::: {}

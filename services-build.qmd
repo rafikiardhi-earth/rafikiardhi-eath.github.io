@@ -3,6 +3,9 @@ title: "Build: problem solving"
 description: "Answers to environmental questions that don't have an off-the-shelf solution, built on existing knowledge, with honest uncertainty."
 ---
 
+![](images/namib-banner.jpg){.page-banner fig-alt="A road crossing the gravel plains of the Namib Desert, Namibia, with red dunes on the horizon"}
+
+
 Some environmental questions don't have an off-the-shelf answer. That's where we start.
 
 ::: {.cards}
