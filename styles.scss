@@ -114,6 +114,11 @@ main .bi { font-size: 1.15em; margin-right: .4em; vertical-align: -0.1em; }
 
 .regions { color: $ra-ink-2; }
 
+//text 
+.text-black {
+  color: #000000 !important;
+}
+
 // General content
 a { text-underline-offset: 2px; }
 hr { border-color: $ra-line; opacity: 1; }
