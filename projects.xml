@@ -10,7 +10,32 @@
 <atom:link href="https://rafikiardhi.earth/projects.xml" rel="self" type="application/rss+xml"/>
 <description>What we&#39;re working on now, and the places and people behind our work.</description>
 <generator>quarto-1.10.19</generator>
-<lastBuildDate>Sat, 03 Oct 2026 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sat, 10 Oct 2026 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Soils in motion</title>
+  <link>https://rafikiardhi.earth/projects/soils-in-motion.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<p>Most soil science treats soil as something that sits still. We are treating it as a system in motion: water moving through it in drought and in flood, heat and energy flowing with it, and the soil organising itself around that flow over time.</p>
+<p>To do that, we are bringing mathematics from outside soil science into it, linking how water moves with how soils organise and how resilient they are. The work spans drylands to the tropics, from the Western United States to Morocco, with a PhD student leading parts of it.</p>
+<p>Details stay under wraps until the work is published.</p>
+
+
+
+ ]]></description>
+  <category>Upcoming</category>
+  <category>NDA</category>
+  <category>Water</category>
+  <category>Knowledge</category>
+  <category>Global</category>
+  <guid>https://rafikiardhi.earth/projects/soils-in-motion.html</guid>
+  <pubDate>Sat, 10 Oct 2026 00:00:00 GMT</pubDate>
+  <media:content url="https://rafikiardhi.earth/images/deadvlei-card.jpg" medium="image" type="image/jpeg"/>
+</item>
 <item>
   <title>Cumulative knowledge</title>
   <link>https://rafikiardhi.earth/projects/cumulative-knowledge.html</link>
