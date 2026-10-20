@@ -17,13 +17,15 @@ page-layout: full
 ::: {.cards}
 ::: {.card-item}
 ### [Homeowners: real science](homeowners.qmd)
-Everyday decisions about soil, water and gardens, answered with the same science researchers use, without the sales pitch.
+Practical home and landscape decisions informed by the same scientific principles researchers use—from applying Darcy’s and Jurin’s laws to irrigation design to using calculus to estimate sod quantities for irregular lawns.
+
 ![Dry-stacked retaining walls, built without mortar and still holding the slope.](images/drystack-walls-card.jpg)
 :::
 
 ::: {.card-item}
 ### [Researchers: real creativity](tools.qmd)
-Free research tools and checks, and new angles on hard environmental problems, with the rigour kept intact.
+Real creativity for difficult environmental problems. Free research tools and checks to explore new ideas without compromising rigour.
+
 ![Subsoil texture, temperature and precipitation combined in one colour map of Texas.](images/texas-rgb-card.jpg)
 :::
 :::
