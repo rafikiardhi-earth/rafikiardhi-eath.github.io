@@ -241,7 +241,7 @@
   <media:content url="https://rafikiardhi.earth/images/namib-road-card.jpg" medium="image" type="image/jpeg"/>
 </item>
 <item>
-  <title>De-bushing and soil carbon</title>
+  <title>De-bushing and the soil system</title>
   <link>https://rafikiardhi.earth/projects/steambioafrica.html</link>
   <description><![CDATA[ 
 
@@ -249,7 +249,7 @@
 
 
 
-<p>Invasive bush is spreading across Southern African rangelands, choking grazing land and water. Clearing it can restore land, livelihoods and can be used as a source of biofuel for cooking or energy; however, what does it do to the very ecosystem?</p>
+<p>Invasive bush is spreading across Southern African rangelands, choking grazing land and water. Clearing it can restore land, livelihoods and can be used as a source of biofuel for cooking or energy; however, what does it do to the ecosystem we cannot see?</p>
 <p>As a research consultant to <a href="https://www.slu.se/en/research/research-catalogue/projekt/s/steambioafrica/">SLU</a> (the Swedish University of Agricultural Sciences) on SteamBioAfrica, an EU Horizon 2020 project turning invasive woody biomass into products that benefit local communities, we modelled soil carbon dynamics during and after de-bushing and pesticide use in Namibia, Botswana and South Africa.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -262,6 +262,7 @@
 
  ]]></description>
   <category>Carbon</category>
+  <category>Water</category>
   <category>Socio-ecological</category>
   <category>Partnerships</category>
   <category>Southern Africa</category>
