@@ -3,10 +3,12 @@ title: "Learn: training"
 description: "Workshops in soil classification, do-it-yourself landscaping, research creativity and research validation, tailored to the group and available in several languages."
 ---
 
-![](images/rio-talk-banner.jpg){.page-banner fig-alt="Trevan Flynn presenting soil mapping methods at a conference in Rio de Janeiro"}
+![](images/rio-talk-banner.jpg){.page-banner fig-alt="Trevan Flynn presenting award-winning soil mapping methods at the 2018 World Congress of Soil Science in Rio de Janeiro"}
 
 
 Workshops tailored to the group, from homeowners and field teams to research students, and available in several languages.
+
+Our workshops draw on experience teaching at university and presenting at international conferences, work that later won Best Paper in the *South African Journal of Plant and Soil*.
 
 ::: {.cards}
 
