@@ -6,6 +6,8 @@ categories: [Upcoming, Water, Knowledge, Global]
 image: ../images/desert-camp-card.jpg
 ---
 
+![A dry sand river as a storm builds. Within hours the same channel can carry water.](../images/dry-river-storm.jpg){fig-alt="Lightning striking beyond a wide dry sandy riverbed lined with bush, under dark storm clouds."}
+
 Most soil science treats soil as something that sits still. We are treating it as a system in motion: water moving through it in drought and in flood, heat and energy flowing with it, and the soil organising itself around that flow over time.
 
 The key is exergy: the share of energy a soil can actually put to work, rather than the total energy passing through it. What matters is not how much energy a soil receives, but how well it uses what it has.
@@ -14,7 +16,7 @@ That changes how soil is perceived. A desert soil can seem "dead": bare, crusted
 
 To capture this, we are bringing mathematics from outside soil science into it, linking how energy moves with how soil organises, functions and recovers. The work spans drylands to the tropics, from the Western United States to the Malawi, with a students leading the charge.
 
-![Sossusvlei, Namibia, in September. The pan stays dry for long stretches, but it can fill with water from the ephemeral Tsauchab River, and a desert bloom follows from the seed bank that survives the dry heat.](../images/deadvlei-banner.jpg){fig-alt="A white cracked clay pan with dead camel thorn trees in front of tall red dunes under a deep blue sky."}
+![Sossusvlei, Namibia, in September. The pan stays dry for long stretches, but it can fill with water from the ephemeral Tsauchab River, and a desert bloom follows from the seed bank that survives the dry heat.](../images/sossusvlei-banner.jpg){fig-alt="A white cracked clay pan with dead camel thorn trees in front of tall red dunes under a deep blue sky."}
 
 Details stay under wraps until the work is published.
 
