@@ -72,8 +72,6 @@ Workshops from do-it-yourself landscaping to research creativity and validation.
 
 ## Where we work
 
-![](images/eswatini-valley-banner.jpg){.page-banner fig-alt="A valley in eSwatini where settlement is growing into the landscape, under a passing rainstorm"}
-
 [Southern, East and Central Africa · Latin America · United States · Europe. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
 
 ::: {layout="[[1,1],[1,1]]"}
