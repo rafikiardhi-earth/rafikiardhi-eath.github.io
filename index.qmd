@@ -1,6 +1,6 @@
 ---
 title: ""
-pagetitle: "RafikiArdhi — Free tools, paid thinking"
+pagetitle: "RafikiArdhi — Open science, creative freedom"
 page-layout: full
 ---
 
@@ -16,14 +16,14 @@ page-layout: full
 
 ::: {.cards}
 ::: {.card-item}
-### [Homeowners: real science](homeowners.qmd)
+### [Homeowners: open science](homeowners.qmd)
 Practical home and landscape decisions informed by the same scientific principles researchers use—from applying Darcy’s and Jurin’s laws to irrigation design to using calculus to estimate sod quantities for irregular lawns.
 
 ![Dry-stacked retaining walls, built without mortar and still holding the slope after 15 years.](images/drystack-walls-card.jpg)
 :::
 
 ::: {.card-item}
-### [Researchers: real creativity](tools.qmd)
+### [Researchers: creative freedom](tools.qmd)
 Let your mind explore the scientific landscape, without compromising scientific rigour. Discover free research tools and checks, creative approaches to difficult environmental problems, and new ways to challenge the possible.
 
 ![Subsoil texture, temperature and precipitation combined in one colour map of Texas.](images/texas-rgb-card.jpg)
