@@ -455,74 +455,235 @@
     "text": "The name\nRafiki ardhi is Kiswahili for “Land friend”.\nTry the tools  Get in touch\n\nFounded by Trevan Flynn, PhD, soil scientist. See Research for the published research behind our methods."
   },
   {
-    "objectID": "projects.html",
-    "href": "projects.html",
-    "title": "Projects",
+    "objectID": "checks (2).html",
+    "href": "checks (2).html",
+    "title": "Check a result",
     "section": "",
-    "text": "Environmental knowledge is about land and the people who live on it. Our projects start with a question someone actually has, build on what is already known, and end with knowledge people can use in their own place and their own language.\nNewest work comes first. Some projects are under non-disclosure agreements, so we describe them only briefly.\n\n\n\n\n\n\n\n\n\n\nSoils in motion\n\n\n\nUpcoming\n\nWater\n\nKnowledge\n\nGlobal\n\n\n\nHow water, heat and energy move through soil, and how soil organises itself around that flow, across global climates.\n\n\n\n\n\n\n\n\n\n\n\n\nCumulative knowledge\n\n\n\nIn progress\n\nKnowledge\n\nSouthern Africa\n\n\n\nEnvironmental knowledge keeps getting reset. We’re building it up instead.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil keys in your language\n\n\n\nIn progress\n\nLanguages\n\nSocio-ecological\n\n\n\nSoil classification in Farsi, Kiswahili and the South African system, with more languages to come.\n\n\n\n\n\n\n\n\n\n\n\n\nCaribbean pedohydrology\n\n\n\nNDA\n\nIn progress\n\nWater\n\nSocio-ecological\n\nCaribbean\n\n\n\nSoil water retention and runoff for flood modelling on an island without a soil survey, guided by uncertainty.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil resilience\n\n\n\nUnder review\n\nKnowledge\n\nSocio-ecological\n\nWestern US\n\nGlobal\n\n\n\nReading how soils organise themselves, and what that says about resilience and the many functions soils perform.\n\n\n\n\n\n\n\n\n\n\n\n\nOur own backyard, Colorado\n\n\n\nHomeowners\n\nWater\n\nWestern US\n\n\n\nDoing it ourselves: gravel, raised beds and drip irrigation, worked out with our own homeowner tools.\n\n\n\n\n\n\n\n\n\n\n\n\nWorld Bank carbon credits\n\n\n\nNDA\n\nCarbon\n\nSouthern Africa\n\n\n\nBaseline soil carbon stock maps for a carbon credit programme in Mpumalanga, South Africa.\n\n\n\n\n\n\n\n\n\n\n\n\nSoils4Africa mapping\n\n\n\nUnder review\n\nKnowledge\n\nSouthern Africa\n\n\n\nIntegrated Soil Profile Mapping (ISPM) reveals regional patterns of soil condition across Southern African agricultural lands.\n\n\n\n\n\n\n\n\n\n\n\n\nDe-bushing and the soil system\n\n\n\nCarbon\n\nWater\n\nSocio-ecological\n\nPartnerships\n\nSouthern Africa\n\n\n\nPredicted how clearing invasive bush and pesticide use changed soil carbon and water across Namibia, Botswana and South Africa.\n\n\n\n\n\nNo matching items"
+    "text": "Before you submit, or when you review, check that the numbers can all be true. Each check takes the figures a paper or report gives (or your own) and tests them against what the method allows. Nothing you enter leaves your browser."
   },
   {
-    "objectID": "diy-soil-tests.html",
-    "href": "diy-soil-tests.html",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "objectID": "checks (2).html#finding-the-right-pixel-size",
+    "href": "checks (2).html#finding-the-right-pixel-size",
+    "title": "Check a result",
+    "section": "Finding the right pixel size",
+    "text": "Finding the right pixel size\nGrid resolution is often chosen by habit (30 m because that’s Landsat). Hengl (2006) set out rules that tie it to what the data can actually support. For each aspect of a dataset they give a coarsest legible resolution (the largest pixel that still represents it), a finest legible resolution (below which pixels “are probably just waste of memory”) and a recommended compromise. Fill in whatever you know; the overall range is where the rules agree.\n\n\n\nReference\nHengl, T. (2006). Finding the right pixel size. Computers & Geosciences 32, 1283–1298. doi:10.1016/j.cageo.2005.11.008"
+  },
+  {
+    "objectID": "checks (2).html#back-transformation",
+    "href": "checks (2).html#back-transformation",
+    "title": "Check a result",
+    "section": "Back-transformation",
+    "text": "Back-transformation\nA mean calculated on log values, then exponentiated, is the median (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter what the paper gives on the log scale.\n\n\n\nReferences\nAitchison, J., Brown, J.A.C. (1957). The Lognormal Distribution. Cambridge University Press.\nJournel, A.G. (1980). The lognormal approach to predicting local distributions of selective mining unit grades. Mathematical Geology 12, 285–303. doi:10.1007/BF01029417\nWebster, R., Oliver, M.A. (2007). Geostatistics for Environmental Scientists, 2nd ed. Wiley."
+  },
+  {
+    "objectID": "checks (2).html#carbon-stock-arithmetic",
+    "href": "checks (2).html#carbon-stock-arithmetic",
+    "title": "Check a result",
+    "section": "Carbon stock arithmetic",
+    "text": "Carbon stock arithmetic\nRebuild a reported stock from its inputs. If it doesn’t match, the check tries the common slips (% vs g/kg, stones ignored or on the wrong basis, organic matter instead of carbon, kg/m² vs Mg/ha) and tells you which one reproduces the reported number.\n\n\n\nReferences\nPoeplau, C., Vos, C., Don, A. (2017). Soil organic carbon stocks are systematically overestimated by misuse of the parameters bulk density and rock fragment content. SOIL 3, 61–66. doi:10.5194/soil-3-61-2017\nPribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. Geoderma 156, 75–83. doi:10.1016/j.geoderma.2010.02.003"
+  },
+  {
+    "objectID": "checks (2).html#area-from-a-confusion-matrix",
+    "href": "checks (2).html#area-from-a-confusion-matrix",
+    "title": "Check a result",
+    "section": "Area from a confusion matrix",
+    "text": "Area from a confusion matrix\nCounting pixels in a map gives biased class areas, because every map has errors. With a stratified accuracy sample, the confusion matrix gives unbiased areas with confidence intervals (Olofsson et al. 2014). Rows are map classes, columns are reference classes, and the last column is each map class’s mapped area.\n\n\n\nReference\nOlofsson, P., Foody, G.M., Herold, M., Stehman, S.V., Woodcock, C.E., Wulder, M.A. (2014). Good practices for estimating area and assessing accuracy of land change. Remote Sensing of Environment 148, 42–57. doi:10.1016/j.rse.2014.02.015"
+  },
+  {
+    "objectID": "checks (2).html#effective-sample-size",
+    "href": "checks (2).html#effective-sample-size",
+    "title": "Check a result",
+    "section": "Effective sample size",
+    "text": "Effective sample size\nSamples close together carry overlapping information. For estimating an average, a cluster of ten nearby samples can be worth little more than one. This uses the variogram to work out how many independent samples your layout is really worth.\n\n\n\nReferences\nCressie, N.A.C. (1993). Statistics for Spatial Data, revised ed. Wiley. Section 1.3.\nWebster, R., Oliver, M.A. (2007). Geostatistics for Environmental Scientists, 2nd ed. Wiley."
+  },
+  {
+    "objectID": "checks (2).html#spatial-cross-validation-and-leakage",
+    "href": "checks (2).html#spatial-cross-validation-and-leakage",
+    "title": "Check a result",
+    "section": "Spatial cross-validation and leakage",
+    "text": "Spatial cross-validation and leakage\nRandom cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won’t achieve between samples. Tick anything that applies to the study you’re checking.\n\n\n\nReferences\nRoberts, D.R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. Ecography 40, 913–929. doi:10.1111/ecog.02881\nMeyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution 12, 1620–1633. doi:10.1111/2041-210X.13650\nMilà, C., Mateu, J., Pebesma, E., Meyer, H. (2022). Nearest neighbour distance matching leave-one-out cross-validation for map validation. Methods in Ecology and Evolution 13, 1304–1316. doi:10.1111/2041-210X.13851"
+  },
+  {
+    "objectID": "checks (2).html#independence-and-study-design",
+    "href": "checks (2).html#independence-and-study-design",
+    "title": "Check a result",
+    "section": "Independence and study design",
+    "text": "Independence and study design\nIndependence is a property of the study design and the question being asked, not a box that a single diagnostic can certify. Use this guided check to identify common sources of dependence and mismatches between the sampling unit, statistical analysis, and validation design. It flags issues to investigate; it does not automatically invalidate a study.\n\n\n\nReferences\nHurlbert, S.H. (1984). Pseudoreplication and the design of ecological field experiments. Ecological Monographs 54, 187–211. doi:10.2307/1942661\nRoberts, D.R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. Ecography 40, 913–929. doi:10.1111/ecog.02881\nMeyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution 12, 1620–1633. doi:10.1111/2041-210X.13650"
+  },
+  {
+    "objectID": "checks (2).html#statistical-assumptions-check-beta",
+    "href": "checks (2).html#statistical-assumptions-check-beta",
+    "title": "Check a result",
+    "section": "Statistical assumptions check BETA",
+    "text": "Statistical assumptions check BETA\nA guided reviewer checklist for matching assumptions to the statistical method. This does not infer assumptions from a paper automatically: select the method and the diagnostics reported, and use the resulting prompts to identify what may need checking.\n\n  \n    Method reportedLinear regression / ANCOVAANOVA / group comparisonLogistic regressionPearson correlationMixed-effects / repeated measuresRank-based / nonparametric methodOther or unclear\n    Primary aimInference (tests, estimates or confidence intervals)PredictionDescription / exploration\n  \n  Which checks are described in the paper?\n  \n     Residuals or model diagnostics inspected\n     Variance / dispersion assessed\n     Relevant distributional assumption assessed\n     Influential points / outliers assessed where relevant\n     Independence or grouping structure addressed\n     Functional form / link / linearity assessed where relevant\n  \n  Generate reviewer prompts Reset\n  \n\n\n\nScope note\nThis beta tool is a structured checklist, not a test of model assumptions. The relevant assumptions depend on the exact statistical procedure and intended inference. A missing checkbox indicates only that the reviewer has not marked the check as reported."
+  },
+  {
+    "objectID": "checks (2).html#model-comparison-audit-beta",
+    "href": "checks (2).html#model-comparison-audit-beta",
+    "title": "Check a result",
+    "section": "Model comparison audit BETA",
+    "text": "Model comparison audit BETA\nUse this checklist when a paper claims that one model performs better than another. It checks comparability of the evaluation design; it does not decide the winner from a single metric.\n\n  For each item, select the statement that best describes the comparison in the paper.\n  \n    Evaluation observationsSame held-out observations for all modelsDifferent observations / foldsNot clear from the paper\n    Response and scaleSame response, units and transformationDifferent response scale / targetNot clear from the paper\n    Validation strategySame split or resampling strategyDifferent validation strategiesNot clear from the paper\n    Metric definition and directionSame metric definition; direction understoodMetrics differ or are not directly comparableNot clear from the paper\n    Tuning and preprocessingTuning / preprocessing confined to training dataPossible test-data use or leakageNot clear from the paper\n    Uncertainty in the differenceUncertainty or paired differences reportedOnly point estimates reportedNot clear from the paper\n  \n  Audit comparison Reset\n  \n\n\n\nScope note\nThis beta audit checks the comparability of model evaluations based on reviewer-selected answers. It does not calculate performance metrics or infer statistical significance. For spatial, temporal or grouped data, validation design should reflect the intended prediction task; see Roberts et al. (2017), Ecography, 40, 913–929. doi:10.1111/ecog.02881."
+  },
+  {
+    "objectID": "checks (2).html#lab-method-conversions",
+    "href": "checks (2).html#lab-method-conversions",
+    "title": "Check a result",
+    "section": "Lab method conversions",
+    "text": "Lab method conversions\nResults from different methods aren’t directly comparable. These are the common conversion factors, with the assumption behind each stated, so you can see what you’re accepting when you convert.\n\n\n\nReferences\nWalkley, A., Black, I.A. (1934). An examination of the Degtjareff method for determining soil organic matter, and a proposed modification of the chromic acid titration method. Soil Science 37, 29–38.\nPribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. Geoderma 156, 75–83. doi:10.1016/j.geoderma.2010.02.003\nAhern, C.R., Baker, D.E., Aitken, R.L. (1995). Models for relating pH measurements in water and calcium chloride for a wide range of pH, soil types and depths. Plant and Soil 171, 47–52. doi:10.1007/BF00009563\nOxide and unit conversions are exact, from molar masses."
+  },
+  {
+    "objectID": "checks (2).html#coordinates-and-distances",
+    "href": "checks (2).html#coordinates-and-distances",
+    "title": "Check a result",
+    "section": "Coordinates and distances",
+    "text": "Coordinates and distances\nA degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and “metres” computed from degrees are wrong. Convert a distance, or paste coordinates to check them.\n\n\n\nMethod\nNo paper needed: standard spherical geometry (haversine formula, mean Earth radius 6,371 km)."
+  },
+  {
+    "objectID": "foundation-grading.html",
+    "href": "foundation-grading.html",
+    "title": "Foundation grading check",
     "section": "",
-    "text": "Español\nThree simple tests tell you most of what matters about your soil: what it’s made of (texture) and how fast water moves through it (drainage). Texture decides how often to water, how fast water soaks in, and how the soil behaves when you dig."
+    "text": "Español\nWater pooling against a foundation is one of the most expensive problems a house can have. The common building-code guideline is that ground should fall at least 6 inches over the first 10 feet from the house (about 5%). You can check it in an afternoon.\nHow to measure: drive a stake against the foundation and another 10 ft (3 m) out. Tie a string between them and level it with a line level. At each stake, measure from the string down to the ground. The drop is the outer measurement minus the inner one. Repeat every 10–15 ft along each wall."
   },
   {
-    "objectID": "diy-soil-tests.html#jar-test-texture",
-    "href": "diy-soil-tests.html#jar-test-texture",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "Jar test (texture)",
-    "text": "Jar test (texture)\n\nFill a straight-sided jar about one-third with soil from root depth (pick out stones, roots and debris).\nAdd water until the jar is about two-thirds full, plus a teaspoon of dishwasher detergent or salt-free water softener to separate the particles.\nShake hard for 3–5 minutes, then set it down and start a timer.\nAfter 1 minute, mark the height of the settled layer: that’s the sand.\nAfter 2 hours, mark the height again: sand plus silt.\nAfter 2 days (when the water clears), mark the final height: everything, including clay."
+    "objectID": "foundation-grading.html#other-signs-of-a-grading-problem",
+    "href": "foundation-grading.html#other-signs-of-a-grading-problem",
+    "title": "Foundation grading check",
+    "section": "Other signs of a grading problem",
+    "text": "Other signs of a grading problem\n\nWater standing next to the foundation after rain or irrigation.\nMulch or soil piled up against the siding, often built up over years.\nDownspouts that empty right at the wall.\nPatios, walks or window wells that have settled so they tip toward the house.\nDamp patches, efflorescence (white crust) or musty smells in a basement or crawlspace.\n\nMost of these are cheap to fix compared with foundation repairs."
   },
   {
-    "objectID": "diy-soil-tests.html#ribbon-test-texture-by-feel",
-    "href": "diy-soil-tests.html#ribbon-test-texture-by-feel",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "Ribbon test (texture by feel)",
-    "text": "Ribbon test (texture by feel)\nTake a walnut-sized lump of soil, wet it until it’s like putty, and work it in your hand. Then press it between your thumb and finger, pushing it up into a ribbon until it breaks under its own weight."
-  },
-  {
-    "objectID": "diy-soil-tests.html#drainage-percolation-test",
-    "href": "diy-soil-tests.html#drainage-percolation-test",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "Drainage (percolation) test",
-    "text": "Drainage (percolation) test\n\nDig a hole about 12 in (30 cm) deep and 6–12 in wide.\nFill it with water and let it drain completely. This wets the surrounding soil; skip it and the result will be too fast.\nFill it again. Measure the water depth, wait a set time (an hour is easy), and measure again.\n\n\n\nIf the hole still holds water the next day, test again somewhere else and dig deeper to look for a dense or cemented layer. Drainage problems are usually about a layer below, not the soil you plant in."
-  },
-  {
-    "objectID": "planter-soil.html",
-    "href": "planter-soil.html",
-    "title": "Raised bed and planter soil calculator",
+    "objectID": "fertilizer-calculator.html",
+    "href": "fertilizer-calculator.html",
+    "title": "Fertilizer label calculator",
     "section": "",
-    "text": "Español\nFilling raised beds and big planters takes more soil than most people expect, and bags add up fast. This works out the volume for beds, round pots and tree planters, and shows how to cut the cost of deep beds."
+    "text": "Español\nThe three numbers on a fertilizer bag (N-P-K) are percentages by weight. A 20 lb bag of 24-0-6 contains 4.8 lb of nitrogen; the rest is the other nutrients and filler. This turns the label into how much product to spread, and shows what you’re really paying per pound of nutrient."
   },
   {
-    "objectID": "planter-soil.html#tips-for-filling-beds",
-    "href": "planter-soil.html#tips-for-filling-beds",
-    "title": "Raised bed and planter soil calculator",
-    "section": "Tips for filling beds",
-    "text": "Tips for filling beds\n\nA raised bed 4 × 8 ft and 12 in deep holds about 1.2 cubic yards (32 ft³) once settled. That’s over 20 bags of 1.5 ft³.\nFill in layers and water each one so the soil settles before you plant.\nTop up each spring. Beds sink as organic matter breaks down; an inch or two of compost each year keeps them full.\nAvoid treated wood scraps as filler, and anything painted or glued."
+    "objectID": "fertilizer-calculator.html#reading-a-fertilizer-label",
+    "href": "fertilizer-calculator.html#reading-a-fertilizer-label",
+    "title": "Fertilizer label calculator",
+    "section": "Reading a fertilizer label",
+    "text": "Reading a fertilizer label\n\nN (nitrogen) drives green leafy growth. It’s the nutrient lawns need most, and it doesn’t stay in soil long, which is why it’s applied regularly.\nP (phosphate, P₂O₅) supports roots and establishment. The label shows phosphate, not pure phosphorus: elemental P is about 44% of the P₂O₅ number.\nK (potash, K₂O) helps with stress tolerance. Elemental K is about 83% of the K₂O number.\nSlow-release or organic products feed over weeks rather than days. The arithmetic is the same; they’re just gentler.\n\nMore is not better. Extra nitrogen means more mowing, weaker roots and nitrate washing into waterways. A soil test tells you whether you need phosphate or potash at all."
   },
   {
-    "objectID": "planter-soil.html#pots-and-potting-mix",
-    "href": "planter-soil.html#pots-and-potting-mix",
-    "title": "Raised bed and planter soil calculator",
-    "section": "Pots and potting mix",
-    "text": "Pots and potting mix\n\nPotting mix is sold in quarts or cubic feet in the US (8 qt, 16 qt, 1–2 cu ft) and in litres elsewhere. One cubic foot is about 26 quarts or 28 litres.\nNursery “gallon” sizes are trade sizes, not measurements. A #1 (“1-gallon”) pot holds about 3 quarts; a #5 holds about 4 gallons.\nUse potting mix, not garden soil, in pots. Garden soil packs down in containers and stays waterlogged at the bottom."
-  },
-  {
-    "objectID": "services.html",
-    "href": "services.html",
-    "title": "Services",
+    "objectID": "lawn-water.html",
+    "href": "lawn-water.html",
+    "title": "Lawn vs low-water landscape: water use calculator",
     "section": "",
-    "text": "The tools on this site are free. What we charge for is the thinking behind them: working out what a question really needs, building methods where none exist, and checking that conclusions hold up.\nFor homeowners, we bring actual science to everyday decisions about soil, water and gardens, so you’re not guessing or relying on a sales pitch. For researchers, we bring creativity: new angles on hard problems, without giving up rigour. Either way, some questions don’t have an off-the-shelf answer, and that’s where we start."
+    "text": "Español\nHow much water does a lawn actually use compared with the alternatives? This estimates a season’s irrigation for the same area planted different ways, from your climate and water price."
   },
   {
-    "objectID": "services.html#why-be-creative-in-science",
-    "href": "services.html#why-be-creative-in-science",
-    "title": "Services",
-    "section": "Why be creative in science?",
-    "text": "Why be creative in science?\nAn example{.text-muted}\nThe problem. Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.\nThe insight. Soil isn’t layered like a spreadsheet. It forms as one connected profile, so a map should reflect this information.\nThe result. Every pixel now holds a continuous, physically consistent profile. Properties can be read at any depth or totalled over the whole profile, and moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon: maps at six standard depths (left) and the whole-profile total (right).\n\n\nDiscuss a project →"
+    "objectID": "lawn-water.html#how-this-is-worked-out",
+    "href": "lawn-water.html#how-this-is-worked-out",
+    "title": "Lawn vs low-water landscape: water use calculator",
+    "section": "How this is worked out",
+    "text": "How this is worked out\nPlants lose water through their leaves at a rate set mainly by weather: sun, heat, wind and dry air. Weather networks express that as reference evapotranspiration (ETo): what a well-watered grass would use. Each planting uses a share of it: bluegrass close to 80%, buffalograss under half, established low-water shrubs a third or less. Subtract the rain the plants can use, allow for watering that’s never perfectly efficient, and you have the irrigation.\nThe factors used here are typical values for planning. They’re useful for comparing options, not for setting a controller: for that, use the catch-cup test."
+  },
+  {
+    "objectID": "rain-garden.html",
+    "href": "rain-garden.html",
+    "title": "Rain garden and dry well calculator",
+    "section": "",
+    "text": "Español\nA rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a drainage test first."
+  },
+  {
+    "objectID": "rain-garden.html#building-a-rain-garden",
+    "href": "rain-garden.html#building-a-rain-garden",
+    "title": "Rain garden and dry well calculator",
+    "section": "Building a rain garden",
+    "text": "Building a rain garden\n\nLocation: a low spot at least 10 ft from the house, where water already heads, but not where it stands for days.\nShape: longer than it is wide, across the slope, with a level bottom so water spreads evenly.\nInlet and overflow: line the inlet with stone so it doesn’t erode, and give the overflow a safe path for storms bigger than the design.\nPlants: wet-tolerant species in the bottom, drought-tolerant ones on the rim. Native plants with deep roots keep the soil open.\nSoil: if your soil drains poorly, mix compost into the bottom, but don’t create a “bathtub” of loose soil in dense clay. An underdrain is the fix for very slow soils."
+  },
+  {
+    "objectID": "projects/soil-resilience.html",
+    "href": "projects/soil-resilience.html",
+    "title": "Soil resilience",
+    "section": "",
+    "text": "Soil is not a random mixture. Soil organises itself over time, using and releasing energy as water, heat and carbon move through, and that organisation is what lets soil absorb shocks and performs many ecosystem services at once. We measure it with thermodynamics rather than by counting soil types: in other words, pedodiversity reflects how a soil dissipates energy relative to what it has available.\n\n\n\nGrassland in recovery along an agroforestry system in Germany, with young trees in guards along the slope.\n\n\nIn the U.S. Southwest, this approach revealed agroecosystem patterns on ancestral and contemporary Indigenous lands, from the Chuska Mountains to the Great Sage Plain and Hopi Land, where generations of land use and soil organisation are written into the landscape. The original preprint focused on this area because of our knowledge of, and closeness to, the land, but it raised more questions than it answered. Humanity’s tie to the land is not unique to this region, and the questions that run from pedodiversity to pedocomplexity can be studied at many scales and with many techniques, for the wellbeing of both ecosystems and people.\n\n\n\nFrom soil states with depth (A), to thermodynamic pedodiversity in three dimensions (B), to pedocomplexity (C): cultural insight and a physics-informed model, working together.\n\n\nPreprint: Thermodynamic pedodiversity patterns reveal agroecosystem patterns in Indigenous lands of the U.S. Southwest"
+  },
+  {
+    "objectID": "projects/mpumalanga-carbon.html",
+    "href": "projects/mpumalanga-carbon.html",
+    "title": "World Bank carbon credits",
+    "section": "",
+    "text": "Carbon credits depend on knowing how much carbon is in the soil before anything changes. For a World Bank–funded carbon credit programme in Mpumalanga, South Africa, we created the baseline soil carbon stock maps using spatial mixed models, which account for how carbon varies across the landscape and how confident each estimate is.\nThese baselines are the reference that every future change in soil carbon is measured against.\n\n\n\nIllustrative example of soil organic carbon mapped with depth and summed over the whole profile, from separate work. Maps from the World Bank programme are under NDA and not shown."
+  },
+  {
+    "objectID": "projects/steambioafrica.html",
+    "href": "projects/steambioafrica.html",
+    "title": "De-bushing and the soil system",
+    "section": "",
+    "text": "Invasive bush is spreading across Southern African rangelands, choking grazing land and water. Clearing it can restore land, livelihoods and can be used as a source of biofuel for cooking or energy; however, what does it do to the ecosystem we cannot see?\n\n\n\nShade is scarce in encroached bushveld, for people and wildlife alike.\n\n\nAs a research consultant to SLU (the Swedish University of Agricultural Sciences) on SteamBioAfrica, an EU Horizon 2020 project turning invasive woody biomass into products that benefit local communities, we modelled soil carbon dynamics during and after de-bushing and pesticide use in Namibia, Botswana and South Africa.\n\n\n\nCrop residue left on bare soil after clearing: what stays on the surface shapes whats underneath your feet."
+  },
+  {
+    "objectID": "projects/caribbean-flood.html",
+    "href": "projects/caribbean-flood.html",
+    "title": "Caribbean pedohydrology",
+    "section": "",
+    "text": "The island has never had a soil survey, yet flood models need to know how much water the soil holds and how much runs off. What makes this project different is that uncertainty propagation guides every step: the hydropedological assumptions, the models, and the decisions built on them.\n\n\n\nOur free hydrologic soil group tool applies the standard NRCS rules to a single soil. The project goes further, with no soil survey to start from and uncertainty carried through and informs every step.\n\n\nTry the free tool →"
+  },
+  {
+    "objectID": "contact.html",
+    "href": "contact.html",
+    "title": "Contact",
+    "section": "",
+    "text": "Email\n WhatsApp\n \nRafikiArdhi LLC\nCarbondale, Colorado, USA\nORCID · LinkedIn · ResearchGate\n\n\n\nGet in touch about\n A quote for a review or project\n How to use one of the tools\n A problem or error in a tool\n Questions about our methods\n Research partnerships and proposals\n Workshops and training\n Home and garden questions\n\n\nContribute to the tools\nOur classification keys and tools are offered in several languages so more people can use them in their own. If you would like to translate or review a tool in your language, or co-develop a new key or tool, we would like to hear from you. Contributors are acknowledged on the tools they help build."
+  },
+  {
+    "objectID": "frost-depth.html",
+    "href": "frost-depth.html",
+    "title": "Frost depth calculator",
+    "section": "",
+    "text": "Español\nIn cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.\nYou need two numbers: the average temperature of your coldest month and of your warmest month. They are in the climate table for your town (on Wikipedia or your weather service). In the mountains, use a station at a similar elevation: temperatures drop about 3.5 °F per 1,000 ft (6.5 °C per 1,000 m) as you go up."
+  },
+  {
+    "objectID": "frost-depth.html#why-frost-depth-varies-so-much",
+    "href": "frost-depth.html#why-frost-depth-varies-so-much",
+    "title": "Frost depth calculator",
+    "section": "Why frost depth varies so much",
+    "text": "Why frost depth varies so much\n\nCold, and how long it lasts. What matters is the freezing index: how far below freezing it is, added up over every day of winter. A long, steady cold freezes deeper than a short, sharp one.\nSnow. A foot of fluffy snow insulates about as well as a couple of inches of foam board. Plowed driveways and shoveled paths lose that blanket and freeze deepest.\nSoil and moisture. Water gives off a lot of heat as it freezes, which slows the frost. Dry gravel and rocky fill freeze much deeper than wet clay.\nWarm ground below. Where summers are warm, the ground stores heat that pushes back against the frost from below."
+  },
+  {
+    "objectID": "frost-depth.html#about-this-estimate",
+    "href": "frost-depth.html#about-this-estimate",
+    "title": "Frost depth calculator",
+    "section": "About this estimate",
+    "text": "About this estimate\nThis uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.\nFor more control (freezing index, density, water content and surface factors), use the frost depth tool for researchers."
+  },
+  {
+    "objectID": "projects/soils-in-motion.html",
+    "href": "projects/soils-in-motion.html",
+    "title": "Soils in motion",
+    "section": "",
+    "text": "A dry sand river as a storm builds. Within hours the same channel can carry water.\n\n\nMost soil science treats soil as something that sits still. We are treating it as a system in motion: water moving through it in drought and in flood, heat and energy flowing with it, and the soil organising itself around that flow over time.\nThe key is exergy: the share of energy a soil can actually put to work, rather than the total energy passing through it. What matters is not how much energy a soil receives, but how well it uses what it has.\nThat changes how soil is perceived. A desert soil can seem “dead”: bare, crusted and pale. Yet with very little rain and energy, it may be doing its jobs remarkably well. Its surface crust holds the ground together and fixes nutrients, it stores water deep where it does not evaporate, and it locks away carbon for thousands of years. A tropical soil under lush forest can look full of life, yet much of that richness sits in the plants, not the soil. Many tropical soil is deeply weathered and hold few nutrients of its own, and clear the forest and that apparent fertility can disappear within a few seasons. Judged against the energy each has available, the desert soil may function for the ecosystem just as well.\nTo capture this, we are bringing mathematics from outside soil science into it, linking how energy moves with how soil organises, functions and recovers. The work spans drylands to the tropics, from the Western United States to the Malawi, with a students leading the charge.\n\n\n\nSossusvlei, Namibia, in September. The pan stays dry for long stretches, but it can fill with water from the ephemeral Tsauchab River, and a desert bloom follows from the seed bank that survives the dry heat.\n\n\nDetails stay under wraps until the work is published.\nFor additional experts in the this field, see about page"
+  },
+  {
+    "objectID": "projects/multilingual-keys.html",
+    "href": "projects/multilingual-keys.html",
+    "title": "Soil keys in your language",
+    "section": "",
+    "text": "Soil classification keys in Farsi, Kiswahili and the South African system, built with soil scientists who speak those languages. Language matters as much as the logic: a key is only useful if people can read it in their own words.\nTry the keys →"
+  },
+  {
+    "objectID": "projects/southern-africa-depth.html",
+    "href": "projects/southern-africa-depth.html",
+    "title": "Soils4Africa mapping",
+    "section": "",
+    "text": "Soil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary. The research formed part of Soils4Africa, an EU Horizon 2020 project building an open-data Soil Information System to help farmers, agri-businesses, scientists and policymakers by improving the quality and availability of African soil data.\n\n\n\nAgricultural land across the study area in Namibia, South Africa, Lesotho and Eswatini.\n\n\nSampling was sparse, only two horizons were sampled per profile, and the environmental gradients were extreme, so we developed a new method for the project: Integrated Soil Profile Mapping (ISPM). It builds on our earlier physics-informed depth spline (phySpline) and is now being extended to update existing soil maps and support decisions. See Cumulative knowledge.\n\n\n\n\n\n\nHumid highlands: eSwatini, near Sheba Rock.\n\n\n\n\n\n\n\nSavanna: a storm over a dry sand river in Kruger.\n\n\n\n\n\n\n\nDesert: dunes of the Namib. Soil organic carbon, organisms and water are present under the surface.\n\n\n\n\n\n\n\n\nTexture profiles in Malawi drawn as continuous curves with depth, beside the site’s climate and elevation (Flynn et al., 2026).\n\n\nPreprint: Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands"
+  },
+  {
+    "objectID": "projects/home-garden.html",
+    "href": "projects/home-garden.html",
+    "title": "Our own backyard, Colorado",
+    "section": "",
+    "text": "We test our homeowner tools where it matters most to us: at home.\nThe yard had a compacted, uneven surface, patchy drainage, an irregular shape that made the area easy to misjudge, and a 1 m drop along the left fence line, where the fence and part of the yard were slowly slumping into the neighbour’s property.\nWe turned the lawn edges and bare ground into gravel paths, raised beds and drip irrigation, working out every quantity of soil, mulch and gravel first with the same free calculators on our Homeowners page.\n\n\n\nBefore and after: bare ground and lawn edges turned into gravel beds and a raised garden bed.\n\n\n\n\n\nThe legal boss and professional hole digger checks the new raised bed. The wet circles show where each drip emitter waters the soil."
+  },
+  {
+    "objectID": "projects/cumulative-knowledge.html",
+    "href": "projects/cumulative-knowledge.html",
+    "title": "Cumulative knowledge",
+    "section": "",
+    "text": "Environmental knowledge keeps getting reset. A new survey, a new map or a new project arrives, and the last one is quietly replaced, along with everything it cost and everything it knew.\nWe’re working on the opposite: updating what is known as new data arrives, so that knowledge accumulates and uncertainty falls with each round instead of starting over. In Limpopo, South Africa, a continental soil survey is used to update regional soil fertility maps into domains that support land-use decisions.\n\n\n\nSoil fertility domains across Limpopo Province, South Africa, ordered from lowest (1) to highest (9) fertility, from updating a regional map with a continental survey.\n\n\nThe method is an updated version of our ISPM digital soil mapping framework, built on the idea that the whole is greater than the sum of its parts. The updating is physics-based: it obeys the laws of thermodynamics and is solved exactly with calculus, rather than learned by AI. Every update can be traced, checked and explained, and the knowledge it adds is never lost to a black box.\n(Manuscript under production)"
   },
   {
     "objectID": "homeowners.html",
@@ -560,151 +721,74 @@
     "text": "Drainage, building and trees\n\n\nFoundation grading check\nDoes the ground slope away from your house enough, and how much fill to fix it.\n\n\nRain garden and dry well\nSize a rain garden or dry well from your roof area and how fast your soil drains.\n\n\nNew-build yard soil check\nFind out if construction left you thin topsoil over compacted subsoil, and what to ask your builder.\n\n\nFrost depth\nHow deep the ground freezes where you live, for water lines, footings and fence posts.\n\n\nTree protection zone\nHow much space to fence off around a tree before construction or digging.\n\n\n\nWorking professionally? See our scientific tools for soil classification, profile modelling and more."
   },
   {
-    "objectID": "projects/cumulative-knowledge.html",
-    "href": "projects/cumulative-knowledge.html",
-    "title": "Cumulative knowledge",
+    "objectID": "services.html",
+    "href": "services.html",
+    "title": "Services",
     "section": "",
-    "text": "Environmental knowledge keeps getting reset. A new survey, a new map or a new project arrives, and the last one is quietly replaced, along with everything it cost and everything it knew.\nWe’re working on the opposite: updating what is known as new data arrives, so that knowledge accumulates and uncertainty falls with each round instead of starting over. In Limpopo, South Africa, a continental soil survey is used to update regional soil fertility maps into domains that support land-use decisions.\n\n\n\nSoil fertility domains across Limpopo Province, South Africa, ordered from lowest (1) to highest (9) fertility, from updating a regional map with a continental survey.\n\n\nThe method is an updated version of our ISPM digital soil mapping framework, built on the idea that the whole is greater than the sum of its parts. The updating is physics-based: it obeys the laws of thermodynamics and is solved exactly with calculus, rather than learned by AI. Every update can be traced, checked and explained, and the knowledge it adds is never lost to a black box.\n(Manuscript under production)"
+    "text": "The tools on this site are free. What we charge for is the thinking behind them: working out what a question really needs, building methods where none exist, and checking that conclusions hold up.\nFor homeowners, we bring actual science to everyday decisions about soil, water and gardens, so you’re not guessing or relying on a sales pitch. For researchers, we bring creativity: new angles on hard problems, without giving up rigour. Either way, some questions don’t have an off-the-shelf answer, and that’s where we start."
   },
   {
-    "objectID": "projects/home-garden.html",
-    "href": "projects/home-garden.html",
-    "title": "Our own backyard, Colorado",
+    "objectID": "services.html#why-be-creative-in-science",
+    "href": "services.html#why-be-creative-in-science",
+    "title": "Services",
+    "section": "Why be creative in science?",
+    "text": "Why be creative in science?\nAn example{.text-muted}\nThe problem. Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.\nThe insight. Soil isn’t layered like a spreadsheet. It forms as one connected profile, so a map should reflect this information.\nThe result. Every pixel now holds a continuous, physically consistent profile. Properties can be read at any depth or totalled over the whole profile, and moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon: maps at six standard depths (left) and the whole-profile total (right).\n\n\nDiscuss a project →"
+  },
+  {
+    "objectID": "planter-soil.html",
+    "href": "planter-soil.html",
+    "title": "Raised bed and planter soil calculator",
     "section": "",
-    "text": "We test our homeowner tools where it matters most to us: at home.\nThe yard had a compacted, uneven surface, patchy drainage, an irregular shape that made the area easy to misjudge, and a 1 m drop along the left fence line, where the fence and part of the yard were slowly slumping into the neighbour’s property.\nWe turned the lawn edges and bare ground into gravel paths, raised beds and drip irrigation, working out every quantity of soil, mulch and gravel first with the same free calculators on our Homeowners page.\n\n\n\nBefore and after: bare ground and lawn edges turned into gravel beds and a raised garden bed.\n\n\n\n\n\nThe legal boss and professional hole digger checks the new raised bed. The wet circles show where each drip emitter waters the soil."
+    "text": "Español\nFilling raised beds and big planters takes more soil than most people expect, and bags add up fast. This works out the volume for beds, round pots and tree planters, and shows how to cut the cost of deep beds."
   },
   {
-    "objectID": "projects/southern-africa-depth.html",
-    "href": "projects/southern-africa-depth.html",
-    "title": "Soils4Africa mapping",
+    "objectID": "planter-soil.html#tips-for-filling-beds",
+    "href": "planter-soil.html#tips-for-filling-beds",
+    "title": "Raised bed and planter soil calculator",
+    "section": "Tips for filling beds",
+    "text": "Tips for filling beds\n\nA raised bed 4 × 8 ft and 12 in deep holds about 1.2 cubic yards (32 ft³) once settled. That’s over 20 bags of 1.5 ft³.\nFill in layers and water each one so the soil settles before you plant.\nTop up each spring. Beds sink as organic matter breaks down; an inch or two of compost each year keeps them full.\nAvoid treated wood scraps as filler, and anything painted or glued."
+  },
+  {
+    "objectID": "planter-soil.html#pots-and-potting-mix",
+    "href": "planter-soil.html#pots-and-potting-mix",
+    "title": "Raised bed and planter soil calculator",
+    "section": "Pots and potting mix",
+    "text": "Pots and potting mix\n\nPotting mix is sold in quarts or cubic feet in the US (8 qt, 16 qt, 1–2 cu ft) and in litres elsewhere. One cubic foot is about 26 quarts or 28 litres.\nNursery “gallon” sizes are trade sizes, not measurements. A #1 (“1-gallon”) pot holds about 3 quarts; a #5 holds about 4 gallons.\nUse potting mix, not garden soil, in pots. Garden soil packs down in containers and stays waterlogged at the bottom."
+  },
+  {
+    "objectID": "diy-soil-tests.html",
+    "href": "diy-soil-tests.html",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
     "section": "",
-    "text": "Soil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary. The research formed part of Soils4Africa, an EU Horizon 2020 project building an open-data Soil Information System to help farmers, agri-businesses, scientists and policymakers by improving the quality and availability of African soil data.\n\n\n\nAgricultural land across the study area in Namibia, South Africa, Lesotho and Eswatini.\n\n\nSampling was sparse, only two horizons were sampled per profile, and the environmental gradients were extreme, so we developed a new method for the project: Integrated Soil Profile Mapping (ISPM). It builds on our earlier physics-informed depth spline (phySpline) and is now being extended to update existing soil maps and support decisions. See Cumulative knowledge.\n\n\n\n\n\n\nHumid highlands: eSwatini, near Sheba Rock.\n\n\n\n\n\n\n\nSavanna: a storm over a dry sand river in Kruger.\n\n\n\n\n\n\n\nDesert: dunes of the Namib. Soil organic carbon, organisms and water are present under the surface.\n\n\n\n\n\n\n\n\nTexture profiles in Malawi drawn as continuous curves with depth, beside the site’s climate and elevation (Flynn et al., 2026).\n\n\nPreprint: Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands"
+    "text": "Español\nThree simple tests tell you most of what matters about your soil: what it’s made of (texture) and how fast water moves through it (drainage). Texture decides how often to water, how fast water soaks in, and how the soil behaves when you dig."
   },
   {
-    "objectID": "projects/multilingual-keys.html",
-    "href": "projects/multilingual-keys.html",
-    "title": "Soil keys in your language",
+    "objectID": "diy-soil-tests.html#jar-test-texture",
+    "href": "diy-soil-tests.html#jar-test-texture",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "Jar test (texture)",
+    "text": "Jar test (texture)\n\nFill a straight-sided jar about one-third with soil from root depth (pick out stones, roots and debris).\nAdd water until the jar is about two-thirds full, plus a teaspoon of dishwasher detergent or salt-free water softener to separate the particles.\nShake hard for 3–5 minutes, then set it down and start a timer.\nAfter 1 minute, mark the height of the settled layer: that’s the sand.\nAfter 2 hours, mark the height again: sand plus silt.\nAfter 2 days (when the water clears), mark the final height: everything, including clay."
+  },
+  {
+    "objectID": "diy-soil-tests.html#ribbon-test-texture-by-feel",
+    "href": "diy-soil-tests.html#ribbon-test-texture-by-feel",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "Ribbon test (texture by feel)",
+    "text": "Ribbon test (texture by feel)\nTake a walnut-sized lump of soil, wet it until it’s like putty, and work it in your hand. Then press it between your thumb and finger, pushing it up into a ribbon until it breaks under its own weight."
+  },
+  {
+    "objectID": "diy-soil-tests.html#drainage-percolation-test",
+    "href": "diy-soil-tests.html#drainage-percolation-test",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "Drainage (percolation) test",
+    "text": "Drainage (percolation) test\n\nDig a hole about 12 in (30 cm) deep and 6–12 in wide.\nFill it with water and let it drain completely. This wets the surrounding soil; skip it and the result will be too fast.\nFill it again. Measure the water depth, wait a set time (an hour is easy), and measure again.\n\n\n\nIf the hole still holds water the next day, test again somewhere else and dig deeper to look for a dense or cemented layer. Drainage problems are usually about a layer below, not the soil you plant in."
+  },
+  {
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
     "section": "",
-    "text": "Soil classification keys in Farsi, Kiswahili and the South African system, built with soil scientists who speak those languages. Language matters as much as the logic: a key is only useful if people can read it in their own words.\nTry the keys →"
-  },
-  {
-    "objectID": "projects/soils-in-motion.html",
-    "href": "projects/soils-in-motion.html",
-    "title": "Soils in motion",
-    "section": "",
-    "text": "A dry sand river as a storm builds. Within hours the same channel can carry water.\n\n\nMost soil science treats soil as something that sits still. We are treating it as a system in motion: water moving through it in drought and in flood, heat and energy flowing with it, and the soil organising itself around that flow over time.\nThe key is exergy: the share of energy a soil can actually put to work, rather than the total energy passing through it. What matters is not how much energy a soil receives, but how well it uses what it has.\nThat changes how soil is perceived. A desert soil can seem “dead”: bare, crusted and pale. Yet with very little rain and energy, it may be doing its jobs remarkably well. Its surface crust holds the ground together and fixes nutrients, it stores water deep where it does not evaporate, and it locks away carbon for thousands of years. A tropical soil under lush forest can look full of life, yet much of that richness sits in the plants, not the soil. Many tropical soil is deeply weathered and hold few nutrients of its own, and clear the forest and that apparent fertility can disappear within a few seasons. Judged against the energy each has available, the desert soil may function for the ecosystem just as well.\nTo capture this, we are bringing mathematics from outside soil science into it, linking how energy moves with how soil organises, functions and recovers. The work spans drylands to the tropics, from the Western United States to the Malawi, with a students leading the charge.\n\n\n\nSossusvlei, Namibia, in September. The pan stays dry for long stretches, but it can fill with water from the ephemeral Tsauchab River, and a desert bloom follows from the seed bank that survives the dry heat.\n\n\nDetails stay under wraps until the work is published.\nFor additional experts in the this field, see about page"
-  },
-  {
-    "objectID": "frost-depth.html",
-    "href": "frost-depth.html",
-    "title": "Frost depth calculator",
-    "section": "",
-    "text": "Español\nIn cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.\nYou need two numbers: the average temperature of your coldest month and of your warmest month. They are in the climate table for your town (on Wikipedia or your weather service). In the mountains, use a station at a similar elevation: temperatures drop about 3.5 °F per 1,000 ft (6.5 °C per 1,000 m) as you go up."
-  },
-  {
-    "objectID": "frost-depth.html#why-frost-depth-varies-so-much",
-    "href": "frost-depth.html#why-frost-depth-varies-so-much",
-    "title": "Frost depth calculator",
-    "section": "Why frost depth varies so much",
-    "text": "Why frost depth varies so much\n\nCold, and how long it lasts. What matters is the freezing index: how far below freezing it is, added up over every day of winter. A long, steady cold freezes deeper than a short, sharp one.\nSnow. A foot of fluffy snow insulates about as well as a couple of inches of foam board. Plowed driveways and shoveled paths lose that blanket and freeze deepest.\nSoil and moisture. Water gives off a lot of heat as it freezes, which slows the frost. Dry gravel and rocky fill freeze much deeper than wet clay.\nWarm ground below. Where summers are warm, the ground stores heat that pushes back against the frost from below."
-  },
-  {
-    "objectID": "frost-depth.html#about-this-estimate",
-    "href": "frost-depth.html#about-this-estimate",
-    "title": "Frost depth calculator",
-    "section": "About this estimate",
-    "text": "About this estimate\nThis uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.\nFor more control (freezing index, density, water content and surface factors), use the frost depth tool for researchers."
-  },
-  {
-    "objectID": "contact.html",
-    "href": "contact.html",
-    "title": "Contact",
-    "section": "",
-    "text": "Email\n WhatsApp\n \nRafikiArdhi LLC\nCarbondale, Colorado, USA\nORCID · LinkedIn · ResearchGate\n\n\n\nGet in touch about\n A quote for a review or project\n How to use one of the tools\n A problem or error in a tool\n Questions about our methods\n Research partnerships and proposals\n Workshops and training\n Home and garden questions\n\n\nContribute to the tools\nOur classification keys and tools are offered in several languages so more people can use them in their own. If you would like to translate or review a tool in your language, or co-develop a new key or tool, we would like to hear from you. Contributors are acknowledged on the tools they help build."
-  },
-  {
-    "objectID": "projects/caribbean-flood.html",
-    "href": "projects/caribbean-flood.html",
-    "title": "Caribbean pedohydrology",
-    "section": "",
-    "text": "The island has never had a soil survey, yet flood models need to know how much water the soil holds and how much runs off. What makes this project different is that uncertainty propagation guides every step: the hydropedological assumptions, the models, and the decisions built on them.\n\n\n\nOur free hydrologic soil group tool applies the standard NRCS rules to a single soil. The project goes further, with no soil survey to start from and uncertainty carried through and informs every step.\n\n\nTry the free tool →"
-  },
-  {
-    "objectID": "projects/steambioafrica.html",
-    "href": "projects/steambioafrica.html",
-    "title": "De-bushing and the soil system",
-    "section": "",
-    "text": "Invasive bush is spreading across Southern African rangelands, choking grazing land and water. Clearing it can restore land, livelihoods and can be used as a source of biofuel for cooking or energy; however, what does it do to the ecosystem we cannot see?\n\n\n\nShade is scarce in encroached bushveld, for people and wildlife alike.\n\n\nAs a research consultant to SLU (the Swedish University of Agricultural Sciences) on SteamBioAfrica, an EU Horizon 2020 project turning invasive woody biomass into products that benefit local communities, we modelled soil carbon dynamics during and after de-bushing and pesticide use in Namibia, Botswana and South Africa.\n\n\n\nCrop residue left on bare soil after clearing: what stays on the surface shapes whats underneath your feet."
-  },
-  {
-    "objectID": "projects/mpumalanga-carbon.html",
-    "href": "projects/mpumalanga-carbon.html",
-    "title": "World Bank carbon credits",
-    "section": "",
-    "text": "Carbon credits depend on knowing how much carbon is in the soil before anything changes. For a World Bank–funded carbon credit programme in Mpumalanga, South Africa, we created the baseline soil carbon stock maps using spatial mixed models, which account for how carbon varies across the landscape and how confident each estimate is.\nThese baselines are the reference that every future change in soil carbon is measured against.\n\n\n\nIllustrative example of soil organic carbon mapped with depth and summed over the whole profile, from separate work. Maps from the World Bank programme are under NDA and not shown."
-  },
-  {
-    "objectID": "projects/soil-resilience.html",
-    "href": "projects/soil-resilience.html",
-    "title": "Soil resilience",
-    "section": "",
-    "text": "Soil is not a random mixture. Soil organises itself over time, using and releasing energy as water, heat and carbon move through, and that organisation is what lets soil absorb shocks and performs many ecosystem services at once. We measure it with thermodynamics rather than by counting soil types: in other words, pedodiversity reflects how a soil dissipates energy relative to what it has available.\n\n\n\nGrassland in recovery along an agroforestry system in Germany, with young trees in guards along the slope.\n\n\nIn the U.S. Southwest, this approach revealed agroecosystem patterns on ancestral and contemporary Indigenous lands, from the Chuska Mountains to the Great Sage Plain and Hopi Land, where generations of land use and soil organisation are written into the landscape. The original preprint focused on this area because of our knowledge of, and closeness to, the land, but it raised more questions than it answered. Humanity’s tie to the land is not unique to this region, and the questions that run from pedodiversity to pedocomplexity can be studied at many scales and with many techniques, for the wellbeing of both ecosystems and people.\n\n\n\nFrom soil states with depth (A), to thermodynamic pedodiversity in three dimensions (B), to pedocomplexity (C): cultural insight and a physics-informed model, working together.\n\n\nPreprint: Thermodynamic pedodiversity patterns reveal agroecosystem patterns in Indigenous lands of the U.S. Southwest"
-  },
-  {
-    "objectID": "rain-garden.html",
-    "href": "rain-garden.html",
-    "title": "Rain garden and dry well calculator",
-    "section": "",
-    "text": "Español\nA rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a drainage test first."
-  },
-  {
-    "objectID": "rain-garden.html#building-a-rain-garden",
-    "href": "rain-garden.html#building-a-rain-garden",
-    "title": "Rain garden and dry well calculator",
-    "section": "Building a rain garden",
-    "text": "Building a rain garden\n\nLocation: a low spot at least 10 ft from the house, where water already heads, but not where it stands for days.\nShape: longer than it is wide, across the slope, with a level bottom so water spreads evenly.\nInlet and overflow: line the inlet with stone so it doesn’t erode, and give the overflow a safe path for storms bigger than the design.\nPlants: wet-tolerant species in the bottom, drought-tolerant ones on the rim. Native plants with deep roots keep the soil open.\nSoil: if your soil drains poorly, mix compost into the bottom, but don’t create a “bathtub” of loose soil in dense clay. An underdrain is the fix for very slow soils."
-  },
-  {
-    "objectID": "lawn-water.html",
-    "href": "lawn-water.html",
-    "title": "Lawn vs low-water landscape: water use calculator",
-    "section": "",
-    "text": "Español\nHow much water does a lawn actually use compared with the alternatives? This estimates a season’s irrigation for the same area planted different ways, from your climate and water price."
-  },
-  {
-    "objectID": "lawn-water.html#how-this-is-worked-out",
-    "href": "lawn-water.html#how-this-is-worked-out",
-    "title": "Lawn vs low-water landscape: water use calculator",
-    "section": "How this is worked out",
-    "text": "How this is worked out\nPlants lose water through their leaves at a rate set mainly by weather: sun, heat, wind and dry air. Weather networks express that as reference evapotranspiration (ETo): what a well-watered grass would use. Each planting uses a share of it: bluegrass close to 80%, buffalograss under half, established low-water shrubs a third or less. Subtract the rain the plants can use, allow for watering that’s never perfectly efficient, and you have the irrigation.\nThe factors used here are typical values for planning. They’re useful for comparing options, not for setting a controller: for that, use the catch-cup test."
-  },
-  {
-    "objectID": "fertilizer-calculator.html",
-    "href": "fertilizer-calculator.html",
-    "title": "Fertilizer label calculator",
-    "section": "",
-    "text": "Español\nThe three numbers on a fertilizer bag (N-P-K) are percentages by weight. A 20 lb bag of 24-0-6 contains 4.8 lb of nitrogen; the rest is the other nutrients and filler. This turns the label into how much product to spread, and shows what you’re really paying per pound of nutrient."
-  },
-  {
-    "objectID": "fertilizer-calculator.html#reading-a-fertilizer-label",
-    "href": "fertilizer-calculator.html#reading-a-fertilizer-label",
-    "title": "Fertilizer label calculator",
-    "section": "Reading a fertilizer label",
-    "text": "Reading a fertilizer label\n\nN (nitrogen) drives green leafy growth. It’s the nutrient lawns need most, and it doesn’t stay in soil long, which is why it’s applied regularly.\nP (phosphate, P₂O₅) supports roots and establishment. The label shows phosphate, not pure phosphorus: elemental P is about 44% of the P₂O₅ number.\nK (potash, K₂O) helps with stress tolerance. Elemental K is about 83% of the K₂O number.\nSlow-release or organic products feed over weeks rather than days. The arithmetic is the same; they’re just gentler.\n\nMore is not better. Extra nitrogen means more mowing, weaker roots and nitrate washing into waterways. A soil test tells you whether you need phosphate or potash at all."
-  },
-  {
-    "objectID": "foundation-grading.html",
-    "href": "foundation-grading.html",
-    "title": "Foundation grading check",
-    "section": "",
-    "text": "Español\nWater pooling against a foundation is one of the most expensive problems a house can have. The common building-code guideline is that ground should fall at least 6 inches over the first 10 feet from the house (about 5%). You can check it in an afternoon.\nHow to measure: drive a stake against the foundation and another 10 ft (3 m) out. Tie a string between them and level it with a line level. At each stake, measure from the string down to the ground. The drop is the outer measurement minus the inner one. Repeat every 10–15 ft along each wall."
-  },
-  {
-    "objectID": "foundation-grading.html#other-signs-of-a-grading-problem",
-    "href": "foundation-grading.html#other-signs-of-a-grading-problem",
-    "title": "Foundation grading check",
-    "section": "Other signs of a grading problem",
-    "text": "Other signs of a grading problem\n\nWater standing next to the foundation after rain or irrigation.\nMulch or soil piled up against the siding, often built up over years.\nDownspouts that empty right at the wall.\nPatios, walks or window wells that have settled so they tip toward the house.\nDamp patches, efflorescence (white crust) or musty smells in a basement or crawlspace.\n\nMost of these are cheap to fix compared with foundation repairs."
+    "text": "Environmental knowledge is about land and the people who live on it. Our projects start with a question someone actually has, build on what is already known, and end with knowledge people can use in their own place and their own language.\nNewest work comes first. Some projects are under non-disclosure agreements, so we describe them only briefly.\n\n\n\n\n\n\n\n\n\n\nSoils in motion\n\n\n\nUpcoming\n\nWater\n\nKnowledge\n\nGlobal\n\n\n\nHow water, heat and energy move through soil, and how soil organises itself around that flow, across global climates.\n\n\n\n\n\n\n\n\n\n\n\n\nCumulative knowledge\n\n\n\nIn progress\n\nKnowledge\n\nSouthern Africa\n\n\n\nEnvironmental knowledge keeps getting reset. We’re building it up instead.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil keys in your language\n\n\n\nIn progress\n\nLanguages\n\nSocio-ecological\n\n\n\nSoil classification in Farsi, Kiswahili and the South African system, with more languages to come.\n\n\n\n\n\n\n\n\n\n\n\n\nCaribbean pedohydrology\n\n\n\nNDA\n\nIn progress\n\nWater\n\nSocio-ecological\n\nCaribbean\n\n\n\nSoil water retention and runoff for flood modelling on an island without a soil survey, guided by uncertainty.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil resilience\n\n\n\nUnder review\n\nKnowledge\n\nSocio-ecological\n\nWestern US\n\nGlobal\n\n\n\nReading how soils organise themselves, and what that says about resilience and the many functions soils perform.\n\n\n\n\n\n\n\n\n\n\n\n\nOur own backyard, Colorado\n\n\n\nHomeowners\n\nWater\n\nWestern US\n\n\n\nDoing it ourselves: gravel, raised beds and drip irrigation, worked out with our own homeowner tools.\n\n\n\n\n\n\n\n\n\n\n\n\nWorld Bank carbon credits\n\n\n\nNDA\n\nCarbon\n\nSouthern Africa\n\n\n\nBaseline soil carbon stock maps for a carbon credit programme in Mpumalanga, South Africa.\n\n\n\n\n\n\n\n\n\n\n\n\nSoils4Africa mapping\n\n\n\nUnder review\n\nKnowledge\n\nSouthern Africa\n\n\n\nIntegrated Soil Profile Mapping (ISPM) reveals regional patterns of soil condition across Southern African agricultural lands.\n\n\n\n\n\n\n\n\n\n\n\n\nDe-bushing and the soil system\n\n\n\nCarbon\n\nWater\n\nSocio-ecological\n\nPartnerships\n\nSouthern Africa\n\n\n\nPredicted how clearing invasive bush and pesticide use changed soil carbon and water across Namibia, Botswana and South Africa.\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "quote-checker.html",
