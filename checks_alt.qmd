@@ -32,7 +32,7 @@ window.CK = {
     ['spat', 'Spatial structure and sampling', 'Do the variogram, the sampling and the map fit together?'],
     ['data', 'Soil data and units', 'Do the numbers follow from the inputs?'],
     ['design', 'Study design and independence', 'Do the observations and validation match the question?'],
-    ['review', 'Study design and statistical reasoning · beta', 'Early-stage checks to help examine methods, assumptions and comparisons.']
+    ['review', 'Study design and statistical reasoning', 'Checks for study design, statistical assumptions and model comparisons.']
   ],
   items: {
     'r2': { g: 'acc', t: 'R², RMSE and SD', d: 'Can the reported R² and RMSE both be true? Are they better than the lab precision allows?', href: 'tools.html#eval/ev-check-cont', where: 'Model evaluation' },
@@ -40,7 +40,7 @@ window.CK = {
     'picp': { g: 'acc', t: 'Honest uncertainty', d: 'Do prediction intervals cover what they claim (PICP)?', href: 'tools.html#eval', where: 'Model evaluation' },
     'area-estimation': { g: 'acc', t: 'Area from a confusion matrix', d: 'Unbiased class areas with confidence intervals, instead of pixel counts.', rel: ['acc', 'spatial-cv', 'pixel-size'] },
     'spatial-cv': { g: 'acc', t: 'Spatial cross-validation and leakage', d: 'Is the validation optimistic? A guided checklist.', rel: ['r2', 'krig', 'effective-sample-size', 'independence'] },
-    'independence': { g: 'design', t: 'Independence and study design', d: 'Are the sampling unit, analysis and validation strategy aligned?', beta: true, rel: ['effective-sample-size', 'spatial-cv', 'detect'] },
+    'independence': { g: 'review', t: 'Independence and study design', d: 'Are the sampling unit, analysis and validation strategy aligned?', beta: true, rel: ['effective-sample-size', 'spatial-cv', 'detect'] },
     'assumptions-check': { g: 'review', t: 'Statistical assumptions check', d: 'Which assumptions matter for this method, and what evidence would help you assess them?', beta: true, rel: ['independence', 'r2', 'effective-sample-size'] },
     'model-comparison': { g: 'review', t: 'Model comparison audit', d: 'Are competing models evaluated on comparable data, scales and metrics?', beta: true, rel: ['spatial-cv', 'r2', 'acc'] },
     'krig': { g: 'spat', t: 'Kriging error vs. variogram', d: 'Is a reported kriging RMSE possible, given the range, nugget and sample spacing?', href: 'tools.html#krige/kr-check', where: 'Variogram & kriging' },
