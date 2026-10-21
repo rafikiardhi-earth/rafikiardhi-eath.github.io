@@ -14,6 +14,14 @@ page-layout: full
 [Use the free tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
 :::
 
+### What we believe
+
+- **Build on what exists.** Old surveys and past projects are worth more than people think. We update knowledge instead of starting over.
+- **Honest uncertainty.** Every answer comes with how far it can be trusted.
+- **No AI, no black boxes.** Our methods follow the processes behind the environment, so every result can be traced and checked.
+- **Science in your own language.** Our tools and keys come in the languages people actually speak, not only English.
+- **Land is shared.** Healthy land includes the animals that live with us.
+
 ::: {.cards}
 ::: {.card-item}
 ### [Homeowners: open science](homeowners.qmd)
@@ -29,14 +37,6 @@ Let your mind explore the scientific landscape, without compromising scientific 
 ![Subsoil texture, temperature and precipitation combined in one colour map of Texas.](images/texas-rgb-card.jpg)
 :::
 :::
-
-## What we believe
-
-- **Build on what exists.** Old surveys and past projects are worth more than people think. We update knowledge instead of starting over.
-- **Honest uncertainty.** Every answer comes with how far it can be trusted.
-- **No AI, no black boxes.** Our methods follow the processes behind the environment, so every result can be traced and checked.
-- **Science in your own language.** Our tools and keys come in the languages people actually speak, not only English.
-- **Land is shared.** Healthy land includes the animals that live with us.
 
 ## How we can help
 
@@ -62,7 +62,26 @@ Workshops from do-it-yourself landscaping to research creativity and validation.
 :::
 :::
 
-## Where we work
+### News and updates
+
+The latest tools, research, translations, and developments from RafikiArdhi.
+
+::: {.cards}
+::: {.card-item}
+![](images/cov-dist-card.png){fig-alt="Covariance Distance Explorer"}
+
+**New tool: Covariance Distance Explorer**
+
+*October 2026 · Research tools*
+
+Explore Mahalanobis and Euclidean distances, inspect covariance structure and check matrix properties using a transparent, interactive tool.
+
+[Explore the tool →](../news-updates/covariance-distance.html)
+:::
+:::
+
+
+### Where we work
 
 [Southern, East and Central Africa · Latin America · United States · Europe. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
 
