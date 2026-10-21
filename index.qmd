@@ -1,6 +1,6 @@
 ---
 title: ""
-pagetitle: "RafikiArdhi — Open science, creative freedom"
+pagetitle: "RafikiArdhi — open science, creative freedom"
 page-layout: full
 ---
 
@@ -9,7 +9,7 @@ page-layout: full
 
 # Your "land friend" for researchers and homeowners
 
-[Practical home and landscape decisions informed by the same scientific principles researchers use, from applying Darcy’s and Jurin’s laws to irrigation design to using calculus to estimate sod quantities for irregular lawns.]{.text-black}
+[Practical home and landscape decisions informed by the same scientific principles researchers use, from applying Darcy’s and Jurin’s laws to irrigation design to using calculus to estimate sod quantities for irregular lawns.]{.lead}
 
 [Use the free tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
 :::
