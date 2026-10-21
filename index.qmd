@@ -68,7 +68,7 @@ The latest tools, research, translations, and developments from RafikiArdhi.
 
 ::: {.cards}
 ::: {.card-item}
-![](images/cov-dist-card.png){fig-alt="Covariance Distance Explorer"}
+![](../images/cov-dist-card.png){fig-alt="Covariance Distance Explorer"}
 
 **New tool: Covariance Distance Explorer**
 
