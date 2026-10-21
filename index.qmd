@@ -67,7 +67,7 @@ Workshops from do-it-yourself landscaping to research creativity and validation.
 [Southern, East and Central Africa · Latin America · United States · Europe. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
 
 ::: {layout="[[1,1],[1,1]]"}
-![Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background."}
+[![Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background."}](africa.qmd)
 
 ![Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance."}
 
