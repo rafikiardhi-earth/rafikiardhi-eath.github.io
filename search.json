@@ -364,95 +364,368 @@
     "text": "Tips\n\nWater deeply, less often. Infrequent, longer runs wet a deeper root zone than daily short ones, and deep roots handle heat better.\nEmitters belong at the edge of the roots, not against the trunk or stem. For trees and shrubs that means moving them outward as the plant grows.\nNew plantings need more frequent water for their first season. Established native and low-water plants often need little or none outside drought.\nCheck the filter and flush the lines each spring. Clogged emitters are the most common reason a drip zone stops working."
   },
   {
-    "objectID": "services-learn.html",
-    "href": "services-learn.html",
-    "title": "Learn: training",
+    "objectID": "privacy.html",
+    "href": "privacy.html",
+    "title": "Privacy",
     "section": "",
-    "text": "Workshops tailored to the group, from homeowners and field teams to research students, and available in several languages.\nOur workshops draw on experience teaching at university and presenting at international conferences, work that later won Best Paper in the South African Journal of Plant and Soil.\n\n\nSoil classification\nDescribing and classifying soils in the field with WRB and national systems, using our free classification keys.\n\n\nDo-it-yourself landscaping\nPut our homeowner tools together and make home gardening both fun and scientific, without the stress.\n\n\nResearch creativity\nThink outside the box while keeping scientific rigour, to solve complex environmental challenges.\n\n\nResearch validation\nQuantifying, propagating, communicating and visualising scientific results for every audience, from your mother to the neighbour who doesn’t speak your language.\n\n\nPlan a workshop →"
+    "text": "Last updated: October 2026\nThe short version: our tools run entirely in your browser and store nothing; we use Google Analytics to count visits; we don’t have accounts, don’t sell anything about you, and don’t show ads."
   },
   {
-    "objectID": "should-i-amend.html",
-    "href": "should-i-amend.html",
-    "title": "Should I amend my soil?",
+    "objectID": "privacy.html#the-tools",
+    "href": "privacy.html#the-tools",
+    "title": "Privacy",
+    "section": "The tools",
+    "text": "The tools\nOur tools run entirely in your web browser. When you open a file, it is read and processed on your own computer, and results are saved directly back to it. No data is transmitted to RafikiArdhi or any third party, and nothing is stored on our servers. We don’t have a database. That makes the tools safe for confidential data, unpublished results and manuscripts under review.\n\nShare links. Some tools put your inputs into the page address so that “Copy link” can recreate your calculation. That address stays in your browser unless you choose to share it.\nYour units. If you switch between US and metric units, your browser remembers the choice on your device. We never see it.\nCheck it yourself. Once a tool page has loaded, disconnect from the internet. The tool still works, because nothing it does depends on our servers."
+  },
+  {
+    "objectID": "privacy.html#visit-statistics",
+    "href": "privacy.html#visit-statistics",
+    "title": "Privacy",
+    "section": "Visit statistics",
+    "text": "Visit statistics\nWe use Google Analytics to understand how the site is used: which pages are visited, how people find us (for example from a search engine or another website), and roughly where visitors are and what devices they use. This helps us decide which tools to improve or build next.\n\nGoogle Analytics uses cookies and collects information such as the pages you view, your browser and device type, the website that referred you, and your approximate location (city or country level).\nOur site analytics record only page visits, never the contents of files or anything you enter into a tool. We have configured Google Analytics not to record the share-link part of page addresses.\nWe can’t see who you are. We only see totals and trends.\nGoogle processes this data under its own privacy policy: policies.google.com/privacy. You can see how Google uses data from sites that use its services at policies.google.com/technologies/partner-sites.\n\nTo opt out, you can block cookies in your browser settings, use a browser or extension that blocks trackers, or install Google’s Analytics opt-out add-on. The site and all the tools work exactly the same without them."
+  },
+  {
+    "objectID": "privacy.html#if-you-contact-us",
+    "href": "privacy.html#if-you-contact-us",
+    "title": "Privacy",
+    "section": "If you contact us",
+    "text": "If you contact us\nIf you email us, we use your name, address and message only to reply and to carry out any work you ask us for. We don’t add you to mailing lists or share your details."
+  },
+  {
+    "objectID": "privacy.html#client-projects",
+    "href": "privacy.html#client-projects",
+    "title": "Privacy",
+    "section": "Client projects",
+    "text": "Client projects\nData from paid projects is handled under the agreement for that project. It stays confidential, and results funded by a client are published only with their agreement."
+  },
+  {
+    "objectID": "privacy.html#children",
+    "href": "privacy.html#children",
+    "title": "Privacy",
+    "section": "Children",
+    "text": "Children\nThis site isn’t aimed at children, and we don’t knowingly collect information from them."
+  },
+  {
+    "objectID": "privacy.html#changes",
+    "href": "privacy.html#changes",
+    "title": "Privacy",
+    "section": "Changes",
+    "text": "Changes\nIf we change how the site handles information, we’ll update this page and the date at the top."
+  },
+  {
+    "objectID": "privacy.html#contact",
+    "href": "privacy.html#contact",
+    "title": "Privacy",
+    "section": "Contact",
+    "text": "Contact\nRafikiArdhi LLC, Carbondale, Colorado, USA. Questions about privacy are welcome through our contact page."
+  },
+  {
+    "objectID": "services-partner.html",
+    "href": "services-partner.html",
+    "title": "Partner: research collaboration",
     "section": "",
-    "text": "Español\nCompost and topsoil are useful, but a lot of money goes on amendments that don’t help, or make things worse. Answer a few questions and this tells you what’s worth doing for what you’re planting."
+    "text": "For research groups and projects that need analytical depth over months rather than weeks.\n\n\nAnalytical partnerships\nOngoing methods, analysis and modelling support for research groups and projects, with co-authorship where the contribution warrants it.\n\n\nMethods lead on proposals\nWriting the methods and analysis sections of a proposal, with RafikiArdhi named in the team and budget as the analytical partner.\n\n\nDiscuss a partnership →"
   },
   {
-    "objectID": "should-i-amend.html#the-short-version",
-    "href": "should-i-amend.html#the-short-version",
-    "title": "Should I amend my soil?",
-    "section": "The short version",
-    "text": "The short version\n\nTrees: never amend the planting hole. Wide hole, native soil, mulch.\nNative and low-water plants: usually nothing. Rich soil works against them.\nVegetables: yes, compost every year.\nLawns: improve the soil before seeding. On an existing lawn, aerate and top-dress lightly.\nClay: compost helps; a little sand makes it worse.\nStanding water: a drainage problem, not a soil-quality one."
-  },
-  {
-    "objectID": "services-review.html",
-    "href": "services-review.html",
-    "title": "Review: independent third-party assessment",
+    "objectID": "compost-mix.html",
+    "href": "compost-mix.html",
+    "title": "Compost mix calculator (greens and browns)",
     "section": "",
-    "text": "A check by someone with no stake in the outcome, before you submit, publish or act. Each review has a fixed scope and price agreed in advance, and you receive written comments you can act on.\n\n\nGrant proposals\nPre-submission review of aims, methods and feasibility, and whether the budget matches the work.\n\n\nResearch and sampling design\nSample size, spatial layout, statistical power, and whether the design can answer the question being asked.\n\n\nModels\nStatistical, geostatistical and process models: assumptions, validation, overfitting and data leakage, and how uncertainty is handled.\n\n\nData\nQuality, gaps, harmonisation problems, and whether the data supports the claims made from it.\n\n\nReports and manuscripts\nPre-submission review of the analysis and the inference drawn from it.\n\n\nConsultant deliverables\nA check of a study you have paid for, such as a flood, soil or site assessment, before you act on it. Short second opinions are available for homeowners as well.\n\n\n\nWe only review work for the people who own it: applicants, authors or clients. We don’t take paid reviews of proposals or manuscripts we are assessing for a funder or journal, and everything you share stays confidential.\n\nRequest a review →"
+    "text": "Español\nA compost pile works fastest at a carbon-to-nitrogen (C:N) ratio of about 25–35 and moisture like a wrung-out sponge. Too much nitrogen (greens) and it smells; too much carbon (browns) and it barely heats up. Enter what you’re adding, by the bucket or any equal measure."
   },
   {
-    "objectID": "construction-soil-check.html",
-    "href": "construction-soil-check.html",
-    "title": "New-build yard soil check",
+    "objectID": "compost-mix.html#greens-and-browns",
+    "href": "compost-mix.html#greens-and-browns",
+    "title": "Compost mix calculator (greens and browns)",
+    "section": "Greens and browns",
+    "text": "Greens and browns\n\nGreens (nitrogen-rich, usually wet): grass clippings, kitchen scraps, coffee grounds, fresh garden plants, manure.\nBrowns (carbon-rich, usually dry): dry leaves, straw, wood chips, sawdust, cardboard, newspaper.\n\nNote that “parts” are by volume, and materials differ a lot in weight: a bucket of grass clippings weighs several times a bucket of dry leaves. That’s why roughly 2–3 buckets of browns to 1 of greens often balances.\nKeep out: meat, dairy and oily food (attract pests), pet and human waste, diseased plants, weeds with seeds (unless your pile gets hot), and anything treated with herbicide. Some herbicides survive composting and damage vegetables."
+  },
+  {
+    "objectID": "soil-keys-fa.html",
+    "href": "soil-keys-fa.html",
+    "title": "کلید رده‌بندی خاک WRB",
     "section": "",
-    "text": "Español\nOn many new-build lots, the topsoil is scraped off during construction, the subsoil is compacted by heavy machinery, and a thin layer of soil is spread back on top before the sod goes down. Lawns and plants then struggle for years. A few simple checks show whether that’s what happened.\nYou’ll need: a shovel, a long screwdriver, and moist (not soggy) soil, a day or two after rain or watering."
+    "text": "The Farsi key has moved to the soil classification keys (choose فارسی in the language list)."
   },
   {
-    "objectID": "construction-soil-check.html#why-this-matters",
-    "href": "construction-soil-check.html#why-this-matters",
-    "title": "New-build yard soil check",
-    "section": "Why this matters",
-    "text": "Why this matters\nTopsoil is the layer where roots, water and soil life do most of their work. Subsoil compacted by trucks and graders can be as dense as a road base: roots can’t enter it and water can’t drain through it. Sod laid on a thin layer over it looks fine for a season, then thins out, browns in summer and floods after storms.\nFixing it costs far less before planting than after, so check before you invest in landscaping."
-  },
-  {
-    "objectID": "about.html",
-    "href": "about.html",
-    "title": "About",
+    "objectID": "soil-keys.html",
+    "href": "soil-keys.html",
+    "title": "Soil classification keys",
     "section": "",
-    "text": "RafikiArdhi is an independent environmental research company built on one idea: science should stay open. We publish what we produce, turn validated methods into free tools, and fund that work through the projects we take on."
+    "text": "WRB 2022 (international)\n  South Africa (2018)\n\n\n\n\n\n\n\n\n\n  No AI. No machine learning.\n  The keys follow the published classification criteria step by step, the way you would key out a soil in the field. The same profile always gives the same answer, and you can see exactly which criterion led there, in every language the key is offered in.\n  Language and criteria grow together. We add languages as we refine the criteria, working with soil scientists who speak them, because the language matters as much as the logic: a key is only useful if people can read it in their own words. Want to help translate or review a key? →\n\n\n\n  \n    Beta Learning and screening aid\n    \n      EnglishفارسیKiswahili\n      Start over\n    \n  \n  \n  \n  ← Back to Tools\n    Beta learning aid. It does not replace the WRB text or a qualified soil scientist.\n    Source: IUSS Working Group WRB (2022). World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria. wrb.isric.org\n    Classifying from data in R: Rodrigues, H. (2026). soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13. R package version 0.9.259. doi:10.5281/zenodo.19930112 · GitHub\n\n\n\n\n\n\n\n  این کلید گام‌به‌گام شما را به گروه مرجع خاک (Reference Soil Group) در سامانهٔ جهانی رده‌بندی خاک WRB 2022 می‌رساند. نام گروه‌ها و توصیفگرها، همان‌گونه که در WRB آمده، به انگلیسی نوشته شده و معادل فارسی آن‌ها در پرانتز آمده است. همهٔ محاسبات روی دستگاه شما انجام می‌شود و هیچ داده‌ای فرستاده یا ذخیره نمی‌شود.\n\n\n\n  \n    آزمایشی ابزار آموزشی و غربالگری\n    \n      EnglishفارسیKiswahili\n      شروع دوباره\n    \n  \n  \n  \n  → بازگشت به ابزارها\n    آزمایشی: ابزار آموزشی است و جایگزین متن WRB یا متخصص خاک نیست.\n    منبع: IUSS Working Group WRB (2022). World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria. wrb.isric.org\n    رده‌بندی از روی داده‌ها در R: Rodrigues, H. (2026). soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13. R package version 0.9.259. doi:10.5281/zenodo.19930112 · GitHub\n\n\n\n\n\n\n\n  Ufunguo huu wa hatua kwa hatua unakufikisha kwenye Kundi la Rejea la Udongo (Reference Soil Group) katika mfumo wa kimataifa wa uainishaji wa udongo, WRB 2022. Majina ya makundi na viainishi yameandikwa kwa Kiingereza kama yalivyo katika WRB, na maelezo mafupi ya Kiswahili ndani ya mabano. Hesabu zote zinafanyika kwenye kifaa chako, na hakuna data inayotumwa wala kuhifadhiwa.\n\n\n\n  \n    Majaribio Zana ya kujifunzia na uchunguzi wa awali\n    \n      EnglishفارسیKiswahili\n      Anza upya\n    \n  \n  \n  \n  ← Rudi kwenye Zana\n    Majaribio: ni zana ya kujifunzia. Haichukui nafasi ya maandiko ya WRB wala mtaalamu wa udongo.\n    Chanzo: IUSS Working Group WRB (2022). World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria. wrb.isric.org\n    Kuainisha kutoka data katika R: Rodrigues, H. (2026). soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13. R package version 0.9.259. doi:10.5281/zenodo.19930112 · GitHub\n\n\n\n\n\n\n\n\n\n\n\n\n  \n    Beta Learning and field aid\n    \n      EnglishAfrikaansisiZulu\n      Start over\n    \n  \n  Afrikaanse vertaling (beta). Vormname bly soos in die boek, en die beskrywing- en CSV-invoer word in Engels gelees. Terugvoer is welkom: tflynn@rafikiardhi.earth.\n  Ukuhumusha kwesiZulu (beta, kudinga ukubuyekezwa yisikhulumi somdabu). Amagama ezinhlobo nezendlalelo ahlala njengoba enjalo encwadini (ngesiNgisi), futhi incazelo nokufaka kwe-CSV kufundwa ngesiNgisi. Imibono yamukelekile: tflynn@rafikiardhi.earth.\n  \n  ← Back to Tools\n    Beta learning aid, not affiliated with or endorsed by the ARC. It does not replace the book or a qualified soil scientist.\n    Source: Soil Classification Working Group (2018). Soil Classification: A Natural and Anthropogenic System for South Africa. ARC-Institute for Soil, Climate and Water, Pretoria.\n    Official app: Digital Soil Classification (ARC, Android)"
   },
   {
-    "objectID": "about.html#open-by-design",
-    "href": "about.html#open-by-design",
-    "title": "About",
-    "section": "Open by design",
-    "text": "Open by design\n\n\nWe publish what we produce\nOur methods go through peer review and into the scientific literature, with the details needed to reproduce them. Results that shape decisions should be open to scrutiny.\n\n\nFree tools\nValidated methods become free tools that anyone can use in a browser from the home gardener to the peer reviewer. They run on your own device, so your data never leaves it.\n\n\nPaid work funds open work\nProjects, advanced analyses and custom development pay for the research. As methods are proven, and agreements allow, they are released openly.\n\n\nCredit where it is due\nWe build on other people’s work and cite it clearly: the methods, data and classification systems our tools rely on."
+    "objectID": "quote-checker.html",
+    "href": "quote-checker.html",
+    "title": "Landscape quote checker",
+    "section": "",
+    "text": "Español\nEnter your area, the depth you want, and up to three quotes. The checker shows the depth each quote would actually cover, whether it’s more (or less) than you need, and the price per unit, so quotes in yards, tons and bags can be compared fairly."
   },
   {
-    "objectID": "about.html#how-a-method-becomes-open",
-    "href": "about.html#how-a-method-becomes-open",
-    "title": "About",
-    "section": "How a method becomes open",
-    "text": "How a method becomes open\n\nSolve. We take on environmental problems that existing methods handle poorly.\nValidate. The method is tested against independent data and published.\nRelease. A simplified, well-documented version becomes a free tool.\nSupport. The full system method, applied to your data and question, is available as a project."
+    "objectID": "quote-checker.html#yards-and-tons-converter",
+    "href": "quote-checker.html#yards-and-tons-converter",
+    "title": "Landscape quote checker",
+    "section": "Yards and tons converter",
+    "text": "Yards and tons converter\nSoil and mulch are usually sold by the cubic yard; stone, gravel and sand by the ton. This converts between them, and shows what an amount will cover."
   },
   {
-    "objectID": "about.html#what-is-free-and-what-is-a-project",
-    "href": "about.html#what-is-free-and-what-is-a-project",
-    "title": "About",
-    "section": "What is free, and what is a project",
-    "text": "What is free, and what is a project\n\n\nAlways free\nPublished methods and open-access papers, the online tools, their documentation and the references behind them.\n\n\nProjects\nAdvanced and continuous versions of the tools, analysis of your data, custom development and training. Client data stays confidential, and client-funded results are never published without an agreement."
+    "objectID": "quote-checker.html#why-quotes-are-hard-to-compare",
+    "href": "quote-checker.html#why-quotes-are-hard-to-compare",
+    "title": "Landscape quote checker",
+    "section": "Why quotes are hard to compare",
+    "text": "Why quotes are hard to compare\n\nYards vs tons. A cubic yard of mulch weighs a few hundred pounds; a cubic yard of gravel weighs well over a ton. A price per ton and a price per yard can’t be compared unless you know what the material weighs. The checker converts using typical weights; ask the supplier for theirs.\nDelivery. A delivery fee spread over a small load makes the price per unit look high. Compare quotes for the same quantity.\nExtra for settling. Loose material settles after spreading, so a fair quote includes a little more than the measured volume, usually 5–25% depending on the material. A quote for double what you need is not “a little extra”.\nBags. Bag sizes vary (1, 1.5, 2 or 3 cubic feet). Check the bag size before comparing bag prices.\n\nUse the materials calculator to work out exactly how much you need for an odd-shaped area."
   },
   {
-    "objectID": "about.html#approach",
-    "href": "about.html#approach",
-    "title": "About",
-    "section": "Approach",
-    "text": "Approach\nWe build on existing knowledge rather than replacing it. Every map and piece of information is updated, not reset; every estimate propagates its uncertainty; and every result is explained in terms the decision maker can use.\nWe do not use AI to replace human expertise. Where others reach for black-box AI, we use “glass box” functions: methods that are easy to interpret, scale to large problems, and are benchmarked against AI models."
+    "objectID": "projects.html",
+    "href": "projects.html",
+    "title": "Projects",
+    "section": "",
+    "text": "Environmental knowledge is about land and the people who live on it. Our projects start with a question someone actually has, build on what is already known, and end with knowledge people can use in their own place and their own language.\nNewest work comes first. Some projects are under non-disclosure agreements, so we describe them only briefly.\n\n\n\n\n\n\n\n\n\n\nSoils in motion\n\n\n\nUpcoming\n\nWater\n\nKnowledge\n\nGlobal\n\n\n\nHow water, heat and energy move through soil, and how soil organises itself around that flow, across global climates.\n\n\n\n\n\n\n\n\n\n\n\n\nCumulative knowledge\n\n\n\nIn progress\n\nKnowledge\n\nSouthern Africa\n\n\n\nEnvironmental knowledge keeps getting reset. We’re building it up instead.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil keys in your language\n\n\n\nIn progress\n\nLanguages\n\nSocio-ecological\n\n\n\nSoil classification in Farsi, Kiswahili and the South African system, with more languages to come.\n\n\n\n\n\n\n\n\n\n\n\n\nCaribbean pedohydrology\n\n\n\nNDA\n\nIn progress\n\nWater\n\nSocio-ecological\n\nCaribbean\n\n\n\nSoil water retention and runoff for flood modelling on an island without a soil survey, guided by uncertainty.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil resilience\n\n\n\nUnder review\n\nKnowledge\n\nSocio-ecological\n\nWestern US\n\nGlobal\n\n\n\nReading how soils organise themselves, and what that says about resilience and the many functions soils perform.\n\n\n\n\n\n\n\n\n\n\n\n\nOur own backyard, Colorado\n\n\n\nHomeowners\n\nWater\n\nWestern US\n\n\n\nDoing it ourselves: gravel, raised beds and drip irrigation, worked out with our own homeowner tools.\n\n\n\n\n\n\n\n\n\n\n\n\nWorld Bank carbon credits\n\n\n\nNDA\n\nCarbon\n\nSouthern Africa\n\n\n\nBaseline soil carbon stock maps for a carbon credit programme in Mpumalanga, South Africa.\n\n\n\n\n\n\n\n\n\n\n\n\nSoils4Africa mapping\n\n\n\nUnder review\n\nKnowledge\n\nSouthern Africa\n\n\n\nIntegrated Soil Profile Mapping (ISPM) reveals regional patterns of soil condition across Southern African agricultural lands.\n\n\n\n\n\n\n\n\n\n\n\n\nDe-bushing and the soil system\n\n\n\nCarbon\n\nWater\n\nSocio-ecological\n\nPartnerships\n\nSouthern Africa\n\n\n\nPredicted how clearing invasive bush and pesticide use changed soil carbon and water across Namibia, Botswana and South Africa.\n\n\n\n\n\nNo matching items"
   },
   {
-    "objectID": "about.html#contibutor-and-acknowledgements",
-    "href": "about.html#contibutor-and-acknowledgements",
-    "title": "About",
-    "section": "Contibutor and acknowledgements",
-    "text": "Contibutor and acknowledgements\nThe free tools on this site developed with co-authors, improved by people who tested them, checked the methods and suggested changes.\n\nRosana Kostecki, PhD (Profile). Soil Consultoria Socioambiental (Soil Socio-Environmental Consulting), Londrina, Paraná, Brazil\nZahra Rasaei, PhD (Profile). Faculty of Agriculture, The University of Birjand, South Khorasan, Iran\nSara Merzoug (Profile). Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco\n\nAny remaining errors are ours. Found one, or want to suggest a tool? Get in touch."
+    "objectID": "diy-soil-tests.html",
+    "href": "diy-soil-tests.html",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "",
+    "text": "Español\nThree simple tests tell you most of what matters about your soil: what it’s made of (texture) and how fast water moves through it (drainage). Texture decides how often to water, how fast water soaks in, and how the soil behaves when you dig."
   },
   {
-    "objectID": "about.html#the-name",
-    "href": "about.html#the-name",
-    "title": "About",
-    "section": "The name",
-    "text": "The name\nRafiki ardhi is Kiswahili for “Land friend”.\nTry the tools  Get in touch\n\nFounded by Trevan Flynn, PhD, soil scientist. See Research for the published research behind our methods."
+    "objectID": "diy-soil-tests.html#jar-test-texture",
+    "href": "diy-soil-tests.html#jar-test-texture",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "Jar test (texture)",
+    "text": "Jar test (texture)\n\nFill a straight-sided jar about one-third with soil from root depth (pick out stones, roots and debris).\nAdd water until the jar is about two-thirds full, plus a teaspoon of dishwasher detergent or salt-free water softener to separate the particles.\nShake hard for 3–5 minutes, then set it down and start a timer.\nAfter 1 minute, mark the height of the settled layer: that’s the sand.\nAfter 2 hours, mark the height again: sand plus silt.\nAfter 2 days (when the water clears), mark the final height: everything, including clay."
+  },
+  {
+    "objectID": "diy-soil-tests.html#ribbon-test-texture-by-feel",
+    "href": "diy-soil-tests.html#ribbon-test-texture-by-feel",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "Ribbon test (texture by feel)",
+    "text": "Ribbon test (texture by feel)\nTake a walnut-sized lump of soil, wet it until it’s like putty, and work it in your hand. Then press it between your thumb and finger, pushing it up into a ribbon until it breaks under its own weight."
+  },
+  {
+    "objectID": "diy-soil-tests.html#drainage-percolation-test",
+    "href": "diy-soil-tests.html#drainage-percolation-test",
+    "title": "DIY soil tests: texture, drainage and the ribbon test",
+    "section": "Drainage (percolation) test",
+    "text": "Drainage (percolation) test\n\nDig a hole about 12 in (30 cm) deep and 6–12 in wide.\nFill it with water and let it drain completely. This wets the surrounding soil; skip it and the result will be too fast.\nFill it again. Measure the water depth, wait a set time (an hour is easy), and measure again.\n\n\n\nIf the hole still holds water the next day, test again somewhere else and dig deeper to look for a dense or cemented layer. Drainage problems are usually about a layer below, not the soil you plant in."
+  },
+  {
+    "objectID": "planter-soil.html",
+    "href": "planter-soil.html",
+    "title": "Raised bed and planter soil calculator",
+    "section": "",
+    "text": "Español\nFilling raised beds and big planters takes more soil than most people expect, and bags add up fast. This works out the volume for beds, round pots and tree planters, and shows how to cut the cost of deep beds."
+  },
+  {
+    "objectID": "planter-soil.html#tips-for-filling-beds",
+    "href": "planter-soil.html#tips-for-filling-beds",
+    "title": "Raised bed and planter soil calculator",
+    "section": "Tips for filling beds",
+    "text": "Tips for filling beds\n\nA raised bed 4 × 8 ft and 12 in deep holds about 1.2 cubic yards (32 ft³) once settled. That’s over 20 bags of 1.5 ft³.\nFill in layers and water each one so the soil settles before you plant.\nTop up each spring. Beds sink as organic matter breaks down; an inch or two of compost each year keeps them full.\nAvoid treated wood scraps as filler, and anything painted or glued."
+  },
+  {
+    "objectID": "planter-soil.html#pots-and-potting-mix",
+    "href": "planter-soil.html#pots-and-potting-mix",
+    "title": "Raised bed and planter soil calculator",
+    "section": "Pots and potting mix",
+    "text": "Pots and potting mix\n\nPotting mix is sold in quarts or cubic feet in the US (8 qt, 16 qt, 1–2 cu ft) and in litres elsewhere. One cubic foot is about 26 quarts or 28 litres.\nNursery “gallon” sizes are trade sizes, not measurements. A #1 (“1-gallon”) pot holds about 3 quarts; a #5 holds about 4 gallons.\nUse potting mix, not garden soil, in pots. Garden soil packs down in containers and stays waterlogged at the bottom."
+  },
+  {
+    "objectID": "services.html",
+    "href": "services.html",
+    "title": "Services",
+    "section": "",
+    "text": "The tools on this site are free. What we charge for is the thinking behind them: working out what a question really needs, building methods where none exist, and checking that conclusions hold up.\nFor homeowners, we bring actual science to everyday decisions about soil, water and gardens, so you’re not guessing or relying on a sales pitch. For researchers, we bring creativity: new angles on hard problems, without giving up rigour. Either way, some questions don’t have an off-the-shelf answer, and that’s where we start."
+  },
+  {
+    "objectID": "services.html#why-be-creative-in-science",
+    "href": "services.html#why-be-creative-in-science",
+    "title": "Services",
+    "section": "Why be creative in science?",
+    "text": "Why be creative in science?\nAn example{.text-muted}\nThe problem. Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.\nThe insight. Soil isn’t layered like a spreadsheet. It forms as one connected profile, so a map should reflect this information.\nThe result. Every pixel now holds a continuous, physically consistent profile. Properties can be read at any depth or totalled over the whole profile, and moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon: maps at six standard depths (left) and the whole-profile total (right).\n\n\nDiscuss a project →"
+  },
+  {
+    "objectID": "homeowners.html",
+    "href": "homeowners.html",
+    "title": "Homeowners",
+    "section": "",
+    "text": "Español\nFree tools for your yard and garden, built by soil scientists. Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions with the working shown.\nNo ads, no sign-up, and no supplier pays to be listed. Every tool shows how its numbers are calculated, so you can check them yourself."
+  },
+  {
+    "objectID": "homeowners.html#buying-materials",
+    "href": "homeowners.html#buying-materials",
+    "title": "Homeowners",
+    "section": "Buying materials",
+    "text": "Buying materials\n\n\nLandscape materials calculator\nHow much topsoil, compost, mulch, gravel, road base, sand, sod or grass seed to order, for any shape of yard, in yards, tons, bags or pallets.\n\n\nQuote checker\nSee what depth a quote really covers, whether it’s more than you need, and the price per yard and per ton. Includes a yards-to-tons converter.\n\n\nRaised bed and planter soil\nSoil for raised beds, pots and planters, how to fill deep beds for less, and how much soil a tree needs.\n\n\nFertilizer label calculator\nTurn the N-P-K numbers into how much to spread, and compare the real cost per pound of nutrient."
+  },
+  {
+    "objectID": "homeowners.html#watering",
+    "href": "homeowners.html#watering",
+    "title": "Homeowners",
+    "section": "Watering",
+    "text": "Watering\n\n\nSprinkler catch-cup test\nMeasure what each zone really puts down, and how evenly, to set run times.\n\n\nCycle-and-soak scheduler\nStop runoff on clay and slopes by splitting watering into short cycles.\n\n\nDrip irrigation calculator\nRun times and emitters per plant, and whether the zone can supply them.\n\n\nLawn vs low-water landscape\nCompare a season’s water use and cost for lawns, low-water plantings and mulch.\n\n\nRain barrel calculator\nHow much your roof collects per storm and per year, and how fast a barrel fills."
+  },
+  {
+    "objectID": "homeowners.html#your-soil",
+    "href": "homeowners.html#your-soil",
+    "title": "Homeowners",
+    "section": "Your soil",
+    "text": "Your soil\n\n\nSoil test translator\nA lab report in plain English: what to do, and what you don’t need to buy.\n\n\nShould I amend my soil?\nCheck before you buy compost, topsoil or sand, for what you’re planting.\n\n\nDIY soil tests\nJar, ribbon and drainage tests: find your texture and how fast your soil drains.\n\n\nSoil pH: lime and sulfur\nHow much to raise or lower pH, and when lowering it isn’t realistic.\n\n\nCompost mix calculator\nBalance greens and browns, and fix a smelly or slow pile."
+  },
+  {
+    "objectID": "homeowners.html#drainage-building-and-trees",
+    "href": "homeowners.html#drainage-building-and-trees",
+    "title": "Homeowners",
+    "section": "Drainage, building and trees",
+    "text": "Drainage, building and trees\n\n\nFoundation grading check\nDoes the ground slope away from your house enough, and how much fill to fix it.\n\n\nRain garden and dry well\nSize a rain garden or dry well from your roof area and how fast your soil drains.\n\n\nNew-build yard soil check\nFind out if construction left you thin topsoil over compacted subsoil, and what to ask your builder.\n\n\nFrost depth\nHow deep the ground freezes where you live, for water lines, footings and fence posts.\n\n\nTree protection zone\nHow much space to fence off around a tree before construction or digging.\n\n\n\nWorking professionally? See our scientific tools for soil classification, profile modelling and more."
+  },
+  {
+    "objectID": "projects/cumulative-knowledge.html",
+    "href": "projects/cumulative-knowledge.html",
+    "title": "Cumulative knowledge",
+    "section": "",
+    "text": "Environmental knowledge keeps getting reset. A new survey, a new map or a new project arrives, and the last one is quietly replaced, along with everything it cost and everything it knew.\nWe’re working on the opposite: updating what is known as new data arrives, so that knowledge accumulates and uncertainty falls with each round instead of starting over. In Limpopo, South Africa, a continental soil survey is used to update regional soil fertility maps into domains that support land-use decisions.\n\n\n\nSoil fertility domains across Limpopo Province, South Africa, ordered from lowest (1) to highest (9) fertility, from updating a regional map with a continental survey.\n\n\nThe method is an updated version of our ISPM digital soil mapping framework, built on the idea that the whole is greater than the sum of its parts. The updating is physics-based: it obeys the laws of thermodynamics and is solved exactly with calculus, rather than learned by AI. Every update can be traced, checked and explained, and the knowledge it adds is never lost to a black box.\n(Manuscript under production)"
+  },
+  {
+    "objectID": "projects/home-garden.html",
+    "href": "projects/home-garden.html",
+    "title": "Our own backyard, Colorado",
+    "section": "",
+    "text": "We test our homeowner tools where it matters most to us: at home.\nThe yard had a compacted, uneven surface, patchy drainage, an irregular shape that made the area easy to misjudge, and a 1 m drop along the left fence line, where the fence and part of the yard were slowly slumping into the neighbour’s property.\nWe turned the lawn edges and bare ground into gravel paths, raised beds and drip irrigation, working out every quantity of soil, mulch and gravel first with the same free calculators on our Homeowners page.\n\n\n\nBefore and after: bare ground and lawn edges turned into gravel beds and a raised garden bed.\n\n\n\n\n\nThe legal boss and professional hole digger checks the new raised bed. The wet circles show where each drip emitter waters the soil."
+  },
+  {
+    "objectID": "projects/southern-africa-depth.html",
+    "href": "projects/southern-africa-depth.html",
+    "title": "Soils4Africa mapping",
+    "section": "",
+    "text": "Soil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary. The research formed part of Soils4Africa, an EU Horizon 2020 project building an open-data Soil Information System to help farmers, agri-businesses, scientists and policymakers by improving the quality and availability of African soil data.\n\n\n\nAgricultural land across the study area in Namibia, South Africa, Lesotho and Eswatini.\n\n\nSampling was sparse, only two horizons were sampled per profile, and the environmental gradients were extreme, so we developed a new method for the project: Integrated Soil Profile Mapping (ISPM). It builds on our earlier physics-informed depth spline (phySpline) and is now being extended to update existing soil maps and support decisions. See Cumulative knowledge.\n\n\n\n\n\n\nHumid highlands: eSwatini, near Sheba Rock.\n\n\n\n\n\n\n\nSavanna: a storm over a dry sand river in Kruger.\n\n\n\n\n\n\n\nDesert: dunes of the Namib. Soil organic carbon, organisms and water are present under the surface.\n\n\n\n\n\n\n\n\nTexture profiles in Malawi drawn as continuous curves with depth, beside the site’s climate and elevation (Flynn et al., 2026).\n\n\nPreprint: Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands"
+  },
+  {
+    "objectID": "projects/multilingual-keys.html",
+    "href": "projects/multilingual-keys.html",
+    "title": "Soil keys in your language",
+    "section": "",
+    "text": "Soil classification keys in Farsi, Kiswahili and the South African system, built with soil scientists who speak those languages. Language matters as much as the logic: a key is only useful if people can read it in their own words.\nTry the keys →"
+  },
+  {
+    "objectID": "projects/soils-in-motion.html",
+    "href": "projects/soils-in-motion.html",
+    "title": "Soils in motion",
+    "section": "",
+    "text": "A dry sand river as a storm builds. Within hours the same channel can carry water.\n\n\nMost soil science treats soil as something that sits still. We are treating it as a system in motion: water moving through it in drought and in flood, heat and energy flowing with it, and the soil organising itself around that flow over time.\nThe key is exergy: the share of energy a soil can actually put to work, rather than the total energy passing through it. What matters is not how much energy a soil receives, but how well it uses what it has.\nThat changes how soil is perceived. A desert soil can seem “dead”: bare, crusted and pale. Yet with very little rain and energy, it may be doing its jobs remarkably well. Its surface crust holds the ground together and fixes nutrients, it stores water deep where it does not evaporate, and it locks away carbon for thousands of years. A tropical soil under lush forest can look full of life, yet much of that richness sits in the plants, not the soil. Many tropical soil is deeply weathered and hold few nutrients of its own, and clear the forest and that apparent fertility can disappear within a few seasons. Judged against the energy each has available, the desert soil may function for the ecosystem just as well.\nTo capture this, we are bringing mathematics from outside soil science into it, linking how energy moves with how soil organises, functions and recovers. The work spans drylands to the tropics, from the Western United States to the Malawi, with a students leading the charge.\n\n\n\nSossusvlei, Namibia, in September. The pan stays dry for long stretches, but it can fill with water from the ephemeral Tsauchab River, and a desert bloom follows from the seed bank that survives the dry heat.\n\n\nDetails stay under wraps until the work is published.\nFor additional experts in the this field, see about page"
+  },
+  {
+    "objectID": "frost-depth.html",
+    "href": "frost-depth.html",
+    "title": "Frost depth calculator",
+    "section": "",
+    "text": "Español\nIn cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.\nYou need two numbers: the average temperature of your coldest month and of your warmest month. They are in the climate table for your town (on Wikipedia or your weather service). In the mountains, use a station at a similar elevation: temperatures drop about 3.5 °F per 1,000 ft (6.5 °C per 1,000 m) as you go up."
+  },
+  {
+    "objectID": "frost-depth.html#why-frost-depth-varies-so-much",
+    "href": "frost-depth.html#why-frost-depth-varies-so-much",
+    "title": "Frost depth calculator",
+    "section": "Why frost depth varies so much",
+    "text": "Why frost depth varies so much\n\nCold, and how long it lasts. What matters is the freezing index: how far below freezing it is, added up over every day of winter. A long, steady cold freezes deeper than a short, sharp one.\nSnow. A foot of fluffy snow insulates about as well as a couple of inches of foam board. Plowed driveways and shoveled paths lose that blanket and freeze deepest.\nSoil and moisture. Water gives off a lot of heat as it freezes, which slows the frost. Dry gravel and rocky fill freeze much deeper than wet clay.\nWarm ground below. Where summers are warm, the ground stores heat that pushes back against the frost from below."
+  },
+  {
+    "objectID": "frost-depth.html#about-this-estimate",
+    "href": "frost-depth.html#about-this-estimate",
+    "title": "Frost depth calculator",
+    "section": "About this estimate",
+    "text": "About this estimate\nThis uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.\nFor more control (freezing index, density, water content and surface factors), use the frost depth tool for researchers."
+  },
+  {
+    "objectID": "contact.html",
+    "href": "contact.html",
+    "title": "Contact",
+    "section": "",
+    "text": "Email\n WhatsApp\n \nRafikiArdhi LLC\nCarbondale, Colorado, USA\nORCID · LinkedIn · ResearchGate\n\n\n\nGet in touch about\n A quote for a review or project\n How to use one of the tools\n A problem or error in a tool\n Questions about our methods\n Research partnerships and proposals\n Workshops and training\n Home and garden questions\n\n\nContribute to the tools\nOur classification keys and tools are offered in several languages so more people can use them in their own. If you would like to translate or review a tool in your language, or co-develop a new key or tool, we would like to hear from you. Contributors are acknowledged on the tools they help build."
+  },
+  {
+    "objectID": "projects/caribbean-flood.html",
+    "href": "projects/caribbean-flood.html",
+    "title": "Caribbean pedohydrology",
+    "section": "",
+    "text": "The island has never had a soil survey, yet flood models need to know how much water the soil holds and how much runs off. What makes this project different is that uncertainty propagation guides every step: the hydropedological assumptions, the models, and the decisions built on them.\n\n\n\nOur free hydrologic soil group tool applies the standard NRCS rules to a single soil. The project goes further, with no soil survey to start from and uncertainty carried through and informs every step.\n\n\nTry the free tool →"
+  },
+  {
+    "objectID": "projects/steambioafrica.html",
+    "href": "projects/steambioafrica.html",
+    "title": "De-bushing and the soil system",
+    "section": "",
+    "text": "Invasive bush is spreading across Southern African rangelands, choking grazing land and water. Clearing it can restore land, livelihoods and can be used as a source of biofuel for cooking or energy; however, what does it do to the ecosystem we cannot see?\n\n\n\nShade is scarce in encroached bushveld, for people and wildlife alike.\n\n\nAs a research consultant to SLU (the Swedish University of Agricultural Sciences) on SteamBioAfrica, an EU Horizon 2020 project turning invasive woody biomass into products that benefit local communities, we modelled soil carbon dynamics during and after de-bushing and pesticide use in Namibia, Botswana and South Africa.\n\n\n\nCrop residue left on bare soil after clearing: what stays on the surface shapes whats underneath your feet."
+  },
+  {
+    "objectID": "projects/mpumalanga-carbon.html",
+    "href": "projects/mpumalanga-carbon.html",
+    "title": "World Bank carbon credits",
+    "section": "",
+    "text": "Carbon credits depend on knowing how much carbon is in the soil before anything changes. For a World Bank–funded carbon credit programme in Mpumalanga, South Africa, we created the baseline soil carbon stock maps using spatial mixed models, which account for how carbon varies across the landscape and how confident each estimate is.\nThese baselines are the reference that every future change in soil carbon is measured against.\n\n\n\nIllustrative example of soil organic carbon mapped with depth and summed over the whole profile, from separate work. Maps from the World Bank programme are under NDA and not shown."
+  },
+  {
+    "objectID": "projects/soil-resilience.html",
+    "href": "projects/soil-resilience.html",
+    "title": "Soil resilience",
+    "section": "",
+    "text": "Soil is not a random mixture. Soil organises itself over time, using and releasing energy as water, heat and carbon move through, and that organisation is what lets soil absorb shocks and performs many ecosystem services at once. We measure it with thermodynamics rather than by counting soil types: in other words, pedodiversity reflects how a soil dissipates energy relative to what it has available.\n\n\n\nGrassland in recovery along an agroforestry system in Germany, with young trees in guards along the slope.\n\n\nIn the U.S. Southwest, this approach revealed agroecosystem patterns on ancestral and contemporary Indigenous lands, from the Chuska Mountains to the Great Sage Plain and Hopi Land, where generations of land use and soil organisation are written into the landscape. The original preprint focused on this area because of our knowledge of, and closeness to, the land, but it raised more questions than it answered. Humanity’s tie to the land is not unique to this region, and the questions that run from pedodiversity to pedocomplexity can be studied at many scales and with many techniques, for the wellbeing of both ecosystems and people.\n\n\n\nFrom soil states with depth (A), to thermodynamic pedodiversity in three dimensions (B), to pedocomplexity (C): cultural insight and a physics-informed model, working together.\n\n\nPreprint: Thermodynamic pedodiversity patterns reveal agroecosystem patterns in Indigenous lands of the U.S. Southwest"
+  },
+  {
+    "objectID": "rain-garden.html",
+    "href": "rain-garden.html",
+    "title": "Rain garden and dry well calculator",
+    "section": "",
+    "text": "Español\nA rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a drainage test first."
+  },
+  {
+    "objectID": "rain-garden.html#building-a-rain-garden",
+    "href": "rain-garden.html#building-a-rain-garden",
+    "title": "Rain garden and dry well calculator",
+    "section": "Building a rain garden",
+    "text": "Building a rain garden\n\nLocation: a low spot at least 10 ft from the house, where water already heads, but not where it stands for days.\nShape: longer than it is wide, across the slope, with a level bottom so water spreads evenly.\nInlet and overflow: line the inlet with stone so it doesn’t erode, and give the overflow a safe path for storms bigger than the design.\nPlants: wet-tolerant species in the bottom, drought-tolerant ones on the rim. Native plants with deep roots keep the soil open.\nSoil: if your soil drains poorly, mix compost into the bottom, but don’t create a “bathtub” of loose soil in dense clay. An underdrain is the fix for very slow soils."
+  },
+  {
+    "objectID": "lawn-water.html",
+    "href": "lawn-water.html",
+    "title": "Lawn vs low-water landscape: water use calculator",
+    "section": "",
+    "text": "Español\nHow much water does a lawn actually use compared with the alternatives? This estimates a season’s irrigation for the same area planted different ways, from your climate and water price."
+  },
+  {
+    "objectID": "lawn-water.html#how-this-is-worked-out",
+    "href": "lawn-water.html#how-this-is-worked-out",
+    "title": "Lawn vs low-water landscape: water use calculator",
+    "section": "How this is worked out",
+    "text": "How this is worked out\nPlants lose water through their leaves at a rate set mainly by weather: sun, heat, wind and dry air. Weather networks express that as reference evapotranspiration (ETo): what a well-watered grass would use. Each planting uses a share of it: bluegrass close to 80%, buffalograss under half, established low-water shrubs a third or less. Subtract the rain the plants can use, allow for watering that’s never perfectly efficient, and you have the irrigation.\nThe factors used here are typical values for planning. They’re useful for comparing options, not for setting a controller: for that, use the catch-cup test."
+  },
+  {
+    "objectID": "fertilizer-calculator.html",
+    "href": "fertilizer-calculator.html",
+    "title": "Fertilizer label calculator",
+    "section": "",
+    "text": "Español\nThe three numbers on a fertilizer bag (N-P-K) are percentages by weight. A 20 lb bag of 24-0-6 contains 4.8 lb of nitrogen; the rest is the other nutrients and filler. This turns the label into how much product to spread, and shows what you’re really paying per pound of nutrient."
+  },
+  {
+    "objectID": "fertilizer-calculator.html#reading-a-fertilizer-label",
+    "href": "fertilizer-calculator.html#reading-a-fertilizer-label",
+    "title": "Fertilizer label calculator",
+    "section": "Reading a fertilizer label",
+    "text": "Reading a fertilizer label\n\nN (nitrogen) drives green leafy growth. It’s the nutrient lawns need most, and it doesn’t stay in soil long, which is why it’s applied regularly.\nP (phosphate, P₂O₅) supports roots and establishment. The label shows phosphate, not pure phosphorus: elemental P is about 44% of the P₂O₅ number.\nK (potash, K₂O) helps with stress tolerance. Elemental K is about 83% of the K₂O number.\nSlow-release or organic products feed over weeks rather than days. The arithmetic is the same; they’re just gentler.\n\nMore is not better. Extra nitrogen means more mowing, weaker roots and nitrate washing into waterways. A soil test tells you whether you need phosphate or potash at all."
+  },
+  {
+    "objectID": "foundation-grading.html",
+    "href": "foundation-grading.html",
+    "title": "Foundation grading check",
+    "section": "",
+    "text": "Español\nWater pooling against a foundation is one of the most expensive problems a house can have. The common building-code guideline is that ground should fall at least 6 inches over the first 10 feet from the house (about 5%). You can check it in an afternoon.\nHow to measure: drive a stake against the foundation and another 10 ft (3 m) out. Tie a string between them and level it with a line level. At each stake, measure from the string down to the ground. The drop is the outer measurement minus the inner one. Repeat every 10–15 ft along each wall."
+  },
+  {
+    "objectID": "foundation-grading.html#other-signs-of-a-grading-problem",
+    "href": "foundation-grading.html#other-signs-of-a-grading-problem",
+    "title": "Foundation grading check",
+    "section": "Other signs of a grading problem",
+    "text": "Other signs of a grading problem\n\nWater standing next to the foundation after rain or irrigation.\nMulch or soil piled up against the siding, often built up over years.\nDownspouts that empty right at the wall.\nPatios, walks or window wells that have settled so they tip toward the house.\nDamp patches, efflorescence (white crust) or musty smells in a basement or crawlspace.\n\nMost of these are cheap to fix compared with foundation repairs."
   },
   {
     "objectID": "checks (2).html",
@@ -539,368 +812,179 @@
     "text": "Coordinates and distances\nA degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and “metres” computed from degrees are wrong. Convert a distance, or paste coordinates to check them.\n\n\n\nMethod\nNo paper needed: standard spherical geometry (haversine formula, mean Earth radius 6,371 km)."
   },
   {
-    "objectID": "foundation-grading.html",
-    "href": "foundation-grading.html",
-    "title": "Foundation grading check",
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
     "section": "",
-    "text": "Español\nWater pooling against a foundation is one of the most expensive problems a house can have. The common building-code guideline is that ground should fall at least 6 inches over the first 10 feet from the house (about 5%). You can check it in an afternoon.\nHow to measure: drive a stake against the foundation and another 10 ft (3 m) out. Tie a string between them and level it with a line level. At each stake, measure from the string down to the ground. The drop is the outer measurement minus the inner one. Repeat every 10–15 ft along each wall."
+    "text": "RafikiArdhi is an independent environmental research company built on one idea: science should stay open. We publish what we produce, turn validated methods into free tools, and fund that work through the projects we take on."
   },
   {
-    "objectID": "foundation-grading.html#other-signs-of-a-grading-problem",
-    "href": "foundation-grading.html#other-signs-of-a-grading-problem",
-    "title": "Foundation grading check",
-    "section": "Other signs of a grading problem",
-    "text": "Other signs of a grading problem\n\nWater standing next to the foundation after rain or irrigation.\nMulch or soil piled up against the siding, often built up over years.\nDownspouts that empty right at the wall.\nPatios, walks or window wells that have settled so they tip toward the house.\nDamp patches, efflorescence (white crust) or musty smells in a basement or crawlspace.\n\nMost of these are cheap to fix compared with foundation repairs."
+    "objectID": "about.html#open-by-design",
+    "href": "about.html#open-by-design",
+    "title": "About",
+    "section": "Open by design",
+    "text": "Open by design\n\n\nWe publish what we produce\nOur methods go through peer review and into the scientific literature, with the details needed to reproduce them. Results that shape decisions should be open to scrutiny.\n\n\nFree tools\nValidated methods become free tools that anyone can use in a browser from the home gardener to the peer reviewer. They run on your own device, so your data never leaves it.\n\n\nPaid work funds open work\nProjects, advanced analyses and custom development pay for the research. As methods are proven, and agreements allow, they are released openly.\n\n\nCredit where it is due\nWe build on other people’s work and cite it clearly: the methods, data and classification systems our tools rely on."
   },
   {
-    "objectID": "fertilizer-calculator.html",
-    "href": "fertilizer-calculator.html",
-    "title": "Fertilizer label calculator",
+    "objectID": "about.html#how-a-method-becomes-open",
+    "href": "about.html#how-a-method-becomes-open",
+    "title": "About",
+    "section": "How a method becomes open",
+    "text": "How a method becomes open\n\nSolve. We take on environmental problems that existing methods handle poorly.\nValidate. The method is tested against independent data and published.\nRelease. A simplified, well-documented version becomes a free tool.\nSupport. The full system method, applied to your data and question, is available as a project."
+  },
+  {
+    "objectID": "about.html#what-is-free-and-what-is-a-project",
+    "href": "about.html#what-is-free-and-what-is-a-project",
+    "title": "About",
+    "section": "What is free, and what is a project",
+    "text": "What is free, and what is a project\n\n\nAlways free\nPublished methods and open-access papers, the online tools, their documentation and the references behind them.\n\n\nProjects\nAdvanced and continuous versions of the tools, analysis of your data, custom development and training. Client data stays confidential, and client-funded results are never published without an agreement."
+  },
+  {
+    "objectID": "about.html#approach",
+    "href": "about.html#approach",
+    "title": "About",
+    "section": "Approach",
+    "text": "Approach\nWe build on existing knowledge rather than replacing it. Every map and piece of information is updated, not reset; every estimate propagates its uncertainty; and every result is explained in terms the decision maker can use.\nWe do not use AI to replace human expertise. Where others reach for black-box AI, we use “glass box” functions: methods that are easy to interpret, scale to large problems, and are benchmarked against AI models."
+  },
+  {
+    "objectID": "about.html#contibutor-and-acknowledgements",
+    "href": "about.html#contibutor-and-acknowledgements",
+    "title": "About",
+    "section": "Contibutor and acknowledgements",
+    "text": "Contibutor and acknowledgements\nThe free tools on this site developed with co-authors, improved by people who tested them, checked the methods and suggested changes.\n\nRosana Kostecki, PhD (Profile). Soil Consultoria Socioambiental (Soil Socio-Environmental Consulting), Londrina, Paraná, Brazil\nZahra Rasaei, PhD (Profile). Faculty of Agriculture, The University of Birjand, South Khorasan, Iran\nSara Merzoug (Profile). Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco\n\nAny remaining errors are ours. Found one, or want to suggest a tool? Get in touch."
+  },
+  {
+    "objectID": "about.html#the-name",
+    "href": "about.html#the-name",
+    "title": "About",
+    "section": "The name",
+    "text": "The name\nRafiki ardhi is Kiswahili for “Land friend”.\nTry the tools  Get in touch\n\nFounded by Trevan Flynn, PhD, soil scientist. See Research for the published research behind our methods."
+  },
+  {
+    "objectID": "construction-soil-check.html",
+    "href": "construction-soil-check.html",
+    "title": "New-build yard soil check",
     "section": "",
-    "text": "Español\nThe three numbers on a fertilizer bag (N-P-K) are percentages by weight. A 20 lb bag of 24-0-6 contains 4.8 lb of nitrogen; the rest is the other nutrients and filler. This turns the label into how much product to spread, and shows what you’re really paying per pound of nutrient."
+    "text": "Español\nOn many new-build lots, the topsoil is scraped off during construction, the subsoil is compacted by heavy machinery, and a thin layer of soil is spread back on top before the sod goes down. Lawns and plants then struggle for years. A few simple checks show whether that’s what happened.\nYou’ll need: a shovel, a long screwdriver, and moist (not soggy) soil, a day or two after rain or watering."
   },
   {
-    "objectID": "fertilizer-calculator.html#reading-a-fertilizer-label",
-    "href": "fertilizer-calculator.html#reading-a-fertilizer-label",
-    "title": "Fertilizer label calculator",
-    "section": "Reading a fertilizer label",
-    "text": "Reading a fertilizer label\n\nN (nitrogen) drives green leafy growth. It’s the nutrient lawns need most, and it doesn’t stay in soil long, which is why it’s applied regularly.\nP (phosphate, P₂O₅) supports roots and establishment. The label shows phosphate, not pure phosphorus: elemental P is about 44% of the P₂O₅ number.\nK (potash, K₂O) helps with stress tolerance. Elemental K is about 83% of the K₂O number.\nSlow-release or organic products feed over weeks rather than days. The arithmetic is the same; they’re just gentler.\n\nMore is not better. Extra nitrogen means more mowing, weaker roots and nitrate washing into waterways. A soil test tells you whether you need phosphate or potash at all."
+    "objectID": "construction-soil-check.html#why-this-matters",
+    "href": "construction-soil-check.html#why-this-matters",
+    "title": "New-build yard soil check",
+    "section": "Why this matters",
+    "text": "Why this matters\nTopsoil is the layer where roots, water and soil life do most of their work. Subsoil compacted by trucks and graders can be as dense as a road base: roots can’t enter it and water can’t drain through it. Sod laid on a thin layer over it looks fine for a season, then thins out, browns in summer and floods after storms.\nFixing it costs far less before planting than after, so check before you invest in landscaping."
   },
   {
-    "objectID": "lawn-water.html",
-    "href": "lawn-water.html",
-    "title": "Lawn vs low-water landscape: water use calculator",
+    "objectID": "services-review.html",
+    "href": "services-review.html",
+    "title": "Review: independent third-party assessment",
     "section": "",
-    "text": "Español\nHow much water does a lawn actually use compared with the alternatives? This estimates a season’s irrigation for the same area planted different ways, from your climate and water price."
+    "text": "A check by someone with no stake in the outcome, before you submit, publish or act. Each review has a fixed scope and price agreed in advance, and you receive written comments you can act on.\n\n\nGrant proposals\nPre-submission review of aims, methods and feasibility, and whether the budget matches the work.\n\n\nResearch and sampling design\nSample size, spatial layout, statistical power, and whether the design can answer the question being asked.\n\n\nModels\nStatistical, geostatistical and process models: assumptions, validation, overfitting and data leakage, and how uncertainty is handled.\n\n\nData\nQuality, gaps, harmonisation problems, and whether the data supports the claims made from it.\n\n\nReports and manuscripts\nPre-submission review of the analysis and the inference drawn from it.\n\n\nConsultant deliverables\nA check of a study you have paid for, such as a flood, soil or site assessment, before you act on it. Short second opinions are available for homeowners as well.\n\n\n\nWe only review work for the people who own it: applicants, authors or clients. We don’t take paid reviews of proposals or manuscripts we are assessing for a funder or journal, and everything you share stays confidential.\n\nRequest a review →"
   },
   {
-    "objectID": "lawn-water.html#how-this-is-worked-out",
-    "href": "lawn-water.html#how-this-is-worked-out",
-    "title": "Lawn vs low-water landscape: water use calculator",
-    "section": "How this is worked out",
-    "text": "How this is worked out\nPlants lose water through their leaves at a rate set mainly by weather: sun, heat, wind and dry air. Weather networks express that as reference evapotranspiration (ETo): what a well-watered grass would use. Each planting uses a share of it: bluegrass close to 80%, buffalograss under half, established low-water shrubs a third or less. Subtract the rain the plants can use, allow for watering that’s never perfectly efficient, and you have the irrigation.\nThe factors used here are typical values for planning. They’re useful for comparing options, not for setting a controller: for that, use the catch-cup test."
-  },
-  {
-    "objectID": "rain-garden.html",
-    "href": "rain-garden.html",
-    "title": "Rain garden and dry well calculator",
+    "objectID": "should-i-amend.html",
+    "href": "should-i-amend.html",
+    "title": "Should I amend my soil?",
     "section": "",
-    "text": "Español\nA rain garden is a shallow planted dip that catches runoff from a roof or driveway and lets it soak in. A dry well does the same job underground, in a pit filled with gravel. Both depend on how fast your soil drains, so do a drainage test first."
+    "text": "Español\nCompost and topsoil are useful, but a lot of money goes on amendments that don’t help, or make things worse. Answer a few questions and this tells you what’s worth doing for what you’re planting."
   },
   {
-    "objectID": "rain-garden.html#building-a-rain-garden",
-    "href": "rain-garden.html#building-a-rain-garden",
-    "title": "Rain garden and dry well calculator",
-    "section": "Building a rain garden",
-    "text": "Building a rain garden\n\nLocation: a low spot at least 10 ft from the house, where water already heads, but not where it stands for days.\nShape: longer than it is wide, across the slope, with a level bottom so water spreads evenly.\nInlet and overflow: line the inlet with stone so it doesn’t erode, and give the overflow a safe path for storms bigger than the design.\nPlants: wet-tolerant species in the bottom, drought-tolerant ones on the rim. Native plants with deep roots keep the soil open.\nSoil: if your soil drains poorly, mix compost into the bottom, but don’t create a “bathtub” of loose soil in dense clay. An underdrain is the fix for very slow soils."
+    "objectID": "should-i-amend.html#the-short-version",
+    "href": "should-i-amend.html#the-short-version",
+    "title": "Should I amend my soil?",
+    "section": "The short version",
+    "text": "The short version\n\nTrees: never amend the planting hole. Wide hole, native soil, mulch.\nNative and low-water plants: usually nothing. Rich soil works against them.\nVegetables: yes, compost every year.\nLawns: improve the soil before seeding. On an existing lawn, aerate and top-dress lightly.\nClay: compost helps; a little sand makes it worse.\nStanding water: a drainage problem, not a soil-quality one."
   },
   {
-    "objectID": "projects/soil-resilience.html",
-    "href": "projects/soil-resilience.html",
-    "title": "Soil resilience",
+    "objectID": "services-learn.html",
+    "href": "services-learn.html",
+    "title": "Learn: training",
     "section": "",
-    "text": "Soil is not a random mixture. Soil organises itself over time, using and releasing energy as water, heat and carbon move through, and that organisation is what lets soil absorb shocks and performs many ecosystem services at once. We measure it with thermodynamics rather than by counting soil types: in other words, pedodiversity reflects how a soil dissipates energy relative to what it has available.\n\n\n\nGrassland in recovery along an agroforestry system in Germany, with young trees in guards along the slope.\n\n\nIn the U.S. Southwest, this approach revealed agroecosystem patterns on ancestral and contemporary Indigenous lands, from the Chuska Mountains to the Great Sage Plain and Hopi Land, where generations of land use and soil organisation are written into the landscape. The original preprint focused on this area because of our knowledge of, and closeness to, the land, but it raised more questions than it answered. Humanity’s tie to the land is not unique to this region, and the questions that run from pedodiversity to pedocomplexity can be studied at many scales and with many techniques, for the wellbeing of both ecosystems and people.\n\n\n\nFrom soil states with depth (A), to thermodynamic pedodiversity in three dimensions (B), to pedocomplexity (C): cultural insight and a physics-informed model, working together.\n\n\nPreprint: Thermodynamic pedodiversity patterns reveal agroecosystem patterns in Indigenous lands of the U.S. Southwest"
+    "text": "Workshops tailored to the group, from homeowners and field teams to research students, and available in several languages.\nOur workshops draw on experience teaching at university and presenting at international conferences, work that later won Best Paper in the South African Journal of Plant and Soil.\n\n\nSoil classification\nDescribing and classifying soils in the field with WRB and national systems, using our free classification keys.\n\n\nDo-it-yourself landscaping\nPut our homeowner tools together and make home gardening both fun and scientific, without the stress.\n\n\nResearch creativity\nThink outside the box while keeping scientific rigour, to solve complex environmental challenges.\n\n\nResearch validation\nQuantifying, propagating, communicating and visualising scientific results for every audience, from your mother to the neighbour who doesn’t speak your language.\n\n\nPlan a workshop →"
   },
   {
-    "objectID": "projects/mpumalanga-carbon.html",
-    "href": "projects/mpumalanga-carbon.html",
-    "title": "World Bank carbon credits",
+    "objectID": "checks_alt.html",
+    "href": "checks_alt.html",
+    "title": "Check a result",
     "section": "",
-    "text": "Carbon credits depend on knowing how much carbon is in the soil before anything changes. For a World Bank–funded carbon credit programme in Mpumalanga, South Africa, we created the baseline soil carbon stock maps using spatial mixed models, which account for how carbon varies across the landscape and how confident each estimate is.\nThese baselines are the reference that every future change in soil carbon is measured against.\n\n\n\nIllustrative example of soil organic carbon mapped with depth and summed over the whole profile, from separate work. Maps from the World Bank programme are under NDA and not shown."
+    "text": "Use these checks to investigate whether your own results and methods hold together. They test reported figures against what the method allows, and highlight questions worth considering before you share your work. Reviewers might ask similar questions, but the checks are designed to help you examine your own analysis. Nothing you enter leaves your browser."
   },
   {
-    "objectID": "projects/steambioafrica.html",
-    "href": "projects/steambioafrica.html",
-    "title": "De-bushing and the soil system",
-    "section": "",
-    "text": "Invasive bush is spreading across Southern African rangelands, choking grazing land and water. Clearing it can restore land, livelihoods and can be used as a source of biofuel for cooking or energy; however, what does it do to the ecosystem we cannot see?\n\n\n\nShade is scarce in encroached bushveld, for people and wildlife alike.\n\n\nAs a research consultant to SLU (the Swedish University of Agricultural Sciences) on SteamBioAfrica, an EU Horizon 2020 project turning invasive woody biomass into products that benefit local communities, we modelled soil carbon dynamics during and after de-bushing and pesticide use in Namibia, Botswana and South Africa.\n\n\n\nCrop residue left on bare soil after clearing: what stays on the surface shapes whats underneath your feet."
+    "objectID": "checks_alt.html#finding-the-right-pixel-size",
+    "href": "checks_alt.html#finding-the-right-pixel-size",
+    "title": "Check a result",
+    "section": "Finding the right pixel size",
+    "text": "Finding the right pixel size\nGrid resolution is often chosen by habit (30 m because that’s Landsat). Hengl (2006) set out rules that tie it to what the data can actually support. For each aspect of a dataset they give a coarsest legible resolution (the largest pixel that still represents it), a finest legible resolution (below which pixels “are probably just waste of memory”) and a recommended compromise. Fill in whatever you know; the overall range is where the rules agree.\n\n\n\nReference\nHengl, T. (2006). Finding the right pixel size. Computers & Geosciences 32, 1283–1298. doi:10.1016/j.cageo.2005.11.008"
   },
   {
-    "objectID": "projects/caribbean-flood.html",
-    "href": "projects/caribbean-flood.html",
-    "title": "Caribbean pedohydrology",
-    "section": "",
-    "text": "The island has never had a soil survey, yet flood models need to know how much water the soil holds and how much runs off. What makes this project different is that uncertainty propagation guides every step: the hydropedological assumptions, the models, and the decisions built on them.\n\n\n\nOur free hydrologic soil group tool applies the standard NRCS rules to a single soil. The project goes further, with no soil survey to start from and uncertainty carried through and informs every step.\n\n\nTry the free tool →"
+    "objectID": "checks_alt.html#back-transformation",
+    "href": "checks_alt.html#back-transformation",
+    "title": "Check a result",
+    "section": "Back-transformation",
+    "text": "Back-transformation\nA mean calculated on log values, then exponentiated, is the median (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter what the paper gives on the log scale.\n\n\n\nReferences\nAitchison, J., Brown, J.A.C. (1957). The Lognormal Distribution. Cambridge University Press.\nJournel, A.G. (1980). The lognormal approach to predicting local distributions of selective mining unit grades. Mathematical Geology 12, 285–303. doi:10.1007/BF01029417\nWebster, R., Oliver, M.A. (2007). Geostatistics for Environmental Scientists, 2nd ed. Wiley."
   },
   {
-    "objectID": "contact.html",
-    "href": "contact.html",
-    "title": "Contact",
-    "section": "",
-    "text": "Email\n WhatsApp\n \nRafikiArdhi LLC\nCarbondale, Colorado, USA\nORCID · LinkedIn · ResearchGate\n\n\n\nGet in touch about\n A quote for a review or project\n How to use one of the tools\n A problem or error in a tool\n Questions about our methods\n Research partnerships and proposals\n Workshops and training\n Home and garden questions\n\n\nContribute to the tools\nOur classification keys and tools are offered in several languages so more people can use them in their own. If you would like to translate or review a tool in your language, or co-develop a new key or tool, we would like to hear from you. Contributors are acknowledged on the tools they help build."
+    "objectID": "checks_alt.html#carbon-stock-arithmetic",
+    "href": "checks_alt.html#carbon-stock-arithmetic",
+    "title": "Check a result",
+    "section": "Carbon stock arithmetic",
+    "text": "Carbon stock arithmetic\nRebuild a reported stock from its inputs. If it doesn’t match, the check tries the common slips (% vs g/kg, stones ignored or on the wrong basis, organic matter instead of carbon, kg/m² vs Mg/ha) and tells you which one reproduces the reported number.\n\n\n\nReferences\nPoeplau, C., Vos, C., Don, A. (2017). Soil organic carbon stocks are systematically overestimated by misuse of the parameters bulk density and rock fragment content. SOIL 3, 61–66. doi:10.5194/soil-3-61-2017\nPribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. Geoderma 156, 75–83. doi:10.1016/j.geoderma.2010.02.003"
   },
   {
-    "objectID": "frost-depth.html",
-    "href": "frost-depth.html",
-    "title": "Frost depth calculator",
-    "section": "",
-    "text": "Español\nIn cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.\nYou need two numbers: the average temperature of your coldest month and of your warmest month. They are in the climate table for your town (on Wikipedia or your weather service). In the mountains, use a station at a similar elevation: temperatures drop about 3.5 °F per 1,000 ft (6.5 °C per 1,000 m) as you go up."
+    "objectID": "checks_alt.html#area-from-a-confusion-matrix",
+    "href": "checks_alt.html#area-from-a-confusion-matrix",
+    "title": "Check a result",
+    "section": "Area from a confusion matrix",
+    "text": "Area from a confusion matrix\nCounting pixels in a map gives biased class areas, because every map has errors. With a stratified accuracy sample, the confusion matrix gives unbiased areas with confidence intervals (Olofsson et al. 2014). Rows are map classes, columns are reference classes, and the last column is each map class’s mapped area.\n\n\n\nReference\nOlofsson, P., Foody, G.M., Herold, M., Stehman, S.V., Woodcock, C.E., Wulder, M.A. (2014). Good practices for estimating area and assessing accuracy of land change. Remote Sensing of Environment 148, 42–57. doi:10.1016/j.rse.2014.02.015"
   },
   {
-    "objectID": "frost-depth.html#why-frost-depth-varies-so-much",
-    "href": "frost-depth.html#why-frost-depth-varies-so-much",
-    "title": "Frost depth calculator",
-    "section": "Why frost depth varies so much",
-    "text": "Why frost depth varies so much\n\nCold, and how long it lasts. What matters is the freezing index: how far below freezing it is, added up over every day of winter. A long, steady cold freezes deeper than a short, sharp one.\nSnow. A foot of fluffy snow insulates about as well as a couple of inches of foam board. Plowed driveways and shoveled paths lose that blanket and freeze deepest.\nSoil and moisture. Water gives off a lot of heat as it freezes, which slows the frost. Dry gravel and rocky fill freeze much deeper than wet clay.\nWarm ground below. Where summers are warm, the ground stores heat that pushes back against the frost from below."
+    "objectID": "checks_alt.html#effective-sample-size",
+    "href": "checks_alt.html#effective-sample-size",
+    "title": "Check a result",
+    "section": "Effective sample size",
+    "text": "Effective sample size\nSamples close together carry overlapping information. For estimating an average, a cluster of ten nearby samples can be worth little more than one. This uses the variogram to work out how many independent samples your layout is really worth.\n\n\n\nReferences\nCressie, N.A.C. (1993). Statistics for Spatial Data, revised ed. Wiley. Section 1.3.\nWebster, R., Oliver, M.A. (2007). Geostatistics for Environmental Scientists, 2nd ed. Wiley."
   },
   {
-    "objectID": "frost-depth.html#about-this-estimate",
-    "href": "frost-depth.html#about-this-estimate",
-    "title": "Frost depth calculator",
-    "section": "About this estimate",
-    "text": "About this estimate\nThis uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.\nFor more control (freezing index, density, water content and surface factors), use the frost depth tool for researchers."
+    "objectID": "checks_alt.html#spatial-cross-validation-and-leakage",
+    "href": "checks_alt.html#spatial-cross-validation-and-leakage",
+    "title": "Check a result",
+    "section": "Spatial cross-validation and leakage",
+    "text": "Spatial cross-validation and leakage\nRandom cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won’t achieve between samples. Tick anything that applies to the study you’re checking.\n\n\n\nReferences\nRoberts, D.R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. Ecography 40, 913–929. doi:10.1111/ecog.02881\nMeyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution 12, 1620–1633. doi:10.1111/2041-210X.13650\nMilà, C., Mateu, J., Pebesma, E., Meyer, H. (2022). Nearest neighbour distance matching leave-one-out cross-validation for map validation. Methods in Ecology and Evolution 13, 1304–1316. doi:10.1111/2041-210X.13851"
   },
   {
-    "objectID": "projects/soils-in-motion.html",
-    "href": "projects/soils-in-motion.html",
-    "title": "Soils in motion",
-    "section": "",
-    "text": "A dry sand river as a storm builds. Within hours the same channel can carry water.\n\n\nMost soil science treats soil as something that sits still. We are treating it as a system in motion: water moving through it in drought and in flood, heat and energy flowing with it, and the soil organising itself around that flow over time.\nThe key is exergy: the share of energy a soil can actually put to work, rather than the total energy passing through it. What matters is not how much energy a soil receives, but how well it uses what it has.\nThat changes how soil is perceived. A desert soil can seem “dead”: bare, crusted and pale. Yet with very little rain and energy, it may be doing its jobs remarkably well. Its surface crust holds the ground together and fixes nutrients, it stores water deep where it does not evaporate, and it locks away carbon for thousands of years. A tropical soil under lush forest can look full of life, yet much of that richness sits in the plants, not the soil. Many tropical soil is deeply weathered and hold few nutrients of its own, and clear the forest and that apparent fertility can disappear within a few seasons. Judged against the energy each has available, the desert soil may function for the ecosystem just as well.\nTo capture this, we are bringing mathematics from outside soil science into it, linking how energy moves with how soil organises, functions and recovers. The work spans drylands to the tropics, from the Western United States to the Malawi, with a students leading the charge.\n\n\n\nSossusvlei, Namibia, in September. The pan stays dry for long stretches, but it can fill with water from the ephemeral Tsauchab River, and a desert bloom follows from the seed bank that survives the dry heat.\n\n\nDetails stay under wraps until the work is published.\nFor additional experts in the this field, see about page"
+    "objectID": "checks_alt.html#independence-and-study-design",
+    "href": "checks_alt.html#independence-and-study-design",
+    "title": "Check a result",
+    "section": "Independence and study design",
+    "text": "Independence and study design\nIndependence is a property of the study design and the question being asked, not a box that a single diagnostic can certify. Use this guided check to identify common sources of dependence and mismatches between the sampling unit, statistical analysis, and validation design. It flags issues to investigate; it does not automatically invalidate a study.\n\n\n\nReferences\nHurlbert, S.H. (1984). Pseudoreplication and the design of ecological field experiments. Ecological Monographs 54, 187–211. doi:10.2307/1942661\nRoberts, D.R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. Ecography 40, 913–929. doi:10.1111/ecog.02881\nMeyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution 12, 1620–1633. doi:10.1111/2041-210X.13650"
   },
   {
-    "objectID": "projects/multilingual-keys.html",
-    "href": "projects/multilingual-keys.html",
-    "title": "Soil keys in your language",
-    "section": "",
-    "text": "Soil classification keys in Farsi, Kiswahili and the South African system, built with soil scientists who speak those languages. Language matters as much as the logic: a key is only useful if people can read it in their own words.\nTry the keys →"
+    "objectID": "checks_alt.html#statistical-assumptions-check-beta",
+    "href": "checks_alt.html#statistical-assumptions-check-beta",
+    "title": "Check a result",
+    "section": "Statistical assumptions check BETA",
+    "text": "Statistical assumptions check BETA\nA guided check for matching assumptions to the statistical method. It does not infer assumptions automatically: select the method and the diagnostics you have checked, then use the prompts to identify anything that may need further investigation. Reviewers might ask similar questions about the evidence reported.\n\n  \n    Method reportedLinear regression / ANCOVAANOVA / group comparisonLogistic regressionPearson correlationMixed-effects / repeated measuresRank-based / nonparametric methodOther or unclear\n    Primary aimInference (tests, estimates or confidence intervals)PredictionDescription / exploration\n  \n  Which checks have you carried out or documented?\n  \n     Residuals or model diagnostics inspected\n     Variance / dispersion assessed\n     Relevant distributional assumption assessed\n     Influential points / outliers assessed where relevant\n     Independence or grouping structure addressed\n     Functional form / link / linearity assessed where relevant\n  \n  Generate questions to consider Reset\n  \n\n\n\nScope note\nThis beta tool is a structured checklist, not a test of model assumptions. The relevant assumptions depend on the exact statistical procedure and intended inference. An unchecked item only means that you have not marked the check as reported; it does not establish that the paper omitted it."
   },
   {
-    "objectID": "projects/southern-africa-depth.html",
-    "href": "projects/southern-africa-depth.html",
-    "title": "Soils4Africa mapping",
-    "section": "",
-    "text": "Soil properties mapped consistently with depth across Eswatini, Lesotho, Namibia and South Africa, so that maps no longer jump at every layer boundary. The research formed part of Soils4Africa, an EU Horizon 2020 project building an open-data Soil Information System to help farmers, agri-businesses, scientists and policymakers by improving the quality and availability of African soil data.\n\n\n\nAgricultural land across the study area in Namibia, South Africa, Lesotho and Eswatini.\n\n\nSampling was sparse, only two horizons were sampled per profile, and the environmental gradients were extreme, so we developed a new method for the project: Integrated Soil Profile Mapping (ISPM). It builds on our earlier physics-informed depth spline (phySpline) and is now being extended to update existing soil maps and support decisions. See Cumulative knowledge.\n\n\n\n\n\n\nHumid highlands: eSwatini, near Sheba Rock.\n\n\n\n\n\n\n\nSavanna: a storm over a dry sand river in Kruger.\n\n\n\n\n\n\n\nDesert: dunes of the Namib. Soil organic carbon, organisms and water are present under the surface.\n\n\n\n\n\n\n\n\nTexture profiles in Malawi drawn as continuous curves with depth, beside the site’s climate and elevation (Flynn et al., 2026).\n\n\nPreprint: Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands"
+    "objectID": "checks_alt.html#model-comparison-audit-beta",
+    "href": "checks_alt.html#model-comparison-audit-beta",
+    "title": "Check a result",
+    "section": "Model comparison audit BETA",
+    "text": "Model comparison audit BETA\nUse this checklist when a paper claims that one model performs better than another. It checks comparability of the evaluation design; it does not decide the winner from a single metric.\n\n  For each item, select the statement that best describes the comparison in the paper.\n  \n    Evaluation observationsSame held-out observations for all modelsDifferent observations / foldsNot clear from the paper\n    Response and scaleSame response, units and transformationDifferent response scale / targetNot clear from the paper\n    Validation strategySame split or resampling strategyDifferent validation strategiesNot clear from the paper\n    Metric definition and directionSame metric definition; direction understoodMetrics differ or are not directly comparableNot clear from the paper\n    Tuning and preprocessingTuning / preprocessing confined to training dataPossible test-data use or leakageNot clear from the paper\n    Uncertainty in the differenceUncertainty or paired differences reportedOnly point estimates reportedNot clear from the paper\n  \n  Audit comparison Reset\n  \n\n\n\nScope note\nThis beta check examines the comparability of model evaluations based on your selected answers. It does not calculate performance metrics or infer statistical significance. For spatial, temporal or grouped data, validation design should reflect the intended prediction task; see Roberts et al. (2017), Ecography, 40, 913–929. doi:10.1111/ecog.02881."
   },
   {
-    "objectID": "projects/home-garden.html",
-    "href": "projects/home-garden.html",
-    "title": "Our own backyard, Colorado",
-    "section": "",
-    "text": "We test our homeowner tools where it matters most to us: at home.\nThe yard had a compacted, uneven surface, patchy drainage, an irregular shape that made the area easy to misjudge, and a 1 m drop along the left fence line, where the fence and part of the yard were slowly slumping into the neighbour’s property.\nWe turned the lawn edges and bare ground into gravel paths, raised beds and drip irrigation, working out every quantity of soil, mulch and gravel first with the same free calculators on our Homeowners page.\n\n\n\nBefore and after: bare ground and lawn edges turned into gravel beds and a raised garden bed.\n\n\n\n\n\nThe legal boss and professional hole digger checks the new raised bed. The wet circles show where each drip emitter waters the soil."
+    "objectID": "checks_alt.html#lab-method-conversions",
+    "href": "checks_alt.html#lab-method-conversions",
+    "title": "Check a result",
+    "section": "Lab method conversions",
+    "text": "Lab method conversions\nResults from different methods aren’t directly comparable. These are the common conversion factors, with the assumption behind each stated, so you can see what you’re accepting when you convert.\n\n\n\nReferences\nWalkley, A., Black, I.A. (1934). An examination of the Degtjareff method for determining soil organic matter, and a proposed modification of the chromic acid titration method. Soil Science 37, 29–38.\nPribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. Geoderma 156, 75–83. doi:10.1016/j.geoderma.2010.02.003\nAhern, C.R., Baker, D.E., Aitken, R.L. (1995). Models for relating pH measurements in water and calcium chloride for a wide range of pH, soil types and depths. Plant and Soil 171, 47–52. doi:10.1007/BF00009563\nOxide and unit conversions are exact, from molar masses."
   },
   {
-    "objectID": "projects/cumulative-knowledge.html",
-    "href": "projects/cumulative-knowledge.html",
-    "title": "Cumulative knowledge",
-    "section": "",
-    "text": "Environmental knowledge keeps getting reset. A new survey, a new map or a new project arrives, and the last one is quietly replaced, along with everything it cost and everything it knew.\nWe’re working on the opposite: updating what is known as new data arrives, so that knowledge accumulates and uncertainty falls with each round instead of starting over. In Limpopo, South Africa, a continental soil survey is used to update regional soil fertility maps into domains that support land-use decisions.\n\n\n\nSoil fertility domains across Limpopo Province, South Africa, ordered from lowest (1) to highest (9) fertility, from updating a regional map with a continental survey.\n\n\nThe method is an updated version of our ISPM digital soil mapping framework, built on the idea that the whole is greater than the sum of its parts. The updating is physics-based: it obeys the laws of thermodynamics and is solved exactly with calculus, rather than learned by AI. Every update can be traced, checked and explained, and the knowledge it adds is never lost to a black box.\n(Manuscript under production)"
-  },
-  {
-    "objectID": "homeowners.html",
-    "href": "homeowners.html",
-    "title": "Homeowners",
-    "section": "",
-    "text": "Español\nFree tools for your yard and garden, built by soil scientists. Work out how much material you actually need, check a quote before you pay it, water smarter, and make soil decisions with the working shown.\nNo ads, no sign-up, and no supplier pays to be listed. Every tool shows how its numbers are calculated, so you can check them yourself."
-  },
-  {
-    "objectID": "homeowners.html#buying-materials",
-    "href": "homeowners.html#buying-materials",
-    "title": "Homeowners",
-    "section": "Buying materials",
-    "text": "Buying materials\n\n\nLandscape materials calculator\nHow much topsoil, compost, mulch, gravel, road base, sand, sod or grass seed to order, for any shape of yard, in yards, tons, bags or pallets.\n\n\nQuote checker\nSee what depth a quote really covers, whether it’s more than you need, and the price per yard and per ton. Includes a yards-to-tons converter.\n\n\nRaised bed and planter soil\nSoil for raised beds, pots and planters, how to fill deep beds for less, and how much soil a tree needs.\n\n\nFertilizer label calculator\nTurn the N-P-K numbers into how much to spread, and compare the real cost per pound of nutrient."
-  },
-  {
-    "objectID": "homeowners.html#watering",
-    "href": "homeowners.html#watering",
-    "title": "Homeowners",
-    "section": "Watering",
-    "text": "Watering\n\n\nSprinkler catch-cup test\nMeasure what each zone really puts down, and how evenly, to set run times.\n\n\nCycle-and-soak scheduler\nStop runoff on clay and slopes by splitting watering into short cycles.\n\n\nDrip irrigation calculator\nRun times and emitters per plant, and whether the zone can supply them.\n\n\nLawn vs low-water landscape\nCompare a season’s water use and cost for lawns, low-water plantings and mulch.\n\n\nRain barrel calculator\nHow much your roof collects per storm and per year, and how fast a barrel fills."
-  },
-  {
-    "objectID": "homeowners.html#your-soil",
-    "href": "homeowners.html#your-soil",
-    "title": "Homeowners",
-    "section": "Your soil",
-    "text": "Your soil\n\n\nSoil test translator\nA lab report in plain English: what to do, and what you don’t need to buy.\n\n\nShould I amend my soil?\nCheck before you buy compost, topsoil or sand, for what you’re planting.\n\n\nDIY soil tests\nJar, ribbon and drainage tests: find your texture and how fast your soil drains.\n\n\nSoil pH: lime and sulfur\nHow much to raise or lower pH, and when lowering it isn’t realistic.\n\n\nCompost mix calculator\nBalance greens and browns, and fix a smelly or slow pile."
-  },
-  {
-    "objectID": "homeowners.html#drainage-building-and-trees",
-    "href": "homeowners.html#drainage-building-and-trees",
-    "title": "Homeowners",
-    "section": "Drainage, building and trees",
-    "text": "Drainage, building and trees\n\n\nFoundation grading check\nDoes the ground slope away from your house enough, and how much fill to fix it.\n\n\nRain garden and dry well\nSize a rain garden or dry well from your roof area and how fast your soil drains.\n\n\nNew-build yard soil check\nFind out if construction left you thin topsoil over compacted subsoil, and what to ask your builder.\n\n\nFrost depth\nHow deep the ground freezes where you live, for water lines, footings and fence posts.\n\n\nTree protection zone\nHow much space to fence off around a tree before construction or digging.\n\n\n\nWorking professionally? See our scientific tools for soil classification, profile modelling and more."
-  },
-  {
-    "objectID": "services.html",
-    "href": "services.html",
-    "title": "Services",
-    "section": "",
-    "text": "The tools on this site are free. What we charge for is the thinking behind them: working out what a question really needs, building methods where none exist, and checking that conclusions hold up.\nFor homeowners, we bring actual science to everyday decisions about soil, water and gardens, so you’re not guessing or relying on a sales pitch. For researchers, we bring creativity: new angles on hard problems, without giving up rigour. Either way, some questions don’t have an off-the-shelf answer, and that’s where we start."
-  },
-  {
-    "objectID": "services.html#why-be-creative-in-science",
-    "href": "services.html#why-be-creative-in-science",
-    "title": "Services",
-    "section": "Why be creative in science?",
-    "text": "Why be creative in science?\nAn example{.text-muted}\nThe problem. Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.\nThe insight. Soil isn’t layered like a spreadsheet. It forms as one connected profile, so a map should reflect this information.\nThe result. Every pixel now holds a continuous, physically consistent profile. Properties can be read at any depth or totalled over the whole profile, and moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon: maps at six standard depths (left) and the whole-profile total (right).\n\n\nDiscuss a project →"
-  },
-  {
-    "objectID": "planter-soil.html",
-    "href": "planter-soil.html",
-    "title": "Raised bed and planter soil calculator",
-    "section": "",
-    "text": "Español\nFilling raised beds and big planters takes more soil than most people expect, and bags add up fast. This works out the volume for beds, round pots and tree planters, and shows how to cut the cost of deep beds."
-  },
-  {
-    "objectID": "planter-soil.html#tips-for-filling-beds",
-    "href": "planter-soil.html#tips-for-filling-beds",
-    "title": "Raised bed and planter soil calculator",
-    "section": "Tips for filling beds",
-    "text": "Tips for filling beds\n\nA raised bed 4 × 8 ft and 12 in deep holds about 1.2 cubic yards (32 ft³) once settled. That’s over 20 bags of 1.5 ft³.\nFill in layers and water each one so the soil settles before you plant.\nTop up each spring. Beds sink as organic matter breaks down; an inch or two of compost each year keeps them full.\nAvoid treated wood scraps as filler, and anything painted or glued."
-  },
-  {
-    "objectID": "planter-soil.html#pots-and-potting-mix",
-    "href": "planter-soil.html#pots-and-potting-mix",
-    "title": "Raised bed and planter soil calculator",
-    "section": "Pots and potting mix",
-    "text": "Pots and potting mix\n\nPotting mix is sold in quarts or cubic feet in the US (8 qt, 16 qt, 1–2 cu ft) and in litres elsewhere. One cubic foot is about 26 quarts or 28 litres.\nNursery “gallon” sizes are trade sizes, not measurements. A #1 (“1-gallon”) pot holds about 3 quarts; a #5 holds about 4 gallons.\nUse potting mix, not garden soil, in pots. Garden soil packs down in containers and stays waterlogged at the bottom."
-  },
-  {
-    "objectID": "diy-soil-tests.html",
-    "href": "diy-soil-tests.html",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "",
-    "text": "Español\nThree simple tests tell you most of what matters about your soil: what it’s made of (texture) and how fast water moves through it (drainage). Texture decides how often to water, how fast water soaks in, and how the soil behaves when you dig."
-  },
-  {
-    "objectID": "diy-soil-tests.html#jar-test-texture",
-    "href": "diy-soil-tests.html#jar-test-texture",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "Jar test (texture)",
-    "text": "Jar test (texture)\n\nFill a straight-sided jar about one-third with soil from root depth (pick out stones, roots and debris).\nAdd water until the jar is about two-thirds full, plus a teaspoon of dishwasher detergent or salt-free water softener to separate the particles.\nShake hard for 3–5 minutes, then set it down and start a timer.\nAfter 1 minute, mark the height of the settled layer: that’s the sand.\nAfter 2 hours, mark the height again: sand plus silt.\nAfter 2 days (when the water clears), mark the final height: everything, including clay."
-  },
-  {
-    "objectID": "diy-soil-tests.html#ribbon-test-texture-by-feel",
-    "href": "diy-soil-tests.html#ribbon-test-texture-by-feel",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "Ribbon test (texture by feel)",
-    "text": "Ribbon test (texture by feel)\nTake a walnut-sized lump of soil, wet it until it’s like putty, and work it in your hand. Then press it between your thumb and finger, pushing it up into a ribbon until it breaks under its own weight."
-  },
-  {
-    "objectID": "diy-soil-tests.html#drainage-percolation-test",
-    "href": "diy-soil-tests.html#drainage-percolation-test",
-    "title": "DIY soil tests: texture, drainage and the ribbon test",
-    "section": "Drainage (percolation) test",
-    "text": "Drainage (percolation) test\n\nDig a hole about 12 in (30 cm) deep and 6–12 in wide.\nFill it with water and let it drain completely. This wets the surrounding soil; skip it and the result will be too fast.\nFill it again. Measure the water depth, wait a set time (an hour is easy), and measure again.\n\n\n\nIf the hole still holds water the next day, test again somewhere else and dig deeper to look for a dense or cemented layer. Drainage problems are usually about a layer below, not the soil you plant in."
-  },
-  {
-    "objectID": "projects.html",
-    "href": "projects.html",
-    "title": "Projects",
-    "section": "",
-    "text": "Environmental knowledge is about land and the people who live on it. Our projects start with a question someone actually has, build on what is already known, and end with knowledge people can use in their own place and their own language.\nNewest work comes first. Some projects are under non-disclosure agreements, so we describe them only briefly.\n\n\n\n\n\n\n\n\n\n\nSoils in motion\n\n\n\nUpcoming\n\nWater\n\nKnowledge\n\nGlobal\n\n\n\nHow water, heat and energy move through soil, and how soil organises itself around that flow, across global climates.\n\n\n\n\n\n\n\n\n\n\n\n\nCumulative knowledge\n\n\n\nIn progress\n\nKnowledge\n\nSouthern Africa\n\n\n\nEnvironmental knowledge keeps getting reset. We’re building it up instead.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil keys in your language\n\n\n\nIn progress\n\nLanguages\n\nSocio-ecological\n\n\n\nSoil classification in Farsi, Kiswahili and the South African system, with more languages to come.\n\n\n\n\n\n\n\n\n\n\n\n\nCaribbean pedohydrology\n\n\n\nNDA\n\nIn progress\n\nWater\n\nSocio-ecological\n\nCaribbean\n\n\n\nSoil water retention and runoff for flood modelling on an island without a soil survey, guided by uncertainty.\n\n\n\n\n\n\n\n\n\n\n\n\nSoil resilience\n\n\n\nUnder review\n\nKnowledge\n\nSocio-ecological\n\nWestern US\n\nGlobal\n\n\n\nReading how soils organise themselves, and what that says about resilience and the many functions soils perform.\n\n\n\n\n\n\n\n\n\n\n\n\nOur own backyard, Colorado\n\n\n\nHomeowners\n\nWater\n\nWestern US\n\n\n\nDoing it ourselves: gravel, raised beds and drip irrigation, worked out with our own homeowner tools.\n\n\n\n\n\n\n\n\n\n\n\n\nWorld Bank carbon credits\n\n\n\nNDA\n\nCarbon\n\nSouthern Africa\n\n\n\nBaseline soil carbon stock maps for a carbon credit programme in Mpumalanga, South Africa.\n\n\n\n\n\n\n\n\n\n\n\n\nSoils4Africa mapping\n\n\n\nUnder review\n\nKnowledge\n\nSouthern Africa\n\n\n\nIntegrated Soil Profile Mapping (ISPM) reveals regional patterns of soil condition across Southern African agricultural lands.\n\n\n\n\n\n\n\n\n\n\n\n\nDe-bushing and the soil system\n\n\n\nCarbon\n\nWater\n\nSocio-ecological\n\nPartnerships\n\nSouthern Africa\n\n\n\nPredicted how clearing invasive bush and pesticide use changed soil carbon and water across Namibia, Botswana and South Africa.\n\n\n\n\n\nNo matching items"
-  },
-  {
-    "objectID": "quote-checker.html",
-    "href": "quote-checker.html",
-    "title": "Landscape quote checker",
-    "section": "",
-    "text": "Español\nEnter your area, the depth you want, and up to three quotes. The checker shows the depth each quote would actually cover, whether it’s more (or less) than you need, and the price per unit, so quotes in yards, tons and bags can be compared fairly."
-  },
-  {
-    "objectID": "quote-checker.html#yards-and-tons-converter",
-    "href": "quote-checker.html#yards-and-tons-converter",
-    "title": "Landscape quote checker",
-    "section": "Yards and tons converter",
-    "text": "Yards and tons converter\nSoil and mulch are usually sold by the cubic yard; stone, gravel and sand by the ton. This converts between them, and shows what an amount will cover."
-  },
-  {
-    "objectID": "quote-checker.html#why-quotes-are-hard-to-compare",
-    "href": "quote-checker.html#why-quotes-are-hard-to-compare",
-    "title": "Landscape quote checker",
-    "section": "Why quotes are hard to compare",
-    "text": "Why quotes are hard to compare\n\nYards vs tons. A cubic yard of mulch weighs a few hundred pounds; a cubic yard of gravel weighs well over a ton. A price per ton and a price per yard can’t be compared unless you know what the material weighs. The checker converts using typical weights; ask the supplier for theirs.\nDelivery. A delivery fee spread over a small load makes the price per unit look high. Compare quotes for the same quantity.\nExtra for settling. Loose material settles after spreading, so a fair quote includes a little more than the measured volume, usually 5–25% depending on the material. A quote for double what you need is not “a little extra”.\nBags. Bag sizes vary (1, 1.5, 2 or 3 cubic feet). Check the bag size before comparing bag prices.\n\nUse the materials calculator to work out exactly how much you need for an odd-shaped area."
-  },
-  {
-    "objectID": "soil-keys.html",
-    "href": "soil-keys.html",
-    "title": "Soil classification keys",
-    "section": "",
-    "text": "WRB 2022 (international)\n  South Africa (2018)\n\n\n\n\n\n\n\n\n\n  No AI. No machine learning.\n  The keys follow the published classification criteria step by step, the way you would key out a soil in the field. The same profile always gives the same answer, and you can see exactly which criterion led there, in every language the key is offered in.\n  Language and criteria grow together. We add languages as we refine the criteria, working with soil scientists who speak them, because the language matters as much as the logic: a key is only useful if people can read it in their own words. Want to help translate or review a key? →\n\n\n\n  \n    Beta Learning and screening aid\n    \n      EnglishفارسیKiswahili\n      Start over\n    \n  \n  \n  \n  ← Back to Tools\n    Beta learning aid. It does not replace the WRB text or a qualified soil scientist.\n    Source: IUSS Working Group WRB (2022). World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria. wrb.isric.org\n    Classifying from data in R: Rodrigues, H. (2026). soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13. R package version 0.9.259. doi:10.5281/zenodo.19930112 · GitHub\n\n\n\n\n\n\n\n  این کلید گام‌به‌گام شما را به گروه مرجع خاک (Reference Soil Group) در سامانهٔ جهانی رده‌بندی خاک WRB 2022 می‌رساند. نام گروه‌ها و توصیفگرها، همان‌گونه که در WRB آمده، به انگلیسی نوشته شده و معادل فارسی آن‌ها در پرانتز آمده است. همهٔ محاسبات روی دستگاه شما انجام می‌شود و هیچ داده‌ای فرستاده یا ذخیره نمی‌شود.\n\n\n\n  \n    آزمایشی ابزار آموزشی و غربالگری\n    \n      EnglishفارسیKiswahili\n      شروع دوباره\n    \n  \n  \n  \n  → بازگشت به ابزارها\n    آزمایشی: ابزار آموزشی است و جایگزین متن WRB یا متخصص خاک نیست.\n    منبع: IUSS Working Group WRB (2022). World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria. wrb.isric.org\n    رده‌بندی از روی داده‌ها در R: Rodrigues, H. (2026). soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13. R package version 0.9.259. doi:10.5281/zenodo.19930112 · GitHub\n\n\n\n\n\n\n\n  Ufunguo huu wa hatua kwa hatua unakufikisha kwenye Kundi la Rejea la Udongo (Reference Soil Group) katika mfumo wa kimataifa wa uainishaji wa udongo, WRB 2022. Majina ya makundi na viainishi yameandikwa kwa Kiingereza kama yalivyo katika WRB, na maelezo mafupi ya Kiswahili ndani ya mabano. Hesabu zote zinafanyika kwenye kifaa chako, na hakuna data inayotumwa wala kuhifadhiwa.\n\n\n\n  \n    Majaribio Zana ya kujifunzia na uchunguzi wa awali\n    \n      EnglishفارسیKiswahili\n      Anza upya\n    \n  \n  \n  \n  ← Rudi kwenye Zana\n    Majaribio: ni zana ya kujifunzia. Haichukui nafasi ya maandiko ya WRB wala mtaalamu wa udongo.\n    Chanzo: IUSS Working Group WRB (2022). World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria. wrb.isric.org\n    Kuainisha kutoka data katika R: Rodrigues, H. (2026). soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13. R package version 0.9.259. doi:10.5281/zenodo.19930112 · GitHub\n\n\n\n\n\n\n\n\n\n\n\n\n  \n    Beta Learning and field aid\n    \n      EnglishAfrikaansisiZulu\n      Start over\n    \n  \n  Afrikaanse vertaling (beta). Vormname bly soos in die boek, en die beskrywing- en CSV-invoer word in Engels gelees. Terugvoer is welkom: tflynn@rafikiardhi.earth.\n  Ukuhumusha kwesiZulu (beta, kudinga ukubuyekezwa yisikhulumi somdabu). Amagama ezinhlobo nezendlalelo ahlala njengoba enjalo encwadini (ngesiNgisi), futhi incazelo nokufaka kwe-CSV kufundwa ngesiNgisi. Imibono yamukelekile: tflynn@rafikiardhi.earth.\n  \n  ← Back to Tools\n    Beta learning aid, not affiliated with or endorsed by the ARC. It does not replace the book or a qualified soil scientist.\n    Source: Soil Classification Working Group (2018). Soil Classification: A Natural and Anthropogenic System for South Africa. ARC-Institute for Soil, Climate and Water, Pretoria.\n    Official app: Digital Soil Classification (ARC, Android)"
-  },
-  {
-    "objectID": "soil-keys-fa.html",
-    "href": "soil-keys-fa.html",
-    "title": "کلید رده‌بندی خاک WRB",
-    "section": "",
-    "text": "The Farsi key has moved to the soil classification keys (choose فارسی in the language list)."
-  },
-  {
-    "objectID": "compost-mix.html",
-    "href": "compost-mix.html",
-    "title": "Compost mix calculator (greens and browns)",
-    "section": "",
-    "text": "Español\nA compost pile works fastest at a carbon-to-nitrogen (C:N) ratio of about 25–35 and moisture like a wrung-out sponge. Too much nitrogen (greens) and it smells; too much carbon (browns) and it barely heats up. Enter what you’re adding, by the bucket or any equal measure."
-  },
-  {
-    "objectID": "compost-mix.html#greens-and-browns",
-    "href": "compost-mix.html#greens-and-browns",
-    "title": "Compost mix calculator (greens and browns)",
-    "section": "Greens and browns",
-    "text": "Greens and browns\n\nGreens (nitrogen-rich, usually wet): grass clippings, kitchen scraps, coffee grounds, fresh garden plants, manure.\nBrowns (carbon-rich, usually dry): dry leaves, straw, wood chips, sawdust, cardboard, newspaper.\n\nNote that “parts” are by volume, and materials differ a lot in weight: a bucket of grass clippings weighs several times a bucket of dry leaves. That’s why roughly 2–3 buckets of browns to 1 of greens often balances.\nKeep out: meat, dairy and oily food (attract pests), pet and human waste, diseased plants, weeds with seeds (unless your pile gets hot), and anything treated with herbicide. Some herbicides survive composting and damage vegetables."
-  },
-  {
-    "objectID": "services-partner.html",
-    "href": "services-partner.html",
-    "title": "Partner: research collaboration",
-    "section": "",
-    "text": "For research groups and projects that need analytical depth over months rather than weeks.\n\n\nAnalytical partnerships\nOngoing methods, analysis and modelling support for research groups and projects, with co-authorship where the contribution warrants it.\n\n\nMethods lead on proposals\nWriting the methods and analysis sections of a proposal, with RafikiArdhi named in the team and budget as the analytical partner.\n\n\nDiscuss a partnership →"
-  },
-  {
-    "objectID": "privacy.html",
-    "href": "privacy.html",
-    "title": "Privacy",
-    "section": "",
-    "text": "Last updated: October 2026\nThe short version: our tools run entirely in your browser and store nothing; we use Google Analytics to count visits; we don’t have accounts, don’t sell anything about you, and don’t show ads."
-  },
-  {
-    "objectID": "privacy.html#the-tools",
-    "href": "privacy.html#the-tools",
-    "title": "Privacy",
-    "section": "The tools",
-    "text": "The tools\nOur tools run entirely in your web browser. When you open a file, it is read and processed on your own computer, and results are saved directly back to it. No data is transmitted to RafikiArdhi or any third party, and nothing is stored on our servers. We don’t have a database. That makes the tools safe for confidential data, unpublished results and manuscripts under review.\n\nShare links. Some tools put your inputs into the page address so that “Copy link” can recreate your calculation. That address stays in your browser unless you choose to share it.\nYour units. If you switch between US and metric units, your browser remembers the choice on your device. We never see it.\nCheck it yourself. Once a tool page has loaded, disconnect from the internet. The tool still works, because nothing it does depends on our servers."
-  },
-  {
-    "objectID": "privacy.html#visit-statistics",
-    "href": "privacy.html#visit-statistics",
-    "title": "Privacy",
-    "section": "Visit statistics",
-    "text": "Visit statistics\nWe use Google Analytics to understand how the site is used: which pages are visited, how people find us (for example from a search engine or another website), and roughly where visitors are and what devices they use. This helps us decide which tools to improve or build next.\n\nGoogle Analytics uses cookies and collects information such as the pages you view, your browser and device type, the website that referred you, and your approximate location (city or country level).\nOur site analytics record only page visits, never the contents of files or anything you enter into a tool. We have configured Google Analytics not to record the share-link part of page addresses.\nWe can’t see who you are. We only see totals and trends.\nGoogle processes this data under its own privacy policy: policies.google.com/privacy. You can see how Google uses data from sites that use its services at policies.google.com/technologies/partner-sites.\n\nTo opt out, you can block cookies in your browser settings, use a browser or extension that blocks trackers, or install Google’s Analytics opt-out add-on. The site and all the tools work exactly the same without them."
-  },
-  {
-    "objectID": "privacy.html#if-you-contact-us",
-    "href": "privacy.html#if-you-contact-us",
-    "title": "Privacy",
-    "section": "If you contact us",
-    "text": "If you contact us\nIf you email us, we use your name, address and message only to reply and to carry out any work you ask us for. We don’t add you to mailing lists or share your details."
-  },
-  {
-    "objectID": "privacy.html#client-projects",
-    "href": "privacy.html#client-projects",
-    "title": "Privacy",
-    "section": "Client projects",
-    "text": "Client projects\nData from paid projects is handled under the agreement for that project. It stays confidential, and results funded by a client are published only with their agreement."
-  },
-  {
-    "objectID": "privacy.html#children",
-    "href": "privacy.html#children",
-    "title": "Privacy",
-    "section": "Children",
-    "text": "Children\nThis site isn’t aimed at children, and we don’t knowingly collect information from them."
-  },
-  {
-    "objectID": "privacy.html#changes",
-    "href": "privacy.html#changes",
-    "title": "Privacy",
-    "section": "Changes",
-    "text": "Changes\nIf we change how the site handles information, we’ll update this page and the date at the top."
-  },
-  {
-    "objectID": "privacy.html#contact",
-    "href": "privacy.html#contact",
-    "title": "Privacy",
-    "section": "Contact",
-    "text": "Contact\nRafikiArdhi LLC, Carbondale, Colorado, USA. Questions about privacy are welcome through our contact page."
+    "objectID": "checks_alt.html#coordinates-and-distances",
+    "href": "checks_alt.html#coordinates-and-distances",
+    "title": "Check a result",
+    "section": "Coordinates and distances",
+    "text": "Coordinates and distances\nA degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and “metres” computed from degrees are wrong. Convert a distance, or paste coordinates to check them.\n\n\n\nMethod\nNo paper needed: standard spherical geometry (haversine formula, mean Earth radius 6,371 km)."
   },
   {
     "objectID": "materials-calculator.html",
