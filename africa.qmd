@@ -33,7 +33,7 @@ Blessed by diversity and contrasts, Africa offers people from every background a
 
 We learned geostatistics in Zambia, community-based agriculture in Malawi, agricultural policy in Namibia, sustainable agricultural intensification in South Africa, the importance of smallholder farms in Tanzania, dryland water management in Kenya, and the value of agricultural extension in the Democratic Republic of the Congo. None of these lessons stands alone. The people and cultures are diverse, but the creative freedom to learn, adapt, and bring ideas together remains the same.
 
-![Agriculture festival in Lusaka, Zambia with the President making the keynote speech.](../images/chibombo-card.JPEG){fig-alt="President of Zambia talking about community agriculture."}
+![Agriculture festival in Lusaka, Zambia with the President making the keynote speech.](../images/zam-pres-card){fig-alt="President of Zambia talking about community agriculture."}
 
 ### Where connections were built, and still last.
 
