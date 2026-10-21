@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Covariance Distance Explorer – RafikiArdhi</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-cd1a2654534965ed0b2e9341ba0e1c59.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-7672c8aacd1b5a7b1286f9b86b9857c6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-8QXXQWKPTD"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
+</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="nav-fixed quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../images/logo-small.png" alt="RafikiArdhi logo" class="navbar-logo light-content">
+    <img src="../images/logo-small.png" alt="RafikiArdhi logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">RafikiArdhi</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-services" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Services</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-services">    
+        <li>
+    <a class="dropdown-item" href="../services.html">
+ <span class="dropdown-text">All services</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Independent Review</li>
+        <li>
+    <a class="dropdown-item" href="../services-review.html">
+ <span class="dropdown-text">Third party review</span></a>
+  </li>  
+        <li class="dropdown-header">Build</li>
+        <li>
+    <a class="dropdown-item" href="../services-build.html">
+ <span class="dropdown-text">Problem solving</span></a>
+  </li>  
+        <li class="dropdown-header">Partner</li>
+        <li>
+    <a class="dropdown-item" href="../services-partner.html">
+ <span class="dropdown-text">Research collaboration</span></a>
+  </li>  
+        <li class="dropdown-header">Learn</li>
+        <li>
+    <a class="dropdown-item" href="../services-learn.html">
+ <span class="dropdown-text">Training</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tools" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tools</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tools">    
+        <li class="dropdown-header">For homeowners</li>
+        <li>
+    <a class="dropdown-item" href="../homeowners.html">
+ <span class="dropdown-text">Gardening &amp; landscapes</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">For researchers</li>
+        <li>
+    <a class="dropdown-item" href="../tools.html">
+ <span class="dropdown-text">Research tools</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../checks.html">
+ <span class="dropdown-text">Research checks</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Learners</li>
+        <li>
+    <a class="dropdown-item" href="../soil-keys.html">
+ <span class="dropdown-text">Soil classification</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../publications.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content column-page" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Covariance Distance Explorer</h1>
+</div>
+
+
+
+<div class="quarto-title-meta column-page">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<style>
+
+:root {
+  color-scheme: light dark;
+  --site-primary: #24594d;
+  --site-on-primary: #ffffff;
+  --site-secondary: #e3eee8;
+  --site-on-secondary: #183c33;
+  --site-background: #f5f7f3;
+  --site-on-background: #1d2925;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Georgia, "Times New Roman", serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --site-primary: #8cc8b2;
+    --site-on-primary: #102b24;
+    --site-secondary: #243b34;
+    --site-on-secondary: #e2f1e9;
+    --site-background: #151d1a;
+    --site-on-background: #e6eee9;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+#app { background-color: var(--site-background); color: var(--site-on-background); min-height: 100vh; padding: calc(28px * var(--site-spacing-scale)); border-radius: 0; }
+main { max-width: 1100px; margin: 0 auto; }
+header { border-bottom: 1px solid color-mix(in srgb, var(--site-on-background) 16%, transparent); padding-bottom: 22px; margin-bottom: 24px; }
+.eyebrow { color: var(--site-primary); font-size: .76rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+h1, h2, h3 { font-family: var(--site-font-heading); font-weight: 600; }
+h1 { font-size: calc(2.4rem * var(--site-heading-scale)); line-height: 1.05; margin: 9px 0 12px; }
+h2 { font-size: calc(1.4rem * var(--site-heading-scale)); margin: 0 0 8px; }
+p { line-height: 1.55; }
+.intro { max-width: 760px; margin-bottom: 0; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(290px, .8fr); gap: calc(20px * var(--site-spacing-scale)); align-items: start; }
+.panel { background: light-dark(#ffffff, #1e2924); border: 1px solid color-mix(in srgb, var(--site-on-background) 14%, transparent); border-radius: calc(16px * var(--site-radius-scale)); padding: calc(20px * var(--site-spacing-scale)); }
+.news-panel { margin: 0 auto; max-width: 980px; }
+.news-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.news-card { border: 1px solid color-mix(in srgb, var(--site-on-background) 12%, transparent); border-radius: 12px; overflow: hidden; background: var(--site-background); display: flex; flex-direction: column; min-width: 0; }
+.news-art { min-height: 100px; padding: 17px; display: flex; align-items: end; background: linear-gradient(135deg, color-mix(in srgb, var(--site-primary) 24%, var(--site-background)), var(--site-secondary)); color: var(--site-on-secondary); }
+.news-art svg { width: 44px; height: 44px; opacity: .9; }
+.news-copy { padding: 15px; display: flex; flex-direction: column; align-items: start; flex: 1; }
+.news-meta { font-size: .7rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; color: var(--site-primary); margin-bottom: 8px; }
+.news-copy h3 { font-family: var(--site-font-body); font-size: 1rem; line-height: 1.35; margin: 0 0 7px; }
+.news-copy p { font-size: .88rem; margin: 0 0 15px; line-height: 1.5; }
+.news-link { color: var(--site-primary); font-size: .88rem; font-weight: 750; text-decoration: none; margin-top: auto; }
+.news-link:hover { text-decoration: underline; }
+.panel + .panel { margin-top: 16px; }
+label { display: block; font-size: .88rem; font-weight: 650; margin: 14px 0 6px; }
+textarea, input, select { width: 100%; border: 1px solid color-mix(in srgb, var(--site-on-background) 25%, transparent); border-radius: 8px; padding: 10px 11px; background: var(--site-background); color: var(--site-on-background); font: inherit; }
+textarea { min-height: 140px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .86rem; line-height: 1.5; }
+small, .muted { color: color-mix(in srgb, var(--site-on-background) 68%, transparent); }
+small { display: block; line-height: 1.45; margin-top: 5px; }
+button { border: 0; border-radius: 9px; background: var(--site-primary); color: var(--site-on-primary); padding: 11px 15px; font: inherit; font-weight: 700; cursor: pointer; }
+button.secondary { background: var(--site-secondary); color: var(--site-on-secondary); }
+.actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+.tabs { display: flex; gap: 8px; border-bottom: 1px solid color-mix(in srgb, var(--site-on-background) 16%, transparent); margin: 12px 0 16px; }
+.tab { border-radius: 8px 8px 0 0; background: transparent; color: var(--site-on-background); border-bottom: 3px solid transparent; padding: 10px 12px; }
+.tab[aria-selected="true"] { color: var(--site-primary); border-bottom-color: var(--site-primary); }
+.tab-panel[hidden] { display: none; }
+.error { display: none; color: #b91c1c; background: #fee2e2; border-radius: 8px; padding: 10px 12px; margin-top: 12px; }
+.metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+.metric { background: var(--site-secondary); color: var(--site-on-secondary); padding: 13px; border-radius: 10px; }
+.metric span { display: block; font-size: .75rem; font-weight: 650; opacity: .8; }
+.metric strong { display: block; font-size: 1.3rem; margin-top: 5px; font-variant-numeric: tabular-nums; }
+.status { border-left: 4px solid var(--site-primary); padding: 10px 12px; background: color-mix(in srgb, var(--site-primary) 10%, transparent); border-radius: 0 8px 8px 0; line-height: 1.45; }
+table { width: 100%; border-collapse: collapse; font-size: .87rem; margin-top: 10px; }
+th, td { padding: 8px 7px; text-align: right; border-bottom: 1px solid color-mix(in srgb, var(--site-on-background) 12%, transparent); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+.result-section { margin-top: 18px; }
+.pill { display: inline-block; font-size: .74rem; font-weight: 750; padding: 4px 8px; border-radius: 100px; background: var(--site-secondary); color: var(--site-on-secondary); }
+footer { margin-top: 24px; border-top: 1px solid color-mix(in srgb, var(--site-on-background) 16%, transparent); padding-top: 16px; font-size: .83rem; }
+@media (max-width: 760px) { #app { padding: 18px; } .layout { grid-template-columns: 1fr; } .news-grid { grid-template-columns: 1fr; } h1 { font-size: calc(2rem * var(--site-heading-scale)); } }
+
+</style>
+<div id="app" data-sites-preview-theme="">
+<main>
+<header>
+<div class="eyebrow">
+RafikiArdhi · Research tools
+</div>
+<h1>
+Covariance Distance Explorer
+</h1>
+<p class="intro">
+Calculate Mahalanobis distance from a mean vector and covariance matrix. Explore how variance and correlation change multivariate distance, with transparent validation and no data sent anywhere.
+</p>
+</header>
+<div class="layout">
+<section class="panel">
+<h2 class="anchored">
+Input data
+</h2>
+<p class="muted">
+Use the longer worked example, enter values manually, or open a CSV containing observations. CSV mode calculates a mean and sample covariance from selected numeric columns, then lets you choose a row to measure against that reference.
+</p>
+<div class="tabs" role="tablist" aria-label="Input method">
+<pre><code>&lt;button class="tab" id="manualTab" role="tab" aria-selected="true" aria-controls="manualPanel"&gt;Manual / example&lt;/button&gt;
+&lt;button class="tab" id="csvTab" role="tab" aria-selected="false" aria-controls="csvPanel"&gt;Open CSV&lt;/button&gt;</code></pre>
+</div>
+<div id="manualPanel" class="tab-panel" role="tabpanel" aria-labelledby="manualTab">
+<label for="target">Target vector (x)</label>
+<textarea id="target" spellcheck="false">2.4, 1.2, 0.9, 3.1, 1.4</textarea>
+<small>Example: a soil sample represented by two standardised attributes.</small> <label for="mean">Reference mean (μ)</label>
+<textarea id="mean" spellcheck="false">0, 0, 0, 0, 0</textarea>
+<label for="matrixType">Matrix supplied</label> <select id="matrixType"><option value="covariance">Covariance matrix (Σ)</option><option value="precision">Precision matrix (Σ⁻¹)</option></select> <small>Choose covariance when you have Σ, or precision when you already have the inverse covariance matrix Σ⁻¹. The tool calculates the distance using the selected matrix and displays its inverse for reference.</small> <label for="cov" id="matrixLabel">Covariance matrix (Σ)</label>
+<textarea id="cov" spellcheck="false">4, 1.2, 0.8, 1.4, 0.5
+1.2, 2.25, 0.9, 0.75, 0.3
+0.8, 0.9, 1.44, 0.6, 0.24
+1.4, 0.75, 0.6, 4, 0.7
+0.5, 0.3, 0.24, 0.7, 1</textarea>
+<small id="matrixHelp">The matrix must be square, symmetric, and positive definite. Rows and columns must follow the same variable order as x and μ.</small>
+<div class="actions">
+<pre><code>&lt;button id="calculate"&gt;Calculate distance&lt;/button&gt;
+&lt;button id="example" class="secondary"&gt;Load example&lt;/button&gt;
+&lt;button id="clear" class="secondary"&gt;Clear&lt;/button&gt;</code></pre>
+</div>
+</div>
+<div id="csvPanel" class="tab-panel" role="tabpanel" aria-labelledby="csvTab" hidden="">
+<pre><code>&lt;p&gt;Choose a local CSV file with a header row and numeric columns. The file is read in your browser and is not uploaded.&lt;/p&gt;
+&lt;label for="csvFile"&gt;CSV file&lt;/label&gt;
+&lt;input id="csvFile" type="file" accept=".csv,text/csv"&gt;
+&lt;div id="csvStatus" class="status" style="margin-top:12px"&gt;No file loaded.&lt;/div&gt;
+&lt;label for="csvColumns"&gt;Variables to include&lt;/label&gt;
+&lt;select id="csvColumns" multiple size="6" aria-describedby="csvHelp"&gt;&lt;/select&gt;
+&lt;small id="csvHelp"&gt;Select at least two numeric variables. Hold Ctrl (Windows) or Command (Mac) to select multiple columns.&lt;/small&gt;
+&lt;label for="csvRow"&gt;Target observation&lt;/label&gt;
+&lt;select id="csvRow"&gt;&lt;/select&gt;
+&lt;div class="actions"&gt;&lt;button id="useCsv"&gt;Use selected CSV data&lt;/button&gt;&lt;button id="downloadDistanceMatrix" class="secondary"&gt;Download distance matrix CSV&lt;/button&gt;&lt;/div&gt;
+&lt;p class="muted"&gt;Selected columns define the reference mean and sample covariance. The chosen row becomes the target vector. Rows with missing or non-numeric selected values are excluded from the reference calculation.&lt;/p&gt;</code></pre>
+</div>
+<div id="error" class="error" role="alert">
+
+</div>
+</section>
+<section>
+<div class="panel">
+<pre><code>&lt;h2&gt;Result&lt;/h2&gt;
+&lt;span class="pill" id="state"&gt;Ready to calculate&lt;/span&gt;
+&lt;div class="metrics"&gt;
+  &lt;div class="metric"&gt;&lt;span&gt;Mahalanobis distance&lt;/span&gt;&lt;strong id="distance"&gt;—&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class="metric"&gt;&lt;span&gt;Squared Mahalanobis distance&lt;/span&gt;&lt;strong id="squared"&gt;—&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class="metric"&gt;&lt;span&gt;Euclidean distance&lt;/span&gt;&lt;strong id="euclidean"&gt;—&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class="metric"&gt;&lt;span&gt;Squared Euclidean distance&lt;/span&gt;&lt;strong id="euclideanSquared"&gt;—&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class="metric"&gt;&lt;span&gt;Variables&lt;/span&gt;&lt;strong id="dimension"&gt;—&lt;/strong&gt;&lt;/div&gt;
+  &lt;div class="metric"&gt;&lt;span&gt;Matrix condition estimate&lt;/span&gt;&lt;strong id="condition"&gt;—&lt;/strong&gt;&lt;/div&gt;
+&lt;/div&gt;
+&lt;div id="interpretation" class="status"&gt;Enter a target, mean, and covariance matrix, then calculate.&lt;/div&gt;
+&lt;div class="result-section"&gt;
+  &lt;h3&gt;Difference vector (x − μ)&lt;/h3&gt;
+  &lt;div id="delta" class="muted"&gt;—&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+</div>
+<div class="panel">
+<pre><code>&lt;h2&gt;What is being calculated?&lt;/h2&gt;
+&lt;p&gt;Mahalanobis distance measures how far a vector is from a reference mean while accounting for covariance among variables.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Squared Mahalanobis distance: D² = (x − μ)ᵀ P (x − μ)&lt;/strong&gt;, where P is the precision matrix (Σ⁻¹).&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Squared Euclidean distance: E² = Σᵢ(xᵢ − μᵢ)²&lt;/strong&gt;; Euclidean distance is √E².&lt;/p&gt;
+&lt;p class="muted"&gt;Euclidean distance treats each variable axis equally in the supplied units. Mahalanobis distance accounts for covariance and variable scales. Neither distance is a probability by itself.&lt;/p&gt;</code></pre>
+</div>
+</section>
+</div>
+<div id="details" class="panel result-section" hidden="">
+<h2 class="anchored">
+Matrix diagnostics
+</h2>
+<div id="diagnostics">
+
+</div>
+<h3 id="inverseTitle" class="anchored">
+Inverse matrix
+</h3>
+<div id="inverse">
+
+</div>
+</div>
+<footer>
+Transparent calculation · Runs locally in this page · Not a substitute for checking whether the chosen variables, covariance estimate, and reference population are scientifically appropriate.
+</footer>
+</main>
+</div>
+<script>
+const $ = id => document.getElementById(id);
+function parseVector(text, name) {
+  const tokens = text.trim().split(/[\s,;]+/).filter(Boolean);
+  if (!tokens.length) throw new Error(name + " is empty.");
+  const vals = tokens.map(Number);
+  if (vals.some(v => !Number.isFinite(v))) throw new Error(name + " contains a non-numeric or non-finite value.");
+  return vals;
+}
+function parseMatrix(text) {
+  const rows = text.trim().split(/\n|;/).map(s => s.trim()).filter(Boolean).map(line => line.split(/[\s,]+/).filter(Boolean).map(Number));
+  if (!rows.length) throw new Error("Covariance matrix is empty.");
+  if (rows.some(r => r.some(v => !Number.isFinite(v)))) throw new Error("Covariance matrix contains a non-numeric or non-finite value.");
+  const n = rows.length;
+  if (rows.some(r => r.length !== n)) throw new Error("Covariance matrix must be square: number of rows must equal number of columns.");
+  return rows;
+}
+function parseCsv(text) {
+  const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(line=>line.trim().length);
+  if(lines.length<3) throw new Error("CSV needs a header and at least two data rows.");
+  function splitLine(line) {
+    const out=[]; let cur='', quoted=false;
+    for(let i=0;i<line.length;i++) { const ch=line[i]; if(ch==='"'&&quoted&&line[i+1]==='"'){cur+='"';i++;} else if(ch==='"'){quoted=!quoted;} else if(ch===','&&!quoted){out.push(cur.trim());cur='';} else cur+=ch; }
+    if(quoted) throw new Error("CSV contains an unclosed quoted field."); out.push(cur.trim()); return out;
+  }
+  const headers=splitLine(lines[0]);
+  if(new Set(headers).size!==headers.length) throw new Error("CSV column names must be unique.");
+  const rows=lines.slice(1).map((line,i)=>{const cells=splitLine(line); if(cells.length!==headers.length) throw new Error("CSV row "+(i+2)+" has "+cells.length+" fields; expected "+headers.length+"."); return {label:i+1,cells};});
+  return {headers,rows};
+}
+let csvData=null;
+function setTab(which) {
+  const manual=which==='manual'; $("manualPanel").hidden=!manual; $("csvPanel").hidden=manual;
+  $("manualTab").setAttribute("aria-selected",String(manual)); $("csvTab").setAttribute("aria-selected",String(!manual));
+}
+function updateMatrixLabel() {
+  const precision=$("matrixType").value==="precision";
+  $("matrixLabel").textContent=precision?"Precision matrix (Σ⁻¹)":"Covariance matrix (Σ)";
+  $("matrixHelp").textContent=precision?"Enter the precision matrix, which is the inverse covariance matrix. It must be square, symmetric, and positive definite; rows and columns must follow the same variable order as x and μ.":"Enter the covariance matrix. It must be square, symmetric, and positive definite; rows and columns must follow the same variable order as x and μ.";
+  $("inverseTitle").textContent=precision?"Inverse precision matrix / covariance matrix (Σ)":"Inverse covariance matrix / precision matrix (Σ⁻¹)";
+}
+function selectedCsvColumns() { return Array.from($("csvColumns").selectedOptions).map(o=>Number(o.value)); }
+function csvEscape(value) { const s=String(value); return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; }
+function downloadDistanceMatrix() {
+  try {
+    if(!csvData) throw new Error("Choose a CSV file first.");
+    const cols=selectedCsvColumns();
+    if(cols.length<2) throw new Error("Select at least two numeric columns.");
+    const valid=csvData.rows.filter(r=>cols.every(c=>r.cells[c]!==""&&Number.isFinite(Number(r.cells[c]))));
+    const p=cols.length;
+    if(valid.length<p+1) throw new Error("Need at least p + 1 complete observations to estimate the covariance matrix, where p is the number of selected variables.");
+    const X=valid.map(r=>cols.map(c=>Number(r.cells[c])));
+    const means=Array.from({length:p},(_,j)=>X.reduce((s,r)=>s+r[j],0)/X.length);
+    const cov=Array.from({length:p},(_,i)=>Array.from({length:p},(_,j)=>X.reduce((s,r)=>s+(r[i]-means[i])*(r[j]-means[j]),0)/(X.length-1)));
+    const chol=cholesky(cov);
+    if(!chol.ok) throw new Error("The selected variables produce a covariance matrix that is not positive definite. Check redundant variables or choose a different set of columns.");
+    const precision=invert(cov).inverse;
+    const distances=X.map((a,i)=>X.map((b,j)=>{
+      const d=a.map((v,k)=>v-b[k]);
+      const d2=d.reduce((s,v,k)=>s+v*precision[k].reduce((t,q,l)=>t+q*d[l],0),0);
+      return Math.sqrt(Math.max(0,d2));
+    }));
+    const labels=valid.map(r=>"Row "+r.label);
+    const csv=[["Observation",...labels],...distances.map((row,i)=>[labels[i],...row.map(v=>Number(v.toPrecision(12)))])].map(row=>row.map(csvEscape).join(",")).join("\r\n");
+    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+    const url=URL.createObjectURL(blob); const a=document.createElement("a");
+    a.href=url; a.download="mahalanobis-distance-matrix.csv"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    $("csvStatus").textContent="Downloaded pairwise Mahalanobis distance matrix for "+valid.length+" complete observations using "+p+" selected variables.";
+  } catch(err) { $("csvStatus").textContent=err.message; }
+}
+function updateCsvRows() {
+  if(!csvData) return;
+  const cols=selectedCsvColumns(); const sel=$("csvRow"); sel.innerHTML="";
+  const eligible=csvData.rows.filter(r=>cols.length&&cols.every(c=>r.cells[c]!==""&&Number.isFinite(Number(r.cells[c]))));
+  eligible.forEach(r=>{const opt=document.createElement("option");opt.value=String(r.label);opt.textContent="Row "+r.label+" · "+r.cells.slice(0,Math.min(3,r.cells.length)).join(", ");sel.appendChild(opt);});
+  $("csvStatus").textContent=cols.length<2?"Select at least two numeric columns.":eligible.length+" complete observations available for the selected variables.";
+}
+function normInf(A) { return Math.max(...A.map(r => r.reduce((s,v)=>s+Math.abs(v),0))); }
+function invert(A) {
+  const n = A.length, M = A.map((r,i)=>r.concat(r.map((_,j)=>i===j?1:0)));
+  let maxPivot = 0, minPivot = Infinity;
+  for (let c=0;c<n;c++) {
+    let p=c;
+    for(let r=c+1;r<n;r++) if(Math.abs(M[r][c])>Math.abs(M[p][c])) p=r;
+    const pivot = Math.abs(M[p][c]);
+    if (pivot < 1e-12) throw new Error("Covariance matrix is singular or numerically near-singular; ordinary inversion is unstable. Check redundant variables or use a justified regularisation/pseudoinverse method.");
+    [M[c],M[p]]=[M[p],M[c]];
+    const div=M[c][c]; maxPivot=Math.max(maxPivot,Math.abs(div)); minPivot=Math.min(minPivot,Math.abs(div));
+    for(let j=0;j<2*n;j++) M[c][j]/=div;
+    for(let r=0;r<n;r++) if(r!==c) { const f=M[r][c]; for(let j=0;j<2*n;j++) M[r][j]-=f*M[c][j]; }
+  }
+  return {inverse:M.map(r=>r.slice(n)), pivotRatio:maxPivot/minPivot};
+}
+function cholesky(A) {
+  const n=A.length,L=Array.from({length:n},()=>Array(n).fill(0));
+  for(let i=0;i<n;i++) for(let j=0;j<=i;j++) {
+    let sum=A[i][j]; for(let k=0;k<j;k++) sum-=L[i][k]*L[j][k];
+    if(i===j) { if(sum <= 1e-10) return {ok:false,minDiag:sum}; L[i][j]=Math.sqrt(sum); }
+    else L[i][j]=sum/L[j][j];
+  }
+  return {ok:true,L};
+}
+function fmt(x) { return Number(x).toLocaleString(undefined,{maximumFractionDigits:6,minimumFractionDigits:0}); }
+function matrixHtml(A) {
+  return '<table><tbody>'+A.map((r,i)=>'<tr><th>Row '+(i+1)+'</th>'+r.map(v=>'<td>'+fmt(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
+}
+function calculate() {
+  $("error").style.display="none";
+  try {
+    const x=parseVector($("target").value,"Target vector");
+    const mu=parseVector($("mean").value,"Reference mean");
+    const inputMatrix=parseMatrix($("cov").value), n=x.length;
+    if(mu.length!==n) throw new Error("Target vector and reference mean must have the same number of values.");
+    if(inputMatrix.length!==n) throw new Error("Matrix dimension must match the number of values in the target and mean vectors.");
+    const scale=Math.max(1,...inputMatrix.flat().map(Math.abs)), tol=1e-9*scale;
+    let maxAsym=0;
+    for(let i=0;i<n;i++) for(let j=0;j<n;j++) maxAsym=Math.max(maxAsym,Math.abs(inputMatrix[i][j]-inputMatrix[j][i]));
+    if(maxAsym>tol) throw new Error("The supplied matrix is not symmetric within numerical tolerance (maximum asymmetry "+fmt(maxAsym)+"). Check the matrix or variable ordering.");
+    const sym=inputMatrix.map((r,i)=>r.map((v,j)=>(v+inputMatrix[j][i])/2));
+    const chol=cholesky(sym);
+    if(!chol.ok) throw new Error("The supplied matrix is not positive definite (Cholesky test failed). It may be singular or positive semidefinite; this version requires a positive-definite covariance or precision matrix.");
+    const {inverse}=invert(sym), delta=x.map((v,i)=>v-mu[i]);
+    const precision=$("matrixType").value==="precision"?sym:inverse;
+    let d2=delta.reduce((s,v,i)=>s+v*precision[i].reduce((rowSum,p,j)=>rowSum+p*delta[j],0),0);
+    if(d2 < -1e-8) throw new Error("Computed squared distance is negative beyond numerical tolerance; inspect matrix conditioning and inputs.");
+    d2=Math.max(0,d2);
+    const euclideanSquared=delta.reduce((s,v)=>s+v*v,0);
+    const cond=normInf(sym)*normInf(inverse);
+    $("distance").textContent=fmt(Math.sqrt(d2));
+    $("squared").textContent=fmt(d2);
+    $("euclidean").textContent=fmt(Math.sqrt(euclideanSquared));
+    $("euclideanSquared").textContent=fmt(euclideanSquared);
+    $("dimension").textContent=String(n);
+    $("condition").textContent=cond.toExponential(2);
+    $("delta").textContent="["+delta.map(fmt).join(", ")+"]";
+    $("state").textContent=cond>1e8?"Valid matrix · poor conditioning":cond>1e5?"Valid matrix · check conditioning":"Calculation complete";
+    $("interpretation").textContent=cond>1e8?"Distance calculated, but the covariance matrix is very ill-conditioned. Small changes in inputs may strongly affect the result; interpret cautiously.":cond>1e5?"Distance calculated. The matrix may be ill-conditioned; inspect variable redundancy and scaling before relying on the result.":"Distance calculated using the supplied covariance matrix. Larger values indicate greater multivariate separation from the reference mean, relative to the covariance structure.";
+    $("diagnostics").innerHTML='<ul><li><strong>Matrix supplied:</strong> '+($("matrixType").value==="precision"?"precision matrix (Σ⁻¹)":"covariance matrix (Σ)")+'.</li><li><strong>Symmetry:</strong> passed after tolerance check (maximum asymmetry '+fmt(maxAsym)+').</li><li><strong>Positive definiteness:</strong> passed Cholesky factorisation.</li><li><strong>Mahalanobis distance:</strong> calculated as (x − μ)ᵀP(x − μ), using the supplied precision matrix directly or inverting the covariance matrix when covariance was supplied.</li><li><strong>Euclidean distance:</strong> calculated independently from the unweighted squared differences.</li><li><strong>Infinity-norm condition estimate:</strong> '+fmt(cond)+'.</li></ul>';
+    $("inverse").innerHTML=matrixHtml(inverse);
+    $("details").hidden=false;
+  } catch(err) {
+    $("error").textContent=err.message;
+    $("error").style.display="block";
+    $("state").textContent="Input needs attention";
+  }
+}
+$("calculate").addEventListener("click",calculate);
+$("matrixType").addEventListener("change",updateMatrixLabel);
+$("manualTab").addEventListener("click",()=>setTab("manual"));
+$("csvTab").addEventListener("click",()=>setTab("csv"));
+$("csvFile").addEventListener("change",async e=>{
+  const file=e.target.files&&e.target.files[0]; if(!file)return;
+  try {
+    csvData=parseCsv(await file.text()); const select=$("csvColumns"); select.innerHTML="";
+    csvData.headers.forEach((h,i)=>{const vals=csvData.rows.map(r=>r.cells[i]).filter(v=>v!==""); if(vals.length&&vals.every(v=>Number.isFinite(Number(v)))){const opt=document.createElement("option");opt.value=String(i);opt.textContent=h||("Column "+(i+1));select.appendChild(opt);}});
+    if(select.options.length<2) throw new Error("Could not find at least two numeric columns in this CSV.");
+    Array.from(select.options).forEach((o,i)=>{if(i<Math.min(5,select.options.length))o.selected=true;});
+    updateCsvRows(); $("csvStatus").textContent="Loaded "+file.name+". "+csvData.rows.length+" data rows; "+select.options.length+" numeric columns detected.";
+  } catch(err) { csvData=null; $("csvStatus").textContent=err.message; }
+});
+$("csvColumns").addEventListener("change",updateCsvRows);
+$("downloadDistanceMatrix").addEventListener("click",downloadDistanceMatrix);
+$("useCsv").addEventListener("click",()=>{
+  try {
+    if(!csvData) throw new Error("Choose a CSV file first.");
+    const cols=selectedCsvColumns(); if(cols.length<2) throw new Error("Select at least two numeric columns.");
+    const valid=csvData.rows.filter(r=>cols.every(c=>r.cells[c]!==""&&Number.isFinite(Number(r.cells[c]))));
+    if(valid.length<cols.length+1) throw new Error("Need at least p + 1 complete observations to estimate a full-rank covariance matrix, where p is the number of selected variables.");
+    const chosen=Number($("csvRow").value); const targetRow=valid.find(r=>r.label===chosen); if(!targetRow) throw new Error("Choose a target observation from the eligible rows.");
+    const X=valid.map(r=>cols.map(c=>Number(r.cells[c]))); const p=cols.length;
+    const means=Array.from({length:p},(_,j)=>X.reduce((s,r)=>s+r[j],0)/X.length);
+    const cov=Array.from({length:p},(_,i)=>Array.from({length:p},(_,j)=>X.reduce((s,r)=>s+(r[i]-means[i])*(r[j]-means[j]),0)/(X.length-1)));
+    $("target").value=cols.map(c=>Number(targetRow.cells[c])).join(", "); $("mean").value=means.join(", "); $("cov").value=cov.map(r=>r.join(", ")).join("\n");
+    $("matrixType").value="covariance"; updateMatrixLabel(); setTab("manual"); calculate(); $("csvStatus").textContent="Inputs prepared from "+X.length+" complete observations. Target is CSV row "+chosen+".";
+  } catch(err) { $("error").textContent=err.message; $("error").style.display="block"; }
+});
+$("example").addEventListener("click",()=>{
+  $("target").value="2.4, 1.2, 0.9, 3.1, 1.4"; $("mean").value="0, 0, 0, 0, 0";
+  $("cov").value="4, 1.2, 0.8, 1.4, 0.5\n1.2, 2.25, 0.9, 0.75, 0.3\n0.8, 0.9, 1.44, 0.6, 0.24\n1.4, 0.75, 0.6, 4, 0.7\n0.5, 0.3, 0.24, 0.7, 1"; calculate();
+});
+$("clear").addEventListener("click",()=>{
+  $("target").value=""; $("mean").value=""; $("cov").value="";
+  $("distance").textContent="—"; $("squared").textContent="—"; $("euclidean").textContent="—"; $("euclideanSquared").textContent="—"; $("dimension").textContent="—"; $("condition").textContent="—"; $("delta").textContent="—";
+  $("state").textContent="Ready to calculate"; $("interpretation").textContent="Enter a target, mean, and covariance matrix, then calculate."; $("error").style.display="none"; $("details").hidden=true;
+});
+calculate();
+updateMatrixLabel();
+</script>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/rafikiardhi\.earth");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 RafikiArdhi LLC · Carbondale, Colorado · <a href="../privacy.html">Privacy</a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+ *Rafiki Ardhi* — Kiswahili for “land friend”
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:tflynn@rafikiardhi.earth">
+      <i class="bi bi-envelope" role="img" aria-label="Email">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://wa.me/RafikiArdhi">
+      <i class="bi bi-whatsapp" role="img" aria-label="WhatsApp">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
