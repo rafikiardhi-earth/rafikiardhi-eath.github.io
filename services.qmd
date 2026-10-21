@@ -1,6 +1,7 @@
 ---
 title: "Services"
 description: "Independent review, problem solving, research partnerships and training for environmental questions."
+page-layout: full
 ---
 
 ![](images/swartland-banner.jpg){.page-banner fig-alt="Harvested wheatlands in the Swartland, Western Cape, South Africa, with dust blowing off the fields"}
