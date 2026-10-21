@@ -70,11 +70,13 @@ The latest tools, research, translations, and developments from RafikiArdhi.
 ::: {.card-item}
 [![](../images/cov-dist-card.png)](news-updates/covariance-distance.qmd)
 
-[**New tool: Covariance Distance Explorer**](news-updates/covariance-distance.qmd)
+**New tool: Covariance Distance Explorer**
 
-[*October 2026 · Research tools*](news-updates/covariance-distance.qmd)
+*October 2026 · Research tools*
 
-[Explore Mahalanobis and Euclidean distances, inspect covariance structure and check matrix properties using a transparent, interactive tool.](news-updates/covariance-distance.qmd)
+Explore Mahalanobis and Euclidean distances, inspect covariance structure and check matrix properties using a transparent, interactive tool.
+
+[Explore the tool →](news-updates/covariance-distance.html)
 :::
 :::
 
@@ -84,13 +86,13 @@ The latest tools, research, translations, and developments from RafikiArdhi.
 [Southern, East and Central Africa · Latin America · United States · Europe. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
 
 ::: {layout="[[1,1],[1,1]]"}
-[![Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background."}](africa.qmd)
+[![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background."}](africa.qmd)
 
-![Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance."}
+![Photo: Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance."}
 
-![United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground."}
+![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground."}
 
-![Europe (Kleť, Czech Republic)](images/where-europe-klet.jpg){fig-alt="View from a lookout tower over spruce and beech forest to farmland and rolling hills."}
+![Photo: Europe (Kleť, Czech Republic)](images/where-europe-klet.jpg){fig-alt="View from a lookout tower over spruce and beech forest to farmland and rolling hills."}
 :::
 
 [See all services →](services.qmd)
