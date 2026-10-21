@@ -7,9 +7,9 @@ page-layout: full
 ::: {.hero}
 [Free tools · Paid thinking · No gatekeeping]{.tagline}
 
-# Your land friend for researchers and homeowners
+# Your "land friend" for researchers and homeowners
 
-[Answers for environmental questions that don't come off the shelf. We bring scientific understanding to practical problems and creative thinking to complex ones. Our tools are free and our methods open. When a question needs more, we bring the thinking.]{.lead}{.text-black}
+Answers for environmental questions that don't come off the shelf. We bring scientific understanding to practical problems and creative thinking to complex ones. Our tools are free and our methods open. When a question needs more, we bring the thinking.
 
 [Use the free tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
 :::
