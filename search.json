@@ -641,7 +641,7 @@
     "href": "checks.html",
     "title": "Check a result",
     "section": "",
-    "text": "Before you submit, or when you review, check that the numbers can all be true. Each check takes the figures a paper or report gives (or your own) and tests them against what the method allows. Nothing you enter leaves your browser."
+    "text": "Use these checks to investigate whether your own results and methods hold together. They test reported figures against what the method allows, and highlight questions worth considering before you share your work. Reviewers might ask similar questions, but the checks are designed to help you examine your own analysis. Nothing you enter leaves your browser."
   },
   {
     "objectID": "checks.html#finding-the-right-pixel-size",
@@ -684,6 +684,27 @@
     "title": "Check a result",
     "section": "Spatial cross-validation and leakage",
     "text": "Spatial cross-validation and leakage\nRandom cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won’t achieve between samples. Tick anything that applies to the study you’re checking.\n\n\n\nReferences\nRoberts, D.R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. Ecography 40, 913–929. doi:10.1111/ecog.02881\nMeyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution 12, 1620–1633. doi:10.1111/2041-210X.13650\nMilà, C., Mateu, J., Pebesma, E., Meyer, H. (2022). Nearest neighbour distance matching leave-one-out cross-validation for map validation. Methods in Ecology and Evolution 13, 1304–1316. doi:10.1111/2041-210X.13851"
+  },
+  {
+    "objectID": "checks.html#independence-and-study-design",
+    "href": "checks.html#independence-and-study-design",
+    "title": "Check a result",
+    "section": "Independence and study design",
+    "text": "Independence and study design\nIndependence is a property of the study design and the question being asked, not a box that a single diagnostic can certify. Use this guided check to identify common sources of dependence and mismatches between the sampling unit, statistical analysis, and validation design. It flags issues to investigate; it does not automatically invalidate a study.\n\n\n\nReferences\nHurlbert, S.H. (1984). Pseudoreplication and the design of ecological field experiments. Ecological Monographs 54, 187–211. doi:10.2307/1942661\nRoberts, D.R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. Ecography 40, 913–929. doi:10.1111/ecog.02881\nMeyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. Methods in Ecology and Evolution 12, 1620–1633. doi:10.1111/2041-210X.13650"
+  },
+  {
+    "objectID": "checks.html#statistical-assumptions-check-beta",
+    "href": "checks.html#statistical-assumptions-check-beta",
+    "title": "Check a result",
+    "section": "Statistical assumptions check BETA",
+    "text": "Statistical assumptions check BETA\nA guided check for matching assumptions to the statistical method. It does not infer assumptions automatically: select the method and the diagnostics you have checked, then use the prompts to identify anything that may need further investigation. Reviewers might ask similar questions about the evidence reported.\n\n  \n    Method reportedLinear regression / ANCOVAANOVA / group comparisonLogistic regressionPearson correlationMixed-effects / repeated measuresRank-based / nonparametric methodOther or unclear\n    Primary aimInference (tests, estimates or confidence intervals)PredictionDescription / exploration\n  \n  Which checks have you carried out or documented?\n  \n     Residuals or model diagnostics inspected\n     Variance / dispersion assessed\n     Relevant distributional assumption assessed\n     Influential points / outliers assessed where relevant\n     Independence or grouping structure addressed\n     Functional form / link / linearity assessed where relevant\n  \n  Generate questions to consider Reset\n  \n\n\n\nScope note\nThis beta tool is a structured checklist, not a test of model assumptions. The relevant assumptions depend on the exact statistical procedure and intended inference. An unchecked item only means that you have not marked the check as reported; it does not establish that the paper omitted it."
+  },
+  {
+    "objectID": "checks.html#model-comparison-audit-beta",
+    "href": "checks.html#model-comparison-audit-beta",
+    "title": "Check a result",
+    "section": "Model comparison audit BETA",
+    "text": "Model comparison audit BETA\nUse this checklist when a paper claims that one model performs better than another. It checks comparability of the evaluation design; it does not decide the winner from a single metric.\n\n  For each item, select the statement that best describes the comparison in the paper.\n  \n    Evaluation observationsSame held-out observations for all modelsDifferent observations / foldsNot clear from the paper\n    Response and scaleSame response, units and transformationDifferent response scale / targetNot clear from the paper\n    Validation strategySame split or resampling strategyDifferent validation strategiesNot clear from the paper\n    Metric definition and directionSame metric definition; direction understoodMetrics differ or are not directly comparableNot clear from the paper\n    Tuning and preprocessingTuning / preprocessing confined to training dataPossible test-data use or leakageNot clear from the paper\n    Uncertainty in the differenceUncertainty or paired differences reportedOnly point estimates reportedNot clear from the paper\n  \n  Audit comparison Reset\n  \n\n\n\nScope note\nThis beta check examines the comparability of model evaluations based on your selected answers. It does not calculate performance metrics or infer statistical significance. For spatial, temporal or grouped data, validation design should reflect the intended prediction task; see Roberts et al. (2017), Ecography, 40, 913–929. doi:10.1111/ecog.02881."
   },
   {
     "objectID": "checks.html#lab-method-conversions",
