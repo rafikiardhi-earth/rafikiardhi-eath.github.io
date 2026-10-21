@@ -17,7 +17,7 @@ page-layout: full
 ::: {.cards}
 ::: {.card-item}
 ### [Homeowners: open science](homeowners.qmd)
-Practical home and landscape decisions informed by the same scientific principles researchers use—from applying Darcy’s and Jurin’s laws to irrigation design to using calculus to estimate sod quantities for irregular lawns.
+Practical home and landscape decisions informed by the same scientific principles researchers use, from applying Darcy’s and Jurin’s laws for irrigation design to using calculus to estimate sod quantities for irregular lawns.
 
 ![Dry-stacked retaining walls, built without mortar and still holding the slope after 15 years.](images/drystack-walls-card.jpg)
 :::
