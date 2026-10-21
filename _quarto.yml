@@ -47,7 +47,7 @@ website:
           - text: "For researchers"
           - href: tools.qmd
             text: Research tools
-          - href: checks (2).qmd
+          - href: checks_alt.qmd
             text: Research checks
           - text: "---"
           - text: "Learners"
