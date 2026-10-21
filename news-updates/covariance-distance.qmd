@@ -1,0 +1,364 @@
+---
+title: "Covariance Distance Explorer"
+format:
+  html:
+    page-layout: full
+---
+
+<style>
+
+:root {
+  color-scheme: light dark;
+  --site-primary: #24594d;
+  --site-on-primary: #ffffff;
+  --site-secondary: #e3eee8;
+  --site-on-secondary: #183c33;
+  --site-background: #f5f7f3;
+  --site-on-background: #1d2925;
+  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --site-font-heading: Georgia, "Times New Roman", serif;
+  --site-heading-scale: 1;
+  --site-spacing-scale: 1;
+  --site-radius-scale: 1;
+  --site-decoration-opacity: 1;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --site-primary: #8cc8b2;
+    --site-on-primary: #102b24;
+    --site-secondary: #243b34;
+    --site-on-secondary: #e2f1e9;
+    --site-background: #151d1a;
+    --site-on-background: #e6eee9;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+#app { background-color: var(--site-background); color: var(--site-on-background); min-height: 100vh; padding: calc(28px * var(--site-spacing-scale)); border-radius: 0; }
+main { max-width: 1100px; margin: 0 auto; }
+header { border-bottom: 1px solid color-mix(in srgb, var(--site-on-background) 16%, transparent); padding-bottom: 22px; margin-bottom: 24px; }
+.eyebrow { color: var(--site-primary); font-size: .76rem; font-weight: 750; letter-spacing: .13em; text-transform: uppercase; }
+h1, h2, h3 { font-family: var(--site-font-heading); font-weight: 600; }
+h1 { font-size: calc(2.4rem * var(--site-heading-scale)); line-height: 1.05; margin: 9px 0 12px; }
+h2 { font-size: calc(1.4rem * var(--site-heading-scale)); margin: 0 0 8px; }
+p { line-height: 1.55; }
+.intro { max-width: 760px; margin-bottom: 0; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(290px, .8fr); gap: calc(20px * var(--site-spacing-scale)); align-items: start; }
+.panel { background: light-dark(#ffffff, #1e2924); border: 1px solid color-mix(in srgb, var(--site-on-background) 14%, transparent); border-radius: calc(16px * var(--site-radius-scale)); padding: calc(20px * var(--site-spacing-scale)); }
+.news-panel { margin: 0 auto; max-width: 980px; }
+.news-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.news-card { border: 1px solid color-mix(in srgb, var(--site-on-background) 12%, transparent); border-radius: 12px; overflow: hidden; background: var(--site-background); display: flex; flex-direction: column; min-width: 0; }
+.news-art { min-height: 100px; padding: 17px; display: flex; align-items: end; background: linear-gradient(135deg, color-mix(in srgb, var(--site-primary) 24%, var(--site-background)), var(--site-secondary)); color: var(--site-on-secondary); }
+.news-art svg { width: 44px; height: 44px; opacity: .9; }
+.news-copy { padding: 15px; display: flex; flex-direction: column; align-items: start; flex: 1; }
+.news-meta { font-size: .7rem; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; color: var(--site-primary); margin-bottom: 8px; }
+.news-copy h3 { font-family: var(--site-font-body); font-size: 1rem; line-height: 1.35; margin: 0 0 7px; }
+.news-copy p { font-size: .88rem; margin: 0 0 15px; line-height: 1.5; }
+.news-link { color: var(--site-primary); font-size: .88rem; font-weight: 750; text-decoration: none; margin-top: auto; }
+.news-link:hover { text-decoration: underline; }
+.panel + .panel { margin-top: 16px; }
+label { display: block; font-size: .88rem; font-weight: 650; margin: 14px 0 6px; }
+textarea, input, select { width: 100%; border: 1px solid color-mix(in srgb, var(--site-on-background) 25%, transparent); border-radius: 8px; padding: 10px 11px; background: var(--site-background); color: var(--site-on-background); font: inherit; }
+textarea { min-height: 140px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .86rem; line-height: 1.5; }
+small, .muted { color: color-mix(in srgb, var(--site-on-background) 68%, transparent); }
+small { display: block; line-height: 1.45; margin-top: 5px; }
+button { border: 0; border-radius: 9px; background: var(--site-primary); color: var(--site-on-primary); padding: 11px 15px; font: inherit; font-weight: 700; cursor: pointer; }
+button.secondary { background: var(--site-secondary); color: var(--site-on-secondary); }
+.actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 16px; }
+.tabs { display: flex; gap: 8px; border-bottom: 1px solid color-mix(in srgb, var(--site-on-background) 16%, transparent); margin: 12px 0 16px; }
+.tab { border-radius: 8px 8px 0 0; background: transparent; color: var(--site-on-background); border-bottom: 3px solid transparent; padding: 10px 12px; }
+.tab[aria-selected="true"] { color: var(--site-primary); border-bottom-color: var(--site-primary); }
+.tab-panel[hidden] { display: none; }
+.error { display: none; color: #b91c1c; background: #fee2e2; border-radius: 8px; padding: 10px 12px; margin-top: 12px; }
+.metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+.metric { background: var(--site-secondary); color: var(--site-on-secondary); padding: 13px; border-radius: 10px; }
+.metric span { display: block; font-size: .75rem; font-weight: 650; opacity: .8; }
+.metric strong { display: block; font-size: 1.3rem; margin-top: 5px; font-variant-numeric: tabular-nums; }
+.status { border-left: 4px solid var(--site-primary); padding: 10px 12px; background: color-mix(in srgb, var(--site-primary) 10%, transparent); border-radius: 0 8px 8px 0; line-height: 1.45; }
+table { width: 100%; border-collapse: collapse; font-size: .87rem; margin-top: 10px; }
+th, td { padding: 8px 7px; text-align: right; border-bottom: 1px solid color-mix(in srgb, var(--site-on-background) 12%, transparent); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+.result-section { margin-top: 18px; }
+.pill { display: inline-block; font-size: .74rem; font-weight: 750; padding: 4px 8px; border-radius: 100px; background: var(--site-secondary); color: var(--site-on-secondary); }
+footer { margin-top: 24px; border-top: 1px solid color-mix(in srgb, var(--site-on-background) 16%, transparent); padding-top: 16px; font-size: .83rem; }
+@media (max-width: 760px) { #app { padding: 18px; } .layout { grid-template-columns: 1fr; } .news-grid { grid-template-columns: 1fr; } h1 { font-size: calc(2rem * var(--site-heading-scale)); } }
+
+</style>
+
+<div id="app" data-sites-preview-theme>
+<main>
+<header>
+  <div class="eyebrow">RafikiArdhi · Research tools</div>
+  <h1>Covariance Distance Explorer</h1>
+  <p class="intro">Calculate Mahalanobis distance from a mean vector and covariance matrix. Explore how variance and correlation change multivariate distance, with transparent validation and no data sent anywhere.</p>
+</header>
+<div class="layout">
+<section class="panel">
+  <h2>Input data</h2>
+  <p class="muted">Use the longer worked example, enter values manually, or open a CSV containing observations. CSV mode calculates a mean and sample covariance from selected numeric columns, then lets you choose a row to measure against that reference.</p>
+  <div class="tabs" role="tablist" aria-label="Input method">
+    <button class="tab" id="manualTab" role="tab" aria-selected="true" aria-controls="manualPanel">Manual / example</button>
+    <button class="tab" id="csvTab" role="tab" aria-selected="false" aria-controls="csvPanel">Open CSV</button>
+  </div>
+  <div id="manualPanel" class="tab-panel" role="tabpanel" aria-labelledby="manualTab">
+  <label for="target">Target vector (x)</label>
+  <textarea id="target" spellcheck="false">2.4, 1.2, 0.9, 3.1, 1.4</textarea>
+  <small>Example: a soil sample represented by two standardised attributes.</small>
+  <label for="mean">Reference mean (μ)</label>
+  <textarea id="mean" spellcheck="false">0, 0, 0, 0, 0</textarea>
+  <label for="matrixType">Matrix supplied</label>
+  <select id="matrixType"><option value="covariance">Covariance matrix (Σ)</option><option value="precision">Precision matrix (Σ⁻¹)</option></select>
+  <small>Choose covariance when you have Σ, or precision when you already have the inverse covariance matrix Σ⁻¹. The tool calculates the distance using the selected matrix and displays its inverse for reference.</small>
+  <label for="cov" id="matrixLabel">Covariance matrix (Σ)</label>
+  <textarea id="cov" spellcheck="false">4, 1.2, 0.8, 1.4, 0.5
+1.2, 2.25, 0.9, 0.75, 0.3
+0.8, 0.9, 1.44, 0.6, 0.24
+1.4, 0.75, 0.6, 4, 0.7
+0.5, 0.3, 0.24, 0.7, 1</textarea>
+  <small id="matrixHelp">The matrix must be square, symmetric, and positive definite. Rows and columns must follow the same variable order as x and μ.</small>
+  <div class="actions">
+    <button id="calculate">Calculate distance</button>
+    <button id="example" class="secondary">Load example</button>
+    <button id="clear" class="secondary">Clear</button>
+  </div>
+  </div>
+  <div id="csvPanel" class="tab-panel" role="tabpanel" aria-labelledby="csvTab" hidden>
+    <p>Choose a local CSV file with a header row and numeric columns. The file is read in your browser and is not uploaded.</p>
+    <label for="csvFile">CSV file</label>
+    <input id="csvFile" type="file" accept=".csv,text/csv">
+    <div id="csvStatus" class="status" style="margin-top:12px">No file loaded.</div>
+    <label for="csvColumns">Variables to include</label>
+    <select id="csvColumns" multiple size="6" aria-describedby="csvHelp"></select>
+    <small id="csvHelp">Select at least two numeric variables. Hold Ctrl (Windows) or Command (Mac) to select multiple columns.</small>
+    <label for="csvRow">Target observation</label>
+    <select id="csvRow"></select>
+    <div class="actions"><button id="useCsv">Use selected CSV data</button><button id="downloadDistanceMatrix" class="secondary">Download distance matrix CSV</button></div>
+    <p class="muted">Selected columns define the reference mean and sample covariance. The chosen row becomes the target vector. Rows with missing or non-numeric selected values are excluded from the reference calculation.</p>
+  </div>
+  <div id="error" class="error" role="alert"></div>
+</section>
+<section>
+  <div class="panel">
+    <h2>Result</h2>
+    <span class="pill" id="state">Ready to calculate</span>
+    <div class="metrics">
+      <div class="metric"><span>Mahalanobis distance</span><strong id="distance">—</strong></div>
+      <div class="metric"><span>Squared Mahalanobis distance</span><strong id="squared">—</strong></div>
+      <div class="metric"><span>Euclidean distance</span><strong id="euclidean">—</strong></div>
+      <div class="metric"><span>Squared Euclidean distance</span><strong id="euclideanSquared">—</strong></div>
+      <div class="metric"><span>Variables</span><strong id="dimension">—</strong></div>
+      <div class="metric"><span>Matrix condition estimate</span><strong id="condition">—</strong></div>
+    </div>
+    <div id="interpretation" class="status">Enter a target, mean, and covariance matrix, then calculate.</div>
+    <div class="result-section">
+      <h3>Difference vector (x − μ)</h3>
+      <div id="delta" class="muted">—</div>
+    </div>
+  </div>
+  <div class="panel">
+    <h2>What is being calculated?</h2>
+    <p>Mahalanobis distance measures how far a vector is from a reference mean while accounting for covariance among variables.</p>
+    <p><strong>Squared Mahalanobis distance: D² = (x − μ)ᵀ P (x − μ)</strong>, where P is the precision matrix (Σ⁻¹).</p>
+    <p><strong>Squared Euclidean distance: E² = Σᵢ(xᵢ − μᵢ)²</strong>; Euclidean distance is √E².</p>
+    <p class="muted">Euclidean distance treats each variable axis equally in the supplied units. Mahalanobis distance accounts for covariance and variable scales. Neither distance is a probability by itself.</p>
+  </div>
+</section>
+</div>
+<div class="panel result-section" id="details" hidden>
+  <h2>Matrix diagnostics</h2>
+  <div id="diagnostics"></div>
+  <h3 id="inverseTitle">Inverse matrix</h3>
+  <div id="inverse"></div>
+</div>
+<footer>Transparent calculation · Runs locally in this page · Not a substitute for checking whether the chosen variables, covariance estimate, and reference population are scientifically appropriate.</footer>
+</main>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+function parseVector(text, name) {
+  const tokens = text.trim().split(/[\s,;]+/).filter(Boolean);
+  if (!tokens.length) throw new Error(name + " is empty.");
+  const vals = tokens.map(Number);
+  if (vals.some(v => !Number.isFinite(v))) throw new Error(name + " contains a non-numeric or non-finite value.");
+  return vals;
+}
+function parseMatrix(text) {
+  const rows = text.trim().split(/\n|;/).map(s => s.trim()).filter(Boolean).map(line => line.split(/[\s,]+/).filter(Boolean).map(Number));
+  if (!rows.length) throw new Error("Covariance matrix is empty.");
+  if (rows.some(r => r.some(v => !Number.isFinite(v)))) throw new Error("Covariance matrix contains a non-numeric or non-finite value.");
+  const n = rows.length;
+  if (rows.some(r => r.length !== n)) throw new Error("Covariance matrix must be square: number of rows must equal number of columns.");
+  return rows;
+}
+function parseCsv(text) {
+  const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/).filter(line=>line.trim().length);
+  if(lines.length<3) throw new Error("CSV needs a header and at least two data rows.");
+  function splitLine(line) {
+    const out=[]; let cur='', quoted=false;
+    for(let i=0;i<line.length;i++) { const ch=line[i]; if(ch==='"'&&quoted&&line[i+1]==='"'){cur+='"';i++;} else if(ch==='"'){quoted=!quoted;} else if(ch===','&&!quoted){out.push(cur.trim());cur='';} else cur+=ch; }
+    if(quoted) throw new Error("CSV contains an unclosed quoted field."); out.push(cur.trim()); return out;
+  }
+  const headers=splitLine(lines[0]);
+  if(new Set(headers).size!==headers.length) throw new Error("CSV column names must be unique.");
+  const rows=lines.slice(1).map((line,i)=>{const cells=splitLine(line); if(cells.length!==headers.length) throw new Error("CSV row "+(i+2)+" has "+cells.length+" fields; expected "+headers.length+"."); return {label:i+1,cells};});
+  return {headers,rows};
+}
+let csvData=null;
+function setTab(which) {
+  const manual=which==='manual'; $("manualPanel").hidden=!manual; $("csvPanel").hidden=manual;
+  $("manualTab").setAttribute("aria-selected",String(manual)); $("csvTab").setAttribute("aria-selected",String(!manual));
+}
+function updateMatrixLabel() {
+  const precision=$("matrixType").value==="precision";
+  $("matrixLabel").textContent=precision?"Precision matrix (Σ⁻¹)":"Covariance matrix (Σ)";
+  $("matrixHelp").textContent=precision?"Enter the precision matrix, which is the inverse covariance matrix. It must be square, symmetric, and positive definite; rows and columns must follow the same variable order as x and μ.":"Enter the covariance matrix. It must be square, symmetric, and positive definite; rows and columns must follow the same variable order as x and μ.";
+  $("inverseTitle").textContent=precision?"Inverse precision matrix / covariance matrix (Σ)":"Inverse covariance matrix / precision matrix (Σ⁻¹)";
+}
+function selectedCsvColumns() { return Array.from($("csvColumns").selectedOptions).map(o=>Number(o.value)); }
+function csvEscape(value) { const s=String(value); return /[",\n\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s; }
+function downloadDistanceMatrix() {
+  try {
+    if(!csvData) throw new Error("Choose a CSV file first.");
+    const cols=selectedCsvColumns();
+    if(cols.length<2) throw new Error("Select at least two numeric columns.");
+    const valid=csvData.rows.filter(r=>cols.every(c=>r.cells[c]!==""&&Number.isFinite(Number(r.cells[c]))));
+    const p=cols.length;
+    if(valid.length<p+1) throw new Error("Need at least p + 1 complete observations to estimate the covariance matrix, where p is the number of selected variables.");
+    const X=valid.map(r=>cols.map(c=>Number(r.cells[c])));
+    const means=Array.from({length:p},(_,j)=>X.reduce((s,r)=>s+r[j],0)/X.length);
+    const cov=Array.from({length:p},(_,i)=>Array.from({length:p},(_,j)=>X.reduce((s,r)=>s+(r[i]-means[i])*(r[j]-means[j]),0)/(X.length-1)));
+    const chol=cholesky(cov);
+    if(!chol.ok) throw new Error("The selected variables produce a covariance matrix that is not positive definite. Check redundant variables or choose a different set of columns.");
+    const precision=invert(cov).inverse;
+    const distances=X.map((a,i)=>X.map((b,j)=>{
+      const d=a.map((v,k)=>v-b[k]);
+      const d2=d.reduce((s,v,k)=>s+v*precision[k].reduce((t,q,l)=>t+q*d[l],0),0);
+      return Math.sqrt(Math.max(0,d2));
+    }));
+    const labels=valid.map(r=>"Row "+r.label);
+    const csv=[["Observation",...labels],...distances.map((row,i)=>[labels[i],...row.map(v=>Number(v.toPrecision(12)))])].map(row=>row.map(csvEscape).join(",")).join("\r\n");
+    const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+    const url=URL.createObjectURL(blob); const a=document.createElement("a");
+    a.href=url; a.download="mahalanobis-distance-matrix.csv"; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    $("csvStatus").textContent="Downloaded pairwise Mahalanobis distance matrix for "+valid.length+" complete observations using "+p+" selected variables.";
+  } catch(err) { $("csvStatus").textContent=err.message; }
+}
+function updateCsvRows() {
+  if(!csvData) return;
+  const cols=selectedCsvColumns(); const sel=$("csvRow"); sel.innerHTML="";
+  const eligible=csvData.rows.filter(r=>cols.length&&cols.every(c=>r.cells[c]!==""&&Number.isFinite(Number(r.cells[c]))));
+  eligible.forEach(r=>{const opt=document.createElement("option");opt.value=String(r.label);opt.textContent="Row "+r.label+" · "+r.cells.slice(0,Math.min(3,r.cells.length)).join(", ");sel.appendChild(opt);});
+  $("csvStatus").textContent=cols.length<2?"Select at least two numeric columns.":eligible.length+" complete observations available for the selected variables.";
+}
+function normInf(A) { return Math.max(...A.map(r => r.reduce((s,v)=>s+Math.abs(v),0))); }
+function invert(A) {
+  const n = A.length, M = A.map((r,i)=>r.concat(r.map((_,j)=>i===j?1:0)));
+  let maxPivot = 0, minPivot = Infinity;
+  for (let c=0;c<n;c++) {
+    let p=c;
+    for(let r=c+1;r<n;r++) if(Math.abs(M[r][c])>Math.abs(M[p][c])) p=r;
+    const pivot = Math.abs(M[p][c]);
+    if (pivot < 1e-12) throw new Error("Covariance matrix is singular or numerically near-singular; ordinary inversion is unstable. Check redundant variables or use a justified regularisation/pseudoinverse method.");
+    [M[c],M[p]]=[M[p],M[c]];
+    const div=M[c][c]; maxPivot=Math.max(maxPivot,Math.abs(div)); minPivot=Math.min(minPivot,Math.abs(div));
+    for(let j=0;j<2*n;j++) M[c][j]/=div;
+    for(let r=0;r<n;r++) if(r!==c) { const f=M[r][c]; for(let j=0;j<2*n;j++) M[r][j]-=f*M[c][j]; }
+  }
+  return {inverse:M.map(r=>r.slice(n)), pivotRatio:maxPivot/minPivot};
+}
+function cholesky(A) {
+  const n=A.length,L=Array.from({length:n},()=>Array(n).fill(0));
+  for(let i=0;i<n;i++) for(let j=0;j<=i;j++) {
+    let sum=A[i][j]; for(let k=0;k<j;k++) sum-=L[i][k]*L[j][k];
+    if(i===j) { if(sum <= 1e-10) return {ok:false,minDiag:sum}; L[i][j]=Math.sqrt(sum); }
+    else L[i][j]=sum/L[j][j];
+  }
+  return {ok:true,L};
+}
+function fmt(x) { return Number(x).toLocaleString(undefined,{maximumFractionDigits:6,minimumFractionDigits:0}); }
+function matrixHtml(A) {
+  return '<table><tbody>'+A.map((r,i)=>'<tr><th>Row '+(i+1)+'</th>'+r.map(v=>'<td>'+fmt(v)+'</td>').join('')+'</tr>').join('')+'</tbody></table>';
+}
+function calculate() {
+  $("error").style.display="none";
+  try {
+    const x=parseVector($("target").value,"Target vector");
+    const mu=parseVector($("mean").value,"Reference mean");
+    const inputMatrix=parseMatrix($("cov").value), n=x.length;
+    if(mu.length!==n) throw new Error("Target vector and reference mean must have the same number of values.");
+    if(inputMatrix.length!==n) throw new Error("Matrix dimension must match the number of values in the target and mean vectors.");
+    const scale=Math.max(1,...inputMatrix.flat().map(Math.abs)), tol=1e-9*scale;
+    let maxAsym=0;
+    for(let i=0;i<n;i++) for(let j=0;j<n;j++) maxAsym=Math.max(maxAsym,Math.abs(inputMatrix[i][j]-inputMatrix[j][i]));
+    if(maxAsym>tol) throw new Error("The supplied matrix is not symmetric within numerical tolerance (maximum asymmetry "+fmt(maxAsym)+"). Check the matrix or variable ordering.");
+    const sym=inputMatrix.map((r,i)=>r.map((v,j)=>(v+inputMatrix[j][i])/2));
+    const chol=cholesky(sym);
+    if(!chol.ok) throw new Error("The supplied matrix is not positive definite (Cholesky test failed). It may be singular or positive semidefinite; this version requires a positive-definite covariance or precision matrix.");
+    const {inverse}=invert(sym), delta=x.map((v,i)=>v-mu[i]);
+    const precision=$("matrixType").value==="precision"?sym:inverse;
+    let d2=delta.reduce((s,v,i)=>s+v*precision[i].reduce((rowSum,p,j)=>rowSum+p*delta[j],0),0);
+    if(d2 < -1e-8) throw new Error("Computed squared distance is negative beyond numerical tolerance; inspect matrix conditioning and inputs.");
+    d2=Math.max(0,d2);
+    const euclideanSquared=delta.reduce((s,v)=>s+v*v,0);
+    const cond=normInf(sym)*normInf(inverse);
+    $("distance").textContent=fmt(Math.sqrt(d2));
+    $("squared").textContent=fmt(d2);
+    $("euclidean").textContent=fmt(Math.sqrt(euclideanSquared));
+    $("euclideanSquared").textContent=fmt(euclideanSquared);
+    $("dimension").textContent=String(n);
+    $("condition").textContent=cond.toExponential(2);
+    $("delta").textContent="["+delta.map(fmt).join(", ")+"]";
+    $("state").textContent=cond>1e8?"Valid matrix · poor conditioning":cond>1e5?"Valid matrix · check conditioning":"Calculation complete";
+    $("interpretation").textContent=cond>1e8?"Distance calculated, but the covariance matrix is very ill-conditioned. Small changes in inputs may strongly affect the result; interpret cautiously.":cond>1e5?"Distance calculated. The matrix may be ill-conditioned; inspect variable redundancy and scaling before relying on the result.":"Distance calculated using the supplied covariance matrix. Larger values indicate greater multivariate separation from the reference mean, relative to the covariance structure.";
+    $("diagnostics").innerHTML='<ul><li><strong>Matrix supplied:</strong> '+($("matrixType").value==="precision"?"precision matrix (Σ⁻¹)":"covariance matrix (Σ)")+'.</li><li><strong>Symmetry:</strong> passed after tolerance check (maximum asymmetry '+fmt(maxAsym)+').</li><li><strong>Positive definiteness:</strong> passed Cholesky factorisation.</li><li><strong>Mahalanobis distance:</strong> calculated as (x − μ)ᵀP(x − μ), using the supplied precision matrix directly or inverting the covariance matrix when covariance was supplied.</li><li><strong>Euclidean distance:</strong> calculated independently from the unweighted squared differences.</li><li><strong>Infinity-norm condition estimate:</strong> '+fmt(cond)+'.</li></ul>';
+    $("inverse").innerHTML=matrixHtml(inverse);
+    $("details").hidden=false;
+  } catch(err) {
+    $("error").textContent=err.message;
+    $("error").style.display="block";
+    $("state").textContent="Input needs attention";
+  }
+}
+$("calculate").addEventListener("click",calculate);
+$("matrixType").addEventListener("change",updateMatrixLabel);
+$("manualTab").addEventListener("click",()=>setTab("manual"));
+$("csvTab").addEventListener("click",()=>setTab("csv"));
+$("csvFile").addEventListener("change",async e=>{
+  const file=e.target.files&&e.target.files[0]; if(!file)return;
+  try {
+    csvData=parseCsv(await file.text()); const select=$("csvColumns"); select.innerHTML="";
+    csvData.headers.forEach((h,i)=>{const vals=csvData.rows.map(r=>r.cells[i]).filter(v=>v!==""); if(vals.length&&vals.every(v=>Number.isFinite(Number(v)))){const opt=document.createElement("option");opt.value=String(i);opt.textContent=h||("Column "+(i+1));select.appendChild(opt);}});
+    if(select.options.length<2) throw new Error("Could not find at least two numeric columns in this CSV.");
+    Array.from(select.options).forEach((o,i)=>{if(i<Math.min(5,select.options.length))o.selected=true;});
+    updateCsvRows(); $("csvStatus").textContent="Loaded "+file.name+". "+csvData.rows.length+" data rows; "+select.options.length+" numeric columns detected.";
+  } catch(err) { csvData=null; $("csvStatus").textContent=err.message; }
+});
+$("csvColumns").addEventListener("change",updateCsvRows);
+$("downloadDistanceMatrix").addEventListener("click",downloadDistanceMatrix);
+$("useCsv").addEventListener("click",()=>{
+  try {
+    if(!csvData) throw new Error("Choose a CSV file first.");
+    const cols=selectedCsvColumns(); if(cols.length<2) throw new Error("Select at least two numeric columns.");
+    const valid=csvData.rows.filter(r=>cols.every(c=>r.cells[c]!==""&&Number.isFinite(Number(r.cells[c]))));
+    if(valid.length<cols.length+1) throw new Error("Need at least p + 1 complete observations to estimate a full-rank covariance matrix, where p is the number of selected variables.");
+    const chosen=Number($("csvRow").value); const targetRow=valid.find(r=>r.label===chosen); if(!targetRow) throw new Error("Choose a target observation from the eligible rows.");
+    const X=valid.map(r=>cols.map(c=>Number(r.cells[c]))); const p=cols.length;
+    const means=Array.from({length:p},(_,j)=>X.reduce((s,r)=>s+r[j],0)/X.length);
+    const cov=Array.from({length:p},(_,i)=>Array.from({length:p},(_,j)=>X.reduce((s,r)=>s+(r[i]-means[i])*(r[j]-means[j]),0)/(X.length-1)));
+    $("target").value=cols.map(c=>Number(targetRow.cells[c])).join(", "); $("mean").value=means.join(", "); $("cov").value=cov.map(r=>r.join(", ")).join("\n");
+    $("matrixType").value="covariance"; updateMatrixLabel(); setTab("manual"); calculate(); $("csvStatus").textContent="Inputs prepared from "+X.length+" complete observations. Target is CSV row "+chosen+".";
+  } catch(err) { $("error").textContent=err.message; $("error").style.display="block"; }
+});
+$("example").addEventListener("click",()=>{
+  $("target").value="2.4, 1.2, 0.9, 3.1, 1.4"; $("mean").value="0, 0, 0, 0, 0";
+  $("cov").value="4, 1.2, 0.8, 1.4, 0.5\n1.2, 2.25, 0.9, 0.75, 0.3\n0.8, 0.9, 1.44, 0.6, 0.24\n1.4, 0.75, 0.6, 4, 0.7\n0.5, 0.3, 0.24, 0.7, 1"; calculate();
+});
+$("clear").addEventListener("click",()=>{
+  $("target").value=""; $("mean").value=""; $("cov").value="";
+  $("distance").textContent="—"; $("squared").textContent="—"; $("euclidean").textContent="—"; $("euclideanSquared").textContent="—"; $("dimension").textContent="—"; $("condition").textContent="—"; $("delta").textContent="—";
+  $("state").textContent="Ready to calculate"; $("interpretation").textContent="Enter a target, mean, and covariance matrix, then calculate."; $("error").style.display="none"; $("details").hidden=true;
+});
+calculate();
+updateMatrixLabel();
+</script>
