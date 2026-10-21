@@ -68,7 +68,7 @@ The latest tools, research, translations, and developments from RafikiArdhi.
 
 ::: {.cards}
 ::: {.card-item}
-![](../images/cov-dist-card.png){fig-alt="Covariance Distance Explorer"}
+![(../images/cov-dist-card.png){fig-alt="Covariance Distance Explorer"}
 
 **New tool: Covariance Distance Explorer**
 
@@ -76,7 +76,7 @@ The latest tools, research, translations, and developments from RafikiArdhi.
 
 Explore Mahalanobis and Euclidean distances, inspect covariance structure and check matrix properties using a transparent, interactive tool.
 
-[Explore the tool →](news-updates/covariance-distance.html)
+[Explore the tool →]](news-updates/covariance-distance.html)
 :::
 :::
 
