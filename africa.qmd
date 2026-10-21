@@ -1,0 +1,49 @@
+---
+title: "Africa - the beginning"
+description: "From university to extension work, RafikiArdhi was built from our neighbours in Africa"
+page-layout: full
+---
+
+![Mosi-oa-Tunya (Victoria Falls) meaning "the smoke that thunders".](../images/mosi-oa-tunya.jpg){fig-alt="Victoria Falls from the Zambia side. Otherwise known as Mosi-oa-Tunya in Silozi."}
+
+### Where it began
+
+RafikiArdhi grew out of years of soil research on the rooi plane of Stellenbosch University, teaching and agricultural extension across Africa. From university-based work in South Africa to working alongside farmers throughout southern, central and eastern Africa, these experiences shaped a belief that scientific knowledge should support both ecosystem and human wellbeing. 
+
+The work continues through practical tools and approaches that make science more accessible, locally relevant 
+and useful for the people who depend on the land.
+
+### The land
+
+The complexity of Africa's landscapes and soil is sometimes hidden beneath the surface, but a hike into the Cape Fold Belt can reveal the beauty and intricacy of the land. 
+
+![Muizenberg summit with Stellenbosch below and false Bay and Table Mountain in the Distance.](../images/western-cape.jpg){fig-alt="The summit of Muizenberg on the false peak."}
+
+From a mountain summit, you can begin to appreciate the geological history that shaped these landscapes. It can also boggle the mind that penguins live just a 45-minute drive from the cliffs of Muizenberg.
+
+![Penguins can be found on beaches of Cape Peninsula with the most popular being Boulders Beach.](../images/penguins.jpg){fig-alt="The penguins of Boulders Beach."}
+
+The academic and environmental setting of Stellenbosch provides an ideal place to develop scientific skills while learning why they matter beyond the university.
+
+### The people 
+
+Blessed by diversity and contrasts, Africa offers people from every background and experience to learn from. From waking early to collect water for the day to shopping at the local market, everyday life is shaped by community. Collaboration happens naturally, often without anyone thinking of it as collaboration. Bringing ideas together is part of the day, not a job.
+
+![People celebrating Siku ya Uhuru (Independence Day) on December 9th, 2011 in Boma Ng'ombe Tanzania.](../image/tzn-people.jgp){fig-alt="People celebrating independence day."}
+
+We learned geostatistics in Zambia, community-based agriculture in Malawi, agricultural policy in Namibia, sustainable agricultural intensification in South Africa, the importance of smallholder farms in Tanzania, dryland water management in Kenya, and the value of agricultural extension in the Democratic Republic of the Congo. None of these lessons stands alone. The people and cultures are diverse, but the creative freedom to learn, adapt, and bring ideas together remains the same.
+
+![Agriculture festival in Lusaka, Zambia with the President making the keynote speech.](../images/chibombo-card.JPEG){fig-alt="President of Zambia talking about community agriculture."}
+
+### Where connections were built, and still last.
+
+### Where connections were built, and still last
+
+The work doesn't end when a project does, or when we leave a place. Ideas travel, collaborations continue, and lessons from one landscape find meaning in another. The connections built through research, teaching, and shared experiences across Africa continue to shape how we approach scientific problems today. RafikiArdhi carries that spirit forward: bringing knowledge together, making tools accessible, and creating space for new ideas to grow.
+
+![Group of multidisciplinary scientists from Stellenbosch University, not an academic meeting but forming connections.](../images/su-scientists.JPEG){fig-alt="A group of scientist from Stellenbosch."}
+
+
+
+
+
