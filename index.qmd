@@ -99,11 +99,11 @@ Practical tools for checking assumptions, independence, and model comparisons, h
 ::: {layout="[[1,1],[1,1]]"}
 [![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background."}](africa.qmd)
 
-![Photo: Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance."}
-
-[![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground."}](usa.qmd)
+[![Photo: Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance."}](brazil.qmd)
 
 ![Photo: Europe (Kleť, Czech Republic)](images/where-europe-klet.jpg){fig-alt="View from a lookout tower over spruce and beech forest to farmland and rolling hills."}
+
+[![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground."}](usa.qmd)
 :::
 
 [See all services →](services.qmd)
