@@ -23,7 +23,7 @@ From a mountain summit, you can begin to appreciate the geological history that 
 
 ![Penguins can be found on beaches of Cape Peninsula with the most popular being Boulders Beach.](../images/penguins.jpg){fig-alt="The penguins of Boulders Beach." width="600px"}
 
-The academic and environmental setting of Stellenbosch provides an ideal place to develop scientific skills while learning why they matter beyond the university. This setting brought [awards](../images/best-paper.jpg) for the people who helped us, RafikiArdhi at its early stages of [research](publications.qmd) and allowed Dr Flynn to publish is PhD thesis while personally experiencing why it matters.
+The academic and environmental setting of Stellenbosch provides an ideal place to develop scientific skills while learning why they matter beyond the university. This setting brought [awards](../images/best-paper.jpg) for the people who helped us, RafikiArdhi at its early stages of [research](publications.qmd) and allowed Dr Flynn to publish his PhD thesis while personally experiencing why it matters.
 
 ### The people 
 
