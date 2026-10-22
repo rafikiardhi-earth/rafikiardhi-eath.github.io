@@ -110,8 +110,19 @@ main .bi { font-size: 1.15em; margin-right: .4em; vertical-align: -0.1em; }
 // Icons (page content only, so navbar/footer icons keep Quarto's sizing)
 main .bi { font-size: 1.15em; margin-right: .4em; vertical-align: -0.1em; }
 .bi-whatsapp { color: #25D366; }
-.bi-envelope { color: #c98a5e; }
+.bi-envelope { color: $ra-accent; }
 .bi-check2-circle { color: $ra-accent; }
+.bi-geo-alt { color: $ra-accent; }
+.bi-geo-alt-fill { color: $ra-accent; }
+.bi-globe-europe-africa { color: $ra-accent; }
+.bi-globe-europe-africa-fill { color: $ra-accent; }
+.bi-map { color: $ra-accent; }
+.bi-award { color: $ra-accent; }
+.bi-award-fill { color: $ra-accent; }
+.bi-clipboard-check { color: $ra-accent; }
+.bi-clipboard-check-fill { color: $ra-accent; }
+.bi-credit-card { color: $ra-accent; }
+.bi-feather { color: $ra-accent; }
 
 // Language link (English / Español) on homeowner pages
 .hm-lang { text-align: right; margin: -0.5rem 0 0.75rem; font-size: .9rem; }
