@@ -14,7 +14,7 @@ page-layout: full
 [Use the free tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
 :::
 
-### What we believe
+## What we believe
 
 - **Build on what exists.** Old surveys and past projects are worth more than people think. We update knowledge instead of replace it.
 - **Honest uncertainty.** Every answer comes with how far it can be trusted. We propogate uncertainties and make them informative.
@@ -62,7 +62,7 @@ Workshops from do-it-yourself landscaping to research creativity and validation.
 :::
 :::
 
-### News and updates
+## News and updates
 
 The latest tools, research, translations and developments from RafikiArdhi.
 
@@ -92,9 +92,9 @@ Practical tools for checking assumptions, independence, and model comparisons, h
 :::
 :::
 
-### Where we work
+## [Where we work](work-places.qmd)
 
-[Southern, East and Central Africa · Latin America · United States · Europe. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
+[Southern, East and Central Africa · Latin America · Europe · United States. Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
 
 ::: {layout="[[1,1],[1,1]]"}
 [![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background."}](africa.qmd)
