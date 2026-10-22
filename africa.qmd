@@ -23,7 +23,7 @@ From a mountain summit, you can begin to appreciate the geological history that 
 
 ![Penguins can be found on beaches of Cape Peninsula with the most popular being Boulders Beach.](../images/penguins.jpg){fig-alt="The penguins of Boulders Beach." width="600px"}
 
-The academic and environmental setting of Stellenbosch provides an ideal place to develop scientific skills while learning why they matter beyond the university. This setting brought [awards](../images/best-paper.jpg) for the people who helped us, RafikiArdhi at its early stages of [research](publications.qmd) and allowed Dr Flynn to publish his PhD thesis while personally experiencing why it matters.
+The academic and environmental setting of Stellenbosch provides an ideal place to develop scientific skills while learning why they matter beyond the university. This setting brought [awards](../images/best-paper.jpg) for publications to the people who helped us, *RafikiArdhi* at its early stages of [research](publications.qmd) and allowed research while experiencing why it matters.
 
 ### The people 
 
@@ -31,17 +31,21 @@ Blessed by diversity and contrasts, Africa offers people from every background a
 
 ![People celebrating Siku ya Uhuru (Independence Day) on December 9th, 2011 in Boma Ng'ombe Tanzania.](../images/tzn-people.jpg){fig-alt="People celebrating independence day." width="600px"}
 
-We learned geostatistics in Zambia, community-based agriculture in Malawi, agricultural policy in Namibia, sustainable agricultural intensification in South Africa, the importance of smallholder farms in Tanzania, dryland water management in Kenya, and the value of agricultural extension in the Democratic Republic of the Congo. None of these lessons stands alone. This community thinking gave us the opportunity to base our research on increasing access to information ([publication](https://doi.org/10.1016/j.geoderma.2018.11.003)) and digital soil mapping for farms ([publication](https://doi.org/10.1080/02571862.2019.1570566)), aspects that were rarely researched at the time. 
+We learned geostatistics in Zambia, community-based agriculture in Malawi, agricultural policy in Namibia, sustainable agricultural intensification in South Africa, the importance of smallholder farms in Tanzania, dryland water management in Kenya and the value of agricultural extension in the Democratic Republic of the Congo. None of these lessons stands alone. This community thinking gave us the opportunity to base our research on increasing access to information [research](https://doi.org/10.1016/j.geoderma.2018.11.003) and digital soil mapping for farms [research](https://doi.org/10.1080/02571862.2019.1570566), aspects that were rarely researched at the time. 
 
-The people and cultures are diverse, but the creative freedom to learn, adapt, and bring ideas together remains the same.
+The people and cultures are diverse, but the creative freedom to learn, adapt and bring ideas together remains the same.
 
 ![Agriculture festival in Lusaka, Zambia with the President making the keynote speech.](../images/zam-pres-card.jpg){fig-alt="President of Zambia talking about community agriculture." width="600px"}
 
 ### Where connections were built, and still last.
 
-The work doesn't end when a project does, or when we leave a place. Ideas travel, collaborations continue, and lessons from one landscape find meaning in another. The connections built through research, teaching, and shared experiences across Africa continue to shape how we approach scientific problems today. RafikiArdhi carries that spirit forward: bringing knowledge together, making tools accessible, and creating space for new ideas to grow.
+The work doesn't end when a project does, or when we leave a place. Ideas travel, collaborations continue, and lessons from one landscape find meaning in another. The connections built through research, teaching, and shared experiences across Africa continue to shape how we approach scientific problems today. *RafikiArdhi* carries that spirit forward: bringing knowledge together, making tools accessible, and creating space for new ideas to grow.
+
+We continue to work with people connected to organisations such as *[Phyla Earth](https://www.phyla.earth/)* in Lusaka, Zambia; *[Stellenbosch University](https://www.su.ac.za/en/faculties/agri/departments/soil-science/homepage)* in South Africa; *[Zambia Institute of Agriculture](https://www.facebook.com/ZIA.Zambia/)* in Ndola, Zambia; and the *[International Institute of Tropical Agriculture](https://iita.org/)*, with work across West and East Africa.
 
 ![Group of multidisciplinary scientists from Stellenbosch University, not an academic meeting but forming connections.](../images/su-scientists.JPEG){width="600px"}
+
+These relationships are not maintained simply for commercial gain. They endure because research is a collective effort, built on cumulative knowledge and the contributions of many people. It takes a village.
 
 
 

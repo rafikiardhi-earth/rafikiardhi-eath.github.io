@@ -13,7 +13,7 @@ description: "A journey from growing up with gardening to returning to the Unite
 
 ## The roots
 
-RafikiArdhi began in gardening and landscaping, developing an early connection to the land that would grow into environmental research published in international journals. Along the way, experiences such as encountering Hopi culture broadened our understanding of the relationships between people, land, and place. These connections continue to shape our work. Within the first year of returning to the United States, we began exploring soil multifunctionality and resilience on Indigenous lands in the American Southwest ([preprint](https://doi.org/10.32942/X2H66M)). The findings have challenged how we think about environmental systems, bringing scientific questions about soil organisation and resilience into conversation with broader ethical questions about how we understand and care for the land. 
+*RafikiArdhi* began in gardening and landscaping, developing an early connection to the land that would grow into environmental research published in international journals. Along the way, experiences such as encountering Hopi culture broadened our understanding of the relationships between people, land and place. These connections continue to shape our work. Within the first year of returning to the United States, we began exploring soil multifunctionality and resilience on Indigenous lands in the American Southwest ([preprint](https://doi.org/10.32942/X2H66M)). The findings have challenged how we think about environmental systems, bringing scientific questions about soil organisation and resilience into conversation with broader ethical questions about how we understand and care for the land. 
 
 ![We want to protect the ecosystem for us, and our bestfriends](../images/harlow-grass.jpg){fig-alt="Dog enjoying the grass in a landscape worth protecting"}
 
@@ -23,17 +23,17 @@ Returning to the United States has connected the landscapes where our story bega
 
 ![Snowmass ski resort from the sky, where landscapers cannot afford to live but are the predominant workers in the town](../images/smv-snow.jpg){fig-alt="Snowmass ski resort in Colorado, where many landscape workers face the high cost of living"}
 
-This return has also opened new opportunities to contribute to the scientific community. RafikiArdhi team members have joined environmental journal editorial boards ([editorial committee](https://cienciasambientais.com/index.php/rica/editorialcommittee)) and taken on guest-editing roles for open-access applied science research ([Applied Sciences](https://www.mdpi.com/journal/applsci/special_issues/8NPO39I8MT)). Through our university associations, we also review manuscripts and mentor postgraduate students, supporting the development of early-career researchers.
+This return has also opened new opportunities to contribute to the scientific community. *RafikiArdhi* team members have joined environmental journal editorial boards ([editorial committee](https://cienciasambientais.com/index.php/rica/editorialcommittee)) and taken on guest-editing roles for open-access applied science research ([Applied Sciences](https://www.mdpi.com/journal/applsci/special_issues/8NPO39I8MT)). Through our university associations, we also review manuscripts and mentor postgraduate students, supporting the development of early-career researchers.
 
 Science is part of a wider landscape of work and community. In places such as Colorado's mountain towns, the people who maintain and shape the landscape do not always have the means to live in the communities where they work. Connecting environmental knowledge with local needs means recognising these realities, too.
 
 ### Full circle
 
-Building an independent research company gives us the freedom to pursue questions, push conceptual boundaries, and share knowledge beyond traditional academic structures. It also gives us the opportunity to reconnect scientific thinking with the practical work that started RafikiArdhi.
+Building an independent research company gives us the freedom to pursue questions, push conceptual boundaries, and share knowledge beyond traditional academic structures. It also gives us the opportunity to reconnect scientific thinking with the practical work that started *RafikiArdhi*.
 
-That connection takes different forms. We develop research tools that make scientific methods more transparent and accessible, while our [homeowner tools](homeowners.qmd) help people make informed decisions about gardens, soil, and landscaping. We can pursue complex environmental questions while also supporting the everyday work of caring for the land.
+That connection takes different forms. We develop [research tools](tools.qmd) that make scientific methods more transparent and accessible, while our [homeowner tools](homeowners.qmd) help people make informed decisions about gardens, soil and landscaping. We can pursue complex environmental questions while also supporting the everyday work of caring for the land.
 
-For us, bringing science home means more than returning to the United States. It means connecting international research with local work, supporting the next generation of scientists, and making environmental knowledge useful beyond academia — right in your own backyard.
+For us, bringing science home means more than returning to the United States. It means connecting international research with local work, supporting the next generation of scientists and making environmental knowledge useful beyond academia, right in your own backyard.
 
 ![Topsoil covering the hole that its meant to fill as the boss needed to dig.](../images/wewe-not-working.jpg){fig-alt="Husky supervising a topsoil job after the hole has been filled"}
 
