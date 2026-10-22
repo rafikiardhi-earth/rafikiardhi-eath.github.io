@@ -4,17 +4,17 @@ description: "The places that keeps on giving"
 page-layout: full
 ---
 
-![The 2018 World Soil Congress of Soil Science presenting our digital soil mapping for farmers with limited data (Rio de Janeiro, Brazil).](../images/rio-talk-banner.jpg){fig-alt="Explaining how remote sensing can be used to predict soil properties when data are limited"}
+![View from Sugarloaf, showing the city intertwine within the landscape.](../images/brazil-sugarloaf.jpg){fig-alt="View across Rio de Janeiro from Sugarloaf Mountain"}
 
 ## Connections across borders
 
 Latin America has been important in shaping the relationships behind *RafikiArdhi*. It is where many connections were formed through shared interests, experiences, and a common commitment to understanding the environment. Although distance means we do not see one another as often as we would like, these relationships have continued to grow beyond the places and moments where they began.
 
-![View from Sugarloaf, showing the city intertwine within the landscape.](../images/brazil-sugarloaf.jpg){fig-alt="View across Rio de Janeiro from Sugarloaf Mountain"}
+![The 2018 World Soil Congress of Soil Science presenting our digital soil mapping for farmers with limited data (Rio de Janeiro, Brazil).](../images/rio-talk-banner.jpg){fig-alt="Explaining how remote sensing can be used to predict soil properties when data are limited"}
 
 Each city seems to be part of the environment, not an addition to it.
 
-![Hidden amoung the chaos of the city there are places such as Parque Lage courtyard (left) and its gardens (right)](../images/brazil-hidden-city.jpg){fig-alt="The historic courtyard of Parque Lage on the left and its gardens on the right"}
+![Hidden amoung the chaos of the city there are places such as Parque Lage courtyard (left) and its gardens (right)](../images/brazil-hidden-city.jpg){fig-alt="The historic courtyard of Parque Lage on the left and its gardens on the right" .width="600px"}
 
 ## Working together, wherever we are
 
@@ -24,10 +24,10 @@ Good collaborations are not defined by how often people meet, but by what they c
 
 Working with *[Soil Consultoria Socioambiental](https://soilconsultoriasocioambiental.com)*, one of our major partners, we have developed research and tools across several areas:
 
-- **Pedological profile modelling:** Developing continuous soil profile models and making the methods accessible through our ([phySpline tool](tools.html#spline)) and ([published research](https://doi.org/10.1016/j.scitotenv.2026.181621)).
-- **Country-scale soil mapping:** Producing high-resolution predictions of soil types, extending the work described in our ([published research](https://doi.org/10.1016/j.geodrs.2024.e00902)).
-- **Refining continental soil maps:** Translating broad-scale soil information into more detailed local ([soil type maps](https://doi.org/10.1016/j.geomat.2024.100028)).
-- **Three-dimensional carbon mapping:** Calculating soil carbon stocks continuously through the soil profile, supported by our [carbon calculator](tools.html#carbon) and ([published research](https://doi.org/10.1016/j.pedsph.2024.07.004)).
+- **Pedological profile modelling:** Developing continuous soil profile models and making the methods accessible through our [phySpline tool](tools.html#spline) and [published research](https://doi.org/10.1016/j.scitotenv.2026.181621).
+- **Country-scale soil mapping:** Producing high-resolution predictions of soil types, extending the work described in our [published research](https://doi.org/10.1016/j.geodrs.2024.e00902).
+- **Refining continental soil maps:** Translating broad-scale soil information into more detailed local [soil type maps](https://doi.org/10.1016/j.geomat.2024.100028).
+- **Three-dimensional carbon mapping:** Calculating soil carbon stocks continuously through the soil profile, supported by our [carbon calculator](tools.html#carbon) and [published research](https://doi.org/10.1016/j.pedsph.2024.07.004).
 
 Together, these projects bring different expertise and perspectives into the same work. The result is more than any one of us could produce alone: a whole greater than the sum of its parts.
 
