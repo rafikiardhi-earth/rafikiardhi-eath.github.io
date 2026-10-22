@@ -38,10 +38,10 @@ These pages are part of that story, and the story is still being written.
 
 These are the stories:
 
-- *[Africa](africa.qmd)*
-- *[Europe](europe.qmd)*
-- *[Latin America](brazil.qmd)*
-- *[USA](usa.qmd)*
+- {{< bi geo-alt >}} *[Africa](africa.qmd)*
+- {{< bi geo-alt >}} *[Europe](europe.qmd)*
+- {{< bi geo-alt >}} *[Latin America](brazil.qmd)*
+- {{< bi geo-alt >}} *[USA](usa.qmd)*
 
 ## Where are we going?
 
