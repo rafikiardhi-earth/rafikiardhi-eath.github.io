@@ -80,7 +80,7 @@ Explore Mahalanobis and Euclidean distances, inspect covariance structure and ch
 :::
 
 ::: {.card-item}
-{{< bi clipboard-check >}} 
+[![](../images/new-check-card.png)](checks.qmd)
 
 **New checks: Study design and statistical reasoning**
 
