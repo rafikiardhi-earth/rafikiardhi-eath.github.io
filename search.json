@@ -823,7 +823,7 @@
     "href": "index.html#where-we-work",
     "title": "Your “land friend” for researchers and homeowners",
     "section": "Where we work",
-    "text": "Where we work\n{{&lt; bi geo-alt &gt;}} Africa · {{&lt; bi geo-alt &gt;}} Latin America · {{&lt; bi geo-alt &gt;}} Europe · {{&lt; bi geo-alt &gt;}} United States. Work is delivered remotely, personally on site or with local partners in the field.\n\n\n\n\n\n\nPhoto: Africa (Kruger National Park, South Africa)\n\n\n\n\n\n\n\nPhoto: Latin America (Rio de Janeiro, Brazil)\n\n\n\n\n\n\n\n\n\nPhoto: Europe (Kleť, Czech Republic)\n\n\n\n\n\n\n\nPhoto: United States (Roaring Fork Valley, CO)\n\n\n\n\n\nSee all services →"
+    "text": "Where we work\n{.bi .bi-geo-alt} *Africa* · {.bi .bi-geo-alt} *Latin America* · {.bi .bi-geo-alt} *Europe* · {.bi .bi-geo-alt} *United States*. Work is delivered remotely, personally on site or with local partners in the field.\n\n\n\n\n\n\nPhoto: Africa (Kruger National Park, South Africa)\n\n\n\n\n\n\n\nPhoto: Latin America (Rio de Janeiro, Brazil)\n\n\n\n\n\n\n\n\n\nPhoto: Europe (Kleť, Czech Republic)\n\n\n\n\n\n\n\nPhoto: United States (Roaring Fork Valley, CO)\n\n\n\n\n\nSee all services →"
   },
   {
     "objectID": "news-updates/covariance-distance.html",
