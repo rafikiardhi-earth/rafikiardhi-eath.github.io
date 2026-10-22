@@ -42,21 +42,29 @@ Let your mind explore the scientific landscape, without compromising scientific 
 
 ::: {.cards}
 ::: {.card-item}
+{.bi .bi-search}
+::: {.card-content}
 ### [Review](services-review.qmd)
 Independent assessments on grants, research designs, models, data and reports.
 :::
 
 ::: {.card-item}
+{.bi .bi-tools}
+::: {.card-content}
 ### [Build](services-build.qmd)
 Answers to questions without an off-the-shelf solution, honest about uncertainty.
 :::
 
 ::: {.card-item}
+{.bi .bi-people}
+::: {.card-content}
 ### [Partner](services-partner.qmd)
 Ongoing analytical collaboration with research groups and projects.
 :::
 
 ::: {.card-item}
+{.bi .bi-mortarboard}
+::: {.card-content}
 ### [Learn](services-learn.qmd)
 Workshops from do-it-yourself landscaping to research creativity and validation.
 :::
