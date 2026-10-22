@@ -21,7 +21,7 @@ The complexity of Africa's landscapes and soil is sometimes hidden beneath the s
 
 From a mountain summit, you can begin to appreciate the geological history that shaped these landscapes. It can also boggle the mind that penguins live just a 45-minute drive from the cliffs of Muizenberg.
 
-![Penguins can be found on beaches of Cape Peninsula with the most popular being Boulders Beach.](../images/penguins.jpg){fig-alt="The penguins of Boulders Beach."}
+![Penguins can be found on beaches of Cape Peninsula with the most popular being Boulders Beach.](../images/penguins.jpg){fig-alt="The penguins of Boulders Beach." width="600px"}
 
 The academic and environmental setting of Stellenbosch provides an ideal place to develop scientific skills while learning why they matter beyond the university.
 
@@ -29,11 +29,11 @@ The academic and environmental setting of Stellenbosch provides an ideal place t
 
 Blessed by diversity and contrasts, Africa offers people from every background and experience to learn from. From waking early to collect water for the day to shopping at the local market, everyday life is shaped by community. Collaboration happens naturally, often without anyone thinking of it as collaboration. Bringing ideas together is part of the day, not a job.
 
-![People celebrating Siku ya Uhuru (Independence Day) on December 9th, 2011 in Boma Ng'ombe Tanzania.](../images/tzn-people.jpg){fig-alt="People celebrating independence day."}
+![People celebrating Siku ya Uhuru (Independence Day) on December 9th, 2011 in Boma Ng'ombe Tanzania.](../images/tzn-people.jpg){fig-alt="People celebrating independence day." width="600px"}
 
 We learned geostatistics in Zambia, community-based agriculture in Malawi, agricultural policy in Namibia, sustainable agricultural intensification in South Africa, the importance of smallholder farms in Tanzania, dryland water management in Kenya, and the value of agricultural extension in the Democratic Republic of the Congo. None of these lessons stands alone. The people and cultures are diverse, but the creative freedom to learn, adapt, and bring ideas together remains the same.
 
-![Agriculture festival in Lusaka, Zambia with the President making the keynote speech.](../images/zam-pres-card.jpg){fig-alt="President of Zambia talking about community agriculture."}
+![Agriculture festival in Lusaka, Zambia with the President making the keynote speech.](../images/zam-pres-card.jpg){fig-alt="President of Zambia talking about community agriculture." width="600px"}
 
 ### Where connections were built, and still last.
 
