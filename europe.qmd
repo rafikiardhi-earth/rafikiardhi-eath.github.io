@@ -1,0 +1,35 @@
+---
+title: "Europe - Learning to See the Landscape"
+description: "Discovering that good science depends not on how much technology we have, but on how well we understand the landscape."
+page-layout: full
+---
+
+![Bratislava at night from the UFO tower overlooking the Danube River contrasted by the 9th century castle.](../images/czech-brat.jpg){fig-alt="The modern city of Bratislava contrasted with the old castle"}
+
+## Beyond familiar ground
+
+Europe was where *RafikiArdhi's* research story first extended beyond Africa, beyond soil and plants. Through our first research experiences on another continent and our early independent research, we encountered new landscapes, new scientific traditions and different ways of approaching environmental questions.
+
+Working in unfamiliar places brought an important lesson: good science does not necessarily require the most advanced technology or the largest collection of data. It requires knowing what you are looking at and the curiosity to solve it.
+
+![Leafs lower down on the tree turn yellow first as the tree allocates its nitrogen to the roots from the older leaves first](../images/czech-trees.jpg){fig-alt="The physiology of trees during the change of seasons"}
+
+## Understanding the landscape
+
+Technology can help us measure, model and visualise the environment, but it cannot replace an understanding of how a landscape works. Knowing the area — its soils, geology, history and the processes that shape it — can be more valuable than having access to ever more sophisticated tools.
+
+![The NDVI area under the curve for the 2017 growing season of the Czech Republic at a 10 m resolution. Performed through the integral at each pixel on a standard intel CPU laptop](../images/czech-ndvi.jpg){fig-alt="NDVI continuous trend analysis for the whole country"}
+
+This perspective continues to shape how *RafikiArdhi* approaches environmental research. Models should help us understand the landscape, not simply produce predictions about it. Methods are most useful when they are grounded in the places they are intended to represent.
+
+In doing so, we have developed a suite of [research tools](tools.qmd) and [research checks](checks.qmd) that do not use any AI or machine learning. They are advanced methods developed not only for free use, but to demonstrate that access to knowledge and where that knowledge comes from is the most important tool *RafikiArdhi* has. 
+
+![NDVI trend analysis for different land uses in South Bohemia, Czech Republic](../images/czech-trend.jpg){fig-alt="NDVI advanced trend analysis according to land use"}
+
+## Lessons that travel
+
+The experience of working across continents reinforced the value of combining quantitative methods with knowledge of place. Techniques can travel between regions, but their application must account for the conditions, processes and histories that make each landscape distinctive.
+
+For *RafikiArdhi*, this remains central to our approach: use technology where it adds value, keep the science transparent and never lose sight of the landscape behind the data.
+
+![Storm that uplifted trees České Budějovice due to compacted subsoil preventing roots to establish sufficiently (left & right). Dog named *"Rafiki"* doing his buisness on said trees](../images/czech-storm.jpg){fig-alt="Aftermath of a severe storm in Southern Bohemia"}
