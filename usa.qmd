@@ -1,0 +1,34 @@
+---
+title: "USA - full circle"
+description: "The return to where the love for gardening begain, with science to improve the fun"
+page-layout: full
+---
+
+---
+title: "USA - Full Circle"
+description: "A journey from growing up with gardening to returning to the United States to do research."
+---
+
+![Site engineer and smell auditor telling whats flawed and what needs fixing. Sometimes we all need help, no matter how loud the bosses words are.](../images/wewe-working.jpg){fig-alt="Husky inspecting defaulty garden upgrades"}
+
+## The roots
+
+The company began in gardening and landscaping, developing an early connection to the land that would grow into environmental research published in international journals. Along the way, experiences such as encountering Hopi culture broadened our understanding of the relationships between people, land, and place. Such connections have led to research into soil multifunctionality and resilience on Indigenous lands in the U.S. southwest [preprint](https://doi.org/10.32942/X2H66M) within the first year of returning. The findings of this study have changed RafikiArdhi's thinking on how to treat environmental systems from both a scientific and moral perspective. 
+
+![We want to protect the ecosystem for us, and our bestfriends](../images/harlow-grass.jpg)
+
+### Fresh perspective
+
+Returning to the United States brings a fresh perspective, connecting the landscapes where our story began with the international research that followed. We bring a global perspective back to local places, bridging the gap between academia and everyday work on the land. Through scientific research, practical tools, and collaboration, we aim to make environmental knowledge useful both to the scientific community and to the people who shape the landscapes around them.
+
+![Snowmass ski resort from the sky, where landscapers cannot afford to live but are the predominant workers in the town](../images/smv-snow.jpg)
+
+These rediscovered stories have given opportunity for RafikiArdhi team members to become members of environmental editorial boards for local journals [Committee](https://cienciasambientais.com/index.php/rica/editorialcommittee) and as guest editors for applied science journals which support open-access [MDPI](https://www.mdpi.com/journal/applsci/special_issues/8NPO39I8MT). Additionally, It has allowed us to expand our capacity to review manuscripts and mentor postgraduate students to support their early career development through our associations with universities.
+
+[!Topsoil covering the hole that its meant to fill as the boss needed to dig.](../images/wewe-not-working.jpg)
+
+### Full circle
+
+Building an independent research company also creates the freedom to pursue questions, develop [homeowner tools](homeowners.qmd) and share knowledge beyond traditional academic boundaries. We get to push the conceptual limits of science, while still supporting the communities that started RafikiArdhi. By connecting scientific research with local jobs and practical resources for [homeowners](../projects/home-garden.qmd), we aim to bring environmental knowledge out of academia and into your back yard.
+
+[!Autumn in the high country, Colorado.](../images/wewe-hike.jpg)
