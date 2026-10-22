@@ -34,17 +34,19 @@ A project may end, a research appointment may change or we may move on to anothe
 
 These pages are part of that story, and the story is still being written.
 
-## Where we work
+## Places that shaped us and work in
 
 These are the stories:
 
-- {{< bi geo-alt >}} *[Africa](africa.qmd)*
-- {{< bi geo-alt >}} *[Europe](europe.qmd)*
-- {{< bi geo-alt >}} *[Latin America](brazil.qmd)*
-- {{< bi geo-alt >}} *[USA](usa.qmd)*
+- [{.bi .bi-geo-alt} *Africa](africa.qmd)*
+- [{.bi .bi-geo-alt} *Europe](europe.qmd)*
+- [{.bi .bi-geo-alt} *Latin America](brazil.qmd)*
+- [{.bi .bi-geo-alt} *USA](usa.qmd)*
 
 ## Where are we going?
 
 We don't know exactly where we're going. But we're going.
+
+Check [news and updates](index.html/#news-and-updates) to see the most recent science and tools.
 
 ![Unknown mountain taken from a plane, on route to somewhere](../images/unknown-mtn.jpg){fig-alt="Image was taken by RafkiArdhi but location is unknown"}
