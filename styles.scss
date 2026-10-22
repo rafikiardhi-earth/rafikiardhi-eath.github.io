@@ -89,7 +89,17 @@ body { font-size: 1.06rem; line-height: 1.65; }
 main .bi { font-size: 1.15em; margin-right: .4em; vertical-align: -0.1em; }
 .bi-whatsapp { color: #25D366; }
 .bi-envelope { color: $ra-accent; }
-
+.bi-geo-alt { color: $ra-accent; }
+.bi-geo-alt-fill { color: $ra-accent; }
+.bi-globe-europe-africa { color: $ra-accent; }
+.bi-globe-europe-africa-fill { color: $ra-accent; }
+.bi-map { color: $ra-accent; }
+.bi-award { color: $ra-accent; }
+.bi-award-fill { color: $ra-accent; }
+.bi-clipboard-check { color: $ra-accent; }
+.bi-clipboard-check-fill { color: $ra-accent; }
+.bi-credit-card { color: $ra-accent; }
+.bi-feather { color: $ra-accent; }
 // Page banner photos (wide images at the top of a page)
 .page-banner {
   width: 100%; height: 260px; object-fit: cover;
