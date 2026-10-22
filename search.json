@@ -256,7 +256,7 @@
     "href": "work-places.html#where-we-work",
     "title": "Where We Work",
     "section": "Where we work",
-    "text": "Where we work\nThese are the stories:\n\nAfrica\nEurope\nLatin America\nUSA"
+    "text": "Where we work\nThese are the stories:\n\n{{&lt; bi geo-alt &gt;}} Africa\n{{&lt; bi geo-alt &gt;}} Europe\n{{&lt; bi geo-alt &gt;}} Latin America\n{{&lt; bi geo-alt &gt;}} USA"
   },
   {
     "objectID": "work-places.html#where-are-we-going",
