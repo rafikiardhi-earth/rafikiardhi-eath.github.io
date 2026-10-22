@@ -64,7 +64,7 @@ Workshops from do-it-yourself landscaping to research creativity and validation.
 
 ### News and updates
 
-The latest tools, research, translations, and developments from RafikiArdhi.
+The latest tools, research, translations and developments from RafikiArdhi.
 
 ::: {.cards}
 ::: {.card-item}
@@ -76,9 +76,22 @@ The latest tools, research, translations, and developments from RafikiArdhi.
 
 Explore Mahalanobis and Euclidean distances, inspect covariance structure and check matrix properties using a transparent, interactive tool.
 
-[Explore the tool →](news-updates/covariance-distance.html)
+[Explore the tool →](news-updates/covariance-distance.qmd)
+:::
+
+::: {.card-item}
+{{< bi clipboard-check >}} 
+
+**New checks: Study design and statistical reasoning**
+
+*October 2026 · Research checks*
+
+Practical tools for checking assumptions, independence, and model comparisons, helping researchers assess their methods without relying on black-box answers.
+
+[Explore the checks →](checks.qmd)
 :::
 :::
+
 
 
 ### Where we work
