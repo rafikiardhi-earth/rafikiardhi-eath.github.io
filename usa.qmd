@@ -9,26 +9,34 @@ title: "USA - Full Circle"
 description: "A journey from growing up with gardening to returning to the United States to do research."
 ---
 
-![Site engineer and smell auditor telling whats flawed and what needs fixing. Sometimes we all need help, no matter how loud the bosses words are.](../images/wewe-working.jpg){fig-alt="Husky inspecting defaulty garden upgrades"}
+![Site engineer and smell auditor reporting what needs fixing. Sometimes we all need help, no matter how loudly the boss insists otherwise.](../images/wewe-working.jpg){fig-alt="Husky inspecting garden upgrades"}
 
 ## The roots
 
-The company began in gardening and landscaping, developing an early connection to the land that would grow into environmental research published in international journals. Along the way, experiences such as encountering Hopi culture broadened our understanding of the relationships between people, land, and place. Such connections have led to research into soil multifunctionality and resilience on Indigenous lands in the U.S. southwest [preprint](https://doi.org/10.32942/X2H66M) within the first year of returning. The findings of this study have changed RafikiArdhi's thinking on how to treat environmental systems from both a scientific and moral perspective. 
+RafikiArdhi began in gardening and landscaping, developing an early connection to the land that would grow into environmental research published in international journals. Along the way, experiences such as encountering Hopi culture broadened our understanding of the relationships between people, land, and place. These connections continue to shape our work. Within the first year of returning to the United States, we began exploring soil multifunctionality and resilience on Indigenous lands in the American Southwest ([preprint](https://doi.org/10.32942/X2H66M)). The findings have challenged how we think about environmental systems, bringing scientific questions about soil organisation and resilience into conversation with broader ethical questions about how we understand and care for the land. 
 
-![We want to protect the ecosystem for us, and our bestfriends](../images/harlow-grass.jpg)
+![We want to protect the ecosystem for us, and our bestfriends](../images/harlow-grass.jpg){fig-alt="Dog enjoying the grass in a landscape worth protecting"}
 
 ### Fresh perspective
 
-Returning to the United States brings a fresh perspective, connecting the landscapes where our story began with the international research that followed. We bring a global perspective back to local places, bridging the gap between academia and everyday work on the land. Through scientific research, practical tools, and collaboration, we aim to make environmental knowledge useful both to the scientific community and to the people who shape the landscapes around them.
+Returning to the United States has connected the landscapes where our story began with the international research that followed. We bring experiences from across the world back to local places, bridging scientific inquiry with the everyday realities of working on the land.
 
-![Snowmass ski resort from the sky, where landscapers cannot afford to live but are the predominant workers in the town](../images/smv-snow.jpg)
+![Snowmass ski resort from the sky, where landscapers cannot afford to live but are the predominant workers in the town](../images/smv-snow.jpg){fig-alt="Snowmass ski resort in Colorado, where many landscape workers face the high cost of living"}
 
-These rediscovered stories have given opportunity for RafikiArdhi team members to become members of environmental editorial boards for local journals [Committee](https://cienciasambientais.com/index.php/rica/editorialcommittee) and as guest editors for applied science journals which support open-access [MDPI](https://www.mdpi.com/journal/applsci/special_issues/8NPO39I8MT). Additionally, It has allowed us to expand our capacity to review manuscripts and mentor postgraduate students to support their early career development through our associations with universities.
+This return has also opened new opportunities to contribute to the scientific community. RafikiArdhi team members have joined environmental journal editorial boards ([editorial committee](https://cienciasambientais.com/index.php/rica/editorialcommittee)) and taken on guest-editing roles for open-access applied science research ([Applied Sciences](https://www.mdpi.com/journal/applsci/special_issues/8NPO39I8MT)). Through our university associations, we also review manuscripts and mentor postgraduate students, supporting the development of early-career researchers.
 
-![Topsoil covering the hole that its meant to fill as the boss needed to dig.](../images/wewe-not-working.jpg)
+Science is part of a wider landscape of work and community. In places such as Colorado's mountain towns, the people who maintain and shape the landscape do not always have the means to live in the communities where they work. Connecting environmental knowledge with local needs means recognising these realities, too.
 
 ### Full circle
 
-Building an independent research company also creates the freedom to pursue questions, develop [homeowner tools](homeowners.qmd) and share knowledge beyond traditional academic boundaries. We get to push the conceptual limits of science, while still supporting the communities that started RafikiArdhi. By connecting scientific research with local jobs and practical resources for [homeowners](../projects/home-garden.qmd), we aim to bring environmental knowledge out of academia and into your back yard.
+Building an independent research company gives us the freedom to pursue questions, push conceptual boundaries, and share knowledge beyond traditional academic structures. It also gives us the opportunity to reconnect scientific thinking with the practical work that started RafikiArdhi.
 
-![Autumn in the high country, Colorado.](../images/wewe-hike.jpg)
+That connection takes different forms. We develop research tools that make scientific methods more transparent and accessible, while our [homeowner tools](homeowners.qmd) help people make informed decisions about gardens, soil, and landscaping. We can pursue complex environmental questions while also supporting the everyday work of caring for the land.
+
+For us, bringing science home means more than returning to the United States. It means connecting international research with local work, supporting the next generation of scientists, and making environmental knowledge useful beyond academia — right in your own backyard.
+
+![Topsoil covering the hole that its meant to fill as the boss needed to dig.](../images/wewe-not-working.jpg){fig-alt="Husky supervising a topsoil job after the hole has been filled"}
+
+The job is done. The supervisor remains on site.
+
+![Autumn in the high country, Colorado.](../images/autumn-co.jpg){fig-alt="Autumn colours in the Colorado high country"}
