@@ -1,0 +1,50 @@
+---
+title: "Where We Work"
+description: "The places, people, and experiences that shape our work"
+page-layout: full
+---
+
+![Serenity at our campsite in central Namibia, wondering if their is any organic matter under our feet. There is!](../images/namib-camp-banner.jpg){fig-alt="Campsite in the middle of Namibia"}
+
+## More than places on a map
+
+The places where we work are more than locations where research happens. They are landscapes we have learned from, communities we have worked alongside and relationships that continue long after individual projects end.
+
+Each place has shaped how we approach science in a different way. Some have taught us to look at familiar problems differently; others have shown us the value of local knowledge, shared experience and working with what is available rather than assuming that better science always requires more technology.
+
+![Pondering over Hout Bay as we hike from the south side of Table Mountain](../images/sa-hike.jpg){fig-alt="Hiking the little known trail up to Table Mountain"}
+
+We created these pages to share some of those experiences. They are not intended to be complete histories of our [research](publications.qmd) or lists of [projects](projects.qmd) and [achievements](../images/best-paper.jpg). Instead, they offer glimpses of the people, places and ideas that have influenced how we work today and how we differ.
+
+## Different places, shared ideas
+
+Our work spans different landscapes, scientific traditions and ways of understanding the world. What connects them is the belief that useful knowledge grows through exchange: between disciplines, between people with different expertise and between scientific understanding and the places where it matters.
+
+![Deep roots searching in the heavily degraded soil (right). Solution, sustainable grazing to increase the water infiltration and organic matter of the heavily eroded and compact soil (right)](../images/degraded-soil-card.jpg){fig-alt="Heavily degraded soil in southern Zambia"}
+
+The individual stories reflect this diversity. Each has its own history, lessons, and connections, but together they form a broader picture of how our work has developed and where it may lead next.
+
+## The work continues
+
+A project may end, a research appointment may change or we may move on to another landscape. The knowledge and relationships built along the way do not simply disappear.
+
+*RafikiArdhi* carries that spirit forward: making knowledge accessible, sharing useful tools and creating opportunities for the next generation.
+
+![Dune number 45 in the Namib desert](../images/namib-dune-banner.jpg){fig-alt="Famous sand dune of Namibia"}
+
+These pages are part of that story, and the story is still being written.
+
+## Where we work
+
+These are the stories:
+
+- *[Africa](africa.qmd)*
+- *[Europe](europe.qmd)*
+- *[Latin America](brazil.qmd)*
+- *[USA](usa.qmd)*
+
+## Where are we going?
+
+We don't know exactly where we're going. But we're going.
+
+![Unknown mountain taken from a plane, on route to somewhere](../images/unknown-mtn.jpg){fig-alt="Image was taken by RafkiArdhi but location is unknown"}
