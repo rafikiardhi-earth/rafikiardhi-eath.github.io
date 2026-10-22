@@ -809,7 +809,7 @@
     "href": "index.html#how-we-can-help",
     "title": "Your “land friend” for researchers and homeowners",
     "section": "How we can help",
-    "text": "How we can help\n\n\nReview\nIndependent assessments on grants, research designs, models, data and reports.\n\n\nBuild\nAnswers to questions without an off-the-shelf solution, honest about uncertainty.\n\n\nPartner\nOngoing analytical collaboration with research groups and projects.\n\n\nLearn\nWorkshops from do-it-yourself landscaping to research creativity and validation."
+    "text": "How we can help\n\n\n{.bi .bi-search} ::: {.card-content} ### Review Independent assessments on grants, research designs, models, data and reports.\n\n\n{.bi .bi-tools} ::: {.card-content} ### Build Answers to questions without an off-the-shelf solution, honest about uncertainty.\n\n\n{.bi .bi-people} ::: {.card-content} ### Partner Ongoing analytical collaboration with research groups and projects.\n\n\n{.bi .bi-mortarboard} ::: {.card-content} ### Learn Workshops from do-it-yourself landscaping to research creativity and validation."
   },
   {
     "objectID": "index.html#news-and-updates",
@@ -1152,7 +1152,7 @@
     "href": "work-places.html#places-that-shaped-us-and-work-in",
     "title": "Where We Work",
     "section": "Places that shaped us and work in",
-    "text": "Places that shaped us and work in\nThese are the stories:\n\n{.bi .bi-geo-alt} *Africa*\n{.bi .bi-geo-alt} *Europe*\n{.bi .bi-geo-alt} *Latin America*\n{.bi .bi-geo-alt} *USA*"
+    "text": "Places that shaped us and work in\nThese are the stories:\n\n{.bi .bi-geo-alt} Africa\n{.bi .bi-geo-alt} Europe\n{.bi .bi-geo-alt} Latin America\n{.bi .bi-geo-alt} USA"
   },
   {
     "objectID": "work-places.html#where-are-we-going",
