@@ -6,6 +6,12 @@ page-layout: full
 toc: false
 ---
 
+::: {.callout-note appearance="simple" icon="false"}
+## No AI. No machine learning.
+
+The colour is worked out with published colour science, step by step: the photo is corrected against your reference card, converted to CIELAB, and compared with the Munsell soil-book chips computed from the Munsell renotation data. The uncertainty is calculated from the pixels you sample and the stated error of each card method. The same photo with the circles in the same place always gives the same answer. Nothing is trained on other people's photos.
+:::
+
 Place the circles on the soil matrix and on your reference card, then read the result. Load a photo from your phone camera or gallery; the sample photo shows a 10YR 4/3 matrix under a warm colour cast.
 
 ```{=html}
