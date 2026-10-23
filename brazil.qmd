@@ -32,3 +32,5 @@ Working with *[Soil Consultoria Socioambiental](https://soilconsultoriasocioambi
 Together, these projects bring different expertise and perspectives into the same work. The result is more than any one of us could produce alone: a whole greater than the sum of its parts.
 
 ![The tranquil beaches foster creativity, even in the middle of a city](../images/brazil-beach.jpg){fig-alt="A peaceful beach in Rio de Janeiro"}
+
+[[]{.bi .bi-global-europe-africa} Places →](work-places.qmd)

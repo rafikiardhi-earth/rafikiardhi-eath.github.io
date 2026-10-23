@@ -1,5 +1,5 @@
 ---
-title: "Africa - the beginning"
+title: "Africa - the Beginning"
 description: "From university to extension work, RafikiArdhi was built from our neighbours in Africa"
 page-layout: full
 ---
@@ -47,6 +47,7 @@ We continue to work with people connected to organisations such as *[Phyla Earth
 
 These relationships are not maintained simply for commercial gain. They endure because research is a collective effort, built on cumulative knowledge and the contributions of many people. It takes a village.
 
+[[]{.bi .bi-global-europe-africa} Places →](work-places.qmd)
 
 
 

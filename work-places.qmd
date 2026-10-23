@@ -20,7 +20,7 @@ We created these pages to share some of those experiences. They are not intended
 
 Our work spans different landscapes, scientific traditions and ways of understanding the world. What connects them is the belief that useful knowledge grows through exchange: between disciplines, between people with different expertise and between scientific understanding and the places where it matters.
 
-![Deep roots searching in the heavily degraded soil (right). Solution, sustainable grazing to increase the water infiltration and organic matter of the heavily eroded and compact soil (right)](../images/degraded-soil-card.jpg){fig-alt="Heavily degraded soil in southern Zambia"}
+![Deep roots searching in the heavily degraded soil (left). Solution, sustainable grazing to increase the water infiltration and organic matter of the heavily eroded and compact soil (right)](../images/degraded-soil-card.jpg){fig-alt="Heavily degraded soil in southern Zambia" width="600px"}
 
 The individual stories reflect this diversity. Each has its own history, lessons, and connections, but together they form a broader picture of how our work has developed and where it may lead next.
 
@@ -34,15 +34,15 @@ A project may end, a research appointment may change or we may move on to anothe
 
 These pages are part of that story, and the story is still being written.
 
-## Places that shaped us and work in
+## Places that shaped our research
 
 These are the stories:
-:::{.icon-list}
+
 - *[[]{.bi .bi-geo-alt} Africa](africa.qmd)*
 - *[[]{.bi .bi-geo-alt} Europe](europe.qmd)*
 - *[[]{.bi .bi-geo-alt} Latin America](brazil.qmd)*
 - *[[]{.bi .bi-geo-alt} USA](usa.qmd)*
-:::
+
 
 ## Where are we going?
 
@@ -50,4 +50,4 @@ We don't know exactly where we're going. But we're going.
 
 Check [news and updates](index.html/#news-and-updates) to see the most recent science and tools.
 
-![Unknown mountain taken from a plane, on route to somewhere](../images/unknown-mtn.jpg){fig-alt="Image was taken by RafkiArdhi but location is unknown"}
+![Unknown mountain taken from the summit of another unknown mountain](../images/unknown-mtn.jpg){fig-alt="Image was taken by *RafkiArdhi* but location is unknown"}

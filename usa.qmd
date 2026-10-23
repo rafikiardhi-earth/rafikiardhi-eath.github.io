@@ -1,5 +1,5 @@
 ---
-title: "USA - full circle"
+title: "USA - Full Circle"
 description: "The return to where the love for gardening begain, with science to improve the fun"
 page-layout: full
 ---
@@ -40,3 +40,5 @@ For us, bringing science home means more than returning to the United States. It
 The job is done. The supervisor remains on site.
 
 ![Autumn in the high country, Colorado.](../images/autumn-co.jpg){fig-alt="Autumn colours in the Colorado high country"}
+
+[[]{.bi .bi-global-europe-africa} Places →](work-places.qmd)

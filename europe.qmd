@@ -33,3 +33,5 @@ The experience of working across continents reinforced the value of combining qu
 For *RafikiArdhi*, this remains central to our approach: use technology where it adds value, keep the science transparent and never lose sight of the landscape behind the data.
 
 ![Storm that uplifted trees České Budějovice due to compacted subsoil preventing roots to establish sufficiently (left & right). Dog named *"Rafiki"* doing his buisness on said trees](../images/czech-storm.jpg){fig-alt="Aftermath of a severe storm in Southern Bohemia"}
+
+[[]{.bi .bi-global-europe-africa} Places →](work-places.qmd)
