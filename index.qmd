@@ -65,6 +65,8 @@ Workshops from do-it-yourself landscaping to research creativity and validation.
 :::
 :::
 
+[See all services →](services.qmd)
+
 ## News and updates
 
 The latest tools, research, translations and developments from RafikiArdhi.
@@ -110,5 +112,3 @@ Practical tools for checking assumptions, independence and model comparisons, he
 
 [![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground." width="500px"}](usa.qmd)
 :::
-
-[See all services →](services.qmd)
