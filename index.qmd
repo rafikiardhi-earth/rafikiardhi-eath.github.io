@@ -7,12 +7,14 @@ page-layout: full
 ::: {.hero}
 [Free tools · Paid thinking · No gatekeeping]{.tagline}
 
-# "Earth is the most interesting place I have ever been" (Unknown, 2026).
+# "Earth is the most interesting place I have ever been". 
+(Robert, 2026)
 
 [Practical home and landscape decisions informed by the same scientific principles researchers use. Your "Land Friend" to support research activities and inner curiosity to maintain ecosystems]{.lead}
 
-[Free research tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
-[Free homeonwer tools](homeowners.qmd){.btn-earth} &nbsp; [Bring us a what you want →](contact.qmd)
+[Research tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
+
+[Homeonwer tools](homeowners.qmd){.btn-earth} &nbsp; [Bring us a what you want →](contact.qmd)
 :::
 
 ## What we believe
@@ -95,16 +97,16 @@ Practical tools for checking assumptions, independence and model comparisons, he
 
 ## Where we work
 
-[[[]{.bi .bi-geo-alt} Africa](africa.qmd) · [[]{.bi .bi-geo-alt} Latin America](brazil.qmd) · [[]{.bi .bi-geo-alt} Europe](europe.qmd) · [[]{.bi .bi-geo-alt} United States](usa.qmd). Work is delivered remotely, personally on site or with local partners in the field.](work-places.qmd){.regions}
+[[[]{.bi .bi-geo-alt} Africa](africa.qmd) · [[]{.bi .bi-geo-alt} Latin America](brazil.qmd) · [[]{.bi .bi-geo-alt} Europe](europe.qmd) · [[]{.bi .bi-geo-alt} United States](usa.qmd). Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
 
 ::: {layout="[[1,1],[1,1]]"}
-[![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background." width="500px" fig-align="center"}](africa.qmd)
+[![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background." width="500px"}](africa.qmd)
 
-[![Photo: Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance." width="500px" fig-align="center"}](brazil.qmd)
+[![Photo: Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance." width="500px"}](brazil.qmd)
 
-[![Photo: Europe (Kleť, Czech Republic)](images/where-europe-klet.jpg){fig-alt="View from a lookout tower over spruce and beech forest to farmland and rolling hills." width="500px" fig-align="center"}](europe.qmd)
+[![Photo: Europe (Kleť, Czech Republic)](images/where-europe-klet.jpg){fig-alt="View from a lookout tower over spruce and beech forest to farmland and rolling hills." width="500px"}](europe.qmd)
 
-[![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground." width="500px" fig-align="center"}](usa.qmd)
+[![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground." width="500px"}](usa.qmd)
 :::
 
 [See all services →](services.qmd)
