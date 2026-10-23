@@ -14,7 +14,7 @@ Latin America has been important in shaping the relationships behind *RafikiArdh
 
 Each city seems to be part of the environment, not an addition to it.
 
-![Hidden amoung the chaos of the city there are places such as Parque Lage courtyard (left) and its gardens (right)](../images/brazil-hidden-city.jpg){fig-alt="The historic courtyard of Parque Lage on the left and its gardens on the right" .width="600px"}
+![Hidden amoung the chaos of the city there are places such as Parque Lage courtyard (left) and its gardens (right)](../images/brazil-hidden-city.jpg){fig-alt="The historic courtyard of Parque Lage on the left and its gardens on the right" width="600px"}
 
 ## Working together, wherever we are
 
