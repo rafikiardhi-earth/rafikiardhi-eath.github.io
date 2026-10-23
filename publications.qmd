@@ -4,7 +4,7 @@ title: "Research"
 
 A full, current list is on [ORCID](https://orcid.org/0000-0002-5187-9946) and [Google Scholar](https://scholar.google.com/citations?hl=en&user=5UqrBX8AAAAJ).
 
-## Selected publications
+## []{.bi .bi-clipboard-check} Selected publications
 
 - Flynn, T., Rasaei, Z., Kostecki, R. (2026). Smoothing Earth's surface: The complexity of soil texture class transitions. *Science of the Total Environment*. [https://doi.org/10.1016/j.scitotenv.2026.181621](https://doi.org/10.1016/j.scitotenv.2026.181621)
 - Qasha, V., Manyevere, A., Flynn, T., Mashamaite, V. (2026). Active ecological restoration drives rapid soil chemistry and carbon change in Mistbelt Afromontane forests. *Trees, Forests and People*. [https://doi.org/10.1016/j.tfp.2026.101321](https://doi.org/10.1016/j.tfp.2026.101321)
@@ -16,7 +16,7 @@ A full, current list is on [ORCID](https://orcid.org/0000-0002-5187-9946) and [G
 - Flynn, T., Kostecki, R. (2024). Spatial downscaling of global soil texture classes into 30 m images at the province scale. *Geomatica*. [https://doi.org/10.1016/j.geomat.2024.100028](https://doi.org/10.1016/j.geomat.2024.100028)
 - Flynn, T., Clarke, C., Kostecki, R., Rebi, A. (2024). A comparison of country-scale subsoil predictions between a numeric and a taxonomic soil classification system. *Geoderma Regional*. [https://doi.org/10.1016/j.geodrs.2024.e00902](https://doi.org/10.1016/j.geodrs.2024.e00902)
 
-## Earlier work
+## []{.bi .bi-clipboard} Earlier work
 
 - Raza, T., Shehzad, M., Abbas, M., Eash, N.S., Jatav, H.S., Sillanpaa, M., Flynn, T. (2023). Impact assessment of COVID-19 global pandemic on water, environment, and humans. *Environmental Advances*, 11. [https://doi.org/10.1016/j.envadv.2022.100328](https://doi.org/10.1016/j.envadv.2022.100328)
 - Flynn, T., Tuma, J., Fayle, T.M., Veselá, H., Frouz, J. (2023). Changes in soil chemical properties and their spatial distribution after logging and conversion to oil palm plantation in Sabah (Borneo). *Journal of Tropical Ecology*, 39(4). [https://doi.org/10.1017/S026646742300024X](https://doi.org/10.1017/S026646742300024X)
@@ -27,13 +27,13 @@ A full, current list is on [ORCID](https://orcid.org/0000-0002-5187-9946) and [G
 - Flynn, T., van Zijl, G., van Tol, J., Botha, C., Rozanov, A., Warr, B., Clarke, C. (2019). Comparing algorithms to disaggregate complex soil polygons in contrasting environments. *Geoderma*, 352, 171–180. [https://doi.org/10.1016/j.geoderma.2019.06.013](https://doi.org/10.1016/j.geoderma.2019.06.013)
 - Flynn, T., Rozanov, A., de Clercq, W., Warr, B., Clarke, C. (2019). Semi-automatic disaggregation of a national resource inventory into a farm-scale soil depth class map. *Geoderma*, 337, 1136–1145. [https://doi.org/10.1016/j.geoderma.2018.11.003](https://doi.org/10.1016/j.geoderma.2018.11.003)
 
-## Preprints
+## []{.bi .bi-sign-yield} Preprints
 
 - Flynn, T., Rozanov, A., Mesele, S. (2026). Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands. *EarthArXiv* preprint; under review at *Regional Environmental Change*. [https://doi.org/10.31223/X5JN5T](https://doi.org/10.31223/X5JN5T)
 - Flynn, T. (2026). Soil-informed multivariate decision support to assess urban ecosystem service potential. Book chapter, Springer Nature (in press). *EarthArXiv* preprint. [https://doi.org/10.31223/X50763](https://doi.org/10.31223/X50763)
 - Flynn, T. (2026). Thermodynamic pedodiversity patterns reveal higher-order soil organization in indigenous agroecosystems of the U.S. Southwest. *EcoEvoRxiv* preprint; under review at *Scientific Reports*. [https://doi.org/10.32942/X2H66M](https://doi.org/10.32942/X2H66M)
 
-## Recognition
+## {.bi .bi-award} Recognition
 
 - **2021** · Best Paper, *South African Journal of Plant and Soil* · "High-resolution digital soil mapping of multiple soil properties: an alternative to the traditional field survey?" (2019) [read](https://soils.org.za/?page_id=79)
 - **2017–2020** · National Research Foundation (NRF) Innovation Doctoral Bursary, South Africa
@@ -43,12 +43,12 @@ A full, current list is on [ORCID](https://orcid.org/0000-0002-5187-9946) and [G
 - **2015** · HORTGRO Science / Daan Strydom Prize, best horticultural science student, Stellenbosch University
 - **2013–2019** · Stellenbosch University Merit Bursary, for an outstanding academic record
 
-## Media & outreach
+## {.bi .bi-camera-reels} Media & outreach
 
 - **2025** · ABC News · "Soil degradation threatens food supply and scientists are calling for action": coverage of the Aroura Soil Security Think Tank and its Soil Security Declaration (Sydney, 2024). I served on the Aroura Secretariat during its launch and the first Global Soil Security Summit, and co-authored two of its publications (above). [Read](https://www.abc.net.au/news/2025-01-01/global-soil-degradation-aroura-soil-security-think-tank/104594018)
 - **2016** · Stellenbosch University News · "American student is SU's top horticultural science student". [Read](https://www.su.ac.za/en/node/1426)
 
-## Memberships & service
+## {.bi .bi-check-square} Memberships & service
 
 - International Union of Soil Sciences (IUSS)
 - Soil Science Society of South Africa (SSSSA)

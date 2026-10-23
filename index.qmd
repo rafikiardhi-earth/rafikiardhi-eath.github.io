@@ -7,11 +7,12 @@ page-layout: full
 ::: {.hero}
 [Free tools · Paid thinking · No gatekeeping]{.tagline}
 
-# Your "land friend" for researchers and homeowners
+# "Earth is the most interesting place I have ever been" (Unknown, 2026).
 
-[Practical home and landscape decisions informed by the same scientific principles researchers use, from science to your home garden to creativity in your scientific outputs.]{.lead}
+[Practical home and landscape decisions informed by the same scientific principles researchers use. Your "Land Friend" to support research activities and inner curiosity to maintain ecosystems]{.lead}
 
-[Use the free tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
+[Free research tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
+[Free homeonwer tools](homeowners.qmd){.btn-earth} &nbsp; [Bring us a what you want →](contact.qmd)
 :::
 
 ## What we believe
@@ -68,7 +69,7 @@ The latest tools, research, translations and developments from RafikiArdhi.
 
 ::: {.cards}
 ::: {.card-item}
-[![](../images/cov-dist-card.png){width="300px"}](news-updates/covariance-distance.qmd)
+[![](../images/cov-dist-card.png){width="500px"}](news-updates/covariance-distance.qmd)
 
 **New tool: Covariance Distance Explorer**
 
@@ -80,30 +81,30 @@ Explore Mahalanobis and Euclidean distances, inspect covariance structure and ch
 :::
 
 ::: {.card-item}
-[![](../images/new-check-card.png){width="300px"}](checks.qmd)
+[![](../images/new-check-card.png){width="500px"}](checks.qmd)
 
 **New checks: Study design and statistical reasoning**
 
 *October 2026 · Research checks*
 
-Practical tools for checking assumptions, independence, and model comparisons, helping researchers assess their methods without relying on black-box answers.
+Practical tools for checking assumptions, independence and model comparisons, helping researchers assess their methods without relying on black-box answers.
 
 [Explore the checks →](checks.qmd)
 :::
 :::
 
-## [Where we work](work-places.qmd)
+## Where we work
 
-[[[]{.bi .bi-geo-alt} Africa](africa.qmd) · [[]{.bi .bi-geo-alt} Latin America](brazil.qmd) · [[]{.bi .bi-geo-alt} Europe](europe.qmd) · [[]{.bi .bi-geo-alt} United States](usa.qmd). Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
+[[[]{.bi .bi-geo-alt} Africa](africa.qmd) · [[]{.bi .bi-geo-alt} Latin America](brazil.qmd) · [[]{.bi .bi-geo-alt} Europe](europe.qmd) · [[]{.bi .bi-geo-alt} United States](usa.qmd). Work is delivered remotely, personally on site or with local partners in the field.](work-places.qmd){.regions}
 
 ::: {layout="[[1,1],[1,1]]"}
-[![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background." width="300px"}](africa.qmd)
+[![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background." width="500px" fig-align="center"}](africa.qmd)
 
-[![Photo: Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance." width="300px"}](brazil.qmd)
+[![Photo: Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance." width="500px" fig-align="center"}](brazil.qmd)
 
-[![Photo: Europe (Kleť, Czech Republic)](images/where-europe-klet.jpg){fig-alt="View from a lookout tower over spruce and beech forest to farmland and rolling hills." width="300px"}](europe.qmd)
+[![Photo: Europe (Kleť, Czech Republic)](images/where-europe-klet.jpg){fig-alt="View from a lookout tower over spruce and beech forest to farmland and rolling hills." width="500px" fig-align="center"}](europe.qmd)
 
-[![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground." width="300px"}](usa.qmd)
+[![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground." width="500px" fig-align="center"}](usa.qmd)
 :::
 
 [See all services →](services.qmd)
