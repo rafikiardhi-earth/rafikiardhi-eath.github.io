@@ -809,7 +809,7 @@
     "href": "index.html#how-we-can-help",
     "title": "Your “land friend” for researchers and homeowners",
     "section": "How we can help",
-    "text": "How we can help\n\n\n ::: {.card-content} ### Review Independent assessments on grants, research designs, models, data and reports.\n\n\n ::: {.card-content} ### Build Answers to questions without an off-the-shelf solution, honest about uncertainty.\n\n\n ::: {.card-content} ### Partner Ongoing analytical collaboration with research groups and projects.\n\n\n ::: {.card-content} ### Learn Workshops from do-it-yourself landscaping to research creativity and validation."
+    "text": "How we can help\n\n\n{.bi .bi-search} ### Review Independent assessments on grants, research designs, models, data and reports.\n\n\n{.bi .bi-tools} ### Build Answers to questions without an off-the-shelf solution, honest about uncertainty.\n\n\n{.bi .bi-people} ### Partner Ongoing analytical collaboration with research groups and projects.\n\n\n{.bi .bi-mortarboard} ### Learn Workshops from do-it-yourself landscaping to research creativity and validation."
   },
   {
     "objectID": "index.html#news-and-updates",
