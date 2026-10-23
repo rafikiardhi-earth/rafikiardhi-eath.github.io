@@ -37,11 +37,12 @@ These pages are part of that story, and the story is still being written.
 ## Places that shaped us and work in
 
 These are the stories:
-
+:::{.icon-list}
 - *[[]{.bi .bi-geo-alt} Africa](africa.qmd)*
 - *[[]{.bi .bi-geo-alt} Europe](europe.qmd)*
 - *[[]{.bi .bi-geo-alt} Latin America](brazil.qmd)*
 - *[[]{.bi .bi-geo-alt} USA](usa.qmd)*
+:::
 
 ## Where are we going?
 
