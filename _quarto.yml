@@ -53,6 +53,8 @@ website:
           - text: "Learners"
           - href: soil-keys.qmd
             text: Soil classification
+          - href: soil-colour.qmd
+            text: Soil colour
       - href: projects.qmd
         text: Projects
       - href: work-places.qmd
