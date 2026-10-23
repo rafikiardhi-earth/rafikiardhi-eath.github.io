@@ -795,7 +795,7 @@
     "href": "index.html",
     "title": "Your “land friend” for researchers and homeowners",
     "section": "",
-    "text": "Free tools · Paid thinking · No gatekeeping\n\n\nPractical home and landscape decisions informed by the same scientific principles researchers use, from applying Darcy’s and Jurin’s laws to irrigation design to using calculus to estimate sod quantities for irregular lawns.\nUse the free tools   Bring us a problem →"
+    "text": "Free tools · Paid thinking · No gatekeeping\n\n\nPractical home and landscape decisions informed by the same scientific principles researchers use, from science to your home garden to creativity in your scientific outputs.\nUse the free tools   Bring us a problem →"
   },
   {
     "objectID": "index.html#what-we-believe",
@@ -809,7 +809,7 @@
     "href": "index.html#how-we-can-help",
     "title": "Your “land friend” for researchers and homeowners",
     "section": "How we can help",
-    "text": "How we can help\n\n\n{.bi .bi-search} ### Review Independent assessments on grants, research designs, models, data and reports.\n\n\n{.bi .bi-tools} ### Build Answers to questions without an off-the-shelf solution, honest about uncertainty.\n\n\n{.bi .bi-people} ### Partner Ongoing analytical collaboration with research groups and projects.\n\n\n{.bi .bi-mortarboard} ### Learn Workshops from do-it-yourself landscaping to research creativity and validation."
+    "text": "How we can help\n\n\n ### Review Independent assessments on grants, research designs, models, data and reports.\n\n\n ### Build Answers to questions without an off-the-shelf solution, honest about uncertainty.\n\n\n ### Partner Ongoing analytical collaboration with research groups and projects.\n\n\n ### Learn Workshops from do-it-yourself landscaping to research creativity and validation."
   },
   {
     "objectID": "index.html#news-and-updates",
@@ -823,7 +823,7 @@
     "href": "index.html#where-we-work",
     "title": "Your “land friend” for researchers and homeowners",
     "section": "Where we work",
-    "text": "Where we work\n{.bi .bi-geo-alt} *Africa* · {.bi .bi-geo-alt} *Latin America* · {.bi .bi-geo-alt} *Europe* · {.bi .bi-geo-alt} *United States*. Work is delivered remotely, personally on site or with local partners in the field.\n\n\n\n\n\n\nPhoto: Africa (Kruger National Park, South Africa)\n\n\n\n\n\n\n\nPhoto: Latin America (Rio de Janeiro, Brazil)\n\n\n\n\n\n\n\n\n\nPhoto: Europe (Kleť, Czech Republic)\n\n\n\n\n\n\n\nPhoto: United States (Roaring Fork Valley, CO)\n\n\n\n\n\nSee all services →"
+    "text": "Where we work\n Africa ·  Latin America ·  Europe ·  United States. Work is delivered remotely, personally on site or with local partners in the field.\n\n\n\n\n\n\nPhoto: Africa (Kruger National Park, South Africa)\n\n\n\n\n\n\n\nPhoto: Latin America (Rio de Janeiro, Brazil)\n\n\n\n\n\n\n\n\n\nPhoto: Europe (Kleť, Czech Republic)\n\n\n\n\n\n\n\nPhoto: United States (Roaring Fork Valley, CO)\n\n\n\n\n\nSee all services →"
   },
   {
     "objectID": "news-updates/covariance-distance.html",
@@ -1152,7 +1152,7 @@
     "href": "work-places.html#places-that-shaped-us-and-work-in",
     "title": "Where We Work",
     "section": "Places that shaped us and work in",
-    "text": "Places that shaped us and work in\nThese are the stories:\n\n Africa\n Europe\n Latin America\n USA"
+    "text": "Places that shaped us and work in\nThese are the stories: :::{.icon-list} -  Africa -  Europe -  Latin America -  USA :::"
   },
   {
     "objectID": "work-places.html#where-are-we-going",
