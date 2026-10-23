@@ -55,6 +55,8 @@ website:
             text: Soil classification
       - href: projects.qmd
         text: Projects
+      - href: work-places.qmd
+        text: Places
       - href: publications.qmd
         text: Research
       - href: contact.qmd
