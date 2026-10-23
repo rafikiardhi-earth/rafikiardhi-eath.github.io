@@ -42,22 +42,22 @@ Let your mind explore the scientific landscape, without compromising scientific 
 
 ::: {.cards}
 ::: {.card-item}
-[[]{.bi .bi-search} ### Review](services-review.qmd)
+### [[]{.bi .bi-search} Review](services-review.qmd)
 Independent assessments on grants, research designs, models, data and reports.
 :::
 
 ::: {.card-item}
-[[]{.bi .bi-tools} ### Build](services-build.qmd)
+### [[]{.bi .bi-tools} Build](services-build.qmd)
 Answers to questions without an off-the-shelf solution, honest about uncertainty.
 :::
 
 ::: {.card-item}
-[[]{.bi .bi-people} ### Partner](services-partner.qmd)
+### [[]{.bi .bi-people} Partner](services-partner.qmd)
 Ongoing analytical collaboration with research groups and projects.
 :::
 
 ::: {.card-item}
-[[]{.bi .bi-mortarboard} ### Learn](services-learn.qmd)
+### [[]{.bi .bi-mortarboard} Learn](services-learn.qmd)
 Workshops from do-it-yourself landscaping to research creativity and validation.
 :::
 :::
@@ -68,7 +68,7 @@ The latest tools, research, translations and developments from RafikiArdhi.
 
 ::: {.cards}
 ::: {.card-item}
-[![](../images/cov-dist-card.png)](news-updates/covariance-distance.qmd)
+[![](../images/cov-dist-card.png){width="300px"}](news-updates/covariance-distance.qmd)
 
 **New tool: Covariance Distance Explorer**
 
@@ -80,7 +80,7 @@ Explore Mahalanobis and Euclidean distances, inspect covariance structure and ch
 :::
 
 ::: {.card-item}
-[![](../images/new-check-card.png)](checks.qmd)
+[![](../images/new-check-card.png){width="300px"}](checks.qmd)
 
 **New checks: Study design and statistical reasoning**
 
@@ -94,16 +94,16 @@ Practical tools for checking assumptions, independence, and model comparisons, h
 
 ## [Where we work](work-places.qmd)
 
-[[[]{.bi .bi-geo-alt} *Africa*](africa.qmd) · [[]{.bi .bi-geo-alt} *Latin America*](brazil.qmd) · [[]{.bi .bi-geo-alt} *Europe*](europe.qmd) · [[]{.bi .bi-geo-alt} *United States*](usa.qmd). Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
+[[[]{.bi .bi-geo-alt} Africa](africa.qmd) · [[]{.bi .bi-geo-alt} Latin America](brazil.qmd) · [[]{.bi .bi-geo-alt} Europe](europe.qmd) · [[]{.bi .bi-geo-alt} United States](usa.qmd). Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
 
 ::: {layout="[[1,1],[1,1]]"}
-[![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background."}](africa.qmd)
+[![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background." width="300px"}](africa.qmd)
 
-[![Photo: Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance."}](brazil.qmd)
+[![Photo: Latin America (Rio de Janeiro, Brazil)](images/where-latin-america.jpg){fig-alt="A city curving around a sandy beach and a wide bay, with a long bridge in the distance." width="300px"}](brazil.qmd)
 
-[![Photo: Europe (Kleť, Czech Republic)](images/where-europe-klet.jpg){fig-alt="View from a lookout tower over spruce and beech forest to farmland and rolling hills."}](europe.qmd)
+[![Photo: Europe (Kleť, Czech Republic)](images/where-europe-klet.jpg){fig-alt="View from a lookout tower over spruce and beech forest to farmland and rolling hills." width="300px"}](europe.qmd)
 
-[![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground."}](usa.qmd)
+[![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground." width="300px"}](usa.qmd)
 :::
 
 [See all services →](services.qmd)
