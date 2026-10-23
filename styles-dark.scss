@@ -102,10 +102,25 @@ body { font-size: 1.06rem; line-height: 1.65; }
   @media (max-width: 640px) { height: 170px; }
 }
 
-// Icons
-main .bi { font-size: 1.15em; margin-right: .4em; vertical-align: -0.1em; }
-.bi-whatsapp { color: #25D366; }
-.bi-envelope { color: #c98a5e; }
+//Icon lists
+main .icon-list ul {
+  list-style: none;
+  padding-left: 0;
+  margin-left: 0;
+}
+
+main .icon-list li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  margin-bottom: 0.4rem;
+}
+
+main .icon-list li .bi {
+  color: $ra-accent;
+  margin-right: 0.5rem;
+  font-size: 1.1em;
+}
 
 // Icons (page content only, so navbar/footer icons keep Quarto's sizing)
 main .bi { font-size: 1.15em; margin-right: .4em; vertical-align: -0.1em; }
