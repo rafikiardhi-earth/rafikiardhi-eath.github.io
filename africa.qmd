@@ -8,7 +8,7 @@ page-layout: full
 
 ### Where it began
 
-RafikiArdhi grew out of years of soil research on the rooi plane of Stellenbosch University, teaching and agricultural extension across Africa. From university-based work in South Africa to working alongside farmers throughout southern, central and eastern Africa, these experiences shaped a belief that scientific knowledge should support both ecosystem and human wellbeing. 
+*RafikiArdhi* grew out of years of soil research on the rooi (red) plane of Stellenbosch University, teaching and agricultural extension across Africa. From university-based work in South Africa to working alongside farmers throughout southern, central and eastern Africa, these experiences shaped a belief that scientific knowledge should support both ecosystem and human wellbeing. 
 
 The work continues through practical tools and approaches that make science more accessible, locally relevant 
 and useful for the people who depend on the land.
@@ -17,13 +17,13 @@ and useful for the people who depend on the land.
 
 The complexity of Africa's landscapes and soil is sometimes hidden beneath the surface, but a hike into the Cape Fold Belt can reveal the beauty and intricacy of the land. 
 
-![Muizenberg summit with Stellenbosch below and false Bay and Table Mountain in the Distance.](../images/western-cape.jpg){fig-alt="The summit of Muizenberg on the false peak."}
+![Muizenberg Mountain summit (not to be confused with the town) with Stellenbosch below and False Bay and Table Mountain in the Distance.](../images/western-cape.jpg){fig-alt="The summit of Muizenberg on the false peak."}
 
 From a mountain summit, you can begin to appreciate the geological history that shaped these landscapes. It can also boggle the mind that penguins live just a 45-minute drive from the cliffs of Muizenberg.
 
 ![Penguins can be found on beaches of Cape Peninsula with the most popular being Boulders Beach.](../images/penguins.jpg){fig-alt="The penguins of Boulders Beach." width="600px"}
 
-The academic and environmental setting of Stellenbosch provides an ideal place to develop scientific skills while learning why they matter beyond the university. This setting brought [awards](../images/best-paper.jpg) for publications to the people who helped us, *RafikiArdhi* at its early stages of [research](publications.qmd) and allowed research while experiencing why it matters.
+The academic and environmental setting of Stellenbosch provides an ideal place to develop scientific skills while learning why they matter beyond the university. This setting brought [awards](../images/best-paper.jpg) to the people who helped build *RafikiArdhi* in its early [research](publications.qmd), and the chance to do research while seeing why it matters.
 
 ### The people 
 
@@ -31,7 +31,7 @@ Blessed by diversity and contrasts, Africa offers people from every background a
 
 ![People celebrating Siku ya Uhuru (Independence Day) on December 9th, 2011 in Boma Ng'ombe Tanzania.](../images/tzn-people.jpg){fig-alt="People celebrating independence day." width="600px"}
 
-We learned geostatistics in Zambia, community-based agriculture in Malawi, agricultural policy in Namibia, sustainable agricultural intensification in South Africa, the importance of smallholder farms in Tanzania, dryland water management in Kenya and the value of agricultural extension in the Democratic Republic of the Congo. None of these lessons stands alone. This community thinking gave us the opportunity to base our research on increasing access to information [research](https://doi.org/10.1016/j.geoderma.2018.11.003) and digital soil mapping for farms [research](https://doi.org/10.1080/02571862.2019.1570566), aspects that were rarely researched at the time. 
+We learned geostatistics in Zambia, community-based agriculture in Malawi, agricultural policy in Namibia, sustainable agricultural intensification in South Africa, the importance of smallholder farms in Tanzania, dryland water management in Kenya and the value of agricultural extension on highly leached soil in the Democratic Republic of the Congo. None of these lessons stands alone. This community thinking gave us the opportunity to base our research on increasing [access to information](https://doi.org/10.1016/j.geoderma.2018.11.003) and [digital soil mapping for farms](https://doi.org/10.1080/02571862.2019.1570566), aspects that were rarely researched at the time. 
 
 The people and cultures are diverse, but the creative freedom to learn, adapt and bring ideas together remains the same.
 
@@ -47,7 +47,7 @@ We continue to work with people connected to organisations such as *[Phyla Earth
 
 These relationships are not maintained simply for commercial gain. They endure because research is a collective effort, built on cumulative knowledge and the contributions of many people. It takes a village.
 
-[[]{.bi .bi-global-europe-africa} Places →](work-places.qmd)
+[[]{.bi .bi-global-europe-africa} Europe →](europe.qmd)
 
 
 

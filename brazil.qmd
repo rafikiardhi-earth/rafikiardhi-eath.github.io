@@ -10,11 +10,11 @@ page-layout: full
 
 Latin America has been important in shaping the relationships behind *RafikiArdhi*. It is where many connections were formed through shared interests, experiences, and a common commitment to understanding the environment. Although distance means we do not see one another as often as we would like, these relationships have continued to grow beyond the places and moments where they began.
 
-![The 2018 World Soil Congress of Soil Science presenting our digital soil mapping for farmers with limited data (Rio de Janeiro, Brazil).](../images/rio-talk-banner.jpg){fig-alt="Explaining how remote sensing can be used to predict soil properties when data are limited"}
+![The 2018 World Congress of Soil Science presenting our digital soil mapping for farmers with limited data (Rio de Janeiro, Brazil).](../images/rio-talk-banner.jpg){fig-alt="Explaining how remote sensing can be used to predict soil properties when data are limited"}
 
 Each city seems to be part of the environment, not an addition to it.
 
-![Hidden amoung the chaos of the city there are places such as Parque Lage courtyard (left) and its gardens (right)](../images/brazil-hidden-city.jpg){fig-alt="The historic courtyard of Parque Lage on the left and its gardens on the right" width="600px"}
+![Hidden among the chaos of the city there are places such as Parque Lage courtyard (left) and its gardens (right)](../images/brazil-hidden-city.jpg){fig-alt="The historic courtyard of Parque Lage on the left and its gardens on the right" width="600px"}
 
 ## Working together, wherever we are
 
@@ -33,4 +33,4 @@ Together, these projects bring different expertise and perspectives into the sam
 
 ![The tranquil beaches foster creativity, even in the middle of a city](../images/brazil-beach.jpg){fig-alt="A peaceful beach in Rio de Janeiro"}
 
-[[]{.bi .bi-global-europe-africa} Places →](work-places.qmd)
+[[]{.bi .bi-global-europe-africa} USA →](usa.qmd)

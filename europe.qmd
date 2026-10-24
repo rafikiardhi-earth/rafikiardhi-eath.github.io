@@ -1,6 +1,6 @@
 ---
 title: "Europe - Learning to See the Landscape"
-description: "Discovering that good science depends not on how much technology we have, but on how well we understand the landscape."
+description: "Discovering that good science depends not on how much technology we have, but on how well we understand the landscape"
 page-layout: full
 ---
 
@@ -12,7 +12,7 @@ Europe was where *RafikiArdhi's* research story first extended beyond Africa, be
 
 Working in unfamiliar places brought an important lesson: good science does not necessarily require the most advanced technology or the largest collection of data. It requires knowing what you are looking at and the curiosity to solve it.
 
-![Leafs lower down on the tree turn yellow first as the tree allocates its nitrogen to the roots from the older leaves first](../images/czech-trees.jpg){fig-alt="The physiology of trees during the change of seasons"}
+![Leaves lower down on the tree turn yellow first as the tree allocates its nitrogen to the roots from the older leaves first](../images/czech-trees.jpg){fig-alt="The physiology of trees during the change of seasons"}
 
 ## Understanding the landscape
 
@@ -34,4 +34,12 @@ For *RafikiArdhi*, this remains central to our approach: use technology where it
 
 ![Storm that uplifted trees České Budějovice due to compacted subsoil preventing roots to establish sufficiently (left & right). Dog named *"Rafiki"* doing his buisness on said trees](../images/czech-storm.jpg){fig-alt="Aftermath of a severe storm in Southern Bohemia"}
 
-[[]{.bi .bi-global-europe-africa} Places →](work-places.qmd)
+Working with the Biology Centre of the [Czech Academy of Sciences](https://www.avcr.cz/en/) in České Budějovice, we modelled ecosystem services across the whole of the Czech Republic. With the [Department of Horticulture](https://www.gartenbauwissenschaften.uni-bonn.de/en) at the University of Bonn, we worked on decision analysis for agroforestry systems across the wider European Union.
+
+Both projects ran into COVID-19. Travel stopped, fieldwork was put on hold and the plans we started with no longer worked. What remained was a laptop, open satellite data and what we knew about the landscapes.
+
+![Farm expanding its agroforestry endevours in Western Germany](../images/lux-agroforestry.jpg){fig-alt="Farm in Western Germany practicing agroforestry"}
+
+It was enough. The national vegetation analysis below ran on an ordinary laptop. Decision analysis is built for exactly this situation: it works with what is known, states the uncertainty about the rest, and still gives an answer people can act on. Neither project needed more technology. Both needed a clear understanding of the systems being studied.
+
+[[]{.bi .bi-global-europe-africa} Latin America →](brazil.qmd)

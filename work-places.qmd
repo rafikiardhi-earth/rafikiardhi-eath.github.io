@@ -4,7 +4,7 @@ description: "The places, people, and experiences that shape our work"
 page-layout: full
 ---
 
-![Serenity at our campsite in central Namibia, wondering if their is any organic matter under our feet. There is!](../images/namib-camp-banner.jpg){fig-alt="Campsite in the middle of Namibia"}
+![Serenity at our campsite in central Namibia, wondering if there is any organic matter under our feet. There is!](../images/namib-camp-banner.jpg){fig-alt="Campsite in the middle of Namibia"}
 
 ## More than places on a map
 
@@ -14,7 +14,7 @@ Each place has shaped how we approach science in a different way. Some have taug
 
 ![Pondering over Hout Bay as we hike from the south side of Table Mountain](../images/sa-hike.jpg){fig-alt="Hiking the little known trail up to Table Mountain"}
 
-We created these pages to share some of those experiences. They are not intended to be complete histories of our [research](publications.qmd) or lists of [projects](projects.qmd) and [achievements](../images/best-paper.jpg). Instead, they offer glimpses of the people, places and ideas that have influenced how we work today and how we differ.
+We created these pages to share some of those experiences. They are not intended to be complete histories of our [research](publications.qmd) or lists of [projects](projects.qmd) and [achievements](../images/best-paper.jpg). Instead, they offer glimpses of the people, places and ideas that have influenced how we work today and what makes our approach different.
 
 ## Different places, shared ideas
 
@@ -22,7 +22,7 @@ Our work spans different landscapes, scientific traditions and ways of understan
 
 ![Deep roots searching in the heavily degraded soil (left). Solution, sustainable grazing to increase the water infiltration and organic matter of the heavily eroded and compact soil (right)](../images/degraded-soil-card.jpg){fig-alt="Heavily degraded soil in southern Zambia" width="600px"}
 
-The individual stories reflect this diversity. Each has its own history, lessons, and connections, but together they form a broader picture of how our work has developed and where it may lead next.
+The individual stories reflect this diversity. Each has its own history, lessons and connections, but together they form a broader picture of how our work has developed and where it may lead next.
 
 ## The work continues
 
@@ -48,6 +48,6 @@ These are the stories:
 
 We don't know exactly where we're going. But we're going.
 
-Check [news and updates](index.html/#news-and-updates) to see the most recent science and tools.
+Check [news and updates](index.html#news-and-updates) to see the most recent science and tools.
 
 ![Unknown mountain taken from the summit of another unknown mountain](../images/unknown-mtn.jpg){fig-alt="Image was taken by *RafkiArdhi* but location is unknown"}
