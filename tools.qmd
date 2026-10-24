@@ -168,9 +168,9 @@ body.quarto-dark .rk-tools {
 <nav class="rk-tabs" aria-label="Tools">
   <div class="rk-wrap" role="tablist">
     <div class="tgroup"><span class="tglabel">Profiles &amp; mapping</span><button role="tab" data-tab="spline" data-tip="Turn horizon data into standard depth intervals (0–5, 5–15 cm…) with a smooth profile." aria-selected="true">Profile harmoniser</button><button role="tab" data-tab="pedodiv" data-tip="How many soil classes an area has and how evenly they share it." aria-selected="false">Pedodiversity</button><button role="tab" data-tab="krige" data-tip="Fit a variogram to point data and test kriging by cross-validation." aria-selected="false">Variogram &amp; kriging</button><button role="tab" data-tab="eval" data-tip="How well a map or model matches independent observations: accuracy, uncertainty, classes." aria-selected="false">Model evaluation</button><button role="tab" data-tab="sampling" data-tip="How many samples you need for a field mean, or for a map." aria-selected="false">Sampling density</button></div>
-    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="van Genuchten–Mualem curves from a texture class, a pedotransfer function, or fitted to your own measurements." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from six pedotransfer functions, compared side by side." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D), its curve number for your land cover, and how much of a storm runs off." aria-selected="false">Hydrologic soil group</button></div>
+    <div class="tgroup"><span class="tglabel">Water</span><button role="tab" data-tab="vg" data-tip="van Genuchten–Mualem curves from a texture class, a pedotransfer function, or fitted to your own measurements." aria-selected="false">van Genuchten</button><button role="tab" data-tab="water" data-tip="Field capacity, wilting point and available water from six pedotransfer functions, compared side by side." aria-selected="false">Water retention</button><button role="tab" data-tab="hsg" data-tip="Hydrologic soil group (A–D), its curve number for your land cover (including arid rangeland), and how much of a storm runs off on dry, average or wet soil." aria-selected="false">Hydrologic soil group</button></div>
     <div class="tgroup"><span class="tglabel">Energy &amp; climate</span><button role="tab" data-tab="soiltemp" data-tip="How daily and seasonal temperature swings travel down into the soil." aria-selected="false">Soil temperature</button><button role="tab" data-tab="energy" data-tip="Where the sun's energy goes at a bare soil surface as it wets up." aria-selected="false">Energy balance</button><button role="tab" data-tab="et" data-tip="Daily reference evapotranspiration (FAO-56), crop water use and days between irrigations." aria-selected="false">Evapotranspiration</button><button role="tab" data-tab="frost" data-tip="How deep the ground freezes, from the winter, the surface and the soil." aria-selected="false">Frost depth</button><button role="tab" data-tab="sun" data-tip="Day length, sunrise and sunset, and solar radiation for any latitude and date." aria-selected="false">Day length &amp; sun</button></div>
-    <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" data-tip="Texture class from sand, silt and clay, one sample or a whole file." aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" data-tip="Carbon stocks to fixed depths or equivalent soil mass, and whether a change is detectable." aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" data-tip="A Munsell notation as an on-screen colour, what it says about the soil, and Munsell from colour-sensor readings." aria-selected="false">Munsell colour</button></div>
+    <div class="tgroup"><span class="tglabel">Soil properties</span><button role="tab" data-tab="texture" data-tip="Texture class from sand, silt and clay, one sample or a whole file." aria-selected="false">Texture class</button><button role="tab" data-tab="carbon" data-tip="Carbon stocks to fixed depths or equivalent soil mass, and whether a change is detectable." aria-selected="false">Carbon stocks</button><button role="tab" data-tab="munsell" data-tip="A Munsell notation as an on-screen colour, what it says about the soil, Munsell from colour-sensor readings with match probabilities, and a link to the photo reader." aria-selected="false">Munsell colour</button></div>
     <div class="tgroup"><span class="tglabel">Checks</span><a class="tglink" href="checks.html">Check a result: yours or a published one →</a></div>
     <div class="tgroup"><span class="tglabel">Soil classification</span><a class="tglink" href="soil-keys.html#wrb">WRB soil key <span style="font-size:.7rem; color:var(--warn); font-weight:700">BETA</span> →</a><a class="tglink" href="soil-keys.html#sa">South African soil key <span style="font-size:.7rem; color:var(--warn); font-weight:700">BETA</span> →</a></div>
   </div>
@@ -431,7 +431,7 @@ body.quarto-dark .rk-tools {
 <!-- ============ HSG ============ -->
 <section class="tool" id="tab-hsg">
   <h2>Hydrologic soil group and runoff</h2>
-  <p class="lede">Find a soil's hydrologic soil group (A–D) with the NRCS rules, then see what it means: the runoff curve number for your land cover and how much of a storm runs off.</p>
+  <p class="lede">Find a soil's hydrologic soil group (A–D) with the NRCS rules, then see what it means: the runoff curve number for your land cover, including arid and semiarid rangeland, and how much of a storm runs off on dry, average or wet soil.</p>
   <div class="two">
     <div class="rk-card">
       <h3>1. The soil</h3>
@@ -446,7 +446,7 @@ body.quarto-dark .rk-tools {
         <div class="h-tex"><label for="h-oc">Organic carbon (%)</label><input type="number" id="h-oc" value="1" min="0" step="any"></div>
       </div>
       <p class="hint" id="h-layer"></p>
-      <p class="hint">An impermeable layer is bedrock, a hardpan (fragipan, duripan, petrocalcic or other cemented layer), permafrost, or any layer with Ksat below 0.01 µm/s. A seasonal high water table counts if it occurs in any month of the year. Soil surveys list both for each map unit.</p>
+      <p class="hint">An impermeable layer is bedrock, a hardpan (fragipan, duripan, petrocalcic or other cemented layer), permafrost, or any layer with Ksat below 0.01 µm/s. Fractured or deeply weathered rock that still transmits water is not impermeable; judge it by its Ksat. A seasonal high water table counts if it occurs in any month of the year. Soil surveys list both for each map unit.</p>
     </div>
     <div class="rk-card">
       <h3>Hydrologic soil group</h3>
@@ -462,6 +462,8 @@ body.quarto-dark .rk-tools {
       <div><label for="h-lc">Land cover</label><select id="h-lc"></select></div>
       <div><label for="h-p">Storm rainfall</label><input type="number" id="h-p" value="50" min="0" step="any"></div>
       <div><label for="h-pu">Rainfall units</label><select id="h-pu"><option value="mm">mm</option><option value="in">inches</option></select></div>
+      <div><label for="h-amc">Soil before the storm</label><select id="h-amc"><option value="avg">Average moisture (TR-55 tables)</option><option value="dry">Dry (AMC I)</option><option value="wet">Wet, e.g. after earlier rain (AMC III)</option></select></div>
+      <div><label for="h-ia">Initial abstraction</label><select id="h-ia"><option value="0.2">0.2S (TR-55 standard)</option><option value="0.05">0.05S (Hawkins et al. 2002)</option></select></div>
     </div>
     <div class="stats" id="h-stats" style="margin-top:12px"></div>
     <div class="rk-table-wrap" style="margin-top:12px"><div id="h-cntable"></div></div>
@@ -472,7 +474,7 @@ body.quarto-dark .rk-tools {
     <p>We map hydrologic soil groups continuously from geology, terrain and soil data, including where soil surveys are missing or coarse.</p>
     <a class="cta" href="mailto:tflynn@rafikiardhi.earth?subject=Hydrologic%20soil%20group%20mapping">Get in touch →</a>
   </div>
-  <p class="refs">Hydrologic soil groups: USDA-NRCS (2009). <i>National Engineering Handbook</i>, Part 630 Hydrology, Chapter 7: Hydrologic Soil Groups (Table 7-1). Curve numbers and runoff equation: USDA-SCS (1986). <i>Urban Hydrology for Small Watersheds</i>, Technical Release 55 (TR-55), Tables 2-2a to 2-2c, average antecedent moisture, initial abstraction 0.2S. Ksat from texture: Saxton, K.E., Rawls, W.J. (2006). <i>Soil Sci. Soc. Am. J.</i> 70, 1569–1578. <a href="https://doi.org/10.2136/sssaj2005.0117">doi:10.2136/sssaj2005.0117</a>. This is a screening tool, not a replacement for official soil survey data.</p>
+  <p class="refs">Hydrologic soil groups: USDA-NRCS (2009). <i>National Engineering Handbook</i>, Part 630 Hydrology, Chapter 7: Hydrologic Soil Groups (Table 7-1). Curve numbers and runoff equation: USDA-SCS (1986). <i>Urban Hydrology for Small Watersheds</i>, Technical Release 55 (TR-55), Tables 2-2a to 2-2d, average antecedent moisture, initial abstraction 0.2S. Antecedent moisture (AMC I and III): Chow, V.T., Maidment, D.R., Mays, L.W. (1988). <i>Applied Hydrology</i>. McGraw-Hill, New York, Section 5.5. Initial abstraction 0.05S: Hawkins, R.H., Jiang, R., Woodward, D.E., Hjelmfelt, A.T., Van Mullem, J.A. (2002). Runoff curve number method: examination of the initial abstraction ratio. <i>Proceedings of the Second Federal Interagency Hydrologic Modeling Conference</i>, Las Vegas, Nevada. Ksat from texture: Saxton, K.E., Rawls, W.J. (2006). <i>Soil Sci. Soc. Am. J.</i> 70, 1569–1578. <a href="https://doi.org/10.2136/sssaj2005.0117">doi:10.2136/sssaj2005.0117</a>. This is a screening tool, not a replacement for official soil survey data.</p>
 </section>
 
 <!-- ============ TEXTURE ============ -->
@@ -538,7 +540,7 @@ body.quarto-dark .rk-tools {
 <!-- ============ MUNSELL ============ -->
 <section class="tool" id="tab-munsell">
   <h2>Munsell soil colour</h2>
-  <p class="lede">See a Munsell notation as an on-screen colour, browse a soil chart page, learn what the colour usually tells you about the soil, and convert colour-sensor readings (L*a*b*, RGB or XYZ) to Munsell, one at a time or a whole file.</p>
+  <p class="lede">See a Munsell notation as an on-screen colour, browse a soil chart page, learn what the colour usually tells you about the soil, convert colour-sensor readings (L*a*b*, RGB or XYZ) to Munsell with the probability of each nearby chip, one at a time or a whole file, and estimate the colour from a photo with a reference card.</p>
   <div class="two">
     <div class="rk-card">
       <h3>Notation</h3>
@@ -572,7 +574,9 @@ body.quarto-dark .rk-tools {
       <div class="mc-3"><label for="mc-2" id="mc-2l">a*</label><input type="number" id="mc-2" value="8.1" step="any"></div>
       <div class="mc-3"><label for="mc-3" id="mc-3l">b*</label><input type="number" id="mc-3" value="21.4" step="any"></div>
       <div class="mc-hex"><label for="mc-hex">Hex code</label><input type="text" id="mc-hex" value="#7a5c3e"></div>
+      <div><label for="mc-unc">Repeat-reading spread (ΔE)</label><input type="number" id="mc-unc" value="1" min="0" step="any"></div>
     </div>
+    <p class="hint">The repeat-reading spread is how much readings of the same sample differ: about 0.5 for a laboratory spectrophotometer, 1–2 for a pocket sensor, more if the sample surface or moisture varies. It turns the nearest chip into a probability over neighbouring chips. Set it to 0 to see only the nearest chip.</p>
     <div class="msg" id="mc-msg" role="status"></div>
     <div id="mc-res" style="margin-top:12px"></div>
     <h3 style="margin-top:18px">Many samples</h3>
@@ -583,9 +587,14 @@ body.quarto-dark .rk-tools {
       <button class="rk-btn primary" id="mc-run">Convert</button>
       <button class="rk-btn" id="mc-dl" hidden>Download CSV</button>
     </div>
-    <p class="hint">Columns named <b>L, a, b</b> (or L*, a*, b*), <b>R, G, B</b>, <b>X, Y, Z</b>, or <b>hex</b>, plus an optional <b>id</b> column. The illuminant setting above applies to L*a*b* and XYZ. RGB and hex are taken as standard sRGB.</p>
+    <p class="hint">Columns named <b>L, a, b</b> (or L*, a*, b*), <b>R, G, B</b>, <b>X, Y, Z</b>, or <b>hex</b>, plus an optional <b>id</b> column. The illuminant setting above applies to L*a*b* and XYZ. RGB and hex are taken as standard sRGB. RGB read from an ordinary photo is not calibrated: the camera's white balance and exposure shift it, so use the photo tool below instead.</p>
     <div class="msg" id="mc-bmsg" role="status"></div>
     <div class="rk-table-wrap" style="max-height:420px; overflow:auto; margin-top:8px"><div id="mc-table"></div></div>
+  </div>
+  <div class="rk-card">
+    <h3>From a photo</h3>
+    <p style="margin:0 0 8px">A photo of a soil face or a ped can give a rough Munsell colour if it includes a reference card. The <a href="soil-colour.html">Soil Colour Reader</a> corrects the photo with an 18% grey card or a black-and-white card, drops shadows, pores and glare, and gives the most likely chip with probabilities over the neighbouring chips. It runs on your device like the other tools.</p>
+    <a class="tglink" href="soil-colour.html">Open the Soil Colour Reader →</a>
   </div>
   <p class="refs">Colours are computed from the Munsell renotation data (illuminant C) and converted to sRGB. Screens vary, so use this for learning, not in place of a physical chart. Chips that fall outside the sRGB range are left out. Matching uses the CIEDE2000 colour difference against the chips on the soil and gley pages; Munsell value from luminance follows ASTM D1535. A ΔE₀₀ under about 2 is hard to tell apart by eye; above 5, no chip is a good match. Instrument readings depend on moisture, grinding and the light source, so record the conditions as you would for a chart reading.</p>
 </section>
@@ -2368,8 +2377,40 @@ const CN_TABLE = [
   ["Woodland", [
     ["Woods, poor (litter and brush removed by grazing or burning)", [45, 66, 77, 83]],
     ["Woods, fair", [36, 60, 73, 79]],
-    ["Woods, good (litter and brush cover the soil)", [30, 55, 70, 77]]]]
+    ["Woods, good (litter and brush cover the soil)", [30, 55, 70, 77]]]],
+  ["Arid and semiarid rangeland", [ // TR-55 Table 2-2d; poor < 30% ground cover, fair 30–70%, good > 70%. Group A only for desert shrub.
+    ["Herbaceous (grass, weeds, low brush), poor", [null, 80, 87, 93]],
+    ["Herbaceous (grass, weeds, low brush), fair", [null, 71, 81, 89]],
+    ["Herbaceous (grass, weeds, low brush), good", [null, 62, 74, 85]],
+    ["Desert shrub (saltbush, creosote, mesquite, cactus…), poor", [63, 77, 85, 88]],
+    ["Desert shrub (saltbush, creosote, mesquite, cactus…), fair", [55, 72, 81, 86]],
+    ["Desert shrub (saltbush, creosote, mesquite, cactus…), good", [49, 68, 79, 84]],
+    ["Sagebrush with grass understory, poor", [null, 67, 80, 85]],
+    ["Sagebrush with grass understory, fair", [null, 51, 63, 70]],
+    ["Sagebrush with grass understory, good", [null, 35, 47, 55]],
+    ["Pinyon–juniper with grass understory, poor", [null, 75, 85, 89]],
+    ["Pinyon–juniper with grass understory, fair", [null, 58, 73, 80]],
+    ["Pinyon–juniper with grass understory, good", [null, 41, 61, 71]],
+    ["Oak–aspen mountain brush, poor", [null, 66, 74, 79]],
+    ["Oak–aspen mountain brush, fair", [null, 48, 57, 63]],
+    ["Oak–aspen mountain brush, good", [null, 30, 41, 48]]]]
 ];
+// Curve number adjusted for antecedent moisture (Chow, Maidment & Mays 1988) and,
+// optionally, for an initial abstraction of 0.05S (Hawkins et al. 2002: S0.05 = 1.33 S0.2^1.15, S in inches).
+function cnAdjust(cn, amc, lam) {
+  if (cn == null || !isFinite(cn)) return null;
+  let c = cn;
+  if (c < 98) c = amc === "dry" ? 4.2 * c / (10 - 0.058 * c) : amc === "wet" ? 23 * c / (10 + 0.13 * c) : c;
+  c = Math.min(c, 100);
+  if (lam === 0.05 && c < 100) c = 1000 / (10 + 1.33 * Math.pow(1000 / c - 10, 1.15));
+  return c;
+}
+function scsRunoffL(P, CN, lam) { // P and result in mm; Ia = lam × S
+  if (CN == null) return null;
+  if (CN >= 100) return P;
+  const S = 25400 / CN - 254, Ia = lam * S;
+  return P > Ia ? (P - Ia) * (P - Ia) / (P - Ia + S) : 0;
+}
 (function () {
   const sel = $("h-lc");
   sel.innerHTML = CN_TABLE.map(([g, rows], gi) => `<optgroup label="${g}">` + rows.map((r, ri) => `<option value="${gi}.${ri}">${r[0]}</option>`).join("") + "</optgroup>").join("");
@@ -2442,19 +2483,38 @@ function updCN() {
   const u = v => inch ? `${fmt(v / 25.4, 2)} in` : `${fmt(v, v < 10 ? 1 : 0)} mm`;
   if (!(P >= 0)) { $("h-stats").innerHTML = ""; $("h-cntable").innerHTML = ""; $("h-cnwhy").textContent = "Enter the storm rainfall."; return; }
   const G = ["A", "B", "C", "D"], stat = (k, v, s) => `<div class="stat"><div class="k">${k}</div><div class="v">${v}</div><div class="u">${s}</div></div>`;
-  let st = "";
+  const amc = $("h-amc").value, lam = Number($("h-ia").value), adjusted = amc !== "avg" || lam !== 0.2;
+  const cnUse = i => cnAdjust(lc[1][i], amc, lam), cnTxt = c => c == null ? "–" : fmt(c, 0);
+  const amcTxt = { avg: "average moisture", dry: "dry soil (AMC I)", wet: "wet soil (AMC III)" }[amc];
+  let st = "", noA = false;
   if (hsgLast) {
     const show = hsgLast.drained ? [["Undrained (D)", "D"], [`Drained (${hsgLast.drained})`, hsgLast.drained]] : [[`Group ${hsgLast.g}`, hsgLast.g]];
-    show.forEach(([lab, gg]) => { const cn = lc[1][G.indexOf(gg)], q = scsRunoff(P, cn); st += stat(`Curve number, ${lab}`, cn, lc[0].split(":")[0]) + stat(`Runoff, ${lab}`, u(q), `${fmt(P > 0 ? q / P * 100 : 0, 0)}% of the ${u(P)} storm`); });
+    show.forEach(([lab, gg]) => {
+      const i = G.indexOf(gg), cn = cnUse(i);
+      if (cn == null) { noA = true; return; }
+      const q = scsRunoffL(P, cn, lam);
+      const qDry = scsRunoffL(P, cnAdjust(lc[1][i], "dry", lam), lam), qWet = scsRunoffL(P, cnAdjust(lc[1][i], "wet", lam), lam);
+      st += stat(`Curve number, ${lab}`, cnTxt(cn), adjusted ? `${lc[1][i]} in the table; ${amcTxt}${lam !== 0.2 ? ", Ia 0.05S" : ""}` : lc[0].split(":")[0])
+          + stat(`Runoff, ${lab}`, u(q), `${fmt(P > 0 ? q / P * 100 : 0, 0)}% of the ${u(P)} storm`)
+          + stat(`Runoff range, dry to wet soil`, `${u(qDry)} – ${u(qWet)}`, `same storm, ${lab.charAt(0).toLowerCase() + lab.slice(1)}`);
+    });
   }
-  $("h-stats").innerHTML = st;
+  $("h-stats").innerHTML = st + (noA ? `<p class="hint" style="grid-column:1/-1">TR-55 gives no curve number for group A under this cover; only desert shrub has group A values on arid rangeland.</p>` : "");
   const mine = hsgLast ? (hsgLast.drained ? ["D", hsgLast.drained] : [hsgLast.g]) : [];
-  setTable($("h-cntable"), ["Soil group", "Curve number", "Runoff", "Share of rain", "Rain that soaks in or is held"], G.map((gg, i) => { const cn = lc[1][i], q = scsRunoff(P, cn); return [(mine.includes(gg) ? "▶ " : "") + gg, cn, u(q), fmt(P > 0 ? q / P * 100 : 0, 0) + "%", u(P - q)]; }));
-  const cnB = lc[1][1], S = 25400 / cnB - 254;
-  $("h-cnwhy").textContent = `Runoff Q = (P − 0.2S)² ÷ (P + 0.8S), with S = 25,400 ÷ CN − 254 mm (= 1000 ÷ CN − 10 in); no runoff until rainfall passes 0.2S (for example ${u(0.2 * S)} for group B under this cover). The table shows the same storm on all four groups for comparison. Curve numbers assume average moisture before the storm; runoff is higher on soil that is already wet. For a single storm, not annual totals.`;
+  const head = adjusted ? ["Soil group", "Curve number (table)", "Curve number (used)", "Runoff", "Share of rain", "Rain that soaks in or is held"] : ["Soil group", "Curve number", "Runoff", "Share of rain", "Rain that soaks in or is held"];
+  setTable($("h-cntable"), head, G.map((gg, i) => {
+    const cn = cnUse(i), q = scsRunoffL(P, cn, lam), tag = (mine.includes(gg) ? "▶ " : "") + gg;
+    const rest = cn == null ? ["–", "–", "–"] : [u(q), fmt(P > 0 ? q / P * 100 : 0, 0) + "%", u(P - q)];
+    return adjusted ? [tag, lc[1][i] ?? "–", cnTxt(cn), ...rest] : [tag, cnTxt(cn), ...rest];
+  }));
+  const cnB = cnUse(1), S = 25400 / cnB - 254, lamTxt = lam === 0.2 ? "0.2" : "0.05", oneMinus = lam === 0.2 ? "0.8" : "0.95";
+  $("h-cnwhy").textContent = `Runoff Q = (P − ${lamTxt}S)² ÷ (P + ${oneMinus}S), with S = 25,400 ÷ CN − 254 mm (= 1000 ÷ CN − 10 in); no runoff until rainfall passes ${lamTxt}S (for example ${u(lam * S)} for group B under this cover). `
+    + `The table shows the same storm on all four groups for comparison. TR-55 curve numbers are for average moisture before the storm; dry and wet soil use the AMC I and AMC III conversions (Chow, Maidment & Mays 1988), and impervious surfaces (CN 98) are left unchanged. `
+    + (lam === 0.05 ? "With an initial abstraction of 0.05S the curve number is converted so that it describes the same soil (Hawkins et al. 2002); this gives more runoff from small storms and is often a better fit for urban and semiarid catchments. " : "")
+    + "The dry-to-wet range is a quick way to see how sensitive the runoff is to the moisture before the storm. For a single storm, not annual totals.";
 }
 ["h-rest", "h-wt", "h-ksmode", "h-ks", "h-unit", "h-sand", "h-clay", "h-oc"].forEach(id => $(id).addEventListener("input", updHSG));
-["h-lc", "h-p", "h-pu"].forEach(id => $(id).addEventListener("input", updCN));
+["h-lc", "h-p", "h-pu", "h-amc", "h-ia"].forEach(id => $(id).addEventListener("input", updCN));
 $("h-pu").addEventListener("change", () => { const v = num($("h-p").value); if (isFinite(v)) $("h-p").value = $("h-pu").value === "in" ? +(v / 25.4).toFixed(2) : +(v * 25.4).toFixed(0); updCN(); });
 
 /* ============ TEXTURE ============ */
@@ -2780,6 +2840,21 @@ function mcMatch(lab, Y) {
   const ranked = M_CHIPS.map(ch => ({ ch, de: CLR.de2000(lab, ch.lab) })).sort((a, b) => a.de - b.de);
   return { best: ranked[0], next: ranked.slice(1, 3), V: CLR.valueFromY(Y) };
 }
+// Probability over chips given the instrument's repeat-reading spread (ΔE, treated as the RMS
+// of independent normal errors on L*, a*, b*). Seeded, so the same reading always gives the same answer.
+function mcProb(lab, unc, nDraw = 600) {
+  const cand = M_CHIPS.map(ch => ({ ch, de: CLR.de2000(lab, ch.lab) })).sort((a, b) => a.de - b.de).slice(0, 30).map(o => o.ch);
+  let seed = 2024; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const gauss = () => Math.sqrt(-2 * Math.log(rnd())) * Math.cos(2 * Math.PI * rnd());
+  const sd = unc / Math.sqrt(3), count = new Map();
+  for (let t = 0; t < nDraw; t++) {
+    const d = [lab[0] + sd * gauss(), lab[1] + sd * gauss(), lab[2] + sd * gauss()];
+    let best = null, bd = Infinity;
+    for (const ch of cand) { const e = CLR.de2000(d, ch.lab); if (e < bd) { bd = e; best = ch; } }
+    count.set(best, (count.get(best) || 0) + 1);
+  }
+  return [...count.entries()].sort((a, b) => b[1] - a[1]).map(([ch, n]) => ({ ch, p: n / nDraw }));
+}
 function mcSingle() {
   const mode = $("mc-mode").value;
   document.querySelectorAll("#tab-munsell .mc-ill").forEach(e => e.style.display = mode === "lab" || mode === "xyz" ? "" : "none");
@@ -2793,6 +2868,15 @@ function mcSingle() {
   const m = mcMatch(r.lab, r.Y), b = m.best;
   const sw = hx => `<span style="display:inline-block; width:22px; height:22px; border-radius:5px; border:1px solid var(--line); vertical-align:middle; margin-right:6px; background:#${hx}"></span>`;
   const good = b.de < 2 ? "very close" : b.de < 5 ? "close" : "not a good match to any chip";
+  const unc = num($("mc-unc").value);
+  let probHtml = "";
+  if (isFinite(unc) && unc > 0) {
+    const pr = mcProb(r.lab, unc).slice(0, 4), top = pr[0];
+    const conf = top.p >= 0.8 ? "The reading points clearly to one chip." : top.p >= 0.5 ? "One chip is most likely, but a neighbour is a real possibility." : "The reading sits between chips; record the two most likely or report it as a range.";
+    probHtml = `<div style="margin:10px 0 4px"><div class="hint" style="margin:0 0 6px">How sure is the match, with a repeat-reading spread of ΔE ${fmt(unc, 1)}? ${conf}</div>`
+      + pr.map(o => `<div style="display:grid; grid-template-columns:22px 110px minmax(0,1fr) 46px; gap:8px; align-items:center; font-size:.88rem; margin:3px 0">${sw(o.ch.hx)}<span>${o.ch.name}</span><span style="height:7px; background:var(--surface-2); border-radius:4px; overflow:hidden"><span style="display:block; height:100%; width:${(o.p * 100).toFixed(1)}%; background:var(--accent)"></span></span><span style="text-align:right; font-variant-numeric:tabular-nums">${fmt(o.p * 100, 0)}%</span></div>`).join("")
+      + "</div>";
+  }
   $("mc-res").innerHTML = `<div style="display:flex; gap:14px; align-items:center; flex-wrap:wrap">
       <div style="width:72px; height:72px; border-radius:10px; border:1px solid var(--line); background:#${b.ch.hx}"></div>
       <div><div class="hint" style="margin:0">Nearest chart chip</div><div class="big" style="margin:0">${b.ch.name}</div><div class="hint" style="margin:0">ΔE₀₀ ${fmt(b.de, 1)}: ${good}</div></div>
@@ -2800,6 +2884,7 @@ function mcSingle() {
     </div>
     <p class="hint" style="margin:10px 0 4px">Next closest: ${m.next.map(n => `${sw(n.ch.hx)}${n.ch.name} (ΔE₀₀ ${fmt(n.de, 1)})`).join(" &nbsp; ")}</p>
     ${b.de >= 5 ? '<p class="msg err" style="margin:6px 0">No chip on the soil or gley pages is close. Check the instrument settings (illuminant, specular included or excluded), or the colour may be outside the chart.</p>' : ""}
+    ${probHtml}
     <div class="rk-row"><button class="rk-btn" id="mc-show">Show it on the chart</button></div>`;
   $("mc-show").addEventListener("click", () => { mSel = { hue: b.ch.hue, v: b.ch.v, c: b.ch.c }; $("m-text").value = b.ch.name; mRender(); $("m-swatch").scrollIntoView({ behavior: "smooth", block: "center" }); });
 }
@@ -2829,7 +2914,7 @@ function mcBatch() {
   mcOut = { header, rows }; $("mc-dl").hidden = false;
   msg.textContent = `${rows.length - bad} sample${rows.length - bad === 1 ? "" : "s"} converted from ${mode === "lab" ? "L*a*b* (" + ill + ")" : mode === "xyz" ? "XYZ (" + ill + ")" : mode === "rgb" ? "sRGB" : "hex"}.` + (bad ? ` ${bad} row${bad > 1 ? "s" : ""} could not be read.` : "");
 }
-["mc-mode", "mc-ill", "mc-1", "mc-2", "mc-3", "mc-hex"].forEach(id => $(id).addEventListener("input", mcSingle));
+["mc-mode", "mc-ill", "mc-1", "mc-2", "mc-3", "mc-hex", "mc-unc"].forEach(id => $(id).addEventListener("input", mcSingle));
 $("mc-run").addEventListener("click", mcBatch);
 $("mc-ex").addEventListener("click", () => { $("mc-data").value = "id,L,a,b\nAp,34.1,4.6,13.2\nBt1,47.8,13.9,26.5\nBt2,52.3,16.8,30.1\nBg,58.6,0.8,9.4\nC,63.2,5.1,17.9"; mcBatch(); });
 readFileInto($("mc-file"), $("mc-data"), mcBatch);
