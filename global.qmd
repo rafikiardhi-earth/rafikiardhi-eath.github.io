@@ -1,0 +1,43 @@
+---
+title: "Global – Soil Security as Shared Ground"
+description: "Australia, Asia and the projects that looked at soil as a resource the whole world depends on"
+page-layout: full
+---
+
+![The first Soil Security Think Tank members and secretariats](../images/ss-summit.jpg){fig-alt="Aroura soil security think tank"}
+
+## From one landscape to the whole planet
+
+Some questions cannot be answered in one country. How much soil does the world have left in good condition? Who is responsible for it? How do we value something that takes centuries to form and a few seasons to lose?
+
+In Australia, *RafikiArdhi* team members worked on exactly these questions. We served on the Secretariat of [Aroura](https://arourasoil.com/), the soil and soil security think tank in Sydney, during its launch and the first Global Soil Security Summit, where the Soil Security Declaration was signed. We co-authored two of Aroura's publications and took part in projects that looked at soil at the scale of the planet.
+
+![Declaration signed by the Soil Security Think Tank memeber, written by the secretariate](../images/ss-declaration.jpg){fig-alt="Declaration from the Aroura Soil Security Think Tank" width="600px"}
+
+## Soil security
+
+Soil security asks a simple question with a complicated answer: is the soil able to keep providing what people and ecosystems need from it? Answering it means looking at more than the soil itself. It brings together the condition of the soil, what it is capable of, its value, how connected people are to it, and the policies and laws that govern how it is used.
+
+![Wetland in a Sydney Park, Sydney plagued by contamination from past industrial activity and current land development](../images/sydney-park.jpg){fig-alt="Wetland on the east side of Sydney Park"}
+
+That framing did not changed how we work. A soil map or a carbon stock is only part of the picture. The same soil can be secure in one place and at risk in another, depending on who depends on it and how it is managed. This is how we always worked.
+
+What did change is that one place cannot decide these standards for another, and local knowledge is often the most useful tool.
+
+## Thinking globally, working locally
+
+Global projects can feel far removed from a farm, a catchment or a backyard. For us they did the opposite. They showed that the same ideas apply at every scale: know the soil, know the people who depend on it, and make the knowledge useful to them.
+
+That thinking runs through the [other places](work-places.qmd) we have worked and through the [research tools](tools.qmd) we share freely. The scale changes; the responsibility does not. We continue to support projects globally from young scientists to large scale projects:
+
+- *[[]{.bi .bi-geo-alt} Global Covid-19](https://doi.org/10.1016/j.envadv.2022.100328)*
+- *[[]{.bi .bi-geo-alt} Global phySplines](https://doi.org/10.1016/j.scitotenv.2026.181621)
+- *[]{.bi .bi-geo-alt} Pakistan* - see [research](publications.qmd)
+- *[]{.bi .bi-geo-alt} Bangladesh* - modeling shoreline change (MSc student, in progress)
+- *[]{.bi .bi-geo-alt} China* - see [research](publications.qmd)
+- *[]{.bi .bi-geo-alt} Japan* - global climate models (NDA)
+- *[]{.bi .bi-geo-alt} World Bank* - carbon credit feasibility (NDA)
+
+![Barangaroo, Sydney: the harbour foreshore rebuilt from the Hawkesbury Sandstone dug out of the site, with the new city rising behind it.](../images/sydney-bay.jpg){fig-alt="Need to take care of nature to take care of our cities" width="600px"}
+
+[[]{.bi .bi-global-europe-africa} Places →](work-places.qmd)

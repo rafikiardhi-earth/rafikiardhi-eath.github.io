@@ -1,6 +1,6 @@
 ---
 title: "Where We Work"
-description: "The places, people, and experiences that shape our work"
+description: "The places, people and experiences that shape our work"
 page-layout: full
 ---
 
@@ -12,7 +12,7 @@ The places where we work are more than locations where research happens. They ar
 
 Each place has shaped how we approach science in a different way. Some have taught us to look at familiar problems differently; others have shown us the value of local knowledge, shared experience and working with what is available rather than assuming that better science always requires more technology.
 
-![Pondering over Hout Bay as we hike from the south side of Table Mountain](../images/sa-hike.jpg){fig-alt="Hiking the little known trail up to Table Mountain"}
+![Pondering over Hout Bay as we hike from the south side of Table Mountain](../images/sa-hike.jpg){fig-alt="Hiking the little-known trail up to Table Mountain"}
 
 We created these pages to share some of those experiences. They are not intended to be complete histories of our [research](publications.qmd) or lists of [projects](projects.qmd) and [achievements](../images/best-paper.jpg). Instead, they offer glimpses of the people, places and ideas that have influenced how we work today and what makes our approach different.
 

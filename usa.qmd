@@ -36,4 +36,4 @@ The job is done. The supervisor remains on site.
 
 ![Autumn in the high country, Colorado.](../images/autumn-co.jpg){fig-alt="Autumn colours in the Colorado high country"}
 
-[[]{.bi .bi-global-europe-africa} Places →](work-places.qmd)
+[[]{.bi .bi-global-europe-africa} Global →](global.qmd)
