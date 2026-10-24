@@ -8,7 +8,7 @@ page-layout: full
 
 ## Beyond familiar ground
 
-Europe was where *RafikiArdhi's* research story first extended beyond Africa, beyond soil and plants. Through our first research experiences on another continent and our early independent research, we encountered new landscapes, new scientific traditions and different ways of approaching environmental questions.
+Europe was where *RafikiArdhi's* research story first extended beyond Africa, beyond soil and plants. Through our first research experiences on another continent and our early independent research, we encountered new landscapes, new scientific traditions and different ways of approaching environmental questions such as the restoration of [drained peat lands](https://doi.org/10.1016/j.ecoleng.2021.106336).
 
 Working in unfamiliar places brought an important lesson: good science does not necessarily require the most advanced technology or the largest collection of data. It requires knowing what you are looking at and the curiosity to solve it.
 
