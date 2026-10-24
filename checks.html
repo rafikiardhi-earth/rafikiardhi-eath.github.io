@@ -750,8 +750,7 @@ window.CK = {
     ['acc', 'Model accuracy and validation', 'Is the model as good as the paper says?'],
     ['spat', 'Spatial structure and sampling', 'Do the variogram, the sampling and the map fit together?'],
     ['data', 'Soil data and units', 'Do the numbers follow from the inputs?'],
-    ['design', 'Study design and independence', 'Do the observations and validation match the question?'],
-    ['review', 'Study design and statistical reasoning', 'Checks for study design, statistical assumptions and model comparisons.']
+    ['review', 'Study design and statistical reasoning', 'Do the observations, the assumptions and the model comparison match the question?']
   ],
   items: {
     'r2': { g: 'acc', t: 'R², RMSE and SD', d: 'Can the reported R² and RMSE both be true? Are they better than the lab precision allows?', href: 'tools.html#eval/ev-check-cont', where: 'Model evaluation' },
@@ -759,9 +758,9 @@ window.CK = {
     'picp': { g: 'acc', t: 'Honest uncertainty', d: 'Do prediction intervals cover what they claim (PICP)?', href: 'tools.html#eval', where: 'Model evaluation' },
     'area-estimation': { g: 'acc', t: 'Area from a confusion matrix', d: 'Unbiased class areas with confidence intervals, instead of pixel counts.', rel: ['acc', 'spatial-cv', 'pixel-size'] },
     'spatial-cv': { g: 'acc', t: 'Spatial cross-validation and leakage', d: 'Is the validation optimistic? A guided checklist.', rel: ['r2', 'krig', 'effective-sample-size', 'independence'] },
-    'independence': { g: 'review', t: 'Independence and study design', d: 'Are the sampling unit, analysis and validation strategy aligned?', beta: true, rel: ['effective-sample-size', 'spatial-cv', 'detect'] },
-    'assumptions-check': { g: 'review', t: 'Statistical assumptions check', d: 'Which assumptions matter for this method, and what evidence would help you assess them?', beta: true, rel: ['independence', 'r2', 'effective-sample-size'] },
-    'model-comparison': { g: 'review', t: 'Model comparison audit', d: 'Are competing models evaluated on comparable data, scales and metrics?', beta: true, rel: ['spatial-cv', 'r2', 'acc'] },
+    'independence': { g: 'review', t: 'Independence and study design', d: 'Are the sampling unit, analysis and validation aligned? How much does grouping shrink the effective sample size?', beta: true, rel: ['effective-sample-size', 'spatial-cv', 'detect'] },
+    'assumptions-check': { g: 'review', t: 'Statistical assumptions check', d: 'Which assumptions matter for this method? Paste residuals for skewness, outliers, unequal spread and autocorrelation.', beta: true, rel: ['independence', 'r2', 'effective-sample-size'] },
+    'model-comparison': { g: 'review', t: 'Model comparison audit', d: 'Are competing models evaluated on comparable terms? Test the difference with paired fold scores or McNemar.', beta: true, rel: ['spatial-cv', 'r2', 'acc'] },
     'krig': { g: 'spat', t: 'Kriging error vs. variogram', d: 'Is a reported kriging RMSE possible, given the range, nugget and sample spacing?', href: 'tools.html#krige/kr-check', where: 'Variogram & kriging' },
     'smap': { g: 'spat', t: 'Samples for a map', d: 'How many samples a target map error needs, from the variogram.', href: 'tools.html#sampling/s-check', where: 'Sampling density' },
     'effective-sample-size': { g: 'spat', t: 'Effective sample size', d: 'How much clustered samples are really worth.', rel: ['smap', 'detect', 'spatial-cv'] },
@@ -1127,9 +1126,9 @@ Stable non-forest,2,1,9,313,6450000`;
 </section>
 </div>
 <div id="independence" class="ck-sec">
-<section id="independence-and-study-design" class="level2">
-<h2 data-anchor-id="independence-and-study-design">Independence and study design</h2>
-<p>Independence is a property of the study design and the question being asked, not a box that a single diagnostic can certify. Use this guided check to identify common sources of dependence and mismatches between the sampling unit, statistical analysis, and validation design. It flags issues to investigate; it does not automatically invalidate a study.</p>
+<section id="independence-and-study-design-beta" class="level2">
+<h2 data-anchor-id="independence-and-study-design-beta">Independence and study design <span class="ck-beta">BETA</span></h2>
+<p>Independence is a property of the study design and the question being asked, not a box that a single diagnostic can certify. Use this guided check to identify common sources of dependence and mismatches between the sampling unit, statistical analysis, and validation design. It flags issues to investigate; it does not automatically invalidate a study. If you know how many observations and groups there are, it also shows how much the grouping shrinks the effective sample size.</p>
 <div class="hmc" id="indep"></div>
 <script>
 (function () {
@@ -1158,7 +1157,7 @@ Stable non-forest,2,1,9,313,6450000`;
   ];
   HM.tool({
     id: 'indep', step: 'Study structure and intended inference', units: false, hash: false,
-    example: { structure: 'multi', unit: 'profile', goal: 'newgroup', split: 'random', groups: true, pseudorep: true, overlap: true, leakage: false, balanced: false },
+    example: { structure: 'multi', unit: 'profile', goal: 'newgroup', split: 'random', groups: true, pseudorep: true, overlap: true, leakage: false, balanced: false, nobs: 240, ngrp: 30, icc: 0.4 },
     inputs: [
       { k: 'structure', l: 'What structure is present in the observations?', t: 'select', d: 'none', opts: structureOptions },
       { k: 'unit', l: 'What is the independent sampling or experimental unit?', t: 'select', d: 'sample', opts: [['sample', 'Each individual observation'], ['plot', 'Plot, site, subject, or other group'], ['profile', 'Profile, core, or sampling location'], ['cluster', 'Catchment, region, school, clinic, or higher-level cluster'], ['timeunit', 'Time point or time block'], ['unclear', 'Not stated or unclear']] },
@@ -1169,11 +1168,39 @@ Stable non-forest,2,1,9,313,6450000`;
       { k: 'pseudorep', l: 'The analysis appears to count subsamples, repeated measures, pixels, or technical replicates as independent replicates', t: 'check', d: false },
       { k: 'overlap', l: 'Nearby locations, adjacent time points, or related observations may occur in both training and test data', t: 'check', d: false },
       { k: 'leakage', l: 'Preprocessing, feature selection, tuning, or covariate construction may have used information from the held-out data', t: 'check', d: false },
-      { k: 'balanced', l: 'The paper reports a design-aware method (e.g. mixed model, cluster-robust SE, block design, or grouped validation)', t: 'check', d: false }
+      { k: 'balanced', l: 'The paper reports a design-aware method (e.g. mixed model, cluster-robust SE, block design, or grouped validation)', t: 'check', d: false },
+      { t: 'sec', l: 'Numbers, if known (optional): how much the grouping costs' },
+      { k: 'nobs', l: 'Observations analysed', t: 'num', w: 2 },
+      { k: 'ngrp', l: 'Independent groups (sites, profiles, subjects…)', t: 'num', w: 2 },
+      { k: 'icc', l: 'Intraclass correlation (ICC, 0–1), if reported', t: 'num', w: 2 }
     ],
     compute(v, U) {
       const findings = [];
       const add = (level, title, detail) => findings.push({level, title, detail});
+      // design effect (Kish 1965): DEFF = 1 + (m - 1) * ICC, m = mean group size
+      const given = x => x !== '' && x !== null && x !== undefined && isFinite(Number(x));
+      const nn = Number(v.nobs), kk = Number(v.ngrp), icc = Number(v.icc);
+      let numHtml = '', numWork = [];
+      if (given(v.nobs) && given(v.ngrp) && nn > 0 && kk > 0 && kk <= nn) {
+        const m = nn / kk;
+        const neffOf = r => nn / (1 + (m - 1) * r);
+        if (given(v.icc) && icc >= 0 && icc <= 1) {
+          const deff = 1 + (m - 1) * icc, neff = nn / deff;
+          numHtml = U.big('Effective sample size', HM.fmt(neff, 1), `out of ${nn} observations in ${kk} groups (about ${HM.fmt(m, 1)} per group), with ICC ${HM.fmt(icc, 2)}.`)
+            + U.kv([['Design effect', HM.fmt(deff, 2)], ['Standard errors that ignore the grouping are too small by', `${HM.fmt(Math.sqrt(deff), 2)}×`], ['Effective n lies between', `${kk} (groups) and ${nn} (observations)`]]);
+          if (neff < nn / 2) add('high', 'Grouping removes most of the apparent replication', `With this ICC the ${nn} observations carry about as much information as ${HM.fmt(neff, 0)} independent ones. Tests and intervals that use n = ${nn} will look far more certain than the data support.`);
+          numWork = [`Mean group size m = ${nn} ÷ ${kk} = ${HM.fmt(m, 2)}`, `Design effect = 1 + (m − 1) × ICC = 1 + ${HM.fmt(m - 1, 2)} × ${HM.fmt(icc, 2)} = ${HM.fmt(deff, 3)}`, `Effective n = ${nn} ÷ ${HM.fmt(deff, 3)} = ${HM.fmt(neff, 1)}`];
+        } else {
+          const rows = [0.1, 0.3, 0.5, 0.8].map(r => [`ICC ${r}`, `${HM.fmt(neffOf(r), 1)} effective (standard errors ${HM.fmt(Math.sqrt(1 + (m - 1) * r), 2)}× too small)`]);
+          numHtml = '<h3>Effective sample size for a range of ICC values</h3>' + U.kv(rows)
+            + `<p>Effective n lies between ${kk} (the number of groups) and ${nn} (the number of observations). Soil properties measured repeatedly within a profile or site often have ICCs well above 0.3.</p>`;
+          numWork = [`Mean group size m = ${nn} ÷ ${kk} = ${HM.fmt(m, 2)}; design effect = 1 + (m − 1) × ICC for each ICC shown`];
+        }
+        numWork.push('This is the Kish design effect for estimating a mean with groups of similar size. For a regression slope it also depends on how strongly the predictor itself clusters (Moulton 1990); unequal group sizes raise it further.');
+        if (v.unit === 'sample' && kk < nn) add('warn', 'The stated unit may be wrong', `You gave ${kk} groups for ${nn} observations, but chose “each individual observation” as the independent unit. If the observations within a group are related, the group is the independent unit.`);
+      } else if (given(v.nobs) || given(v.ngrp)) {
+        numHtml = U.note('Enter both the number of observations and the number of groups (groups no more than observations) to see the effective sample size.', 'warn');
+      }
       if (v.unit === 'unclear') add('warn', 'Independent unit is unclear', 'The paper should identify the unit independently sampled or assigned to treatment. The number of measurements is not necessarily the number of independent replicates.');
       if (v.groups || ['group','repeat','multi'].includes(v.structure)) {
         if (v.balanced) add('info', 'Grouped or repeated data: check the stated adjustment', 'The paper reports a design-aware method. Confirm that it matches the grouping structure and the estimand; a mixed model or robust standard error does not automatically solve every dependence problem.');
@@ -1201,9 +1228,11 @@ Stable non-forest,2,1,9,313,6450000`;
       const label = findings.some(x => x.level === 'high') ? ['bad','Potential design mismatch or leakage to investigate'] : findings.some(x => x.level === 'warn') ? ['warn','Independence assumptions need a closer look'] : ['good','No major warning selected; verify against the paper'];
       let html = `<p><span class="tag ${label[0]}">${label[1]}</span></p>`;
       html += '<p>This is a guided screening result based on the selections above, not a statistical test of independence.</p>';
+      html += numHtml;
       html += findings.map(f => U.note(`<b>${f.title}.</b> ${f.detail}`, f.level === 'high' ? 'bad' : f.level === 'warn' ? 'warn' : 'good')).join('');
       html += '<h3>Questions reviewers might ask</h3><ul class="plain"><li>What is the independently sampled or randomised unit?</li><li>Does the statistical model account for dependence at that unit?</li><li>Does the validation split mimic the population, location, group, or time period to which the conclusions are intended to apply?</li><li>Were all data-dependent modelling decisions confined to the training data?</li></ul>';
       return { html, work: [
+        ...numWork,
         'Independence is design- and estimand-specific. A dependence structure may affect standard errors, effective sample size, or predictive validation in different ways; these are related but not interchangeable issues.',
         'The checklist reports potential risks from user-selected study characteristics. It does not estimate correlation, effective sample size, or the magnitude of bias.',
         'For spatial data, select validation separation based on the prediction task and expected distance to training observations. For forecasting, preserve temporal order. For grouped data, keep the relevant independent groups together.',
@@ -1218,102 +1247,271 @@ Stable non-forest,2,1,9,313,6450000`;
 <p>Hurlbert, S.H. (1984). Pseudoreplication and the design of ecological field experiments. <em>Ecological Monographs</em> 54, 187–211. <a href="https://doi.org/10.2307/1942661">doi:10.2307/1942661</a></p>
 <p>Roberts, D.R. et al.&nbsp;(2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. <em>Ecography</em> 40, 913–929. <a href="https://doi.org/10.1111/ecog.02881">doi:10.1111/ecog.02881</a></p>
 <p>Meyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. <em>Methods in Ecology and Evolution</em> 12, 1620–1633. <a href="https://doi.org/10.1111/2041-210X.13650">doi:10.1111/2041-210X.13650</a></p>
+<p>Kish, L. (1965). <em>Survey Sampling</em>. Wiley, New York.</p>
+<p>Moulton, B.R. (1990). An illustration of a pitfall in estimating the effects of aggregate variables on micro units. <em>Review of Economics and Statistics</em> 72, 334–338. <a href="https://doi.org/10.2307/2109724">doi:10.2307/2109724</a></p>
 </div>
 </section>
 </div>
 <div id="assumptions-check" class="ck-sec">
 <section id="statistical-assumptions-check-beta" class="level2">
 <h2 data-anchor-id="statistical-assumptions-check-beta">Statistical assumptions check <span class="ck-beta">BETA</span></h2>
-<p>A guided check for matching assumptions to the statistical method. It does not infer assumptions automatically: select the method and the diagnostics you have checked, then use the prompts to identify anything that may need further investigation. Reviewers might ask similar questions about the evidence reported.</p>
-<div class="hmc" id="assump-beta">
-  <div class="hm-grid">
-    <label class="hm-field"><span>Method reported</span><select id="as-method"><option value="linear">Linear regression / ANCOVA</option><option value="anova">ANOVA / group comparison</option><option value="logistic">Logistic regression</option><option value="correlation">Pearson correlation</option><option value="mixed">Mixed-effects / repeated measures</option><option value="nonparam">Rank-based / nonparametric method</option><option value="other">Other or unclear</option></select></label>
-    <label class="hm-field"><span>Primary aim</span><select id="as-aim"><option value="inference">Inference (tests, estimates or confidence intervals)</option><option value="prediction">Prediction</option><option value="description">Description / exploration</option></select></label>
-  </div>
-  <p><strong>Which checks have you carried out or documented?</strong></p>
-  <div class="hm-grid">
-    <label><input type="checkbox" id="as-resid"> Residuals or model diagnostics inspected</label>
-    <label><input type="checkbox" id="as-var"> Variance / dispersion assessed</label>
-    <label><input type="checkbox" id="as-dist"> Relevant distributional assumption assessed</label>
-    <label><input type="checkbox" id="as-infl"> Influential points / outliers assessed where relevant</label>
-    <label><input type="checkbox" id="as-ind"> Independence or grouping structure addressed</label>
-    <label><input type="checkbox" id="as-form"> Functional form / link / linearity assessed where relevant</label>
-  </div>
-  <p><button class="btn btn-primary" type="button" id="as-run">Generate questions to consider</button> <button class="btn btn-outline-secondary" type="button" id="as-reset">Reset</button></p>
-  <div id="as-output" aria-live="polite"></div>
-</div>
+<p>A guided check for matching assumptions to the statistical method. Select the method and the diagnostics you have checked, then use the prompts to identify anything that may need further investigation. If you have the residuals, paste them: the check reports skewness, outliers, unequal spread, curvature and, for ordered data, autocorrelation, with a residual plot. Reviewers might ask similar questions about the evidence reported.</p>
+<div class="hmc" id="assump"></div>
 <script>
-(function(){
- const $=id=>document.getElementById(id), checks=['resid','var','dist','infl','ind','form'];
- const names={resid:'Residual or model diagnostics',var:'Variance / dispersion',dist:'Distributional assumption',infl:'Influential observations',ind:'Independence / grouping',form:'Functional form / link'};
- $('as-run').addEventListener('click',()=>{
-  const m=$('as-method').value, aim=$('as-aim').value, done=checks.filter(k=>$('as-'+k).checked), missing=checks.filter(k=>!$('as-'+k).checked);
-  let relevant=[];
-  if(['linear','anova','mixed'].includes(m)) relevant.push('Check whether the model’s error structure and variance assumptions are appropriate for the design. Normality, where needed for inference, concerns the model errors or residuals—not automatically the raw response.');
-  if(m==='linear') relevant.push('Check linearity / functional form, residual-versus-fitted structure, heteroscedasticity, leverage and influential observations.');
-  if(m==='anova') relevant.push('Check independence at the experimental-unit level and whether variance homogeneity is plausible; the appropriate response to unequal variance depends on the design and method.');
-  if(m==='logistic') relevant.push('Check the binary outcome and link specification, functional form for continuous predictors on the logit scale, separation, influential observations, and overdispersion where relevant. Normal residuals are not a standard logistic-regression requirement.');
-  if(m==='correlation') relevant.push('For Pearson correlation, inspect linearity, influential points, and whether the inference accounts for dependence. Distributional assumptions depend on the inferential procedure; a scatterplot is essential.');
-  if(m==='mixed') relevant.push('Identify the grouping / random-effects structure and check whether it matches the sampling or repeated-measures design. Residual and random-effect diagnostics answer different questions.');
-  if(m==='nonparam') relevant.push('Do not assume “nonparametric” means assumption-free. Check independence, measurement scale, sampling design, and the specific method’s assumptions (for example, shape assumptions for some rank-based comparisons).');
-  if(m==='other') relevant.push('The method is too broad to prescribe a valid assumption set. Identify the exact estimator, test, likelihood or algorithm before deciding which diagnostics are required.');
-  if(aim==='prediction') relevant.push('For prediction, prioritise out-of-sample performance, calibration, distribution shift and leakage. A diagnostic that supports coefficient inference may not establish predictive performance.');
-  if(aim==='description') relevant.push('For descriptive or exploratory work, distinguish assumptions needed for the reported summaries from assumptions needed for formal uncertainty or generalisation.');
-  let html='<p><span class="tag warn">Guided check — not an automated verdict</span></p><p><strong>Selected method:</strong> '+({'linear':'Linear regression / ANCOVA','anova':'ANOVA / group comparison','logistic':'Logistic regression','correlation':'Pearson correlation','mixed':'Mixed-effects / repeated measures','nonparam':'Rank-based / nonparametric method','other':'Other or unclear'}[m])+'</p>';
-  html+='<h3>Method-specific prompts</h3><ul>'+relevant.map(x=>'<li>'+x+'</li>').join('')+'</ul>';
-  html+='<h3>Checks not marked as reported</h3>'+(missing.length?'<ul>'+missing.map(k=>'<li><strong>'+names[k]+':</strong> confirm whether this is relevant to the chosen method and whether the paper reports adequate evidence. An unchecked item is not proof the authors omitted it.</li>').join('')+'</ul>':'<p>All checklist items were marked. Verify that the paper reports suitable evidence rather than only stating that checks were performed.</p>');
-  html+='<p><strong>Marked as reported:</strong> '+(done.length?done.map(k=>names[k]).join('; '):'none')+'.</p><p>Interpretation depends on the estimator, design, sample size and inferential target. Do not require every diagnostic for every method.</p>';
-  $('as-output').innerHTML=html;
- });
- $('as-reset').addEventListener('click',()=>{ $('as-method').value='linear'; $('as-aim').value='inference'; checks.forEach(k=>$('as-'+k).checked=false); $('as-output').innerHTML=''; });
+/* Shared statistics helpers for the checks below (normal, t, exact binomial). */
+window.CKSTAT = window.CKSTAT || (function () {
+  const lgamma = z => {
+    const c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (z < 0.5) return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * z))) - lgamma(1 - z);
+    z -= 1; let x = c[0]; for (let i = 1; i < 9; i++) x += c[i] / (z + i);
+    const t = z + 7.5; return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+  };
+  const betacf = (a, b, x) => {
+    const FP = 1e-300; let qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap;
+    if (Math.abs(d) < FP) d = FP; d = 1 / d; let h = d;
+    for (let m = 1; m <= 300; m++) {
+      const m2 = 2 * m; let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+      d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d; h *= d * c;
+      aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+      d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d;
+      const del = d * c; h *= del; if (Math.abs(del - 1) < 3e-14) break;
+    }
+    return h;
+  };
+  const ibeta = (x, a, b) => {
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+    return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b;
+  };
+  const erf = x => { const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x);
+    return s * (1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x)); };
+  const normCdf = z => 0.5 * (1 + erf(z / Math.SQRT2));
+  const tTwoSided = (t, df) => ibeta(df / (df + t * t), df / 2, 0.5);
+  const binomTwoSided = (k, n) => { // exact two-sided sign test, p = 0.5
+    if (n === 0) return 1; const lo = Math.min(k, n - k); let s = 0;
+    for (let i = 0; i <= lo; i++) s += Math.exp(lgamma(n + 1) - lgamma(i + 1) - lgamma(n - i + 1) - n * Math.LN2);
+    return Math.min(1, 2 * s);
+  };
+  const ranks = a => { const o = a.map((v, i) => [v, i]).sort((p, q) => p[0] - q[0]), r = new Array(a.length);
+    for (let i = 0; i < o.length;) { let j = i; while (j + 1 < o.length && o[j + 1][0] === o[i][0]) j++; for (let k = i; k <= j; k++) r[o[k][1]] = (i + j) / 2 + 1; i = j + 1; } return r; };
+  const pearson = (x, y) => { const n = x.length, mx = x.reduce((s, v) => s + v, 0) / n, my = y.reduce((s, v) => s + v, 0) / n;
+    let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; syy += (y[i] - my) ** 2; }
+    return sxx > 0 && syy > 0 ? sxy / Math.sqrt(sxx * syy) : 0; };
+  const fmtP = p => p < 0.001 ? 'p < 0.001' : 'p = ' + p.toFixed(3);
+  const parseRows = txt => String(txt || '').split(/\r?\n/).map(l => l.trim()).filter(l => l && !/^[a-z]/i.test(l))
+    .map(l => l.split(/[,;\t\s]+/).map(Number)).filter(r => r.length && r.every(isFinite));
+  return { lgamma, ibeta, normCdf, tTwoSided, binomTwoSided, ranks, pearson, fmtP, parseRows };
+})();
+
+(function () {
+  const S = window.CKSTAT;
+  const methods = [['linear', 'Linear regression / ANCOVA'], ['anova', 'ANOVA / group comparison'], ['logistic', 'Logistic regression'], ['correlation', 'Pearson correlation'], ['mixed', 'Mixed-effects / repeated measures'], ['nonparam', 'Rank-based / nonparametric method'], ['other', 'Other or unclear']];
+  const names = { resid: 'Residual or model diagnostics', vari: 'Variance / dispersion', dist: 'Distributional assumption', infl: 'Influential observations', ind: 'Independence / grouping', form: 'Functional form / link' };
+  // example: a regression whose residual spread grows with the fitted value
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const gauss = () => Math.sqrt(-2 * Math.log(rnd())) * Math.cos(2 * Math.PI * rnd());
+  let ex = 'fitted,residual'; for (let i = 0; i < 70; i++) { const f = 1 + i * 0.3; ex += `\n${f.toFixed(2)},${(gauss() * 0.15 * f).toFixed(3)}`; }
+
+  HM.tool({
+    id: 'assump', step: 'Method, aim and the checks reported', units: false, hash: false,
+    example: { method: 'linear', aim: 'inference', resid: true, vari: false, dist: true, infl: false, ind: false, form: true, data: ex, ordered: false },
+    inputs: [
+      { k: 'method', l: 'Method reported', t: 'select', d: 'linear', opts: methods },
+      { k: 'aim', l: 'Primary aim', t: 'select', d: 'inference', opts: [['inference', 'Inference (tests, estimates or confidence intervals)'], ['prediction', 'Prediction'], ['description', 'Description / exploration']] },
+      { t: 'sec', l: 'Which checks have you carried out or documented?' },
+      { k: 'resid', l: 'Residuals or model diagnostics inspected', t: 'check', d: false },
+      { k: 'vari', l: 'Variance / dispersion assessed', t: 'check', d: false },
+      { k: 'dist', l: 'Relevant distributional assumption assessed', t: 'check', d: false },
+      { k: 'infl', l: 'Influential points / outliers assessed where relevant', t: 'check', d: false },
+      { k: 'ind', l: 'Independence or grouping structure addressed', t: 'check', d: false },
+      { k: 'form', l: 'Functional form / link / linearity assessed where relevant', t: 'check', d: false },
+      { t: 'sec', l: 'Residuals (optional): paste them for a quick diagnostic' },
+      { k: 'data', l: 'One per line: residual, or fitted, residual. A header row is ignored.', t: 'textarea', rows: 6, ph: 'fitted,residual\n12.1,0.84\n13.4,-1.10' },
+      { k: 'ordered', l: 'Rows are in time order or along a transect (checks autocorrelation)', t: 'check', d: false }
+    ],
+    compute(v, U) {
+      const m = v.method, aim = v.aim, keys = Object.keys(names);
+      const done = keys.filter(k => v[k]), missing = keys.filter(k => !v[k]);
+      const relevant = [];
+      if (['linear', 'anova', 'mixed'].includes(m)) relevant.push('Check whether the model’s error structure and variance assumptions are appropriate for the design. Normality, where needed for inference, concerns the model errors or residuals—not automatically the raw response.');
+      if (m === 'linear') relevant.push('Check linearity / functional form, residual-versus-fitted structure, heteroscedasticity, leverage and influential observations.');
+      if (m === 'anova') relevant.push('Check independence at the experimental-unit level and whether variance homogeneity is plausible; the appropriate response to unequal variance depends on the design and method.');
+      if (m === 'logistic') relevant.push('Check the binary outcome and link specification, functional form for continuous predictors on the logit scale, separation, influential observations, and overdispersion where relevant. Normal residuals are not a standard logistic-regression requirement.');
+      if (m === 'correlation') relevant.push('For Pearson correlation, inspect linearity, influential points, and whether the inference accounts for dependence. Distributional assumptions depend on the inferential procedure; a scatterplot is essential.');
+      if (m === 'mixed') relevant.push('Identify the grouping / random-effects structure and check whether it matches the sampling or repeated-measures design. Residual and random-effect diagnostics answer different questions.');
+      if (m === 'nonparam') relevant.push('Do not assume “nonparametric” means assumption-free. Check independence, measurement scale, sampling design, and the specific method’s assumptions (for example, shape assumptions for some rank-based comparisons).');
+      if (m === 'other') relevant.push('The method is too broad to prescribe a valid assumption set. Identify the exact estimator, test, likelihood or algorithm before deciding which diagnostics are required.');
+      if (aim === 'prediction') relevant.push('For prediction, prioritise out-of-sample performance, calibration, distribution shift and leakage. A diagnostic that supports coefficient inference may not establish predictive performance.');
+      if (aim === 'description') relevant.push('For descriptive or exploratory work, distinguish assumptions needed for the reported summaries from assumptions needed for formal uncertainty or generalisation.');
+
+      let html = '<p><span class="tag warn">Guided check — not an automated verdict</span></p>';
+      html += '<h3>Method-specific prompts</h3><ul>' + relevant.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+      html += '<h3>Checks not marked as reported</h3>' + (missing.length ? '<ul>' + missing.map(k => '<li><strong>' + names[k] + ':</strong> confirm whether this is relevant to the chosen method and whether the paper reports adequate evidence. An unchecked item is not proof the authors omitted it.</li>').join('') + '</ul>' : '<p>All checklist items were marked. Verify that the paper reports suitable evidence rather than only stating that checks were performed.</p>');
+      html += '<p><strong>Marked as reported:</strong> ' + (done.length ? done.map(k => names[k]).join('; ') : 'none') + '.</p>';
+      const work = ['Interpretation depends on the estimator, design, sample size and inferential target. Do not require every diagnostic for every method.'];
+
+      // ---- optional residual diagnostics ----
+      const rows = S.parseRows(v.data);
+      if (rows.length) {
+        const two = rows.every(r => r.length >= 2), fit = two ? rows.map(r => r[0]) : null, e = rows.map(r => two ? r[1] : r[0]);
+        const n = e.length;
+        if (n < 8) {
+          html += U.note('Paste at least 8 residuals for the diagnostic.', 'warn');
+        } else {
+          const mean = e.reduce((s, x) => s + x, 0) / n, sd = Math.sqrt(e.reduce((s, x) => s + (x - mean) ** 2, 0) / (n - 1));
+          const m2 = e.reduce((s, x) => s + (x - mean) ** 2, 0) / n, m3 = e.reduce((s, x) => s + (x - mean) ** 3, 0) / n, m4 = e.reduce((s, x) => s + (x - mean) ** 4, 0) / n;
+          const g1 = m3 / m2 ** 1.5, g2 = m4 / m2 ** 2 - 3, jb = n / 6 * (g1 * g1 + g2 * g2 / 4), pjb = Math.exp(-jb / 2);
+          const z = e.map(x => (x - mean) / sd), out = z.filter(x => Math.abs(x) > 3).length, expOut = 0.0027 * n;
+          const kv = [['Residuals', `${n}`], ['Mean (should be near 0)', `${HM.fmt(mean, 3)} (${HM.fmt(sd > 0 ? mean / sd : 0, 2)} SD)`], ['Skewness', HM.fmt(g1, 2)], ['Excess kurtosis', HM.fmt(g2, 2)], ['Jarque–Bera normality test', `${S.fmtP(pjb)}`], ['Beyond ±3 SD', `${out} (about ${HM.fmt(expOut, 1)} expected if normal)`]];
+          const flags = [];
+          if (Math.abs(g1) > 1 || Math.abs(g2) > 2) flags.push(['warn', `The residuals are ${Math.abs(g1) > 1 ? (g1 > 0 ? 'strongly right-skewed' : 'strongly left-skewed') : 'heavy-tailed'}. For small samples this affects tests and intervals; a transformation, a different error distribution or robust methods may fit better.`]);
+          if (pjb < 0.05 && n >= 200) flags.push(['good', `The normality test rejects (${S.fmtP(pjb)}), but with ${n} residuals it detects departures too small to matter. Judge by the skewness, kurtosis and plot instead.`]);
+          else if (pjb < 0.05) flags.push(['warn', `The normality test rejects (${S.fmtP(pjb)}). With ${n} residuals this matters for tests and intervals that assume normal errors.`]);
+          else if (n < 30) flags.push(['good', `No departure from normality detected, but with only ${n} residuals the test has little power. Look at the plot.`]);
+          if (out > Math.max(1, 3 * expOut)) flags.push(['warn', `${out} residuals lie beyond ±3 SD, more than a normal distribution would give. Check them for data errors and their influence on the fit.`]);
+          if (fit) {
+            const rho = S.pearson(S.ranks(fit), S.ranks(e.map(Math.abs))), zr = rho * Math.sqrt(n - 1), pr = 2 * (1 - S.normCdf(Math.abs(zr)));
+            kv.push(['Spread vs fitted value (Spearman ρ of |residual|)', `${HM.fmt(rho, 2)}, ${S.fmtP(pr)}`]);
+            if (pr < 0.05 && Math.abs(rho) > 0.2) flags.push(['warn', `The spread of the residuals ${rho > 0 ? 'grows' : 'shrinks'} with the fitted value (ρ = ${HM.fmt(rho, 2)}). Standard errors that assume constant variance will be wrong; consider a transformation, weights or heteroscedasticity-robust standard errors.`]);
+            const ord = fit.map((f, i) => [f, e[i]]).sort((p, q) => p[0] - q[0]), k3 = Math.floor(n / 3);
+            const thirds = [ord.slice(0, k3), ord.slice(k3, n - k3), ord.slice(n - k3)].map(g => g.reduce((s, p) => s + p[1], 0) / g.length);
+            kv.push(['Mean residual: low / middle / high fitted thirds', thirds.map(t => HM.fmt(t, 2)).join(' / ')]);
+            if (thirds.some(t => Math.abs(t) > 0.5 * sd)) flags.push(['warn', 'The mean residual differs between the low, middle and high fitted values. That points to a missed curve or interaction, which a transformation or an extra term may fix.']);
+          }
+          if (v.ordered) {
+            let num = 0, den = 0; for (let i = 0; i < n; i++) { den += (e[i] - mean) ** 2; if (i) num += (e[i] - e[i - 1]) ** 2; }
+            const dw = num / den, r1 = 1 - dw / 2;
+            kv.push(['Durbin–Watson (lag-1 autocorrelation)', `${HM.fmt(dw, 2)} (r₁ ≈ ${HM.fmt(r1, 2)})`]);
+            if (r1 > 0.3) flags.push(['warn', `Neighbouring residuals are correlated (r₁ ≈ ${HM.fmt(r1, 2)}). The observations carry less independent information than their number suggests; see the independence check.`]);
+          }
+          // residual plot
+          const W = 520, Hh = 210, pad = 34, xs = fit || e.map((_, i) => i + 1), x0 = Math.min(...xs), x1 = Math.max(...xs), lim = Math.max(...e.map(Math.abs)) || 1;
+          const X = x => pad + (x1 > x0 ? (x - x0) / (x1 - x0) : 0.5) * (W - pad - 10), Y = y => Hh / 2 - y / lim * (Hh / 2 - 14);
+          let svg = `<svg viewBox="0 0 ${W} ${Hh}" style="width:100%;max-width:${W}px;height:auto;display:block;color:inherit" role="img" aria-label="Residual plot">`;
+          svg += `<line x1="${pad}" x2="${W - 10}" y1="${Y(0)}" y2="${Y(0)}" stroke="currentColor" stroke-opacity=".4"/>`;
+          svg += e.map((y, i) => `<circle cx="${X(xs[i]).toFixed(1)}" cy="${Y(y).toFixed(1)}" r="2.6" fill="currentColor" fill-opacity="${Math.abs(z[i]) > 3 ? 0.95 : 0.5}"/>`).join('');
+          svg += `<text x="${pad}" y="12" font-size="11" fill="currentColor" fill-opacity=".7">Residual</text><text x="${W - 10}" y="${Hh - 4}" font-size="11" text-anchor="end" fill="currentColor" fill-opacity=".7">${fit ? 'Fitted value' : 'Row order'}</text></svg>`;
+          html += '<h3>Residual diagnostic</h3>' + U.kv(kv) + svg;
+          html += flags.map(([lvl, t]) => U.note(t, lvl === 'warn' ? 'warn' : 'good')).join('');
+          if (!flags.length) html += U.note('No marked skew, outliers, unequal spread or curvature in these residuals. This supports, but does not prove, the assumptions for this model.', 'good');
+          work.push('Skewness and excess kurtosis use the population moments; Jarque–Bera = n/6 × (skew² + kurtosis²/4), compared with χ² on 2 degrees of freedom (p = e^(−JB/2)).',
+            'Unequal spread is screened with the Spearman rank correlation between |residual| and the fitted value (normal approximation, z = ρ√(n − 1)). Curvature is screened by the mean residual in each third of the fitted values.',
+            'Durbin–Watson = Σ(eₜ − eₜ₋₁)² ÷ Σ(eₜ − ē)², only meaningful when the rows are in time or spatial order. Values near 2 mean no lag-1 autocorrelation.',
+            'These are screening statistics for one set of residuals, not a full model diagnosis. Influence (leverage, Cook’s distance) needs the predictors, which are not entered here.');
+        }
+      }
+      return { html, work };
+    }
+  });
 })();
 </script>
 <div class="ck-refs">
 <p><strong>Scope note</strong></p>
-<p>This beta tool is a structured checklist, not a test of model assumptions. The relevant assumptions depend on the exact statistical procedure and intended inference. An unchecked item only means that you have not marked the check as reported; it does not establish that the paper omitted it.</p>
+<p>This beta tool is a structured checklist, not a test of model assumptions. The relevant assumptions depend on the exact statistical procedure and intended inference. An unchecked item only means that you have not marked the check as reported; it does not establish that the paper omitted it. The residual diagnostic screens one set of residuals; it does not replace a full model diagnosis.</p>
+<p>Jarque, C.M., Bera, A.K. (1987). A test for normality of observations and regression residuals. <em>International Statistical Review</em> 55, 163–172. <a href="https://doi.org/10.2307/1403192">doi:10.2307/1403192</a></p>
+<p>Durbin, J., Watson, G.S. (1950). Testing for serial correlation in least squares regression. I. <em>Biometrika</em> 37, 409–428. <a href="https://doi.org/10.1093/biomet/37.3-4.409">doi:10.1093/biomet/37.3-4.409</a></p>
 </div>
 </section>
 </div>
 <div id="model-comparison" class="ck-sec">
 <section id="model-comparison-audit-beta" class="level2">
 <h2 data-anchor-id="model-comparison-audit-beta">Model comparison audit <span class="ck-beta">BETA</span></h2>
-<p>Use this checklist when a paper claims that one model performs better than another. It checks comparability of the evaluation design; it does not decide the winner from a single metric.</p>
-<div class="hmc" id="model-comp-beta">
-  <p>For each item, select the statement that best describes the comparison in the paper.</p>
-  <div class="hm-grid">
-    <label class="hm-field"><span>Evaluation observations</span><select id="mc-data"><option value="same">Same held-out observations for all models</option><option value="different">Different observations / folds</option><option value="unknown">Not clear from the paper</option></select></label>
-    <label class="hm-field"><span>Response and scale</span><select id="mc-scale"><option value="same">Same response, units and transformation</option><option value="different">Different response scale / target</option><option value="unknown">Not clear from the paper</option></select></label>
-    <label class="hm-field"><span>Validation strategy</span><select id="mc-validation"><option value="same">Same split or resampling strategy</option><option value="different">Different validation strategies</option><option value="unknown">Not clear from the paper</option></select></label>
-    <label class="hm-field"><span>Metric definition and direction</span><select id="mc-metric"><option value="same">Same metric definition; direction understood</option><option value="different">Metrics differ or are not directly comparable</option><option value="unknown">Not clear from the paper</option></select></label>
-    <label class="hm-field"><span>Tuning and preprocessing</span><select id="mc-tuning"><option value="nested">Tuning / preprocessing confined to training data</option><option value="leak">Possible test-data use or leakage</option><option value="unknown">Not clear from the paper</option></select></label>
-    <label class="hm-field"><span>Uncertainty in the difference</span><select id="mc-uncertainty"><option value="reported">Uncertainty or paired differences reported</option><option value="none">Only point estimates reported</option><option value="unknown">Not clear from the paper</option></select></label>
-  </div>
-  <p><button class="btn btn-primary" type="button" id="mc-run">Audit comparison</button> <button class="btn btn-outline-secondary" type="button" id="mc-reset">Reset</button></p>
-  <div id="mc-output" aria-live="polite"></div>
-</div>
+<p>Use this checklist when a paper claims that one model performs better than another. It checks comparability of the evaluation design. With paired fold scores it also tests the difference properly (cross-validation folds share training data, so a plain paired t-test is too optimistic), and with the counts of cases where two classifiers disagree it runs McNemar’s test.</p>
+<div class="hmc" id="modelcmp"></div>
 <script>
-(function(){
- const $=id=>document.getElementById(id);
- const fields=[['data','Evaluation observations','different','If models are evaluated on different observations or folds, the metric difference can reflect the evaluation data as well as model performance. Prefer paired predictions on the same held-out cases where the comparison target allows it.'],['scale','Response and scale','different','Metrics on different response scales or targets are generally not directly comparable. Confirm the target, units, transformations and any retransformation correction.'],['validation','Validation strategy','different','Different splits or resampling strategies can change the difficulty of the task. Re-evaluate models under a common strategy that matches the intended deployment setting.'],['metric','Metric definition and direction','different','Confirm the exact metric formula, units, weighting, aggregation across folds and whether higher or lower is better. Similar names do not guarantee identical definitions.'],['tuning','Tuning and preprocessing','leak','Potential leakage: feature selection, scaling, imputation, target encoding and hyperparameter tuning should be learned inside training folds, not from held-out data.'],['uncertainty','Uncertainty in the difference','none','Point estimates alone do not show whether a performance difference is stable. Consider paired differences across appropriate resamples or an independent test set, while avoiding treating dependent folds as independent replicates.']];
- $('mc-run').addEventListener('click',()=>{
-  const vals=Object.fromEntries(fields.map(f=>[f[0],$('mc-'+f[0]).value]));
-  const issues=fields.filter(f=>vals[f[0]]===f[2]);
-  const unknown=fields.filter(f=>vals[f[0]]==='unknown');
-  let level=issues.some(f=>f[0]==='tuning'||f[0]==='scale')?'bad':issues.length?'warn':unknown.length?'warn':'good';
-  let label=level==='bad'?'Potential leakage or non-comparable target':level==='warn'?'Comparability needs review':'Core comparability checks look aligned';
-  let html='<p><span class="tag '+level+'">'+label+'</span></p>';
-  if(issues.length) html+='<h3>Issues to investigate</h3><ul>'+issues.map(f=>'<li><strong>'+f[1]+':</strong> '+f[3]+'</li>').join('')+'</ul>';
-  if(unknown.length) html+='<h3>Information to locate in the paper</h3><ul>'+unknown.map(f=>'<li><strong>'+f[1]+':</strong> check your methods, supplement or code to confirm this choice.</li>').join('')+'</ul>';
-  if(!issues.length&&!unknown.length) html+='<p>The selected answers indicate aligned evaluation conditions. This does not prove that the comparison is unbiased or that the observed difference is meaningful.</p>';
-  html+='<h3>Questions reviewers might ask</h3><ul><li>Were all models assessed on the same observations and target?</li><li>Were preprocessing, feature selection and tuning repeated inside each training split?</li><li>Does the validation design match the intended use (new locations, groups, or future times)?</li><li>Is the reported performance difference large relative to its uncertainty and practical importance?</li></ul><p>Model comparisons are strongest when the evaluation target, test cases, metric definitions and resampling design are aligned. No universal threshold determines whether a model is meaningfully better.</p>';
-  $('mc-output').innerHTML=html;
- });
- $('mc-reset').addEventListener('click',()=>{ ['data','scale','validation','metric','tuning','uncertainty'].forEach(k=>$( 'mc-'+k).selectedIndex=0); $('mc-output').innerHTML=''; });
+(function () {
+  const S = window.CKSTAT;
+  const fields = [
+    ['data', 'Evaluation observations', [['same', 'Same held-out observations for all models'], ['different', 'Different observations / folds'], ['unknown', 'Not clear from the paper']], 'different', 'If models are evaluated on different observations or folds, the metric difference can reflect the evaluation data as well as model performance. Prefer paired predictions on the same held-out cases where the comparison target allows it.'],
+    ['scale', 'Response and scale', [['same', 'Same response, units and transformation'], ['different', 'Different response scale / target'], ['unknown', 'Not clear from the paper']], 'different', 'Metrics on different response scales or targets are generally not directly comparable. Confirm the target, units, transformations and any retransformation correction.'],
+    ['validation', 'Validation strategy', [['same', 'Same split or resampling strategy'], ['different', 'Different validation strategies'], ['unknown', 'Not clear from the paper']], 'different', 'Different splits or resampling strategies can change the difficulty of the task. Re-evaluate models under a common strategy that matches the intended deployment setting.'],
+    ['metric', 'Metric definition and direction', [['same', 'Same metric definition; direction understood'], ['different', 'Metrics differ or are not directly comparable'], ['unknown', 'Not clear from the paper']], 'different', 'Confirm the exact metric formula, units, weighting, aggregation across folds and whether higher or lower is better. Similar names do not guarantee identical definitions.'],
+    ['tuning', 'Tuning and preprocessing', [['nested', 'Tuning / preprocessing confined to training data'], ['leak', 'Possible test-data use or leakage'], ['unknown', 'Not clear from the paper']], 'leak', 'Potential leakage: feature selection, scaling, imputation, target encoding and hyperparameter tuning should be learned inside training folds, not from held-out data.'],
+    ['uncertainty', 'Uncertainty in the difference', [['reported', 'Uncertainty or paired differences reported'], ['none', 'Only point estimates reported'], ['unknown', 'Not clear from the paper']], 'none', 'Point estimates alone do not show whether a performance difference is stable. Consider paired differences across appropriate resamples or an independent test set, while avoiding treating dependent folds as independent replicates.']
+  ];
+  const ex = 'model A,model B\n0.412,0.424\n0.398,0.400\n0.445,0.455\n0.420,0.416\n0.405,0.420\n0.431,0.437\n0.415,0.426\n0.402,0.400\n0.437,0.450\n0.410,0.407';
+  HM.tool({
+    id: 'modelcmp', step: 'How the models were compared', units: false, hash: false,
+    example: { data: 'same', scale: 'same', validation: 'same', metric: 'same', tuning: 'unknown', uncertainty: 'none', folds: ex, testfrac: 0.1, dir: 'lower', b: '', c: '' },
+    inputs: [
+      ...fields.map(f => ({ k: f[0], l: f[1], t: 'select', d: f[2][0][0], opts: f[2] })),
+      { t: 'sec', l: 'Optional: paired scores from the same folds' },
+      { k: 'folds', l: 'One line per fold (or per fold and repeat): score of model A, score of model B', t: 'textarea', rows: 6, ph: 'model A,model B\n0.41,0.43\n0.40,0.41' },
+      { k: 'testfrac', l: 'Share of the data in each test fold (0.2 for 5-fold, 0.1 for 10-fold)', t: 'num', w: 2 },
+      { k: 'dir', l: 'For this metric', t: 'select', d: 'lower', w: 2, opts: [['lower', 'lower is better (RMSE, MAE…)'], ['higher', 'higher is better (R², accuracy…)']] },
+      { t: 'sec', l: 'Optional: two classifiers on the same test cases (McNemar)' },
+      { k: 'b', l: 'Cases model A got right and model B got wrong', t: 'num', w: 2 },
+      { k: 'c', l: 'Cases model A got wrong and model B got right', t: 'num', w: 2 }
+    ],
+    compute(v, U) {
+      const issues = fields.filter(f => v[f[0]] === f[3]), unknown = fields.filter(f => v[f[0]] === 'unknown');
+      const level = issues.some(f => f[0] === 'tuning' || f[0] === 'scale') ? 'bad' : (issues.length || unknown.length) ? 'warn' : 'good';
+      const label = level === 'bad' ? 'Potential leakage or non-comparable target' : level === 'warn' ? 'Comparability needs review' : 'Core comparability checks look aligned';
+      let html = `<p><span class="tag ${level}">${label}</span></p>`;
+      if (issues.length) html += '<h3>Issues to investigate</h3><ul>' + issues.map(f => `<li><strong>${f[1]}:</strong> ${f[4]}</li>`).join('') + '</ul>';
+      if (unknown.length) html += '<h3>Information to locate in the paper</h3><ul>' + unknown.map(f => `<li><strong>${f[1]}:</strong> check the methods, supplement or code to confirm this choice.</li>`).join('') + '</ul>';
+      if (!issues.length && !unknown.length) html += '<p>The selected answers indicate aligned evaluation conditions. This does not prove that the comparison is unbiased or that the observed difference is meaningful.</p>';
+      const work = [];
+      const given = x => x !== '' && x !== null && x !== undefined && isFinite(Number(x));
+
+      // ---- paired fold scores: corrected resampled t-test ----
+      const rows = S.parseRows(v.folds).filter(r => r.length >= 2);
+      if (rows.length) {
+        if (rows.length < 3) html += U.note('Enter scores for at least three folds.', 'warn');
+        else {
+          const J = rows.length, d = rows.map(r => r[0] - r[1]), dbar = d.reduce((s, x) => s + x, 0) / J;
+          const s2 = d.reduce((s, x) => s + (x - dbar) ** 2, 0) / (J - 1), df = J - 1;
+          const mA = rows.reduce((s, r) => s + r[0], 0) / J, mB = rows.reduce((s, r) => s + r[1], 0) / J;
+          const better = (v.dir === 'lower') === (dbar < 0) ? 'A' : 'B';
+          const tN = s2 > 0 ? dbar / Math.sqrt(s2 / J) : Infinity, pN = s2 > 0 ? S.tTwoSided(tN, df) : 0;
+          const kv = [['Folds', `${J}`], ['Mean score, model A', HM.fmt(mA, 4)], ['Mean score, model B', HM.fmt(mB, 4)], ['Mean difference (A − B)', `${HM.fmt(dbar, 4)} (model ${better} better)`], ['Model ' + better + ' wins in', `${d.filter(x => (v.dir === 'lower') === (better === 'A') ? x < 0 : x > 0).length} of ${J} folds`], ['Naive paired t-test (treats folds as independent)', `${S.fmtP(pN)}`]];
+          const tf = Number(v.testfrac);
+          if (given(v.testfrac) && tf > 0 && tf < 1) {
+            const ratio = tf / (1 - tf), tC = s2 > 0 ? dbar / Math.sqrt((1 / J + ratio) * s2) : Infinity, pC = s2 > 0 ? S.tTwoSided(tC, df) : 0;
+            kv.push(['Corrected resampled t-test (Nadeau & Bengio)', `t = ${HM.fmt(tC, 2)}, ${S.fmtP(pC)}`]);
+            html += '<h3>Paired fold scores</h3>' + U.kv(kv);
+            if (pN < 0.05 && pC >= 0.05) html += U.note(`The naive test calls the difference significant (${S.fmtP(pN)}), but once the overlap between training sets is accounted for it is not (${S.fmtP(pC)}). Folds share most of their training data, so their scores are not independent.`, 'bad');
+            else if (pC < 0.05) html += U.note(`Model ${better} is better even after correcting for overlapping training sets (${S.fmtP(pC)}). Check that the difference is also large enough to matter in practice.`, 'good');
+            else html += U.note(`No reliable difference between the models (corrected ${S.fmtP(pC)}).`, 'warn');
+            work.push(`Differences d = A − B per fold; mean ${HM.fmt(dbar, 5)}, variance ${HM.fmt(s2, 6)}, J = ${J}`,
+              `Corrected t = d̄ ÷ √[(1/J + n_test/n_train) × s²] = ${HM.fmt(dbar, 5)} ÷ √[(1/${J} + ${HM.fmt(ratio, 3)}) × ${HM.fmt(s2, 6)}] = ${HM.fmt(tC, 3)}, on ${df} degrees of freedom`,
+              'The naive paired t-test uses s²/J and is too liberal because training sets overlap between folds (Nadeau & Bengio 2003; Bouckaert & Frank 2004).');
+          } else {
+            html += '<h3>Paired fold scores</h3>' + U.kv(kv) + U.note('Enter the share of the data in each test fold to get the corrected test. Without it, only the naive test is shown, and it overstates significance for cross-validation.', 'warn');
+          }
+          if (v.data === 'different') html += U.note('You indicated the models were evaluated on different observations or folds; paired fold scores are only meaningful when both models used the same folds.', 'bad');
+        }
+      }
+
+      // ---- McNemar for two classifiers ----
+      if (given(v.b) || given(v.c)) {
+        const b = Number(v.b), c = Number(v.c);
+        if (!(given(v.b) && given(v.c)) || b < 0 || c < 0 || !Number.isInteger(b) || !Number.isInteger(c)) html += U.note('Enter both discordant counts as whole numbers.', 'warn');
+        else {
+          const n = b + c, pE = S.binomTwoSided(b, n), chi = n > 0 ? (Math.abs(b - c) - 1) ** 2 / n : 0;
+          const better = b > c ? 'A' : b < c ? 'B' : null;
+          html += '<h3>McNemar test (same test cases)</h3>' + U.kv([['Cases where the models disagree', `${n}`], ['Model A right, B wrong', `${b}`], ['Model A wrong, B right', `${c}`], ['Exact McNemar test', `${S.fmtP(pE)}`], ['χ² with continuity correction', HM.fmt(chi, 2)]]);
+          html += n === 0 ? U.note('The models never disagree, so there is nothing to test.', 'warn')
+            : pE < 0.05 ? U.note(`Model ${better} is more accurate on these test cases (${S.fmtP(pE)}). Cases where both models are right or both wrong do not enter the test.`, 'good')
+            : U.note(`No reliable accuracy difference: the ${n} disagreements split ${b} to ${c} (${S.fmtP(pE)}).`, 'warn');
+          work.push(`McNemar uses only the discordant cases: exact two-sided binomial test of ${b} against ${n} with p = 0.5 (McNemar 1947; Dietterich 1998).`);
+        }
+      }
+
+      html += '<h3>Questions reviewers might ask</h3><ul><li>Were all models assessed on the same observations and target?</li><li>Were preprocessing, feature selection and tuning repeated inside each training split?</li><li>Does the validation design match the intended use (new locations, groups, or future times)?</li><li>Is the reported performance difference large relative to its uncertainty and practical importance?</li></ul>';
+      work.push('Model comparisons are strongest when the evaluation target, test cases, metric definitions and resampling design are aligned. No universal threshold determines whether a model is meaningfully better.');
+      return { html, work };
+    }
+  });
 })();
 </script>
 <div class="ck-refs">
 <p><strong>Scope note</strong></p>
-<p>This beta check examines the comparability of model evaluations based on your selected answers. It does not calculate performance metrics or infer statistical significance. For spatial, temporal or grouped data, validation design should reflect the intended prediction task; see Roberts et al.&nbsp;(2017), <em>Ecography</em>, 40, 913–929. <a href="https://doi.org/10.1111/ecog.02881">doi:10.1111/ecog.02881</a>.</p>
+<p>This beta check examines the comparability of model evaluations based on your selected answers, and tests a difference only from the paired scores or counts you enter. For spatial, temporal or grouped data, validation design should reflect the intended prediction task; see Roberts et al.&nbsp;(2017), <em>Ecography</em>, 40, 913–929. <a href="https://doi.org/10.1111/ecog.02881">doi:10.1111/ecog.02881</a>.</p>
+<p>Nadeau, C., Bengio, Y. (2003). Inference for the generalization error. <em>Machine Learning</em> 52, 239–281. <a href="https://doi.org/10.1023/A:1024068626366">doi:10.1023/A:1024068626366</a></p>
+<p>Bouckaert, R.R., Frank, E. (2004). Evaluating the replicability of significance tests for comparing learning algorithms. In: <em>Advances in Knowledge Discovery and Data Mining (PAKDD 2004)</em>, Lecture Notes in Computer Science 3056, 3–12. Springer.</p>
+<p>McNemar, Q. (1947). Note on the sampling error of the difference between correlated proportions or percentages. <em>Psychometrika</em> 12, 153–157. <a href="https://doi.org/10.1007/BF02295996">doi:10.1007/BF02295996</a></p>
+<p>Dietterich, T.G. (1998). Approximate statistical tests for comparing supervised classification learning algorithms. <em>Neural Computation</em> 10, 1895–1923. <a href="https://doi.org/10.1162/089976698300017197">doi:10.1162/089976698300017197</a></p>
 </div>
 </section>
 </div>
