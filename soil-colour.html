@@ -402,20 +402,20 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </header>
 
 
-<div class="callout callout-style-simple callout-note no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
+<style>
+.scr-intro { --accent: #8a4b22; }
+body.quarto-dark .scr-intro { --accent: #d98b56; }
+.scr-intro .method-box { border: 1px solid var(--accent); border-left: 4px solid var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); border-radius: 10px; padding: 12px 16px; margin: 6px 0 12px; }
+.scr-intro .method-box strong { display: block; margin-bottom: 4px; }
+.scr-intro .method-box p { margin: 0; opacity: .85; font-size: .95rem; }
+</style>
+<div class="scr-intro">
+  <div class="method-box">
+    <strong>No AI. No machine learning.</strong>
+    <p>The colour is worked out with published colour science, step by step: the photo is corrected against your reference card, converted to CIELAB, and compared with the Munsell soil-book chips computed from the Munsell renotation data. The uncertainty is calculated from the pixels you sample and the stated error of each card method. The same photo with the circles in the same place always gives the same answer. Nothing is trained on other people's photos.</p>
+  </div>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>No AI. No machine learning.
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The colour is worked out with published colour science, step by step: the photo is corrected against your reference card, converted to CIELAB, and compared with the Munsell soil-book chips computed from the Munsell renotation data. The uncertainty is calculated from the pixels you sample and the stated error of each card method. The same photo with the circles in the same place always gives the same answer. Nothing is trained on other people’s photos.</p>
-</div>
-</div>
-<p>Place the circles on the soil matrix and on your reference card, then read the result. Load a photo from your phone camera or gallery; the sample photo shows a 10YR 4/3 matrix under a warm colour cast.</p>
+<p>Place the circles on the soil matrix and on your reference card, then read the result. Load a photo from your phone camera or gallery; the sample photo shows a three-horizon profile with mottles under a warm colour cast.</p>
 <style>
 .scr {
   --bg: #ecece9;
@@ -549,7 +549,7 @@ body.quarto-dark .scr {
           <div class="photo-tag" id="photoTag">Sample photo</div>
         </div>
       </div>
-      <p class="hint" id="sampleHint" hidden="">Simulated profile photographed under warm, dim light, so the card patches look off on purpose. Move the Soil marker into each horizon: with the card correction it should read close to A 10YR 3/2, Bw 7.5YR 4/4 and C 10YR 6/4. The Bw has 7.5YR 5/8 mottles: shrink the circle (slider, scroll wheel over the circle, pinch, or + / − keys) and place it on one, such as the large mottle to the right of the Soil marker.</p>
+      <p class="hint" id="sampleHint" hidden="">Simulated profile photographed under warm, dim light, so the card patches look off on purpose. Move the Soil marker into each horizon: with the card correction it should read close to A 10YR 3/2, Bw 7.5YR 4/4 and C 10YR 6/4. The Bw has 7.5YR 5/8 mottles: shrink the circle (slider, pinch, or + / − keys) and place it on one, such as the large mottle to the right of the Soil marker.</p>
 
       <div class="controls">
         <div class="row">
@@ -835,11 +835,7 @@ document.addEventListener("pointerup", e => {
   if (!drag || e.pointerId !== drag.id) return;
   els[drag.k].style.cursor = ""; drag = null; schedule(true);
 });
-/* resize the soil circle: scroll wheel over the circle, or pinch on the photo */
-els.soil.addEventListener("wheel", e => {
-  e.preventDefault();
-  setDiam(diamPct() * Math.exp(-e.deltaY * 0.0015));
-}, { passive: false });
+/* resize the soil circle: two-finger pinch on the photo (touch screens) */
 const touches = new Map(); let pinch = null, prevPos = null;
 const spread = () => { const [a, b] = [...touches.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
 stage.addEventListener("pointerdown", e => {
