@@ -508,7 +508,7 @@
     "href": "services.html#why-be-creative-in-science",
     "title": "Services",
     "section": "Why be creative in science?",
-    "text": "Why be creative in science?\nThe problem. Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.\nThe insight. Soil isn’t layered like a spreadsheet. It forms as one connected profile, so a map should reflect this information.\nThe result. Every pixel now holds a continuous, physically consistent profile. Properties can be read at any depth or totalled over the whole profile, and moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon: maps at six standard depths (left) and the whole-profile total (right).\n\n\nDiscuss a project →"
+    "text": "Why be creative in science?\nThe problem. Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.\nThe insight. Soil isn’t layered like a spreadsheet. It forms as one connected profile, so a map should reflect this information.\nThe result. Every pixel now holds a continuous, physically consistent profile. Properties can be read at any depth or totalled over the whole profile, and moisture or temperature can be added to the same framework.\n\n\n\nSoil organic carbon: maps at six standard depths (left) and the whole-profile total (right). Turning a 2D GIS system into a depth aware 3D tool\n\n\nDiscuss a project →"
   },
   {
     "objectID": "projects.html",
