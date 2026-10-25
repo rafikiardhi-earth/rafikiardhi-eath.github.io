@@ -10,8 +10,7 @@ page-layout: full
 # "Earth is the most interesting place I have ever been" 
 (Robert, 2026)
 
-[Practical home and landscape decisions informed by the same scientific principles researchers use. 
-Your "Land Friend" to support research activities and inner curiosity to maintain ecosystems]{.lead}
+[We turn the science researchers use into practical decisions for homes, farms and landscapes, with interpretable tools tested against the same benchmarks as AI, so you can see how every answer was reached.]{.lead}
 
 [Research tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
 
