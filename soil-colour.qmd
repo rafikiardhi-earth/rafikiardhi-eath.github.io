@@ -148,6 +148,7 @@ body.quarto-dark .scr {
           <div class="photo-tag" id="photoTag">Sample photo</div>
         </div>
       </div>
+      <p class="hint" id="sampleHint" hidden>Simulated profile photographed under warm, dim light, so the card patches look off on purpose. Move the Soil marker into each horizon: with the card correction it should read close to A 10YR 3/2, Bw 7.5YR 4/4 and C 10YR 6/4.</p>
 
       <div class="controls">
         <div class="row">
@@ -426,6 +427,7 @@ function setImage(src, isSample) {
   ctx.drawImage(src, 0, 0, W, H);
   pixels = ctx.getImageData(0, 0, W, H).data;
   document.getElementById("photoTag").hidden = !isSample;
+  document.getElementById("sampleHint").hidden = !isSample;
   layout(); schedule(true);
 }
 document.getElementById("file").addEventListener("change", e => {
@@ -438,17 +440,30 @@ document.getElementById("file").addEventListener("change", e => {
 });
 document.getElementById("demo").addEventListener("click", () => setImage(makeSample(), true));
 
-/* Sample photo: a 10YR 4/3 matrix with aggregates, pores and glare, plus a
+/* Sample photo: a three-horizon profile (A 10YR 3/2, Bw 7.5YR 4/4, C 10YR 6/4)
+   with wavy, gradual boundaries, aggregates, pores and glare, plus a
    white / grey / black card, all under a warm cast with slight underexposure and flare. */
+const SAMPLE_HORIZONS = [
+  { name: "A",  chip: ["10YR", 3, 2],  pores: 1.0 },
+  { name: "Bw", chip: ["7.5YR", 4, 4], pores: 0.6 },
+  { name: "C",  chip: ["10YR", 6, 4],  pores: 0.25 }
+];
 function makeSample() {
   const w = 1200, h = 900, c = document.createElement("canvas"); c.width = w; c.height = h;
   const g = c.getContext("2d"), im = g.createImageData(w, h), d = im.data;
-  const chip = CHIPS.find(r => r[0] === "10YR" && r[1] === 4 && r[2] === 3);
-  const base = [LUT[chip[6]], LUT[chip[7]], LUT[chip[8]]];
+  const hz = SAMPLE_HORIZONS.map(o => {
+    const r = CHIPS.find(q => q[0] === o.chip[0] && q[1] === o.chip[1] && q[2] === o.chip[2]);
+    return { ...o, refl: [LUT[r[6]], LUT[r[7]], LUT[r[8]]] };
+  });
+  // wavy horizon boundaries (pixel rows) and transition width
+  const b1 = x => 360 + 25 * Math.sin(x / 90) + 12 * Math.sin(x / 37 + 1);
+  const b2 = x => 650 + 30 * Math.sin(x / 120 + 2) + 10 * Math.sin(x / 29);
+  const tw = 18;
+  const smooth = t => { t = Math.min(1, Math.max(0, t)); return t * t * (3 - 2 * t); };
   const cast = [1.18, 0.98, 0.70], expo = 0.80, flare = 0.006;
   seed = 777;
   const blobs = Array.from({ length: 260 }, () => ({ x: rnd() * w, y: rnd() * h, r: 6 + rnd() * 26, k: 0.75 + rnd() * 0.5 }));
-  const pores = Array.from({ length: 120 }, () => ({ x: rnd() * w, y: rnd() * h, r: 1.5 + rnd() * 5 }));
+  const pores = Array.from({ length: 160 }, () => ({ x: rnd() * w, y: rnd() * h, r: 1.5 + rnd() * 5, u: rnd() }));
   const glints = Array.from({ length: 50 }, () => ({ x: rnd() * w, y: rnd() * h, r: 1 + rnd() * 2.5 }));
   const card = { x0: 70, y0: 120, x1: 470, y1: 290 };
   const patch = x => x < 203 ? 0.90 : x < 336 ? 0.18 : 0.035;   // white | grey | black reflectance
@@ -459,6 +474,7 @@ function makeSample() {
     const a = nz[j * cells + i], b = nz[j * cells + i + 1], cc = nz[(j + 1) * cells + i], dd = nz[(j + 1) * cells + i + 1];
     return a * (1 - fx) * (1 - fy) + b * fx * (1 - fy) + cc * (1 - fx) * fy + dd * fx * fy;
   };
+  const horizonAt = (x, y) => y < b1(x) ? 0 : y < b2(x) ? 1 : 2;
   for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) {
     let refl, k = 1;
     const onCard = x >= card.x0 && x < card.x1 && y >= card.y0 && y < card.y1;
@@ -466,11 +482,16 @@ function makeSample() {
     else {
       k = 0.86 + 0.28 * vnoise(x, y) + (rnd() - 0.5) * 0.06;
       for (let i = 0; i < 6; i++) { const b = blobs[(x * 7 + y * 13 + i * 97) % blobs.length]; if ((x - b.x) ** 2 + (y - b.y) ** 2 < b.r * b.r) { k *= b.k; break; } }
-      refl = base;
+      // gradual boundaries: blend neighbouring horizons over ~tw pixels
+      const t1 = smooth((y - b1(x)) / tw + 0.5), t2 = smooth((y - b2(x)) / tw + 0.5);
+      refl = [0, 1, 2].map(j => hz[0].refl[j] * (1 - t1) + hz[1].refl[j] * (t1 - t2) + hz[2].refl[j] * t2);
     }
     let r = refl[0] * k, gg = refl[1] * k, bb = refl[2] * k;
     if (!onCard) {
-      for (const p of pores) if ((x - p.x) ** 2 + (y - p.y) ** 2 < p.r * p.r) { r *= 0.12; gg *= 0.12; bb *= 0.12; break; }
+      for (const p of pores) if ((x - p.x) ** 2 + (y - p.y) ** 2 < p.r * p.r) {
+        if (p.u < hz[horizonAt(p.x, p.y)].pores) { r *= 0.12; gg *= 0.12; bb *= 0.12; }
+        break;
+      }
       for (const s of glints) if ((x - s.x) ** 2 + (y - s.y) ** 2 < s.r * s.r) { r = gg = bb = 1.4; break; }
     }
     const o = (y * w + x) * 4;
@@ -478,8 +499,14 @@ function makeSample() {
   }
   g.putImageData(im, 0, 0);
   g.strokeStyle = "rgba(0,0,0,.4)"; g.lineWidth = 2; g.strokeRect(card.x0, card.y0, card.x1 - card.x0, card.y1 - card.y0);
+  // horizon labels at the left edge, away from the sampling spots
+  g.font = "700 26px system-ui, sans-serif"; g.fillStyle = "rgba(255,255,255,.85)";
+  g.strokeStyle = "rgba(0,0,0,.55)"; g.lineWidth = 3;
+  [["A", 70], ["Bw", (b1(20) + b2(20)) / 2], ["C", (b2(20) + h) / 2]].forEach(([t, yy]) => {
+    const ly = t === "A" ? 70 : yy; g.strokeText(t, 18, ly); g.fillText(t, 18, ly);
+  });
   RET.white.x = 136 / w; RET.grey.x = 270 / w; RET.black.x = 403 / w; RET.white.y = RET.grey.y = RET.black.y = 205 / h;
-  RET.soil.x = 0.66; RET.soil.y = 0.64;
+  RET.soil.x = 0.66; RET.soil.y = 505 / h;   // starts in the Bw horizon
   return c;
 }
 
