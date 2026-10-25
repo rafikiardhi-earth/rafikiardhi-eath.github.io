@@ -70,9 +70,20 @@ Workshops from do-it-yourself landscaping to research creativity and validation.
 
 ## News and updates
 
-The latest tools, research, translations and developments from RafikiArdhi.
+The latest tools, research, translations and developments from *RafikiArdhi*.
 
 ::: {.cards}
+::: {.card-item}
+[![](../images/color-tool.png){width="500px"}](soil-colour.qmd)
+
+**New tool (Beta): Soil colour from a soil profile**
+
+*October 2026 · Research tools - Learners* 
+
+Practical tool to determine the color of the soil matrix, peds, cutans, mottles and more. Offers a rough estimate if no reference colour card available, an 18% grey card mode and if a pure black and white card is available, results become more certain.
+
+[Explore lab colour tool →](tools.qmd#munsell)
+
 ::: {.card-item}
 [![](../images/cov-dist-card.png){width="500px"}](news-updates/covariance-distance.qmd)
 
