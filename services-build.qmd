@@ -47,7 +47,7 @@ The deeper version of any tool on this site, built for your problem.
 
 :::
 
-![New problem, new method: soil organic carbon across Malawi in one map. Colour shows how carbon is shared between 0–30, 30–60 and 60–100 cm. Shade shows whether it is increasing or decreasing over time.](images/malawi-soc-depth.jpg){fig-alt="A map of Malawi beside Lake Malawi coloured in reds, greens, blues and purples, next to a triangle plot of thousands of coloured points with corners labelled 0–30 cm, 30–60 cm and 60–100 cm."}
+![New problem, new method: soil organic carbon across Malawi in one map. Colour shows how carbon is shared between 0–30, 30–60 and 60–100 cm. Shade shows whether it is increasing or decreasing over time.](images/malawi-soc-depth.jpg){fig-alt="A map of Malawi beside Lake Malawi coloured in reds, greens, blues and purples, next to a triangle plot of thousands of coloured points with corners labelled 0–30 cm, 30–60 cm and 60–100 cm." width="600px"}
 
 You receive a licence to use the methods and results built for you. RafikiArdhi keeps the methods themselves and may later release an open version. Engineering work that requires a licensed professional engineer is carried out alongside that engineer.
 
