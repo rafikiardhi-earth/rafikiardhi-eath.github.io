@@ -45,11 +45,11 @@ Workshops in soil classification, do-it-yourself landscaping, research creativit
 
 [An example]{.small}{.text-muted}
 
-**The problem.** Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.
+**[The problem.]{.ra-accent}** Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.
 
-**The insight.** Soil isn't layered like a spreadsheet. It forms as one connected profile, so a map should reflect this information.
+**[The insight.]{.ra-accent}** Soil isn't layered like a spreadsheet. It forms as one connected profile, so a map should reflect this information.
 
-**The result.** Every pixel now holds a continuous, physically consistent profile. Properties can be read at any depth or totalled over the whole profile, and moisture or temperature can be added to the same framework.
+**[The result.]{.ra-accent}** Every pixel now holds a continuous, physically consistent profile. Properties can be read at any depth or totalled over the whole profile, and moisture or temperature can be added to the same framework.
 
 ![Soil organic carbon: maps at six standard depths (left) and the whole-profile total (right).](images/soc-depth-spline.jpg){fig-alt="Six small maps of soil organic carbon across a watershed at depths from 0–20 cm to 100–150 cm, decreasing with depth, beside one larger map of the depth-integrated total showing high values in the north and along drainage lines."}
 
