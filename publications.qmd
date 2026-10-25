@@ -33,7 +33,7 @@ A full, current list is on [ORCID](https://orcid.org/0000-0002-5187-9946) and [G
 - Flynn, T. (2026). Soil-informed multivariate decision support to assess urban ecosystem service potential. Book chapter, Springer Nature (in press). *EarthArXiv* preprint. [https://doi.org/10.31223/X50763](https://doi.org/10.31223/X50763)
 - Flynn, T. (2026). Thermodynamic pedodiversity patterns reveal higher-order soil organization in indigenous agroecosystems of the U.S. Southwest. *EcoEvoRxiv* preprint; under review at *Scientific Reports*. [https://doi.org/10.32942/X2H66M](https://doi.org/10.32942/X2H66M)
 
-## {.bi .bi-award} Recognition
+## []{.bi .bi-award} Recognition
 
 - **2021** · Best Paper, *South African Journal of Plant and Soil* · "High-resolution digital soil mapping of multiple soil properties: an alternative to the traditional field survey?" (2019) [read](https://soils.org.za/?page_id=79)
 - **2017–2020** · National Research Foundation (NRF) Innovation Doctoral Bursary, South Africa
@@ -43,12 +43,12 @@ A full, current list is on [ORCID](https://orcid.org/0000-0002-5187-9946) and [G
 - **2015** · HORTGRO Science / Daan Strydom Prize, best horticultural science student, Stellenbosch University
 - **2013–2019** · Stellenbosch University Merit Bursary, for an outstanding academic record
 
-## {.bi .bi-camera-reels} Media & outreach
+## []{.bi .bi-camera-reels} Media & outreach
 
 - **2025** · ABC News · "Soil degradation threatens food supply and scientists are calling for action": coverage of the Aroura Soil Security Think Tank and its Soil Security Declaration (Sydney, 2024). I served on the Aroura Secretariat during its launch and the first Global Soil Security Summit, and co-authored two of its publications (above). [Read](https://www.abc.net.au/news/2025-01-01/global-soil-degradation-aroura-soil-security-think-tank/104594018)
 - **2016** · Stellenbosch University News · "American student is SU's top horticultural science student". [Read](https://www.su.ac.za/en/node/1426)
 
-## {.bi .bi-check-square} Memberships & service
+## []{.bi .bi-check-square} Memberships & service
 
 - International Union of Soil Sciences (IUSS)
 - Soil Science Society of South Africa (SSSSA)
