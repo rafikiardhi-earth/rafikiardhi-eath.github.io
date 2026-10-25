@@ -75,6 +75,7 @@ website:
         aria-label: WhatsApp
 format:
   html:
+    canonical-url: true
     theme:
       dark: [darkly, styles-dark.scss]
       light: [cosmo, styles.scss]
