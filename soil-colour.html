@@ -549,7 +549,7 @@ body.quarto-dark .scr {
           <div class="photo-tag" id="photoTag">Sample photo</div>
         </div>
       </div>
-      <p class="hint" id="sampleHint" hidden="">Simulated profile photographed under warm, dim light, so the card patches look off on purpose. Move the Soil marker into each horizon: with the card correction it should read close to A 10YR 3/2, Bw 7.5YR 4/4 and C 10YR 6/4.</p>
+      <p class="hint" id="sampleHint" hidden="">Simulated profile photographed under warm, dim light, so the card patches look off on purpose. Move the Soil marker into each horizon: with the card correction it should read close to A 10YR 3/2, Bw 7.5YR 4/4 and C 10YR 6/4. The Bw has 7.5YR 5/8 mottles: shrink the circle (slider, scroll wheel over the circle, pinch, or + / − keys) and place it on one, such as the large mottle to the right of the Soil marker.</p>
 
       <div class="controls">
         <div class="row">
@@ -565,7 +565,8 @@ body.quarto-dark .scr {
           <div class="seg" role="group" aria-label="Circle to place" id="placeSeg"></div>
         </div>
         <div class="row">
-          <label class="inline" for="rad">Soil sample size <input id="rad" type="range" min="1" max="12" step="0.5" value="5"></label>
+          <label class="inline" for="rad">Soil sample size <input id="rad" type="range" min="0" max="100" step="1" value="56" aria-describedby="radOut"></label>
+          <output id="radOut" class="hint" for="rad"></output>
           <label class="inline" for="gley"><input id="gley" type="checkbox" checked=""> Include gley pages</label>
         </div>
         <p class="hint" id="modeHint"></p>
@@ -747,11 +748,31 @@ for (const k of Object.keys(RET)) {
   d.addEventListener("keydown", e => {
     const s = e.shiftKey ? 0.02 : 0.004; let used = true;
     if (e.key === "ArrowLeft") RET[k].x -= s; else if (e.key === "ArrowRight") RET[k].x += s;
-    else if (e.key === "ArrowUp") RET[k].y -= s; else if (e.key === "ArrowDown") RET[k].y += s; else used = false;
+    else if (e.key === "ArrowUp") RET[k].y -= s; else if (e.key === "ArrowDown") RET[k].y += s;
+    else if (k === "soil" && (e.key === "+" || e.key === "=")) { setDiam(diamPct() * 1.15); e.preventDefault(); return; }
+    else if (k === "soil" && (e.key === "-" || e.key === "_")) { setDiam(diamPct() / 1.15); e.preventDefault(); return; }
+    else used = false;
     if (used) { e.preventDefault(); clampRet(k); layout(); schedule(true); }
   });
 }
-const soilR = () => Number(document.getElementById("rad").value) / 100 / 2;   // fraction of width
+/* Soil circle diameter: 0.5 % to 30 % of the image width on a log scale, so the
+   small end (single mottles) gets as much slider travel as the large end (matrix). */
+const RAD_MIN = 0.5, RAD_MAX = 30;
+const radEl = document.getElementById("rad");
+const diamPct = () => RAD_MIN * Math.pow(RAD_MAX / RAD_MIN, Number(radEl.value) / 100);
+const soilR = () => diamPct() / 100 / 2;   // radius, fraction of width
+function setDiam(pct) {
+  pct = Math.min(RAD_MAX, Math.max(RAD_MIN, pct));
+  radEl.value = String(Math.round(100 * Math.log(pct / RAD_MIN) / Math.log(RAD_MAX / RAD_MIN)));
+  layout(); schedule(false); scheduleSettle();
+}
+let settleT = null;
+function scheduleSettle() { clearTimeout(settleT); settleT = setTimeout(() => schedule(true), 250); }
+function radReadout() {
+  const d = diamPct(), px = W ? Math.round(Math.PI * (soilR() * W) ** 2) : 0;
+  document.getElementById("radOut").textContent =
+    (d < 2 ? d.toFixed(1) : d.toFixed(0)) + "% of width · ~" + px.toLocaleString() + " px";
+}
 
 function clampRet(k) { RET[k].x = Math.min(1, Math.max(0, RET[k].x)); RET[k].y = Math.min(1, Math.max(0, RET[k].y)); }
 function layout() {
@@ -764,6 +785,7 @@ function layout() {
     els[k].style.width = (2 * r * 100) + "%";
     els[k].classList.toggle("active", k === placing);
   }
+  radReadout();
 }
 
 /* placing selector */
@@ -805,7 +827,7 @@ function startDrag(e, k) {
   els[k].style.cursor = "grabbing";
 }
 document.addEventListener("pointermove", e => {
-  if (!drag || e.pointerId !== drag.id) return;
+  if (!drag || e.pointerId !== drag.id || pinch) return;
   const p = posFromEvent(e); RET[drag.k].x = p.x; RET[drag.k].y = p.y; clampRet(drag.k);
   layout(); schedule(false);
 });
@@ -813,8 +835,35 @@ document.addEventListener("pointerup", e => {
   if (!drag || e.pointerId !== drag.id) return;
   els[drag.k].style.cursor = ""; drag = null; schedule(true);
 });
+/* resize the soil circle: scroll wheel over the circle, or pinch on the photo */
+els.soil.addEventListener("wheel", e => {
+  e.preventDefault();
+  setDiam(diamPct() * Math.exp(-e.deltaY * 0.0015));
+}, { passive: false });
+const touches = new Map(); let pinch = null, prevPos = null;
+const spread = () => { const [a, b] = [...touches.values()]; return Math.hypot(a.x - b.x, a.y - b.y); };
 stage.addEventListener("pointerdown", e => {
-  if (e.target.closest(".ret")) return;
+  if (e.pointerType !== "touch") return;
+  touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (touches.size === 1) prevPos = { k: placing, x: RET[placing].x, y: RET[placing].y };
+  if (touches.size === 2) {
+    if (drag) { els[drag.k].style.cursor = ""; drag = null; }
+    // the first finger may have moved a circle; a pinch only resizes, so put it back
+    if (prevPos) { RET[prevPos.k].x = prevPos.x; RET[prevPos.k].y = prevPos.y; layout(); }
+    pinch = { d0: Math.max(1, spread()), pct0: diamPct() };
+  }
+}, true);
+document.addEventListener("pointermove", e => {
+  if (!touches.has(e.pointerId)) return;
+  touches.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (pinch && touches.size === 2) setDiam(pinch.pct0 * spread() / pinch.d0);
+});
+const endTouch = e => { touches.delete(e.pointerId); if (touches.size < 2) pinch = null; };
+document.addEventListener("pointerup", endTouch);
+document.addEventListener("pointercancel", endTouch);
+
+stage.addEventListener("pointerdown", e => {
+  if (e.target.closest(".ret") || pinch || touches.size > 1) return;
   const p = posFromEvent(e); RET[placing].x = p.x; RET[placing].y = p.y; clampRet(placing);
   layout(); schedule(true);
 });
@@ -849,6 +898,7 @@ const SAMPLE_HORIZONS = [
   { name: "Bw", chip: ["7.5YR", 4, 4], pores: 0.6 },
   { name: "C",  chip: ["10YR", 6, 4],  pores: 0.25 }
 ];
+const SAMPLE_MOTTLE = ["7.5YR", 5, 8];   // iron concentrations in the Bw
 function makeSample() {
   const w = 1200, h = 900, c = document.createElement("canvas"); c.width = w; c.height = h;
   const g = c.getContext("2d"), im = g.createImageData(w, h), d = im.data;
@@ -856,6 +906,8 @@ function makeSample() {
     const r = CHIPS.find(q => q[0] === o.chip[0] && q[1] === o.chip[1] && q[2] === o.chip[2]);
     return { ...o, refl: [LUT[r[6]], LUT[r[7]], LUT[r[8]]] };
   });
+  const mc = CHIPS.find(q => q[0] === SAMPLE_MOTTLE[0] && q[1] === SAMPLE_MOTTLE[1] && q[2] === SAMPLE_MOTTLE[2]);
+  const mottleRefl = [LUT[mc[6]], LUT[mc[7]], LUT[mc[8]]];
   // wavy horizon boundaries (pixel rows) and transition width
   const b1 = x => 360 + 25 * Math.sin(x / 90) + 12 * Math.sin(x / 37 + 1);
   const b2 = x => 650 + 30 * Math.sin(x / 120 + 2) + 10 * Math.sin(x / 29);
@@ -866,6 +918,14 @@ function makeSample() {
   const blobs = Array.from({ length: 260 }, () => ({ x: rnd() * w, y: rnd() * h, r: 6 + rnd() * 26, k: 0.75 + rnd() * 0.5 }));
   const pores = Array.from({ length: 160 }, () => ({ x: rnd() * w, y: rnd() * h, r: 1.5 + rnd() * 5, u: rnd() }));
   const glints = Array.from({ length: 50 }, () => ({ x: rnd() * w, y: rnd() * h, r: 1 + rnd() * 2.5 }));
+  // mottles: irregular blobs inside the Bw, kept clear of the default soil spot;
+  // the first one is placed and sized for trying the small circle
+  const mottles = [{ x: 930, y: 500, r: 16, a: 0.4, e: 0.3 }];
+  while (mottles.length < 28) {
+    const x = 30 + rnd() * (w - 60), y = 390 + rnd() * 230, r = 4 + rnd() * 11;
+    if (Math.hypot(x - 792, y - 505) < 90 || y < b1(x) + r + 8 || y > b2(x) - r - 8) continue;
+    mottles.push({ x, y, r, a: rnd() * Math.PI, e: 0.2 + rnd() * 0.5 });
+  }
   const card = { x0: 70, y0: 120, x1: 470, y1: 290 };
   const patch = x => x < 203 ? 0.90 : x < 336 ? 0.18 : 0.035;   // white | grey | black reflectance
   const grid = 24, cells = Math.ceil(w / grid) + 2, rows = Math.ceil(h / grid) + 2;
@@ -886,6 +946,14 @@ function makeSample() {
       // gradual boundaries: blend neighbouring horizons over ~tw pixels
       const t1 = smooth((y - b1(x)) / tw + 0.5), t2 = smooth((y - b2(x)) / tw + 0.5);
       refl = [0, 1, 2].map(j => hz[0].refl[j] * (1 - t1) + hz[1].refl[j] * (t1 - t2) + hz[2].refl[j] * t2);
+      // mottles: elongated, with a diffuse edge (prominent, diffuse boundary)
+      for (const m of mottles) {
+        const dx = x - m.x, dy = y - m.y; if (Math.abs(dx) > 2 * m.r || Math.abs(dy) > 2 * m.r) continue;
+        const u = dx * Math.cos(m.a) + dy * Math.sin(m.a), v = -dx * Math.sin(m.a) + dy * Math.cos(m.a);
+        const q = Math.hypot(u / (m.r * (1 + m.e)), v / (m.r * (1 - m.e * 0.6)));
+        const f = 1 - smooth((q - 0.75) / 0.5);
+        if (f > 0) { refl = refl.map((c, j) => c * (1 - f) + mottleRefl[j] * f); break; }
+      }
     }
     let r = refl[0] * k, gg = refl[1] * k, bb = refl[2] * k;
     if (!onCard) {
@@ -1013,7 +1081,7 @@ function run(full) {
   for (const p of soil.sub) { const l = lin2lab(cal(p)); ss += (l[0] - meanLab[0]) ** 2 + (l[1] - meanLab[1]) ** 2 + (l[2] - meanLab[2]) ** 2; }
   const variab = Math.sqrt(ss / soil.sub.length);
   if (variab > 8) warns.push(["warn", "Colour varies strongly inside the soil circle (" + variab.toFixed(1) + " ΔE). If this is mottling, sample the matrix and each mottle separately with a smaller circle."]);
-  if (soil.n < 200) warns.push(["warn", "Few pixels in the soil circle (" + soil.n + "). Enlarge the circle or use a higher-resolution photo."]);
+  if (soil.n < 200) warns.push(["warn", "Few pixels in the soil circle (" + soil.n + "). Fine for a small mottle, and the uncertainty widens to match; for a firmer reading take a closer photo."]);
   if (meanY > 0.95 || meanY < 0.005) warns.push(["bad", "The corrected soil colour is outside the range of the soil book. Check the card circles."]);
 
   const [bi0, bd0] = nearestChip(meanLab, chips);
@@ -1153,7 +1221,7 @@ document.getElementById("copy").addEventListener("click", () => {
 });
 
 /* ---------- wiring ---------- */
-document.getElementById("rad").addEventListener("input", () => { layout(); schedule(true); });
+radEl.addEventListener("input", () => { layout(); schedule(false); scheduleSettle(); });
 document.getElementById("gley").addEventListener("change", () => schedule(true));
 document.getElementById("moist").addEventListener("change", () => last && render(last));
 for (const id of ["tW", "tG", "tB", "sN0", "sN1", "sN2", "sG0", "sG1", "sG2", "sB0", "sB1", "sB2"])
