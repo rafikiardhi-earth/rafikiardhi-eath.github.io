@@ -27,7 +27,7 @@ A full, current list is on [ORCID](https://orcid.org/0000-0002-5187-9946) and [G
 - Flynn, T., van Zijl, G., van Tol, J., Botha, C., Rozanov, A., Warr, B., Clarke, C. (2019). Comparing algorithms to disaggregate complex soil polygons in contrasting environments. *Geoderma*, 352, 171–180. [https://doi.org/10.1016/j.geoderma.2019.06.013](https://doi.org/10.1016/j.geoderma.2019.06.013)
 - Flynn, T., Rozanov, A., de Clercq, W., Warr, B., Clarke, C. (2019). Semi-automatic disaggregation of a national resource inventory into a farm-scale soil depth class map. *Geoderma*, 337, 1136–1145. [https://doi.org/10.1016/j.geoderma.2018.11.003](https://doi.org/10.1016/j.geoderma.2018.11.003)
 
-## []{.bi .bi-sign-yield} Preprints
+## []{.bi .bi-graph-up-arrow} Preprints
 
 - Flynn, T., Rozanov, A., Mesele, S. (2026). Integrated soil profile mapping reveals regional patterns of soil condition across Southern African agricultural lands. *EarthArXiv* preprint; under review at *Regional Environmental Change*. [https://doi.org/10.31223/X5JN5T](https://doi.org/10.31223/X5JN5T)
 - Flynn, T. (2026). Soil-informed multivariate decision support to assess urban ecosystem service potential. Book chapter, Springer Nature (in press). *EarthArXiv* preprint. [https://doi.org/10.31223/X50763](https://doi.org/10.31223/X50763)
