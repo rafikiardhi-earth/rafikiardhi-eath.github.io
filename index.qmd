@@ -111,9 +111,9 @@ Practical tools for checking assumptions, independence and model comparisons, he
 
 ## Where we work
 
-[[[]{.bi .bi-geo-alt} Africa](africa.qmd) · [[]{.bi .bi-geo-alt} Latin America](brazil.qmd) · [[]{.bi .bi-geo-alt} Europe](europe.qmd) · [[]{.bi .bi-geo-alt} United States](usa.qmd) · [[]{.bi .bi-globe-europe-africa} Global](global.qmd). Work is delivered remotely, personally on site or with local partners in the field.]{.regions}
+[[[]{.bi .bi-geo-alt} Africa](africa.qmd) · [[]{.bi .bi-geo-alt} Latin America](brazil.qmd) · [[]{.bi .bi-geo-alt} Europe](europe.qmd) · [[]{.bi .bi-geo-alt} United States](usa.qmd) · [[]{.bi .bi-globe-europe-africa} Global](global.qmd).
 
-[[]{.bi .bi-global-europe-africa} Explore →](work-places.qmd)
+[Explore →](work-places.qmd){.btn-earth}
 
 ::: {layout="[[1,1],[1,1]]"}
 [![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background." width="500px"}](africa.qmd)
