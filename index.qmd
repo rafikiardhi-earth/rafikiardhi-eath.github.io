@@ -20,11 +20,11 @@ Your "Land Friend" to support research activities and inner curiosity to maintai
 
 ## What we believe
 
-- []{.bi .bi-buildings} **Build on what exists.** Old surveys and past projects are worth more than people think. We update knowledge instead of replace it.
-- []{.bi .bi-dice-5} **Honest uncertainty.** Every answer comes with how far it can be trusted. We propogate uncertainties and make them informative.
-- []{.bi .bi-filetype-csv} **No AI, no black boxes.** Our methods follow the processes behind the environment, so every result can be traced and checked.
-- []{.bi .bi-door-open} **Science in your own language.** Our tools and keys come in the languages people actually speak, not only English. [Want to help?](about.qmd)
-- []{.bi .bi-moon-stars} **Land is shared.** Healthy land includes the animals that live with us and the attitude we bring to it.
+- []{.bi .bi-buildings} **[Build on what exists.]{.ra-accent}** Old surveys and past projects are worth more than people think. We update knowledge instead of replace it.
+- []{.bi .bi-dice-5} **[Honest uncertainty.]{.ra-accent}** Every answer comes with how far it can be trusted. We propogate uncertainties and make them informative.
+- []{.bi .bi-filetype-csv} **[No AI, no black boxes.]{.ra-accent}** Our methods follow the processes behind the environment, so every result can be traced and checked.
+- []{.bi .bi-door-open} **[Science in your own language.]{.ra-accent}** Our tools and keys come in the languages people actually speak, not only English. [Want to help?](about.qmd)
+- []{.bi .bi-moon-stars} **[Land is shared.]{.ra-accent}** Healthy land includes the animals that live with us and the attitude we bring to it.
 
 ::: {.cards}
 ::: {.card-item}
@@ -83,6 +83,7 @@ The latest tools, research, translations and developments from *RafikiArdhi*.
 Practical tool to determine the color of the soil matrix, peds, cutans, mottles and more. Offers a rough estimate if no reference colour card available, an 18% grey card mode and if a pure black and white card is available, results become more certain.
 
 [Explore lab colour tool →](tools.qmd#munsell)
+:::
 
 ::: {.card-item}
 [![](../images/cov-dist-card.png){width="500px"}](news-updates/covariance-distance.qmd)
