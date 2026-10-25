@@ -8,7 +8,7 @@ description: "Workshops in soil classification, do-it-yourself landscaping, rese
 
 Workshops tailored to the group, from homeowners and field teams to research students, and available in several languages.
 
-Our workshops draw on experience teaching at university and presenting at international conferences, work that later won Best Paper in the *South African Journal of Plant and Soil*.
+Our workshops draw on experience teaching at university and presenting at international conferences, work that later won Best Paper in the *[South African Journal of Plant and Soil](https://soils.org.za/?page_id=79).*
 
 ::: {.cards}
 
