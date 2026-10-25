@@ -13,7 +13,7 @@ For homeowners, we bring actual science to everyday decisions about soil, water 
 ### Ground rules
 Every engagement starts with a short written scope that sets out the question, deliverables, timeline and price before any work begins.
 
-Collaboration on manuscripts is not a RafikiArdhi project, and RafikiArdhi LLC holds no intellectual property in it, unless the company is named in the proposal or grant. If you’re looking for expertise in a particular discipline for a manuscript, please contact the relevant contributor of the tools directly.
+Collaboration on manuscripts is not a *RafikiArdhi* project, and *RafikiArdhi LLC* holds no intellectual property in it, unless the company is named in the proposal or grant. If you’re looking for expertise in a particular discipline for a manuscript, please contact the relevant contributor of the tools directly.
 
 Thesis and dissertation advice is offered only with the approval of the student’s supervisor and under an agreement with the university.
 
@@ -38,12 +38,9 @@ Ongoing analytical collaboration with research groups and projects, and methods 
 ### [Learn](services-learn.qmd)
 Workshops in soil classification, do-it-yourself landscaping, research creativity and research validation, in several languages.
 :::
-
 :::
 
 ## Why be creative in science?
-
-[An example]{.small}{.text-muted}
 
 **[The problem.]{.ra-accent}** Maps treat soil as a stack of flat layers, so properties jump at every boundary and anything between the standard depths is lost.
 

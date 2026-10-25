@@ -2,7 +2,7 @@
 title: "About"
 ---
 
-RafikiArdhi is an independent environmental research company built on one idea: **science should stay open.** We publish what we produce, turn validated methods into free tools, and fund that work through the projects we take on.
+*RafikiArdhi* is an independent environmental research company built on one idea: **[science should stay open.]{.ra-accent}** We publish what we produce, turn validated methods into free tools, and fund that work through the projects we take on.
 
 ![](images/sopris-banner.jpg){.page-banner fig-alt="Mount Sopris above autumn fields near Carbondale, with a person on a bench, two dogs on the trail and horses grazing in the meadow"}
 
