@@ -113,8 +113,6 @@ Practical tools for checking assumptions, independence and model comparisons, he
 
 [[]{.bi .bi-geo-alt} Africa](africa.qmd) · [[]{.bi .bi-geo-alt} Latin America](brazil.qmd) · [[]{.bi .bi-geo-alt} Europe](europe.qmd) · [[]{.bi .bi-geo-alt} United States](usa.qmd) · [[]{.bi .bi-globe-europe-africa} Global](global.qmd)
 
-[Explore →](work-places.qmd)
-
 ::: {layout="[[1,1],[1,1]]"}
 [![Photo: Africa (Kruger National Park, South Africa)](images/where-africa.jpg){fig-alt="Two giraffes browsing on acacia trees in green bushveld, with zebra in the background." width="500px"}](africa.qmd)
 
@@ -124,3 +122,5 @@ Practical tools for checking assumptions, independence and model comparisons, he
 
 [![Photo: United States (Roaring Fork Valley, CO)](images/where-western-us.jpg){fig-alt="Snow-capped peaks above a wide valley and airport, with oak scrub in the foreground." width="500px"}](usa.qmd)
 :::
+
+[Places to explore →](work-places.qmd)
