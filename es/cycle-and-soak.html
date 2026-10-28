@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="Evite que el agua de los aspersores escurra en suelo arcilloso y en pendientes. Divida el riego en ciclos cortos con tiempo de remojo, según su suelo, la pendiente y el tipo de aspersor.">
+<meta name="description" content="Stop sprinkler runoff on clay soil and slopes. Split watering into short cycles with soak time, based on your soil, slope and sprinkler type.">
 
-<title>Programador de riego por ciclos y remojo – RafikiArdhi</title>
+<title>Cycle-and-soak sprinkler scheduler – RafikiArdhi</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -63,17 +63,17 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No se han encontrado resultados",
-    "search-matching-documents-text": "documentos encontrados",
-    "search-copy-link-title": "Copiar el enlace en la búsqueda",
-    "search-hide-matches-text": "Ocultar resultados adicionales",
-    "search-more-match-text": "resultado adicional en este documento",
-    "search-more-matches-text": "resultados adicionales en este documento",
-    "search-clear-button-title": "Borrar",
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancelar",
-    "search-submit-button-title": "Enviar",
-    "search-label": "Buscar"
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-8QXXQWKPTD"></script>
@@ -86,351 +86,6 @@ gtag('js', new Date());
 gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
-<script>
-/* English / Español toggle for the homeowner pages: keeps what you typed when you switch, and remembers your choice. */
-(function () {
-  const es = (document.documentElement.lang || '').toLowerCase().startsWith('es');
-  const here = es ? 'es' : 'en';
-  const other = p => es ? p.replace(/\/es\/([^/]*)$/, '/$1') : p.replace(/\/([^/]*)$/, '/es/$1');
-  let pref = null; try { pref = localStorage.getItem('ra-hm-lang'); } catch (e) { }
-  if (pref === 'en' || pref === 'es') if (pref !== here) { // every page that loads this has a version in the other language
-
-    location.replace(other(location.pathname) + location.search + location.hash); return;
-  }
-  document.addEventListener('click', e => {
-    const a = e.target.closest('.hm-lang a'); if (!a) return;
-    e.preventDefault();
-    try { localStorage.setItem('ra-hm-lang', es ? 'en' : 'es'); } catch (err) { }
-    location.href = other(location.pathname) + location.search + location.hash;
-  });
-})();
-</script>
-<style>
-.hmc {
-  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
-  --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f; --warn: #e0a440; --good: #5cc28f; --bad: #e07070;
-  color: var(--ink); font-size: 1.02rem; line-height: 1.5; max-width: 620px; margin: 8px auto 28px;
-}
-body.quarto-light .hmc {
-  --bg: #f7f5f0; --surface: #fffdf9; --surface-2: #efebe2; --ink: #1f1c17; --ink-2: #57514a; --ink-3: #8a8379;
-  --line: #ddd6ca; --accent: #8a4b22; --accent-ink: #ffffff; --accent-soft: #f3e6da; --warn: #9a6400; --good: #1f7a4d; --bad: #b3261e;
-}
-.hmc * { box-sizing: border-box; }
-.hmc .cx { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 12px; }
-.hmc .step { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 0 0 6px; }
-.hmc .hint { font-size: .9rem; color: var(--ink-2); margin: 6px 0 0; }
-.hmc .fg { display: grid; grid-template-columns: repeat(6, 1fr); column-gap: 10px; }
-.hmc .fg > div { grid-column: span 6; }
-.hmc .fg > div.w3 { grid-column: span 3; }
-.hmc .fg > div.w2 { grid-column: span 2; }
-.hmc .fg > div[hidden] { display: none; }
-.hmc label { display: block; font-size: .9rem; font-weight: 600; color: var(--ink-2); margin: 10px 0 4px; }
-.hmc label .u { font-weight: 400; color: var(--ink-3); }
-.hmc input[type=text], .hmc select {
-  width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
-  font: inherit; padding: 8px 12px;
-}
-.hmc textarea { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: .88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px 12px; resize: vertical; }
-.hmc input:focus, .hmc select:focus, .hmc textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.hmc input.bad { border-color: var(--bad); }
-.hmc .chk { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0 2px; font-weight: 500; color: var(--ink); font-size: .98rem; }
-.hmc .chk input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--accent); flex: none; }
-.hmc .seg { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
-.hmc .seg button { flex: 1 1 auto; min-height: 42px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
-.hmc .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.hmc .res { border: 2px solid var(--accent); }
-.hmc .res .big { font-size: 2rem; font-weight: 700; line-height: 1.15; margin: 2px 0 6px; font-family: "Source Serif 4", Georgia, serif; }
-.hmc .res .sub { color: var(--ink-2); margin: 0 0 10px; }
-.hmc .res ul.kv { list-style: none; padding: 0; margin: 10px 0 0; }
-.hmc .res ul.kv li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
-.hmc .res ul.kv li span:first-child { color: var(--ink-2); }
-.hmc .res ul.kv li span:last-child { font-weight: 600; text-align: right; }
-.hmc .res h3 { font-size: 1.05rem; margin: 16px 0 6px; }
-.hmc .res ul.plain { margin: 6px 0 0; padding-left: 20px; color: var(--ink-2); font-size: .95rem; }
-.hmc .res ul.plain li { margin-bottom: 6px; }
-.hmc .note { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink-2); margin-top: 10px; }
-.hmc .note.good { border-left-color: var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
-.hmc .note.bad { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 10%, transparent); }
-.hmc .tag { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; padding: 1px 9px; border: 1px solid currentColor; }
-.hmc .tag.good { color: var(--good); } .hmc .tag.warn { color: var(--warn); } .hmc .tag.bad { color: var(--bad); }
-.hmc table.tt { width: 100%; border-collapse: collapse; font-size: .93rem; margin-top: 8px; }
-.hmc table.tt th, .hmc table.tt td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; }
-.hmc table.tt th { color: var(--ink-3); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; border-top: none; }
-.hmc table.tt td.r, .hmc table.tt th.r { text-align: right; }
-.hmc .say { margin-top: 12px; background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .95rem; }
-.hmc .say .lab { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; display: block; margin-bottom: 2px; }
-.hmc .linkbtn { background: none; border: none; color: var(--accent); font: inherit; font-weight: 600; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
-.hmc .empty { color: var(--ink-3); margin: 0; }
-.hmc details.cx { padding: 0; }
-.hmc details summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--accent); list-style: none; }
-.hmc details summary::-webkit-details-marker { display: none; }
-.hmc details summary::before { content: "＋ "; }
-.hmc details[open] summary::before { content: "－ "; }
-.hmc details .db { padding: 0 16px 16px; }
-.hmc ol.work { font-size: .92rem; color: var(--ink-2); margin: 0; padding-left: 18px; }
-.hmc ol.work li { margin-bottom: 6px; font-variant-numeric: tabular-nums; }
-.hmc .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
-.hmc .actions button { min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: .92rem; cursor: pointer; }
-.hmc .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 50; }
-.hmc .toast.on { opacity: 1; }
-.hmc .smallprint { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
-@media (max-width: 460px) { .hmc .fg > div.w2, .hmc .fg > div.w3 { grid-column: span 6; } }
-@media print { .hmc .actions, .hmc .toast, .hmc .linkbtn { display: none !important; } .hmc .cx { break-inside: avoid; } }
-</style>
-<script>
-/* RafikiArdhi Homeowners tools: shared helpers and form framework. Everything runs in the browser. */
-window.HM = (function () {
-  const ES = (document.documentElement.lang || '').toLowerCase().startsWith('es');
-  const T = ES ? {
-    units: 'Unidades', us: 'Unidades de EE. UU.', si: 'Métricas', yours: 'Sus datos', work: 'Ver el cálculo', example: 'Ejemplo', link: 'Copiar enlace', print: 'Imprimir', reset: 'Empezar de nuevo',
-    small: 'Gratis, sin registro, sin anuncios, y nada de lo que escribe sale de su navegador. Los valores típicos son un punto de partida; cámbielos según su situación.',
-    sayLab: 'Copie esto', copy: 'Copiar', linkCopied: 'Enlace copiado', copied: 'Copiado', check: 'Revise sus números.', copyThis: 'Copie esto:'
-  } : {
-    units: 'Units', us: 'US units', si: 'Metric', yours: 'Your numbers', work: 'Show the working', example: 'Example', link: 'Copy link', print: 'Print', reset: 'Start over',
-    small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.',
-    sayLab: 'Copy this', copy: 'Copy', linkCopied: 'Link copied', copied: 'Copied', check: 'Check your numbers.', copyThis: 'Copy this:'
-  };
-  // SI value = displayed value × factor
-  const C = {
-    len: { us: [0.3048, 'ft'], si: [1, 'm'] },
-    dep: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
-    dia: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
-    area: { us: [0.09290304, 'ft²'], si: [1, 'm²'] },
-    vol: { us: [0.764554858, 'yd³'], si: [1, 'm³'] },
-    cuft: { us: [0.0283168466, 'ft³'], si: [0.001, 'L'] },
-    gal: { us: [3.785411784, 'gal'], si: [1, 'L'] },
-    wdep: { us: [25.4, 'in'], si: [1, 'mm'] },
-    rate: { us: [25.4, 'in/hr'], si: [1, 'mm/hr'] },
-    mass: { us: [0.45359237, 'lb'], si: [1, 'kg'] },
-    ton: { us: [0.90718474, (ES ? 'toneladas' : 'tons')], si: [1, 't'] },
-    arate: { us: [4.88242764, (ES ? 'lb por 1,000 ft²' : 'lb per 1,000 ft²')], si: [1, 'g/m²'] },
-    flow: { us: [3.785411784, 'gal/hr'], si: [1, 'L/hr'] },
-    dens: { us: [1.18655, (ES ? 'toneladas por yd³' : 'tons per yd³')], si: [1, (ES ? 't por m³' : 't per m³')] },
-    pct: { us: [1, '%'], si: [1, '%'] },
-    num: { us: [1, ''], si: [1, ''] },
-    min: { us: [1, 'min'], si: [1, 'min'] },
-    money: { us: [1, '$'], si: [1, ''] },
-    pvol: { us: [1 / 0.764554858, (ES ? '$ por yd³' : '$ per yd³')], si: [1, (ES ? 'por m³' : 'per m³')] },
-    pton: { us: [1 / 0.90718474, (ES ? '$ por tonelada' : '$ per ton')], si: [1, (ES ? 'por tonelada métrica' : 'per tonne')] },
-    pwater: { us: [1 / 3.785411784, (ES ? '$ por 1,000 gal' : '$ per 1,000 gal')], si: [1, (ES ? 'por m³' : 'per m³')] }
-  };
-  const UNITLESS = ['num', 'pct', 'min', 'money', 'select', 'seg', 'check', 'info', 'sec', 'text', 'textarea'];
-
-  const num = s => { s = String(s).replace(/[$,\s%]/g, ''); if (s === '') return null; return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN; };
-  function feet(s) {
-    s = String(s).trim().toLowerCase().replace(/[’′]/g, "'").replace(/[”″]/g, '"');
-    if (!s) return null; let m;
-    if ((m = s.match(/^(\d*\.?\d+)\s*(?:'|ft|feet|foot|pies?)\s*(?:(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)?)?$/))) return +m[1] + (m[2] ? +m[2] / 12 : 0);
-    if ((m = s.match(/^(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)$/))) return +m[1] / 12;
-    if ((m = s.match(/^(\d+)\s+(\d*\.?\d+)$/))) return +m[1] + +m[2] / 12;
-    return num(s);
-  }
-  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
-  const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  function getUnits() { try { const s = localStorage.getItem('ra-units'); if (s === 'si' || s === 'us') return s; } catch (e) { } return 'us'; }
-  function setUnits(u) { try { localStorage.setItem('ra-units', u); } catch (e) { } }
-  function toast(root, msg) { const t = root.querySelector('.toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); }
-  function copy(root, text, msg) {
-    const done = () => toast(root, msg);
-    const fb = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { window.prompt(T.copyThis, text); } ta.remove(); };
-    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fb); else fb();
-  }
-
-  function tool(cfg) {
-    const root = document.getElementById(cfg.id);
-    if (!root) return;
-    let u = getUnits(), f = {}, raw = {};
-    const inputs = cfg.inputs;
-    const byK = Object.fromEntries(inputs.filter(i => i.k).map(i => [i.k, i]));
-    const hasUnits = cfg.units !== false && inputs.some(i => i.t && !UNITLESS.includes(i.t) && !(i.t === 'list' && UNITLESS.includes(i.of)));
-    const unitOf = i => i.t === 'list' ? i.of : i.t;
-
-    // restore from link
-    try {
-      const m = cfg.hash === false ? null : location.hash.match(new RegExp('^#' + cfg.id + '=(.+)$'));
-      if (m) { const o = JSON.parse(decodeURIComponent(escape(atob(m[1])))); if (o && o.f && typeof o.f === 'object') { f = o.f; if (o.u === 'si' || o.u === 'us') u = o.u; } }
-    } catch (e) { f = {}; }
-
-    function defOf(i) {
-      let d = typeof i.d === 'function' ? i.d(u, read()) : i.d;
-      if (d && typeof d === 'object' && !Array.isArray(d)) d = d[u];
-      return d;
-    }
-    function siDefault(i) {
-      const d = defOf(i);
-      if (d == null) return null;
-      if (['select', 'seg', 'check', 'text', 'textarea'].includes(i.t)) return d;
-      const fac = C[unitOf(i)][u][0];
-      return Array.isArray(d) ? d.map(x => x * fac) : d * fac;
-    }
-    function read() {
-      const v = {};
-      inputs.forEach(i => { if (!i.k) return; v[i.k] = f[i.k] !== undefined ? f[i.k] : (i._noDef ? null : siDefaultSafe(i)); });
-      return v;
-    }
-    let guard = false;
-    function siDefaultSafe(i) { if (guard) return typeof i.d === 'function' ? null : siDefault(i); guard = true; try { return siDefault(i); } finally { guard = false; } }
-
-    function parse(i, s) {
-      const t = unitOf(i);
-      if (i.t === 'list') {
-        const parts = String(s).split(/[,;\s]+/).map(p => p.trim()).filter(Boolean);
-        if (!parts.length) return null;
-        const out = parts.map(p => { const x = (t === 'len' && u === 'us') ? feet(p) : num(p); return x == null || isNaN(x) ? NaN : x * C[t][u][0]; });
-        return out.some(isNaN) ? NaN : out;
-      }
-      const x = (t === 'len' && u === 'us') ? feet(s) : num(s);
-      return x == null || isNaN(x) ? x : x * C[t][u][0];
-    }
-    function shown(i) {
-      if (raw[i.k] !== undefined) return raw[i.k];
-      const v = f[i.k] !== undefined ? f[i.k] : siDefaultSafe(i);
-      if (v == null) return '';
-      const fac = C[unitOf(i)][u][0];
-      if (Array.isArray(v)) return v.map(x => fmt(x / fac, 3).replace(/,/g, '')).join(', ');
-      return fmt(v / fac, 3).replace(/,/g, '');
-    }
-    const lab = i => typeof i.l === 'function' ? i.l(u) : i.l;
-    function fieldHTML(i) {
-      const w = i.w ? ' class="w' + i.w + '"' : '';
-      const id = cfg.id + '-' + i.k;
-      const hint = i.h ? `<p class="hint">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : '';
-      if (i.t === 'info') return `<div${w} data-w="${i.k || ''}"><p class="hint">${typeof i.h === 'function' ? i.h(u) : i.h}</p></div>`;
-      if (i.t === 'select') {
-        const opts = typeof i.opts === 'function' ? i.opts(u) : i.opts, cur = String(read()[i.k]);
-        return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><select id="${id}" data-k="${i.k}">${opts.map(o => `<option value="${esc(o[0])}"${String(o[0]) === cur ? ' selected' : ''}>${esc(o[1])}</option>`).join('')}</select>${hint}</div>`;
-      }
-      if (i.t === 'seg') {
-        const opts = typeof i.opts === 'function' ? i.opts(u) : i.opts, cur = String(read()[i.k]);
-        return `<div${w} data-w="${i.k}">${i.l ? `<label>${lab(i)}</label>` : ''}<div class="seg" role="group">${opts.map(o => `<button type="button" data-seg="${i.k}" data-v="${esc(o[0])}" aria-pressed="${String(o[0]) === cur}">${esc(o[1])}</button>`).join('')}</div>${hint}</div>`;
-      }
-      if (i.t === 'textarea') { const val = read()[i.k] ?? ''; return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><textarea id="${id}" data-k="${i.k}" rows="${i.rows || 6}" spellcheck="false" placeholder="${esc(typeof i.ph === 'function' ? i.ph(u) : (i.ph || ''))}">${esc(val)}</textarea>${hint}</div>`; }
-      if (i.t === 'check') return `<div${w} data-w="${i.k}"><label class="chk"><input type="checkbox" data-k="${i.k}"${read()[i.k] ? ' checked' : ''}> <span>${lab(i)}</span></label>${hint}</div>`;
-      const un = C[unitOf(i)][u][1];
-      const ph = typeof i.ph === 'function' ? i.ph(u) : (i.ph || '');
-      return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}${un && unitOf(i) !== 'money' && unitOf(i) !== 'num' ? ` <span class="u">(${un})</span>` : ''}</label><input type="text" id="${id}" data-k="${i.k}" inputmode="${i.t === 'list' ? 'text' : 'decimal'}" autocomplete="off" value="${esc(shown(i))}" placeholder="${esc(ph)}">${hint}</div>`;
-    }
-
-    function render() {
-      let h = hasUnits ? `<div class="seg" role="group" aria-label="${T.units}"><button type="button" data-u="us" aria-pressed="${u === 'us'}">${T.us}</button><button type="button" data-u="si" aria-pressed="${u === 'si'}">${T.si}</button></div>` : '';
-      let open = false;
-      inputs.forEach((i, n) => {
-        if (i.t === 'sec' || n === 0) {
-          if (open) h += '</div></section>';
-          h += `<section class="cx"${i.t === 'sec' && i.k ? ` data-sec="${i.k}"` : ''}><div class="step">${i.t === 'sec' ? lab(i) : (cfg.step || T.yours)}</div>${i.t === 'sec' && i.h ? `<p class="hint" style="margin-top:0">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : ''}<div class="fg">`;
-          open = true;
-          if (i.t === 'sec') return;
-        }
-        h += fieldHTML(i);
-      });
-      if (open) h += '</div></section>';
-      h += `<section class="cx res" aria-live="polite"></section>
-        <details class="cx hm-work"><summary>${T.work}</summary><div class="db"></div></details>
-        ${cfg.after || ''}
-        <div class="actions" style="grid-template-columns:repeat(${(cfg.example ? 1 : 0) + (cfg.hash === false ? 0 : 1) + 2},1fr)">${cfg.example ? `<button type="button" data-act="example">${T.example}</button>` : ''}${cfg.hash === false ? '' : `<button type="button" data-act="link">${T.link}</button>`}<button type="button" data-act="print">${T.print}</button><button type="button" data-act="reset">${T.reset}</button></div>
-        <p class="smallprint">${cfg.smallprint || T.small}</p><div class="toast"></div>`;
-      root.innerHTML = h;
-      run();
-    }
-
-    const U = {
-      get us() { return u === 'us'; },
-      val: (si, t) => si == null ? null : si / C[t][u][0],
-      unit: t => C[t][u][1],
-      f: (si, t, d = 2) => si == null || !isFinite(si) ? '–' : fmt(si / C[t][u][0], d) + (C[t][u][1] && t !== 'money' ? (C[t][u][1].startsWith('$') ? ' ' : ' ') + C[t][u][1].replace(/^\$ /, '') : ''),
-      n: fmt, fix,
-      money: x => (u === 'us' ? '$' : '') + fix(x, 2),
-      kv: rows => `<ul class="kv">${rows.filter(Boolean).map(r => `<li><span>${r[0]}</span><span>${r[1]}</span></li>`).join('')}</ul>`,
-      note: (h, cls) => `<div class="note${cls ? ' ' + cls : ''}">${h}</div>`,
-      big: (label, val, sub) => `<div class="step">${label}</div><div class="big">${val}</div>${sub ? `<p class="sub">${sub}</p>` : ''}`,
-      say: t => `<div class="say"><span class="lab">${cfg.sayLabel || T.sayLab}</span><span class="hm-say">${esc(t)}</span> <button type="button" class="linkbtn" data-act="say">${T.copy}</button></div>`,
-      empty: t => `<p class="empty">${t}</p>`,
-      esc
-    };
-
-    function run() {
-      const v = read();
-      // validity marks and conditional visibility
-      root.querySelectorAll('input[type=text][data-k]').forEach(inp => {
-        const k = inp.dataset.k, r = raw[k];
-        inp.classList.toggle('bad', r !== undefined && r.trim() !== '' && (f[k] === undefined || (typeof f[k] === 'number' && isNaN(f[k]))));
-      });
-      inputs.forEach(i => {
-        if (!i.show) return;
-        const sel = i.t === 'sec' ? `[data-sec="${i.k}"]` : `[data-w="${i.k}"]`;
-        const el = root.querySelector(sel);
-        if (el) el.hidden = !i.show(v, u);
-      });
-      const clean = {};
-      Object.keys(v).forEach(k => { const x = v[k]; clean[k] = (typeof x === 'number' && isNaN(x)) ? null : x; });
-      let out;
-      try { out = cfg.compute(clean, U) || {}; } catch (e) { out = { html: U.empty(T.check) }; console.warn(e); }
-      if (typeof out === 'string') out = { html: out };
-      root.querySelector('.res').innerHTML = out.html || '';
-      const wd = root.querySelector('.hm-work');
-      wd.hidden = !out.work || !out.work.length;
-      wd.querySelector('.db').innerHTML = out.work && out.work.length ? `<ol class="work">${out.work.map(w => `<li>${w}</li>`).join('')}</ol>` : '';
-      try {
-        const keep = {}; Object.keys(f).forEach(k => { if (f[k] !== null && !(typeof f[k] === 'number' && isNaN(f[k]))) keep[k] = f[k]; });
-        if (cfg.hash === false) return;
-        const hsh = Object.keys(keep).length ? '#' + cfg.id + '=' + btoa(unescape(encodeURIComponent(JSON.stringify({ u, f: keep })))).replace(/=+$/, '') : '';
-        if (location.hash !== hsh) history.replaceState(null, '', location.pathname + location.search + hsh);
-      } catch (e) { }
-    }
-
-    function set(k, si) { f[k] = si; delete raw[k]; const inp = root.querySelector(`input[type=text][data-k="${k}"]`); if (inp) inp.value = shown(byK[k]); }
-    function setChoice(k, val) { f[k] = val; const el = root.querySelector(`[data-w="${k}"]`); if (el) el.outerHTML = fieldHTML(byK[k]); }
-    const setDisp = (k, d) => set(k, d * C[unitOf(byK[k])][u][0]);
-    const api = { set, setDisp, setChoice, get: k => read()[k], units: () => u, rerender: render };
-
-    root.addEventListener('input', e => {
-      const ta = e.target.closest('textarea[data-k]');
-      if (ta) { f[ta.dataset.k] = ta.value; if (cfg.onChange) cfg.onChange(ta.dataset.k, api); run(); return; }
-      const inp = e.target.closest('input[type=text][data-k]');
-      if (!inp) return;
-      const i = byK[inp.dataset.k];
-      raw[i.k] = inp.value;
-      const val = inp.value.trim() === '' ? null : parse(i, inp.value);
-      if (val == null) { f[i.k] = null; } else f[i.k] = val;
-      if (cfg.onChange) cfg.onChange(i.k, api);
-      run();
-    });
-    root.addEventListener('change', e => {
-      const el = e.target;
-      if (el.tagName === 'SELECT' && el.dataset.k) { f[el.dataset.k] = el.value; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
-      else if (el.type === 'checkbox' && el.dataset.k) { f[el.dataset.k] = el.checked; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
-    });
-    root.addEventListener('click', e => {
-      const b = e.target.closest('button');
-      if (!b) return;
-      if (b.dataset.u && b.dataset.u !== u) { u = b.dataset.u; setUnits(u); raw = {}; render(); return; }
-      if (b.dataset.seg) {
-        f[b.dataset.seg] = b.dataset.v;
-        b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
-        if (cfg.onChange) cfg.onChange(b.dataset.seg, api);
-        run(); return;
-      }
-      const a = b.dataset.act;
-      if (a === 'link') copy(root, location.href, T.linkCopied);
-      else if (a === 'print') { root.querySelectorAll('details').forEach(d => d.open = true); window.print(); }
-      else if (a === 'reset') { f = {}; raw = {}; history.replaceState(null, '', location.pathname + location.search); render(); }
-      else if (a === 'example' && cfg.example) {
-        f = {}; raw = {};
-        Object.entries(cfg.example).forEach(([k, val]) => { const i = byK[k]; if (!i) return; f[k] = (typeof val === 'number' && !['select', 'seg', 'check'].includes(i.t)) ? val * C[unitOf(i)][u][0] : val; });
-        render();
-      }
-      else if (a === 'say') { const s = root.querySelector('.hm-say'); if (s) copy(root, s.textContent, T.copied); }
-      else if (cfg.onAction) cfg.onAction(a, api, b);
-    });
-    render();
-    return api;
-  }
-
-  return { tool, C, fmt, fix, num, feet, esc };
-})();
-</script>
-<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/cycle-and-soak.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/cycle-and-soak.html">
 
 
 <link rel="canonical" href="https://rafikiardhi.earth/es/cycle-and-soak.html">
@@ -611,8 +266,8 @@ window.HM = (function () {
     <span class="navbar-title">RafikiArdhi</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Buscar"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -708,7 +363,7 @@ window.HM = (function () {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo oscuro"><i class="bi"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -724,12 +379,12 @@ window.HM = (function () {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Programador de riego por ciclos y remojo</h1>
+<h1 class="title">Cycle-and-soak sprinkler scheduler</h1>
 </div>
 
 <div>
   <div class="description">
-    Evite que el agua de los aspersores escurra en suelo arcilloso y en pendientes. Divida el riego en ciclos cortos con tiempo de remojo, según su suelo, la pendiente y el tipo de aspersor.
+    Stop sprinkler runoff on clay soil and slopes. Split watering into short cycles with soak time, based on your soil, slope and sprinkler type.
   </div>
 </div>
 
@@ -746,10 +401,7 @@ window.HM = (function () {
 </header>
 
 
-<div class="hm-lang">
-<p><a href="../cycle-and-soak.html" lang="en">English</a></p>
-</div>
-<p>Si el agua corre por la banqueta mientras los aspersores están prendidos, las cabezas están aplicando agua más rápido de lo que el suelo puede absorber. La solución no cuesta nada: riegue el mismo tiempo total en ciclos más cortos, con un remojo entre uno y otro. Esta herramienta calcula qué tan cortos y cuántos.</p>
+<p>If water runs down the sidewalk while the sprinklers are on, your heads are putting water down faster than the soil can take it in. The fix costs nothing: run the same total time in shorter cycles, with a soak in between. This works out how short, and how many.</p>
 <div class="hmc" id="cs"></div>
 <script>
 (function () {
@@ -772,57 +424,57 @@ window.HM = (function () {
     return IR[row][key][slope];
   }
   HM.tool({
-    id: 'cs', step: 'Aspersores',
+    id: 'cs', step: 'Sprinklers',
     inputs: [
-      { k: 'head', l: 'Tipo de aspersor', t: 'select', d: qpr ? 'measured' : 'spray', opts: [['spray', 'Cabezas de rocío (emergentes, rocío fijo)'], ['rotor', 'Rotores (de engranes, chorro giratorio)'], ['rotary', 'Boquillas rotativas (varios chorros, p. ej. tipo MP)'], ['measured', 'Lo medí (prueba de vasos)']] },
-      { k: 'pr', l: 'Tasa de aplicación', t: 'rate', d: (u, v) => { if (qpr) return u === 'us' ? qpr / 25.4 : qpr; const r = HEADS[(v && v.head) || 'spray'] || 1.5; return u === 'us' ? r : r * 25.4; }, h: 'Valor típico para este tipo de cabeza. Su propio resultado de la prueba de vasos es mejor: <a href="catch-cup-test.html">mídalo</a>.' },
-      { t: 'sec', l: 'Suelo y pendiente' },
-      { k: 'tex', l: 'Textura del suelo', t: 'select', d: 'loam', opts: [['sand', 'Arena o arena franca (rasposa, se desmorona)'], ['sandyloam', 'Franco arenoso'], ['loam', 'Franco'], ['siltloam', 'Franco limoso (suave, como harina)'], ['clayloam', 'Franco arcilloso'], ['clay', 'Arcilla (pegajosa, brilla al frotarla)']], h: '¿No está seguro? Haga la <a href="diy-soil-tests.html">prueba de la cinta o del frasco</a>.' },
-      { k: 'slope', l: 'Pendiente', t: 'select', d: '0', opts: [['0', 'Plana o suave (0–5%)'], ['1', 'Moderada (5–8%)'], ['2', 'Empinada (8–12%)'], ['3', 'Muy empinada (más de 12%)']], h: 'Una pendiente de 5% baja 6 pulgadas en 10 pies; una de 12% baja como 1.5 pies en 10 pies.' },
-      { k: 'bare', l: 'Suelo desnudo o semilla nueva (sin cubierta establecida)', t: 'check', d: false },
-      { k: 'comp', l: 'Compactado, o con una capa dura cerca de la superficie (común alrededor de casas nuevas)', t: 'check', d: false },
-      { t: 'sec', l: 'Cuánto regar' },
-      { k: 'day', l: 'Agua a aplicar cada día de riego', t: 'wdep', d: { us: 0.5, si: 13 }, w: 3, h: 'Su necesidad semanal dividida entre los días de riego.' },
-      { k: 'root', l: 'Profundidad de las raíces', t: 'dep', d: { us: 6, si: 15 }, w: 3, h: 'Césped 4–8 pulgadas, arbustos 12–18 pulgadas.' }
+      { k: 'head', l: 'Sprinkler type', t: 'select', d: qpr ? 'measured' : 'spray', opts: [['spray', 'Spray heads (pop-up, fixed spray)'], ['rotor', 'Rotors (gear-driven, rotating stream)'], ['rotary', 'Rotary nozzles (multi-stream, e.g. MP-type)'], ['measured', 'I measured it (catch-cup test)']] },
+      { k: 'pr', l: 'Application rate', t: 'rate', d: (u, v) => { if (qpr) return u === 'us' ? qpr / 25.4 : qpr; const r = HEADS[(v && v.head) || 'spray'] || 1.5; return u === 'us' ? r : r * 25.4; }, h: 'Typical for this head type. Your own catch-cup result is better: <a href="catch-cup-test.qmd">measure it</a>.' },
+      { t: 'sec', l: 'Soil and slope' },
+      { k: 'tex', l: 'Soil texture', t: 'select', d: 'loam', opts: [['sand', 'Sand or loamy sand (gritty, falls apart)'], ['sandyloam', 'Sandy loam'], ['loam', 'Loam'], ['siltloam', 'Silt loam (smooth, floury)'], ['clayloam', 'Clay loam'], ['clay', 'Clay (sticky, shiny when rubbed)']], h: 'Not sure? Try the <a href="diy-soil-tests.qmd">ribbon or jar test</a>.' },
+      { k: 'slope', l: 'Slope', t: 'select', d: '0', opts: [['0', 'Flat or gentle (0–5%)'], ['1', 'Moderate (5–8%)'], ['2', 'Steep (8–12%)'], ['3', 'Very steep (over 12%)']], h: 'A 5% slope drops 6 in over 10 ft; 12% drops about 1.5 ft over 10 ft.' },
+      { k: 'bare', l: 'Bare soil or new seed (no established cover)', t: 'check', d: false },
+      { k: 'comp', l: 'Compacted, or a hard layer close to the surface (common around new houses)', t: 'check', d: false },
+      { t: 'sec', l: 'How much to water' },
+      { k: 'day', l: 'Water to apply each watering day', t: 'wdep', d: { us: 0.5, si: 13 }, w: 3, h: 'Your weekly need divided by watering days.' },
+      { k: 'root', l: 'Root depth', t: 'dep', d: { us: 6, si: 15 }, w: 3, h: 'Lawns 4–8 in, shrubs 12–18 in.' }
     ],
     onChange(k, api) { if (k === 'head' && HEADS[api.get('head')]) api.setDisp('pr', HEADS[api.get('head')] * (api.units() === 'us' ? 1 : 25.4)); if (k === 'pr') api.setChoice('head', 'measured'); },
     compute(v, U) {
-      if (!(v.pr > 0) || !(v.day > 0)) return U.empty('Escriba la tasa de aplicación y cuánto quiere aplicar.');
+      if (!(v.pr > 0) || !(v.day > 0)) return U.empty('Enter the application rate and how much to apply.');
       const sl = +v.slope, irIn = irOf(v.tex, sl, v.bare, v.comp), ir = irIn * 25.4; // mm/hr
       const S = STORE[sl] * 25.4, pr = v.pr, total = v.day / pr * 60; // minutes
-      const work = [`Tasa de infiltración del suelo (${v.tex === 'loam' ? 'punto medio entre franco arenoso y franco limoso' : 'valor típico'}, esta pendiente${v.bare ? ', desnudo' : ''}${v.comp ? ', compactado' : ''}) ≈ ${U.f(ir, 'rate', 2)}`,
-        `Tiempo total de riego = ${U.f(v.day, 'wdep', 2)} ÷ ${U.f(pr, 'rate', 2)} × 60 = ${HM.fmt(total, 1)} min`];
+      const work = [`Soil intake rate (${v.tex === 'loam' ? 'midpoint of sandy loam and silt loam' : 'typical value'}, this slope${v.bare ? ', bare' : ''}${v.comp ? ', compacted' : ''}) ≈ ${U.f(ir, 'rate', 2)}`,
+        `Total run time = ${U.f(v.day, 'wdep', 2)} ÷ ${U.f(pr, 'rate', 2)} × 60 = ${HM.fmt(total, 1)} min`];
       let h, cycles = 1, len = total, soak = 0;
       if (pr <= ir) {
-        h = U.big('No hacen falta ciclos', `1 × ${Math.ceil(total)} min`, `Su suelo puede absorber el agua tan rápido como la aplican estas cabezas.`);
-        work.push(`Tasa de aplicación ${U.f(pr, 'rate', 2)} ≤ infiltración ${U.f(ir, 'rate', 2)}, así que el agua se absorbe conforme cae`);
+        h = U.big('No cycling needed', `1 × ${Math.ceil(total)} min`, `Your soil can take water in as fast as these heads put it down.`);
+        work.push(`Application rate ${U.f(pr, 'rate', 2)} ≤ intake ${U.f(ir, 'rate', 2)}, so water soaks in as it lands`);
       } else {
         const tmax = S / (pr - ir) * 60;
         cycles = Math.max(1, Math.ceil(total / tmax - 1e-9)); len = total / cycles;
         const dc = pr * len / 60, soakRaw = dc / ir * 60 - len;
         soak = Math.max(30, Math.ceil(soakRaw / 5) * 5);
-        h = U.big('Riegue', cycles > 1 ? `${cycles} × ${Math.ceil(len)} min` : `1 × ${Math.ceil(len)} min`, cycles > 1 ? `con por lo menos ${soak} minutos entre ciclos, ${HM.fmt(Math.ceil(len) * cycles, 0)} minutos en total.` : 'Es lo bastante corto para absorberse sin ciclos.');
-        h += U.kv([['Ciclo más largo antes de que escurra', `${HM.fmt(tmax, 1)} min`], ['Las cabezas aplican', U.f(pr, 'rate', 2)], ['El suelo absorbe', U.f(ir, 'rate', 2)]]);
-        work.push(`Las cabezas aplican más rápido de lo que el suelo absorbe, así que el agua se encharca. La superficie retiene unas ${U.f(S, 'wdep', 2)} antes de escurrir`,
-          `Ciclo más largo = ${U.f(S, 'wdep', 2)} ÷ (${U.f(pr, 'rate', 2)} − ${U.f(ir, 'rate', 2)}) × 60 = ${HM.fmt(tmax, 1)} min`,
-          `Ciclos = ${HM.fmt(total, 1)} ÷ ${HM.fmt(tmax, 1)} → ${cycles} ciclo${cycles > 1 ? 's' : ''} de ${HM.fmt(len, 1)} min`,
-          `Cada ciclo aplica ${U.f(dc, 'wdep', 2)}, que tarda ${HM.fmt(dc / ir * 60, 0)} min en absorberse → remojo de por lo menos ${soak} min (mínimo 30)`);
+        h = U.big('Run', cycles > 1 ? `${cycles} × ${Math.ceil(len)} min` : `1 × ${Math.ceil(len)} min`, cycles > 1 ? `with at least ${soak} minutes between cycles, ${HM.fmt(Math.ceil(len) * cycles, 0)} minutes in total.` : 'Short enough to soak in without cycling.');
+        h += U.kv([['Longest cycle before runoff', `${HM.fmt(tmax, 1)} min`], ['Heads apply', U.f(pr, 'rate', 2)], ['Soil takes in', U.f(ir, 'rate', 2)]]);
+        work.push(`Heads apply faster than the soil takes it in, so water ponds. The surface holds about ${U.f(S, 'wdep', 2)} before it runs off`,
+          `Longest cycle = ${U.f(S, 'wdep', 2)} ÷ (${U.f(pr, 'rate', 2)} − ${U.f(ir, 'rate', 2)}) × 60 = ${HM.fmt(tmax, 1)} min`,
+          `Cycles = ${HM.fmt(total, 1)} ÷ ${HM.fmt(tmax, 1)} → ${cycles} cycle${cycles > 1 ? 's' : ''} of ${HM.fmt(len, 1)} min`,
+          `Each cycle puts down ${U.f(dc, 'wdep', 2)}, which takes ${HM.fmt(dc / ir * 60, 0)} min to soak in → soak at least ${soak} min (minimum 30)`);
       }
       const awc = AWC[v.tex], rootIn = v.root / 0.0254, maxIn = awc * rootIn * 0.5, maxMm = maxIn * 25.4;
-      work.push(`La zona de raíces retiene unas ${awc} pulgadas de agua por pulgada de suelo × ${HM.fmt(rootIn, 1)} pulgadas × 50% (se rellena cuando se usó la mitad) = ${U.f(maxMm, 'wdep', 2)} por riego`);
-      if (v.day > maxMm * 1.1) h += U.note(`${U.f(v.day, 'wdep', 2)} es más de lo que puede retener la zona de raíces (unas ${U.f(maxMm, 'wdep', 2)}). Lo que sobra se va por debajo de las raíces. Riegue menos cada vez y más seguido, o fomente raíces más profundas regando a fondo pero solo cuando haga falta.`, 'bad');
-      else h += U.note(`Bien: ${U.f(v.day, 'wdep', 2)} cabe en la zona de raíces, que retiene unas ${U.f(maxMm, 'wdep', 2)} a la vez.`, 'good');
-      if (cycles > 1) h += U.note('La mayoría de los controladores tienen una opción de ciclo y remojo (cycle and soak). Si el suyo no la tiene, ponga varias horas de inicio para el mismo programa, separadas por lo menos por el tiempo de remojo.');
+      work.push(`Root zone holds about ${awc} in of water per in of soil × ${HM.fmt(rootIn, 1)} in × 50% (refill when half used) = ${U.f(maxMm, 'wdep', 2)} per watering`);
+      if (v.day > maxMm * 1.1) h += U.note(`${U.f(v.day, 'wdep', 2)} is more than the root zone can hold (about ${U.f(maxMm, 'wdep', 2)}). The extra drains below the roots. Water less each time and more often, or encourage deeper roots by watering deeply but only when needed.`, 'bad');
+      else h += U.note(`Good: ${U.f(v.day, 'wdep', 2)} fits in the root zone, which holds about ${U.f(maxMm, 'wdep', 2)} at a time.`, 'good');
+      if (cycles > 1) h += U.note('Most controllers have a cycle-and-soak setting. If yours doesn\'t, set several start times for the same program, at least the soak time apart.');
       return { html: h, work };
     }
   });
 })();
 </script>
-<section id="por-qué-funciona" class="level2">
-<h2 data-anchor-id="por-qué-funciona">Por qué funciona</h2>
-<p>El agua entra al suelo a una velocidad limitada. Un suelo arenoso puede absorber una pulgada o más por hora; la arcilla tal vez una décima de pulgada. Las cabezas de rocío muchas veces aplican más de una pulgada por hora, así que en arcilla la mayor parte de un ciclo largo escurre. En pendientes escurre todavía antes.</p>
-<p>Los ciclos cortos paran cada vuelta antes de que el agua empiece a escurrir; el remojo deja que baje al suelo antes de la siguiente vuelta. El agua total es la misma; solo deja de perderla en la cuneta.</p>
-<p>Las tasas de infiltración que se usan aquí son valores típicos de diseño para cada suelo y pendiente. Un suelo compactado o una capa dura cerca de la superficie (muy común en lotes de casas nuevas) las reduce mucho. Si todavía ve que escurre, acorte más los ciclos.</p>
+<section id="why-this-works" class="level2">
+<h2 data-anchor-id="why-this-works">Why this works</h2>
+<p>Water soaks into soil at a limited rate. Sandy soil can take in an inch or more an hour; clay may take in a tenth of an inch. Spray heads often put down over an inch an hour, so on clay most of a long cycle runs off. On slopes it runs off even sooner.</p>
+<p>Short cycles stop each round before water starts to run off; the soak lets it move down into the soil before the next round. The total water is the same; you just stop losing it to the gutter.</p>
+<p>The intake rates used here are typical design values for each soil and slope. Compacted soil or a hard layer near the surface (very common on new-build lots) cuts them sharply. If you still see runoff, shorten the cycles further.</p>
 
 
 </section>
@@ -859,12 +511,12 @@ window.HM = (function () {
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copiado");
+      button.setAttribute("title", "Copied!");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copiado");
+        button.setAttribute("data-bs-title", "Copied!");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
