@@ -2620,7 +2620,7 @@ body.quarto-light .sakey {
     <b>Beta</b> learning aid, not affiliated with or endorsed by the ARC. It does not replace the book or a qualified soil scientist.<br>
     <b>Source:</b> Soil Classification Working Group (2018). <i>Soil Classification: A Natural and Anthropogenic System for South Africa</i>. ARC-Institute for Soil, Climate and Water, Pretoria.<br>
     <b>Official app:</b> <a href="https://play.google.com/store/apps/details?id=arc.ict.digitalsoilclassification" target="_blank" rel="noopener">Digital Soil Classification</a> (ARC, Android)<br>
-    <b>How to cite this key:</b> Flynn, T. (2026). <i>South African soil classification key (2018)</i>, version 1.0 [software]. <a href="soil-keys.html#sa">soil-keys.html#sa</a>. Please also cite the Soil Classification Working Group (2018) source above. <a href="cite.html#soil-keys">All citations →</a></div>
+    <b>How to cite this key:</b> Flynn, T. (2026). <i>South African soil classification key (2018)</i>, version 1.0 [software]. <a href="https://doi.org/10.5281/zenodo.23738161">https://doi.org/10.5281/zenodo.23738161</a>. Please also cite the Soil Classification Working Group (2018) source above. <a href="cite.html#soil-keys">All citations →</a></div>
 </div>
 <script>
 (function () {
