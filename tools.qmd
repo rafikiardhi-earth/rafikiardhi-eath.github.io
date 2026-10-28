@@ -10,6 +10,7 @@ citation:
   author:
     - name: Trevan Flynn
       orcid: 0000-0002-5187-9946
+      affiliation: RafikiArdhi LLC
   issued: 2026
   version: "1.0"
   # doi: 10.5281/zenodo.XXXXXXX   # add the Zenodo concept DOI once minted

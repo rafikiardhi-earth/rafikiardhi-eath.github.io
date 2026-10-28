@@ -11,9 +11,10 @@ citation:
   author:
     - name: Trevan Flynn
       orcid: 0000-0002-5187-9946
+      affiliation: RafikiArdhi LLC
   issued: 2026
   version: "1.0"
-  # doi: 10.5281/zenodo.XXXXXXX   # add the Zenodo concept DOI once minted
+  doi: 10.5281/zenodo.23736495
 ---
 
 ```{=html}
@@ -34,7 +35,7 @@ citation:
 </style>
 <div id="ck-hub">
   <p class="ck-intro">Use these checks to investigate whether your own results and methods hold together, whether the work is in progress or already published. They test reported figures against what the method allows, and highlight questions worth answering before you share your work. Nothing you enter leaves your browser.</p>
-  <p class="ck-cite" style="font-size:.8rem; opacity:.75; margin-top:-4px;"><b>How to cite:</b> Flynn, T. (2026). <i>Check a result: plausibility checks for soil and environmental results</i>, version 1.0 [software]. Please also cite the method references given with each check. <a href="cite.html#checks">All citations →</a></p>
+  <p class="ck-cite" style="font-size:.8rem; opacity:.75; margin-top:-4px;"><b>How to cite:</b> Flynn, T. (2026). <i>Check a result: plausibility checks for soil and environmental results</i>, version 1.0 [software]. <a href="https://doi.org/10.5281/zenodo.23736495">https://doi.org/10.5281/zenodo.23736495</a>. Please also cite the method references given with each check. <a href="cite.html#checks">All citations →</a></p>
   <div id="ck-groups"></div>
 </div>
 <script>
