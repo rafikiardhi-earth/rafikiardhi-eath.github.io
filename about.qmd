@@ -2,7 +2,9 @@
 title: "About"
 ---
 
-*RafikiArdhi* is an independent environmental research company built on one idea: **[science should stay open.]{.ra-accent}** We publish what we produce, turn validated methods into free tools, and fund that work through the projects we take on.
+*RafikiArdhi* is an independent environmental research company built on one idea: **[science should stay open]{.ra-accent}** and **[creativity should encouraged.]{.ra-accent}** We publish what we produce, turn validated methods into free tools, and fund that work through the projects we take on.
+
+[How we work →](approach.qmd)
 
 ![](images/sopris-banner.jpg){.page-banner fig-alt="Mount Sopris above autumn fields near Carbondale, with a person on a bench, two dogs on the trail and horses grazing in the meadow"}
 
@@ -18,12 +20,12 @@ Our methods go through peer review and into the scientific literature, with the 
 Validated methods become free tools that anyone can use in a browser from the home gardener to the peer reviewer. They run on your own device, so your data never leaves it.
 :::
 ::: {.card-item}
-### Paid work funds open work
+### Projects funds open work
 Projects, advanced analyses and custom development pay for the research. As methods are proven, and agreements allow, they are released openly.
 :::
 ::: {.card-item}
 ### Credit where it is due
-We build on other people's work and cite it clearly: the methods, data and classification systems our tools rely on.
+We build on other people's work and cite it clearly: the methods, data and classification systems our tools rely on. This allows cumulative knowledge to grow exponentially (yes, there is an equation for that).
 :::
 :::
 
