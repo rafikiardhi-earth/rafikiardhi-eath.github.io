@@ -48,7 +48,7 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
 
 Some of the homeowner calculators (areas and volumes of irregular shapes, roof catchment, drainage) are also useful in research and fieldwork. Cite the collection:
 
-- Flynn, T. (2026). *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/homeowners.html>
+- Flynn, T. (2026). *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://doi.org/10.5281/zenodo.23741943>
 
 or a single tool:
 
@@ -129,6 +129,7 @@ For frost depth in research, the [researcher version](#tools) in Tools for resea
   title   = {Homeowner tools: yard and garden calculators},
   year    = {2026},
   version = {1.0},
+  doi     = {10.5281/zenodo.23741943},
   url     = {https://rafikiardhi.earth/homeowners.html}
 }
 ```
