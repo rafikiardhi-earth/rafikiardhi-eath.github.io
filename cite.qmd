@@ -42,9 +42,10 @@ Each check also lists the method it is based on; please cite that as well.
 ## Soil classification keys {#soil-keys}
 
 - Flynn, T., Rasaei, Z. (2026). *WRB 2022 soil key (English, Farsi and Kiswahili editions)*, version 1.0 [software]. <https://doi.org/10.5281/zenodo.23739387>
+- Flynn, T. (2026). *SiBCS soil key (English and Portuguese editions)*, version 1.0 [software]. <https://rafikiardhi.earth/soil-keys.html#br>
 - Flynn, T. (2026). *South African soil classification key (2018)*, version 1.0 [software]. <https://doi.org/10.5281/zenodo.23738161>
 
-Please also cite the classification itself: IUSS Working Group WRB (2022), *World Reference Base for Soil Resources*, 4th edition, International Union of Soil Sciences, Vienna; or Soil Classification Working Group (2018), *Soil Classification: A Natural and Anthropogenic System for South Africa*, ARC-Institute for Soil, Climate and Water, Pretoria.
+Please also cite the classification itself: IUSS Working Group WRB (2022), *World Reference Base for Soil Resources*, 4th edition, International Union of Soil Sciences, Vienna; Santos, H.G. dos et al. (2018), *Sistema Brasileiro de Classificação de Solos*, 5th edition, Embrapa, Brasília; or Soil Classification Working Group (2018), *Soil Classification: A Natural and Anthropogenic System for South Africa*, ARC-Institute for Soil, Climate and Water, Pretoria.
 
 ## Soil Colour Reader {#soil-colour}
 
@@ -111,6 +112,14 @@ For frost depth in research, the [researcher version](#tools) in Tools for resea
   version = {1.0},
   doi     = {10.5281/zenodo.23739387},
   url     = {https://rafikiardhi.earth/soil-keys.html#wrb}
+}
+
+@software{flynn2026sibcs,
+  author  = {Flynn, Trevan},
+  title   = {SiBCS soil key (English and Portuguese editions)},
+  year    = {2026},
+  version = {1.0},
+  url     = {https://rafikiardhi.earth/soil-keys.html#br}
 }
 
 @software{flynn2026sakey,

@@ -1,13 +1,13 @@
 ---
 title: "Soil classification keys"
-description: "Step-by-step keys to the WRB 2022 Reference Soil Groups and the South African soil forms and families (2018)."
+description: "Step-by-step keys to the WRB 2022 Reference Soil Groups, the Brazilian SiBCS orders and suborders (2018), and the South African soil forms and families (2018)."
 page-layout: full
 anchor-sections: false
 google-scholar: true
 appendix-cite-as: false   # keep the citation metadata, hide the BibTeX appendix
 citation:
   type: software
-  title: "Soil classification keys: WRB 2022 and South Africa (2018)"
+  title: "Soil classification keys: WRB 2022, Brazil (SiBCS 2018) and South Africa (2018)"
   author:
     - name: Trevan Flynn
       orcid: 0000-0002-5187-9946
@@ -31,6 +31,7 @@ body.quarto-light .keyswitch button[aria-selected="true"] { background: #8a4b22;
 </style>
 <div class="keyswitch" role="tablist" aria-label="Classification system">
   <button role="tab" data-key="wrb" aria-selected="true">WRB 2022 (international)</button>
+  <button role="tab" data-key="br" aria-selected="false">Brazil (SiBCS 2018)</button>
   <button role="tab" data-key="sa" aria-selected="false">South Africa (2018)</button>
 </div>
 <div class="keypane" data-pane="wrb">
@@ -3679,6 +3680,391 @@ render();
 </script>
 </div>
 </div>
+<div class="keypane" data-pane="br" hidden>
+<div class="wrbk" id="br-root" lang="en">
+<div class="wk-app">
+  <header>
+    <div class="brand"><span class="beta" style="margin-left:0">Beta</span> <span style="font-weight:400; font-size:.85rem; color:var(--ink-3)" id="br-tag">Learning and screening aid</span></div>
+    <div class="key-hd-right">
+      <select class="key-lang" id="br-lang" aria-label="Language / Idioma"><option value="en" selected>English</option><option value="pt" lang="pt">Português</option></select>
+      <button id="br-restart" hidden>Start over</button>
+    </div>
+  </header>
+  <div class="wk-progress" aria-hidden="true"><div id="br-bar" style="width:0%"></div></div>
+  <main id="br-view"></main>
+  <div class="foot" id="br-foot"></div>
+</div>
+</div>
+<script>
+(function () {
+"use strict";
+/* SiBCS key to the 1st (ordens) and 2nd (subordens) categorical levels.
+   Key order and criteria follow Santos et al. (2018), Sistema Brasileiro de Classificação de Solos, 5th ed.,
+   Chapter 4 (key to orders, pp. 110-114) and Chapters 5-17 (suborders). Criteria are paraphrased and simplified;
+   class names are kept in Portuguese in both languages, as in the official English edition. */
+
+const T = {
+  en: {
+    tag: "Learning and screening aid", restart: "Start over",
+    title: "Find the SiBCS order and suborder",
+    lead: "A step-by-step key to the 13 orders and their suborders of the Brazilian Soil Classification System (SiBCS, 5th edition, 2018). It follows the book's key order, so the first class that fits is the answer.",
+    bullets: ["Answer one question at a time. Choose <b>Not sure</b> when you don't know: the key carries on and tells you what to check.",
+              "Class names stay in Portuguese, as in the official English edition of the SiBCS.",
+              "Most criteria refer to the B horizon, including BA, within its first 100 cm. Colours are Munsell, moist."],
+    start: "Start the key", yes: "Yes", no: "No", unsure: "Not sure", how: "How to check", back: "← Back",
+    order: "Order", suborder: "Suborder", q: "Question", result: "Result",
+    provisional: "Provisional.", unsureN: n => `You weren't sure about ${n} question${n > 1 ? "s" : ""}, so check ${n > 1 ? "these" : "this"} first:`,
+    ifYes: name => ` If yes, the soil would key out as <b>${name}</b> instead.`,
+    answers: "Your answers", again: "Classify another profile", change: "← Change last answer",
+    none: "No order fits", noneDesc: "None of the 13 orders matched your answers. Every soil should key out, so check the answers marked No or Not sure, especially for the diagnostic horizons (B textural, B incipiente, B latossólico).",
+    noSub: "suborder not determined", noSubDesc: "None of the suborder criteria matched. Check the answers above against the book.",
+    next: "Next: the suborder", foot: `<a href="tools.html">← Back to Tools</a><br>
+      <b>Beta</b> learning aid, not affiliated with or endorsed by Embrapa. It does not replace the SiBCS text or a qualified soil scientist. Criteria are simplified; the 3rd and 4th levels are not covered.<br>
+      <b>Source:</b> Santos, H.G. dos, Jacomine, P.K.T., Anjos, L.H.C. dos, Oliveira, V.A. de, Lumbreras, J.F., Coelho, M.R., Almeida, J.A. de, Araujo Filho, J.C. de, Oliveira, J.B. de, Cunha, T.J.F. (2018). <i>Sistema Brasileiro de Classificação de Solos</i>, 5th ed. Embrapa, Brasília, DF. ISBN 978-85-7035-800-4. English edition: <i>Brazilian Soil Classification System</i>, ISBN 978-85-7035-821-9.<br>
+      <b>Classifying from data in R:</b> Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a><br>
+      <b>How to cite this key:</b> Flynn, T. (2026). <i>SiBCS soil key (English and Portuguese editions)</i>, version 1.0 [software]. <a href="soil-keys.html#br">https://rafikiardhi.earth/soil-keys.html#br</a>. Please also cite the SiBCS source above. <a href="cite.html#soil-keys">All citations →</a>`
+  },
+  pt: {
+    tag: "Apoio ao aprendizado e à triagem", restart: "Recomeçar",
+    title: "Encontre a ordem e a subordem no SiBCS",
+    lead: "Uma chave passo a passo para as 13 ordens e suas subordens do Sistema Brasileiro de Classificação de Solos (SiBCS, 5ª edição, 2018). Segue a ordem da chave do livro: a primeira classe que se aplica é a resposta.",
+    bullets: ["Responda uma pergunta de cada vez. Escolha <b>Não sei</b> quando não souber: a chave continua e indica o que verificar.",
+              "Os nomes das classes ficam em português, como na edição oficial em inglês do SiBCS.",
+              "A maioria dos critérios refere-se ao horizonte B, inclusive BA, nos seus primeiros 100 cm. As cores são Munsell, amostra úmida."],
+    start: "Iniciar a chave", yes: "Sim", no: "Não", unsure: "Não sei", how: "Como verificar", back: "← Voltar",
+    order: "Ordem", suborder: "Subordem", q: "Pergunta", result: "Resultado",
+    provisional: "Provisório.", unsureN: n => `Você não tinha certeza em ${n} pergunta${n > 1 ? "s" : ""}; verifique ${n > 1 ? "estas" : "esta"} primeiro:`,
+    ifYes: name => ` Se sim, o solo seria classificado como <b>${name}</b>.`,
+    answers: "Suas respostas", again: "Classificar outro perfil", change: "← Alterar a última resposta",
+    none: "Nenhuma ordem se aplica", noneDesc: "Nenhuma das 13 ordens correspondeu às suas respostas. Todo solo deve ser classificado; revise as respostas marcadas Não ou Não sei, sobretudo as dos horizontes diagnósticos (B textural, B incipiente, B latossólico).",
+    noSub: "subordem não determinada", noSubDesc: "Nenhum critério de subordem correspondeu. Confira as respostas acima com o livro.",
+    next: "A seguir: a subordem", foot: `<a href="tools.html">← Voltar às ferramentas</a><br>
+      Apoio ao aprendizado em versão <b>beta</b>, sem vínculo com a Embrapa nem endosso dela. Não substitui o texto do SiBCS nem um pedólogo qualificado. Os critérios estão simplificados; o 3º e o 4º níveis não estão incluídos.<br>
+      <b>Fonte:</b> Santos, H.G. dos, Jacomine, P.K.T., Anjos, L.H.C. dos, Oliveira, V.A. de, Lumbreras, J.F., Coelho, M.R., Almeida, J.A. de, Araujo Filho, J.C. de, Oliveira, J.B. de, Cunha, T.J.F. (2018). <i>Sistema Brasileiro de Classificação de Solos</i>, 5ª ed. rev. e ampl. Embrapa, Brasília, DF. ISBN 978-85-7035-800-4.<br>
+      <b>Classificação a partir de dados no R:</b> Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a><br>
+      <b>Como citar esta chave:</b> <span lang="en">Flynn, T. (2026). <i>SiBCS soil key (English and Portuguese editions)</i>, version 1.0 [software].</span> <a href="soil-keys.html#br">https://rafikiardhi.earth/soil-keys.html#br</a>. Cite também a fonte do SiBCS acima. <a href="cite.html#soil-keys">Todas as citações →</a>`
+  }
+};
+
+/* Orders in key order (SiBCS 2018, Cap. 4). n = name, d = short description [en, pt], q = question [en, pt], h = help [[en...], [pt...]] */
+const ORDERS = [
+  { c: "O", n: "Organossolos",
+    d: ["Organic soils: peats and mucks, or thick litter over rock in cool, humid uplands.", "Solos orgânicos: turfas e solos de várzea com muita matéria orgânica, ou serapilheira espessa sobre rocha em áreas altas e úmidas."],
+    q: ["Is there a thick histic (organic) horizon?", "Há um horizonte hístico (orgânico) espesso?"],
+    h: [["Histic horizon: organic material with 80 g/kg or more of organic carbon.",
+         "Thick enough if it is 20 cm or more over a lithic or fragmentary lithic contact, or over a layer that is 90% or more (by volume) gravel, cobbles and boulders; or 40 cm or more, continuous or added up, within the upper 80 cm; or 60 cm or more where plant tissue makes up 75% or more of its volume.",
+         "A thinner histic horizon over mineral soil does not count here: answer No."],
+        ["Horizonte hístico: material orgânico com 80 g/kg ou mais de carbono orgânico.",
+         "É espesso o bastante se tiver 20 cm ou mais sobre contato lítico ou lítico fragmentário, ou sobre camada com 90% ou mais (em volume) de cascalhos, calhaus e matacões; ou 40 cm ou mais, contínuos ou cumulativos, nos primeiros 80 cm; ou 60 cm ou mais quando 75% ou mais do volume for tecido vegetal.",
+         "Um horizonte hístico mais delgado sobre solo mineral não conta aqui: responda Não."]] },
+  { c: "R", n: "Neossolos",
+    d: ["Young, weakly developed soils with no diagnostic B horizon: shallow soils on rock, alluvial soils, deep quartz sands.", "Solos jovens, pouco evoluídos, sem horizonte B diagnóstico: solos rasos sobre rocha, solos aluviais, areias quartzosas profundas."],
+    q: ["Is there no diagnostic B horizon of any kind?", "O solo não tem nenhum horizonte B diagnóstico?"],
+    h: [["No B textural, B latossólico, B incipiente, B nítico, B espódico or B plânico.",
+         "Answer No as well if there is a glei horizon starting within 50 cm (unless the soil is sand or loamy sand), a plinthic horizon within 40 cm, a vertic horizon directly below the A, or an A chernozêmico together with carbonatic character or a calcic horizon."],
+        ["Sem B textural, B latossólico, B incipiente, B nítico, B espódico ou B plânico.",
+         "Responda Não também se houver horizonte glei começando dentro de 50 cm (exceto em solos de textura areia ou areia franca), horizonte plíntico dentro de 40 cm, horizonte vértico logo abaixo do A, ou A chernozêmico junto com caráter carbonático ou horizonte cálcico."]] },
+  { c: "V", n: "Vertissolos",
+    d: ["Clayey soils that swell when wet and shrink and crack when dry, with slickensides.", "Solos argilosos que se expandem quando úmidos e se contraem e fendilham quando secos, com superfícies de fricção (slickensides)."],
+    q: ["Is there a vertic horizon (slickensides, wedge-shaped peds) within 100 cm, with deep cracks when dry?", "Há horizonte vértico (slickensides, agregados em cunha) dentro de 100 cm, com fendas profundas na seca?"],
+    h: [["Vertic horizon starting within 100 cm, and too little clay increase with depth for a B textural.",
+         "300 g/kg clay or more in the upper 20 cm (after mixing).",
+         "In the dry season, vertical cracks at least 1 cm wide reaching 50 cm deep (30 cm in shallow soils); where cracks cannot be seen (irrigated or poorly drained land), COLE 0.06 or more (or linear extensibility of 6 cm or more).",
+         "No lithic or fragmentary lithic contact, petrocalcic horizon or duripan within 30 cm, and no diagnostic B horizon above the vertic horizon."],
+        ["Horizonte vértico começando dentro de 100 cm, com relação textural insuficiente para B textural.",
+         "300 g/kg de argila ou mais nos 20 cm superficiais (após mistura).",
+         "Na estação seca, fendas verticais com pelo menos 1 cm de largura até 50 cm de profundidade (30 cm em solos rasos); onde as fendas não são visíveis (áreas irrigadas ou mal drenadas), COLE de 0,06 ou mais (ou expansibilidade linear de 6 cm ou mais).",
+         "Sem contato lítico ou lítico fragmentário, horizonte petrocálcico ou duripã dentro de 30 cm, e sem horizonte B diagnóstico acima do horizonte vértico."]] },
+  { c: "E", n: "Espodossolos",
+    d: ["Sandy soils with a subsoil accumulation of humus and/or iron and aluminium, often under a bleached E horizon.", "Solos arenosos com acúmulo iluvial de húmus e/ou ferro e alumínio em subsuperfície, frequentemente abaixo de um horizonte E esbranquiçado."],
+    q: ["Is there a B espódico directly below an E or A horizon?", "Há horizonte B espódico logo abaixo de um horizonte E ou A?"],
+    h: [["B espódico: illuvial accumulation of organic matter with aluminium, with or without iron (Bh, Bs, Bhs), often dark brown to reddish, sometimes cemented (ortstein).",
+         "Starting within 200 cm of the surface, or within 400 cm if the A + E (or histic under 40 cm + E) horizons are thicker than 200 cm."],
+        ["B espódico: acúmulo iluvial de matéria orgânica com alumínio, com ou sem ferro (Bh, Bs, Bhs), em geral bruno-escuro a avermelhado, às vezes cimentado (ortstein).",
+         "Começando dentro de 200 cm da superfície, ou dentro de 400 cm se os horizontes A + E (ou hístico com menos de 40 cm + E) ultrapassarem 200 cm."]] },
+  { c: "S", n: "Planossolos",
+    d: ["Soils with an abrupt change to a dense, clayey subsoil that impedes drainage (B plânico), often sodic.", "Solos com mudança abrupta para um subsolo adensado e argiloso que restringe a drenagem (B plânico), muitas vezes sódicos."],
+    q: ["Is there a B plânico directly below an A or E horizon?", "Há horizonte B plânico logo abaixo de um horizonte A ou E?"],
+    h: [["B plânico: a B textural with an abrupt textural change from the horizon above, dense, with prismatic, columnar or blocky structure, and grey colours or mottles from impeded drainage.",
+         "A B plânico without sodic character must not coincide with a plinthic horizon (it then keys to Plintossolos); a sodic one still counts."],
+        ["B plânico: B textural com mudança textural abrupta em relação ao horizonte acima, adensado, de estrutura prismática, colunar ou em blocos, com cores acinzentadas ou mosqueados de drenagem imperfeita.",
+         "Um B plânico sem caráter sódico não deve coincidir com horizonte plíntico (nesse caso o solo vai para os Plintossolos); se for sódico, ainda conta."]] },
+  { c: "G", n: "Gleissolos",
+    d: ["Soils saturated by water long enough to develop grey, reduced (gleyed) colours.", "Solos saturados por água tempo suficiente para desenvolver cores acinzentadas de redução (gleização)."],
+    q: ["Is there a glei horizon near the surface?", "Há horizonte glei próximo à superfície?"],
+    h: [["Glei horizon (grey, bluish or greenish reduced colours, often with mottles) starting within 50 cm; or starting between 50 and 150 cm directly below an A or E horizon, or below a histic horizon less than 40 cm thick.",
+         "No plinthic, concretionary or litoplinthic horizon within 200 cm, and no other diagnostic B horizon above the glei horizon."],
+        ["Horizonte glei (cores acinzentadas, azuladas ou esverdeadas de redução, muitas vezes com mosqueados) começando dentro de 50 cm; ou entre 50 e 150 cm, logo abaixo de horizonte A ou E, ou de horizonte hístico com menos de 40 cm.",
+         "Sem horizonte plíntico, concrecionário ou litoplíntico dentro de 200 cm, e sem outro horizonte B diagnóstico acima do glei."]] },
+  { c: "L", n: "Latossolos",
+    d: ["Deep, very weathered soils dominated by kaolinite and iron and aluminium oxides, with weak structure.", "Solos profundos, muito intemperizados, com predomínio de caulinita e óxidos de ferro e alumínio, de estrutura fraca."],
+    q: ["Is there a B latossólico directly below the A horizon?", "Há horizonte B latossólico logo abaixo do horizonte A?"],
+    h: [["B latossólico: deeply weathered, very few weatherable minerals, low-activity clay, weak or granular (“pó de café”) structure, little clay increase with depth, diffuse boundaries.",
+         "Below any type of A horizon, starting within 200 cm (300 cm if the A is thicker than 150 cm).",
+         "A B latossólico that lies below a B textural or B nítico does not count: answer No."],
+        ["B latossólico: muito intemperizado, com pouquíssimos minerais alteráveis, argila de atividade baixa, estrutura fraca ou granular (“pó de café”), pouco aumento de argila em profundidade, transições difusas.",
+         "Abaixo de qualquer tipo de horizonte A, começando dentro de 200 cm (300 cm se o A tiver mais de 150 cm).",
+         "Um B latossólico situado abaixo de um B textural ou B nítico não conta: responda Não."]] },
+  { c: "M", n: "Chernossolos",
+    d: ["Dark, fertile soils with a thick, humus-rich A horizon, high base saturation and active clays, often over carbonates.", "Solos escuros e férteis, com horizonte A espesso e rico em húmus, saturação por bases alta e argila de atividade alta, muitas vezes sobre carbonatos."],
+    q: ["Is there an A chernozêmico followed by a B with active clay and high base saturation, or by carbonates?", "Há A chernozêmico seguido de B com argila de atividade alta e saturação por bases alta, ou de carbonatos?"],
+    h: [["A chernozêmico: thick, dark (moist value and chroma 3 or less, dry value 5 or less), moderately or strongly structured, base saturation 65% or more, organic carbon 6 g/kg or more.",
+         "Followed by: (a) a B incipiente or B textural with high-activity clay (Ta, 27 cmolc/kg clay or more) and base saturation of 50% or more; or (b) a calcic or petrocalcic horizon or carbonatic character in the A and/or C (a B incipiente under 10 cm thick may lie between); or (c) a calcic horizon or carbonatic character (150 g/kg CaCO₃ equivalent or more) in the A, over a lithic or fragmentary lithic contact."],
+        ["A chernozêmico: espesso, escuro (valor e croma úmidos 3 ou menos, valor seco 5 ou menos), com estrutura moderada ou forte, saturação por bases de 65% ou mais e 6 g/kg ou mais de carbono orgânico.",
+         "Seguido de: (a) B incipiente ou B textural com argila de atividade alta (Ta, 27 cmolc/kg de argila ou mais) e saturação por bases de 50% ou mais; ou (b) horizonte cálcico, petrocálcico ou caráter carbonático no A e/ou no C (pode haver um B incipiente com menos de 10 cm entre eles); ou (c) horizonte cálcico ou caráter carbonático (150 g/kg ou mais de CaCO₃ equivalente) no A, seguido de contato lítico ou lítico fragmentário."]] },
+  { c: "C", n: "Cambissolos",
+    d: ["Moderately developed soils with an incipient B horizon: some alteration, but little accumulation.", "Solos pouco desenvolvidos, com horizonte B incipiente: alguma alteração, mas pouca acumulação."],
+    q: ["Is there a B incipiente directly below the A horizon?", "Há horizonte B incipiente logo abaixo do horizonte A?"],
+    h: [["B incipiente: altered enough to show soil colour or structure instead of rock structure, often with weatherable minerals or rock fragments, but without enough clay increase for a B textural.",
+         "Directly below any A horizon, or below a histic horizon less than 40 cm thick.",
+         "Any plinthite or petroplinthite must not meet the Plintossolos criteria (see the next question)."],
+        ["B incipiente: alterado o bastante para mostrar cor ou estrutura de solo em vez de estrutura da rocha, muitas vezes com minerais alteráveis ou fragmentos de rocha, mas sem aumento de argila suficiente para B textural.",
+         "Logo abaixo de qualquer horizonte A, ou de horizonte hístico com menos de 40 cm.",
+         "Plintita ou petroplintita, se presentes, não devem atender aos critérios dos Plintossolos (veja a próxima pergunta)."]] },
+  { c: "F", n: "Plintossolos",
+    d: ["Soils with plinthite (iron-rich mottles that harden on exposure) or ironstone, formed under fluctuating water.", "Solos com plintita (mosqueados ricos em ferro que endurecem com a exposição) ou petroplintita, formados sob oscilação do lençol freático."],
+    q: ["Is there a plinthic, concretionary or litoplinthic horizon near the surface?", "Há horizonte plíntico, concrecionário ou litoplíntico próximo à superfície?"],
+    h: [["Starting within 40 cm; or within 200 cm when below a glei horizon, or directly below an A or E horizon, or below a horizon with pale or variegated colours or abundant mottles (over 20%), with hue 5Y, or hue 7.5YR, 10YR or 2.5Y with chroma 4 or less.",
+         "Plinthic: red, iron-rich mottles in a lighter matrix that harden irreversibly when wetted and dried. Concretionary: many hardened nodules (petroplinthite). Litoplinthic: a continuous ironstone layer.",
+         "Answer No if it coincides with a B plânico with sodic character."],
+        ["Começando dentro de 40 cm; ou dentro de 200 cm quando abaixo de horizonte glei, ou logo abaixo de horizonte A ou E, ou de horizonte com cores pálidas, variegadas ou mosqueados abundantes (mais de 20%), de matiz 5Y, ou matizes 7,5YR, 10YR ou 2,5Y com croma 4 ou menos.",
+         "Plíntico: mosqueados vermelhos, ricos em ferro, numa matriz mais clara, que endurecem irreversivelmente com ciclos de umedecimento e secagem. Concrecionário: muitas concreções endurecidas (petroplintita). Litoplíntico: camada contínua de petroplintita.",
+         "Responda Não se coincidir com B plânico de caráter sódico."]] },
+  { c: "T", n: "Luvissolos",
+    d: ["Clay-enriched subsoil with active clays and high base saturation; typical of the semi-arid Northeast.", "Subsolo com acúmulo de argila, argila de atividade alta e saturação por bases alta; típicos do semiárido nordestino."],
+    q: ["Is there a B textural with high-activity clay and high base saturation?", "Há B textural com argila de atividade alta e saturação por bases alta?"],
+    h: [["B textural: clearly more clay than the horizon above (or clay skins), directly below any A horizon except A chernozêmico, or below an E.",
+         "High-activity clay (Ta, 27 cmolc/kg clay or more) and base saturation of 50% or more in most of the first 100 cm of the B (including BA)."],
+        ["B textural: claramente mais argila que o horizonte acima (ou cerosidade), logo abaixo de qualquer horizonte A, exceto A chernozêmico, ou abaixo de E.",
+         "Argila de atividade alta (Ta, 27 cmolc/kg de argila ou mais) e saturação por bases de 50% ou mais na maior parte dos primeiros 100 cm do B (inclusive BA)."]] },
+  { c: "N", n: "Nitossolos",
+    d: ["Deep, clayey, well-structured soils with shiny ped faces, often red, on basic rocks.", "Solos profundos, argilosos e bem estruturados, com agregados de faces brilhantes, muitas vezes vermelhos, sobre rochas básicas."],
+    q: ["Is there a B nítico in a clayey soil?", "Há B nítico em solo argiloso?"],
+    h: [["350 g/kg clay or more from the surface, including the A horizon.",
+         "B nítico below the A: little clay increase with depth, moderate to strong blocky or prismatic structure with shiny ped faces (cerosidade).",
+         "Low-activity clay (Tb), or high-activity clay with caráter alumínico, in most of the first 100 cm of the B (including BA). Little colour change (polychromy) through the profile."],
+        ["350 g/kg de argila ou mais desde a superfície, inclusive no horizonte A.",
+         "B nítico abaixo do A: pouco aumento de argila em profundidade, estrutura em blocos ou prismática moderada a forte, com cerosidade.",
+         "Argila de atividade baixa (Tb), ou atividade alta conjugada com caráter alumínico, na maior parte dos primeiros 100 cm do B (inclusive BA). Pouca variação de cor (policromia) ao longo do perfil."]] },
+  { c: "P", n: "Argissolos",
+    d: ["Soils with a clay-enriched B textural, mostly low-activity clays; the most widespread order in Brazil after the Latossolos.", "Solos com B textural, em geral com argila de atividade baixa; a ordem mais extensa do Brasil depois dos Latossolos."],
+    q: ["Is there a B textural?", "Há horizonte B textural?"],
+    h: [["B textural: clearly more clay than the horizon above (textural ratio), or clay skins (cerosidade) on ped faces, directly below the A or E horizon.",
+         "Every remaining soil with a B textural keys out here."],
+        ["B textural: claramente mais argila que o horizonte acima (relação textural), ou cerosidade nas faces dos agregados, logo abaixo do horizonte A ou E.",
+         "Todo solo restante com B textural é classificado aqui."]] }
+];
+
+/* Suborders in key order. The last one of each order with r:true is the residual class (no question). */
+const B100 = ["in most of the first 100 cm of the B (including BA)", "na maior parte dos primeiros 100 cm do B (inclusive BA)"];
+const RETR = ["Caráter retrátil: after a few weeks of drying, the exposed profile shrinks markedly, with pronounced vertical cracks and large prisms that break into blocks and pile up like a skirt at the foot of the cut.", "Caráter retrátil: após algumas semanas de exposição ao secamento, a massa do solo se retrai acentuadamente, com fendas verticais pronunciadas e prismas grandes que se desfazem em blocos e se acumulam como uma \u201csaia\u201d na base do corte."];
+const EBAN = ["Caráter ebânico: dominant near-black colours. Hue 7.5YR or yellower: moist value below 4 and chroma below 3 (dry value below 6). Redder hues: moist black or very dark grey (dry value below 5).", "Caráter ebânico: dominância de cores escuras, quase pretas. Matiz 7,5YR ou mais amarelo: valor úmido menor que 4 e croma menor que 3 (valor seco menor que 6). Matizes mais vermelhos: preto ou cinzento muito escuro quando úmido (valor seco menor que 5)."];
+const SUB = {
+  P: [
+    { n: "Bruno-Acinzentados", q: ["Is the B brownish-grey or dark brown (hue 5YR or yellower, value 3–4, chroma 4 or less)?", "O B é bruno-acinzentado ou bruno-escuro (matiz 5YR ou mais amarelo, valor 3–4, croma 4 ou menos)?"],
+      h: [["Moist colours " + B100[0] + ": hue 5YR or yellower, value 3 to 4 and chroma 4 or less.", "And a clearly darker upper B: its moist value and/or chroma lower than the sub-horizon below, and its dry colour darker than at least one horizon above. Found so far in the subtropical South."],
+          ["Cores úmidas " + B100[1] + ": matiz 5YR ou mais amarelo, valor 3 a 4 e croma 4 ou menos.", "E escurecimento expressivo da parte superior do B: valor e/ou croma úmidos menores que os do sub-horizonte logo abaixo, e cor seca mais escura que a de pelo menos um horizonte acima. Constatados até agora no Sul, em clima subtropical."]] },
+    { n: "Acinzentados", q: ["Is the B greyish (hue 7.5YR or yellower, value 5 or more, chroma below 4)?", "O B é acinzentado (matiz 7,5YR ou mais amarelo, valor 5 ou mais, croma menor que 4)?"],
+      h: [["Moist colours " + B100[0] + ": hue 7.5YR or yellower, value 5 or more and chroma less than 4."],
+          ["Cores úmidas " + B100[1] + ": matiz 7,5YR ou mais amarelo, valor 5 ou mais e croma menor que 4."]] },
+    { n: "Amarelos", q: ["Is the B yellowish (hue 7.5YR or yellower)?", "O B é amarelado (matiz 7,5YR ou mais amarelo)?"],
+      h: [["Moist hue 7.5YR or yellower " + B100[0] + "."], ["Matiz úmido 7,5YR ou mais amarelo " + B100[1] + "."]] },
+    { n: "Vermelhos", q: ["Is the B red (hue 2.5YR or redder)?", "O B é vermelho (matiz 2,5YR ou mais vermelho)?"],
+      h: [["Moist hue 2.5YR or redder " + B100[0] + "."],
+          ["Matiz úmido 2,5YR ou mais vermelho " + B100[1] + "."]] },
+    { n: "Vermelho-Amarelos", r: true }
+  ],
+  C: [
+    { n: "Hísticos", q: ["Is there an O histic horizon too thin for the Organossolos?", "Há horizonte O hístico sem espessura suficiente para Organossolos?"],
+      h: [["A well-drained organic (O histic) horizon, not thick enough for the Organossolos."], ["Horizonte orgânico bem drenado (O hístico), sem espessura suficiente para Organossolos."]] },
+    { n: "Húmicos", q: ["Is there an A húmico?", "Há horizonte A húmico?"],
+      h: [["A húmico: a thick, dark A (moist value and chroma 4 or less) with base saturation below 65% and a high organic carbon stock for its clay content; typical of cool, humid uplands."], ["A húmico: horizonte A espesso e escuro (valor e croma úmidos 4 ou menos), com saturação por bases menor que 65% e estoque de carbono orgânico alto em relação ao teor de argila; típico de áreas altas, frias e úmidas."]] },
+    { n: "Flúvicos", q: ["Does the soil show fluvic character (alluvial layering) within 150 cm?", "O solo tem caráter flúvico (estratificação aluvial) dentro de 150 cm?"],
+      h: [["Caráter flúvico: alluvial or colluvial-alluvial layers, shown by erratic changes in particle size (or other properties) or in organic carbon with depth."], ["Caráter flúvico: camadas de sedimentos aluvionares ou colúvio-aluvionares, com variação irregular (errática) da granulometria (ou de outros atributos) ou do carbono orgânico em profundidade."]] },
+    { n: "Háplicos", r: true }
+  ],
+  M: [
+    { n: "Rêndzicos", q: ["Is the A chernozêmico over carbonates (calcic horizon, carbonatic character) or over rock with a carbonatic A?", "O A chernozêmico está sobre carbonatos (horizonte cálcico, caráter carbonático) ou sobre rocha com A carbonático?"],
+      h: [["A calcic or petrocalcic horizon or carbonatic character in the A and/or C (a B incipiente under 10 cm may lie between); or a lithic contact with an A of 150 g/kg CaCO₃ equivalent or more."],
+          ["Horizonte cálcico, petrocálcico ou caráter carbonático no A e/ou no C (pode haver B incipiente com menos de 10 cm entre eles); ou contato lítico com A de 150 g/kg ou mais de CaCO₃ equivalente."]] },
+    { n: "Ebânicos", q: ["Is the B very dark, near black (caráter ebânico)?", "O B é muito escuro, quase preto (caráter ebânico)?"],
+      h: [[EBAN[0] + " In most of the first 100 cm of the B (including BA)."], [EBAN[1] + " Na maior parte dos primeiros 100 cm do B (inclusive BA)."]] },
+    { n: "Argilúvicos", q: ["Is there a B textural below the A chernozêmico?", "Há B textural abaixo do A chernozêmico?"],
+      h: [["Clearly more clay in the B than in the A, or clay skins on ped faces."], ["Claramente mais argila no B que no A, ou cerosidade nas faces dos agregados."]] },
+    { n: "Háplicos", r: true }
+  ],
+  E: [
+    { n: "Humilúvicos", q: ["Is the spodic horizon mainly a Bh and/or Bhm (illuvial humus)?", "O horizonte espódico é principalmente Bh e/ou Bhm (húmus iluvial)?"],
+      h: [["Spodic horizon identified mainly with the suffixes Bh and/or Bhm, alone or over other horizons. Dark brown to black, little iron."], ["Horizonte espódico identificado principalmente com os sufixos Bh e/ou Bhm, isolado ou sobreposto a outros horizontes. Bruno-escuro a preto, com pouco ferro."]] },
+    { n: "Ferrilúvicos", q: ["Is the spodic horizon mainly a Bs and/or Bsm (illuvial iron)?", "O horizonte espódico é principalmente Bs e/ou Bsm (ferro iluvial)?"],
+      h: [["Spodic horizon identified mainly with the suffixes Bs and/or Bsm, alone or over other horizons. Reddish to yellowish-brown, little humus."], ["Horizonte espódico identificado principalmente com os sufixos Bs e/ou Bsm, isolado ou sobreposto a outros horizontes. Avermelhado a bruno-amarelado, com pouco húmus."]] },
+    { n: "Ferri-humilúvicos", r: true }
+  ],
+  G: [
+    { n: "Tiomórficos", q: ["Are there sulfidic materials or a sulfuric horizon within 100 cm?", "Há materiais sulfídricos ou horizonte sulfúrico dentro de 100 cm?"],
+      h: [["Typical of mangroves and coastal marshes: rotten-egg smell, or very acid (pH below 3.5) yellow-mottled layers once drained."], ["Típico de manguezais e várzeas costeiras: cheiro de ovo podre, ou camadas muito ácidas (pH abaixo de 3,5) com mosqueados amarelos após a drenagem."]] },
+    { n: "Sálicos", q: ["Is there salic character (EC 7 dS/m or more) within 100 cm?", "Há caráter sálico (CE de 7 dS/m ou mais) dentro de 100 cm?"],
+      h: [["Electrical conductivity of the saturation extract 7 dS/m or more at 25 °C in some horizon within 100 cm."], ["Condutividade elétrica do extrato de saturação de 7 dS/m ou mais a 25 °C em algum horizonte dentro de 100 cm."]] },
+    { n: "Melânicos", q: ["Is there a dark surface horizon: histic (under 40 cm), A húmico, A proeminente or A chernozêmico?", "Há horizonte superficial escuro: hístico (menos de 40 cm), A húmico, A proeminente ou A chernozêmico?"],
+      h: [["A thick, dark, humus-rich surface horizon of one of these kinds."], ["Um horizonte superficial espesso, escuro e rico em húmus de um desses tipos."]] },
+    { n: "Háplicos", r: true }
+  ],
+  L: [
+    { n: "Brunos", q: ["Is the upper B brownish and dark, with caráter retrátil and a humus-rich A?", "O B superior é brunado e escuro, com caráter retrátil e A rico em húmus?"],
+      h: [[RETR[0], "A húmico, or organic carbon above 10 g/kg down to 70 cm or deeper.", "Upper B (including BA), moist: mainly hue 7.5YR or yellower with value 4 or less and chroma 6 or less; hue 5YR counts if value is 4 or less and chroma below 6.", "Found in the cool, high plateaus of the South."],
+          [RETR[1], "A húmico, ou carbono orgânico acima de 10 g/kg até 70 cm ou mais.", "B superior (inclusive BA), úmido: predominância de matiz 7,5YR ou mais amarelo com valor 4 ou menos e croma 6 ou menos; matiz 5YR vale se o valor for 4 ou menos e o croma menor que 6.", "Ocorrem nos planaltos altos e frios do Sul."]] },
+    { n: "Amarelos", q: ["Is the B yellowish (hue 7.5YR or yellower)?", "O B é amarelado (matiz 7,5YR ou mais amarelo)?"],
+      h: [["Moist hue 7.5YR or yellower " + B100[0] + "."], ["Matiz úmido 7,5YR ou mais amarelo " + B100[1] + "."]] },
+    { n: "Vermelhos", q: ["Is the B red (hue 2.5YR or redder)?", "O B é vermelho (matiz 2,5YR ou mais vermelho)?"],
+      h: [["Moist hue 2.5YR or redder " + B100[0] + "."], ["Matiz úmido 2,5YR ou mais vermelho " + B100[1] + "."]] },
+    { n: "Vermelho-Amarelos", r: true }
+  ],
+  T: [
+    { n: "Crômicos", q: ["Are the B colours strong and bright (caráter crômico)?", "As cores do B são fortes e vivas (caráter crômico)?"],
+      h: [["Caráter crômico " + B100[0] + ", moist: hue 5YR or redder with value 3 or more and chroma 4 or more; or hue yellower than 5YR up to 10YR with value 4 or more and chroma 4 or more; or hue yellower than 10YR up to 5Y with value 5 or more and chroma above 4."],
+          ["Caráter crômico " + B100[1] + ", cores úmidas: matiz 5YR ou mais vermelho com valor 3 ou mais e croma 4 ou mais; ou matiz mais amarelo que 5YR até 10YR com valor 4 ou mais e croma 4 ou mais; ou matiz mais amarelo que 10YR até 5Y com valor 5 ou mais e croma maior que 4."]] },
+    { n: "Háplicos", r: true }
+  ],
+  R: [
+    { n: "Litólicos", q: ["Is there rock (lithic or fragmentary lithic contact) within 50 cm?", "Há contato lítico ou lítico fragmentário dentro de 50 cm?"],
+      h: [["An A or histic horizon directly over rock, over a C or Cr horizon, or over material with 90% or more rock fragments, with the contact within 50 cm.", "A thin B incipiente, too thin to be diagnostic, may be present."],
+          ["Horizonte A ou hístico diretamente sobre a rocha, sobre horizonte C ou Cr, ou sobre material com 90% ou mais de fragmentos de rocha, com o contato dentro de 50 cm.", "Pode haver um B incipiente delgado, sem espessura para ser diagnóstico."]] },
+    { n: "Flúvicos", q: ["Is the soil formed in alluvial sediments, with fluvic character?", "O solo é formado de sedimentos aluviais, com caráter flúvico?"],
+      h: [["Alluvial sediments: an A over C layers with fluvic character (erratic changes in particle size or organic carbon with depth) within 150 cm.", "A B incipiente under 10 cm is allowed; no marked gleying within 50 cm."],
+          ["Sedimentos aluviais: horizonte A sobre camadas C com caráter flúvico (variação errática de granulometria ou de carbono orgânico) dentro de 150 cm.", "Admite B incipiente com menos de 10 cm; sem gleização expressiva dentro de 50 cm."]] },
+    { n: "Regolíticos", q: ["With no rock within 50 cm, are there weatherable minerals or weathered rock fragments?", "Sem contato lítico dentro de 50 cm, há minerais alteráveis ou fragmentos de rocha alterada?"],
+      h: [["No lithic or fragmentary lithic contact within 50 cm; an A or histic horizon over C or Cr (an incipient B too thin to be diagnostic is allowed).", "And at least one of: 4% or more weatherable primary minerals in the total sand (per 100 g of fine earth) in some horizon within 150 cm; or 5% or more (by volume) of the C or Cr within 150 cm as semi-weathered rock fragments, saprolite or pseudomorphs of the rock."],
+          ["Sem contato lítico ou lítico fragmentário dentro de 50 cm; horizonte A ou hístico sobre C ou Cr (admite B em início de formação, sem espessura para ser diagnóstico).", "E pelo menos um destes: 4% ou mais de minerais primários alteráveis na fração areia total (referidos a 100 g de TFSA) em algum horizonte dentro de 150 cm; ou 5% ou mais do volume do C ou Cr, dentro de 150 cm, com fragmentos de rocha semi-intemperizada, saprólito ou pseudomorfos da rocha."]] },
+    { n: "Quartzarênicos", q: ["Is it a deep, quartz-rich sand (sand or loamy sand to 150 cm)?", "É uma areia quartzosa profunda (areia ou areia franca até 150 cm)?"],
+      h: [["No lithic contact within 50 cm; A–C sequence.", "Sand or loamy sand in all horizons to 150 cm or more (or to a lithic contact); the sand is 95% or more quartz, with practically no weatherable minerals."],
+          ["Sem contato lítico dentro de 50 cm; sequência A–C.", "Textura areia ou areia franca em todos os horizontes até 150 cm ou mais (ou até o contato lítico); a areia tem 95% ou mais de quartzo, praticamente sem minerais alteráveis."]] }
+  ],
+  N: [
+    { n: "Brunos", q: ["Is the upper B brownish and dark, with caráter retrátil and a humus-rich A?", "O B superior é brunado e escuro, com caráter retrátil e A rico em húmus?"],
+      h: [[RETR[0], "A húmico, or organic carbon above 10 g/kg down to 40 cm or deeper.", "Upper B (including BA), moist: mainly hue 7.5YR or yellower with value 4 or less and chroma 6 or less; hue 5YR counts if value is 4 or less and chroma below 6."],
+          [RETR[1], "A húmico, ou carbono orgânico acima de 10 g/kg até 40 cm ou mais.", "B superior (inclusive BA), úmido: predominância de matiz 7,5YR ou mais amarelo com valor 4 ou menos e croma 6 ou menos; matiz 5YR vale se o valor for 4 ou menos e o croma menor que 6."]] },
+    { n: "Vermelhos", q: ["Is the B red (hue 2.5YR or redder)?", "O B é vermelho (matiz 2,5YR ou mais vermelho)?"],
+      h: [["Moist hue 2.5YR or redder in most of the first 100 cm of the B (excluding BA)."], ["Matiz úmido 2,5YR ou mais vermelho na maior parte dos primeiros 100 cm do B (exclusive BA)."]] },
+    { n: "Háplicos", r: true }
+  ],
+  O: [
+    { n: "Tiomórficos", q: ["Are there sulfidic materials or a sulfuric horizon within 100 cm?", "Há materiais sulfídricos ou horizonte sulfúrico dentro de 100 cm?"],
+      h: [["Typical of coastal organic soils: rotten-egg smell, or very acid (pH below 3.5) layers once drained."], ["Típico de solos orgânicos costeiros: cheiro de ovo podre, ou camadas muito ácidas (pH abaixo de 3,5) após a drenagem."]] },
+    { n: "Fólicos", q: ["Is it a well-drained organic soil with an O histic horizon (never waterlogged for long)?", "É um solo orgânico bem drenado, com horizonte O hístico (nunca encharcado por muito tempo)?"],
+      h: [["Saturated with water for no more than 30 consecutive days a year, in the wettest season, with an O histic horizon (litter of leaves, fine twigs, roots or bark).", "Typical of humid, high-altitude areas, often over rock."],
+          ["Saturado com água por no máximo 30 dias consecutivos por ano, no período mais chuvoso, com horizonte O hístico (folhas, galhos finos, raízes ou cascas).", "Típico de áreas altas e úmidas, muitas vezes sobre rocha."]] },
+    { n: "Háplicos", r: true }
+  ],
+  S: [
+    { n: "Nátricos", q: ["Does the B plânico have sodic character?", "O B plânico tem caráter sódico?"],
+      h: [["Caráter sódico (sodium saturation, 100 Na⁺/T, of 15% or more) directly below the A or E horizon within 200 cm.", "Or sodic character in one or more horizons within 150 cm, where the upper B has exchangeable Mg²⁺ + Na⁺ greater than Ca²⁺ + H⁺."], ["Caráter sódico (saturação por sódio, 100 Na⁺/T, de 15% ou mais) imediatamente abaixo do horizonte A ou E, dentro de 200 cm.", "Ou caráter sódico em um ou mais horizontes dentro de 150 cm, desde que a parte superior do B tenha Mg²⁺ + Na⁺ trocáveis maior que Ca²⁺ + H⁺."]] },
+    { n: "Háplicos", r: true }
+  ],
+  F: [
+    { n: "Pétricos", q: ["Is the plinthic layer already hardened (concretionary or litoplinthic horizon)?", "A camada de plintita já está endurecida (horizonte concrecionário ou litoplíntico)?"],
+      h: [["A concretionary horizon (many ironstone nodules) or a litoplinthic horizon (continuous ironstone), except when a plinthic horizon lies above it."], ["Horizonte concrecionário (muitas concreções de petroplintita) ou litoplíntico (petroplintita contínua), exceto quando precedido por horizonte plíntico."]] },
+    { n: "Argilúvicos", q: ["Is there a plinthic horizon together with a B textural or argilúvico character?", "Há horizonte plíntico junto com B textural ou caráter argilúvico?"],
+      h: [["Clearly more clay in the B than above, or clay skins, together with the plinthic horizon."], ["Claramente mais argila no B que acima, ou cerosidade, junto com o horizonte plíntico."]] },
+    { n: "Háplicos", r: true }
+  ],
+  V: [
+    { n: "Hidromórficos", q: ["Is there a glei horizon within 50 cm (or 50–100 cm below grey horizons)?", "Há horizonte glei dentro de 50 cm (ou entre 50 e 100 cm, abaixo de horizontes acinzentados)?"],
+      h: [["Glei horizon starting within 50 cm, or between 50 and 100 cm when the horizons above it have greyish colours."], ["Horizonte glei começando dentro de 50 cm, ou entre 50 e 100 cm quando os horizontes acima têm cores acinzentadas."]] },
+    { n: "Ebânicos", q: ["Are the B and/or C horizons within 100 cm very dark, near black (caráter ebânico)?", "Os horizontes B e/ou C dentro de 100 cm são muito escuros, quase pretos (caráter ebânico)?"],
+      h: [[EBAN[0] + " In most of the B and/or C horizons (including BA or CA) within 100 cm."], [EBAN[1] + " Na maior parte dos horizontes B e/ou C (inclusive BA ou CA) dentro de 100 cm."]] },
+    { n: "Háplicos", r: true }
+  ]
+};
+
+const $ = id => document.getElementById(id);
+const root = $("br-root"), view = $("br-view");
+let lang = "en";
+try { const s = localStorage.getItem("ra-br-lang"); if (s === "en" || s === "pt") lang = s; } catch (e) { }
+if (location.hash === "#br-pt") lang = "pt";
+let path = [], started = false;
+const L = () => T[lang], li = () => lang === "en" ? 0 : 1;
+
+/* Walk the answers: orders first, then the suborders of the order reached. */
+function state() {
+  let oi = 0, order = null, si = 0, k = 0;
+  for (; k < path.length; k++) {
+    const a = path[k];
+    if (!order) {
+      if (a.ans === "y") { order = ORDERS[oi]; si = 0; }
+      else { oi++; }
+    } else {
+      if (a.ans === "y") return { done: true, order, sub: SUB[order.c][si] };
+      si++;
+    }
+  }
+  if (!order) return oi >= ORDERS.length ? { done: true, order: null } : { ask: "order", o: ORDERS[oi], n: oi };
+  const list = SUB[order.c];
+  if (si >= list.length) return { done: true, order, sub: null };
+  if (list[si].r) return { done: true, order, sub: list[si] };
+  return { ask: "sub", order, s: list[si], n: si };
+}
+function nodeQ(p) { // question text for a trail entry
+  return p.kind === "order" ? ORDERS[p.i].q[li()] : SUB[p.c][p.i].q[li()];
+}
+function render() {
+  root.setAttribute("lang", lang);
+  $("br-tag").textContent = L().tag; $("br-restart").textContent = L().restart;
+  $("br-foot").innerHTML = L().foot; $("br-lang").value = lang;
+  const st = started ? state() : null;
+  $("br-restart").hidden = !started;
+  $("br-bar").style.width = (!st ? 0 : st.done ? 100 : Math.min(95, path.length / 15 * 100)) + "%";
+  if (!started) return intro();
+  if (st.done) return result(st);
+  question(st);
+}
+function intro() {
+  view.innerHTML = `<div class="wk-card"><h1>${L().title}</h1><p>${L().lead}</p>
+    <ul class="intro">${L().bullets.map(b => `<li>${b}</li>`).join("")}</ul>
+    <button class="primary" id="br-go">${L().start}</button></div>`;
+  $("br-go").onclick = () => { started = true; render(); };
+}
+function question(st) {
+  const l = li(), isO = st.ask === "order";
+  const q = isO ? st.o.q[l] : st.s.q[l], help = isO ? st.o.h[l] : st.s.h[l];
+  const step = isO ? `${L().order} · ${L().q} ${path.length + 1}` : `${st.order.n} · ${L().suborder} · ${L().q} ${path.length + 1}`;
+  view.innerHTML = `<div class="step">${step}</div>
+    <div class="wk-card"><h1>${q}</h1>
+      <div class="answers"><button class="yes" data-a="y">${L().yes}</button><button data-a="n">${L().no}</button><button class="unsure" data-a="u">${L().unsure}</button></div>
+      <details><summary>${L().how}</summary><ul>${help.map(h => `<li>${h}</li>`).join("")}</ul></details></div>
+    <div class="wk-nav"><button id="br-back" ${path.length ? "" : "hidden"}>${L().back}</button><span></span></div>`;
+  const rec = isO ? { kind: "order", i: st.n } : { kind: "sub", c: st.order.c, i: st.n };
+  view.querySelectorAll("[data-a]").forEach(b => b.onclick = () => { path.push({ ...rec, ans: b.dataset.a }); render(); root.scrollIntoView({ block: "start" }); });
+  const bk = $("br-back"); if (bk) bk.onclick = () => { path.pop(); render(); };
+}
+function result(st) {
+  const l = li();
+  let name, desc;
+  if (!st.order) { name = L().none; desc = L().noneDesc; }
+  else if (!st.sub) { name = `${st.order.n} <span style="font-size:1rem;font-weight:500;color:var(--ink-3)">(${L().noSub})</span>`; desc = st.order.d[l] + " " + L().noSubDesc; }
+  else { name = `${st.order.n} ${st.sub.n}`; desc = st.order.d[l]; }
+  const unsure = path.filter(p => p.ans === "u");
+  const alt = p => {
+    if (p.kind === "order") { const o = ORDERS[p.i]; return o.n; }
+    const s = SUB[p.c][p.i]; return `${ORDERS.find(o => o.c === p.c).n} ${s.n}`;
+  };
+  view.innerHTML = `<div class="step">${L().result}</div>
+    <div class="wk-card result">
+      ${st.order ? `<span class="code">${st.order.c}</span>` : ""}
+      <div class="rsg">${name}</div><p>${desc}</p>
+      ${unsure.length ? `<div class="flag"><strong>${L().provisional}</strong> ${L().unsureN(unsure.length)}<ul style="margin:8px 0 0; padding-left:18px">${unsure.map(p => `<li>${nodeQ(p)}${L().ifYes(alt(p))}</li>`).join("")}</ul></div>` : ""}
+      <div class="trail"><h2 style="margin-top:14px">${L().answers}</h2>${path.map(p => `<div><span>${nodeQ(p)}</span><span class="a ${p.ans}">${p.ans === "y" ? L().yes : p.ans === "n" ? L().no : L().unsure}</span></div>`).join("")}</div>
+      <button class="primary" id="br-again">${L().again}</button>
+      <button class="secondary" id="br-back2">${L().change}</button>
+    </div>`;
+  $("br-again").onclick = () => { path = []; render(); root.scrollIntoView({ block: "start" }); };
+  $("br-back2").onclick = () => { path.pop(); render(); };
+}
+$("br-restart").onclick = () => { path = []; started = false; render(); };
+$("br-lang").onchange = e => { lang = e.target.value; try { localStorage.setItem("ra-br-lang", lang); } catch (err) { } render(); };
+render();
+})();
+</script>
+</div>
 <script>
 (function () {
   const btns = document.querySelectorAll(".keyswitch [data-key]");
@@ -3688,8 +4074,9 @@ render();
     if (push) history.replaceState(null, "", "#" + k);
   }
   btns.forEach(b => b.onclick = () => show(b.dataset.key, true));
-  show(location.hash === "#sa" ? "sa" : "wrb", false);
-  window.addEventListener("hashchange", () => { if (location.hash === "#sa" || location.hash === "#wrb") show(location.hash.slice(1), false); });
+  const paneOf = h => h === "#sa" ? "sa" : (h === "#br" || h === "#br-pt") ? "br" : (h === "#wrb" || h.startsWith("#wrb-")) ? "wrb" : null;
+  show(paneOf(location.hash) || "wrb", false);
+  window.addEventListener("hashchange", () => { const k = paneOf(location.hash); if (k) show(k, false); });
 })();
 </script>
 ```
