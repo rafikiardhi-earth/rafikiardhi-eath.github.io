@@ -67,6 +67,12 @@ website:
     left: "© 2026 RafikiArdhi LLC · Carbondale, Colorado · [Privacy](/privacy.qmd)"
     right:
       - text: "*Rafiki Ardhi* — Kiswahili for “land friend”"
+      - icon: archive
+        href: https://zenodo.org/communities/rafikiardhi
+        aria-label: RafikiArdhi on Zenodo
+      - icon: person-badge
+        href: https://orcid.org/0000-0002-5187-9946
+        aria-label: ORCID
       - icon: envelope
         href: mailto:tflynn@rafikiardhi.earth
         aria-label: Email
