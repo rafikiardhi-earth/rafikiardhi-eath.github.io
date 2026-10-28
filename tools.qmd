@@ -13,7 +13,7 @@ citation:
       affiliation: RafikiArdhi LLC
   issued: 2026
   version: "1.0"
-  # doi: 10.5281/zenodo.XXXXXXX   # add the Zenodo concept DOI once minted
+  doi: 10.5281/zenodo.23742278
 ---
 
 ```{=html}
@@ -4208,7 +4208,7 @@ document.querySelectorAll("nav.rk-tabs button[data-tip]").forEach(btn => { const
     year: 2026,
     collection: "Tools for researchers: soil and environmental analysis in the browser",
     version: "1.0",
-    doi: ""            // e.g. "10.5281/zenodo.XXXXXXX" once minted
+    doi: "10.5281/zenodo.23742278"
   };
   const base = location.origin + location.pathname;
   document.querySelectorAll("section.tool[id^='tab-']").forEach(sec => {
@@ -4217,7 +4217,7 @@ document.querySelectorAll("nav.rk-tabs button[data-tip]").forEach(btn => { const
     const tab = sec.id.replace(/^tab-/, "");
     const url = base + "#" + tab;
     const link = SOFTWARE.doi
-      ? `<a href="https://doi.org/${SOFTWARE.doi}">doi:${SOFTWARE.doi}</a>`
+      ? `<a href="https://doi.org/${SOFTWARE.doi}">https://doi.org/${SOFTWARE.doi}</a>`
       : `<a href="${url}">${url}</a>`;
     const hasRefs = !!sec.querySelector(".refs");
     const p = document.createElement("p");

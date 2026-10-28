@@ -10,6 +10,12 @@ All tools are version 1.0. Persistent identifiers (DOIs) will be added here as t
 
 ## Tools for researchers {#tools}
 
+Cite the collection:
+
+- Flynn, T. (2026). *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. <https://doi.org/10.5281/zenodo.23742278>
+
+or a single tool:
+
 - Flynn, T. (2026). Profile harmoniser. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#spline](tools.html#spline)
 - Flynn, T. (2026). Soil carbon stocks. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#carbon](tools.html#carbon)
 - Flynn, T. (2026). Water retention: compare pedotransfer functions. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#water](tools.html#water)
@@ -85,6 +91,7 @@ For frost depth in research, the [researcher version](#tools) in Tools for resea
   title   = {Tools for researchers: soil and environmental analysis in the browser},
   year    = {2026},
   version = {1.0},
+  doi     = {10.5281/zenodo.23742278},
   url     = {https://rafikiardhi.earth/tools.html}
 }
 
