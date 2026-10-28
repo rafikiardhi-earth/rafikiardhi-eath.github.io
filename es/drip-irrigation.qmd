@@ -1,19 +1,12 @@
 ---
-title: "Calculadora de riego por goteo"
-description: "Cuánto tiempo regar por goteo, cuántos goteros poner por planta, y si su zona o su manguera pueden abastecerlos a todos."
-lang: es
+title: "Drip irrigation calculator"
+description: "How long to run drip irrigation, how many emitters per plant, and whether your zone or tubing can supply them all."
 anchor-sections: false
-include-in-header:
-  - file: ../_hm-lang.html
-  - file: ../_hm-head.html
-  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/drip-irrigation.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/drip-irrigation.html">'
+include-in-header: _hm-head.html
+include-after-body: _cite-line.html
 ---
 
-::: {.hm-lang}
-[English](../drip-irrigation.qmd){lang="en"}
-:::
-
-El goteo lleva el agua a las raíces, pero los tiempos de riego casi siempre se adivinan. Escriba lo que necesita cada planta y lo que dan sus goteros; esta herramienta calcula el tiempo de riego y revisa que la zona pueda abastecerlo.
+Drip puts water at the roots, but run times are usually guesses. Enter what each plant needs and what your emitters deliver; this works out the run time and checks that the zone can supply it.
 
 ```{=html}
 <div class="hmc" id="dr"></div>
@@ -23,34 +16,34 @@ El goteo lleva el agua a las raíces, pero los tiempos de riego casi siempre se 
   const SIZE = { small: [0.5, 1], perennial: [1.5, 1], shrub: [3, 2], large: [6, 3], tree: [10, 4], veg: [1, 1] };
   const LINES = { half: 200, threeq: 450, quarter: 25 }; // gal/hr a single run can reasonably carry
   HM.tool({
-    id: 'dr', step: 'Plantas',
+    id: 'dr', step: 'Plants',
     inputs: [
-      { k: 'size', l: 'Tipo de planta', t: 'select', d: 'perennial', opts: [['small', 'Perenne pequeña o cubresuelos'], ['perennial', 'Perenne grande o arbusto pequeño'], ['shrub', 'Arbusto mediano (3–5 pies)'], ['large', 'Arbusto grande'], ['tree', 'Árbol joven (primeros 2–3 años)'], ['veg', 'Planta de hortaliza']] },
-      { k: 'n', l: 'Número de plantas en esta zona', t: 'num', d: 10, w: 3 },
-      { k: 'gpw', l: 'Agua por planta por semana', t: 'gal', d: (u, v) => { const s = SIZE[(v && v.size) || 'perennial']; return u === 'us' ? s[0] : Math.round(s[0] * 3.785 * 2) / 2; }, w: 3, h: 'Típico para clima de verano caluroso y seco. Menos en primavera y otoño, y mucho menos para plantas nativas o de bajo consumo ya establecidas.' },
-      { t: 'sec', l: 'Goteros' },
-      { k: 'em', l: 'Goteros por planta', t: 'num', d: (u, v) => SIZE[(v && v.size) || 'perennial'][1], w: 3 },
-      { k: 'gph', l: 'Caudal por gotero', t: 'flow', d: { us: 1, si: 4 }, w: 3, h: 'Viene impreso en el gotero, muchas veces por color: 0.5, 1 y 2 gal/h (2, 4 y 8 L/h) son comunes.' },
-      { k: 'days', l: 'Días de riego por semana', t: 'select', d: '2', opts: [['1', '1'], ['2', '2'], ['3', '3'], ['7', 'Todos los días']], w: 3 },
-      { k: 'line', l: 'Manguera de este tramo', t: 'select', d: 'half', w: 3, opts: [['half', 'Línea principal de poliducto de ½ pulgada'], ['threeq', 'Línea principal de poliducto de ¾ de pulgada'], ['quarter', 'Microtubo de ¼ de pulgada']] }
+      { k: 'size', l: 'Plant type', t: 'select', d: 'perennial', opts: [['small', 'Small perennial or groundcover'], ['perennial', 'Large perennial or small shrub'], ['shrub', 'Medium shrub (3–5 ft)'], ['large', 'Large shrub'], ['tree', 'Young tree (first 2–3 years)'], ['veg', 'Vegetable plant']] },
+      { k: 'n', l: 'Number of plants on this zone', t: 'num', d: 10, w: 3 },
+      { k: 'gpw', l: 'Water per plant per week', t: 'gal', d: (u, v) => { const s = SIZE[(v && v.size) || 'perennial']; return u === 'us' ? s[0] : Math.round(s[0] * 3.785 * 2) / 2; }, w: 3, h: 'Typical for hot, dry summer weather. Less in spring and fall, much less for established native and xeric plants.' },
+      { t: 'sec', l: 'Emitters' },
+      { k: 'em', l: 'Emitters per plant', t: 'num', d: (u, v) => SIZE[(v && v.size) || 'perennial'][1], w: 3 },
+      { k: 'gph', l: 'Flow per emitter', t: 'flow', d: { us: 1, si: 4 }, w: 3, h: 'Printed on the emitter, often colour-coded: 0.5, 1 and 2 gal/hr (2, 4 and 8 L/hr) are common.' },
+      { k: 'days', l: 'Watering days per week', t: 'select', d: '2', opts: [['1', '1'], ['2', '2'], ['3', '3'], ['7', 'Every day']], w: 3 },
+      { k: 'line', l: 'Tubing for this run', t: 'select', d: 'half', w: 3, opts: [['half', '½ in poly mainline'], ['threeq', '¾ in poly mainline'], ['quarter', '¼ in micro tubing']] }
     ],
     onChange(k, api) { if (k === 'size') { const s = SIZE[api.get('size')]; api.setDisp('gpw', api.units() === 'us' ? s[0] : Math.round(s[0] * 3.785 * 2) / 2); api.set('em', s[1]); } },
     compute(v, U) {
-      if (!(v.n > 0) || !(v.gpw > 0) || !(v.em > 0) || !(v.gph > 0)) return U.empty('Escriba las plantas, el agua que necesitan y los goteros.');
+      if (!(v.n > 0) || !(v.gpw > 0) || !(v.em > 0) || !(v.gph > 0)) return U.empty('Enter the plants, water need and emitters.');
       const days = +v.days, perWater = v.gpw / days, plantFlow = v.em * v.gph, min = perWater / plantFlow * 60;
       const zone = v.n * plantFlow, cap = LINES[v.line] * 3.785411784;
-      let h = U.big('Riegue', `${HM.fmt(Math.ceil(min), 0)} min`, `${days === 7 ? 'todos los días' : days + ' día' + (days > 1 ? 's' : '') + ' por semana'}, dando a cada planta ${U.f(perWater, 'gal', 2)} cada vez.`);
-      h += U.kv([['Caudal por planta', U.f(plantFlow, 'flow', 2)], ['Caudal de la zona', `${U.f(zone, 'flow', 1)} (${U.us ? HM.fmt(zone / 3.785411784 / 60, 2) + ' gal/min' : HM.fmt(zone / 60, 1) + ' L/min'})`], ['La manguera puede llevar unos', U.f(cap, 'flow', 0)]]);
-      if (zone > cap) h += U.note(`La zona necesita más caudal del que lleva un tramo de esta manguera. Divídala en ${Math.ceil(zone / cap)} tramos o zonas, o use una manguera más grande.`, 'bad');
-      if (min > 240) h += U.note('Es un riego muy largo. Ponga más goteros por planta (mejor para zonas de raíces anchas) en vez de regar durante horas.');
-      if (min < 10) h += U.note('Los riegos muy cortos solo mojan la superficie. Riegue con menos frecuencia y por más tiempo, o use goteros de menor caudal.');
-      h += U.note('Ponga en la misma zona plantas con necesidades parecidas. Para una planta grande entre plantas pequeñas, agregue goteros en vez de tiempo. Conforme crecen los árboles y arbustos, mueva los goteros hacia afuera, hacia el borde de la copa.', 'good');
+      let h = U.big('Run for', `${HM.fmt(Math.ceil(min), 0)} min`, `${days === 7 ? 'every day' : days + ' day' + (days > 1 ? 's' : '') + ' a week'}, giving each plant ${U.f(perWater, 'gal', 2)} each time.`);
+      h += U.kv([['Flow per plant', U.f(plantFlow, 'flow', 2)], ['Zone flow', `${U.f(zone, 'flow', 1)} (${U.us ? HM.fmt(zone / 3.785411784 / 60, 2) + ' gal/min' : HM.fmt(zone / 60, 1) + ' L/min'})`], ['Tubing can carry about', U.f(cap, 'flow', 0)]]);
+      if (zone > cap) h += U.note(`The zone needs more flow than one run of this tubing carries. Split it into ${Math.ceil(zone / cap)} runs or zones, or use larger tubing.`, 'bad');
+      if (min > 240) h += U.note('That is a very long run. Add emitters per plant (better for wide root zones) instead of running for hours.');
+      if (min < 10) h += U.note('Very short runs give shallow wetting. Water less often for longer, or use lower-flow emitters.');
+      h += U.note('Put plants with similar needs on the same zone. For a big plant among small ones, add emitters rather than run time. As trees and shrubs grow, move emitters out toward the drip line.', 'good');
       return {
         html: h, work: [
-          `Agua por riego = ${U.f(v.gpw, 'gal', 2)} por semana ÷ ${days} = ${U.f(perWater, 'gal', 2)} por planta`,
-          `Caudal por planta = ${HM.fmt(v.em, 0)} goteros × ${U.f(v.gph, 'flow', 2)} = ${U.f(plantFlow, 'flow', 2)}`,
-          `Tiempo de riego = ${U.f(perWater, 'gal', 2)} ÷ ${U.f(plantFlow, 'flow', 2)} × 60 = ${HM.fmt(min, 1)} min`,
-          `Caudal de la zona = ${HM.fmt(v.n, 0)} plantas × ${U.f(plantFlow, 'flow', 2)} = ${U.f(zone, 'flow', 1)}`
+          `Water per watering = ${U.f(v.gpw, 'gal', 2)} per week ÷ ${days} = ${U.f(perWater, 'gal', 2)} per plant`,
+          `Flow per plant = ${HM.fmt(v.em, 0)} emitters × ${U.f(v.gph, 'flow', 2)} = ${U.f(plantFlow, 'flow', 2)}`,
+          `Run time = ${U.f(perWater, 'gal', 2)} ÷ ${U.f(plantFlow, 'flow', 2)} × 60 = ${HM.fmt(min, 1)} min`,
+          `Zone flow = ${HM.fmt(v.n, 0)} plants × ${U.f(plantFlow, 'flow', 2)} = ${U.f(zone, 'flow', 1)}`
         ]
       };
     }
@@ -59,9 +52,9 @@ El goteo lleva el agua a las raíces, pero los tiempos de riego casi siempre se 
 </script>
 ```
 
-## Consejos
+## Tips
 
-- **Riegue a fondo y con menos frecuencia.** Los riegos más largos y espaciados mojan una zona de raíces más profunda que los riegos cortos diarios, y las raíces profundas aguantan mejor el calor.
-- **Los goteros van en la orilla de las raíces,** no pegados al tronco o al tallo. En árboles y arbustos, eso significa moverlos hacia afuera conforme crece la planta.
-- **Las plantas recién sembradas necesitan agua más seguido** durante su primera temporada. Las plantas nativas y de bajo consumo ya establecidas muchas veces necesitan poca o nada fuera de una sequía.
-- **Revise el filtro y purgue las líneas** cada primavera. Los goteros tapados son la razón más común por la que una zona de goteo deja de funcionar.
+- **Water deeply, less often.** Infrequent, longer runs wet a deeper root zone than daily short ones, and deep roots handle heat better.
+- **Emitters belong at the edge of the roots,** not against the trunk or stem. For trees and shrubs that means moving them outward as the plant grows.
+- **New plantings need more frequent water** for their first season. Established native and low-water plants often need little or none outside drought.
+- **Check the filter and flush the lines** each spring. Clogged emitters are the most common reason a drip zone stops working.

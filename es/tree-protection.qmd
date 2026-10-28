@@ -1,21 +1,13 @@
 ---
-title: "Calculadora de la zona de protección de árboles"
-description: "Cuánto espacio cercar alrededor de un árbol durante una construcción, una excavación o trabajos de jardinería, según el tamaño del tronco, la edad y la tolerancia de la especie."
-lang: es
+title: "Tree protection zone calculator"
+description: "How much space to fence off around a tree during construction, digging or landscaping, based on trunk size, age and species tolerance."
 anchor-sections: false
-include-in-header:
-  - file: ../_hm-lang.html
-  - file: ../_hm-head.html
-  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/tree-protection.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/tree-protection.html">'
+include-in-header: _hm-head.html
 ---
 
-::: {.hm-lang}
-[English](../tree-protection.qmd){lang="en"}
-:::
+Most of a tree's roots are in the top 12–18 inches of soil and spread well beyond the branches. Driving, stockpiling, trenching or changing the grade over them can kill a mature tree, often a few years later. Before any work, fence off a protection zone.
 
-La mayoría de las raíces de un árbol están en las primeras 12–18 pulgadas del suelo y se extienden mucho más allá de las ramas. Manejar encima, amontonar material, abrir zanjas o cambiar el nivel del terreno sobre ellas puede matar un árbol adulto, muchas veces unos años después. Antes de cualquier trabajo, cerque una zona de protección.
-
-**Mida el tronco** a 4½ pies (1.4 m) del suelo. Rodéelo con una cinta para medir la circunferencia, o mida el diámetro directamente.
+**Measure the trunk** at 4½ ft (1.4 m) above the ground. Wrap a tape around it for the circumference, or measure the diameter directly.
 
 ```{=html}
 <div class="hmc" id="tp"></div>
@@ -23,35 +15,34 @@ La mayoría de las raíces de un árbol están en las primeras 12–18 pulgadas 
 (function () {
   // Protection-zone radius as a multiple of trunk diameter, by species tolerance and age
   const F = { good: { young: 6, mature: 8, old: 12 }, mod: { young: 8, mature: 12, old: 15 }, poor: { young: 12, mature: 15, old: 18 } };
-  const AGE = { young: 'joven', mature: 'adulto', old: 'viejo' };
   HM.tool({
-    id: 'tp', step: 'El árbol',
+    id: 'tp', step: 'The tree',
     inputs: [
-      { k: 'how', l: 'Medí la', t: 'seg', d: 'circ', opts: [['circ', 'Circunferencia (alrededor)'], ['dia', 'Diámetro (de lado a lado)']] },
-      { k: 'c', l: 'Circunferencia del tronco', t: 'dia', show: v => v.how === 'circ' },
-      { k: 'd', l: 'Diámetro del tronco', t: 'dia', show: v => v.how === 'dia' },
-      { k: 'age', l: 'Edad', t: 'select', d: 'mature', opts: [['young', 'Joven (menos de más o menos ⅕ de su vida)'], ['mature', 'Adulto'], ['old', 'Viejo o en decadencia']] },
-      { k: 'tol', l: 'Qué tan bien tolera esta especie que le muevan las raíces', t: 'select', d: 'mod', opts: [['good', 'Bien (p. ej. muchos maples, olmos, acacias de tres espinas, sauces)'], ['mod', 'Regular o no estoy seguro'], ['poor', 'Mal (p. ej. muchos robles, hayas, coníferas, y los árboles viejos en general)']], h: 'La tolerancia varía según la especie y el lugar. Si tiene duda, escoja regular o mal.' }
+      { k: 'how', l: 'I measured the', t: 'seg', d: 'circ', opts: [['circ', 'Circumference (around)'], ['dia', 'Diameter (across)']] },
+      { k: 'c', l: 'Trunk circumference', t: 'dia', show: v => v.how === 'circ' },
+      { k: 'd', l: 'Trunk diameter', t: 'dia', show: v => v.how === 'dia' },
+      { k: 'age', l: 'Age', t: 'select', d: 'mature', opts: [['young', 'Young (under about ⅕ of its life span)'], ['mature', 'Mature'], ['old', 'Old or in decline']] },
+      { k: 'tol', l: 'How well this species tolerates root disturbance', t: 'select', d: 'mod', opts: [['good', 'Good (e.g. many maples, elms, honeylocust, willows)'], ['mod', 'Moderate or not sure'], ['poor', 'Poor (e.g. many oaks, beech, conifers, older trees in general)']], h: 'Tolerance varies with species and site. When in doubt, choose moderate or poor.' }
     ],
     compute(v, U) {
       const D = v.how === 'circ' ? (v.c > 0 ? v.c / Math.PI : null) : v.d;
-      if (!(D > 0)) return U.empty('Escriba la medida del tronco.');
+      if (!(D > 0)) return U.empty('Enter the trunk measurement.');
       const f = F[v.tol][v.age], r = D * f; // metres
       const area = Math.PI * r * r, fence = 2 * Math.PI * r;
       const simple = U.us ? D / 0.0254 * 0.3048 : D * 12;
-      let h = U.big('Proteja un círculo', `de ${U.f(r, 'len', 1)} de radio`, `medido desde el tronco en todas direcciones: ${U.f(2 * r, 'len', 0)} de lado a lado.`);
-      h += U.kv([['Diámetro del tronco', U.f(D, 'dia', 1)], ['Área a proteger', U.f(area, 'area', 0)], ['Cerca para rodearla', U.f(fence, 'len', 0)]]);
-      h += `<h3>Dentro de la zona</h3><ul class="plain"><li>No manejar, estacionarse ni guardar materiales, tierra o equipo.</li><li>No abrir zanjas ni excavar. Lleve las líneas de servicios por fuera, o haga un túnel (perforación) por debajo de las raíces.</li><li>No subir ni bajar el nivel del terreno, ni siquiera unas pulgadas. Dos pulgadas de relleno pueden asfixiar las raíces.</li><li>No lavar concreto, pintura ni combustible.</li><li>Ponga 4–6 pulgadas de astillas de madera dentro de la cerca y riegue en temporadas secas.</li></ul>`;
-      if (r > 15) h += U.note('Es una zona grande. Si hay que trabajar dentro, primero hable con un arbolista certificado: hay formas de reducir el daño, como podar raíces con anticipación, tapetes de protección del suelo o excavación con aire a presión.');
-      return { html: h, work: [v.how === 'circ' ? `Diámetro = circunferencia ÷ π = ${U.f(v.c, 'dia', 1)} ÷ 3.1416 = ${U.f(D, 'dia', 1)}` : null, `Radio = ${f} × diámetro (tolerancia ${v.tol === 'good' ? 'buena' : v.tol === 'mod' ? 'regular' : 'mala'}, árbol ${AGE[v.age]}) = ${f} × ${U.f(D, 'dia', 1)} = ${U.f(r, 'len', 1)}`, `Como comparación, la regla sencilla de 1 pie de radio por cada pulgada de diámetro da ${U.f(U.us ? D / 0.0254 * 0.3048 : D * 12, 'len', 1)}`, `Área = π × r² = ${U.f(area, 'area', 0)}; cerca = 2 × π × r = ${U.f(fence, 'len', 0)}`].filter(Boolean) };
+      let h = U.big('Protect a circle', `${U.f(r, 'len', 1)} radius`, `measured out from the trunk in every direction: ${U.f(2 * r, 'len', 0)} across.`);
+      h += U.kv([['Trunk diameter', U.f(D, 'dia', 1)], ['Area to protect', U.f(area, 'area', 0)], ['Fencing to go around it', U.f(fence, 'len', 0)]]);
+      h += `<h3>Inside the zone</h3><ul class="plain"><li>No driving, parking or storing materials, soil or equipment.</li><li>No trenching or digging. Route utilities around it, or tunnel (bore) under the roots.</li><li>No raising or lowering the grade, even by a few inches. Two inches of fill can suffocate roots.</li><li>No washing out concrete, paint or fuel.</li><li>Spread 4–6 in of wood chips inside the fence and water during dry spells.</li></ul>`;
+      if (r > 15) h += U.note('That is a big zone. If work has to happen inside it, talk to a certified arborist first: there are ways to reduce damage, like root pruning in advance, ground protection mats or air-spade excavation.');
+      return { html: h, work: [v.how === 'circ' ? `Diameter = circumference ÷ π = ${U.f(v.c, 'dia', 1)} ÷ 3.1416 = ${U.f(D, 'dia', 1)}` : null, `Radius = ${f} × diameter (${v.tol === 'good' ? 'good' : v.tol === 'mod' ? 'moderate' : 'poor'} tolerance, ${v.age} tree) = ${f} × ${U.f(D, 'dia', 1)} = ${U.f(r, 'len', 1)}`, `For comparison, the simple rule of 1 ft of radius per inch of diameter gives ${U.f(U.us ? D / 0.0254 * 0.3048 : D * 12, 'len', 1)}`, `Area = π × r² = ${U.f(area, 'area', 0)}; fence = 2 × π × r = ${U.f(fence, 'len', 0)}`].filter(Boolean) };
     }
   });
 })();
 </script>
 ```
 
-## Por qué los árboles se mueren después de una construcción
+## Why trees die after construction
 
-Las raíces necesitan aire tanto como agua. La compactación de los vehículos aplasta los poros del suelo; la tierra de relleno entierra las raíces demasiado hondo; las zanjas las cortan. El árbol puede verse bien una o dos temporadas, usando la energía que tiene guardada, y luego empieza a secarse de arriba hacia abajo. Para cuando ve las ramas secas, el daño se hizo años antes.
+Roots need air as much as water. Compaction from vehicles crushes the pore spaces; fill soil buries roots too deep; trenching cuts them. The tree may look fine for a season or two, using stored energy, then decline from the top down. By the time you see dieback, the damage was done years before.
 
-La zona que se calcula aquí aumenta con el tronco, la edad del árbol y qué tan bien aguanta la especie, siguiendo un método muy usado por los arbolistas. La regla sencilla, un pie de radio por cada pulgada de diámetro del tronco, aparece en el cálculo como comparación.
+The zone here scales with the trunk, the tree's age and how well the species copes, following a widely used arborist approach. The simpler rule of thumb, one foot of radius per inch of trunk diameter, is shown in the working for comparison.

@@ -1,34 +1,26 @@
 ---
-title: "¿Debo mejorar mi suelo?"
-description: "Antes de comprar composta, tierra o arena, revise si su suelo la necesita. Una herramienta gratuita de científicos del suelo para césped, camas de hortalizas, arbustos, árboles y plantas nativas."
-lang: es
+title: "Should I amend my soil?"
+description: "Before you buy compost, topsoil or sand, check whether your soil needs it. A free decision tool from soil scientists, for lawns, vegetable beds, shrubs, trees and native plants."
 anchor-sections: false
-include-in-header:
-  - file: ../_hm-lang.html
-  - file: ../_hm-head.html
-  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/should-i-amend.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/should-i-amend.html">'
+include-in-header: _hm-head.html
 ---
 
-::: {.hm-lang}
-[English](../should-i-amend.qmd){lang="en"}
-:::
-
-La composta y la tierra son útiles, pero se gasta mucho dinero en enmiendas que no ayudan, o que empeoran las cosas. Conteste unas preguntas y esta herramienta le dice qué vale la pena hacer según lo que va a sembrar.
+Compost and topsoil are useful, but a lot of money goes on amendments that don't help, or make things worse. Answer a few questions and this tells you what's worth doing for what you're planting.
 
 ```{=html}
 <div class="hmc" id="am"></div>
 <script>
 (function () {
   HM.tool({
-    id: 'am', step: 'Lo que va a sembrar', units: false,
+    id: 'am', step: 'What you\'re planting', units: false,
     inputs: [
-      { k: 'plant', l: 'Siembra', t: 'select', d: 'veg', opts: [['veg', 'Cama de hortalizas o frutas'], ['beds', 'Camas de flores o arbustos'], ['native', 'Plantas nativas o de bajo consumo de agua'], ['tree', 'Plantar un árbol o arbusto (el hoyo de plantación)'], ['newlawn', 'Césped nuevo (semilla o pasto en rollo)'], ['lawn', 'Mejorar un césped que ya existe']] },
-      { t: 'sec', l: 'Su suelo', h: 'Conteste lo que pueda. Las <a href="diy-soil-tests.html">pruebas de suelo caseras</a> ayudan con la textura y el drenaje.' },
-      { k: 'om', l: 'Materia orgánica (de un análisis de suelo)', t: 'select', d: 'unk', opts: [['unk', 'No sé'], ['low', 'Menos de 2%'], ['mid', '2–5%'], ['high', 'Más de 5%']] },
-      { k: 'tex', l: 'Textura', t: 'select', d: 'unk', opts: [['unk', 'No sé'], ['sand', 'Arenoso (rasposo, se desmorona)'], ['loam', 'Franco (intermedio)'], ['clay', 'Arcilloso (pegajoso mojado, duro seco)']] },
-      { k: 'drain', l: 'Después de una lluvia fuerte o una prueba de drenaje, el agua…', t: 'select', d: 'unk', opts: [['unk', 'No sé'], ['ok', 'Drena en unas cuantas horas'], ['slow', 'Se encharca casi todo el día'], ['bad', 'Se queda más de un día']] },
-      { k: 'comp', l: 'Cuesta trabajo meter un desarmador más de 2–3 pulgadas cuando el suelo está húmedo', t: 'check', d: false },
-      { k: 'new', l: 'La casa o el patio se construyó o se niveló en los últimos años', t: 'check', d: false }
+      { k: 'plant', l: 'Planting', t: 'select', d: 'veg', opts: [['veg', 'Vegetable or fruit bed'], ['beds', 'Flower beds or shrubs'], ['native', 'Native or low-water plants'], ['tree', 'Planting a tree or shrub (the planting hole)'], ['newlawn', 'New lawn (seed or sod)'], ['lawn', 'Improving an existing lawn']] },
+      { t: 'sec', l: 'Your soil', h: 'Answer what you can. <a href="diy-soil-tests.qmd">DIY soil tests</a> help with texture and drainage.' },
+      { k: 'om', l: 'Organic matter (from a soil test)', t: 'select', d: 'unk', opts: [['unk', 'Don\'t know'], ['low', 'Under 2%'], ['mid', '2–5%'], ['high', 'Over 5%']] },
+      { k: 'tex', l: 'Texture', t: 'select', d: 'unk', opts: [['unk', 'Don\'t know'], ['sand', 'Sandy (gritty, falls apart)'], ['loam', 'Loamy (in between)'], ['clay', 'Clay (sticky when wet, hard when dry)']] },
+      { k: 'drain', l: 'After heavy rain or a drainage test, water…', t: 'select', d: 'unk', opts: [['unk', 'Don\'t know'], ['ok', 'Drains within a few hours'], ['slow', 'Puddles for most of a day'], ['bad', 'Stands for more than a day']] },
+      { k: 'comp', l: 'A screwdriver is hard to push in more than 2–3 in when the soil is moist', t: 'check', d: false },
+      { k: 'new', l: 'The house or yard was built or regraded in the last few years', t: 'check', d: false }
     ],
     compute(v, U) {
       const P = v.plant, low = v.om === 'low', high = v.om === 'high', unk = v.om === 'unk';
@@ -36,54 +28,54 @@ La composta y la tierra son útiles, pero se gasta mucho dinero en enmiendas que
       let verdict, sub, cls = '';
       // blockers first
       if (v.drain === 'bad') {
-        verdict = 'Primero arregle el drenaje'; sub = 'El agua estancada se debe a lo que hay abajo, casi siempre una capa compactada o densa, o agua que llega de otro lado. Ninguna enmienda mezclada en las primeras pulgadas lo va a arreglar.'; cls = 'bad';
-        doL.push('Excave un hoyo de prueba para averiguar por qué: una capa dura que se puede romper, o agua que llega de una bajante o una pendiente y que se puede desviar.', 'Considere camas elevadas, nivelar el terreno, un <a href="rain-garden.html">jardín de lluvia</a>, o plantas que toleren raíces mojadas.');
+        verdict = 'Fix drainage first'; sub = 'Standing water is caused by what\'s below, usually a compacted or dense layer, or water flowing in from elsewhere. No amendment mixed into the top few inches will fix it.'; cls = 'bad';
+        doL.push('Dig a test hole to find out why: a hard layer you can break up, or water arriving from a downspout or slope you can redirect.', 'Consider raised beds, regrading, a <a href="rain-garden.qmd">rain garden</a>, or plants that tolerate wet roots.');
       }
       if (v.comp || v.new) {
-        doL.push(P === 'lawn' ? 'Airee con sacabocados (sacando tapones) cuando el suelo esté húmedo; repítalo cada año hasta que el desarmador entre fácilmente.' : 'Primero afloje el suelo compactado, tan profundo y ancho como pueda (8–12 pulgadas para camas), antes de agregar cualquier cosa.');
-        if (v.new) doL.push('Los lotes de casas nuevas muchas veces tienen una capa delgada de tierra sobre subsuelo compactado. La <a href="construction-soil-check.html">revisión del suelo en casas nuevas</a> le explica paso a paso.');
+        doL.push(P === 'lawn' ? 'Core aerate (pull plugs) when the soil is moist; repeat yearly until the screwdriver goes in easily.' : 'Loosen compacted soil first, as deep and wide as you can (8–12 in for beds), before adding anything.');
+        if (v.new) doL.push('New-build lots often have thin topsoil over compacted subsoil. The <a href="construction-soil-check.qmd">construction soil check</a> walks through it.');
       }
       if (P === 'tree') {
-        verdict = verdict || 'No mejore el hoyo de plantación'; sub = sub || 'Las raíces crecen mejor cuando el hoyo se rellena con la misma tierra que salió de él. Un relleno rico funciona como una maceta: el agua se junta ahí y las raíces dan vueltas en vez de extenderse.';
-        doL.push('Haga el hoyo 2–3 veces más ancho que el cepellón pero no más profundo, para que la base del tronco quede al nivel del suelo o un poco arriba.', 'Rellene con la tierra del lugar, riegue, y ponga 2–4 pulgadas de mantillo en un círculo amplio, sin tocar el tronco.');
-        dontL.push('Composta, tierra para macetas o tierra comprada en el hoyo de plantación.', 'Grava en el fondo del hoyo: empeora el drenaje, no lo mejora.');
+        verdict = verdict || 'Don\'t amend the planting hole'; sub = sub || 'Roots grow best when the hole is backfilled with the soil that came out of it. Rich backfill acts like a pot: water collects in it and roots circle instead of spreading.';
+        doL.push('Dig the hole 2–3 times as wide as the root ball but no deeper, so the root flare sits at or slightly above grade.', 'Backfill with the native soil, water it in, and spread 2–4 in of mulch over a wide circle, kept off the trunk.');
+        dontL.push('Compost, potting mix or topsoil in the planting hole.', 'Gravel in the bottom of the hole: it makes drainage worse, not better.');
       } else if (P === 'native') {
-        verdict = verdict || 'Probablemente no'; sub = sub || 'Las plantas nativas y de bajo consumo están adaptadas a suelo sin mejorar. Un suelo rico y enmendado muchas veces las hace débiles, de vida corta y con más maleza.';
-        dontL.push('Composta o tierra "para que empiecen bien", a menos que el suelo sea relleno muy alterado.');
-        doL.push('Afloje el suelo compactado, plante, y cubra con grava o una capa delgada de astillas de madera (según lo que prefieran las plantas).');
+        verdict = verdict || 'Probably not'; sub = sub || 'Native and low-water plants are adapted to unimproved soil. Rich, amended soil often makes them floppy, short-lived and weedier.';
+        dontL.push('Compost or topsoil "to give them a good start", unless the soil is badly disturbed fill.');
+        doL.push('Loosen compacted soil, plant, and mulch with gravel or a thin layer of wood chips (as the plants prefer).');
       } else if (P === 'veg') {
-        if (high) { verdict = verdict || 'No mucho'; sub = sub || 'Su materia orgánica ya está alta. Una capa delgada cada año la mantiene así.'; doL.push('Ponga más o menos ½ pulgada de composta cada año, o siembre un cultivo de cobertura.'); dontL.push('Entregas grandes de composta o tierra.'); }
-        else { verdict = verdict || 'Sí: composta'; sub = sub || 'Las hortalizas funcionan mejor en suelo con bastante materia orgánica (más o menos 5% o más).'; cls = cls || 'good'; doL.push(`Mezcle ${low || unk ? '2 pulgadas' : '1 pulgada'} de composta en las primeras 6–8 pulgadas cada año. Una pulgada sobre 1,000 ft² son unas 3 yardas cúbicas: la <a href="materials-calculator.html?m=compost">calculadora de materiales</a> hace la cuenta.`); }
+        if (high) { verdict = verdict || 'Not much'; sub = sub || 'Your organic matter is already high. A thin top-up keeps it there.'; doL.push('Spread about ½ in of compost each year, or grow a cover crop.'); dontL.push('Large compost or topsoil deliveries.'); }
+        else { verdict = verdict || 'Yes: compost'; sub = sub || 'Vegetables do best in soil with plenty of organic matter (around 5% or more).'; cls = cls || 'good'; doL.push(`Mix ${low || unk ? '2' : '1'} in of compost into the top 6–8 in each year. One inch over 1,000 ft² is about 3 cubic yards: the <a href="materials-calculator.qmd?m=compost">materials calculator</a> does the sum.`); }
       } else if (P === 'beds') {
-        if (high) { verdict = verdict || 'No'; sub = sub || 'La materia orgánica ya está alta.'; dontL.push('Composta o acondicionador de suelo.'); doL.push('Solo ponga mantillo: al descomponerse alimenta el suelo.'); }
-        else if (low) { verdict = verdict || 'Una vez, y luego mantillo'; sub = sub || 'Vale la pena corregir la materia orgánica baja una vez, cuando haga la cama.'; cls = cls || 'good'; doL.push('Mezcle 1–2 pulgadas de composta en las primeras 8 pulgadas cuando haga la cama, y luego manténgala con mantillo.'); }
-        else { verdict = verdict || 'Opcional'; sub = sub || 'La mayoría de los arbustos y perennes crecen bien en suelo común.'; doL.push('Si agrega algo, ½–1 pulgada de composta mezclada al plantar es suficiente. El mantillo hace el resto con el tiempo.'); }
+        if (high) { verdict = verdict || 'No'; sub = sub || 'Organic matter is already high.'; dontL.push('Compost or soil conditioner.'); doL.push('Just mulch: as it breaks down it feeds the soil.'); }
+        else if (low) { verdict = verdict || 'Once, then mulch'; sub = sub || 'Low organic matter is worth fixing once when you make the bed.'; cls = cls || 'good'; doL.push('Mix 1–2 in of compost into the top 8 in when you make the bed, then keep it mulched.'); }
+        else { verdict = verdict || 'Optional'; sub = sub || 'Most shrubs and perennials grow well in ordinary soil.'; doL.push('If you add anything, ½–1 in of compost mixed in when planting is plenty. Mulch does the rest over time.'); }
       } else if (P === 'newlawn') {
-        if (low || unk || v.comp || v.new) { verdict = verdict || 'Sí, antes de sembrar'; sub = sub || 'Es su única oportunidad de mejorar el suelo debajo de un césped.'; cls = cls || 'good'; doL.push('Afloje las primeras 6 pulgadas y mezcle más o menos 1 pulgada de composta (unas 3 yardas cúbicas por cada 1,000 ft²) antes de sembrar o poner el pasto en rollo.'); }
-        else { verdict = verdict || 'Probablemente no'; sub = sub || 'Su suelo ya tiene una materia orgánica razonable.'; doL.push('Afloje las primeras pulgadas, nivele, y siembre o ponga el pasto en rollo.'); }
-        dontL.push('Una capa delgada de tierra sobre terreno compactado: crea una capa que las raíces no cruzan. Primero afloje y luego mézclela.');
+        if (low || unk || v.comp || v.new) { verdict = verdict || 'Yes, before seeding'; sub = sub || 'This is your one chance to improve the soil under a lawn.'; cls = cls || 'good'; doL.push('Loosen the top 6 in and mix in about 1 in of compost (about 3 cubic yards per 1,000 ft²) before seeding or laying sod.'); }
+        else { verdict = verdict || 'Probably not'; sub = sub || 'Your soil already has reasonable organic matter.'; doL.push('Loosen the top few inches, level, and seed or sod.'); }
+        dontL.push('A thin layer of topsoil over compacted ground: it creates a layer roots won\'t cross. Loosen first and mix it in.');
       } else if (P === 'lawn') {
-        verdict = verdict || (low || unk ? 'Una capa ligera por encima' : 'No mucho'); sub = sub || 'No se puede mezclar nada en un césped que ya existe, así que se mejora desde arriba.';
-        doL.push('Airee con sacabocados y luego cubra con ¼ de pulgada de composta fina, pasando el rastrillo para que entre en los hoyos. Repítalo cada año.');
-        dontL.push('Echar varias pulgadas de tierra sobre el pasto: lo asfixia y crea una capa.');
+        verdict = verdict || (low || unk ? 'A light top-dress' : 'Not much'); sub = sub || 'You can\'t mix anything into an existing lawn, so improve it from the top.';
+        doL.push('Core aerate, then top-dress with ¼ in of fine compost and rake it into the holes. Repeat yearly.');
+        dontL.push('Spreading inches of topsoil over the grass: it smothers the turf and creates a layer.');
       }
-      if (v.tex === 'clay' && (P === 'tree' || P === 'native')) dontL.push('Arena para "aflojar" la arcilla: llena los huecos y hace la arcilla más densa.');
-      if (v.tex === 'clay' && P !== 'tree' && P !== 'native') { dontL.push('Arena para "aflojar" la arcilla: a menos que sea más de la mitad de la mezcla, la arena llena los huecos y hace la arcilla más densa, más parecida al concreto.'); doL.push('En arcilla, lo que mejora la estructura es la composta y no pisarla ni excavarla cuando está mojada.'); }
-      if (v.tex === 'sand' && P !== 'native' && P !== 'tree') doL.push('El suelo arenoso es el que más gana con la composta: retiene el agua y los nutrientes que la arena no puede.');
-      dontL.push('Yeso agrícola, a menos que un análisis de laboratorio muestre sodio. No afloja la arcilla común.');
-      return U.big('Veredicto', verdict, sub) + `<h3>Vale la pena</h3><ul class="plain">${doL.map(x => `<li>${x}</li>`).join('')}</ul>` + (dontL.length ? `<h3>No lo haga</h3><ul class="plain">${dontL.map(x => `<li>${x}</li>`).join('')}</ul>` : '') +
-        (unk && P !== 'tree' && P !== 'native' ? U.note('Un <a href="soil-test-translator.html">análisis de suelo</a> lo confirmaría: la materia orgánica es el número clave.') : '');
+      if (v.tex === 'clay' && (P === 'tree' || P === 'native')) dontL.push('Sand to "loosen" clay: it fills the gaps and makes clay denser.');
+      if (v.tex === 'clay' && P !== 'tree' && P !== 'native') { dontL.push('Sand to "loosen" clay: unless it makes up over half the mix, sand fills the gaps and makes clay denser, closer to concrete.'); doL.push('For clay, compost and not walking or digging on it when wet are what improve structure.'); }
+      if (v.tex === 'sand' && P !== 'native' && P !== 'tree') doL.push('Sandy soil gains most from compost: it holds water and nutrients the sand can\'t.');
+      dontL.push('Gypsum, unless a lab test shows sodium. It doesn\'t loosen ordinary clay.');
+      return U.big('Verdict', verdict, sub) + `<h3>Worth doing</h3><ul class="plain">${doL.map(x => `<li>${x}</li>`).join('')}</ul>` + (dontL.length ? `<h3>Skip</h3><ul class="plain">${dontL.map(x => `<li>${x}</li>`).join('')}</ul>` : '') +
+        (unk && P !== 'tree' && P !== 'native' ? U.note('A <a href="soil-test-translator.qmd">soil test</a> would firm this up: organic matter is the key number.') : '');
     }
   });
 })();
 </script>
 ```
 
-## En resumen
+## The short version
 
-- **Árboles:** nunca mejore el hoyo de plantación. Hoyo ancho, tierra del lugar, mantillo.
-- **Plantas nativas y de bajo consumo:** normalmente nada. El suelo rico les perjudica.
-- **Hortalizas:** sí, composta cada año.
-- **Césped:** mejore el suelo antes de sembrar. En un césped que ya existe, airee y cubra con una capa ligera.
-- **Arcilla:** la composta ayuda; un poco de arena la empeora.
-- **Agua estancada:** es un problema de drenaje, no de calidad del suelo.
+- **Trees:** never amend the planting hole. Wide hole, native soil, mulch.
+- **Native and low-water plants:** usually nothing. Rich soil works against them.
+- **Vegetables:** yes, compost every year.
+- **Lawns:** improve the soil before seeding. On an existing lawn, aerate and top-dress lightly.
+- **Clay:** compost helps; a little sand makes it worse.
+- **Standing water:** a drainage problem, not a soil-quality one.

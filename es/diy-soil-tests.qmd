@@ -1,28 +1,21 @@
 ---
-title: "Pruebas de suelo caseras: textura, drenaje y la prueba de la cinta"
-description: "Tres pruebas de suelo gratuitas que puede hacer en casa con un frasco, una pala y sus manos: conozca la textura de su suelo, qué tan rápido drena y qué significa para el riego y la siembra."
-lang: es
+title: "DIY soil tests: texture, drainage and the ribbon test"
+description: "Three free soil tests you can do at home with a jar, a shovel and your hands: find your soil texture, how fast it drains, and what that means for watering and planting."
 anchor-sections: false
-include-in-header:
-  - file: ../_hm-lang.html
-  - file: ../_hm-head.html
-  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/diy-soil-tests.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/diy-soil-tests.html">'
+include-in-header: _hm-head.html
+include-after-body: _cite-line.html
 ---
 
-::: {.hm-lang}
-[English](../diy-soil-tests.qmd){lang="en"}
-:::
+Three simple tests tell you most of what matters about your soil: what it's made of (texture) and how fast water moves through it (drainage). Texture decides how often to water, how fast water soaks in, and how the soil behaves when you dig.
 
-Tres pruebas sencillas le dicen casi todo lo importante de su suelo: de qué está hecho (la textura) y qué tan rápido pasa el agua (el drenaje). La textura decide cada cuánto regar, qué tan rápido entra el agua y cómo se comporta el suelo al excavar.
+## Jar test (texture)
 
-## Prueba del frasco (textura)
-
-1. Llene un frasco de lados rectos más o menos a un tercio con tierra de la profundidad de las raíces (quite piedras, raíces y basura).
-2. Agregue agua hasta llenar unas dos terceras partes del frasco, más una cucharadita de detergente para lavavajillas o de suavizante de agua sin sal para separar las partículas.
-3. Agite fuerte durante 3–5 minutos, déjelo quieto y ponga un cronómetro.
-4. **Al minuto**, marque la altura de la capa asentada: esa es la arena.
-5. **A las 2 horas**, vuelva a marcar la altura: arena más limo.
-6. **A los 2 días** (cuando el agua se aclare), marque la altura final: todo, incluida la arcilla.
+1. Fill a straight-sided jar about one-third with soil from root depth (pick out stones, roots and debris).
+2. Add water until the jar is about two-thirds full, plus a teaspoon of dishwasher detergent or salt-free water softener to separate the particles.
+3. Shake hard for 3–5 minutes, then set it down and start a timer.
+4. **After 1 minute**, mark the height of the settled layer: that's the sand.
+5. **After 2 hours**, mark the height again: sand plus silt.
+6. **After 2 days** (when the water clears), mark the final height: everything, including clay.
 
 ```{=html}
 <div class="hmc" id="jar"></div>
@@ -41,44 +34,39 @@ function usdaTexture(S, Si, C) {
   if (C >= 40 && Si >= 40) return 'silty clay';
   return 'clay';
 }
-const TEXNAME = {
-  'sand': 'Arena', 'loamy sand': 'Arena franca', 'sandy loam': 'Franco arenoso', 'loam': 'Franco', 'silt loam': 'Franco limoso', 'silt': 'Limo',
-  'sandy clay loam': 'Franco arcillo-arenoso', 'clay loam': 'Franco arcilloso', 'silty clay loam': 'Franco arcillo-limoso', 'sandy clay': 'Arcilla arenosa',
-  'silty clay': 'Arcilla limosa', 'clay': 'Arcilla'
-};
 const TEXMEAN = {
-  'sand': 'Drena rápido y retiene poca agua y pocos nutrientes. Riegue seguido en cantidades pequeñas; la composta le ayuda a retener más.',
-  'loamy sand': 'Drena rápido y se seca pronto. Riegue más seguido en cantidades más pequeñas; la composta ayuda.',
-  'sandy loam': 'Fácil de trabajar y drena bien, con retención de agua moderada. Bueno para la mayoría de las plantas.',
-  'loam': 'Un buen equilibrio: retiene agua y nutrientes pero drena libremente. Le va bien a la mayoría de las plantas.',
-  'silt loam': 'Retiene bastante agua y es fértil, pero forma costra y se compacta fácilmente. No lo trabaje mojado; cubra la superficie con mantillo.',
-  'silt': 'Retiene bien el agua pero forma costra y se compacta fácilmente. Manténgalo cubierto y no lo trabaje mojado.',
-  'sandy clay loam': 'Retiene agua y nutrientes; puede ponerse firme cuando está seco. Absorbe el agua de forma moderadamente lenta.',
-  'clay loam': 'Retiene bien el agua y los nutrientes pero absorbe el agua despacio y se compacta fácilmente. Riegue en ciclos cortos; no lo excave mojado.',
-  'silty clay loam': 'Retiene mucha agua y la absorbe despacio. Tiende a compactarse y a formar costra.',
-  'sandy clay': 'Pegajoso mojado, duro seco; absorbe el agua despacio.',
-  'silty clay': 'Retiene mucha agua pero la absorbe muy despacio. Riegue en ciclos cortos; el drenaje puede ser malo.',
-  'clay': 'Retiene mucha agua y nutrientes pero absorbe el agua muy despacio, se compacta fácilmente y se queda mojado. Riegue en ciclos cortos, no lo excave mojado, y no le agregue un poco de arena (lo hace más denso).'
+  'sand': 'Drains fast and holds little water or nutrients. Water often in small amounts; compost helps it hold more.',
+  'loamy sand': 'Drains fast and dries out quickly. Water more often in smaller amounts; compost helps.',
+  'sandy loam': 'Easy to work and drains well, with moderate water holding. Good for most plants.',
+  'loam': 'A good balance: holds water and nutrients but drains freely. Suits most plants.',
+  'silt loam': 'Holds plenty of water and is fertile, but crusts and compacts easily. Avoid working it wet; mulch the surface.',
+  'silt': 'Holds water well but crusts and compacts easily. Keep it covered and avoid working it wet.',
+  'sandy clay loam': 'Holds water and nutrients; can be firm when dry. Takes water in moderately slowly.',
+  'clay loam': 'Holds water and nutrients well but takes water in slowly and compacts easily. Water in short cycles; don\'t dig it wet.',
+  'silty clay loam': 'Holds a lot of water and takes it in slowly. Prone to compaction and crusting.',
+  'sandy clay': 'Sticky when wet, hard when dry; slow to take in water.',
+  'silty clay': 'Holds a lot of water but takes it in very slowly. Water in short cycles; drainage may be poor.',
+  'clay': 'Holds a lot of water and nutrients but takes water in very slowly, compacts easily and stays wet. Water in short cycles, don\'t dig it wet, and don\'t add a little sand (it makes it denser).'
 };
 (function () {
   HM.tool({
-    id: 'jar', step: 'Sus marcas', units: false,
+    id: 'jar', step: 'Your marks', units: false,
     inputs: [
-      { k: 'a', l: 'Altura al minuto (arena)', t: 'num', w: 2 },
-      { k: 'b', l: 'A las 2 horas (arena + limo)', t: 'num', w: 2 },
-      { k: 'c', l: 'A los 2 días (total)', t: 'num', w: 2 },
-      { t: 'info', h: 'Puede usar cualquier unidad (pulgadas, cm o mm), siempre que las tres estén en la misma.' }
+      { k: 'a', l: 'Height after 1 minute (sand)', t: 'num', w: 2 },
+      { k: 'b', l: 'After 2 hours (sand + silt)', t: 'num', w: 2 },
+      { k: 'c', l: 'After 2 days (total)', t: 'num', w: 2 },
+      { t: 'info', h: 'Any unit works (inches, cm or mm), as long as all three use the same one.' }
     ],
     compute(v, U) {
-      if (!(v.a >= 0) || !(v.b > 0) || !(v.c > 0)) return U.empty('Escriba las tres alturas.');
-      if (!(v.a <= v.b && v.b <= v.c)) return U.empty('Cada marca debe estar igual o más arriba que la anterior: 1 minuto ≤ 2 horas ≤ 2 días.');
+      if (!(v.a >= 0) || !(v.b > 0) || !(v.c > 0)) return U.empty('Enter all three heights.');
+      if (!(v.a <= v.b && v.b <= v.c)) return U.empty('Each mark should be at or above the one before: 1 minute ≤ 2 hours ≤ 2 days.');
       const S = v.a / v.c * 100, Si = (v.b - v.a) / v.c * 100, C = 100 - S - Si;
       const t = usdaTexture(S, Si, C);
       return {
-        html: U.big('Su suelo es', TEXNAME[t], TEXMEAN[t]) + U.kv([['Arena', HM.fmt(S, 0) + '%'], ['Limo', HM.fmt(Si, 0) + '%'], ['Arcilla', HM.fmt(C, 0) + '%']]) +
-          U.note('La prueba del frasco es aproximada: las capas asentadas se acomodan distinto a las proporciones reales de las partículas. Si el resultado le sorprende, compárelo con la prueba de la cinta de abajo.') +
-          U.note('Siguiente paso: use su textura en el <a href="cycle-and-soak.html">programador de ciclos y remojo</a> para ajustar los tiempos de los aspersores.', 'good'),
-        work: [`Arena = ${HM.fmt(v.a, 2)} ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(S, 1)}%`, `Limo = (${HM.fmt(v.b, 2)} − ${HM.fmt(v.a, 2)}) ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(Si, 1)}%`, `Arcilla = 100 − arena − limo = ${HM.fmt(C, 1)}%`, `Clase textural según el triángulo de texturas del USDA: ${TEXNAME[t].toLowerCase()}`]
+        html: U.big('Your soil is', t.charAt(0).toUpperCase() + t.slice(1), TEXMEAN[t]) + U.kv([['Sand', HM.fmt(S, 0) + '%'], ['Silt', HM.fmt(Si, 0) + '%'], ['Clay', HM.fmt(C, 0) + '%']]) +
+          U.note('The jar test is approximate: settled layers pack differently from the particles\' true proportions. If the result surprises you, cross-check with the ribbon test below.') +
+          U.note('Next: use your texture in the <a href="cycle-and-soak.qmd">cycle-and-soak scheduler</a> to set sprinkler run times.', 'good'),
+        work: [`Sand = ${HM.fmt(v.a, 2)} ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(S, 1)}%`, `Silt = (${HM.fmt(v.b, 2)} − ${HM.fmt(v.a, 2)}) ÷ ${HM.fmt(v.c, 2)} = ${HM.fmt(Si, 1)}%`, `Clay = 100 − sand − silt = ${HM.fmt(C, 1)}%`, `Texture class from the USDA soil texture triangle: ${t}`]
       };
     }
   });
@@ -86,20 +74,20 @@ const TEXMEAN = {
 </script>
 ```
 
-## Prueba de la cinta (textura al tacto)
+## Ribbon test (texture by feel)
 
-Tome un puño de tierra del tamaño de una nuez, mójelo hasta que quede como masilla y trabájelo en la mano. Luego apriételo entre el pulgar y el índice, empujándolo hacia arriba para formar una cinta hasta que se rompa por su propio peso.
+Take a walnut-sized lump of soil, wet it until it's like putty, and work it in your hand. Then press it between your thumb and finger, pushing it up into a ribbon until it breaks under its own weight.
 
 ```{=html}
 <div class="hmc" id="rib"></div>
 <script>
 (function () {
   HM.tool({
-    id: 'rib', step: 'Lo que siente', units: false, hash: false,
+    id: 'rib', step: 'What you feel', units: false, hash: false,
     inputs: [
-      { k: 'ball', l: '¿La tierra húmeda se mantiene unida en una bola?', t: 'seg', d: 'yes', opts: [['no', 'No, se desmorona'], ['yes', 'Sí']] },
-      { k: 'rib', l: '¿Qué tan larga es la cinta antes de romperse?', t: 'seg', d: 'short', opts: [['none', 'No forma cinta'], ['short', 'Menos de 1 pulgada (2.5 cm)'], ['mid', '1–2 pulgadas (2.5–5 cm)'], ['long', 'Más de 2 pulgadas (5 cm)']], show: v => v.ball === 'yes' },
-      { k: 'feel', l: 'Frote un poco en la palma con agua. Se siente…', t: 'seg', d: 'neither', opts: [['gritty', 'Rasposa'], ['smooth', 'Suave, como harina'], ['neither', 'Ninguna de las dos']], show: v => v.ball === 'yes' && v.rib !== 'none' }
+      { k: 'ball', l: 'Does the moist soil hold together in a ball?', t: 'seg', d: 'yes', opts: [['no', 'No, it falls apart'], ['yes', 'Yes']] },
+      { k: 'rib', l: 'How long a ribbon before it breaks?', t: 'seg', d: 'short', opts: [['none', 'No ribbon'], ['short', 'Under 1 in (2.5 cm)'], ['mid', '1–2 in (2.5–5 cm)'], ['long', 'Over 2 in (5 cm)']], show: v => v.ball === 'yes' },
+      { k: 'feel', l: 'Rub a little in your palm with water. It feels…', t: 'seg', d: 'neither', opts: [['gritty', 'Gritty'], ['smooth', 'Smooth, floury'], ['neither', 'Neither stands out']], show: v => v.ball === 'yes' && v.rib !== 'none' }
     ],
     compute(v, U) {
       let t;
@@ -109,42 +97,42 @@ Tome un puño de tierra del tamaño de una nuez, mójelo hasta que quede como ma
         const M = { short: { gritty: 'sandy loam', smooth: 'silt loam', neither: 'loam' }, mid: { gritty: 'sandy clay loam', smooth: 'silty clay loam', neither: 'clay loam' }, long: { gritty: 'sandy clay', smooth: 'silty clay', neither: 'clay' } };
         t = M[v.rib][v.feel];
       }
-      return U.big('Su suelo probablemente es', TEXNAME[t], TEXMEAN[t]);
+      return U.big('Your soil is probably', t.charAt(0).toUpperCase() + t.slice(1), TEXMEAN[t]);
     }
   });
 })();
 </script>
 ```
 
-## Prueba de drenaje (percolación)
+## Drainage (percolation) test
 
-1. Excave un hoyo de unas 12 pulgadas (30 cm) de profundidad y 6–12 pulgadas de ancho.
-2. Llénelo de agua y deje que drene por completo. Esto moja el suelo alrededor; si se lo salta, el resultado saldrá demasiado rápido.
-3. Llénelo otra vez. Mida la profundidad del agua, espere un tiempo fijo (una hora es fácil) y vuelva a medir.
+1. Dig a hole about 12 in (30 cm) deep and 6–12 in wide.
+2. Fill it with water and let it drain completely. This wets the surrounding soil; skip it and the result will be too fast.
+3. Fill it again. Measure the water depth, wait a set time (an hour is easy), and measure again.
 
 ```{=html}
 <div class="hmc" id="perc"></div>
 <script>
 (function () {
   HM.tool({
-    id: 'perc', step: 'Su resultado', hash: false,
+    id: 'perc', step: 'Your result', hash: false,
     inputs: [
-      { k: 'drop', l: 'Cuánto bajó el nivel del agua', t: 'wdep', w: 3 },
-      { k: 'min', l: 'En cuántos minutos', t: 'min', d: 60, w: 3 }
+      { k: 'drop', l: 'How far the water level dropped', t: 'wdep', w: 3 },
+      { k: 'min', l: 'In how many minutes', t: 'min', d: 60, w: 3 }
     ],
     compute(v, U) {
-      if (!(v.drop >= 0) || !(v.min > 0)) return U.empty('Escriba cuánto bajó y el tiempo.');
+      if (!(v.drop >= 0) || !(v.min > 0)) return U.empty('Enter the drop and the time.');
       const r = v.drop / (v.min / 60), inhr = r / 25.4;
       let g, m;
-      if (inhr > 4) { g = ['warn', 'Muy rápido']; m = 'El agua se va rápido y se lleva los nutrientes. Las plantas se secan pronto: ponga mantillo, agregue composta y riegue poco y seguido.'; }
-      else if (inhr >= 1) { g = ['good', 'Bueno']; m = 'Drena bien. Le va bien a la mayoría de las plantas, y es bueno para un jardín de lluvia.'; }
-      else if (inhr >= 0.5) { g = ['good', 'Moderado']; m = 'Suficiente para la mayoría de las plantas. Un jardín de lluvia funcionará si se hace con un tamaño generoso.'; }
-      else if (inhr >= 0.1) { g = ['warn', 'Lento']; m = 'Mal drenaje: las raíces de muchas plantas sufren después de una lluvia fuerte. Escoja plantas que toleren suelo mojado, plante un poco alto y no riegue de más. Un jardín de lluvia necesitaría un dren por debajo.'; }
-      else { g = ['bad', 'Muy lento']; m = 'El agua casi no se mueve. Busque una capa compactada o dura abajo; las enmiendas no lo van a arreglar. Puede que se necesiten camas elevadas, nivelar el terreno o drenaje.'; }
+      if (inhr > 4) { g = ['warn', 'Very fast']; m = 'Water drains away quickly, taking nutrients with it. Plants dry out fast: mulch, add compost, and water little and often.'; }
+      else if (inhr >= 1) { g = ['good', 'Good']; m = 'Drains well. Suits most plants, and good for a rain garden.'; }
+      else if (inhr >= 0.5) { g = ['good', 'Moderate']; m = 'Adequate for most plants. A rain garden will work if sized generously.'; }
+      else if (inhr >= 0.1) { g = ['warn', 'Slow']; m = 'Poor drainage: roots of many plants suffer after heavy rain. Choose plants that tolerate wet soil, plant slightly high, and avoid overwatering. A rain garden would need an underdrain.'; }
+      else { g = ['bad', 'Very slow']; m = 'Water barely moves. Look for a compacted or hard layer below; amendments won\'t fix this. Raised beds, regrading or drainage may be needed.'; }
       return {
-        html: U.big('Drena a', U.f(r, 'rate', 2), '') + `<p><span class="tag ${g[0]}">${g[1]}</span></p><p class="sub">${m}</p>` +
-          U.note(`¿Va a hacer un jardín de lluvia? Use esta velocidad en la <a href="rain-garden.html?ir=${HM.fmt(r, 2)}">calculadora de jardín de lluvia</a>.`, 'good'),
-        work: [`Velocidad = ${U.f(v.drop, 'wdep', 2)} ÷ ${HM.fmt(v.min / 60, 2)} h = ${U.f(r, 'rate', 2)}`, 'Rangos (pulgadas por hora): más de 4 muy rápido, 1–4 bueno, 0.5–1 moderado, 0.1–0.5 lento, menos de 0.1 muy lento']
+        html: U.big('Drains at', U.f(r, 'rate', 2), '') + `<p><span class="tag ${g[0]}">${g[1]}</span></p><p class="sub">${m}</p>` +
+          U.note(`Planning a rain garden? Use this rate in the <a href="rain-garden.qmd?ir=${HM.fmt(r, 2)}">rain garden calculator</a>.`, 'good'),
+        work: [`Rate = ${U.f(v.drop, 'wdep', 2)} ÷ ${HM.fmt(v.min / 60, 2)} hr = ${U.f(r, 'rate', 2)}`, 'Bands (in/hr): over 4 very fast, 1–4 good, 0.5–1 moderate, 0.1–0.5 slow, under 0.1 very slow']
       };
     }
   });
@@ -152,4 +140,8 @@ Tome un puño de tierra del tamaño de una nuez, mójelo hasta que quede como ma
 </script>
 ```
 
-Si el hoyo todavía tiene agua al día siguiente, haga la prueba de nuevo en otro lugar y excave más hondo para buscar una capa densa o cementada. Los problemas de drenaje casi siempre se deben a una capa de abajo, no a la tierra donde siembra.
+If the hole still holds water the next day, test again somewhere else and dig deeper to look for a dense or cemented layer. Drainage problems are usually about a layer below, not the soil you plant in.
+
+## References
+
+Texture classes: Soil Science Division Staff (2017). *Soil Survey Manual*. USDA Handbook 18. Texture by feel: Thien, S.J. (1979). A flow diagram for teaching texture-by-feel analysis. *Journal of Agronomic Education* 8, 54–55.

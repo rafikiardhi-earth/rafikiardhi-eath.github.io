@@ -1,19 +1,12 @@
 ---
-title: "Calculadora de tierra para camas elevadas y macetas"
-description: "Cuánta tierra necesita para llenar camas elevadas, macetas y jardineras para árboles, en bolsas o a granel, y cuánta tierra necesita de verdad un árbol para crecer bien."
-lang: es
+title: "Raised bed and planter soil calculator"
+description: "How much soil to fill raised beds, pots and tree planters, in bags or bulk, and how much soil a tree really needs to grow well."
 anchor-sections: false
-include-in-header:
-  - file: ../_hm-lang.html
-  - file: ../_hm-head.html
-  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/planter-soil.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/planter-soil.html">'
+include-in-header: _hm-head.html
+include-after-body: _cite-line.html
 ---
 
-::: {.hm-lang}
-[English](../planter-soil.qmd){lang="en"}
-:::
-
-Llenar camas elevadas y jardineras grandes lleva más tierra de lo que la mayoría espera, y las bolsas suman rápido. Esta herramienta calcula el volumen para camas, macetas redondas y jardineras para árboles, y muestra cómo bajar el costo de las camas profundas.
+Filling raised beds and big planters takes more soil than most people expect, and bags add up fast. This works out the volume for beds, round pots and tree planters, and shows how to cut the cost of deep beds.
 
 ```{=html}
 <div class="hmc" id="pl"></div>
@@ -21,46 +14,46 @@ Llenar camas elevadas y jardineras grandes lleva más tierra de lo que la mayor�
 (function () {
   const CUFT = 0.0283168466, YD3 = 0.764554858, QT = 0.000946352946, GAL = 0.003785411784;
   // potting-mix bag sizes as sold: quarts and cubic feet in the US, litres elsewhere (values in m³)
-  const PBAG = { us: [['8qt', '8 qt', 8 * QT], ['16qt', '16 qt', 16 * QT], ['1cf', '1 pie³ (≈ 26 qt)', CUFT], ['1.5cf', '1.5 pie³ (≈ 39 qt)', 1.5 * CUFT], ['2cf', '2 pie³ (≈ 52 qt)', 2 * CUFT]],
+  const PBAG = { us: [['8qt', '8 qt', 8 * QT], ['16qt', '16 qt', 16 * QT], ['1cf', '1 cu ft (≈ 26 qt)', CUFT], ['1.5cf', '1.5 cu ft (≈ 39 qt)', 1.5 * CUFT], ['2cf', '2 cu ft (≈ 52 qt)', 2 * CUFT]],
                  si: [['L10', '10 L', 0.01], ['L20', '20 L', 0.02], ['L40', '40 L', 0.04], ['L50', '50 L', 0.05], ['L70', '70 L', 0.07]] };
   const pbagOf = (u, val) => PBAG[u].find(b => b[0] === val) || PBAG[u][1];
   HM.tool({
-    id: 'pl', step: 'Recipiente',
+    id: 'pl', step: 'Container',
     inputs: [
-      { k: 'shape', l: 'Forma', t: 'select', d: 'bed', opts: [['bed', 'Cama elevada o jardinera rectangular'], ['round', 'Maceta o jardinera redonda'], ['tree', '¿Cuánta tierra necesita un árbol?']] },
-      { k: 'L', l: 'Largo', t: 'len', w: 3, show: v => v.shape === 'bed' },
-      { k: 'W', l: 'Ancho', t: 'len', w: 3, show: v => v.shape === 'bed' },
-      { k: 'D1', l: 'Diámetro arriba', t: 'dia', w: 3, show: v => v.shape === 'round' },
-      { k: 'D2', l: 'Diámetro abajo (si se angosta)', t: 'dia', w: 3, show: v => v.shape === 'round' },
-      { k: 'H', l: 'Profundidad de la tierra', t: 'dia', d: { us: 12, si: 30 }, w: 3, show: v => v.shape !== 'tree', h: 'Llene hasta más o menos 1 pulgada (2–3 cm) debajo del borde.' },
-      { k: 'n', l: 'Cuántos', t: 'num', d: 1, w: 3, show: v => v.shape !== 'tree' },
-      { k: 'fill', l: 'Relleno en el fondo (para camas de más de unas 18 pulgadas)', t: 'select', d: '0', show: v => v.shape === 'bed', opts: [['0', 'Ninguno: todo tierra'], ['25', 'Una cuarta parte del fondo con troncos, ramas o tierra del lugar'], ['33', 'Una tercera parte del fondo con troncos, ramas o tierra del lugar']], h: 'La mayoría de las raíces de las hortalizas trabajan en las primeras 12–18 pulgadas. Llenar el fondo de las camas profundas con troncos y ramas sin tratar o con tierra común del patio ahorra dinero. El relleno de madera se asienta al pudrirse, así que agregue tierra cada año.' },
-      { k: 'canopy', l: 'Ancho de la copa cuando el árbol sea adulto', t: 'len', show: v => v.shape === 'tree', h: 'De la etiqueta de la planta o de un vivero. Árboles pequeños 15–20 pies, medianos 25–35 pies, grandes 40 pies o más.' },
-      { k: 'bag', l: 'Tamaño de la bolsa', t: 'cuft', d: { us: 1.5, si: 50 }, show: v => v.shape === 'bed' },
-      { k: 'pbag', l: 'Tamaño de la bolsa de tierra para macetas', t: 'select', d: { us: '16qt', si: 'L20' }, opts: u => PBAG[u].map(b => [b[0], b[1]]), show: v => v.shape === 'round' }
+      { k: 'shape', l: 'Shape', t: 'select', d: 'bed', opts: [['bed', 'Rectangular raised bed or planter box'], ['round', 'Round pot or planter'], ['tree', 'How much soil does a tree need?']] },
+      { k: 'L', l: 'Length', t: 'len', w: 3, show: v => v.shape === 'bed' },
+      { k: 'W', l: 'Width', t: 'len', w: 3, show: v => v.shape === 'bed' },
+      { k: 'D1', l: 'Diameter at the top', t: 'dia', w: 3, show: v => v.shape === 'round' },
+      { k: 'D2', l: 'Diameter at the bottom (if tapered)', t: 'dia', w: 3, show: v => v.shape === 'round' },
+      { k: 'H', l: 'Soil depth', t: 'dia', d: { us: 12, si: 30 }, w: 3, show: v => v.shape !== 'tree', h: 'Fill to about 1 in (2–3 cm) below the rim.' },
+      { k: 'n', l: 'How many', t: 'num', d: 1, w: 3, show: v => v.shape !== 'tree' },
+      { k: 'fill', l: 'Bottom filler (for beds deeper than about 18 in)', t: 'select', d: '0', show: v => v.shape === 'bed', opts: [['0', 'None: all soil'], ['25', 'Bottom quarter with logs, branches or native soil'], ['33', 'Bottom third with logs, branches or native soil']], h: 'Most vegetable roots work in the top 12–18 in. Filling the bottom of deep beds with untreated logs and branches or ordinary soil from the yard saves money. Woody fill settles as it rots, so top up each year.' },
+      { k: 'canopy', l: 'Expected canopy width when mature', t: 'len', show: v => v.shape === 'tree', h: 'From the plant tag or a nursery reference. Small trees 15–20 ft, medium 25–35 ft, large 40 ft or more.' },
+      { k: 'bag', l: 'Bag size', t: 'cuft', d: { us: 1.5, si: 50 }, show: v => v.shape === 'bed' },
+      { k: 'pbag', l: 'Potting mix bag size', t: 'select', d: { us: '16qt', si: 'L20' }, opts: u => PBAG[u].map(b => [b[0], b[1]]), show: v => v.shape === 'round' }
     ],
     compute(v, U) {
       if (v.shape === 'tree') {
-        if (!(v.canopy > 0)) return U.empty('Escriba el ancho de la copa del árbol adulto.');
+        if (!(v.canopy > 0)) return U.empty('Enter the mature canopy width.');
         const r = v.canopy / 2, crown = Math.PI * r * r; // m²
         const ft2 = crown / 0.09290304, need = ft2 * 2 * CUFT; // 2 ft³ soil per ft² crown
         return {
-          html: U.big('Tierra que necesitan las raíces', U.f(need, 'vol', 1), `unos ${HM.fmt(need / CUFT, 0)} ft³, o una cama de ${U.us ? HM.fmt(Math.sqrt(need / CUFT / 3), 0) + ' pies por lado y 3 pies de profundidad' : HM.fmt(Math.sqrt(need / 0.9), 1) + ' m por lado y 0.9 m de profundidad'}.`) +
-            U.note('Por eso los árboles en jardineras pequeñas y en huecos de banqueta se quedan chicos y viven poco. Si una jardinera no puede contener tanta tierra, escoja un árbol más pequeño, o conecte la jardinera con suelo abierto (suelo estructural o celdas de suelo debajo del pavimento).') +
-            U.note('En suelo abierto, las raíces se extienden mucho más allá de la copa, sobre todo en las primeras 12–18 pulgadas. Proteja esa zona para que no se compacte.', 'good'),
-          work: [`Área de la copa adulta = π × (${U.f(v.canopy, 'len', 1)} ÷ 2)² = ${U.f(crown, 'area', 0)}`, `Guía: unos 2 ft³ de buena tierra por cada ft² de copa (0.6 m³ por m²) → ${HM.fmt(ft2, 0)} × 2 = ${HM.fmt(need / CUFT, 0)} ft³ = ${U.f(need, 'vol', 1)}`]
+          html: U.big('Soil the roots need', U.f(need, 'vol', 1), `about ${HM.fmt(need / CUFT, 0)} ft³, or a bed ${U.us ? HM.fmt(Math.sqrt(need / CUFT / 3), 0) + ' ft square and 3 ft deep' : HM.fmt(Math.sqrt(need / 0.9), 1) + ' m square and 0.9 m deep'}.`) +
+            U.note('That\'s why trees in small planters and sidewalk cut-outs stay small and short-lived. If a planter can\'t hold this much, choose a smaller tree, or connect the planter to open soil (structural soil or soil cells under paving).') +
+            U.note('In open ground, roots spread far beyond the canopy, mostly in the top 12–18 in. Protect that zone from compaction.', 'good'),
+          work: [`Mature crown area = π × (${U.f(v.canopy, 'len', 1)} ÷ 2)² = ${U.f(crown, 'area', 0)}`, `Guideline: about 2 ft³ of good soil per ft² of crown (0.6 m³ per m²) → ${HM.fmt(ft2, 0)} × 2 = ${HM.fmt(need / CUFT, 0)} ft³ = ${U.f(need, 'vol', 1)}`]
         };
       }
       const n = v.n > 0 ? Math.round(v.n) : 1;
       let V1, w;
       if (v.shape === 'bed') {
-        if (!(v.L > 0) || !(v.W > 0) || !(v.H > 0)) return U.empty('Escriba el largo, el ancho y la profundidad.');
-        V1 = v.L * v.W * v.H; w = `${U.f(v.L, 'len')} × ${U.f(v.W, 'len')} × ${U.f(v.H, 'dia')} = ${U.f(V1, 'cuft', 1)} cada una`;
+        if (!(v.L > 0) || !(v.W > 0) || !(v.H > 0)) return U.empty('Enter the length, width and depth.');
+        V1 = v.L * v.W * v.H; w = `${U.f(v.L, 'len')} × ${U.f(v.W, 'len')} × ${U.f(v.H, 'dia')} = ${U.f(V1, 'cuft', 1)} each`;
       } else {
-        if (!(v.D1 > 0) || !(v.H > 0)) return U.empty('Escriba el diámetro y la profundidad.');
+        if (!(v.D1 > 0) || !(v.H > 0)) return U.empty('Enter the diameter and depth.');
         const r1 = v.D1 / 2, r2 = (v.D2 > 0 ? v.D2 : v.D1) / 2;
         V1 = Math.PI * v.H / 3 * (r1 * r1 + r1 * r2 + r2 * r2);
-        w = v.D2 > 0 ? `Maceta que se angosta: π × profundidad ÷ 3 × (R² + R·r + r²) = ${U.f(V1, 'cuft', 2)} cada una` : `π × (${U.f(v.D1, 'dia')} ÷ 2)² × ${U.f(v.H, 'dia')} = ${U.f(V1, 'cuft', 2)} cada una`;
+        w = v.D2 > 0 ? `Tapered pot: π × depth ÷ 3 × (R² + R·r + r²) = ${U.f(V1, 'cuft', 2)} each` : `π × (${U.f(v.D1, 'dia')} ÷ 2)² × ${U.f(v.H, 'dia')} = ${U.f(V1, 'cuft', 2)} each`;
       }
       const fillPct = v.shape === 'bed' ? +v.fill : 0;
       const Vsoil = V1 * n * (1 - fillPct / 100), Vorder = Vsoil * 1.2;
@@ -71,31 +64,35 @@ Llenar camas elevadas y jardineras grandes lleva más tierra de lo que la mayor�
       let h;
       if (small) {
         const L = Vorder * 1000, q = Vorder / QT, g = Vorder / GAL;
-        h = U.big('Usted necesita', U.us ? `${HM.fmt(q, q < 10 ? 1 : 0)} cuartos de galón` : `${HM.fmt(L, L < 10 ? 1 : 0)} litros`, `de ${pot ? 'tierra para macetas' : 'mezcla'}${n > 1 ? ` para ${n} recipientes` : ''}, con 20% extra porque se asienta después de llenar y regar.`);
-        h += U.kv([['Litros', HM.fmt(L, 1) + ' L'], ['Cuartos de galón (EE. UU.)', HM.fmt(q, 1) + ' qt'], ['Galones (EE. UU.)', HM.fmt(g, 2) + ' gal'], ['Pies cúbicos', HM.fmt(Vorder / CUFT, 2) + ' ft³'], ['Bolsas', `${bags} × ${bagTxt}`]]);
-        if (pot) h += U.note(`Los tamaños de maceta de vivero no son galones reales: una maceta "de 1 galón" contiene unos 3 cuartos de galón (2.8 L), y una "de 5 galones" unos 4 galones (15 L). Mida su maceta en vez de guiarse por la etiqueta.`);
+        h = U.big('You need', U.us ? `${HM.fmt(q, q < 10 ? 1 : 0)} quarts` : `${HM.fmt(L, L < 10 ? 1 : 0)} litres`, `of ${pot ? 'potting mix' : 'mix'}${n > 1 ? ` for ${n} containers` : ''}, including 20% extra because it settles after filling and watering.`);
+        h += U.kv([['Litres', HM.fmt(L, 1) + ' L'], ['US quarts', HM.fmt(q, 1) + ' qt'], ['US gallons', HM.fmt(g, 2) + ' gal'], ['Cubic feet', HM.fmt(Vorder / CUFT, 2) + ' ft³'], ['Bags', `${bags} × ${bagTxt}`]]);
+        if (pot) h += U.note(`Nursery pot sizes aren't true gallons: a "1-gallon" nursery pot holds about 3 quarts (2.8 L), and a "5-gallon" about 4 gallons (15 L). Measure your pot rather than going by its label.`);
       } else {
-        h = U.big('Usted necesita', U.f(Vorder, 'vol', 2), `${U.f(Vorder, 'cuft', 0)}, con 20% extra porque la mezcla se asienta después de llenar y regar.`);
-        h += U.kv([['O en bolsas', `${bags} × ${bagTxt}`], fillPct ? ['Volumen que ahorra el relleno del fondo', U.f(V1 * n * fillPct / 100 * 1.2, 'vol', 2)] : null]);
+        h = U.big('You need', U.f(Vorder, 'vol', 2), `${U.f(Vorder, 'cuft', 0)}, including 20% extra because the mix settles after filling and watering.`);
+        h += U.kv([['Or in bags', `${bags} × ${bagTxt}`], fillPct ? ['Volume saved by bottom filler', U.f(V1 * n * fillPct / 100 * 1.2, 'vol', 2)] : null]);
       }
-      if (!small && Vorder > 0.75) h += U.note('A este tamaño, una entrega a granel de mezcla para jardín suele salir mucho más barata que las bolsas. Compare en la <a href="materials-calculator.html?m=gardenmix">calculadora de materiales</a>.', 'good');
-      h += U.note('Para macetas, use tierra para macetas, no tierra del jardín: la tierra se compacta en los recipientes y drena mal. Las camas elevadas pueden usar mezcla para jardín o para camas elevadas.');
-      return { html: h, work: [w, n > 1 ? `× ${n} = ${U.f(V1 * n, 'cuft', 1)}` : null, fillPct ? `Menos ${fillPct}% de relleno en el fondo = ${U.f(Vsoil, 'cuft', 1)}` : null, `+ 20% por asentamiento = ${U.f(Vorder, 'cuft', 1)} (${U.f(Vorder, 'vol', 2)})`, pot ? `Bolsas = ${HM.fmt(Vorder * 1000, 1)} L ÷ ${HM.fmt(bagVol * 1000, 1)} L por bolsa (${bagTxt}) → ${bags}` : `Bolsas = ${U.f(Vorder, 'cuft', 1)} ÷ ${U.f(v.bag, 'cuft', 1)} → ${bags}`].filter(Boolean) };
+      if (!small && Vorder > 0.75) h += U.note('At this size a bulk delivery of garden mix is usually much cheaper than bags. Compare in the <a href="materials-calculator.qmd?m=gardenmix">materials calculator</a>.', 'good');
+      h += U.note('For pots, use a potting mix, not garden soil: soil packs down in containers and drains poorly. Raised beds can use a garden or raised-bed mix.');
+      return { html: h, work: [w, n > 1 ? `× ${n} = ${U.f(V1 * n, 'cuft', 1)}` : null, fillPct ? `Minus ${fillPct}% bottom filler = ${U.f(Vsoil, 'cuft', 1)}` : null, `+ 20% for settling = ${U.f(Vorder, 'cuft', 1)} (${U.f(Vorder, 'vol', 2)})`, pot ? `Bags = ${HM.fmt(Vorder * 1000, 1)} L ÷ ${HM.fmt(bagVol * 1000, 1)} L per bag (${bagTxt}) → ${bags}` : `Bags = ${U.f(Vorder, 'cuft', 1)} ÷ ${U.f(v.bag, 'cuft', 1)} → ${bags}`].filter(Boolean) };
     }
   });
 })();
 </script>
 ```
 
-## Consejos para llenar camas
+## Tips for filling beds
 
-- **Una cama elevada de 4 × 8 pies y 12 pulgadas de profundidad contiene unas 1.2 yardas cúbicas** (32 ft³) ya asentada. Son más de 20 bolsas de 1.5 ft³.
-- **Llene por capas y riegue cada una** para que la tierra se asiente antes de sembrar.
-- **Agregue tierra cada primavera.** Las camas bajan conforme la materia orgánica se descompone; una o dos pulgadas de composta cada año las mantiene llenas.
-- **No use restos de madera tratada** como relleno, ni nada pintado o con pegamento.
+- **A raised bed 4 × 8 ft and 12 in deep holds about 1.2 cubic yards** (32 ft³) once settled. That's over 20 bags of 1.5 ft³.
+- **Fill in layers and water each one** so the soil settles before you plant.
+- **Top up each spring.** Beds sink as organic matter breaks down; an inch or two of compost each year keeps them full.
+- **Avoid treated wood scraps** as filler, and anything painted or glued.
 
-## Macetas y tierra para macetas
+## Pots and potting mix
 
-- **En EE. UU. la tierra para macetas se vende en cuartos de galón o pies cúbicos** (8 qt, 16 qt, 1–2 pies³) y en litros en otros países. Un pie cúbico son unos 26 cuartos de galón o 28 litros.
-- **Los tamaños "de galón" de vivero son medidas comerciales, no medidas reales.** Una maceta #1 ("de 1 galón") contiene unos 3 cuartos de galón; una #5 unos 4 galones.
-- **Use tierra para macetas, no tierra del jardín, en las macetas.** La tierra del jardín se compacta en los recipientes y se queda encharcada en el fondo.
+- **Potting mix is sold in quarts or cubic feet in the US** (8 qt, 16 qt, 1–2 cu ft) and in litres elsewhere. One cubic foot is about 26 quarts or 28 litres.
+- **Nursery "gallon" sizes are trade sizes, not measurements.** A #1 ("1-gallon") pot holds about 3 quarts; a #5 holds about 4 gallons.
+- **Use potting mix, not garden soil, in pots.** Garden soil packs down in containers and stays waterlogged at the bottom.
+
+## References
+
+Soil volume for trees: Lindsey, P., Bassuk, N. (1991). Specifying soil volumes to meet the water needs of mature urban street trees and trees in containers. *Journal of Arboriculture* 17, 141–149.
