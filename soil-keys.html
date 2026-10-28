@@ -4366,26 +4366,444 @@ const SUB = {
   ]
 };
 
+/* ---------------- CSV engine: answers each key question from horizon data ----------------
+   Columns use the soilKey names. Each question returns { a: "y" | "n" | "u", w: [en, pt] reason }.
+   Sources, in order of priority: a y/n field call column, then the horizon data, then the horizon designation.
+   "u" (not determined) is followed as No, as in the step-by-step key, and the profile is marked provisional. */
+const BR_CALLS = ["b_textural", "b_latossolico", "b_incipiente", "b_nitico", "b_espodico", "b_planico", "horizonte_glei", "horizonte_plintico",
+  "horizonte_concrecionario", "horizonte_litoplintico", "horizonte_vertico", "a_chernozemico", "a_humico", "a_proeminente", "carater_fluvico",
+  "carater_retratil", "materiais_sulfidricos", "quartzoso"];
+const BR_NUM = ["top_cm", "bottom_cm", "munsell_value_moist", "munsell_chroma_moist", "munsell_value_dry", "clay_pct", "silt_pct", "sand_pct", "oc_pct",
+  "cec_cmol", "bs_pct", "ca_cmol", "mg_cmol", "k_cmol", "na_cmol", "al_cmol", "ec_ds_m", "caco3_pct", "plinthite_pct", "redoximorphic_features_pct",
+  "cracks_width_cm", "cracks_depth_cm", "cole_value", "weatherable_minerals_pct", "coarse_fragments_pct"];
+const BR_TXT = ["designation", "munsell_hue_moist", "slickensides", "clay_films_amount", "structure_grade", "structure_type", "cementation_class"];
+
+function brParseCSV(text) {
+  const lines = text.replace(/^﻿/, "").replace(/\r/g, "").split("\n").filter(l => l.trim());
+  if (!lines.length) return [];
+  const sep = lines[0].includes("\t") ? "\t" : (lines[0].split(";").length > lines[0].split(",").length ? ";" : ",");
+  const split = l => { const o = []; let c = "", q = false; for (let i = 0; i < l.length; i++) { const ch = l[i]; if (ch === '"') { if (q && l[i + 1] === '"') { c += '"'; i++; } else q = !q; } else if (ch === sep && !q) { o.push(c.trim()); c = ""; } else c += ch; } o.push(c.trim()); return o; };
+  const head = split(lines[0]).map(h => h.toLowerCase().replace(/\s+/g, "_"));
+  const ix = n => head.indexOf(n);
+  if (ix("top_cm") < 0 || ix("bottom_cm") < 0) throw new Error("top_cm / bottom_cm");
+  const num = v => { if (v == null) return null; const s = String(v).trim().replace(",", "."); if (s === "" || s.toLowerCase() === "na") return null; const x = +s; return isFinite(x) ? x : null; };
+  const yn = v => { const s = String(v || "").trim().toLowerCase(); return ["y", "yes", "s", "sim", "true", "1"].includes(s) ? "y" : ["n", "no", "nao", "não", "false", "0"].includes(s) ? "n" : ""; };
+  const profs = new Map();
+  lines.slice(1).map(split).forEach(r => {
+    const id = ix("id") >= 0 && r[ix("id")] ? r[ix("id")] : "P1";
+    if (!profs.has(id)) profs.set(id, { id, calls: {}, hz: [] });
+    const P = profs.get(id), h = {};
+    BR_NUM.forEach(k => { h[k] = ix(k) >= 0 ? num(r[ix(k)]) : null; });
+    if (h.ec_ds_m == null && ix("ec_ds_m") < 0 && ix("ec_dsm") >= 0) h.ec_ds_m = num(r[ix("ec_dsm")]);
+    BR_TXT.forEach(k => { h[k] = ix(k) >= 0 ? (r[ix(k)] || "").trim() : ""; });
+    BR_CALLS.forEach(k => { if (ix(k) >= 0) { const v = yn(r[ix(k)]); if (v && !P.calls[k]) P.calls[k] = v; } });
+    if (ix("lithic_contact_cm") >= 0) { const v = (r[ix("lithic_contact_cm")] || "").trim().toLowerCase(); if (v === "none" || v === "nenhum") P.calls.lithic = "none"; else if (num(v) != null && P.calls.lithic == null) P.calls.lithic = num(v); }
+    if (h.top_cm != null && h.bottom_cm != null && h.bottom_cm > h.top_cm) P.hz.push(h);
+  });
+  return [...profs.values()].map(P => { P.hz.sort((a, b) => a.top_cm - b.top_cm); return P; }).filter(P => P.hz.length);
+}
+
+/* hue on one scale: 10R = 10, 2.5YR = 12.5, 5YR = 15, 7.5YR = 17.5, 10YR = 20, 2.5Y = 22.5, 5Y = 25; gley hues higher */
+function brHue(s) {
+  const m = String(s || "").trim().toUpperCase().replace(",", ".").match(/^(\d+(?:\.\d+)?)\s*(YR|R|Y|GY|G|BG|B)$/);
+  if (!m) return /^N/i.test(String(s || "").trim()) ? 99 : null;
+  return +m[1] + { R: 0, YR: 10, Y: 20, GY: 30, G: 40, BG: 50, B: 60 }[m[2]];
+}
+const brM = d => { const m = String(d || "").replace(/^\d+/, "").match(/^([A-Z]+)/); return m ? m[1] : ""; };
+const brSuf = d => String(d || "").replace(/^\d+/, "").replace(/^[A-Z]+/, "").replace(/\d+$/, "");
+const brIsB = h => /^B/.test(brM(h.designation)) && !/^BC/.test(brM(h.designation));
+const brIsA = h => /^A/.test(brM(h.designation));
+const brThick = h => h.bottom_cm - h.top_cm;
+const R2 = (en, pt) => [en, pt];
+
+function brAnalyse(P) {
+  const H = P.hz, C = P.calls, hasDesg = H.some(h => h.designation);
+  const V = h => h.bs_pct != null ? h.bs_pct : (h.cec_cmol && [h.ca_cmol, h.mg_cmol, h.k_cmol, h.na_cmol].every(x => x != null) ? 100 * (h.ca_cmol + h.mg_cmol + h.k_cmol + h.na_cmol) / h.cec_cmol : null);
+  const Ta = h => (h.cec_cmol != null && h.clay_pct) ? h.cec_cmol * 100 / h.clay_pct >= 27 : null;
+  const sodic = h => (h.na_cmol != null && h.cec_cmol) ? 100 * h.na_cmol / h.cec_cmol >= 15 : (/n/.test(brSuf(h.designation)) ? true : null);
+  const sandy = h => h.clay_pct != null && h.silt_pct != null ? h.silt_pct + 2 * h.clay_pct < 30 : (h.clay_pct != null && h.sand_pct != null ? h.sand_pct >= 70 && h.clay_pct < 15 : null);
+  const surfaceTop = Math.min(...H.map(h => h.top_cm));
+  const rockTop = (() => { if (C.lithic === "none") return Infinity; if (typeof C.lithic === "number") return C.lithic; const r = H.find(h => /^R/.test(brM(h.designation))); return r ? r.top_cm : (hasDesg ? Infinity : null); })();
+  const firstB = H.find(brIsB);
+  const Bs = firstB ? H.filter(h => brIsB(h) && h.top_cm < firstB.top_cm + 100) : [];
+  // share of the first 100 cm of the B (incl. BA) meeting a test: y if more than half of the known thickness, u if no data
+  function mostB(test, hs = Bs) {
+    let yes = 0, known = 0;
+    hs.forEach(h => { const t = test(h); if (t == null) return; const w = Math.min(h.bottom_cm, (firstB ? firstB.top_cm : 0) + 100) - h.top_cm; known += w; if (t) yes += w; });
+    return known ? (yes > known / 2 ? "y" : "n") : "u";
+  }
+  const hueOk = (h, f) => { const x = brHue(h.munsell_hue_moist); return x == null ? null : f(x, h.munsell_value_moist, h.munsell_chroma_moist); };
+
+  // ---- diagnostic horizons: call, then designation, then data ----
+  const D = {};
+  const byCall = (k, en, pt) => C[k] ? { a: C[k], w: R2(`${en}: from the ${k} column.`, `${pt}: pela coluna ${k}.`) } : null;
+  // histic layers
+  const hist = H.filter(h => /^[OH]/.test(brM(h.designation)) || (h.oc_pct != null && h.oc_pct >= 8));
+  // B textural
+  D.bt = (() => {
+    const c = byCall("b_textural", "B textural", "B textural"); if (c) return c;
+    const A = H.filter(h => brIsA(h) || /^E/.test(brM(h.designation))), tB = H.filter(h => brIsB(h) && /t/.test(brSuf(h.designation)));
+    if (A.length && firstB && A.every(h => h.clay_pct != null)) {
+      const aT = A.reduce((s, h) => s + brThick(h), 0), aC = A.reduce((s, h) => s + h.clay_pct * brThick(h), 0) / aT;
+      const span = aT < 15 ? 30 : 2 * aT, bh = H.filter(h => brIsB(h) && h.top_cm < firstB.top_cm + span && h.clay_pct != null);
+      if (bh.length) {
+        const bC = bh.reduce((s, h) => s + h.clay_pct * (Math.min(h.bottom_cm, firstB.top_cm + span) - h.top_cm), 0) / bh.reduce((s, h) => s + (Math.min(h.bottom_cm, firstB.top_cm + span) - h.top_cm), 0);
+        const lim = aC > 40 ? 1.5 : aC >= 15 ? 1.7 : 1.8, ratio = bC / aC;
+        const films = bh.some(h => /common|many|comum|abundante|muita/i.test(h.clay_films_amount));
+        if (ratio > lim) return { a: "y", w: R2(`B textural: textural ratio B/A ${ratio.toFixed(2)} > ${lim}.`, `B textural: relação textural B/A ${ratio.toFixed(2).replace(".", ",")} > ${String(lim).replace(".", ",")}.`), ratio };
+        if (films || tB.length) return { a: "y", w: R2(`B textural: ratio ${ratio.toFixed(2)}, but ${films ? "clay films (cerosidade)" : "designated Bt"}.`, `B textural: relação ${ratio.toFixed(2).replace(".", ",")}, mas com ${films ? "cerosidade" : "designação Bt"}.`), soft: true, ratio };
+        return { a: "n", w: R2(`No B textural: ratio B/A ${ratio.toFixed(2)} ≤ ${lim} and no clay films.`, `Sem B textural: relação B/A ${ratio.toFixed(2).replace(".", ",")} ≤ ${String(lim).replace(".", ",")} e sem cerosidade.`), ratio };
+      }
+    }
+    if (tB.length) return { a: "y", w: R2("B textural: designated Bt.", "B textural: designação Bt.") };
+    if (hasDesg && !firstB) return { a: "n", w: R2("No B horizon described.", "Sem horizonte B descrito.") };
+    return { a: "u", w: R2("B textural: needs designations and clay of A and B, or the b_textural column.", "B textural: faltam designações e argila do A e do B, ou a coluna b_textural.") };
+  })();
+  const fromSuffix = (k, en, pt, re, label) => {
+    const c = byCall(k, en, pt); if (c) return c;
+    const hs = H.filter(h => brIsB(h) && re.test(brSuf(h.designation)));
+    if (hs.length) return { a: "y", w: R2(`${en}: designated ${hs[0].designation}.`, `${pt}: designação ${hs[0].designation}.`), top: hs[0].top_cm };
+    if (hasDesg) return { a: "n", w: R2(`No ${en} (${label}) in the designations.`, `Sem ${pt} (${label}) nas designações.`) };
+    return { a: "u", w: R2(`${en}: needs designations or the ${k} column.`, `${pt}: faltam designações ou a coluna ${k}.`) };
+  };
+  D.bw = fromSuffix("b_latossolico", "B latossólico", "B latossólico", /w/, "Bw");
+  D.bi = fromSuffix("b_incipiente", "B incipiente", "B incipiente", /i/, "Bi");
+  D.bh = fromSuffix("b_espodico", "B espódico", "B espódico", /[hs]/, "Bh, Bs");
+  D.bn = byCall("b_nitico", "B nítico", "B nítico") || (() => {
+    if (!firstB) return hasDesg ? { a: "n", w: R2("No B horizon described.", "Sem horizonte B descrito.") } : { a: "u", w: R2("B nítico: needs designations or the b_nitico column.", "B nítico: faltam designações ou a coluna b_nitico.") };
+    if (Bs.some(h => h.clay_pct != null && h.clay_pct < 35)) return { a: "n", w: R2("No B nítico: B not clayey (clay < 35%).", "Sem B nítico: B não argiloso (argila < 350 g/kg).") };
+    if (D.bt.ratio != null && D.bt.ratio > 1.5) return { a: "n", w: R2(`No B nítico: textural ratio ${D.bt.ratio.toFixed(2)} > 1.5.`, `Sem B nítico: relação textural ${D.bt.ratio.toFixed(2).replace(".", ",")} > 1,5.`) };
+    const g = Bs.filter(h => h.structure_grade), f = Bs.filter(h => h.clay_films_amount);
+    if (g.length && g.every(h => /weak|fraca|single|massive|maciça|grãos/i.test(h.structure_grade))) return { a: "n", w: R2("No B nítico: weak or no structure.", "Sem B nítico: estrutura fraca ou ausente.") };
+    if (f.length && f.every(h => /none|few|pouca|ausente/i.test(h.clay_films_amount))) return { a: "n", w: R2("No B nítico: few or no clay films.", "Sem B nítico: cerosidade pouca ou ausente.") };
+    const thick = Bs.reduce((t, h) => t + brThick(h), 0);
+    if (g.length && f.length && Bs.every(h => h.clay_pct != null) && thick >= 30) return { a: "y", w: R2("B nítico: clayey, moderate/strong blocky structure, common clay films, little clay increase.", "B nítico: argiloso, estrutura em blocos moderada/forte, cerosidade comum, pequeno incremento de argila.") };
+    return { a: "u", w: R2("B nítico: needs clay, structure_grade and clay_films_amount of the B, or the b_nitico column.", "B nítico: faltam argila, structure_grade e clay_films_amount do B, ou a coluna b_nitico.") };
+  })();
+  D.bp = (() => {
+    const c = byCall("b_planico", "B plânico", "B plânico"); if (c) return c;
+    if (D.bt.a === "n") return { a: "n", w: R2("No B plânico: no B textural.", "Sem B plânico: sem B textural.") };
+    const A = [...H].reverse().find(h => firstB && h.bottom_cm <= firstB.top_cm && (brIsA(h) || /^E/.test(brM(h.designation))));
+    if (A && firstB && A.clay_pct != null && firstB.clay_pct != null) {
+      const abrupt = A.clay_pct < 20 ? firstB.clay_pct >= 2 * A.clay_pct : firstB.clay_pct - A.clay_pct >= 20;
+      const wet = /[gn]/.test(brSuf(firstB.designation)) || (firstB.munsell_chroma_moist != null && firstB.munsell_chroma_moist <= 2);
+      if (!abrupt) return { a: "n", w: R2("No B plânico: no abrupt textural change.", "Sem B plânico: sem mudança textural abrupta.") };
+      const known = firstB.munsell_chroma_moist != null || firstB.designation;
+      if (!wet && known && firstB.munsell_chroma_moist != null && firstB.munsell_chroma_moist >= 3 && !(firstB.redoximorphic_features_pct > 20)) return { a: "n", w: R2("Abrupt textural change, but the B is not grey or mottled (no impeded drainage): not a B plânico.", "Mudança textural abrupta, mas o B não é acinzentado nem mosqueado (sem drenagem imperfeita): não é B plânico.") };
+      return wet ? { a: "y", w: R2("B plânico: abrupt textural change into a grey or sodic B.", "B plânico: mudança textural abrupta para B acinzentado ou sódico.") } : { a: "u", w: R2("Abrupt textural change, but a B plânico also needs a dense B with impeded drainage: give the b_planico column.", "Mudança textural abrupta, mas o B plânico exige B adensado com drenagem imperfeita: informe a coluna b_planico.") };
+    }
+    return { a: "u", w: R2("B plânico: give the b_planico column.", "B plânico: informe a coluna b_planico.") };
+  })();
+  const layer = (k, en, pt, test, label) => {
+    const c = byCall(k, en, pt);
+    const hs = H.filter(test);
+    if (c) return { ...c, top: c.a === "y" ? (hs.length ? hs[0].top_cm : null) : null };
+    if (hs.length) return { a: "y", w: R2(`${en}: ${label(hs[0])}, from ${hs[0].top_cm} cm.`, `${pt}: ${label(hs[0])}, a partir de ${hs[0].top_cm} cm.`), top: hs[0].top_cm };
+    return hasDesg ? { a: "n", w: R2(`No ${en.toLowerCase()}.`, `Sem ${pt.toLowerCase()}.`) } : { a: "u", w: R2(`${en}: needs designations or the ${k} column.`, `${pt}: faltam designações ou a coluna ${k}.`) };
+  };
+  D.glei = layer("horizonte_glei", "Glei horizon", "Horizonte glei", h => /g/.test(brSuf(h.designation)) && !/^A/.test(brM(h.designation)), h => h.designation);
+  D.plin = layer("horizonte_plintico", "Plinthic horizon", "Horizonte plíntico", h => /f/.test(brSuf(h.designation)) || (h.plinthite_pct != null && h.plinthite_pct >= 15), h => h.designation || `${h.plinthite_pct}% plinthite`);
+  D.conc = layer("horizonte_concrecionario", "Concretionary horizon", "Horizonte concrecionário", h => /c/.test(brSuf(h.designation)) && /^[BC]/.test(brM(h.designation)), h => h.designation);
+  D.lito = layer("horizonte_litoplintico", "Litoplinthic horizon", "Horizonte litoplíntico", h => /^F/.test(brM(h.designation)) || /[fc]m/.test(brSuf(h.designation)), h => h.designation);
+  D.vert = layer("horizonte_vertico", "Vertic horizon", "Horizonte vértico", h => /v/.test(brSuf(h.designation)) || /common|many|continuous|comum|muit|abundante|contínu/i.test(h.slickensides), h => h.designation || "slickensides");
+  // surface horizons
+  const Ahz = H.filter(h => brIsA(h) && h.top_cm < 100), aThick = Ahz.reduce((s, h) => s + brThick(h), 0);
+  const solum = H.filter(h => brIsA(h) || /^[EB]/.test(brM(h.designation))).reduce((s, h) => s + brThick(h), 0);
+  const thickOk = !Ahz.length ? null : (rockTop != null && Ahz.length && Math.max(...Ahz.map(h => h.bottom_cm)) >= rockTop - 0.01 ? aThick >= 10 : solum >= 75 ? aThick >= 25 : aThick >= 18 && aThick > solum / 3);
+  const darkA = Ahz.length && Ahz.every(h => h.munsell_value_moist != null && h.munsell_chroma_moist != null) ? Ahz.every(h => h.munsell_value_moist <= 3 && h.munsell_chroma_moist <= 3 && (h.munsell_value_dry == null || h.munsell_value_dry <= 5)) : null;
+  const aV = Ahz.length && Ahz.every(h => V(h) != null) ? Math.min(...Ahz.map(V)) : null;
+  const aOC = Ahz.length && Ahz.every(h => h.oc_pct != null) ? Math.min(...Ahz.map(h => h.oc_pct)) : null;
+  D.achern = byCall("a_chernozemico", "A chernozêmico", "A chernozêmico") || (() => {
+    if (!Ahz.length) return { a: hasDesg ? "n" : "u", w: R2("No A horizon described.", "Sem horizonte A descrito.") };
+    if (darkA === false || (aV != null && aV < 65) || thickOk === false || (aOC != null && aOC < 0.6)) return { a: "n", w: R2(`No A chernozêmico (${darkA === false ? "not dark enough" : aV != null && aV < 65 ? `V ${Math.round(aV)}% < 65%` : thickOk === false ? `too thin, ${aThick} cm` : "organic C < 0.6%"}).`, `Sem A chernozêmico (${darkA === false ? "não é escuro o bastante" : aV != null && aV < 65 ? `V ${Math.round(aV)}% < 65%` : thickOk === false ? `delgado, ${aThick} cm` : "C orgânico < 6 g/kg"}).`) };
+    if (darkA && aV != null && thickOk && aOC != null) return { a: "y", w: R2(`A chernozêmico: dark, V ${Math.round(aV)}%, ${aThick} cm (structure not checked).`, `A chernozêmico: escuro, V ${Math.round(aV)}%, ${aThick} cm (estrutura não verificada).`) };
+    return { a: "u", w: R2("A chernozêmico: needs moist colour, V%, organic C and thickness of the A, or the a_chernozemico column.", "A chernozêmico: faltam cor úmida, V%, C orgânico e espessura do A, ou a coluna a_chernozemico.") };
+  })();
+  D.ahum = byCall("a_humico", "A húmico", "A húmico") || (() => {
+    if (!Ahz.length) return { a: hasDesg ? "n" : "u", w: R2("No A horizon described.", "Sem horizonte A descrito.") };
+    const ok4 = Ahz.every(h => h.munsell_value_moist != null && h.munsell_chroma_moist != null) ? Ahz.every(h => h.munsell_value_moist <= 4 && h.munsell_chroma_moist <= 4) : null;
+    if (ok4 === false || (aV != null && aV >= 65) || thickOk === false) return { a: "n", w: R2("No A húmico (colour, V% or thickness).", "Sem A húmico (cor, V% ou espessura).") };
+    if (Ahz.every(h => h.oc_pct != null && h.clay_pct != null)) {
+      const stock = Ahz.reduce((s, h) => s + h.oc_pct * 10 * brThick(h) / 10, 0), clay = Ahz.reduce((s, h) => s + h.clay_pct * 10 * brThick(h), 0) / aThick, need = 60 + 0.1 * clay;
+      if (stock < need) return { a: "n", w: R2(`No A húmico: carbon stock ${Math.round(stock)} < ${Math.round(need)}.`, `Sem A húmico: estoque de carbono ${Math.round(stock)} < ${Math.round(need)}.`) };
+      if (ok4 && aV != null && thickOk) return { a: "y", w: R2(`A húmico: carbon stock ${Math.round(stock)} ≥ ${Math.round(need)}, V ${Math.round(aV)}%.`, `A húmico: estoque de carbono ${Math.round(stock)} ≥ ${Math.round(need)}, V ${Math.round(aV)}%.`) };
+    }
+    return { a: "u", w: R2("A húmico: needs colour, V%, organic C, clay and thickness of the A, or the a_humico column.", "A húmico: faltam cor, V%, C orgânico, argila e espessura do A, ou a coluna a_humico.") };
+  })();
+  D.aprom = byCall("a_proeminente", "A proeminente", "A proeminente") || (() => {
+    if (!Ahz.length) return { a: hasDesg ? "n" : "u", w: R2("No A horizon described.", "Sem horizonte A descrito.") };
+    if (darkA === false || (aV != null && aV >= 65) || thickOk === false) return { a: "n", w: R2("No A proeminente.", "Sem A proeminente.") };
+    if (darkA && aV != null && thickOk && aOC != null && aOC >= 0.6) return { a: "y", w: R2(`A proeminente: dark, V ${Math.round(aV)}% < 65%.`, `A proeminente: escuro, V ${Math.round(aV)}% < 65%.`) };
+    return { a: "u", w: R2("A proeminente: needs colour, V% and thickness of the A.", "A proeminente: faltam cor, V% e espessura do A.") };
+  })();
+  const carbonatic = hs => hs.some(h => (h.caco3_pct != null && h.caco3_pct >= 15) || /k/.test(brSuf(h.designation)));
+  const anyCaco3 = H.some(h => h.caco3_pct != null);
+
+  // ---- the 13 order questions ----
+  const Q = {};
+  const glTop = D.glei.a === "y" ? D.glei.top : null, plTop = [D.plin, D.conc, D.lito].filter(x => x.a === "y" && x.top != null).map(x => x.top);
+  const anyPl = [D.plin, D.conc, D.lito];
+  Q.O = (() => {
+    if (C.histico) return { a: C.histico, w: R2("From the histico column.", "Pela coluna histico.") };
+    if (!hist.length) return H.some(h => h.oc_pct != null) || hasDesg ? { a: "n", w: R2("No histic layer (organic C ≥ 8%, or O/H designation).", "Sem camada hística (C orgânico ≥ 80 g/kg, ou designação O/H).") } : { a: "u", w: R2("Needs organic C or designations.", "Faltam C orgânico ou designações.") };
+    const top = surfaceTop, in80 = hist.reduce((s, h) => s + Math.max(0, Math.min(h.bottom_cm, top + 80) - Math.max(h.top_cm, top)), 0);
+    const histTot = hist.reduce((s, h) => s + brThick(h), 0), last = hist[hist.length - 1];
+    const overRock = rockTop != null && rockTop !== Infinity && Math.abs(last.bottom_cm - rockTop) < 1 && histTot >= 20;
+    if (in80 >= 40 || overRock) return { a: "y", w: R2(overRock ? `Histic ${histTot} cm over rock.` : `Histic ${in80} cm within the upper 80 cm.`, overRock ? `Hístico com ${histTot} cm sobre rocha.` : `Hístico com ${in80} cm nos primeiros 80 cm.`) };
+    return { a: "n", w: R2(`Histic layers too thin (${in80} cm within 80 cm).`, `Camadas hísticas delgadas (${in80} cm nos primeiros 80 cm).`) };
+  })();
+  const Bdiag = [D.bt, D.bw, D.bi, D.bn, D.bh, D.bp];
+  Q.R = (() => {
+    if (Bdiag.some(x => x.a === "y")) return { a: "n", w: R2("Has a diagnostic B horizon.", "Tem horizonte B diagnóstico.") };
+    if (glTop != null && glTop <= 50 && !H.filter(h => h.top_cm < 150).every(h => sandy(h) === true)) return { a: "n", w: R2(`Glei horizon at ${glTop} cm (within 50 cm).`, `Horizonte glei a ${glTop} cm (dentro de 50 cm).`) };
+    if (D.plin.a === "y" && D.plin.top <= 40) return { a: "n", w: R2("Plinthic horizon within 40 cm.", "Horizonte plíntico dentro de 40 cm.") };
+    if (D.vert.a === "y") { const v = H.find(h => h.top_cm === D.vert.top), i = H.indexOf(v); if (i === 0 || (i > 0 && brIsA(H[i - 1]))) return { a: "n", w: R2("Vertic horizon directly below the A.", "Horizonte vértico logo abaixo do A.") }; }
+    if (D.achern.a === "y" && carbonatic(H)) return { a: "n", w: R2("A chernozêmico with carbonates.", "A chernozêmico com carbonatos.") };
+    if (Bdiag.some(x => x.a === "u")) return { a: "u", w: R2("Some diagnostic B horizons could not be ruled out.", "Alguns horizontes B diagnósticos não puderam ser descartados.") };
+    return { a: "y", w: R2("No diagnostic B horizon.", "Sem horizonte B diagnóstico.") };
+  })();
+  Q.V = (() => {
+    if (D.vert.a !== "y") return { a: D.vert.a, w: D.vert.w };
+    if (D.vert.top > 100) return { a: "n", w: R2(`Vertic horizon starts at ${D.vert.top} cm (> 100).`, `Horizonte vértico a ${D.vert.top} cm (> 100).`) };
+    if (D.bt.a === "y" && !D.bt.soft) return { a: "n", w: R2("The clay increase is enough for a B textural.", "O incremento de argila é suficiente para B textural.") };
+    const w20 = H.filter(h => h.top_cm < 20 && h.clay_pct != null), cw = w20.reduce((s, h) => s + Math.min(h.bottom_cm, 20) - h.top_cm, 0);
+    const c20 = cw ? w20.reduce((s, h) => s + h.clay_pct * (Math.min(h.bottom_cm, 20) - h.top_cm), 0) / cw : null;
+    if (c20 != null && c20 < 30) return { a: "n", w: R2(`Clay in the upper 20 cm ${Math.round(c20)}% (< 30%).`, `Argila nos 20 cm superficiais ${Math.round(c20)}% (< 300 g/kg).`) };
+    if (rockTop != null && rockTop <= 30) return { a: "n", w: R2("Rock within 30 cm.", "Rocha dentro de 30 cm.") };
+    const cr = H.find(h => h.cracks_width_cm != null);
+    const cracks = cr ? (cr.cracks_width_cm >= 1 && (cr.cracks_depth_cm == null || cr.cracks_depth_cm >= 30)) : H.some(h => h.cole_value != null) ? H.some(h => h.cole_value >= 0.06) : null;
+    if (cracks === false) return { a: "n", w: R2("Cracks / COLE below the limits.", "Fendas / COLE abaixo dos limites.") };
+    if (c20 == null || cracks == null) return { a: "u", w: R2("Vertic horizon found; needs clay in the upper 20 cm and cracks (cracks_width_cm) or COLE.", "Horizonte vértico presente; faltam argila nos 20 cm superficiais e fendas (cracks_width_cm) ou COLE.") };
+    return { a: "y", w: R2(`Vertic horizon from ${D.vert.top} cm, ${Math.round(c20)}% clay at the surface, cracks or COLE met.`, `Horizonte vértico a partir de ${D.vert.top} cm, ${Math.round(c20)}% de argila na superfície, fendas ou COLE atendidos.`) };
+  })();
+  Q.E = D.bh.a === "y" && D.bh.top != null && D.bh.top > 200 ? { a: "n", w: R2("B espódico deeper than 200 cm.", "B espódico abaixo de 200 cm.") } : D.bh;
+  Q.S = (() => {
+    if (D.bp.a !== "y") return D.bp;
+    const sod = firstB ? sodic(firstB) : null;
+    if (D.plin.a === "y" && firstB && D.plin.top <= firstB.bottom_cm && sod !== true) return { a: "n", w: R2("B plânico without sodic character coincides with a plinthic horizon.", "B plânico sem caráter sódico coincide com horizonte plíntico.") };
+    return D.bp;
+  })();
+  Q.G = (() => {
+    if (D.glei.a !== "y") return D.glei;
+    if (glTop == null) return { a: "u", w: R2("Glei horizon depth unknown.", "Profundidade do horizonte glei desconhecida.") };
+    if (glTop > 150) return { a: "n", w: R2(`Glei horizon at ${glTop} cm (> 150).`, `Horizonte glei a ${glTop} cm (> 150).`) };
+    if (glTop > 50) { const i = H.findIndex(h => h.top_cm === glTop), up = i > 0 ? H[i - 1] : null; if (!up || !/^[AEHO]/.test(brM(up.designation))) return { a: "n", w: R2(`Glei horizon at ${glTop} cm is not directly below an A, E or histic horizon.`, `Horizonte glei a ${glTop} cm não está logo abaixo de A, E ou hístico.`) }; }
+    if (plTop.some(t => t <= 200)) return { a: "n", w: R2("Plinthic, concretionary or litoplinthic horizon within 200 cm.", "Horizonte plíntico, concrecionário ou litoplíntico dentro de 200 cm.") };
+    const above = H.filter(h => brIsB(h) && h.top_cm < glTop && /[twihs]/.test(brSuf(h.designation)) && !/g/.test(brSuf(h.designation)));
+    if (above.length) return { a: "n", w: R2(`Diagnostic horizon ${above[0].designation} above the glei horizon.`, `Horizonte diagnóstico ${above[0].designation} acima do glei.`) };
+    return { a: "y", w: R2(`Glei horizon from ${glTop} cm.`, `Horizonte glei a partir de ${glTop} cm.`) };
+  })();
+  Q.L = (() => {
+    if (D.bw.a !== "y") return D.bw;
+    if (D.bt.a === "y" && !D.bt.soft) return { a: "n", w: R2("The B latossólico lies below a B textural.", "O B latossólico está abaixo de um B textural.") };
+    if (D.bw.top != null && D.bw.top > (aThick > 150 ? 300 : 200)) return { a: "n", w: R2("B latossólico too deep.", "B latossólico muito profundo.") };
+    return D.bw;
+  })();
+  Q.M = (() => {
+    if (D.achern.a !== "y") return D.achern;
+    const bta = (D.bi.a === "y" || D.bt.a === "y") ? [mostB(Ta), mostB(h => { const v = V(h); return v == null ? null : v >= 50; })] : null;
+    if (bta && bta[0] === "y" && bta[1] === "y") return { a: "y", w: R2("A chernozêmico over a B with Ta clay and V ≥ 50%.", "A chernozêmico sobre B com argila Ta e V ≥ 50%.") };
+    const AC = H.filter(h => brIsA(h) || /^C/.test(brM(h.designation)));
+    if (carbonatic(AC)) return { a: "y", w: R2("A chernozêmico with carbonatic character or calcic horizon in the A and/or C.", "A chernozêmico com caráter carbonático ou horizonte cálcico no A e/ou C.") };
+    if (bta && (bta[0] === "u" || bta[1] === "u")) return { a: "u", w: R2("A chernozêmico; needs CEC, clay and V% of the B.", "A chernozêmico; faltam CTC, argila e V% do B.") };
+    if (!anyCaco3 && !bta) return { a: "u", w: R2("A chernozêmico; needs CaCO₃ or B data.", "A chernozêmico; faltam CaCO₃ ou dados do B.") };
+    return { a: "n", w: R2("A chernozêmico, but no Ta/high-V B and no carbonates.", "A chernozêmico, mas sem B Ta com V alto e sem carbonatos.") };
+  })();
+  // Plintossolos (also needed to exclude Cambissolos)
+  Q.F = (() => {
+    const ys = anyPl.filter(x => x.a === "y");
+    if (!ys.length) return anyPl.some(x => x.a === "u") ? { a: "u", w: R2("Plinthic horizons could not be ruled out.", "Horizontes plínticos não puderam ser descartados.") } : { a: "n", w: R2("No plinthic, concretionary or litoplinthic horizon.", "Sem horizonte plíntico, concrecionário ou litoplíntico.") };
+    const top = plTop.length ? Math.min(...plTop) : null;
+    if (top == null) return { a: "u", w: R2("Plinthic horizon depth unknown.", "Profundidade do horizonte plíntico desconhecida.") };
+    if (D.bp.a === "y" && firstB && top <= firstB.bottom_cm && sodic(firstB) === true) return { a: "n", w: R2("Coincides with a sodic B plânico.", "Coincide com B plânico sódico.") };
+    if (top <= 40) return { a: "y", w: R2(`Plinthic/concretionary/litoplinthic from ${top} cm.`, `Plíntico/concrecionário/litoplíntico a partir de ${top} cm.`) };
+    if (top > 200) return { a: "n", w: R2(`Plinthic horizon at ${top} cm (> 200).`, `Horizonte plíntico a ${top} cm (> 200).`) };
+    const i = H.findIndex(h => h.top_cm === top), up = i > 0 ? H[i - 1] : null;
+    const pale = up && (() => { const x = brHue(up.munsell_hue_moist); return x != null && (x >= 25 || (x >= 17.5 && x <= 22.5 && up.munsell_chroma_moist != null && up.munsell_chroma_moist <= 4 && (up.munsell_value_moist == null || up.munsell_value_moist >= 5))); })();
+    if ((glTop != null && glTop < top) || (up && (/^[AE]/.test(brM(up.designation)) || pale || (up.redoximorphic_features_pct != null && up.redoximorphic_features_pct > 20)))) return { a: "y", w: R2(`Plinthic horizon at ${top} cm below a glei, A/E, pale or mottled horizon.`, `Horizonte plíntico a ${top} cm abaixo de horizonte glei, A/E, pálido ou mosqueado.`) };
+    return up && (up.munsell_hue_moist || up.redoximorphic_features_pct != null) ? { a: "n", w: R2(`Plinthic horizon at ${top} cm, not below a glei, A/E, pale or mottled horizon.`, `Horizonte plíntico a ${top} cm, não abaixo de glei, A/E, horizonte pálido ou mosqueado.`) } : { a: "u", w: R2(`Plinthic horizon at ${top} cm; needs the colour or mottles of the horizon above.`, `Horizonte plíntico a ${top} cm; faltam cor ou mosqueados do horizonte acima.`) };
+  })();
+  Q.C = (() => {
+    if (D.bi.a !== "y") return D.bi;
+    if (Q.F.a === "y") return { a: "n", w: R2("Meets the Plintossolos requirements.", "Atende aos requisitos dos Plintossolos.") };
+    return D.bi;
+  })();
+  Q.T = (() => {
+    if (D.bt.a !== "y") return D.bt;
+    const ta = mostB(Ta), hv = mostB(h => { const v = V(h); return v == null ? null : v >= 50; });
+    if (ta === "y" && hv === "y") return { a: "y", w: R2("B textural with Ta clay and V ≥ 50% in most of the first 100 cm.", "B textural com argila Ta e V ≥ 50% na maior parte dos primeiros 100 cm.") };
+    if (ta === "n" || hv === "n") return { a: "n", w: R2(`B textural with ${ta === "n" ? "Tb clay" : "V < 50%"}.`, `B textural com ${ta === "n" ? "argila Tb" : "V < 50%"}.`) };
+    return { a: "u", w: R2("B textural; needs CEC, clay and V% of the B.", "B textural; faltam CTC, argila e V% do B.") };
+  })();
+  Q.N = (() => {
+    if (D.bn.a !== "y") return D.bn;
+    const upper = H.filter(h => brIsA(h) || (firstB && h.top_cm < firstB.top_cm + 100 && brIsB(h)));
+    if (upper.some(h => h.clay_pct != null && h.clay_pct < 35)) return { a: "n", w: R2("Clay below 35% in the A or B.", "Argila abaixo de 350 g/kg no A ou no B.") };
+    const tb = mostB(h => { const t = Ta(h); return t == null ? null : !t || (h.al_cmol != null && h.al_cmol >= 4); });
+    if (tb === "n") return { a: "n", w: R2("B nítico with Ta clay and no caráter alumínico.", "B nítico com argila Ta sem caráter alumínico.") };
+    return tb === "y" ? { a: "y", w: R2("Clayey soil with a B nítico of Tb clay (or Ta with Al).", "Solo argiloso com B nítico de argila Tb (ou Ta com Al).") } : { a: "u", w: R2("B nítico; needs CEC and clay of the B.", "B nítico; faltam CTC e argila do B.") };
+  })();
+  Q.P = D.bt;
+
+  // ---- suborders ----
+  const S = {};
+  const colourB = f => mostB(h => hueOk(h, f));
+  const upperB = firstB ? H.filter(h => brIsB(h) && h.top_cm < firstB.top_cm + 30) : [];
+  const brunoUpper = () => { if (!upperB.length) return { a: "u", w: R2("No B colours.", "Sem cores do B.") }; const t = upperB.map(h => hueOk(h, (x, v, c) => v != null && c != null && ((x >= 17.5 && v <= 4 && c <= 6) || (x >= 15 && x < 17.5 && v <= 4 && c < 6)))); return t.some(x => x == null) ? { a: "u", w: R2("Needs the moist colour of the upper B.", "Falta a cor úmida do B superior.") } : t.every(Boolean) ? { a: "y", w: R2("Upper B brownish and dark.", "B superior brunado e escuro.") } : { a: "n", w: R2("Upper B not brownish-dark.", "B superior não é brunado-escuro.") }; };
+  const brunos = depth => {
+    const r = C.carater_retratil;
+    if (r === "n") return { a: "n", w: R2("No caráter retrátil (carater_retratil column).", "Sem caráter retrátil (coluna carater_retratil).") };
+    const col = brunoUpper(); if (col.a === "n") return col;
+    const ocOk = D.ahum.a === "y" || H.filter(h => h.top_cm < depth).every(h => h.oc_pct != null && h.oc_pct > 1) && H.some(h => h.top_cm < depth && h.bottom_cm >= depth);
+    if (!ocOk && D.ahum.a === "n" && H.filter(h => h.top_cm < depth).every(h => h.oc_pct != null)) return { a: "n", w: R2(`Organic C not above 1% to ${depth} cm and no A húmico.`, `C orgânico não supera 10 g/kg até ${depth} cm e sem A húmico.`) };
+    if (r !== "y") return { a: col.a === "y" ? "u" : col.a, w: R2("Brunos need the caráter retrátil: give the carater_retratil column.", "Brunos exigem caráter retrátil: informe a coluna carater_retratil.") };
+    return col.a === "y" && ocOk ? { a: "y", w: R2("Caráter retrátil, humus-rich A, brownish dark upper B.", "Caráter retrátil, A rico em húmus, B superior brunado escuro.") } : { a: "u", w: R2("Check the organic C and upper B colour.", "Verifique o C orgânico e a cor do B superior.") };
+  };
+  const yesNo = (t, yEn, yPt, nEn, nPt) => t === "y" ? { a: "y", w: R2(yEn, yPt) } : t === "n" ? { a: "n", w: R2(nEn, nPt) } : { a: "u", w: R2("Needs moist Munsell colours of the B.", "Faltam as cores Munsell úmidas do B.") };
+  const ebanico = hs => { const t = mostB(h => hueOk(h, (x, v, c) => v == null || c == null ? null : x >= 17.5 ? v < 4 && c < 3 : v <= 2.5 && c <= 1), hs); return yesNo(t, "Caráter ebânico (near-black colours).", "Caráter ebânico (cores quase pretas).", "Not ebânico.", "Não ebânico."); };
+  const sulf = H.some(h => h.top_cm < 100 && /j/.test(brSuf(h.designation))) ? "y" : C.materiais_sulfidricos || (hasDesg ? "n" : "u");
+  const fluv = (lim) => { if (C.carater_fluvico) return C.carater_fluvico; const Cs = H.filter(h => h.top_cm < lim && /^C/.test(brM(h.designation))); if (H.some(h => h.top_cm < lim && /^[2-9]/.test(h.designation || ""))) return "y"; if (Cs.length >= 2 && Cs.every(h => h.oc_pct != null)) { for (let i = 1; i < Cs.length; i++) if (Cs[i].oc_pct > Cs[i - 1].oc_pct + 0.05) return "y"; return "n"; } return hasDesg ? "n" : "u"; };
+  S.P = [
+    () => { const c = colourB((x, v, c) => v != null && c != null ? x >= 15 && v >= 3 && v <= 4 && c <= 4 : null); if (c !== "y") return yesNo(c, "", "", "B not brownish-grey (5YR or yellower, value 3–4, chroma ≤ 4).", "B não bruno-acinzentado (5YR ou mais amarelo, valor 3–4, croma ≤ 4)."); const b = Bs.filter(h => h.munsell_value_moist != null); return b.length >= 2 && (b[0].munsell_value_moist < b[1].munsell_value_moist || (b[0].munsell_chroma_moist ?? 9) < (b[1].munsell_chroma_moist ?? 0)) ? { a: "y", w: R2("Brownish-grey B, darker upper B (dry colours not checked).", "B bruno-acinzentado, com B superior mais escuro (cor seca não verificada).") } : { a: "n", w: R2("Upper B not darker than the B below.", "B superior não é mais escuro que o B abaixo.") }; },
+    () => yesNo(colourB((x, v, c) => v != null && c != null ? x >= 17.5 && v >= 5 && c < 4 : null), "Greyish B (7.5YR or yellower, value ≥ 5, chroma < 4).", "B acinzentado (7,5YR ou mais amarelo, valor ≥ 5, croma < 4).", "B not greyish.", "B não acinzentado."),
+    () => yesNo(colourB(x => x >= 17.5), "B hue 7.5YR or yellower.", "B com matiz 7,5YR ou mais amarelo.", "B hue redder than 7.5YR.", "B com matiz mais vermelho que 7,5YR."),
+    () => yesNo(colourB(x => x <= 12.5), "B hue 2.5YR or redder.", "B com matiz 2,5YR ou mais vermelho.", "B hue yellower than 2.5YR.", "B com matiz mais amarelo que 2,5YR.")];
+  S.C = [
+    () => H.some(h => /^O/.test(brM(h.designation))) || (C.histico === "y") ? { a: "y", w: R2("O histic horizon too thin for the Organossolos.", "Horizonte O hístico sem espessura para Organossolos.") } : hasDesg ? { a: "n", w: R2("No O horizon.", "Sem horizonte O.") } : { a: "u", w: R2("Needs designations.", "Faltam designações.") },
+    () => D.ahum,
+    () => { const f = fluv(150); return { a: f, w: f === "y" ? R2("Caráter flúvico within 150 cm.", "Caráter flúvico dentro de 150 cm.") : f === "n" ? R2("No caráter flúvico.", "Sem caráter flúvico.") : R2("Give the carater_fluvico column.", "Informe a coluna carater_fluvico.") }; }];
+  S.M = [
+    () => { const AC = H.filter(h => brIsA(h) || /^C/.test(brM(h.designation))); return carbonatic(AC) ? { a: "y", w: R2("Carbonatic or calcic in the A and/or C.", "Carbonático ou cálcico no A e/ou C.") } : anyCaco3 || hasDesg ? { a: "n", w: R2("No carbonates in the A or C.", "Sem carbonatos no A ou C.") } : { a: "u", w: R2("Needs caco3_pct.", "Falta caco3_pct.") }; },
+    () => ebanico(Bs),
+    () => D.bt];
+  S.E = [
+    () => H.some(h => brIsB(h) && /h/.test(brSuf(h.designation)) && !/s/.test(brSuf(h.designation))) ? { a: "y", w: R2("Spodic horizon mainly Bh/Bhm.", "Horizonte espódico principalmente Bh/Bhm.") } : hasDesg ? { a: "n", w: R2("No Bh/Bhm.", "Sem Bh/Bhm.") } : { a: "u", w: R2("Needs designations.", "Faltam designações.") },
+    () => H.some(h => brIsB(h) && /s/.test(brSuf(h.designation)) && !/h/.test(brSuf(h.designation))) ? { a: "y", w: R2("Spodic horizon mainly Bs/Bsm.", "Horizonte espódico principalmente Bs/Bsm.") } : hasDesg ? { a: "n", w: R2("No Bs/Bsm.", "Sem Bs/Bsm.") } : { a: "u", w: R2("Needs designations.", "Faltam designações.") }];
+  S.G = [
+    () => ({ a: sulf, w: sulf === "y" ? R2("Sulfidic materials or sulfuric horizon within 100 cm.", "Materiais sulfídricos ou horizonte sulfúrico dentro de 100 cm.") : sulf === "n" ? R2("No sulfidic materials (j suffix or materiais_sulfidricos).", "Sem materiais sulfídricos (sufixo j ou materiais_sulfidricos).") : R2("Give the materiais_sulfidricos column.", "Informe a coluna materiais_sulfidricos.") }),
+    () => { const e = H.filter(h => h.top_cm < 100 && h.ec_ds_m != null); return e.some(h => h.ec_ds_m >= 7) ? { a: "y", w: R2("EC ≥ 7 dS/m within 100 cm.", "CE ≥ 7 dS/m dentro de 100 cm.") } : e.length ? { a: "n", w: R2("EC below 7 dS/m.", "CE abaixo de 7 dS/m.") } : H.some(h => /z/.test(brSuf(h.designation))) ? { a: "u", w: R2("z suffix, but no EC data.", "Sufixo z, mas sem dados de CE.") } : { a: hasDesg ? "n" : "u", w: R2("No EC data or z suffix.", "Sem CE nem sufixo z.") }; },
+    () => { const hh = hist.filter(h => /^H/.test(brM(h.designation)) || h.oc_pct >= 8), ht = hh.reduce((s, h) => s + brThick(h), 0); if (hh.length && ht < 40) return { a: "y", w: R2(`Histic H horizon ${ht} cm (< 40).`, `Horizonte H hístico com ${ht} cm (< 40).`) }; const a = [D.ahum, D.aprom, D.achern]; return a.some(x => x.a === "y") ? { a: "y", w: R2("A húmico, proeminente or chernozêmico.", "A húmico, proeminente ou chernozêmico.") } : a.some(x => x.a === "u") ? { a: "u", w: R2("Needs colour, V% and organic C of the A.", "Faltam cor, V% e C orgânico do A.") } : { a: "n", w: R2("No dark surface horizon.", "Sem horizonte superficial escuro.") }; }];
+  S.L = [() => brunos(70),
+    () => yesNo(colourB(x => x >= 17.5), "B hue 7.5YR or yellower.", "B com matiz 7,5YR ou mais amarelo.", "B hue redder than 7.5YR.", "B com matiz mais vermelho que 7,5YR."),
+    () => yesNo(colourB(x => x <= 12.5), "B hue 2.5YR or redder.", "B com matiz 2,5YR ou mais vermelho.", "B hue yellower than 2.5YR.", "B com matiz mais amarelo que 2,5YR.")];
+  S.T = [() => yesNo(colourB((x, v, c) => v == null || c == null ? null : x <= 15 ? v >= 3 && c >= 4 : x <= 20 ? v >= 4 && c >= 4 : x <= 25 ? v >= 5 && c > 4 : false), "Caráter crômico.", "Caráter crômico.", "Not crômico.", "Não crômico.")];
+  S.R = [
+    () => rockTop == null ? { a: "u", w: R2("Give the depth to rock (lithic_contact_cm) or an R horizon.", "Informe a profundidade da rocha (lithic_contact_cm) ou um horizonte R.") } : rockTop <= 50 ? { a: "y", w: R2(`Rock at ${rockTop} cm.`, `Rocha a ${rockTop} cm.`) } : { a: "n", w: R2(rockTop === Infinity ? "No rock described." : `Rock at ${rockTop} cm (> 50).`, rockTop === Infinity ? "Sem rocha descrita." : `Rocha a ${rockTop} cm (> 50).`) },
+    () => { const f = fluv(150); if (f === "y" && glTop != null && glTop <= 50) return { a: "n", w: R2("Fluvic, but gleyed within 50 cm.", "Flúvico, mas com gleização dentro de 50 cm.") }; return { a: f, w: f === "y" ? R2("Alluvial layers with caráter flúvico within 150 cm.", "Camadas aluviais com caráter flúvico dentro de 150 cm.") : f === "n" ? R2("No caráter flúvico.", "Sem caráter flúvico.") : R2("Give the carater_fluvico column.", "Informe a coluna carater_fluvico.") }; },
+    () => { const wm = H.filter(h => h.top_cm < 150 && h.weatherable_minerals_pct != null), sap = H.some(h => h.top_cm < 150 && (/^CR/.test(brM(h.designation)) || /^Cr/.test(String(h.designation).replace(/^\d+/, "")) || /r/.test(brSuf(h.designation)))); if (wm.some(h => h.weatherable_minerals_pct >= 4) || sap) return { a: "y", w: R2(sap ? "C/Cr with saprolite or weathered rock." : "4% or more weatherable minerals.", sap ? "C/Cr com saprólito ou rocha alterada." : "4% ou mais de minerais alteráveis.") }; return wm.length ? { a: "n", w: R2("Few weatherable minerals and no saprolite.", "Poucos minerais alteráveis e sem saprólito.") } : { a: "u", w: R2("Needs weatherable_minerals_pct or a Cr horizon.", "Faltam weatherable_minerals_pct ou horizonte Cr.") }; },
+    () => { const hs = H.filter(h => h.top_cm < 150), s = hs.map(sandy); if (s.some(x => x === false)) return { a: "n", w: R2("Not sand or loamy sand throughout.", "Não é areia ou areia franca em todo o perfil.") }; if (s.some(x => x == null)) return { a: "u", w: R2("Needs clay and silt (or sand) of every horizon.", "Faltam argila e silte (ou areia) de todos os horizontes.") }; if (Math.max(...H.map(h => h.bottom_cm)) < 150 && !(rockTop != null && rockTop !== Infinity)) return { a: "u", w: R2("Sandy, but the profile is described to less than 150 cm.", "Arenoso, mas o perfil foi descrito até menos de 150 cm.") }; return C.quartzoso === "n" ? { a: "n", w: R2("Sand not quartzose (quartzoso column).", "Areia não quartzosa (coluna quartzoso).") } : { a: "y", w: R2("Sand or loamy sand to 150 cm" + (C.quartzoso === "y" ? ", quartzose." : " (quartz content assumed)."), "Areia ou areia franca até 150 cm" + (C.quartzoso === "y" ? ", quartzosa." : " (teor de quartzo presumido).")) }; }];
+  S.N = [() => brunos(40),
+    () => yesNo(mostB(h => hueOk(h, x => x <= 12.5), Bs.filter(h => !/^BA/.test(brM(h.designation)))), "B hue 2.5YR or redder.", "B com matiz 2,5YR ou mais vermelho.", "B hue yellower than 2.5YR.", "B com matiz mais amarelo que 2,5YR.")];
+  S.O = [
+    () => ({ a: sulf, w: sulf === "y" ? R2("Sulfidic materials within 100 cm.", "Materiais sulfídricos dentro de 100 cm.") : sulf === "n" ? R2("No sulfidic materials.", "Sem materiais sulfídricos.") : R2("Give the materiais_sulfidricos column.", "Informe a coluna materiais_sulfidricos.") }),
+    () => H.some(h => /^O/.test(brM(h.designation))) ? { a: "y", w: R2("O histic horizon (well drained).", "Horizonte O hístico (bem drenado).") } : H.some(h => /^H/.test(brM(h.designation))) ? { a: "n", w: R2("H histic horizon (waterlogged).", "Horizonte H hístico (saturado).") } : { a: "u", w: R2("Designate the histic layers O or H.", "Designe as camadas hísticas como O ou H.") }];
+  S.S = [() => { const b = firstB ? sodic(firstB) : null; if (b === true) return { a: "y", w: R2("Caráter sódico in the B plânico.", "Caráter sódico no B plânico.") }; const s150 = H.filter(h => h.top_cm < 150).map(sodic); if (s150.some(x => x === true)) return { a: "u", w: R2("Sodic within 150 cm, but not in the upper B: the Mg + Na > Ca + H test is not checked.", "Sódico dentro de 150 cm, mas não no B superior: o teste Mg + Na > Ca + H não foi verificado.") }; return s150.some(x => x == null) ? { a: "u", w: R2("Needs Na and CEC.", "Faltam Na e CTC.") } : { a: "n", w: R2("No caráter sódico.", "Sem caráter sódico.") }; }];
+  S.F = [
+    () => { if (D.conc.a !== "y" && D.lito.a !== "y") return { a: D.conc.a === "u" || D.lito.a === "u" ? "u" : "n", w: R2("No concretionary or litoplinthic horizon.", "Sem horizonte concrecionário ou litoplíntico.") }; const t = Math.min(...[D.conc, D.lito].filter(x => x.a === "y" && x.top != null).map(x => x.top)); return D.plin.a === "y" && D.plin.top != null && D.plin.top < t ? { a: "n", w: R2("Preceded by a plinthic horizon.", "Precedido por horizonte plíntico.") } : { a: "y", w: R2("Concretionary or litoplinthic horizon.", "Horizonte concrecionário ou litoplíntico.") }; },
+    () => D.plin.a === "y" ? (D.bt.a === "y" || (D.bt.ratio != null && D.bt.ratio >= 1.4) ? { a: "y", w: R2("Plinthic horizon with B textural or argilúvico character.", "Horizonte plíntico com B textural ou caráter argilúvico.") } : { a: D.bt.a === "u" ? "u" : "n", w: R2("No B textural or argilúvico character.", "Sem B textural ou caráter argilúvico.") }) : { a: "n", w: R2("No plinthic horizon.", "Sem horizonte plíntico.") }];
+  S.V = [
+    () => glTop == null ? { a: D.glei.a === "u" ? "u" : "n", w: R2("No glei horizon.", "Sem horizonte glei.") } : glTop <= 50 ? { a: "y", w: R2(`Glei horizon at ${glTop} cm.`, `Horizonte glei a ${glTop} cm.`) } : glTop <= 100 ? (() => { const up = H.filter(h => h.top_cm < glTop); return up.every(h => h.munsell_chroma_moist != null) ? (up.filter(h => h.munsell_chroma_moist <= 2).length > up.length / 2 ? { a: "y", w: R2("Glei 50–100 cm below greyish horizons.", "Glei entre 50 e 100 cm abaixo de horizontes acinzentados.") } : { a: "n", w: R2("Glei 50–100 cm not below greyish horizons.", "Glei entre 50 e 100 cm sem horizontes acinzentados acima.") }) : { a: "u", w: R2("Needs colours above the glei horizon.", "Faltam as cores acima do glei.") }; })() : { a: "n", w: R2(`Glei horizon at ${glTop} cm.`, `Horizonte glei a ${glTop} cm.`) },
+    () => ebanico(H.filter(h => /^[BC]/.test(brM(h.designation)) && h.top_cm < 100))];
+  return { Q, S, D };
+}
+
+/* Run the key on one profile: same order and suborder sequence as the step-by-step key. */
+function brClassify(P) {
+  const A = brAnalyse(P), trail = [];
+  let order = null, sub = null;
+  for (let i = 0; i < ORDERS.length; i++) {
+    const o = ORDERS[i], r = A.Q[o.c]; trail.push({ kind: "order", i, ans: r.a, w: r.w });
+    if (r.a === "y") { order = o; break; }
+  }
+  if (order) {
+    const list = SUB[order.c], ev = A.S[order.c] || [];
+    for (let i = 0; i < list.length; i++) {
+      if (list[i].r) { sub = list[i]; break; }
+      const r = ev[i] ? ev[i]() : { a: "u", w: R2("Not evaluated.", "Não avaliado.") };
+      trail.push({ kind: "sub", c: order.c, i, ans: r.a, w: r.w });
+      if (r.a === "y") { sub = list[i]; break; }
+    }
+  }
+  return { id: P.id, order, sub, trail, unsure: trail.filter(t => t.ans === "u") };
+}
+
 const $ = id => document.getElementById(id);
 const root = $("br-root"), view = $("br-view");
 let lang = "en";
 try { const s = localStorage.getItem("ra-br-lang"); if (s === "en" || s === "pt") lang = s; } catch (e) { }
 if (location.hash === "#br-pt") lang = "pt";
-let path = [], started = false;
+let path = [], started = false, mode = "step", batch = null, open = null;
 const L = () => T[lang], li = () => lang === "en" ? 0 : 1;
 
-/* Walk the answers: orders first, then the suborders of the order reached. */
+const CT = {
+  en: {
+    modeStep: "Step by step", modeStepD: "Answer one yes/no question at a time. Best in the field.",
+    modeCsv: "Classify from a CSV", modeCsvD: "Upload horizon data for one or many profiles and the key decides from the book's criteria.",
+    csvTitle: "Classify profiles from a CSV",
+    csvLead: "One row per horizon, from the surface down, using the soilKey column names, so the same file works in R. The key identifies the diagnostic horizons from the data and the horizon designations, and lists what it couldn't check.",
+    cols: "Columns it reads",
+    colList: [
+      "<b>id</b>, <b>top_cm</b>, <b>bottom_cm</b> (required): profile and horizon depths.",
+      "<b>designation</b>: Brazilian horizon symbols drive much of the key: Bt (B textural), Bw (B latossólico), Bi (B incipiente), Bh/Bs (B espódico), g (glei), f (plintita), c (concreções), F (litoplíntico), v (vértico), n (sódico), j (tiomórfico), k (carbonatos), z (sais), O/H (hístico), R (rock), Cr (saprolite), 2C… (discontinuities).",
+      "<b>Colour:</b> munsell_hue_moist, munsell_value_moist, munsell_chroma_moist, munsell_value_dry.",
+      "<b>Lab:</b> clay_pct, silt_pct, sand_pct, oc_pct, cec_cmol (T, per kg soil), bs_pct (or ca_cmol, mg_cmol, k_cmol, na_cmol), al_cmol, ec_ds_m, caco3_pct.",
+      "<b>Field:</b> structure_grade, structure_type, clay_films_amount, slickensides, cracks_width_cm, cracks_depth_cm, cole_value, plinthite_pct, redoximorphic_features_pct, weatherable_minerals_pct, lithic_contact_cm (or none).",
+      "<b>Field calls (y / n)</b>, which override the data: b_textural, b_latossolico, b_incipiente, b_nitico, b_espodico, b_planico, horizonte_glei, horizonte_plintico, horizonte_concrecionario, horizonte_litoplintico, horizonte_vertico, a_chernozemico, a_humico, a_proeminente, carater_fluvico, carater_retratil, materiais_sulfidricos, quartzoso, histico. Fill them in any row of the profile.",
+      "Blank cells mean “not measured”. A question that can't be answered is followed as No and the profile is marked <b>Provisional</b>, with the reason. Other columns are ignored."],
+    choose: "Choose CSV file", privacy: "🔒 Processed on your device. Nothing is sent or stored.", example: "Download an example CSV",
+    nProf: n => `${n} profile${n > 1 ? "s" : ""}`, checked: "Checked", prov: "Provisional", tap: "Tap a profile to see how the key ran and why.",
+    dl: "Download results (CSV)", backList: "← Back to the list", backStart: "← Back", howRan: "How the key ran", err: "Could not read the file: it needs top_cm and bottom_cm columns.", empty: "No horizons found in the file.",
+    notDet: "Not determined", ans: { y: "Yes", n: "No", u: "Not determined" }
+  },
+  pt: {
+    modeStep: "Passo a passo", modeStepD: "Responda uma pergunta de sim/não de cada vez. Ideal no campo.",
+    modeCsv: "Classificar a partir de um CSV", modeCsvD: "Envie dados de horizontes de um ou vários perfis e a chave decide pelos critérios do livro.",
+    csvTitle: "Classificar perfis a partir de um CSV",
+    csvLead: "Uma linha por horizonte, da superfície para baixo, com os nomes de colunas do soilKey, para que o mesmo arquivo funcione no R. A chave identifica os horizontes diagnósticos pelos dados e pelas designações dos horizontes e lista o que não pôde verificar.",
+    cols: "Colunas lidas",
+    colList: [
+      "<b>id</b>, <b>top_cm</b>, <b>bottom_cm</b> (obrigatórias): perfil e profundidades dos horizontes.",
+      "<b>designation</b>: os símbolos brasileiros de horizonte orientam boa parte da chave: Bt (B textural), Bw (B latossólico), Bi (B incipiente), Bh/Bs (B espódico), g (glei), f (plintita), c (concreções), F (litoplíntico), v (vértico), n (sódico), j (tiomórfico), k (carbonatos), z (sais), O/H (hístico), R (rocha), Cr (saprólito), 2C… (descontinuidades).",
+      "<b>Cor:</b> munsell_hue_moist, munsell_value_moist, munsell_chroma_moist, munsell_value_dry.",
+      "<b>Laboratório:</b> clay_pct, silt_pct, sand_pct, oc_pct, cec_cmol (T, por kg de solo), bs_pct (ou ca_cmol, mg_cmol, k_cmol, na_cmol), al_cmol, ec_ds_m, caco3_pct.",
+      "<b>Campo:</b> structure_grade, structure_type, clay_films_amount, slickensides, cracks_width_cm, cracks_depth_cm, cole_value, plinthite_pct, redoximorphic_features_pct, weatherable_minerals_pct, lithic_contact_cm (ou none).",
+      "<b>Avaliações de campo (y / n)</b>, que têm prioridade sobre os dados: b_textural, b_latossolico, b_incipiente, b_nitico, b_espodico, b_planico, horizonte_glei, horizonte_plintico, horizonte_concrecionario, horizonte_litoplintico, horizonte_vertico, a_chernozemico, a_humico, a_proeminente, carater_fluvico, carater_retratil, materiais_sulfidricos, quartzoso, histico. Preencha em qualquer linha do perfil.",
+      "Células vazias significam “não medido”. Uma pergunta sem resposta é seguida como Não e o perfil fica marcado como <b>Provisório</b>, com o motivo. Outras colunas são ignoradas."],
+    choose: "Escolher arquivo CSV", privacy: "🔒 Processado no seu aparelho. Nada é enviado ou armazenado.", example: "Baixar um CSV de exemplo",
+    nProf: n => `${n} perfi${n > 1 ? "s" : "l"}`, checked: "Verificado", prov: "Provisório", tap: "Toque num perfil para ver como a chave foi aplicada e por quê.",
+    dl: "Baixar resultados (CSV)", backList: "← Voltar à lista", backStart: "← Voltar", howRan: "Como a chave foi aplicada", err: "Não foi possível ler o arquivo: são necessárias as colunas top_cm e bottom_cm.", empty: "Nenhum horizonte encontrado no arquivo.",
+    notDet: "Não determinado", ans: { y: "Sim", n: "Não", u: "Não determinado" }
+  }
+};
+const LC = () => CT[lang];
+const BR_EXAMPLE = `id,top_cm,bottom_cm,designation,munsell_hue_moist,munsell_value_moist,munsell_chroma_moist,clay_pct,silt_pct,sand_pct,oc_pct,cec_cmol,bs_pct,na_cmol,weatherable_minerals_pct,structure_grade,clay_films_amount,carater_retratil
+LV-1,0,20,A,2.5YR,3,4,55,15,30,2.0,9,30,,,,,n
+LV-1,20,45,BA,2.5YR,3,5,58,12,30,1.2,6,25,,,,,
+LV-1,45,120,Bw1,2.5YR,3,6,60,10,30,0.6,5,20,,,weak,none,
+LV-1,120,200,Bw2,2.5YR,3,6,62,10,28,0.4,5,20,,,weak,none,
+PVA-1,0,25,A,5YR,4,3,12,13,75,0.9,4,40,,,,,
+PVA-1,25,60,Bt1,5YR,5,6,30,15,55,0.4,4,30,,,moderate,common,
+PVA-1,60,130,Bt2,5YR,5,8,35,15,50,0.3,4,30,,,moderate,common,
+RQ-1,0,20,A,10YR,4,2,6,6,88,0.6,2,20,,0,,,
+RQ-1,20,100,C1,10YR,6,4,6,5,89,0.2,1,15,,0,,,
+RQ-1,100,180,C2,10YR,7,4,5,5,90,0.1,1,15,,0,,,
+GX-1,0,15,A,10YR,4,2,30,40,30,2.5,12,40,,,,,
+GX-1,15,60,Cg1,5Y,6,1,35,40,25,0.8,10,45,,,,,
+GX-1,60,120,Cg2,5Y,6,1,38,40,22,0.5,10,50,,,,,
+SN-1,0,20,A,10YR,5,2,10,20,70,0.8,4,60,0.2,,,,
+SN-1,20,35,E,10YR,6,2,8,20,72,0.3,2,55,0.2,,,,
+SN-1,35,80,Btn,10YR,4,1,40,20,40,0.4,15,90,3,,strong,common,
+SN-1,80,130,Cn,10YR,5,2,30,25,45,0.2,12,95,3,,,,
+CX-1,0,20,A,10YR,4,3,25,35,40,1.5,10,50,,,,,
+CX-1,20,70,Bi,7.5YR,5,6,28,35,37,0.5,8,40,,,weak,none,
+CX-1,70,120,Cr,,,,,,,,,,,,,,`;
+
 function state() {
   let oi = 0, order = null, si = 0, k = 0;
   for (; k < path.length; k++) {
     const a = path[k];
-    if (!order) {
-      if (a.ans === "y") { order = ORDERS[oi]; si = 0; }
-      else { oi++; }
-    } else {
-      if (a.ans === "y") return { done: true, order, sub: SUB[order.c][si] };
-      si++;
-    }
+    if (!order) { if (a.ans === "y") { order = ORDERS[oi]; si = 0; } else { oi++; } }
+    else { if (a.ans === "y") return { done: true, order, sub: SUB[order.c][si] }; si++; }
   }
   if (!order) return oi >= ORDERS.length ? { done: true, order: null } : { ask: "order", o: ORDERS[oi], n: oi };
   const list = SUB[order.c];
@@ -4393,15 +4811,19 @@ function state() {
   if (list[si].r) return { done: true, order, sub: list[si] };
   return { ask: "sub", order, s: list[si], n: si };
 }
-function nodeQ(p) { // question text for a trail entry
-  return p.kind === "order" ? ORDERS[p.i].q[li()] : SUB[p.c][p.i].q[li()];
+function nodeQ(p) { return p.kind === "order" ? ORDERS[p.i].q[li()] : SUB[p.c][p.i].q[li()]; }
+const altName = p => p.kind === "order" ? ORDERS[p.i].n : `${ORDERS.find(o => o.c === p.c).n} ${SUB[p.c][p.i].n}`;
+function resName(r) {
+  if (!r.order) return L().none;
+  return r.sub ? `${r.order.n} ${r.sub.n}` : `${r.order.n} (${L().noSub})`;
 }
 function render() {
   root.setAttribute("lang", lang);
   $("br-tag").textContent = L().tag; $("br-restart").textContent = L().restart;
   $("br-foot").innerHTML = L().foot; $("br-lang").value = lang;
+  $("br-restart").hidden = !started && mode === "step";
+  if (mode === "csv") { $("br-bar").style.width = batch ? "100%" : "0%"; return open != null ? csvProfile(batch[open]) : csvView(); }
   const st = started ? state() : null;
-  $("br-restart").hidden = !started;
   $("br-bar").style.width = (!st ? 0 : st.done ? 100 : Math.min(95, path.length / 15 * 100)) + "%";
   if (!started) return intro();
   if (st.done) return result(st);
@@ -4409,9 +4831,13 @@ function render() {
 }
 function intro() {
   view.innerHTML = `<div class="wk-card"><h1>${L().title}</h1><p>${L().lead}</p>
-    <ul class="intro">${L().bullets.map(b => `<li>${b}</li>`).join("")}</ul>
-    <button class="primary" id="br-go">${L().start}</button></div>`;
-  $("br-go").onclick = () => { started = true; render(); };
+    <div class="modes">
+      <button id="br-go"><b>${LC().modeStep}</b><span>${LC().modeStepD}</span></button>
+      <button id="br-gocsv"><b>${LC().modeCsv}</b><span>${LC().modeCsvD}</span></button>
+    </div>
+    <ul class="intro" style="margin-top:16px">${L().bullets.map(b => `<li>${b}</li>`).join("")}</ul></div>`;
+  $("br-go").onclick = () => { started = true; mode = "step"; render(); };
+  $("br-gocsv").onclick = () => { mode = "csv"; open = null; render(); };
 }
 function question(st) {
   const l = li(), isO = st.ask === "order";
@@ -4433,15 +4859,11 @@ function result(st) {
   else if (!st.sub) { name = `${st.order.n} <span style="font-size:1rem;font-weight:500;color:var(--ink-3)">(${L().noSub})</span>`; desc = st.order.d[l] + " " + L().noSubDesc; }
   else { name = `${st.order.n} ${st.sub.n}`; desc = st.order.d[l]; }
   const unsure = path.filter(p => p.ans === "u");
-  const alt = p => {
-    if (p.kind === "order") { const o = ORDERS[p.i]; return o.n; }
-    const s = SUB[p.c][p.i]; return `${ORDERS.find(o => o.c === p.c).n} ${s.n}`;
-  };
   view.innerHTML = `<div class="step">${L().result}</div>
     <div class="wk-card result">
       ${st.order ? `<span class="code">${st.order.c}</span>` : ""}
       <div class="rsg">${name}</div><p>${desc}</p>
-      ${unsure.length ? `<div class="flag"><strong>${L().provisional}</strong> ${L().unsureN(unsure.length)}<ul style="margin:8px 0 0; padding-left:18px">${unsure.map(p => `<li>${nodeQ(p)}${L().ifYes(alt(p))}</li>`).join("")}</ul></div>` : ""}
+      ${unsure.length ? `<div class="flag"><strong>${L().provisional}</strong> ${L().unsureN(unsure.length)}<ul style="margin:8px 0 0; padding-left:18px">${unsure.map(p => `<li>${nodeQ(p)}${L().ifYes(altName(p))}</li>`).join("")}</ul></div>` : ""}
       <div class="trail"><h2 style="margin-top:14px">${L().answers}</h2>${path.map(p => `<div><span>${nodeQ(p)}</span><span class="a ${p.ans}">${p.ans === "y" ? L().yes : p.ans === "n" ? L().no : L().unsure}</span></div>`).join("")}</div>
       <button class="primary" id="br-again">${L().again}</button>
       <button class="secondary" id="br-back2">${L().change}</button>
@@ -4449,7 +4871,54 @@ function result(st) {
   $("br-again").onclick = () => { path = []; render(); root.scrollIntoView({ block: "start" }); };
   $("br-back2").onclick = () => { path.pop(); render(); };
 }
-$("br-restart").onclick = () => { path = []; started = false; render(); };
+
+/* ---------------- CSV mode ---------------- */
+let batchText = null, csvMsg = "";
+const dl = (name, text) => { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + text], { type: "text/csv;charset=utf-8" })); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => a.remove(), 500); };
+function runBatch() {
+  try { const P = brParseCSV(batchText); batch = P.map(brClassify); csvMsg = batch.length ? "" : LC().empty; }
+  catch (err) { batch = null; csvMsg = LC().err; }
+}
+function csvView() {
+  const C = LC();
+  let h = `<div class="step">CSV</div><div class="wk-card"><h1>${C.csvTitle}</h1><p>${C.csvLead}</p>
+    <details><summary>${C.cols}</summary><ul>${C.colList.map(x => `<li>${x}</li>`).join("")}</ul></details>
+    <label class="secondary" style="display:flex; align-items:center; justify-content:center; margin-top:14px; cursor:pointer">${C.choose}<input type="file" id="br-csvin" accept=".csv,.tsv,.txt" style="display:none"></label>
+    <p style="font-size:.85rem; margin:6px 0 0; text-align:center">${C.privacy}</p>
+    <button class="secondary" id="br-tpl">${C.example}</button>
+    <div style="margin-top:8px; font-size:.9rem; color:var(--warn)">${csvMsg}</div>`;
+  if (batch && batch.length) {
+    h += `<h2 style="margin-top:18px">${C.nProf(batch.length)}</h2><p style="font-size:.88rem">${C.tap}</p>` +
+      batch.map((b, i) => `<div class="chk" style="grid-template-columns: 1fr auto; cursor:pointer" data-open="${i}"><span class="t"><b>${b.id}</b> · ${resName(b)}</span><span class="s ${b.unsure.length ? "u" : "y"}">${b.unsure.length ? C.prov : C.checked}</span></div>`).join("") +
+      `<button class="primary" id="br-dl">${C.dl}</button>`;
+  }
+  h += `</div><div class="wk-nav"><button id="br-csvback">${C.backStart}</button><span></span></div>`;
+  view.innerHTML = h;
+  $("br-tpl").onclick = () => dl("sibcs_profiles_example.csv", BR_EXAMPLE + "\n");
+  $("br-csvin").onchange = e => { const f = e.target.files[0]; if (!f) return; const rd = new FileReader(); rd.onload = () => { batchText = rd.result; runBatch(); render(); }; rd.readAsText(f); };
+  $("br-csvback").onclick = () => { mode = "step"; started = false; render(); };
+  view.querySelectorAll("[data-open]").forEach(e => e.onclick = () => { open = +e.dataset.open; render(); root.scrollIntoView({ block: "start" }); });
+  const d = $("br-dl"); if (d) d.onclick = () => {
+    const esc = v => /[",\n;]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+    const l = li(), rows = [["id", "order", "suborder", "name", "status", "not_determined", "reasons"].join(",")].concat(batch.map(b => [
+      b.id, b.order ? b.order.n : "", b.sub ? b.sub.n : "", resName(b), b.unsure.length ? "provisional" : "checked",
+      b.unsure.map(u => nodeQ(u)).join(" | "), b.unsure.map(u => u.w[l]).join(" | ")].map(esc).join(",")));
+    dl("sibcs_key_results.csv", rows.join("\n") + "\n");
+  };
+}
+function csvProfile(b) {
+  const l = li(), C = LC();
+  view.innerHTML = `<div class="step">${L().result} · ${b.id}</div>
+    <div class="wk-card result">
+      ${b.order ? `<span class="code">${b.order.c}</span>` : ""}
+      <div class="rsg">${resName(b)}</div><p>${b.order ? b.order.d[l] : L().noneDesc}</p>
+      ${b.unsure.length ? `<div class="flag"><strong>${L().provisional}</strong> ${L().unsureN(b.unsure.length)}<ul style="margin:8px 0 0; padding-left:18px">${b.unsure.map(p => `<li>${nodeQ(p)}${L().ifYes(altName(p))} <i>${p.w[l]}</i></li>`).join("")}</ul></div>` : ""}
+      <div class="trail"><h2 style="margin-top:14px">${C.howRan}</h2>${b.trail.map(p => `<div style="display:block"><span style="display:flex; justify-content:space-between; gap:10px"><span>${nodeQ(p)}</span><span class="a ${p.ans}">${C.ans[p.ans]}</span></span><span style="display:block; font-size:.82rem; color:var(--ink-3); margin-top:2px">${p.w[l]}</span></div>`).join("")}</div>
+      <button class="secondary" id="br-blist">${C.backList}</button>
+    </div>`;
+  $("br-blist").onclick = () => { open = null; render(); };
+}
+$("br-restart").onclick = () => { path = []; started = false; mode = "step"; open = null; render(); };
 $("br-lang").onchange = e => { lang = e.target.value; try { localStorage.setItem("ra-br-lang", lang); } catch (err) { } render(); };
 render();
 })();
