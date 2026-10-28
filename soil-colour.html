@@ -655,7 +655,7 @@ body.quarto-dark .scr {
     <p>Pixels inside the soil circle are decoded to linear RGB. Clipped highlights and very dark pixels (voids, deep shadow) are dropped, and the brightest and darkest 10% are trimmed. With a black and white card each channel is mapped with a two-point line through the card patches, which removes both the colour cast and any flare offset. With a grey card each channel is scaled so the card reads 18%. The corrected colour is converted to CIELAB (D65).</p>
     <p>Chips are the Munsell soil-book chips (5R to 5Y, the gley pages and neutrals), converted from the Munsell renotation data (illuminant C) to CIELAB under D65. The tool draws 1,500 plausible colours from the sampling error of the soil and card patches plus the residual error set above, assigns each draw to its nearest chip by CIEDE2000, and reports the share of draws per chip. Value is also computed directly from luminance with the ASTM D1535 relation. The probabilities are model-derived: they are only as good as the residual error you set, and are not a substitute for checking against a physical chart.</p>
     <p class="scr-refs"><b>References:</b> Munsell renotation data: Newhall, S.M., Nickerson, D., Judd, D.B. (1943). Final report of the O.S.A. subcommittee on the spacing of the Munsell colors. <i>J. Opt. Soc. Am.</i> 33, 385–418. <a href="https://doi.org/10.1364/JOSA.33.000385">doi:10.1364/JOSA.33.000385</a>. Colour difference: Luo, M.R., Cui, G., Rigg, B. (2001). The development of the CIE 2000 colour-difference formula: CIEDE2000. <i>Color Res. Appl.</i> 26, 340–350. <a href="https://doi.org/10.1002/col.1049">doi:10.1002/col.1049</a>; Sharma, G., Wu, W., Dalal, E.N. (2005). The CIEDE2000 color-difference formula: implementation notes, supplementary test data, and mathematical observations. <i>Color Res. Appl.</i> 30, 21–30. <a href="https://doi.org/10.1002/col.20070">doi:10.1002/col.20070</a>. Munsell value from luminance: ASTM D1535, <i>Standard Practice for Specifying Color by the Munsell System</i>. ASTM International, West Conshohocken, PA. sRGB decoding: IEC 61966-2-1 (1999), <i>Default RGB colour space – sRGB</i>.</p>
-    <p class="scr-refs"><b>How to cite:</b> Flynn, T., Swafo, S.M. (2026). <i>Soil Colour Reader: Munsell soil colour from a photo, with uncertainty</i>, version 1.0 [software]. <a class="scr-self" href="soil-colour.html">soil-colour.html</a>. Please also cite the references above.</p>
+    <p class="scr-refs"><b>How to cite:</b> Flynn, T., Swafo, S.M. (2026). <i>Soil Colour Reader: Munsell soil colour from a photo, with uncertainty</i>, version 1.0 [software]. <a class="scr-self" href="soil-colour.html">soil-colour.html</a>. Please also cite the references above. <a href="cite.html#soil-colour">All citations →</a></p>
   </section>
 </div>
 <script>
@@ -1247,20 +1247,7 @@ document.querySelectorAll('a.scr-self').forEach(a => { a.textContent = new URL(a
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@software{flynn2026,
-  author = {Flynn, Trevan and Michael Swafo, Seome},
-  title = {Soil {Colour} {Reader:} {Munsell} Soil Colour from a Photo,
-    with Uncertainty},
-  version = {1.0},
-  date = {2026},
-  url = {https://rafikiardhi.earth/soil-colour.html},
-  langid = {en}
-}
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-flynn2026" class="csl-entry quarto-appendix-citeas" role="listitem">
-Flynn, Trevan, and Seome Michael Swafo. 2026. <em>Soil Colour Reader:
-Munsell Soil Colour from a Photo, with Uncertainty</em>. V. 1.0.
-Released. <a href="https://rafikiardhi.earth/soil-colour.html">https://rafikiardhi.earth/soil-colour.html</a>.
-</div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

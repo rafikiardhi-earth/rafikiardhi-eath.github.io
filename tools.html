@@ -4618,7 +4618,7 @@ document.querySelectorAll("nav.rk-tabs button[data-tip]").forEach(btn => { const
     const p = document.createElement("p");
     p.className = "cite";
     p.innerHTML = `<b>How to cite:</b> ${SOFTWARE.author} (${SOFTWARE.year}). ${h2.textContent}. In: <i>${SOFTWARE.collection}</i>, version ${SOFTWARE.version} [software]. ${link}` +
-      (hasRefs ? " Please also cite the method references above." : "");
+      (hasRefs ? " Please also cite the method references above." : "") + ' <a href="cite.html#tools">All citations →</a>';
     sec.appendChild(p);
   });
 })();
@@ -4627,19 +4627,7 @@ document.querySelectorAll("nav.rk-tabs button[data-tip]").forEach(btn => { const
 
 
 
-<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@software{flynn2026,
-  author = {Flynn, Trevan},
-  title = {Tools for Researchers: Soil and Environmental Analysis in the
-    Browser},
-  version = {1.0},
-  date = {2026},
-  url = {https://rafikiardhi.earth/tools.html},
-  langid = {en}
-}
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-flynn2026" class="csl-entry quarto-appendix-citeas" role="listitem">
-Flynn, Trevan. 2026. <em>Tools for Researchers: Soil and Environmental
-Analysis in the Browser</em>. V. 1.0. Released. <a href="https://rafikiardhi.earth/tools.html">https://rafikiardhi.earth/tools.html</a>.
-</div></div></section></div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
