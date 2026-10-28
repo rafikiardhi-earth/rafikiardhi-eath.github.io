@@ -10,7 +10,7 @@ page-layout: full
 # "Earth is the most interesting place I have ever been" 
 (Robert, 2026)
 
-[We turn the science researchers use into practical decisions for homes, farms and landscapes, with interpretable tools tested against the same benchmarks as AI, so you can see how every answer was reached.]{.lead}
+[We turn the scientific work into practical decisions for researchers, homes, farms and landscapes, with interpretable tools tested against the same benchmarks as AI, so you can see how every answer was reached.]{.lead}
 
 [Research tools](tools.qmd){.btn-earth} &nbsp; [Bring us a problem →](contact.qmd)
 
