@@ -1,6 +1,6 @@
 ---
 title: "Homeowners"
-description: "Free calculators and decision tools for yards and gardens, built by soil scientists: materials, quotes, irrigation, soil tests, fertilizer, drainage and trees."
+description: "Free calculators and decision tools for yards and gardens, built by soil scientists: materials, quotes, irrigation, soil tests, fertilizer, drainage and trees. No ads, no sign-up."
 include-in-header:
   - file: _hm-lang.html
   - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/homeowners.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/homeowners.html">'
@@ -111,5 +111,7 @@ How much space to fence off around a tree before construction or digging.
 :::
 
 ---
+
+**How to cite these tools:** Flynn, T. (2026). *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/homeowners.html>. [All citations →](cite.qmd)
 
 *Working professionally? See our [scientific tools](tools.qmd) for soil classification, profile modelling and more.*

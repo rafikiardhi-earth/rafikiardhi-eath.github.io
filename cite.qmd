@@ -48,9 +48,33 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
 
 ## Homeowner tools {#homeowners}
 
-Some of the homeowner calculators (areas and volumes of irregular shapes, roof catchment, frost depth, drainage) are also useful in research and fieldwork. Cite them as one collection:
+Some of the homeowner calculators (areas and volumes of irregular shapes, roof catchment, drainage) are also useful in research and fieldwork. Cite the collection:
 
-- Flynn, T. (2026). *Homeowner tools: yard and garden calculators*, version 1.0 [software]. [https://rafikiardhi.earth/homeowners.html](homeowners.html)
+- Flynn, T. (2026). *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/homeowners.html>
+
+or a single tool:
+
+- Flynn, T. (2026). Landscape materials calculator. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/materials-calculator.html>
+- Flynn, T. (2026). Quote checker. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/quote-checker.html>
+- Flynn, T. (2026). Raised bed and planter soil. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/planter-soil.html>
+- Flynn, T. (2026). Fertilizer label calculator. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/fertilizer-calculator.html>
+- Flynn, T. (2026). Sprinkler catch-cup test. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/catch-cup-test.html>
+- Flynn, T. (2026). Cycle-and-soak scheduler. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/cycle-and-soak.html>
+- Flynn, T. (2026). Drip irrigation calculator. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/drip-irrigation.html>
+- Flynn, T. (2026). Lawn vs low-water landscape. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/lawn-water.html>
+- Flynn, T. (2026). Rain barrel calculator. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/rain-harvest.html>
+- Flynn, T. (2026). Soil test translator. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/soil-test-translator.html>
+- Flynn, T. (2026). Should I amend my soil? In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/should-i-amend.html>
+- Flynn, T. (2026). DIY soil tests. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/diy-soil-tests.html>
+- Flynn, T. (2026). Soil pH: lime and sulfur. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/ph-adjustment.html>
+- Flynn, T. (2026). Compost mix calculator. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/compost-mix.html>
+- Flynn, T. (2026). Foundation grading check. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/foundation-grading.html>
+- Flynn, T. (2026). Rain garden and dry well. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/rain-garden.html>
+- Flynn, T. (2026). New-build yard soil check. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/construction-soil-check.html>
+- Flynn, T. (2026). Frost depth. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/frost-depth.html>
+- Flynn, T. (2026). Tree protection zone. In: *Homeowner tools: yard and garden calculators*, version 1.0 [software]. <https://rafikiardhi.earth/tree-protection.html>
+
+For frost depth in research, the [researcher version](#tools) in Tools for researchers gives more control.
 
 ## BibTeX
 
