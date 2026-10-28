@@ -3,6 +3,16 @@ title: "Soil classification keys"
 description: "Step-by-step keys to the WRB 2022 Reference Soil Groups and the South African soil forms and families (2018)."
 page-layout: full
 anchor-sections: false
+google-scholar: true
+citation:
+  type: software
+  title: "Soil classification keys: WRB 2022 and South Africa (2018)"
+  author:
+    - name: Trevan Flynn
+      orcid: 0000-0002-5187-9946
+  issued: 2026
+  version: "1.0"
+  # doi: 10.5281/zenodo.XXXXXXX   # add the Zenodo concept DOI once minted
 ---
 
 ```{=html}
@@ -153,7 +163,8 @@ body.quarto-light .wrbk {
   <div class="foot"><a href="tools.html">← Back to Tools</a><br>
     <b>Beta</b> learning aid. It does not replace the WRB text or a qualified soil scientist.<br>
     <b>Source:</b> IUSS Working Group WRB (2022). <i>World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps</i>, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria. <a href="https://wrb.isric.org/documents.html" target="_blank" rel="noopener">wrb.isric.org</a><br>
-    <b>Classifying from data in R:</b> Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. R package version 0.9.259. <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a> · <a href="https://github.com/HugoMachadoRodrigues/soilKey" target="_blank" rel="noopener">GitHub</a></div>
+    <b>Classifying from data in R:</b> Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. R package version 0.9.259. <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a> · <a href="https://github.com/HugoMachadoRodrigues/soilKey" target="_blank" rel="noopener">GitHub</a><br>
+    <b>How to cite this key:</b> Flynn, T. (2026). <i>WRB 2022 soil key</i>, version 1.0 [software]. <a href="soil-keys.html#wrb">soil-keys.html#wrb</a>. Please also cite the WRB source above.</div>
 </div>
 
 <script>
@@ -990,7 +1001,8 @@ render();
   <div class="foot"><a href="tools.html">→ بازگشت به ابزارها</a><br>
     <b>آزمایشی:</b> ابزار آموزشی است و جایگزین متن WRB یا متخصص خاک نیست.<br>
     <b>منبع:</b> <span dir="ltr" lang="en">IUSS Working Group WRB (2022). <i>World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps</i>, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria.</span> <a href="https://wrb.isric.org/documents.html" target="_blank" rel="noopener">wrb.isric.org</a><br>
-    <b>رده‌بندی از روی داده‌ها در R:</b> <span dir="ltr" lang="en">Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. R package version 0.9.259.</span> <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a> · <a href="https://github.com/HugoMachadoRodrigues/soilKey" target="_blank" rel="noopener">GitHub</a></div>
+    <b>رده‌بندی از روی داده‌ها در R:</b> <span dir="ltr" lang="en">Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. R package version 0.9.259.</span> <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a> · <a href="https://github.com/HugoMachadoRodrigues/soilKey" target="_blank" rel="noopener">GitHub</a><br>
+    <b>نحوهٔ ارجاع به این کلید:</b> <span dir="ltr" lang="en">Flynn, T., Rasaei, Z. (2026). <i>WRB 2022 soil key, Farsi edition</i>, version 1.0 [software].</span> <a href="soil-keys.html#wrb-fa">soil-keys.html#wrb-fa</a>. لطفاً منبع WRB بالا را نیز ذکر کنید.</div>
 </div>
 <script>
 // Simplified WRB 2022 key engine for the RafikiArdhi WRB key.
@@ -1742,7 +1754,8 @@ render();
   <div class="foot"><a href="tools.html">← Rudi kwenye Zana</a><br>
     <b>Majaribio:</b> ni zana ya kujifunzia. Haichukui nafasi ya maandiko ya WRB wala mtaalamu wa udongo.<br>
     <b>Chanzo:</b> <span lang="en">IUSS Working Group WRB (2022). <i>World Reference Base for Soil Resources. International soil classification system for naming soils and creating legends for soil maps</i>, 4th edition. International Union of Soil Sciences (IUSS), Vienna, Austria.</span> <a href="https://wrb.isric.org/documents.html" target="_blank" rel="noopener">wrb.isric.org</a><br>
-    <b>Kuainisha kutoka data katika R:</b> <span lang="en">Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. R package version 0.9.259.</span> <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a> · <a href="https://github.com/HugoMachadoRodrigues/soilKey" target="_blank" rel="noopener">GitHub</a></div>
+    <b>Kuainisha kutoka data katika R:</b> <span lang="en">Rodrigues, H. (2026). <i>soilKey: Automated soil profile classification per WRB 2022, SiBCS 5, and USDA Soil Taxonomy 13</i>. R package version 0.9.259.</span> <a href="https://doi.org/10.5281/zenodo.19930112" target="_blank" rel="noopener">doi:10.5281/zenodo.19930112</a> · <a href="https://github.com/HugoMachadoRodrigues/soilKey" target="_blank" rel="noopener">GitHub</a><br>
+    <b>Jinsi ya kunukuu ufunguo huu:</b> <span lang="en">Flynn, T. (2026). <i>WRB 2022 soil key, Kiswahili edition</i>, version 1.0 [software].</span> <a href="soil-keys.html#wrb-sw">soil-keys.html#wrb-sw</a>. Tafadhali nukuu pia chanzo cha WRB hapo juu.</div>
 </div>
 <script>
 // Simplified WRB 2022 key engine for the RafikiArdhi WRB key.
@@ -2604,7 +2617,8 @@ body.quarto-light .sakey {
   <div class="foot"><a href="tools.html">← Back to Tools</a><br>
     <b>Beta</b> learning aid, not affiliated with or endorsed by the ARC. It does not replace the book or a qualified soil scientist.<br>
     <b>Source:</b> Soil Classification Working Group (2018). <i>Soil Classification: A Natural and Anthropogenic System for South Africa</i>. ARC-Institute for Soil, Climate and Water, Pretoria.<br>
-    <b>Official app:</b> <a href="https://play.google.com/store/apps/details?id=arc.ict.digitalsoilclassification" target="_blank" rel="noopener">Digital Soil Classification</a> (ARC, Android)</div>
+    <b>Official app:</b> <a href="https://play.google.com/store/apps/details?id=arc.ict.digitalsoilclassification" target="_blank" rel="noopener">Digital Soil Classification</a> (ARC, Android)<br>
+    <b>How to cite this key:</b> Flynn, T. (2026). <i>South African soil classification key (2018)</i>, version 1.0 [software]. <a href="soil-keys.html#sa">soil-keys.html#sa</a>. Please also cite the Soil Classification Working Group (2018) source above.</div>
 </div>
 <script>
 (function () {
@@ -3675,5 +3689,9 @@ render();
   show(location.hash === "#sa" ? "sa" : "wrb", false);
   window.addEventListener("hashchange", () => { if (location.hash === "#sa" || location.hash === "#wrb") show(location.hash.slice(1), false); });
 })();
+</script>
+<script>
+/* Show the full address of each key in its "How to cite" line. */
+document.querySelectorAll('.foot a[href^="soil-keys.html#"]').forEach(a => { a.textContent = new URL(a.getAttribute("href"), location.href).href; });
 </script>
 ```
