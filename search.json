@@ -168,11 +168,18 @@
     "text": "Soil Colour Reader\n\nFlynn, T., Swafo, S.M. (2026). Soil Colour Reader: Munsell soil colour from a photo, with uncertainty, version 1.0 [software]. soil-colour.html"
   },
   {
+    "objectID": "cite.html#homeowners",
+    "href": "cite.html#homeowners",
+    "title": "How to cite",
+    "section": "Homeowner tools",
+    "text": "Homeowner tools\nSome of the homeowner calculators (areas and volumes of irregular shapes, roof catchment, frost depth, drainage) are also useful in research and fieldwork. Cite them as one collection:\n\nFlynn, T. (2026). Homeowner tools: yard and garden calculators, version 1.0 [software]. https://rafikiardhi.earth/homeowners.html"
+  },
+  {
     "objectID": "cite.html#bibtex",
     "href": "cite.html#bibtex",
     "title": "How to cite",
     "section": "BibTeX",
-    "text": "BibTeX\n\n\nShow BibTeX entries\n\n@software{flynn2026tools,\n  author  = {Flynn, Trevan},\n  title   = {Tools for researchers: soil and environmental analysis in the browser},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/tools.html}\n}\n\n@software{flynn2026checks,\n  author  = {Flynn, Trevan},\n  title   = {Check a result: plausibility checks for soil and environmental results},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/checks.html}\n}\n\n@software{flynn2026wrb,\n  author  = {Flynn, Trevan},\n  title   = {WRB 2022 soil key},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-keys.html#wrb}\n}\n\n@software{flynn2026wrbfa,\n  author  = {Flynn, Trevan and Rasaei, Zahra},\n  title   = {WRB 2022 soil key, Farsi edition},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-keys.html#wrb-fa}\n}\n\n@software{flynn2026wrbsw,\n  author  = {Flynn, Trevan},\n  title   = {WRB 2022 soil key, Kiswahili edition},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-keys.html#wrb-sw}\n}\n\n@software{flynn2026sakey,\n  author  = {Flynn, Trevan},\n  title   = {South African soil classification key (2018)},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-keys.html#sa}\n}\n\n@software{flynn2026colour,\n  author  = {Flynn, Trevan and Swafo, Seome Michael},\n  title   = {Soil Colour Reader: Munsell soil colour from a photo, with uncertainty},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-colour.html}\n}"
+    "text": "BibTeX\n\n\nShow BibTeX entries\n\n@software{flynn2026tools,\n  author  = {Flynn, Trevan},\n  title   = {Tools for researchers: soil and environmental analysis in the browser},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/tools.html}\n}\n\n@software{flynn2026checks,\n  author  = {Flynn, Trevan},\n  title   = {Check a result: plausibility checks for soil and environmental results},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/checks.html}\n}\n\n@software{flynn2026wrb,\n  author  = {Flynn, Trevan},\n  title   = {WRB 2022 soil key},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-keys.html#wrb}\n}\n\n@software{flynn2026wrbfa,\n  author  = {Flynn, Trevan and Rasaei, Zahra},\n  title   = {WRB 2022 soil key, Farsi edition},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-keys.html#wrb-fa}\n}\n\n@software{flynn2026wrbsw,\n  author  = {Flynn, Trevan},\n  title   = {WRB 2022 soil key, Kiswahili edition},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-keys.html#wrb-sw}\n}\n\n@software{flynn2026sakey,\n  author  = {Flynn, Trevan},\n  title   = {South African soil classification key (2018)},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-keys.html#sa}\n}\n\n@software{flynn2026colour,\n  author  = {Flynn, Trevan and Swafo, Seome Michael},\n  title   = {Soil Colour Reader: Munsell soil colour from a photo, with uncertainty},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/soil-colour.html}\n}\n\n@software{flynn2026homeowner,\n  author  = {Flynn, Trevan},\n  title   = {Homeowner tools: yard and garden calculators},\n  year    = {2026},\n  version = {1.0},\n  url     = {https://rafikiardhi.earth/homeowners.html}\n}"
   },
   {
     "objectID": "checks.html",
@@ -886,7 +893,7 @@
     "href": "frost-depth.html",
     "title": "Frost depth calculator",
     "section": "",
-    "text": "Español\nIn cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.\nYou need two numbers: the average temperature of your coldest month and of your warmest month. They are in the climate table for your town (on Wikipedia or your weather service). In the mountains, use a station at a similar elevation: temperatures drop about 3.5 °F per 1,000 ft (6.5 °C per 1,000 m) as you go up."
+    "text": "In cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.\nYou need two numbers: the average temperature of your coldest month and of your warmest month. They are in the climate table for your town (on Wikipedia or your weather service). In the mountains, use a station at a similar elevation: temperatures drop about 3.5 °F per 1,000 ft (6.5 °C per 1,000 m) as you go up."
   },
   {
     "objectID": "frost-depth.html#why-frost-depth-varies-so-much",
@@ -901,6 +908,13 @@
     "title": "Frost depth calculator",
     "section": "About this estimate",
     "text": "About this estimate\nThis uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.\nFor more control (freezing index, density, water content and surface factors), use the frost depth tool for researchers."
+  },
+  {
+    "objectID": "frost-depth.html#references",
+    "href": "frost-depth.html#references",
+    "title": "Frost depth calculator",
+    "section": "References",
+    "text": "References\nCarslaw, H.S., Jaeger, J.C. (1959). Conduction of Heat in Solids, 2nd ed. Oxford University Press. Aldrich, H.P., Paynter, H.M. (1953). Analytical Studies of Freezing and Thawing of Soils. Arctic Construction and Frost Effects Laboratory, Technical Report 42. Kersten, M.S. (1949). Laboratory Research for the Determination of the Thermal Properties of Soils. University of Minnesota Engineering Experiment Station. US Army (1988). Arctic and Subarctic Construction: Calculation Methods for Determination of Depths of Freeze and Thaw in Soils. TM 5-852-6."
   },
   {
     "objectID": "soil-keys.html",

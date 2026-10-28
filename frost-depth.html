@@ -86,25 +86,6 @@ gtag('js', new Date());
 gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
-<script>
-/* English / Español toggle for the homeowner pages: keeps what you typed when you switch, and remembers your choice. */
-(function () {
-  const es = (document.documentElement.lang || '').toLowerCase().startsWith('es');
-  const here = es ? 'es' : 'en';
-  const other = p => es ? p.replace(/\/es\/([^/]*)$/, '/$1') : p.replace(/\/([^/]*)$/, '/es/$1');
-  let pref = null; try { pref = localStorage.getItem('ra-hm-lang'); } catch (e) { }
-  if (pref === 'en' || pref === 'es') if (pref !== here) { // every page that loads this has a version in the other language
-
-    location.replace(other(location.pathname) + location.search + location.hash); return;
-  }
-  document.addEventListener('click', e => {
-    const a = e.target.closest('.hm-lang a'); if (!a) return;
-    e.preventDefault();
-    try { localStorage.setItem('ra-hm-lang', es ? 'en' : 'es'); } catch (err) { }
-    location.href = other(location.pathname) + location.search + location.hash;
-  });
-})();
-</script>
 <style>
 .hmc {
   --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
@@ -430,7 +411,6 @@ window.HM = (function () {
   return { tool, C, fmt, fix, num, feet, esc };
 })();
 </script>
-<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/frost-depth.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/frost-depth.html">
 
 
 <link rel="canonical" href="https://rafikiardhi.earth/frost-depth.html">
@@ -746,9 +726,6 @@ window.HM = (function () {
 </header>
 
 
-<div class="hm-lang">
-<p><a href="./es/frost-depth.html" lang="es">Español</a></p>
-</div>
 <p>In cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.</p>
 <p><strong>You need two numbers:</strong> the average temperature of your coldest month and of your warmest month. They are in the climate table for your town (on Wikipedia or your weather service). In the mountains, use a station at a similar elevation: temperatures drop about 3.5 °F per 1,000 ft (6.5 °C per 1,000 m) as you go up.</p>
 <div class="hmc" id="fd"></div>
@@ -865,6 +842,10 @@ window.HM = (function () {
 <h2 data-anchor-id="about-this-estimate">About this estimate</h2>
 <p>This uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.</p>
 <p>For more control (freezing index, density, water content and surface factors), use the <a href="./tools.html#frost">frost depth tool for researchers</a>.</p>
+</section>
+<section id="references" class="level2">
+<h2 data-anchor-id="references">References</h2>
+<p>Carslaw, H.S., Jaeger, J.C. (1959). <em>Conduction of Heat in Solids</em>, 2nd ed.&nbsp;Oxford University Press. Aldrich, H.P., Paynter, H.M. (1953). <em>Analytical Studies of Freezing and Thawing of Soils</em>. Arctic Construction and Frost Effects Laboratory, Technical Report 42. Kersten, M.S. (1949). <em>Laboratory Research for the Determination of the Thermal Properties of Soils</em>. University of Minnesota Engineering Experiment Station. US Army (1988). <em>Arctic and Subarctic Construction: Calculation Methods for Determination of Depths of Freeze and Thaw in Soils</em>. TM 5-852-6.</p>
 
 
 </section>
