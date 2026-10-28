@@ -35,9 +35,7 @@ Each check also lists the method it is based on; please cite that as well.
 
 ## Soil classification keys {#soil-keys}
 
-- Flynn, T. (2026). *WRB 2022 soil key*, version 1.0 [software]. [soil-keys.html#wrb](soil-keys.html#wrb)
-- Flynn, T., Rasaei, Z. (2026). *WRB 2022 soil key, Farsi edition*, version 1.0 [software]. [soil-keys.html#wrb-fa](soil-keys.html#wrb-fa)
-- Flynn, T. (2026). *WRB 2022 soil key, Kiswahili edition*, version 1.0 [software]. [soil-keys.html#wrb-sw](soil-keys.html#wrb-sw)
+- Flynn, T., Rasaei, Z. (2026). *WRB 2022 soil key (English, Farsi and Kiswahili editions)*, version 1.0 [software]. <https://doi.org/10.5281/zenodo.23739387>
 - Flynn, T. (2026). *South African soil classification key (2018)*, version 1.0 [software]. <https://doi.org/10.5281/zenodo.23738161>
 
 Please also cite the classification itself: IUSS Working Group WRB (2022), *World Reference Base for Soil Resources*, 4th edition, International Union of Soil Sciences, Vienna; or Soil Classification Working Group (2018), *Soil Classification: A Natural and Anthropogenic System for South Africa*, ARC-Institute for Soil, Climate and Water, Pretoria.
@@ -100,27 +98,12 @@ For frost depth in research, the [researcher version](#tools) in Tools for resea
 }
 
 @software{flynn2026wrb,
-  author  = {Flynn, Trevan},
-  title   = {WRB 2022 soil key},
-  year    = {2026},
-  version = {1.0},
-  url     = {https://rafikiardhi.earth/soil-keys.html#wrb}
-}
-
-@software{flynn2026wrbfa,
   author  = {Flynn, Trevan and Rasaei, Zahra},
-  title   = {WRB 2022 soil key, Farsi edition},
+  title   = {WRB 2022 soil key (English, Farsi and Kiswahili editions)},
   year    = {2026},
   version = {1.0},
-  url     = {https://rafikiardhi.earth/soil-keys.html#wrb-fa}
-}
-
-@software{flynn2026wrbsw,
-  author  = {Flynn, Trevan},
-  title   = {WRB 2022 soil key, Kiswahili edition},
-  year    = {2026},
-  version = {1.0},
-  url     = {https://rafikiardhi.earth/soil-keys.html#wrb-sw}
+  doi     = {10.5281/zenodo.23739387},
+  url     = {https://rafikiardhi.earth/soil-keys.html#wrb}
 }
 
 @software{flynn2026sakey,
