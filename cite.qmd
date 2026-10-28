@@ -1,0 +1,112 @@
+---
+title: "How to cite"
+description: "Citations for the research tools, plausibility checks, soil classification keys and the Soil Colour Reader."
+toc: true
+---
+
+If a tool helped your work, please cite the tool **and** the published methods it implements. The method references are listed with each tool; they credit the people whose science the tool is built on.
+
+All tools are version 1.0. Persistent identifiers (DOIs) will be added here as they are minted; until then, cite the web address.
+
+## Tools for researchers {#tools}
+
+- Flynn, T. (2026). Profile harmoniser. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#spline](tools.html#spline)
+- Flynn, T. (2026). Soil carbon stocks. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#carbon](tools.html#carbon)
+- Flynn, T. (2026). Water retention: compare pedotransfer functions. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#water](tools.html#water)
+- Flynn, T. (2026). van Genuchten curves. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#vg](tools.html#vg)
+- Flynn, T. (2026). Hydrologic soil group and runoff. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#hsg](tools.html#hsg)
+- Flynn, T. (2026). Texture class. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#texture](tools.html#texture)
+- Flynn, T. (2026). Munsell soil colour. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#munsell](tools.html#munsell)
+- Flynn, T. (2026). Sampling density. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#sampling](tools.html#sampling)
+- Flynn, T. (2026). Variogram & kriging. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#krige](tools.html#krige)
+- Flynn, T. (2026). Model evaluation. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#eval](tools.html#eval)
+- Flynn, T. (2026). Soil temperature waves. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#soiltemp](tools.html#soiltemp)
+- Flynn, T. (2026). Surface energy balance. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#energy](tools.html#energy)
+- Flynn, T. (2026). Evapotranspiration and crop water use. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#et](tools.html#et)
+- Flynn, T. (2026). Frost depth. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#frost](tools.html#frost)
+- Flynn, T. (2026). Day length and solar radiation. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#sun](tools.html#sun)
+- Flynn, T. (2026). Pedodiversity. In: *Tools for researchers: soil and environmental analysis in the browser*, version 1.0 [software]. [tools.html#pedodiv](tools.html#pedodiv)
+
+## Check a result {#checks}
+
+- Flynn, T. (2026). *Check a result: plausibility checks for soil and environmental results*, version 1.0 [software]. [checks.html](checks.html)
+
+Each check also lists the method it is based on; please cite that as well.
+
+## Soil classification keys {#soil-keys}
+
+- Flynn, T. (2026). *WRB 2022 soil key*, version 1.0 [software]. [soil-keys.html#wrb](soil-keys.html#wrb)
+- Flynn, T., Rasaei, Z. (2026). *WRB 2022 soil key, Farsi edition*, version 1.0 [software]. [soil-keys.html#wrb-fa](soil-keys.html#wrb-fa)
+- Flynn, T. (2026). *WRB 2022 soil key, Kiswahili edition*, version 1.0 [software]. [soil-keys.html#wrb-sw](soil-keys.html#wrb-sw)
+- Flynn, T. (2026). *South African soil classification key (2018)*, version 1.0 [software]. [soil-keys.html#sa](soil-keys.html#sa)
+
+Please also cite the classification itself: IUSS Working Group WRB (2022), *World Reference Base for Soil Resources*, 4th edition, International Union of Soil Sciences, Vienna; or Soil Classification Working Group (2018), *Soil Classification: A Natural and Anthropogenic System for South Africa*, ARC-Institute for Soil, Climate and Water, Pretoria.
+
+## Soil Colour Reader {#soil-colour}
+
+- Flynn, T., Swafo, S.M. (2026). *Soil Colour Reader: Munsell soil colour from a photo, with uncertainty*, version 1.0 [software]. [soil-colour.html](soil-colour.html)
+
+## BibTeX
+
+<details>
+<summary>Show BibTeX entries</summary>
+
+```bibtex
+@software{flynn2026tools,
+  author  = {Flynn, Trevan},
+  title   = {Tools for researchers: soil and environmental analysis in the browser},
+  year    = {2026},
+  version = {1.0},
+  url     = {https://YOUR-SITE/tools.html}
+}
+
+@software{flynn2026checks,
+  author  = {Flynn, Trevan},
+  title   = {Check a result: plausibility checks for soil and environmental results},
+  year    = {2026},
+  version = {1.0},
+  url     = {https://YOUR-SITE/checks.html}
+}
+
+@software{flynn2026wrb,
+  author  = {Flynn, Trevan},
+  title   = {WRB 2022 soil key},
+  year    = {2026},
+  version = {1.0},
+  url     = {https://YOUR-SITE/soil-keys.html#wrb}
+}
+
+@software{flynn2026wrbfa,
+  author  = {Flynn, Trevan and Rasaei, Zahra},
+  title   = {WRB 2022 soil key, Farsi edition},
+  year    = {2026},
+  version = {1.0},
+  url     = {https://YOUR-SITE/soil-keys.html#wrb-fa}
+}
+
+@software{flynn2026wrbsw,
+  author  = {Flynn, Trevan},
+  title   = {WRB 2022 soil key, Kiswahili edition},
+  year    = {2026},
+  version = {1.0},
+  url     = {https://YOUR-SITE/soil-keys.html#wrb-sw}
+}
+
+@software{flynn2026sakey,
+  author  = {Flynn, Trevan},
+  title   = {South African soil classification key (2018)},
+  year    = {2026},
+  version = {1.0},
+  url     = {https://YOUR-SITE/soil-keys.html#sa}
+}
+
+@software{flynn2026colour,
+  author  = {Flynn, Trevan and Swafo, Seome Michael},
+  title   = {Soil Colour Reader: Munsell soil colour from a photo, with uncertainty},
+  year    = {2026},
+  version = {1.0},
+  url     = {https://YOUR-SITE/soil-colour.html}
+}
+```
+
+</details>
