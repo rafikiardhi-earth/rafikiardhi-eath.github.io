@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="How much lime to raise soil pH, or sulfur to lower it, for your soil type and area. Includes the check most calculators skip: whether lowering pH is realistic at all.">
+<meta name="description" content="Cuánta cal necesita para subir el pH del suelo, o cuánto azufre para bajarlo, según su tipo de suelo y el área. Incluye la revisión que casi todas las calculadoras omiten: si bajar el pH es realista.">
 
-<title>Soil pH calculator: lime and sulfur – RafikiArdhi</title>
+<title>Calculadora del pH del suelo: cal y azufre – RafikiArdhi</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -63,17 +63,17 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-8QXXQWKPTD"></script>
@@ -86,6 +86,351 @@ gtag('js', new Date());
 gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
+<script>
+/* English / Español toggle for the homeowner pages: keeps what you typed when you switch, and remembers your choice. */
+(function () {
+  const es = (document.documentElement.lang || '').toLowerCase().startsWith('es');
+  const here = es ? 'es' : 'en';
+  const other = p => es ? p.replace(/\/es\/([^/]*)$/, '/$1') : p.replace(/\/([^/]*)$/, '/es/$1');
+  let pref = null; try { pref = localStorage.getItem('ra-hm-lang'); } catch (e) { }
+  if (pref === 'en' || pref === 'es') if (pref !== here) { // every page that loads this has a version in the other language
+
+    location.replace(other(location.pathname) + location.search + location.hash); return;
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('.hm-lang a'); if (!a) return;
+    e.preventDefault();
+    try { localStorage.setItem('ra-hm-lang', es ? 'en' : 'es'); } catch (err) { }
+    location.href = other(location.pathname) + location.search + location.hash;
+  });
+})();
+</script>
+<style>
+.hmc {
+  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
+  --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f; --warn: #e0a440; --good: #5cc28f; --bad: #e07070;
+  color: var(--ink); font-size: 1.02rem; line-height: 1.5; max-width: 620px; margin: 8px auto 28px;
+}
+body.quarto-light .hmc {
+  --bg: #f7f5f0; --surface: #fffdf9; --surface-2: #efebe2; --ink: #1f1c17; --ink-2: #57514a; --ink-3: #8a8379;
+  --line: #ddd6ca; --accent: #8a4b22; --accent-ink: #ffffff; --accent-soft: #f3e6da; --warn: #9a6400; --good: #1f7a4d; --bad: #b3261e;
+}
+.hmc * { box-sizing: border-box; }
+.hmc .cx { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 12px; }
+.hmc .step { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 0 0 6px; }
+.hmc .hint { font-size: .9rem; color: var(--ink-2); margin: 6px 0 0; }
+.hmc .fg { display: grid; grid-template-columns: repeat(6, 1fr); column-gap: 10px; }
+.hmc .fg > div { grid-column: span 6; }
+.hmc .fg > div.w3 { grid-column: span 3; }
+.hmc .fg > div.w2 { grid-column: span 2; }
+.hmc .fg > div[hidden] { display: none; }
+.hmc label { display: block; font-size: .9rem; font-weight: 600; color: var(--ink-2); margin: 10px 0 4px; }
+.hmc label .u { font-weight: 400; color: var(--ink-3); }
+.hmc input[type=text], .hmc select {
+  width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  font: inherit; padding: 8px 12px;
+}
+.hmc textarea { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: .88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px 12px; resize: vertical; }
+.hmc input:focus, .hmc select:focus, .hmc textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.hmc input.bad { border-color: var(--bad); }
+.hmc .chk { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0 2px; font-weight: 500; color: var(--ink); font-size: .98rem; }
+.hmc .chk input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.hmc .seg { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.hmc .seg button { flex: 1 1 auto; min-height: 42px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+.hmc .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.hmc .res { border: 2px solid var(--accent); }
+.hmc .res .big { font-size: 2rem; font-weight: 700; line-height: 1.15; margin: 2px 0 6px; font-family: "Source Serif 4", Georgia, serif; }
+.hmc .res .sub { color: var(--ink-2); margin: 0 0 10px; }
+.hmc .res ul.kv { list-style: none; padding: 0; margin: 10px 0 0; }
+.hmc .res ul.kv li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+.hmc .res ul.kv li span:first-child { color: var(--ink-2); }
+.hmc .res ul.kv li span:last-child { font-weight: 600; text-align: right; }
+.hmc .res h3 { font-size: 1.05rem; margin: 16px 0 6px; }
+.hmc .res ul.plain { margin: 6px 0 0; padding-left: 20px; color: var(--ink-2); font-size: .95rem; }
+.hmc .res ul.plain li { margin-bottom: 6px; }
+.hmc .note { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink-2); margin-top: 10px; }
+.hmc .note.good { border-left-color: var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
+.hmc .note.bad { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 10%, transparent); }
+.hmc .tag { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; padding: 1px 9px; border: 1px solid currentColor; }
+.hmc .tag.good { color: var(--good); } .hmc .tag.warn { color: var(--warn); } .hmc .tag.bad { color: var(--bad); }
+.hmc table.tt { width: 100%; border-collapse: collapse; font-size: .93rem; margin-top: 8px; }
+.hmc table.tt th, .hmc table.tt td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; }
+.hmc table.tt th { color: var(--ink-3); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; border-top: none; }
+.hmc table.tt td.r, .hmc table.tt th.r { text-align: right; }
+.hmc .say { margin-top: 12px; background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .95rem; }
+.hmc .say .lab { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; display: block; margin-bottom: 2px; }
+.hmc .linkbtn { background: none; border: none; color: var(--accent); font: inherit; font-weight: 600; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.hmc .empty { color: var(--ink-3); margin: 0; }
+.hmc details.cx { padding: 0; }
+.hmc details summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--accent); list-style: none; }
+.hmc details summary::-webkit-details-marker { display: none; }
+.hmc details summary::before { content: "＋ "; }
+.hmc details[open] summary::before { content: "－ "; }
+.hmc details .db { padding: 0 16px 16px; }
+.hmc ol.work { font-size: .92rem; color: var(--ink-2); margin: 0; padding-left: 18px; }
+.hmc ol.work li { margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.hmc .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+.hmc .actions button { min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: .92rem; cursor: pointer; }
+.hmc .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 50; }
+.hmc .toast.on { opacity: 1; }
+.hmc .smallprint { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
+@media (max-width: 460px) { .hmc .fg > div.w2, .hmc .fg > div.w3 { grid-column: span 6; } }
+@media print { .hmc .actions, .hmc .toast, .hmc .linkbtn { display: none !important; } .hmc .cx { break-inside: avoid; } }
+</style>
+<script>
+/* RafikiArdhi Homeowners tools: shared helpers and form framework. Everything runs in the browser. */
+window.HM = (function () {
+  const ES = (document.documentElement.lang || '').toLowerCase().startsWith('es');
+  const T = ES ? {
+    units: 'Unidades', us: 'Unidades de EE. UU.', si: 'Métricas', yours: 'Sus datos', work: 'Ver el cálculo', example: 'Ejemplo', link: 'Copiar enlace', print: 'Imprimir', reset: 'Empezar de nuevo',
+    small: 'Gratis, sin registro, sin anuncios, y nada de lo que escribe sale de su navegador. Los valores típicos son un punto de partida; cámbielos según su situación.',
+    sayLab: 'Copie esto', copy: 'Copiar', linkCopied: 'Enlace copiado', copied: 'Copiado', check: 'Revise sus números.', copyThis: 'Copie esto:'
+  } : {
+    units: 'Units', us: 'US units', si: 'Metric', yours: 'Your numbers', work: 'Show the working', example: 'Example', link: 'Copy link', print: 'Print', reset: 'Start over',
+    small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.',
+    sayLab: 'Copy this', copy: 'Copy', linkCopied: 'Link copied', copied: 'Copied', check: 'Check your numbers.', copyThis: 'Copy this:'
+  };
+  // SI value = displayed value × factor
+  const C = {
+    len: { us: [0.3048, 'ft'], si: [1, 'm'] },
+    dep: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
+    dia: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
+    area: { us: [0.09290304, 'ft²'], si: [1, 'm²'] },
+    vol: { us: [0.764554858, 'yd³'], si: [1, 'm³'] },
+    cuft: { us: [0.0283168466, 'ft³'], si: [0.001, 'L'] },
+    gal: { us: [3.785411784, 'gal'], si: [1, 'L'] },
+    wdep: { us: [25.4, 'in'], si: [1, 'mm'] },
+    rate: { us: [25.4, 'in/hr'], si: [1, 'mm/hr'] },
+    mass: { us: [0.45359237, 'lb'], si: [1, 'kg'] },
+    ton: { us: [0.90718474, (ES ? 'toneladas' : 'tons')], si: [1, 't'] },
+    arate: { us: [4.88242764, (ES ? 'lb por 1,000 ft²' : 'lb per 1,000 ft²')], si: [1, 'g/m²'] },
+    flow: { us: [3.785411784, 'gal/hr'], si: [1, 'L/hr'] },
+    dens: { us: [1.18655, (ES ? 'toneladas por yd³' : 'tons per yd³')], si: [1, (ES ? 't por m³' : 't per m³')] },
+    pct: { us: [1, '%'], si: [1, '%'] },
+    num: { us: [1, ''], si: [1, ''] },
+    min: { us: [1, 'min'], si: [1, 'min'] },
+    money: { us: [1, '$'], si: [1, ''] },
+    pvol: { us: [1 / 0.764554858, (ES ? '$ por yd³' : '$ per yd³')], si: [1, (ES ? 'por m³' : 'per m³')] },
+    pton: { us: [1 / 0.90718474, (ES ? '$ por tonelada' : '$ per ton')], si: [1, (ES ? 'por tonelada métrica' : 'per tonne')] },
+    pwater: { us: [1 / 3.785411784, (ES ? '$ por 1,000 gal' : '$ per 1,000 gal')], si: [1, (ES ? 'por m³' : 'per m³')] }
+  };
+  const UNITLESS = ['num', 'pct', 'min', 'money', 'select', 'seg', 'check', 'info', 'sec', 'text', 'textarea'];
+
+  const num = s => { s = String(s).replace(/[$,\s%]/g, ''); if (s === '') return null; return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN; };
+  function feet(s) {
+    s = String(s).trim().toLowerCase().replace(/[’′]/g, "'").replace(/[”″]/g, '"');
+    if (!s) return null; let m;
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:'|ft|feet|foot|pies?)\s*(?:(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)?)?$/))) return +m[1] + (m[2] ? +m[2] / 12 : 0);
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)$/))) return +m[1] / 12;
+    if ((m = s.match(/^(\d+)\s+(\d*\.?\d+)$/))) return +m[1] + +m[2] / 12;
+    return num(s);
+  }
+  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function getUnits() { try { const s = localStorage.getItem('ra-units'); if (s === 'si' || s === 'us') return s; } catch (e) { } return 'us'; }
+  function setUnits(u) { try { localStorage.setItem('ra-units', u); } catch (e) { } }
+  function toast(root, msg) { const t = root.querySelector('.toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); }
+  function copy(root, text, msg) {
+    const done = () => toast(root, msg);
+    const fb = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { window.prompt(T.copyThis, text); } ta.remove(); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fb); else fb();
+  }
+
+  function tool(cfg) {
+    const root = document.getElementById(cfg.id);
+    if (!root) return;
+    let u = getUnits(), f = {}, raw = {};
+    const inputs = cfg.inputs;
+    const byK = Object.fromEntries(inputs.filter(i => i.k).map(i => [i.k, i]));
+    const hasUnits = cfg.units !== false && inputs.some(i => i.t && !UNITLESS.includes(i.t) && !(i.t === 'list' && UNITLESS.includes(i.of)));
+    const unitOf = i => i.t === 'list' ? i.of : i.t;
+
+    // restore from link
+    try {
+      const m = cfg.hash === false ? null : location.hash.match(new RegExp('^#' + cfg.id + '=(.+)$'));
+      if (m) { const o = JSON.parse(decodeURIComponent(escape(atob(m[1])))); if (o && o.f && typeof o.f === 'object') { f = o.f; if (o.u === 'si' || o.u === 'us') u = o.u; } }
+    } catch (e) { f = {}; }
+
+    function defOf(i) {
+      let d = typeof i.d === 'function' ? i.d(u, read()) : i.d;
+      if (d && typeof d === 'object' && !Array.isArray(d)) d = d[u];
+      return d;
+    }
+    function siDefault(i) {
+      const d = defOf(i);
+      if (d == null) return null;
+      if (['select', 'seg', 'check', 'text', 'textarea'].includes(i.t)) return d;
+      const fac = C[unitOf(i)][u][0];
+      return Array.isArray(d) ? d.map(x => x * fac) : d * fac;
+    }
+    function read() {
+      const v = {};
+      inputs.forEach(i => { if (!i.k) return; v[i.k] = f[i.k] !== undefined ? f[i.k] : (i._noDef ? null : siDefaultSafe(i)); });
+      return v;
+    }
+    let guard = false;
+    function siDefaultSafe(i) { if (guard) return typeof i.d === 'function' ? null : siDefault(i); guard = true; try { return siDefault(i); } finally { guard = false; } }
+
+    function parse(i, s) {
+      const t = unitOf(i);
+      if (i.t === 'list') {
+        const parts = String(s).split(/[,;\s]+/).map(p => p.trim()).filter(Boolean);
+        if (!parts.length) return null;
+        const out = parts.map(p => { const x = (t === 'len' && u === 'us') ? feet(p) : num(p); return x == null || isNaN(x) ? NaN : x * C[t][u][0]; });
+        return out.some(isNaN) ? NaN : out;
+      }
+      const x = (t === 'len' && u === 'us') ? feet(s) : num(s);
+      return x == null || isNaN(x) ? x : x * C[t][u][0];
+    }
+    function shown(i) {
+      if (raw[i.k] !== undefined) return raw[i.k];
+      const v = f[i.k] !== undefined ? f[i.k] : siDefaultSafe(i);
+      if (v == null) return '';
+      const fac = C[unitOf(i)][u][0];
+      if (Array.isArray(v)) return v.map(x => fmt(x / fac, 3).replace(/,/g, '')).join(', ');
+      return fmt(v / fac, 3).replace(/,/g, '');
+    }
+    const lab = i => typeof i.l === 'function' ? i.l(u) : i.l;
+    function fieldHTML(i) {
+      const w = i.w ? ' class="w' + i.w + '"' : '';
+      const id = cfg.id + '-' + i.k;
+      const hint = i.h ? `<p class="hint">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : '';
+      if (i.t === 'info') return `<div${w} data-w="${i.k || ''}"><p class="hint">${typeof i.h === 'function' ? i.h(u) : i.h}</p></div>`;
+      if (i.t === 'select') {
+        const opts = typeof i.opts === 'function' ? i.opts(u) : i.opts, cur = String(read()[i.k]);
+        return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><select id="${id}" data-k="${i.k}">${opts.map(o => `<option value="${esc(o[0])}"${String(o[0]) === cur ? ' selected' : ''}>${esc(o[1])}</option>`).join('')}</select>${hint}</div>`;
+      }
+      if (i.t === 'seg') {
+        const opts = typeof i.opts === 'function' ? i.opts(u) : i.opts, cur = String(read()[i.k]);
+        return `<div${w} data-w="${i.k}">${i.l ? `<label>${lab(i)}</label>` : ''}<div class="seg" role="group">${opts.map(o => `<button type="button" data-seg="${i.k}" data-v="${esc(o[0])}" aria-pressed="${String(o[0]) === cur}">${esc(o[1])}</button>`).join('')}</div>${hint}</div>`;
+      }
+      if (i.t === 'textarea') { const val = read()[i.k] ?? ''; return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><textarea id="${id}" data-k="${i.k}" rows="${i.rows || 6}" spellcheck="false" placeholder="${esc(typeof i.ph === 'function' ? i.ph(u) : (i.ph || ''))}">${esc(val)}</textarea>${hint}</div>`; }
+      if (i.t === 'check') return `<div${w} data-w="${i.k}"><label class="chk"><input type="checkbox" data-k="${i.k}"${read()[i.k] ? ' checked' : ''}> <span>${lab(i)}</span></label>${hint}</div>`;
+      const un = C[unitOf(i)][u][1];
+      const ph = typeof i.ph === 'function' ? i.ph(u) : (i.ph || '');
+      return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}${un && unitOf(i) !== 'money' && unitOf(i) !== 'num' ? ` <span class="u">(${un})</span>` : ''}</label><input type="text" id="${id}" data-k="${i.k}" inputmode="${i.t === 'list' ? 'text' : 'decimal'}" autocomplete="off" value="${esc(shown(i))}" placeholder="${esc(ph)}">${hint}</div>`;
+    }
+
+    function render() {
+      let h = hasUnits ? `<div class="seg" role="group" aria-label="${T.units}"><button type="button" data-u="us" aria-pressed="${u === 'us'}">${T.us}</button><button type="button" data-u="si" aria-pressed="${u === 'si'}">${T.si}</button></div>` : '';
+      let open = false;
+      inputs.forEach((i, n) => {
+        if (i.t === 'sec' || n === 0) {
+          if (open) h += '</div></section>';
+          h += `<section class="cx"${i.t === 'sec' && i.k ? ` data-sec="${i.k}"` : ''}><div class="step">${i.t === 'sec' ? lab(i) : (cfg.step || T.yours)}</div>${i.t === 'sec' && i.h ? `<p class="hint" style="margin-top:0">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : ''}<div class="fg">`;
+          open = true;
+          if (i.t === 'sec') return;
+        }
+        h += fieldHTML(i);
+      });
+      if (open) h += '</div></section>';
+      h += `<section class="cx res" aria-live="polite"></section>
+        <details class="cx hm-work"><summary>${T.work}</summary><div class="db"></div></details>
+        ${cfg.after || ''}
+        <div class="actions" style="grid-template-columns:repeat(${(cfg.example ? 1 : 0) + (cfg.hash === false ? 0 : 1) + 2},1fr)">${cfg.example ? `<button type="button" data-act="example">${T.example}</button>` : ''}${cfg.hash === false ? '' : `<button type="button" data-act="link">${T.link}</button>`}<button type="button" data-act="print">${T.print}</button><button type="button" data-act="reset">${T.reset}</button></div>
+        <p class="smallprint">${cfg.smallprint || T.small}</p><div class="toast"></div>`;
+      root.innerHTML = h;
+      run();
+    }
+
+    const U = {
+      get us() { return u === 'us'; },
+      val: (si, t) => si == null ? null : si / C[t][u][0],
+      unit: t => C[t][u][1],
+      f: (si, t, d = 2) => si == null || !isFinite(si) ? '–' : fmt(si / C[t][u][0], d) + (C[t][u][1] && t !== 'money' ? (C[t][u][1].startsWith('$') ? ' ' : ' ') + C[t][u][1].replace(/^\$ /, '') : ''),
+      n: fmt, fix,
+      money: x => (u === 'us' ? '$' : '') + fix(x, 2),
+      kv: rows => `<ul class="kv">${rows.filter(Boolean).map(r => `<li><span>${r[0]}</span><span>${r[1]}</span></li>`).join('')}</ul>`,
+      note: (h, cls) => `<div class="note${cls ? ' ' + cls : ''}">${h}</div>`,
+      big: (label, val, sub) => `<div class="step">${label}</div><div class="big">${val}</div>${sub ? `<p class="sub">${sub}</p>` : ''}`,
+      say: t => `<div class="say"><span class="lab">${cfg.sayLabel || T.sayLab}</span><span class="hm-say">${esc(t)}</span> <button type="button" class="linkbtn" data-act="say">${T.copy}</button></div>`,
+      empty: t => `<p class="empty">${t}</p>`,
+      esc
+    };
+
+    function run() {
+      const v = read();
+      // validity marks and conditional visibility
+      root.querySelectorAll('input[type=text][data-k]').forEach(inp => {
+        const k = inp.dataset.k, r = raw[k];
+        inp.classList.toggle('bad', r !== undefined && r.trim() !== '' && (f[k] === undefined || (typeof f[k] === 'number' && isNaN(f[k]))));
+      });
+      inputs.forEach(i => {
+        if (!i.show) return;
+        const sel = i.t === 'sec' ? `[data-sec="${i.k}"]` : `[data-w="${i.k}"]`;
+        const el = root.querySelector(sel);
+        if (el) el.hidden = !i.show(v, u);
+      });
+      const clean = {};
+      Object.keys(v).forEach(k => { const x = v[k]; clean[k] = (typeof x === 'number' && isNaN(x)) ? null : x; });
+      let out;
+      try { out = cfg.compute(clean, U) || {}; } catch (e) { out = { html: U.empty(T.check) }; console.warn(e); }
+      if (typeof out === 'string') out = { html: out };
+      root.querySelector('.res').innerHTML = out.html || '';
+      const wd = root.querySelector('.hm-work');
+      wd.hidden = !out.work || !out.work.length;
+      wd.querySelector('.db').innerHTML = out.work && out.work.length ? `<ol class="work">${out.work.map(w => `<li>${w}</li>`).join('')}</ol>` : '';
+      try {
+        const keep = {}; Object.keys(f).forEach(k => { if (f[k] !== null && !(typeof f[k] === 'number' && isNaN(f[k]))) keep[k] = f[k]; });
+        if (cfg.hash === false) return;
+        const hsh = Object.keys(keep).length ? '#' + cfg.id + '=' + btoa(unescape(encodeURIComponent(JSON.stringify({ u, f: keep })))).replace(/=+$/, '') : '';
+        if (location.hash !== hsh) history.replaceState(null, '', location.pathname + location.search + hsh);
+      } catch (e) { }
+    }
+
+    function set(k, si) { f[k] = si; delete raw[k]; const inp = root.querySelector(`input[type=text][data-k="${k}"]`); if (inp) inp.value = shown(byK[k]); }
+    function setChoice(k, val) { f[k] = val; const el = root.querySelector(`[data-w="${k}"]`); if (el) el.outerHTML = fieldHTML(byK[k]); }
+    const setDisp = (k, d) => set(k, d * C[unitOf(byK[k])][u][0]);
+    const api = { set, setDisp, setChoice, get: k => read()[k], units: () => u, rerender: render };
+
+    root.addEventListener('input', e => {
+      const ta = e.target.closest('textarea[data-k]');
+      if (ta) { f[ta.dataset.k] = ta.value; if (cfg.onChange) cfg.onChange(ta.dataset.k, api); run(); return; }
+      const inp = e.target.closest('input[type=text][data-k]');
+      if (!inp) return;
+      const i = byK[inp.dataset.k];
+      raw[i.k] = inp.value;
+      const val = inp.value.trim() === '' ? null : parse(i, inp.value);
+      if (val == null) { f[i.k] = null; } else f[i.k] = val;
+      if (cfg.onChange) cfg.onChange(i.k, api);
+      run();
+    });
+    root.addEventListener('change', e => {
+      const el = e.target;
+      if (el.tagName === 'SELECT' && el.dataset.k) { f[el.dataset.k] = el.value; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
+      else if (el.type === 'checkbox' && el.dataset.k) { f[el.dataset.k] = el.checked; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
+    });
+    root.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      if (b.dataset.u && b.dataset.u !== u) { u = b.dataset.u; setUnits(u); raw = {}; render(); return; }
+      if (b.dataset.seg) {
+        f[b.dataset.seg] = b.dataset.v;
+        b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        if (cfg.onChange) cfg.onChange(b.dataset.seg, api);
+        run(); return;
+      }
+      const a = b.dataset.act;
+      if (a === 'link') copy(root, location.href, T.linkCopied);
+      else if (a === 'print') { root.querySelectorAll('details').forEach(d => d.open = true); window.print(); }
+      else if (a === 'reset') { f = {}; raw = {}; history.replaceState(null, '', location.pathname + location.search); render(); }
+      else if (a === 'example' && cfg.example) {
+        f = {}; raw = {};
+        Object.entries(cfg.example).forEach(([k, val]) => { const i = byK[k]; if (!i) return; f[k] = (typeof val === 'number' && !['select', 'seg', 'check'].includes(i.t)) ? val * C[unitOf(i)][u][0] : val; });
+        render();
+      }
+      else if (a === 'say') { const s = root.querySelector('.hm-say'); if (s) copy(root, s.textContent, T.copied); }
+      else if (cfg.onAction) cfg.onAction(a, api, b);
+    });
+    render();
+    return api;
+  }
+
+  return { tool, C, fmt, fix, num, feet, esc };
+})();
+</script>
+<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/ph-adjustment.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/ph-adjustment.html">
 
 
 <link rel="canonical" href="https://rafikiardhi.earth/es/ph-adjustment.html">
@@ -266,8 +611,8 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
     <span class="navbar-title">RafikiArdhi</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Buscar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -363,7 +708,7 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo oscuro"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -379,12 +724,12 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Soil pH calculator: lime and sulfur</h1>
+<h1 class="title">Calculadora del pH del suelo: cal y azufre</h1>
 </div>
 
 <div>
   <div class="description">
-    How much lime to raise soil pH, or sulfur to lower it, for your soil type and area. Includes the check most calculators skip: whether lowering pH is realistic at all.
+    Cuánta cal necesita para subir el pH del suelo, o cuánto azufre para bajarlo, según su tipo de suelo y el área. Incluye la revisión que casi todas las calculadoras omiten: si bajar el pH es realista.
   </div>
 </div>
 
@@ -401,7 +746,10 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </header>
 
 
-<p>Changing soil pH takes more material on clay than on sand, and it happens slowly. This estimates how much ground limestone (to raise pH) or elemental sulfur (to lower it) you need, and tells you when lowering pH isn’t realistic.</p>
+<div class="hm-lang">
+<p><a href="../ph-adjustment.html" lang="en">English</a></p>
+</div>
+<p>Cambiar el pH del suelo requiere más material en arcilla que en arena, y sucede despacio. Esta herramienta estima cuánta piedra caliza molida (para subir el pH) o azufre elemental (para bajarlo) necesita, y le dice cuándo bajar el pH no es realista.</p>
 <div class="hmc" id="ph"></div>
 <script>
 (function () {
@@ -409,65 +757,66 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
   const LIME = { sand: 30, sandyloam: 45, loam: 60, siltloam: 70, clay: 80 };
   const SULF = { sand: 10, sandyloam: 13, loam: 17, siltloam: 20, clay: 25 };
   const OMF = { low: 1, mid: 1.25, high: 1.5 };
+  const TEXN = { sand: 'arena', sandyloam: 'franco arenoso', loam: 'franco', siltloam: 'franco limoso', clay: 'arcilla' };
   const LB1000 = 4.88242764; // g/m² per lb/1000 ft²
   HM.tool({
-    id: 'ph', step: 'Your soil',
+    id: 'ph', step: 'Su suelo',
     inputs: [
-      { k: 'cur', l: 'Current pH (from a soil test)', t: 'num', w: 3 },
-      { k: 'tgt', l: 'Target pH', t: 'num', d: 6.5, w: 3, h: 'Most lawns and gardens: 6.0–7.0. Blueberries 4.5–5.5; azaleas and rhododendrons 5.0–6.0.' },
-      { k: 'tex', l: 'Soil texture', t: 'select', d: 'loam', opts: [['sand', 'Sand or loamy sand'], ['sandyloam', 'Sandy loam'], ['loam', 'Loam'], ['siltloam', 'Silt loam'], ['clay', 'Clay loam or clay']] },
-      { k: 'om', l: 'Organic matter', t: 'select', d: 'mid', opts: [['low', 'Low (under 2%)'], ['mid', 'Medium (2–5%)'], ['high', 'High (over 5%)']], h: 'Organic matter resists pH change, so more of it means more material.' },
-      { k: 'fizz', l: 'Vinegar test: does a spoonful of soil fizz in vinegar?', t: 'select', d: 'unk', opts: [['unk', 'Haven\'t tried'], ['no', 'No fizz'], ['yes', 'Yes, it fizzes']], show: v => v.tgt != null && v.cur != null && v.tgt < v.cur },
-      { k: 'lime', l: 'Free lime (calcium carbonate), if your report gives it (%)', t: 'num', show: v => v.fizz === 'yes' && v.tgt < v.cur },
-      { t: 'sec', l: 'Where' },
-      { k: 'site', l: 'Situation', t: 'seg', d: 'lawn', opts: [['lawn', 'Established lawn or bed (spread on top)'], ['new', 'New bed (mixed in)']] },
-      { k: 'area', l: 'Area', t: 'area' }
+      { k: 'cur', l: 'pH actual (de un análisis de suelo)', t: 'num', w: 3 },
+      { k: 'tgt', l: 'pH que quiere', t: 'num', d: 6.5, w: 3, h: 'La mayoría de los céspedes y jardines: 6.0–7.0. Arándanos 4.5–5.5; azaleas y rododendros 5.0–6.0.' },
+      { k: 'tex', l: 'Textura del suelo', t: 'select', d: 'loam', opts: [['sand', 'Arena o arena franca'], ['sandyloam', 'Franco arenoso'], ['loam', 'Franco'], ['siltloam', 'Franco limoso'], ['clay', 'Franco arcilloso o arcilla']] },
+      { k: 'om', l: 'Materia orgánica', t: 'select', d: 'mid', opts: [['low', 'Baja (menos de 2%)'], ['mid', 'Media (2–5%)'], ['high', 'Alta (más de 5%)']], h: 'La materia orgánica resiste el cambio de pH, así que entre más haya, más material se necesita.' },
+      { k: 'fizz', l: 'Prueba del vinagre: ¿una cucharada de tierra burbujea en vinagre?', t: 'select', d: 'unk', opts: [['unk', 'No la he hecho'], ['no', 'No burbujea'], ['yes', 'Sí, burbujea']], show: v => v.tgt != null && v.cur != null && v.tgt < v.cur },
+      { k: 'lime', l: 'Cal libre (carbonato de calcio), si su reporte la da (%)', t: 'num', show: v => v.fizz === 'yes' && v.tgt < v.cur },
+      { t: 'sec', l: 'Dónde' },
+      { k: 'site', l: 'Situación', t: 'seg', d: 'lawn', opts: [['lawn', 'Césped o cama ya establecida (se esparce encima)'], ['new', 'Cama nueva (se mezcla)']] },
+      { k: 'area', l: 'Área', t: 'area' }
     ],
     compute(v, U) {
-      if (v.cur == null || v.tgt == null) return U.empty('Enter your current pH and target.');
-      if (v.cur < 3 || v.cur > 10 || v.tgt < 3 || v.tgt > 10) return U.empty('pH values are normally between 4 and 9. Check the numbers.');
+      if (v.cur == null || v.tgt == null) return U.empty('Escriba su pH actual y el que quiere.');
+      if (v.cur < 3 || v.cur > 10 || v.tgt < 3 || v.tgt > 10) return U.empty('Los valores de pH normalmente están entre 4 y 9. Revise los números.');
       const d = v.tgt - v.cur;
-      if (Math.abs(d) < 0.2) return U.note('Your pH is already at the target. Nothing to add.', 'good');
+      if (Math.abs(d) < 0.2) return U.note('Su pH ya está donde quiere. No hay que agregar nada.', 'good');
       const raise = d > 0, f = OMF[v.om], perUnit = (raise ? LIME : SULF)[v.tex] * f;
       const rate = perUnit * Math.abs(d); // lb/1000 ft²
       const maxApp = raise ? (v.site === 'lawn' ? 50 : 100) : (v.site === 'lawn' ? 5 : 20);
       const apps = Math.ceil(rate / maxApp - 1e-9);
       const rateSI = rate * LB1000; // g/m²
-      const work = [`${raise ? 'Ground limestone' : 'Elemental sulfur'} to change pH by 1 unit in ${v.tex === 'clay' ? 'clay' : v.tex.replace('loam', ' loam')}: about ${raise ? LIME[v.tex] : SULF[v.tex]} lb per 1,000 ft² (top 6 in)`,
-        `× ${f} for ${v.om === 'low' ? 'low' : v.om === 'mid' ? 'medium' : 'high'} organic matter × ${HM.fmt(Math.abs(d), 1)} units = ${HM.fmt(rate, 0)} lb per 1,000 ft² (${HM.fmt(rateSI / 1000, 2)} kg per m²)`];
+      const work = [`${raise ? 'Piedra caliza molida' : 'Azufre elemental'} para cambiar el pH 1 unidad en ${TEXN[v.tex]}: unas ${raise ? LIME[v.tex] : SULF[v.tex]} lb por cada 1,000 ft² (primeras 6 pulgadas)`,
+        `× ${f} por materia orgánica ${v.om === 'low' ? 'baja' : v.om === 'mid' ? 'media' : 'alta'} × ${HM.fmt(Math.abs(d), 1)} unidades = ${HM.fmt(rate, 0)} lb por cada 1,000 ft² (${HM.fmt(rateSI / 1000, 2)} kg por m²)`];
       let h = '';
       if (!raise && v.fizz === 'yes') {
         const lp = v.lime > 0 ? v.lime : 1;
         const soil = 1000 * 0.5 * 80; // lb of soil in top 6 in of 1,000 ft²
         const sNeed = soil * lp / 100 * 0.32;
-        h += U.big('Not realistic', 'Don\'t try to lower pH', `Fizzing means free lime. Before the pH moves at all, sulfur has to dissolve that lime: about ${U.f(sNeed * LB1000, 'arate', 0)} of sulfur for each 1% of lime${v.lime > 0 ? '' : ' (assuming 1%)'}.`);
-        h += `<h3>What works instead</h3><ul class="plain"><li>Choose plants that like alkaline soil. There are good ones for every purpose.</li><li>For yellowing leaves on iron-hungry plants (maples, oaks, roses), use a chelated iron product made for high-pH soil (EDDHA type).</li><li>Grow acid-loving plants like blueberries in containers or raised beds filled with an acidic mix.</li><li>Organic matter and mulch help nutrient availability even when pH stays high.</li></ul>`;
-        work.push(`Top 6 in of 1,000 ft² ≈ 500 ft³ × 80 lb/ft³ = 40,000 lb of soil`, `${HM.fmt(lp, 1)}% lime = ${HM.fmt(soil * lp / 100, 0)} lb of calcium carbonate; sulfur needed to neutralise it = × 0.32 = ${HM.fmt(sNeed, 0)} lb per 1,000 ft², before any pH change`);
+        h += U.big('No es realista', 'No intente bajar el pH', `Si burbujea, hay cal libre. Antes de que el pH se mueva, el azufre tiene que disolver esa cal: unos ${U.f(sNeed * LB1000, 'arate', 0)} de azufre por cada 1% de cal${v.lime > 0 ? '' : ' (suponiendo 1%)'}.`);
+        h += `<h3>Lo que sí funciona</h3><ul class="plain"><li>Escoja plantas a las que les guste el suelo alcalino. Hay buenas opciones para cualquier uso.</li><li>Para hojas amarillas en plantas que necesitan mucho hierro (maples, robles, rosales), use un producto de hierro quelatado hecho para suelo de pH alto (tipo EDDHA).</li><li>Siembre las plantas que prefieren suelo ácido, como los arándanos, en macetas o camas elevadas llenas de una mezcla ácida.</li><li>La materia orgánica y el mantillo ayudan a que los nutrientes estén disponibles aunque el pH siga alto.</li></ul>`;
+        work.push(`Primeras 6 pulgadas de 1,000 ft² ≈ 500 ft³ × 80 lb/ft³ = 40,000 lb de tierra`, `${HM.fmt(lp, 1)}% de cal = ${HM.fmt(soil * lp / 100, 0)} lb de carbonato de calcio; azufre necesario para neutralizarla = × 0.32 = ${HM.fmt(sNeed, 0)} lb por cada 1,000 ft², antes de cualquier cambio de pH`);
         return { html: h, work };
       }
-      const label = raise ? 'ground limestone' : 'elemental sulfur';
+      const label = raise ? 'piedra caliza molida' : 'azufre elemental';
       if (v.area > 0) {
         const kg = rateSI * v.area / 1000;
-        h += U.big('Apply', U.f(kg, 'mass', 1), `of ${label} over ${U.f(v.area, 'area', 0)} (${U.f(rateSI, 'arate', 1)}).`);
-        work.push(`For your area: ${U.f(rateSI, 'arate', 1)} × ${U.f(v.area, 'area', 0)} = ${U.f(kg, 'mass', 1)}`);
-      } else h += U.big('Apply', U.f(rateSI, 'arate', 1), `of ${label}. Enter your area for the total.`);
-      if (apps > 1) h += U.note(`Split this into ${apps} applications of no more than ${U.f(maxApp * LB1000, 'arate', 0)} each${raise ? ', spring and fall' : ', several months apart'}. ${raise ? 'Heavy single doses on lawns can clump and burn.' : 'Too much sulfur at once burns roots and grass.'}`);
-      if (v.site === 'lawn') h += U.note(`Spread on the surface and water in. It works slowly from the top down, so a surface application takes a year or more to fully act${raise ? '; core aerating first speeds it up' : ''}.`);
-      else h += U.note('Mix it into the top 6 in. It still takes weeks (lime) to months (sulfur) to change pH fully.');
-      if (Math.abs(d) > 1.5) h += U.note('That is a big change. Aim for part of it, then retest in 6–12 months before adding more.', 'bad');
-      if (!raise && v.fizz === 'unk') h += U.note('Do the vinegar test first: if your soil fizzes, sulfur will be wasted.', 'bad');
-      if (raise && v.tex !== 'sand' && v.cur > 6) h += U.note('A small rise like this rarely matters for most plants. Only lime if your plants or soil test call for it.');
-      h += U.note(raise ? 'If your soil test gives a lime requirement (often from a "buffer pH"), use that instead: it is more accurate than this estimate.' : 'Use elemental sulfur, not aluminum sulfate, which can harm roots. Iron sulfate works faster but needs about 6 times as much by weight.', 'good');
+        h += U.big('Aplique', U.f(kg, 'mass', 1), `de ${label} en ${U.f(v.area, 'area', 0)} (${U.f(rateSI, 'arate', 1)}).`);
+        work.push(`Para su área: ${U.f(rateSI, 'arate', 1)} × ${U.f(v.area, 'area', 0)} = ${U.f(kg, 'mass', 1)}`);
+      } else h += U.big('Aplique', U.f(rateSI, 'arate', 1), `de ${label}. Escriba su área para ver el total.`);
+      if (apps > 1) h += U.note(`Divídalo en ${apps} aplicaciones de no más de ${U.f(maxApp * LB1000, 'arate', 0)} cada una${raise ? ', en primavera y otoño' : ', con varios meses de separación'}. ${raise ? 'Las dosis grandes de una sola vez en el césped pueden apelmazarse y quemarlo.' : 'Demasiado azufre de una vez quema las raíces y el pasto.'}`);
+      if (v.site === 'lawn') h += U.note(`Espárzalo en la superficie y riegue. Actúa despacio de arriba hacia abajo, así que una aplicación en la superficie tarda un año o más en hacer todo su efecto${raise ? '; airear con sacabocados antes lo acelera' : ''}.`);
+      else h += U.note('Mézclelo en las primeras 6 pulgadas. Aun así tarda semanas (la cal) o meses (el azufre) en cambiar el pH por completo.');
+      if (Math.abs(d) > 1.5) h += U.note('Es un cambio grande. Haga solo una parte, y vuelva a analizar en 6–12 meses antes de agregar más.', 'bad');
+      if (!raise && v.fizz === 'unk') h += U.note('Primero haga la prueba del vinagre: si su suelo burbujea, el azufre se desperdiciará.', 'bad');
+      if (raise && v.tex !== 'sand' && v.cur > 6) h += U.note('Un aumento pequeño como este casi nunca importa para la mayoría de las plantas. Solo aplique cal si sus plantas o su análisis de suelo lo piden.');
+      h += U.note(raise ? 'Si su análisis de suelo da un requerimiento de cal (muchas veces a partir de un "pH buffer"), use ese: es más exacto que esta estimación.' : 'Use azufre elemental, no sulfato de aluminio, que puede dañar las raíces. El sulfato de hierro actúa más rápido pero se necesitan unas 6 veces más por peso.', 'good');
       return { html: h, work };
     }
   });
 })();
 </script>
-<section id="why-ph-changes-slowly" class="level2">
-<h2 data-anchor-id="why-ph-changes-slowly">Why pH changes slowly</h2>
-<p>Soil is buffered: clay and organic matter hold large reserves of acidity (or alkalinity) that resist change. That’s why clay needs two or three times as much lime as sand, and why the same amount works slowly.</p>
-<p><strong>Lowering pH in alkaline soils is a special case.</strong> Many soils in dry regions contain free lime (calcium carbonate), which fizzes in vinegar. Any acid you add, including sulfur as it breaks down, is used up dissolving that lime before the pH moves. Even 1% lime takes well over 100 lb of sulfur per 1,000 ft² just to neutralise. That’s why gardeners in those regions do better choosing plants suited to their soil.</p>
-<p>The rates here are typical extension values for the top 6 inches. A lab “lime requirement” or “buffer pH” result is more accurate for your soil when you have one.</p>
+<section id="por-qué-el-ph-cambia-despacio" class="level2">
+<h2 data-anchor-id="por-qué-el-ph-cambia-despacio">Por qué el pH cambia despacio</h2>
+<p>El suelo tiene amortiguación: la arcilla y la materia orgánica guardan grandes reservas de acidez (o alcalinidad) que resisten el cambio. Por eso la arcilla necesita dos o tres veces más cal que la arena, y por eso la misma cantidad actúa despacio.</p>
+<p><strong>Bajar el pH en suelos alcalinos es un caso especial.</strong> Muchos suelos de regiones secas contienen cal libre (carbonato de calcio), que burbujea con vinagre. Cualquier ácido que agregue, incluido el azufre conforme se descompone, se gasta disolviendo esa cal antes de que el pH se mueva. Aun con 1% de cal se necesitan bastante más de 100 lb de azufre por cada 1,000 ft² solo para neutralizarla. Por eso a los jardineros de esas regiones les va mejor escogiendo plantas adaptadas a su suelo.</p>
+<p>Las dosis que se usan aquí son valores típicos de extensión agrícola para las primeras 6 pulgadas. Un resultado de laboratorio de “requerimiento de cal” o “pH buffer” es más exacto para su suelo cuando lo tiene.</p>
 
 
 </section>
@@ -504,12 +853,12 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "Copiado");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "Copiado");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",

@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es" xml:lang="es"><head>
 
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.10.19">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="description" content="How much rainwater your roof can collect per storm and per year, how fast a rain barrel fills, and how many barrels make sense.">
+<meta name="description" content="Cuánta agua de lluvia puede juntar su techo por tormenta y por año, qué tan rápido se llena un barril de lluvia y cuántos barriles conviene tener.">
 
-<title>Rain barrel and rainwater harvesting calculator – RafikiArdhi</title>
+<title>Calculadora de barriles de lluvia y captación de agua – RafikiArdhi</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -63,17 +63,17 @@ ul.task-list li input[type="checkbox"] {
   ],
   "show-item-context": false,
   "language": {
-    "search-no-results-text": "No results",
-    "search-matching-documents-text": "matching documents",
-    "search-copy-link-title": "Copy link to search",
-    "search-hide-matches-text": "Hide additional matches",
-    "search-more-match-text": "more match in this document",
-    "search-more-matches-text": "more matches in this document",
-    "search-clear-button-title": "Clear",
+    "search-no-results-text": "No se han encontrado resultados",
+    "search-matching-documents-text": "documentos encontrados",
+    "search-copy-link-title": "Copiar el enlace en la búsqueda",
+    "search-hide-matches-text": "Ocultar resultados adicionales",
+    "search-more-match-text": "resultado adicional en este documento",
+    "search-more-matches-text": "resultados adicionales en este documento",
+    "search-clear-button-title": "Borrar",
     "search-text-placeholder": "",
-    "search-detached-cancel-button-title": "Cancel",
-    "search-submit-button-title": "Submit",
-    "search-label": "Search"
+    "search-detached-cancel-button-title": "Cancelar",
+    "search-submit-button-title": "Enviar",
+    "search-label": "Buscar"
   }
 }</script>
 <script async="" src="https://www.googletagmanager.com/gtag/js?id=G-8QXXQWKPTD"></script>
@@ -86,6 +86,351 @@ gtag('js', new Date());
 gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </script>
 <style>html{ scroll-behavior: smooth; }</style>
+<script>
+/* English / Español toggle for the homeowner pages: keeps what you typed when you switch, and remembers your choice. */
+(function () {
+  const es = (document.documentElement.lang || '').toLowerCase().startsWith('es');
+  const here = es ? 'es' : 'en';
+  const other = p => es ? p.replace(/\/es\/([^/]*)$/, '/$1') : p.replace(/\/([^/]*)$/, '/es/$1');
+  let pref = null; try { pref = localStorage.getItem('ra-hm-lang'); } catch (e) { }
+  if (pref === 'en' || pref === 'es') if (pref !== here) { // every page that loads this has a version in the other language
+
+    location.replace(other(location.pathname) + location.search + location.hash); return;
+  }
+  document.addEventListener('click', e => {
+    const a = e.target.closest('.hm-lang a'); if (!a) return;
+    e.preventDefault();
+    try { localStorage.setItem('ra-hm-lang', es ? 'en' : 'es'); } catch (err) { }
+    location.href = other(location.pathname) + location.search + location.hash;
+  });
+})();
+</script>
+<style>
+.hmc {
+  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
+  --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f; --warn: #e0a440; --good: #5cc28f; --bad: #e07070;
+  color: var(--ink); font-size: 1.02rem; line-height: 1.5; max-width: 620px; margin: 8px auto 28px;
+}
+body.quarto-light .hmc {
+  --bg: #f7f5f0; --surface: #fffdf9; --surface-2: #efebe2; --ink: #1f1c17; --ink-2: #57514a; --ink-3: #8a8379;
+  --line: #ddd6ca; --accent: #8a4b22; --accent-ink: #ffffff; --accent-soft: #f3e6da; --warn: #9a6400; --good: #1f7a4d; --bad: #b3261e;
+}
+.hmc * { box-sizing: border-box; }
+.hmc .cx { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 12px; }
+.hmc .step { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 0 0 6px; }
+.hmc .hint { font-size: .9rem; color: var(--ink-2); margin: 6px 0 0; }
+.hmc .fg { display: grid; grid-template-columns: repeat(6, 1fr); column-gap: 10px; }
+.hmc .fg > div { grid-column: span 6; }
+.hmc .fg > div.w3 { grid-column: span 3; }
+.hmc .fg > div.w2 { grid-column: span 2; }
+.hmc .fg > div[hidden] { display: none; }
+.hmc label { display: block; font-size: .9rem; font-weight: 600; color: var(--ink-2); margin: 10px 0 4px; }
+.hmc label .u { font-weight: 400; color: var(--ink-3); }
+.hmc input[type=text], .hmc select {
+  width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  font: inherit; padding: 8px 12px;
+}
+.hmc textarea { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: .88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px 12px; resize: vertical; }
+.hmc input:focus, .hmc select:focus, .hmc textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.hmc input.bad { border-color: var(--bad); }
+.hmc .chk { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0 2px; font-weight: 500; color: var(--ink); font-size: .98rem; }
+.hmc .chk input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.hmc .seg { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.hmc .seg button { flex: 1 1 auto; min-height: 42px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+.hmc .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.hmc .res { border: 2px solid var(--accent); }
+.hmc .res .big { font-size: 2rem; font-weight: 700; line-height: 1.15; margin: 2px 0 6px; font-family: "Source Serif 4", Georgia, serif; }
+.hmc .res .sub { color: var(--ink-2); margin: 0 0 10px; }
+.hmc .res ul.kv { list-style: none; padding: 0; margin: 10px 0 0; }
+.hmc .res ul.kv li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+.hmc .res ul.kv li span:first-child { color: var(--ink-2); }
+.hmc .res ul.kv li span:last-child { font-weight: 600; text-align: right; }
+.hmc .res h3 { font-size: 1.05rem; margin: 16px 0 6px; }
+.hmc .res ul.plain { margin: 6px 0 0; padding-left: 20px; color: var(--ink-2); font-size: .95rem; }
+.hmc .res ul.plain li { margin-bottom: 6px; }
+.hmc .note { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink-2); margin-top: 10px; }
+.hmc .note.good { border-left-color: var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
+.hmc .note.bad { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 10%, transparent); }
+.hmc .tag { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; padding: 1px 9px; border: 1px solid currentColor; }
+.hmc .tag.good { color: var(--good); } .hmc .tag.warn { color: var(--warn); } .hmc .tag.bad { color: var(--bad); }
+.hmc table.tt { width: 100%; border-collapse: collapse; font-size: .93rem; margin-top: 8px; }
+.hmc table.tt th, .hmc table.tt td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; }
+.hmc table.tt th { color: var(--ink-3); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; border-top: none; }
+.hmc table.tt td.r, .hmc table.tt th.r { text-align: right; }
+.hmc .say { margin-top: 12px; background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .95rem; }
+.hmc .say .lab { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; display: block; margin-bottom: 2px; }
+.hmc .linkbtn { background: none; border: none; color: var(--accent); font: inherit; font-weight: 600; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.hmc .empty { color: var(--ink-3); margin: 0; }
+.hmc details.cx { padding: 0; }
+.hmc details summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--accent); list-style: none; }
+.hmc details summary::-webkit-details-marker { display: none; }
+.hmc details summary::before { content: "＋ "; }
+.hmc details[open] summary::before { content: "－ "; }
+.hmc details .db { padding: 0 16px 16px; }
+.hmc ol.work { font-size: .92rem; color: var(--ink-2); margin: 0; padding-left: 18px; }
+.hmc ol.work li { margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.hmc .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+.hmc .actions button { min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: .92rem; cursor: pointer; }
+.hmc .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 50; }
+.hmc .toast.on { opacity: 1; }
+.hmc .smallprint { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
+@media (max-width: 460px) { .hmc .fg > div.w2, .hmc .fg > div.w3 { grid-column: span 6; } }
+@media print { .hmc .actions, .hmc .toast, .hmc .linkbtn { display: none !important; } .hmc .cx { break-inside: avoid; } }
+</style>
+<script>
+/* RafikiArdhi Homeowners tools: shared helpers and form framework. Everything runs in the browser. */
+window.HM = (function () {
+  const ES = (document.documentElement.lang || '').toLowerCase().startsWith('es');
+  const T = ES ? {
+    units: 'Unidades', us: 'Unidades de EE. UU.', si: 'Métricas', yours: 'Sus datos', work: 'Ver el cálculo', example: 'Ejemplo', link: 'Copiar enlace', print: 'Imprimir', reset: 'Empezar de nuevo',
+    small: 'Gratis, sin registro, sin anuncios, y nada de lo que escribe sale de su navegador. Los valores típicos son un punto de partida; cámbielos según su situación.',
+    sayLab: 'Copie esto', copy: 'Copiar', linkCopied: 'Enlace copiado', copied: 'Copiado', check: 'Revise sus números.', copyThis: 'Copie esto:'
+  } : {
+    units: 'Units', us: 'US units', si: 'Metric', yours: 'Your numbers', work: 'Show the working', example: 'Example', link: 'Copy link', print: 'Print', reset: 'Start over',
+    small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.',
+    sayLab: 'Copy this', copy: 'Copy', linkCopied: 'Link copied', copied: 'Copied', check: 'Check your numbers.', copyThis: 'Copy this:'
+  };
+  // SI value = displayed value × factor
+  const C = {
+    len: { us: [0.3048, 'ft'], si: [1, 'm'] },
+    dep: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
+    dia: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
+    area: { us: [0.09290304, 'ft²'], si: [1, 'm²'] },
+    vol: { us: [0.764554858, 'yd³'], si: [1, 'm³'] },
+    cuft: { us: [0.0283168466, 'ft³'], si: [0.001, 'L'] },
+    gal: { us: [3.785411784, 'gal'], si: [1, 'L'] },
+    wdep: { us: [25.4, 'in'], si: [1, 'mm'] },
+    rate: { us: [25.4, 'in/hr'], si: [1, 'mm/hr'] },
+    mass: { us: [0.45359237, 'lb'], si: [1, 'kg'] },
+    ton: { us: [0.90718474, (ES ? 'toneladas' : 'tons')], si: [1, 't'] },
+    arate: { us: [4.88242764, (ES ? 'lb por 1,000 ft²' : 'lb per 1,000 ft²')], si: [1, 'g/m²'] },
+    flow: { us: [3.785411784, 'gal/hr'], si: [1, 'L/hr'] },
+    dens: { us: [1.18655, (ES ? 'toneladas por yd³' : 'tons per yd³')], si: [1, (ES ? 't por m³' : 't per m³')] },
+    pct: { us: [1, '%'], si: [1, '%'] },
+    num: { us: [1, ''], si: [1, ''] },
+    min: { us: [1, 'min'], si: [1, 'min'] },
+    money: { us: [1, '$'], si: [1, ''] },
+    pvol: { us: [1 / 0.764554858, (ES ? '$ por yd³' : '$ per yd³')], si: [1, (ES ? 'por m³' : 'per m³')] },
+    pton: { us: [1 / 0.90718474, (ES ? '$ por tonelada' : '$ per ton')], si: [1, (ES ? 'por tonelada métrica' : 'per tonne')] },
+    pwater: { us: [1 / 3.785411784, (ES ? '$ por 1,000 gal' : '$ per 1,000 gal')], si: [1, (ES ? 'por m³' : 'per m³')] }
+  };
+  const UNITLESS = ['num', 'pct', 'min', 'money', 'select', 'seg', 'check', 'info', 'sec', 'text', 'textarea'];
+
+  const num = s => { s = String(s).replace(/[$,\s%]/g, ''); if (s === '') return null; return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN; };
+  function feet(s) {
+    s = String(s).trim().toLowerCase().replace(/[’′]/g, "'").replace(/[”″]/g, '"');
+    if (!s) return null; let m;
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:'|ft|feet|foot|pies?)\s*(?:(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)?)?$/))) return +m[1] + (m[2] ? +m[2] / 12 : 0);
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)$/))) return +m[1] / 12;
+    if ((m = s.match(/^(\d+)\s+(\d*\.?\d+)$/))) return +m[1] + +m[2] / 12;
+    return num(s);
+  }
+  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function getUnits() { try { const s = localStorage.getItem('ra-units'); if (s === 'si' || s === 'us') return s; } catch (e) { } return 'us'; }
+  function setUnits(u) { try { localStorage.setItem('ra-units', u); } catch (e) { } }
+  function toast(root, msg) { const t = root.querySelector('.toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); }
+  function copy(root, text, msg) {
+    const done = () => toast(root, msg);
+    const fb = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { window.prompt(T.copyThis, text); } ta.remove(); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fb); else fb();
+  }
+
+  function tool(cfg) {
+    const root = document.getElementById(cfg.id);
+    if (!root) return;
+    let u = getUnits(), f = {}, raw = {};
+    const inputs = cfg.inputs;
+    const byK = Object.fromEntries(inputs.filter(i => i.k).map(i => [i.k, i]));
+    const hasUnits = cfg.units !== false && inputs.some(i => i.t && !UNITLESS.includes(i.t) && !(i.t === 'list' && UNITLESS.includes(i.of)));
+    const unitOf = i => i.t === 'list' ? i.of : i.t;
+
+    // restore from link
+    try {
+      const m = cfg.hash === false ? null : location.hash.match(new RegExp('^#' + cfg.id + '=(.+)$'));
+      if (m) { const o = JSON.parse(decodeURIComponent(escape(atob(m[1])))); if (o && o.f && typeof o.f === 'object') { f = o.f; if (o.u === 'si' || o.u === 'us') u = o.u; } }
+    } catch (e) { f = {}; }
+
+    function defOf(i) {
+      let d = typeof i.d === 'function' ? i.d(u, read()) : i.d;
+      if (d && typeof d === 'object' && !Array.isArray(d)) d = d[u];
+      return d;
+    }
+    function siDefault(i) {
+      const d = defOf(i);
+      if (d == null) return null;
+      if (['select', 'seg', 'check', 'text', 'textarea'].includes(i.t)) return d;
+      const fac = C[unitOf(i)][u][0];
+      return Array.isArray(d) ? d.map(x => x * fac) : d * fac;
+    }
+    function read() {
+      const v = {};
+      inputs.forEach(i => { if (!i.k) return; v[i.k] = f[i.k] !== undefined ? f[i.k] : (i._noDef ? null : siDefaultSafe(i)); });
+      return v;
+    }
+    let guard = false;
+    function siDefaultSafe(i) { if (guard) return typeof i.d === 'function' ? null : siDefault(i); guard = true; try { return siDefault(i); } finally { guard = false; } }
+
+    function parse(i, s) {
+      const t = unitOf(i);
+      if (i.t === 'list') {
+        const parts = String(s).split(/[,;\s]+/).map(p => p.trim()).filter(Boolean);
+        if (!parts.length) return null;
+        const out = parts.map(p => { const x = (t === 'len' && u === 'us') ? feet(p) : num(p); return x == null || isNaN(x) ? NaN : x * C[t][u][0]; });
+        return out.some(isNaN) ? NaN : out;
+      }
+      const x = (t === 'len' && u === 'us') ? feet(s) : num(s);
+      return x == null || isNaN(x) ? x : x * C[t][u][0];
+    }
+    function shown(i) {
+      if (raw[i.k] !== undefined) return raw[i.k];
+      const v = f[i.k] !== undefined ? f[i.k] : siDefaultSafe(i);
+      if (v == null) return '';
+      const fac = C[unitOf(i)][u][0];
+      if (Array.isArray(v)) return v.map(x => fmt(x / fac, 3).replace(/,/g, '')).join(', ');
+      return fmt(v / fac, 3).replace(/,/g, '');
+    }
+    const lab = i => typeof i.l === 'function' ? i.l(u) : i.l;
+    function fieldHTML(i) {
+      const w = i.w ? ' class="w' + i.w + '"' : '';
+      const id = cfg.id + '-' + i.k;
+      const hint = i.h ? `<p class="hint">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : '';
+      if (i.t === 'info') return `<div${w} data-w="${i.k || ''}"><p class="hint">${typeof i.h === 'function' ? i.h(u) : i.h}</p></div>`;
+      if (i.t === 'select') {
+        const opts = typeof i.opts === 'function' ? i.opts(u) : i.opts, cur = String(read()[i.k]);
+        return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><select id="${id}" data-k="${i.k}">${opts.map(o => `<option value="${esc(o[0])}"${String(o[0]) === cur ? ' selected' : ''}>${esc(o[1])}</option>`).join('')}</select>${hint}</div>`;
+      }
+      if (i.t === 'seg') {
+        const opts = typeof i.opts === 'function' ? i.opts(u) : i.opts, cur = String(read()[i.k]);
+        return `<div${w} data-w="${i.k}">${i.l ? `<label>${lab(i)}</label>` : ''}<div class="seg" role="group">${opts.map(o => `<button type="button" data-seg="${i.k}" data-v="${esc(o[0])}" aria-pressed="${String(o[0]) === cur}">${esc(o[1])}</button>`).join('')}</div>${hint}</div>`;
+      }
+      if (i.t === 'textarea') { const val = read()[i.k] ?? ''; return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><textarea id="${id}" data-k="${i.k}" rows="${i.rows || 6}" spellcheck="false" placeholder="${esc(typeof i.ph === 'function' ? i.ph(u) : (i.ph || ''))}">${esc(val)}</textarea>${hint}</div>`; }
+      if (i.t === 'check') return `<div${w} data-w="${i.k}"><label class="chk"><input type="checkbox" data-k="${i.k}"${read()[i.k] ? ' checked' : ''}> <span>${lab(i)}</span></label>${hint}</div>`;
+      const un = C[unitOf(i)][u][1];
+      const ph = typeof i.ph === 'function' ? i.ph(u) : (i.ph || '');
+      return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}${un && unitOf(i) !== 'money' && unitOf(i) !== 'num' ? ` <span class="u">(${un})</span>` : ''}</label><input type="text" id="${id}" data-k="${i.k}" inputmode="${i.t === 'list' ? 'text' : 'decimal'}" autocomplete="off" value="${esc(shown(i))}" placeholder="${esc(ph)}">${hint}</div>`;
+    }
+
+    function render() {
+      let h = hasUnits ? `<div class="seg" role="group" aria-label="${T.units}"><button type="button" data-u="us" aria-pressed="${u === 'us'}">${T.us}</button><button type="button" data-u="si" aria-pressed="${u === 'si'}">${T.si}</button></div>` : '';
+      let open = false;
+      inputs.forEach((i, n) => {
+        if (i.t === 'sec' || n === 0) {
+          if (open) h += '</div></section>';
+          h += `<section class="cx"${i.t === 'sec' && i.k ? ` data-sec="${i.k}"` : ''}><div class="step">${i.t === 'sec' ? lab(i) : (cfg.step || T.yours)}</div>${i.t === 'sec' && i.h ? `<p class="hint" style="margin-top:0">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : ''}<div class="fg">`;
+          open = true;
+          if (i.t === 'sec') return;
+        }
+        h += fieldHTML(i);
+      });
+      if (open) h += '</div></section>';
+      h += `<section class="cx res" aria-live="polite"></section>
+        <details class="cx hm-work"><summary>${T.work}</summary><div class="db"></div></details>
+        ${cfg.after || ''}
+        <div class="actions" style="grid-template-columns:repeat(${(cfg.example ? 1 : 0) + (cfg.hash === false ? 0 : 1) + 2},1fr)">${cfg.example ? `<button type="button" data-act="example">${T.example}</button>` : ''}${cfg.hash === false ? '' : `<button type="button" data-act="link">${T.link}</button>`}<button type="button" data-act="print">${T.print}</button><button type="button" data-act="reset">${T.reset}</button></div>
+        <p class="smallprint">${cfg.smallprint || T.small}</p><div class="toast"></div>`;
+      root.innerHTML = h;
+      run();
+    }
+
+    const U = {
+      get us() { return u === 'us'; },
+      val: (si, t) => si == null ? null : si / C[t][u][0],
+      unit: t => C[t][u][1],
+      f: (si, t, d = 2) => si == null || !isFinite(si) ? '–' : fmt(si / C[t][u][0], d) + (C[t][u][1] && t !== 'money' ? (C[t][u][1].startsWith('$') ? ' ' : ' ') + C[t][u][1].replace(/^\$ /, '') : ''),
+      n: fmt, fix,
+      money: x => (u === 'us' ? '$' : '') + fix(x, 2),
+      kv: rows => `<ul class="kv">${rows.filter(Boolean).map(r => `<li><span>${r[0]}</span><span>${r[1]}</span></li>`).join('')}</ul>`,
+      note: (h, cls) => `<div class="note${cls ? ' ' + cls : ''}">${h}</div>`,
+      big: (label, val, sub) => `<div class="step">${label}</div><div class="big">${val}</div>${sub ? `<p class="sub">${sub}</p>` : ''}`,
+      say: t => `<div class="say"><span class="lab">${cfg.sayLabel || T.sayLab}</span><span class="hm-say">${esc(t)}</span> <button type="button" class="linkbtn" data-act="say">${T.copy}</button></div>`,
+      empty: t => `<p class="empty">${t}</p>`,
+      esc
+    };
+
+    function run() {
+      const v = read();
+      // validity marks and conditional visibility
+      root.querySelectorAll('input[type=text][data-k]').forEach(inp => {
+        const k = inp.dataset.k, r = raw[k];
+        inp.classList.toggle('bad', r !== undefined && r.trim() !== '' && (f[k] === undefined || (typeof f[k] === 'number' && isNaN(f[k]))));
+      });
+      inputs.forEach(i => {
+        if (!i.show) return;
+        const sel = i.t === 'sec' ? `[data-sec="${i.k}"]` : `[data-w="${i.k}"]`;
+        const el = root.querySelector(sel);
+        if (el) el.hidden = !i.show(v, u);
+      });
+      const clean = {};
+      Object.keys(v).forEach(k => { const x = v[k]; clean[k] = (typeof x === 'number' && isNaN(x)) ? null : x; });
+      let out;
+      try { out = cfg.compute(clean, U) || {}; } catch (e) { out = { html: U.empty(T.check) }; console.warn(e); }
+      if (typeof out === 'string') out = { html: out };
+      root.querySelector('.res').innerHTML = out.html || '';
+      const wd = root.querySelector('.hm-work');
+      wd.hidden = !out.work || !out.work.length;
+      wd.querySelector('.db').innerHTML = out.work && out.work.length ? `<ol class="work">${out.work.map(w => `<li>${w}</li>`).join('')}</ol>` : '';
+      try {
+        const keep = {}; Object.keys(f).forEach(k => { if (f[k] !== null && !(typeof f[k] === 'number' && isNaN(f[k]))) keep[k] = f[k]; });
+        if (cfg.hash === false) return;
+        const hsh = Object.keys(keep).length ? '#' + cfg.id + '=' + btoa(unescape(encodeURIComponent(JSON.stringify({ u, f: keep })))).replace(/=+$/, '') : '';
+        if (location.hash !== hsh) history.replaceState(null, '', location.pathname + location.search + hsh);
+      } catch (e) { }
+    }
+
+    function set(k, si) { f[k] = si; delete raw[k]; const inp = root.querySelector(`input[type=text][data-k="${k}"]`); if (inp) inp.value = shown(byK[k]); }
+    function setChoice(k, val) { f[k] = val; const el = root.querySelector(`[data-w="${k}"]`); if (el) el.outerHTML = fieldHTML(byK[k]); }
+    const setDisp = (k, d) => set(k, d * C[unitOf(byK[k])][u][0]);
+    const api = { set, setDisp, setChoice, get: k => read()[k], units: () => u, rerender: render };
+
+    root.addEventListener('input', e => {
+      const ta = e.target.closest('textarea[data-k]');
+      if (ta) { f[ta.dataset.k] = ta.value; if (cfg.onChange) cfg.onChange(ta.dataset.k, api); run(); return; }
+      const inp = e.target.closest('input[type=text][data-k]');
+      if (!inp) return;
+      const i = byK[inp.dataset.k];
+      raw[i.k] = inp.value;
+      const val = inp.value.trim() === '' ? null : parse(i, inp.value);
+      if (val == null) { f[i.k] = null; } else f[i.k] = val;
+      if (cfg.onChange) cfg.onChange(i.k, api);
+      run();
+    });
+    root.addEventListener('change', e => {
+      const el = e.target;
+      if (el.tagName === 'SELECT' && el.dataset.k) { f[el.dataset.k] = el.value; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
+      else if (el.type === 'checkbox' && el.dataset.k) { f[el.dataset.k] = el.checked; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
+    });
+    root.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      if (b.dataset.u && b.dataset.u !== u) { u = b.dataset.u; setUnits(u); raw = {}; render(); return; }
+      if (b.dataset.seg) {
+        f[b.dataset.seg] = b.dataset.v;
+        b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        if (cfg.onChange) cfg.onChange(b.dataset.seg, api);
+        run(); return;
+      }
+      const a = b.dataset.act;
+      if (a === 'link') copy(root, location.href, T.linkCopied);
+      else if (a === 'print') { root.querySelectorAll('details').forEach(d => d.open = true); window.print(); }
+      else if (a === 'reset') { f = {}; raw = {}; history.replaceState(null, '', location.pathname + location.search); render(); }
+      else if (a === 'example' && cfg.example) {
+        f = {}; raw = {};
+        Object.entries(cfg.example).forEach(([k, val]) => { const i = byK[k]; if (!i) return; f[k] = (typeof val === 'number' && !['select', 'seg', 'check'].includes(i.t)) ? val * C[unitOf(i)][u][0] : val; });
+        render();
+      }
+      else if (a === 'say') { const s = root.querySelector('.hm-say'); if (s) copy(root, s.textContent, T.copied); }
+      else if (cfg.onAction) cfg.onAction(a, api, b);
+    });
+    render();
+    return api;
+  }
+
+  return { tool, C, fmt, fix, num, feet, esc };
+})();
+</script>
+<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/rain-harvest.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/rain-harvest.html">
 
 
 <link rel="canonical" href="https://rafikiardhi.earth/es/rain-harvest.html">
@@ -266,8 +611,8 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
     <span class="navbar-title">RafikiArdhi</span>
     </a>
   </div>
-            <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+            <div id="quarto-search" class="" title="Buscar"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Navegación de palanca" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -363,7 +708,7 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Alternar modo oscuro"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -379,12 +724,12 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Rain barrel and rainwater harvesting calculator</h1>
+<h1 class="title">Calculadora de barriles de lluvia y captación de agua</h1>
 </div>
 
 <div>
   <div class="description">
-    How much rainwater your roof can collect per storm and per year, how fast a rain barrel fills, and how many barrels make sense.
+    Cuánta agua de lluvia puede juntar su techo por tormenta y por año, qué tan rápido se llena un barril de lluvia y cuántos barriles conviene tener.
   </div>
 </div>
 
@@ -401,46 +746,49 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 </header>
 
 
-<p>Roofs collect a surprising amount of water: an inch of rain on 1,000 ft² of roof is about 600 gallons. This works out what your roof collects and how that compares with a rain barrel.</p>
+<div class="hm-lang">
+<p><a href="../rain-harvest.html" lang="en">English</a></p>
+</div>
+<p>Un techo junta muchísima agua: una pulgada de lluvia sobre 1,000 ft² de techo son unos 600 galones. Esta herramienta calcula cuánto junta su techo y cómo se compara con un barril de lluvia.</p>
 <div class="hmc" id="rh"></div>
 <script>
 (function () {
   HM.tool({
-    id: 'rh', step: 'Your roof',
+    id: 'rh', step: 'Su techo',
     inputs: [
-      { k: 'area', l: 'Roof area draining to this downspout', t: 'area', h: 'Use the footprint (plan view), not the sloped surface. A house usually has 4 or more downspouts sharing the roof.' },
-      { k: 'eff', l: 'Share collected', t: 'pct', d: 80, w: 3, h: 'Some is lost to splash, evaporation and the first wetting.' },
-      { k: 'barrel', l: 'Barrel size', t: 'gal', d: { us: 55, si: 200 }, w: 3 },
-      { t: 'sec', l: 'Rainfall' },
-      { k: 'storm', l: 'A typical storm', t: 'wdep', d: { us: 0.5, si: 13 }, w: 3 },
-      { k: 'year', l: 'Rainfall per year', t: 'wdep', w: 3, h: 'From your local weather service.' }
+      { k: 'area', l: 'Área del techo que desagua en esta bajante', t: 'area', h: 'Use la superficie vista desde arriba (en planta), no la superficie inclinada. Una casa suele tener 4 o más bajantes que comparten el techo.' },
+      { k: 'eff', l: 'Parte que se capta', t: 'pct', d: 80, w: 3, h: 'Una parte se pierde por salpicadura, evaporación y lo que moja el techo al principio.' },
+      { k: 'barrel', l: 'Tamaño del barril', t: 'gal', d: { us: 55, si: 200 }, w: 3 },
+      { t: 'sec', l: 'Lluvia' },
+      { k: 'storm', l: 'Una tormenta típica', t: 'wdep', d: { us: 0.5, si: 13 }, w: 3 },
+      { k: 'year', l: 'Lluvia por año', t: 'wdep', w: 3, h: 'Del servicio meteorológico de su zona.' }
     ],
     compute(v, U) {
-      if (!(v.area > 0)) return U.empty('Enter the roof area.');
+      if (!(v.area > 0)) return U.empty('Escriba el área del techo.');
       const e = (v.eff || 0) / 100, perMm = v.area * e; // litres per mm of rain
       const storm = v.storm > 0 ? perMm * v.storm : null, yr = v.year > 0 ? perMm * v.year : null;
       const L = x => U.us ? `${HM.fmt(x / 3.785411784, 0)} gal` : `${HM.fmt(x, 0)} L`;
       const fill = v.barrel > 0 ? v.barrel / perMm : null; // mm of rain to fill one barrel
-      let h = storm != null ? U.big('Per storm', L(storm), `from ${U.f(v.storm, 'wdep', 2)} of rain on ${U.f(v.area, 'area', 0)}.`) : U.big('Per inch of rain', L(perMm * 25.4), '');
+      let h = storm != null ? U.big('Por tormenta', L(storm), `con ${U.f(v.storm, 'wdep', 2)} de lluvia sobre ${U.f(v.area, 'area', 0)}.`) : U.big('Por pulgada de lluvia', L(perMm * 25.4), '');
       h += U.kv([
-        fill != null ? ['Rain needed to fill one barrel', U.f(fill, 'wdep', 2)] : null,
-        storm != null && v.barrel > 0 ? ['Barrels filled by that storm', HM.fmt(storm / v.barrel, 1)] : null,
-        yr != null ? ['Collected per year', L(yr)] : null
+        fill != null ? ['Lluvia necesaria para llenar un barril', U.f(fill, 'wdep', 2)] : null,
+        storm != null && v.barrel > 0 ? ['Barriles que llena esa tormenta', HM.fmt(storm / v.barrel, 1)] : null,
+        yr != null ? ['Agua captada por año', L(yr)] : null
       ]);
-      if (fill != null && fill < 6) h += U.note(`A single barrel fills in the first ${U.f(fill, 'wdep', 2)} of rain; the rest overflows. Make sure the overflow is directed at least 5–10 ft (1.5–3 m) away from the foundation, or into a <a href="rain-garden.qmd">rain garden</a>.`);
-      h += U.note('Rainwater collection rules vary by state and country. In Colorado, for example, a single-family home may use up to two barrels with a combined capacity of 110 gallons. Check your local rules before buying.');
-      h += U.note('Use it for gardens and landscapes, not drinking. Keep barrels covered (mosquitoes), and empty them before freezing weather.', 'good');
-      return { html: h, work: [`Each ${U.us ? 'inch' : 'mm'} of rain on ${U.f(v.area, 'area', 0)} × ${HM.fmt(e * 100, 0)}% collected = ${U.us ? HM.fmt(perMm * 25.4 / 3.785411784, 0) + ' gal per inch' : HM.fmt(perMm, 0) + ' L per mm'}`, U.us ? 'For reference: 1 in of rain on 1 ft² is 0.623 gal' : 'For reference: 1 mm of rain on 1 m² is 1 L'] };
+      if (fill != null && fill < 6) h += U.note(`Un solo barril se llena con los primeros ${U.f(fill, 'wdep', 2)} de lluvia; el resto se desborda. Asegúrese de que el desborde salga por lo menos a 5–10 ft (1.5–3 m) de los cimientos, o hacia un <a href="rain-garden.html">jardín de lluvia</a>.`);
+      h += U.note('Las reglas para captar agua de lluvia cambian según el estado y el país. En Colorado, por ejemplo, una casa unifamiliar puede usar hasta dos barriles con una capacidad total de 110 galones. Revise las reglas de su zona antes de comprar.');
+      h += U.note('Úsela para jardines y plantas, no para beber. Mantenga los barriles tapados (por los mosquitos) y vacíelos antes de que hiele.', 'good');
+      return { html: h, work: [`Cada ${U.us ? 'pulgada' : 'mm'} de lluvia sobre ${U.f(v.area, 'area', 0)} × ${HM.fmt(e * 100, 0)}% captado = ${U.us ? HM.fmt(perMm * 25.4 / 3.785411784, 0) + ' gal por pulgada' : HM.fmt(perMm, 0) + ' L por mm'}`, U.us ? 'Como referencia: 1 pulgada de lluvia sobre 1 ft² son 0.623 gal' : 'Como referencia: 1 mm de lluvia sobre 1 m² es 1 L'] };
     }
   });
 })();
 </script>
-<section id="making-the-most-of-it" class="level2">
-<h2 data-anchor-id="making-the-most-of-it">Making the most of it</h2>
+<section id="cómo-aprovecharla-al-máximo" class="level2">
+<h2 data-anchor-id="cómo-aprovecharla-al-máximo">Cómo aprovecharla al máximo</h2>
 <ul>
-<li><strong>Barrels fill fast and empty slowly.</strong> Use the water between storms so there’s room for the next one.</li>
-<li><strong>A soaker hose or drip line</strong> works on barrel pressure if the barrel is raised on blocks; sprinklers don’t.</li>
-<li><strong>For larger volumes,</strong> directing downspouts into planted areas or a rain garden stores water in the soil itself, often more of it than barrels hold, and is allowed almost everywhere.</li>
+<li><strong>Los barriles se llenan rápido y se vacían despacio.</strong> Use el agua entre una tormenta y otra para que haya espacio para la siguiente.</li>
+<li><strong>Una manguera porosa o una línea de goteo</strong> funcionan con la presión del barril si el barril está elevado sobre bloques; los aspersores no.</li>
+<li><strong>Para volúmenes más grandes,</strong> dirigir las bajantes hacia áreas con plantas o hacia un jardín de lluvia guarda el agua en el mismo suelo, muchas veces más de la que cabe en los barriles, y está permitido casi en todas partes.</li>
 </ul>
 
 
@@ -478,12 +826,12 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
       // flash "checked"
       button.classList.add('code-copy-button-checked');
       var currentTitle = button.getAttribute("title");
-      button.setAttribute("title", "Copied!");
+      button.setAttribute("title", "Copiado");
       let tooltip;
       if (window.bootstrap) {
         button.setAttribute("data-bs-toggle", "tooltip");
         button.setAttribute("data-bs-placement", "left");
-        button.setAttribute("data-bs-title", "Copied!");
+        button.setAttribute("data-bs-title", "Copiado");
         tooltip = new bootstrap.Tooltip(button, 
           { trigger: "manual", 
             customClass: "code-copy-button-tooltip",
