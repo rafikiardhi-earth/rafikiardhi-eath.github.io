@@ -65,6 +65,7 @@ Soil Consultoria Socioambiental (Soil Socio-Environmental Consulting), Londrina,
 Faculty of Agriculture, The University of Birjand, South Khorasan, Iran
 - **[Sara Merzoug]{.ra-accent}** ([Profile](https://www.linkedin.com/in/saramerzoug/?isSelfProfile=false)).
 Faculty of Applied Sciences Taroudant, Ibn Zohr University, Morocco
+- **[Seome Michael Swafo]{.ra-accent}** ([Profile](https://www.linkedin.com/in/seome-michael-swafo/)). School of Agriculture and Environmental Sciences, University of Limpopo, south Africa
 
 Any remaining errors are ours. Found one, or want to suggest a tool? [Get in touch](contact.qmd).
 
