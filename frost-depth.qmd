@@ -2,15 +2,9 @@
 title: "Frost depth calculator"
 description: "How deep the ground freezes where you live, from your winter temperatures, the surface and your soil: for water lines, footings, fence posts and frost heave. Built for mountain and cold-climate homes."
 anchor-sections: false
-include-in-header:
-  - file: _hm-lang.html
-  - file: _hm-head.html
-  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/frost-depth.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/frost-depth.html">'
+include-in-header: _hm-head.html
+include-after-body: _cite-line.html
 ---
-
-::: {.hm-lang}
-[Español](es/frost-depth.qmd){lang="es"}
-:::
 
 In cold places the ground can freeze several feet down. Water lines, footings and fence posts set above that depth can burst, crack or get pushed up by frost heave. This estimates how deep frost goes in an average winter and a cold one, for your climate, surface and soil.
 
@@ -132,3 +126,7 @@ In cold places the ground can freeze several feet down. Water lines, footings an
 This uses the same heat-flow physics as engineering frost-depth methods, with typical soil properties for each soil type. It is an estimate for an average and a colder-than-average winter, not a design value. Soil properties alone can shift the answer by about a quarter. Building codes set frost depths from the coldest winters in decades, so follow your local code for footings.
 
 For more control (freezing index, density, water content and surface factors), use the [frost depth tool for researchers](tools.qmd#frost).
+
+## References
+
+Carslaw, H.S., Jaeger, J.C. (1959). *Conduction of Heat in Solids*, 2nd ed. Oxford University Press. Aldrich, H.P., Paynter, H.M. (1953). *Analytical Studies of Freezing and Thawing of Soils*. Arctic Construction and Frost Effects Laboratory, Technical Report 42. Kersten, M.S. (1949). *Laboratory Research for the Determination of the Thermal Properties of Soils*. University of Minnesota Engineering Experiment Station. US Army (1988). *Arctic and Subarctic Construction: Calculation Methods for Determination of Depths of Freeze and Thaw in Soils*. TM 5-852-6.

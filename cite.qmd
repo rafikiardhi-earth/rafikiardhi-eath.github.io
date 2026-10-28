@@ -1,6 +1,6 @@
 ---
 title: "How to cite"
-description: "Citations for the research tools, plausibility checks, soil classification keys and the Soil Colour Reader."
+description: "Citations for the research tools, plausibility checks, soil classification keys, the Soil Colour Reader and the homeowner tools."
 toc: true
 ---
 
@@ -45,6 +45,12 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
 ## Soil Colour Reader {#soil-colour}
 
 - Flynn, T., Swafo, S.M. (2026). *Soil Colour Reader: Munsell soil colour from a photo, with uncertainty*, version 1.0 [software]. [soil-colour.html](soil-colour.html)
+
+## Homeowner tools {#homeowners}
+
+Some of the homeowner calculators (areas and volumes of irregular shapes, roof catchment, frost depth, drainage) are also useful in research and fieldwork. Cite them as one collection:
+
+- Flynn, T. (2026). *Homeowner tools: yard and garden calculators*, version 1.0 [software]. [https://rafikiardhi.earth/homeowners.html](homeowners.html)
 
 ## BibTeX
 
@@ -106,6 +112,14 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
   year    = {2026},
   version = {1.0},
   url     = {https://rafikiardhi.earth/soil-colour.html}
+}
+
+@software{flynn2026homeowner,
+  author  = {Flynn, Trevan},
+  title   = {Homeowner tools: yard and garden calculators},
+  year    = {2026},
+  version = {1.0},
+  url     = {https://rafikiardhi.earth/homeowners.html}
 }
 ```
 
