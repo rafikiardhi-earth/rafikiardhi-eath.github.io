@@ -57,7 +57,7 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
   title   = {Tools for researchers: soil and environmental analysis in the browser},
   year    = {2026},
   version = {1.0},
-  url     = {https://YOUR-SITE/tools.html}
+  url     = {https://rafikiardhi.earth/tools.html}
 }
 
 @software{flynn2026checks,
@@ -65,7 +65,7 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
   title   = {Check a result: plausibility checks for soil and environmental results},
   year    = {2026},
   version = {1.0},
-  url     = {https://YOUR-SITE/checks.html}
+  url     = {https://rafikiardhi.earth/checks.html}
 }
 
 @software{flynn2026wrb,
@@ -73,7 +73,7 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
   title   = {WRB 2022 soil key},
   year    = {2026},
   version = {1.0},
-  url     = {https://YOUR-SITE/soil-keys.html#wrb}
+  url     = {https://rafikiardhi.earth/soil-keys.html#wrb}
 }
 
 @software{flynn2026wrbfa,
@@ -81,7 +81,7 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
   title   = {WRB 2022 soil key, Farsi edition},
   year    = {2026},
   version = {1.0},
-  url     = {https://YOUR-SITE/soil-keys.html#wrb-fa}
+  url     = {https://rafikiardhi.earth/soil-keys.html#wrb-fa}
 }
 
 @software{flynn2026wrbsw,
@@ -89,7 +89,7 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
   title   = {WRB 2022 soil key, Kiswahili edition},
   year    = {2026},
   version = {1.0},
-  url     = {https://YOUR-SITE/soil-keys.html#wrb-sw}
+  url     = {https://rafikiardhi.earth/soil-keys.html#wrb-sw}
 }
 
 @software{flynn2026sakey,
@@ -97,7 +97,7 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
   title   = {South African soil classification key (2018)},
   year    = {2026},
   version = {1.0},
-  url     = {https://YOUR-SITE/soil-keys.html#sa}
+  url     = {https://rafikiardhi.earth/soil-keys.html#sa}
 }
 
 @software{flynn2026colour,
@@ -105,7 +105,7 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
   title   = {Soil Colour Reader: Munsell soil colour from a photo, with uncertainty},
   year    = {2026},
   version = {1.0},
-  url     = {https://YOUR-SITE/soil-colour.html}
+  url     = {https://rafikiardhi.earth/soil-colour.html}
 }
 ```
 
