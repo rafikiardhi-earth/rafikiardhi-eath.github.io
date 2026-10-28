@@ -29,7 +29,7 @@ All tools are version 1.0. Persistent identifiers (DOIs) will be added here as t
 
 ## Check a result {#checks}
 
-- Flynn, T. (2026). *Check a result: plausibility checks for soil and environmental results*, version 1.0 [software]. [checks.html](checks.html)
+- Flynn, T. (2026). *Check a result: plausibility checks for soil and environmental results*, version 1.0 [software]. <https://doi.org/10.5281/zenodo.23736495>
 
 Each check also lists the method it is based on; please cite that as well.
 
@@ -44,7 +44,7 @@ Please also cite the classification itself: IUSS Working Group WRB (2022), *Worl
 
 ## Soil Colour Reader {#soil-colour}
 
-- Flynn, T., Swafo, S.M. (2026). *Soil Colour Reader: Munsell soil colour from a photo, with uncertainty*, version 1.0 [software]. [soil-colour.html](soil-colour.html)
+- Flynn, T., Swafo, S.M. (2026). *Soil Colour Reader: Munsell soil colour from a photo, with uncertainty*, version 1.0 [software]. <https://doi.org/10.5281/zenodo.23737366>
 
 ## Homeowner tools {#homeowners}
 
@@ -95,6 +95,7 @@ For frost depth in research, the [researcher version](#tools) in Tools for resea
   title   = {Check a result: plausibility checks for soil and environmental results},
   year    = {2026},
   version = {1.0},
+  doi     = {10.5281/zenodo.23736495},
   url     = {https://rafikiardhi.earth/checks.html}
 }
 
@@ -135,6 +136,7 @@ For frost depth in research, the [researcher version](#tools) in Tools for resea
   title   = {Soil Colour Reader: Munsell soil colour from a photo, with uncertainty},
   year    = {2026},
   version = {1.0},
+  doi     = {10.5281/zenodo.23737366},
   url     = {https://rafikiardhi.earth/soil-colour.html}
 }
 
