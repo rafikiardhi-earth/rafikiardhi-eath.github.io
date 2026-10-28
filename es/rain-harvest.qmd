@@ -1,51 +1,58 @@
 ---
-title: "Rain barrel and rainwater harvesting calculator"
-description: "How much rainwater your roof can collect per storm and per year, how fast a rain barrel fills, and how many barrels make sense."
+title: "Calculadora de barriles de lluvia y captación de agua"
+description: "Cuánta agua de lluvia puede juntar su techo por tormenta y por año, qué tan rápido se llena un barril de lluvia y cuántos barriles conviene tener."
+lang: es
 anchor-sections: false
-include-in-header: _hm-head.html
-include-after-body: _cite-line.html
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/rain-harvest.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/rain-harvest.html">'
 ---
 
-Roofs collect a surprising amount of water: an inch of rain on 1,000 ft² of roof is about 600 gallons. This works out what your roof collects and how that compares with a rain barrel.
+::: {.hm-lang}
+[English](../rain-harvest.qmd){lang="en"}
+:::
+
+Un techo junta muchísima agua: una pulgada de lluvia sobre 1,000 ft² de techo son unos 600 galones. Esta herramienta calcula cuánto junta su techo y cómo se compara con un barril de lluvia.
 
 ```{=html}
 <div class="hmc" id="rh"></div>
 <script>
 (function () {
   HM.tool({
-    id: 'rh', step: 'Your roof',
+    id: 'rh', step: 'Su techo',
     inputs: [
-      { k: 'area', l: 'Roof area draining to this downspout', t: 'area', h: 'Use the footprint (plan view), not the sloped surface. A house usually has 4 or more downspouts sharing the roof.' },
-      { k: 'eff', l: 'Share collected', t: 'pct', d: 80, w: 3, h: 'Some is lost to splash, evaporation and the first wetting.' },
-      { k: 'barrel', l: 'Barrel size', t: 'gal', d: { us: 55, si: 200 }, w: 3 },
-      { t: 'sec', l: 'Rainfall' },
-      { k: 'storm', l: 'A typical storm', t: 'wdep', d: { us: 0.5, si: 13 }, w: 3 },
-      { k: 'year', l: 'Rainfall per year', t: 'wdep', w: 3, h: 'From your local weather service.' }
+      { k: 'area', l: 'Área del techo que desagua en esta bajante', t: 'area', h: 'Use la superficie vista desde arriba (en planta), no la superficie inclinada. Una casa suele tener 4 o más bajantes que comparten el techo.' },
+      { k: 'eff', l: 'Parte que se capta', t: 'pct', d: 80, w: 3, h: 'Una parte se pierde por salpicadura, evaporación y lo que moja el techo al principio.' },
+      { k: 'barrel', l: 'Tamaño del barril', t: 'gal', d: { us: 55, si: 200 }, w: 3 },
+      { t: 'sec', l: 'Lluvia' },
+      { k: 'storm', l: 'Una tormenta típica', t: 'wdep', d: { us: 0.5, si: 13 }, w: 3 },
+      { k: 'year', l: 'Lluvia por año', t: 'wdep', w: 3, h: 'Del servicio meteorológico de su zona.' }
     ],
     compute(v, U) {
-      if (!(v.area > 0)) return U.empty('Enter the roof area.');
+      if (!(v.area > 0)) return U.empty('Escriba el área del techo.');
       const e = (v.eff || 0) / 100, perMm = v.area * e; // litres per mm of rain
       const storm = v.storm > 0 ? perMm * v.storm : null, yr = v.year > 0 ? perMm * v.year : null;
       const L = x => U.us ? `${HM.fmt(x / 3.785411784, 0)} gal` : `${HM.fmt(x, 0)} L`;
       const fill = v.barrel > 0 ? v.barrel / perMm : null; // mm of rain to fill one barrel
-      let h = storm != null ? U.big('Per storm', L(storm), `from ${U.f(v.storm, 'wdep', 2)} of rain on ${U.f(v.area, 'area', 0)}.`) : U.big('Per inch of rain', L(perMm * 25.4), '');
+      let h = storm != null ? U.big('Por tormenta', L(storm), `con ${U.f(v.storm, 'wdep', 2)} de lluvia sobre ${U.f(v.area, 'area', 0)}.`) : U.big('Por pulgada de lluvia', L(perMm * 25.4), '');
       h += U.kv([
-        fill != null ? ['Rain needed to fill one barrel', U.f(fill, 'wdep', 2)] : null,
-        storm != null && v.barrel > 0 ? ['Barrels filled by that storm', HM.fmt(storm / v.barrel, 1)] : null,
-        yr != null ? ['Collected per year', L(yr)] : null
+        fill != null ? ['Lluvia necesaria para llenar un barril', U.f(fill, 'wdep', 2)] : null,
+        storm != null && v.barrel > 0 ? ['Barriles que llena esa tormenta', HM.fmt(storm / v.barrel, 1)] : null,
+        yr != null ? ['Agua captada por año', L(yr)] : null
       ]);
-      if (fill != null && fill < 6) h += U.note(`A single barrel fills in the first ${U.f(fill, 'wdep', 2)} of rain; the rest overflows. Make sure the overflow is directed at least 5–10 ft (1.5–3 m) away from the foundation, or into a <a href="rain-garden.qmd">rain garden</a>.`);
-      h += U.note('Rainwater collection rules vary by state and country. In Colorado, for example, a single-family home may use up to two barrels with a combined capacity of 110 gallons. Check your local rules before buying.');
-      h += U.note('Use it for gardens and landscapes, not drinking. Keep barrels covered (mosquitoes), and empty them before freezing weather.', 'good');
-      return { html: h, work: [`Each ${U.us ? 'inch' : 'mm'} of rain on ${U.f(v.area, 'area', 0)} × ${HM.fmt(e * 100, 0)}% collected = ${U.us ? HM.fmt(perMm * 25.4 / 3.785411784, 0) + ' gal per inch' : HM.fmt(perMm, 0) + ' L per mm'}`, U.us ? 'For reference: 1 in of rain on 1 ft² is 0.623 gal' : 'For reference: 1 mm of rain on 1 m² is 1 L'] };
+      if (fill != null && fill < 6) h += U.note(`Un solo barril se llena con los primeros ${U.f(fill, 'wdep', 2)} de lluvia; el resto se desborda. Asegúrese de que el desborde salga por lo menos a 5–10 ft (1.5–3 m) de los cimientos, o hacia un <a href="rain-garden.html">jardín de lluvia</a>.`);
+      h += U.note('Las reglas para captar agua de lluvia cambian según el estado y el país. En Colorado, por ejemplo, una casa unifamiliar puede usar hasta dos barriles con una capacidad total de 110 galones. Revise las reglas de su zona antes de comprar.');
+      h += U.note('Úsela para jardines y plantas, no para beber. Mantenga los barriles tapados (por los mosquitos) y vacíelos antes de que hiele.', 'good');
+      return { html: h, work: [`Cada ${U.us ? 'pulgada' : 'mm'} de lluvia sobre ${U.f(v.area, 'area', 0)} × ${HM.fmt(e * 100, 0)}% captado = ${U.us ? HM.fmt(perMm * 25.4 / 3.785411784, 0) + ' gal por pulgada' : HM.fmt(perMm, 0) + ' L por mm'}`, U.us ? 'Como referencia: 1 pulgada de lluvia sobre 1 ft² son 0.623 gal' : 'Como referencia: 1 mm de lluvia sobre 1 m² es 1 L'] };
     }
   });
 })();
 </script>
 ```
 
-## Making the most of it
+## Cómo aprovecharla al máximo
 
-- **Barrels fill fast and empty slowly.** Use the water between storms so there's room for the next one.
-- **A soaker hose or drip line** works on barrel pressure if the barrel is raised on blocks; sprinklers don't.
-- **For larger volumes,** directing downspouts into planted areas or a rain garden stores water in the soil itself, often more of it than barrels hold, and is allowed almost everywhere.
+- **Los barriles se llenan rápido y se vacían despacio.** Use el agua entre una tormenta y otra para que haya espacio para la siguiente.
+- **Una manguera porosa o una línea de goteo** funcionan con la presión del barril si el barril está elevado sobre bloques; los aspersores no.
+- **Para volúmenes más grandes,** dirigir las bajantes hacia áreas con plantas o hacia un jardín de lluvia guarda el agua en el mismo suelo, muchas veces más de la que cabe en los barriles, y está permitido casi en todas partes.

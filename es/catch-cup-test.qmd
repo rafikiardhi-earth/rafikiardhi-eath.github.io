@@ -1,14 +1,21 @@
 ---
-title: "Sprinkler catch-cup test"
-description: "Find out how much water your sprinklers really put down, how evenly, and how long to run each zone. A free catch-cup (can) test calculator."
+title: "Prueba de vasos para aspersores"
+description: "Averigüe cuánta agua aplican de verdad sus aspersores, qué tan parejo, y cuánto tiempo regar cada zona. Calculadora gratuita de la prueba de vasos (latas)."
+lang: es
 anchor-sections: false
-include-in-header: _hm-head.html
-include-after-body: _cite-line.html
+include-in-header:
+  - file: ../_hm-lang.html
+  - file: ../_hm-head.html
+  - text: '<link rel="alternate" hreflang="en" href="https://rafikiardhi.earth/catch-cup-test.html"><link rel="alternate" hreflang="es" href="https://rafikiardhi.earth/es/catch-cup-test.html">'
 ---
 
-Most people guess their sprinkler run times. A catch-cup test measures what each zone actually puts down, in about 20 minutes, with a few cups and a ruler.
+::: {.hm-lang}
+[English](../catch-cup-test.qmd){lang="en"}
+:::
 
-**How to do it:** set out 8–12 identical straight-sided containers (tuna cans or plastic cups) in a grid across one zone, away from the heads themselves. Run the zone for 10–20 minutes. Measure the water depth in each container with a ruler and enter them below.
+La mayoría de la gente adivina los tiempos de riego de sus aspersores. La prueba de vasos mide lo que cada zona aplica de verdad, en unos 20 minutos, con unos cuantos vasos y una regla.
+
+**Cómo hacerla:** coloque de 8 a 12 recipientes iguales de lados rectos (latas de atún o vasos de plástico) en cuadrícula por toda una zona, lejos de las cabezas de los aspersores. Riegue la zona de 10 a 20 minutos. Mida con una regla la profundidad del agua en cada recipiente y escríbala abajo.
 
 ```{=html}
 <div class="hmc" id="cc"></div>
@@ -16,43 +23,43 @@ Most people guess their sprinkler run times. A catch-cup test measures what each
 (function () {
   const NEED = { peak: [1.25, 32], shoulder: [0.75, 19], low: [0.5, 13], xeric: [0.3, 8] };
   HM.tool({
-    id: 'cc', step: 'Your test',
+    id: 'cc', step: 'Su prueba',
     inputs: [
-      { k: 'min', l: 'How long the zone ran', t: 'min', d: 15, w: 3 },
-      { k: 'cups', l: 'Water depth in each cup, separated by commas', t: 'list', of: 'wdep', ph: u => u === 'us' ? 'e.g. 0.35, 0.4, 0.3, 0.45, 0.2, 0.38' : 'e.g. 9, 10, 8, 11, 5, 9.5', h: u => u === 'us' ? 'Measure to the nearest 1/16 in if you can (0.0625). Decimals work best: ¼ = 0.25.' : 'Measure to the nearest millimetre.' },
-      { t: 'sec', l: 'How much water the area needs' },
-      { k: 'pre', l: 'Plants and season', t: 'select', d: 'peak', opts: u => [['peak', `Cool-season lawn, peak summer (≈ ${u === 'us' ? '1¼ in' : '32 mm'}/week)`], ['shoulder', `Cool-season lawn, spring or fall (≈ ${u === 'us' ? '¾ in' : '19 mm'}/week)`], ['low', `Low-water lawn, e.g. buffalograss (≈ ${u === 'us' ? '½ in' : '13 mm'}/week)`], ['xeric', `Established low-water shrubs and perennials (≈ ${u === 'us' ? '0.3 in' : '8 mm'}/week)`], ['custom', 'My own number']] },
-      { k: 'need', l: 'Water needed per week, including rain', t: 'wdep', d: (u, v) => { const n = NEED[(v && v.pre) || 'peak'] || NEED.peak; return u === 'us' ? n[0] : n[1]; }, w: 3, h: 'Subtract any rain that fell that week.' },
-      { k: 'days', l: 'Watering days per week', t: 'select', d: '3', opts: [['1', '1'], ['2', '2'], ['3', '3'], ['4', '4']], w: 3 }
+      { k: 'min', l: 'Cuánto tiempo se regó la zona', t: 'min', d: 15, w: 3 },
+      { k: 'cups', l: 'Profundidad del agua en cada vaso, separada por comas', t: 'list', of: 'wdep', ph: u => u === 'us' ? 'p. ej. 0.35, 0.4, 0.3, 0.45, 0.2, 0.38' : 'p. ej. 9, 10, 8, 11, 5, 9.5', h: u => u === 'us' ? 'Si puede, mida al 1/16 de pulgada más cercano (0.0625). Los decimales funcionan mejor: ¼ = 0.25.' : 'Mida al milímetro más cercano.' },
+      { t: 'sec', l: 'Cuánta agua necesita el área' },
+      { k: 'pre', l: 'Plantas y temporada', t: 'select', d: 'peak', opts: u => [['peak', `Césped de clima fresco, pleno verano (≈ ${u === 'us' ? '1¼ in' : '32 mm'}/semana)`], ['shoulder', `Césped de clima fresco, primavera u otoño (≈ ${u === 'us' ? '¾ in' : '19 mm'}/semana)`], ['low', `Césped de bajo consumo de agua, p. ej. pasto búfalo (≈ ${u === 'us' ? '½ in' : '13 mm'}/semana)`], ['xeric', `Arbustos y perennes de bajo consumo ya establecidos (≈ ${u === 'us' ? '0.3 in' : '8 mm'}/semana)`], ['custom', 'Mi propio número']] },
+      { k: 'need', l: 'Agua necesaria por semana, contando la lluvia', t: 'wdep', d: (u, v) => { const n = NEED[(v && v.pre) || 'peak'] || NEED.peak; return u === 'us' ? n[0] : n[1]; }, w: 3, h: 'Reste la lluvia que cayó esa semana.' },
+      { k: 'days', l: 'Días de riego por semana', t: 'select', d: '3', opts: [['1', '1'], ['2', '2'], ['3', '3'], ['4', '4']], w: 3 }
     ],
     onChange(k, api) { if (k === 'pre' && NEED[api.get('pre')]) api.setDisp('need', NEED[api.get('pre')][api.units() === 'us' ? 0 : 1]); if (k === 'need') api.setChoice('pre', 'custom'); },
     compute(v, U) {
       const c = (v.cups || []).filter(x => x >= 0);
-      if (!(v.min > 0) || c.length < 2) return U.empty('Enter the run time and at least two cup readings (eight or more is better).');
+      if (!(v.min > 0) || c.length < 2) return U.empty('Escriba el tiempo de riego y por lo menos dos lecturas de vasos (ocho o más es mejor).');
       const n = c.length, avg = c.reduce((a, b) => a + b, 0) / n;
-      if (!(avg > 0)) return U.empty('All the cups are empty: check the zone ran.');
+      if (!(avg > 0)) return U.empty('Todos los vasos están vacíos: revise que la zona sí se regó.');
       const s = c.slice().sort((a, b) => a - b), q = Math.max(1, Math.round(n / 4)), lq = s.slice(0, q).reduce((a, b) => a + b, 0) / q;
       const rate = avg / (v.min / 60), du = lq / avg, sm = 1 / (0.4 + 0.6 * du);
       const base = v.need / rate * 60, adj = base * sm, days = +v.days, per = adj / days;
-      const grade = du >= 0.7 ? ['good', 'Good'] : du >= 0.55 ? ['warn', 'Fair'] : ['bad', 'Poor'];
-      let h = U.big('Run this zone', `${HM.fmt(Math.ceil(per), 0)} min`, `${days} day${days > 1 ? 's' : ''} a week, ${HM.fmt(Math.ceil(adj), 0)} minutes in total.`);
+      const grade = du >= 0.7 ? ['good', 'Buena'] : du >= 0.55 ? ['warn', 'Regular'] : ['bad', 'Mala'];
+      let h = U.big('Riegue esta zona', `${HM.fmt(Math.ceil(per), 0)} min`, `${days} día${days > 1 ? 's' : ''} por semana, ${HM.fmt(Math.ceil(adj), 0)} minutos en total.`);
       h += U.kv([
-        ['Application rate', U.f(rate, 'rate', 2)],
-        ['Evenness (lower-quarter DU)', `${HM.fmt(du * 100, 0)}% <span class="tag ${grade[0]}">${grade[1]}</span>`],
-        ['Water per watering day', U.f(v.need / days, 'wdep', 2)]
+        ['Tasa de aplicación', U.f(rate, 'rate', 2)],
+        ['Uniformidad (DU del cuarto más bajo)', `${HM.fmt(du * 100, 0)}% <span class="tag ${grade[0]}">${grade[1]}</span>`],
+        ['Agua por día de riego', U.f(v.need / days, 'wdep', 2)]
       ]);
-      if (du < 0.55) h += U.note('Coverage is uneven. Before adding minutes, look for tilted, sunken, blocked or mismatched heads and fix those: it saves more water than any schedule.', 'bad');
-      else if (du < 0.7) h += U.note('Coverage is fair. Straightening heads and clearing grass from around them usually improves it.');
-      if (rate > 0.75 * 25.4) h += U.note(`This zone applies water quickly. On clay or slopes it will run off before it soaks in: use the <a href="cycle-and-soak.qmd?pr=${HM.fmt(rate, 2)}">cycle-and-soak scheduler</a> to split it into shorter cycles.`);
-      else h += U.note(`Check for runoff on clay or slopes with the <a href="cycle-and-soak.qmd?pr=${HM.fmt(rate, 2)}">cycle-and-soak scheduler</a>.`, 'good');
+      if (du < 0.55) h += U.note('La cobertura no es pareja. Antes de agregar minutos, busque cabezas inclinadas, hundidas, tapadas o de tipos distintos y arréglelas: ahorra más agua que cualquier horario.', 'bad');
+      else if (du < 0.7) h += U.note('La cobertura es regular. Enderezar las cabezas y quitar el pasto alrededor normalmente la mejora.');
+      if (rate > 0.75 * 25.4) h += U.note(`Esta zona aplica el agua rápido. En suelo arcilloso o en pendiente escurrirá antes de absorberse: use el <a href="cycle-and-soak.html?pr=${HM.fmt(rate, 2)}">programador de ciclos y remojo</a> para dividirla en ciclos más cortos.`);
+      else h += U.note(`Revise si escurre en suelo arcilloso o en pendiente con el <a href="cycle-and-soak.html?pr=${HM.fmt(rate, 2)}">programador de ciclos y remojo</a>.`, 'good');
       return {
         html: h, work: [
-          `Average catch = ${U.f(avg, 'wdep', 3)} in ${HM.fmt(v.min, 1)} min (${n} cups)`,
-          `Application rate = ${U.f(avg, 'wdep', 3)} ÷ ${HM.fmt(v.min / 60, 3)} hr = ${U.f(rate, 'rate', 2)}`,
-          `Lowest quarter (${q} cup${q > 1 ? 's' : ''}) average = ${U.f(lq, 'wdep', 3)}; evenness DU = ${U.f(lq, 'wdep', 3)} ÷ ${U.f(avg, 'wdep', 3)} = ${HM.fmt(du, 2)}`,
-          `Base run time = ${U.f(v.need, 'wdep', 2)} ÷ ${U.f(rate, 'rate', 2)} × 60 = ${HM.fmt(base, 1)} min per week`,
-          `Scheduling multiplier = 1 ÷ (0.4 + 0.6 × ${HM.fmt(du, 2)}) = ${HM.fmt(sm, 2)}, so the drier spots get enough: ${HM.fmt(base, 1)} × ${HM.fmt(sm, 2)} = ${HM.fmt(adj, 1)} min per week`,
-          `Per day = ${HM.fmt(adj, 1)} ÷ ${days} = ${HM.fmt(per, 1)} → ${Math.ceil(per)} min`
+          `Promedio captado = ${U.f(avg, 'wdep', 3)} en ${HM.fmt(v.min, 1)} min (${n} vasos)`,
+          `Tasa de aplicación = ${U.f(avg, 'wdep', 3)} ÷ ${HM.fmt(v.min / 60, 3)} h = ${U.f(rate, 'rate', 2)}`,
+          `Promedio del cuarto más bajo (${q} vaso${q > 1 ? 's' : ''}) = ${U.f(lq, 'wdep', 3)}; uniformidad DU = ${U.f(lq, 'wdep', 3)} ÷ ${U.f(avg, 'wdep', 3)} = ${HM.fmt(du, 2)}`,
+          `Tiempo base = ${U.f(v.need, 'wdep', 2)} ÷ ${U.f(rate, 'rate', 2)} × 60 = ${HM.fmt(base, 1)} min por semana`,
+          `Multiplicador de programación = 1 ÷ (0.4 + 0.6 × ${HM.fmt(du, 2)}) = ${HM.fmt(sm, 2)}, para que los puntos más secos reciban suficiente: ${HM.fmt(base, 1)} × ${HM.fmt(sm, 2)} = ${HM.fmt(adj, 1)} min por semana`,
+          `Por día = ${HM.fmt(adj, 1)} ÷ ${days} = ${HM.fmt(per, 1)} → ${Math.ceil(per)} min`
         ]
       };
     }
@@ -61,14 +68,10 @@ Most people guess their sprinkler run times. A catch-cup test measures what each
 </script>
 ```
 
-## What the numbers mean
+## Qué significan los números
 
-- **Application rate** is how fast the zone puts water down. Spray heads are usually fast (1–2 in/hr); rotors and rotary nozzles are slow (0.3–0.7 in/hr). Zones with different head types need different run times.
-- **Evenness (DU)** compares the driest quarter of the cups with the average. At 70% or above, coverage is good. Below about 55%, some spots get less than half as much as others, and adding minutes just floods the wet spots to rescue the dry ones.
-- **Scheduling multiplier.** Because coverage is never perfect, the run time is stretched a little so the drier areas still get enough. Better coverage means a smaller multiplier and less water.
+- **La tasa de aplicación** es qué tan rápido la zona aplica el agua. Las cabezas de rocío (spray) suelen ser rápidas (1–2 pulgadas por hora); los rotores y las boquillas rotativas son lentos (0.3–0.7 pulgadas por hora). Las zonas con tipos de cabezas distintos necesitan tiempos distintos.
+- **La uniformidad (DU)** compara el cuarto más seco de los vasos con el promedio. Con 70% o más, la cobertura es buena. Por debajo de más o menos 55%, algunos puntos reciben menos de la mitad que otros, y agregar minutos solo encharca los puntos mojados para salvar los secos.
+- **El multiplicador de programación.** Como la cobertura nunca es perfecta, el tiempo de riego se alarga un poco para que las áreas más secas reciban suficiente. Mejor cobertura significa un multiplicador más pequeño y menos agua.
 
-Repeat the test for each zone: zones rarely match. Once you know a zone's rate, the [cycle-and-soak scheduler](cycle-and-soak.qmd) checks whether your soil can absorb it that fast.
-
-## References
-
-Lower-quarter distribution uniformity and scheduling multiplier: Irrigation Association (2005). *Landscape Irrigation Scheduling and Water Management*. Irrigation Association, Falls Church, VA.
+Repita la prueba en cada zona: casi nunca son iguales. Cuando conozca la tasa de una zona, el [programador de ciclos y remojo](cycle-and-soak.qmd) revisa si su suelo puede absorberla así de rápido.
