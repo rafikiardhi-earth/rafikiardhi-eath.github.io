@@ -1,0 +1,33 @@
+---
+title: "How we work"
+description: "Science is a creative act. Why RafikiArdhi builds open, transparent tools and how creativity, rigour and access fit together."
+---
+
+*RafikiArdhi* works independently, outside the usual institutional channels, so the work has to speak for itself. It grew out of living, and working, on almost every continent: different land, different languages, and the same questions about how to read the ground beneath us and care for it.
+
+Three ideas run through everything we build.
+
+## []{.bi .bi-bezier2} Art and science share a method
+
+The most elegant equations are creative acts, and much of the most striking art is a set of lines that are mathematically elegant. A good model and a good drawing both find the simplest form that still tells the truth. Creativity is not a break from scientific reasoning; it is how new questions, and better answers, get found.
+
+That is why our tools show their working. A result you can follow step by step is one you can question, extend and build on, and that is where new ideas start.
+
+## []{.bi .bi-unlock} Open tools level the field
+
+Good science shouldn't depend on ones name, a big budget or a big institution. Our research tools, checks and classification keys are free, run in the browser, and each has its own DOI, so anyone who uses them can cite them, and anyone who builds them gets credit.
+
+That matters most for early-career researchers, independent scientists, and people working where software licences and institutional access are hard to come by. It is also why the keys come in the languages people actually speak and not commonly found in text.
+
+## []{.bi .bi-search} Transparent checks, not black boxes
+
+The number of papers keeps growing, and reviewers, editors and authors have less time for each one. Black-box tools can produce an answer quickly, but not one you can check. We build the opposite: plausibility checks and methods that follow published, physically meaningful reasoning, so every number can be traced to its source and its uncertainty. 
+
+## What this looks like in practice
+
+- [Tools for researchers](tools.qmd): soil, water, energy and mapping methods with their working shown and their original authors credited.
+- [Check a result](checks.qmd): fast plausibility checks for your own work or published results.
+- [Soil classification keys](soil-keys.qmd): WRB, Brazilian and South African keys, in several languages.
+- [How to cite](cite.qmd): every tool is citable, with a DOI.
+
+Have an idea, a translation or a problem that doesn't fit the usual mould? [Get in touch →](contact.qmd)
