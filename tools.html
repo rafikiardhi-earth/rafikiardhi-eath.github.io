@@ -94,6 +94,7 @@ gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
 <meta name="citation_cover_date" content="2026">
 <meta name="citation_year" content="2026">
 <meta name="citation_fulltext_html_url" content="https://rafikiardhi.earth/tools.html">
+<meta name="citation_doi" content="10.5281/zenodo.23742278">
 <meta name="citation_language" content="en">
 </head>
 
@@ -4603,7 +4604,7 @@ document.querySelectorAll("nav.rk-tabs button[data-tip]").forEach(btn => { const
     year: 2026,
     collection: "Tools for researchers: soil and environmental analysis in the browser",
     version: "1.0",
-    doi: ""            // e.g. "10.5281/zenodo.XXXXXXX" once minted
+    doi: "10.5281/zenodo.23742278"
   };
   const base = location.origin + location.pathname;
   document.querySelectorAll("section.tool[id^='tab-']").forEach(sec => {
@@ -4612,7 +4613,7 @@ document.querySelectorAll("nav.rk-tabs button[data-tip]").forEach(btn => { const
     const tab = sec.id.replace(/^tab-/, "");
     const url = base + "#" + tab;
     const link = SOFTWARE.doi
-      ? `<a href="https://doi.org/${SOFTWARE.doi}">doi:${SOFTWARE.doi}</a>`
+      ? `<a href="https://doi.org/${SOFTWARE.doi}">https://doi.org/${SOFTWARE.doi}</a>`
       : `<a href="${url}">${url}</a>`;
     const hasRefs = !!sec.querySelector(".refs");
     const p = document.createElement("p");
