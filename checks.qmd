@@ -3,6 +3,16 @@ title: "Check a result"
 description: "Plausibility checks for soil and environmental results: kriging error, R² vs RMSE, classification accuracy, detectable change, back-transformation, carbon stock arithmetic, area estimation, effective sample size, spatial cross-validation, lab conversions, coordinates, and beta checks for independence, assumptions and model comparison."
 anchor-sections: false
 include-in-header: _hm-head.html
+google-scholar: true
+citation:
+  type: software
+  title: "Check a result: plausibility checks for soil and environmental results"
+  author:
+    - name: Trevan Flynn
+      orcid: 0000-0002-5187-9946
+  issued: 2026
+  version: "1.0"
+  # doi: 10.5281/zenodo.XXXXXXX   # add the Zenodo concept DOI once minted
 ---
 
 ```{=html}
@@ -22,13 +32,13 @@ include-in-header: _hm-head.html
 .ck-sec[hidden], #ck-hub[hidden] { display: none !important; }
 </style>
 <div id="ck-hub">
-  <p class="ck-intro">Use these checks to investigate whether your own results and methods hold together. They test reported figures against what the method allows, and highlight questions worth considering before you share your work. Reviewers might ask similar questions, but the checks are designed to help you examine your own analysis. Nothing you enter leaves your browser.</p>
+  <p class="ck-intro">Use these checks to investigate whether your own results and methods hold together, whether the work is in progress or already published. They test reported figures against what the method allows, and highlight questions worth answering before you share your work. Nothing you enter leaves your browser.</p>
   <div id="ck-groups"></div>
 </div>
 <script>
 window.CK = {
   groups: [
-    ['acc', 'Model accuracy and validation', 'Is the model as good as the paper says?'],
+    ['acc', 'Model accuracy and validation', 'Is the model as good as the reported accuracy suggests?'],
     ['spat', 'Spatial structure and sampling', 'Do the variogram, the sampling and the map fit together?'],
     ['data', 'Soil data and units', 'Do the numbers follow from the inputs?'],
     ['review', 'Study design and statistical reasoning', 'Do the observations, the assumptions and the model comparison match the question?']
@@ -145,7 +155,7 @@ Hengl, T. (2006). Finding the right pixel size. *Computers & Geosciences* 32, 12
 
 ## Back-transformation
 
-A mean calculated on log values, then exponentiated, is the **median** (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter what the paper gives on the log scale.
+A mean calculated on log values, then exponentiated, is the **median** (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter the value on the log scale.
 
 ```{=html}
 <div class="hmc" id="bt"></div>
@@ -408,7 +418,7 @@ Webster, R., Oliver, M.A. (2007). *Geostatistics for Environmental Scientists*, 
 
 ## Spatial cross-validation and leakage
 
-Random cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won't achieve between samples. Tick anything that applies to the study you're checking.
+Random cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won't achieve between samples. Tick anything that applies to your study.
 
 ```{=html}
 <div class="hmc" id="cv"></div>
@@ -444,7 +454,7 @@ Random cross-validation on spatial data usually tests points close to the traini
         else distNote = U.note('Test distances are similar to prediction distances: the validation reflects how the map is used.', 'good');
       }
       const level = hit.length === 0 && !distNote.includes('bad') ? ['good', 'No warning signs ticked'] : hit.length <= 1 ? ['warn', 'Some risk of optimistic accuracy'] : ['bad', 'High risk of optimistic accuracy'];
-      return `<p><span class="tag ${level[0]}">${level[1]}</span></p>` + distNote + (hit.length ? `<h3>Questions reviewers might ask</h3><ul class="plain">${hit.map(([, l, fix]) => `<li><b>${l}.</b> ${fix}</li>`).join('')}</ul>` : '');
+      return `<p><span class="tag ${level[0]}">${level[1]}</span></p>` + distNote + (hit.length ? `<h3>Questions to answer before you share</h3><ul class="plain">${hit.map(([, l, fix]) => `<li><b>${l}.</b> ${fix}</li>`).join('')}</ul>` : '');
     }
   });
 })();
@@ -505,12 +515,12 @@ Independence is a property of the study design and the question being asked, not
       { k: 'unit', l: 'What is the independent sampling or experimental unit?', t: 'select', d: 'sample', opts: [['sample', 'Each individual observation'], ['plot', 'Plot, site, subject, or other group'], ['profile', 'Profile, core, or sampling location'], ['cluster', 'Catchment, region, school, clinic, or higher-level cluster'], ['timeunit', 'Time point or time block'], ['unclear', 'Not stated or unclear']] },
       { k: 'goal', l: 'What is the main inferential or prediction goal?', t: 'select', d: 'population', opts: goalOptions },
       { k: 'split', l: 'If predicting, how was validation separated?', t: 'select', d: 'na', opts: splitOptions },
-      { t: 'sec', l: 'Potential issues reported or visible in the paper' },
+      { t: 'sec', l: 'Potential issues in your design or analysis' },
       { k: 'groups', l: 'Several observations come from the same group, site, subject, profile, or experimental unit', t: 'check', d: false },
       { k: 'pseudorep', l: 'The analysis appears to count subsamples, repeated measures, pixels, or technical replicates as independent replicates', t: 'check', d: false },
       { k: 'overlap', l: 'Nearby locations, adjacent time points, or related observations may occur in both training and test data', t: 'check', d: false },
       { k: 'leakage', l: 'Preprocessing, feature selection, tuning, or covariate construction may have used information from the held-out data', t: 'check', d: false },
-      { k: 'balanced', l: 'The paper reports a design-aware method (e.g. mixed model, cluster-robust SE, block design, or grouped validation)', t: 'check', d: false },
+      { k: 'balanced', l: 'You used a design-aware method (e.g. mixed model, cluster-robust SE, block design, or grouped validation)', t: 'check', d: false },
       { t: 'sec', l: 'Numbers, if known (optional): how much the grouping costs' },
       { k: 'nobs', l: 'Observations analysed', t: 'num', w: 2 },
       { k: 'ngrp', l: 'Independent groups (sites, profiles, subjects…)', t: 'num', w: 2 },
@@ -543,9 +553,9 @@ Independence is a property of the study design and the question being asked, not
       } else if (given(v.nobs) || given(v.ngrp)) {
         numHtml = U.note('Enter both the number of observations and the number of groups (groups no more than observations) to see the effective sample size.', 'warn');
       }
-      if (v.unit === 'unclear') add('warn', 'Independent unit is unclear', 'The paper should identify the unit independently sampled or assigned to treatment. The number of measurements is not necessarily the number of independent replicates.');
+      if (v.unit === 'unclear') add('warn', 'Independent unit is unclear', 'Identify the unit independently sampled or assigned to treatment. The number of measurements is not necessarily the number of independent replicates.');
       if (v.groups || ['group','repeat','multi'].includes(v.structure)) {
-        if (v.balanced) add('info', 'Grouped or repeated data: check the stated adjustment', 'The paper reports a design-aware method. Confirm that it matches the grouping structure and the estimand; a mixed model or robust standard error does not automatically solve every dependence problem.');
+        if (v.balanced) add('info', 'Grouped or repeated data: check the stated adjustment', 'You used a design-aware method. Confirm that it matches the grouping structure and the estimand; a mixed model or robust standard error does not automatically solve every dependence problem.');
         else add('warn', 'Grouped or repeated observations may be dependent', 'Check whether inference accounts for the group or repeated-measure structure. Possible approaches include group-level summaries, mixed-effects models, GEE, cluster-robust uncertainty, or a design-specific repeated-measures analysis. The appropriate choice depends on the question and design.');
       }
       if (v.pseudorep) add('high', 'Possible pseudoreplication', 'Check whether treatment or sampling was independently replicated at the level claimed. Subsamples and technical replicates can improve measurement precision, but do not create additional independent experimental units.');
@@ -567,12 +577,12 @@ Independence is a property of the study design and the question being asked, not
       if (v.split === 'time' && ['time','multi'].includes(v.structure)) add('info', 'Time-ordered validation selected', 'Confirm that all preprocessing and tuning occur within each training window and that the evaluation reflects the intended forecast horizon.');
       const rank = {high: 0, warn: 1, info: 2};
       findings.sort((a,b) => rank[a.level] - rank[b.level]);
-      const label = findings.some(x => x.level === 'high') ? ['bad','Potential design mismatch or leakage to investigate'] : findings.some(x => x.level === 'warn') ? ['warn','Independence assumptions need a closer look'] : ['good','No major warning selected; verify against the paper'];
+      const label = findings.some(x => x.level === 'high') ? ['bad','Potential design mismatch or leakage to investigate'] : findings.some(x => x.level === 'warn') ? ['warn','Independence assumptions need a closer look'] : ['good','No major warning selected; verify against your design'];
       let html = `<p><span class="tag ${label[0]}">${label[1]}</span></p>`;
       html += '<p>This is a guided screening result based on the selections above, not a statistical test of independence.</p>';
       html += numHtml;
       html += findings.map(f => U.note(`<b>${f.title}.</b> ${f.detail}`, f.level === 'high' ? 'bad' : f.level === 'warn' ? 'warn' : 'good')).join('');
-      html += '<h3>Questions reviewers might ask</h3><ul class="plain"><li>What is the independently sampled or randomised unit?</li><li>Does the statistical model account for dependence at that unit?</li><li>Does the validation split mimic the population, location, group, or time period to which the conclusions are intended to apply?</li><li>Were all data-dependent modelling decisions confined to the training data?</li></ul>';
+      html += '<h3>Questions to answer before you share</h3><ul class="plain"><li>What is the independently sampled or randomised unit?</li><li>Does the statistical model account for dependence at that unit?</li><li>Does the validation split mimic the population, location, group, or time period to which the conclusions are intended to apply?</li><li>Were all data-dependent modelling decisions confined to the training data?</li></ul>';
       return { html, work: [
         ...numWork,
         'Independence is design- and estimand-specific. A dependence structure may affect standard errors, effective sample size, or predictive validation in different ways; these are related but not interchangeable issues.',
@@ -606,7 +616,7 @@ Moulton, B.R. (1990). An illustration of a pitfall in estimating the effects of 
 
 ## Statistical assumptions check <span class="ck-beta">BETA</span>
 
-A guided check for matching assumptions to the statistical method. Select the method and the diagnostics you have checked, then use the prompts to identify anything that may need further investigation. If you have the residuals, paste them: the check reports skewness, outliers, unequal spread, curvature and, for ordered data, autocorrelation, with a residual plot. Reviewers might ask similar questions about the evidence reported.
+A guided check for matching assumptions to the statistical method. Select the method and the diagnostics you have checked, then use the prompts to identify anything that may need further investigation. If you have the residuals, paste them: the check reports skewness, outliers, unequal spread, curvature and, for ordered data, autocorrelation, with a residual plot.
 
 ```{=html}
 <div class="hmc" id="assump"></div>
@@ -699,7 +709,7 @@ window.CKSTAT = window.CKSTAT || (function () {
 
       let html = '<p><span class="tag warn">Guided check — not an automated verdict</span></p>';
       html += '<h3>Method-specific prompts</h3><ul>' + relevant.map(x => '<li>' + x + '</li>').join('') + '</ul>';
-      html += '<h3>Checks not marked as reported</h3>' + (missing.length ? '<ul>' + missing.map(k => '<li><strong>' + names[k] + ':</strong> confirm whether this is relevant to the chosen method and whether the paper reports adequate evidence. An unchecked item is not proof the authors omitted it.</li>').join('') + '</ul>' : '<p>All checklist items were marked. Verify that the paper reports suitable evidence rather than only stating that checks were performed.</p>');
+      html += '<h3>Checks not marked as reported</h3>' + (missing.length ? '<ul>' + missing.map(k => '<li><strong>' + names[k] + ':</strong> confirm whether this is relevant to the chosen method and whether you report adequate evidence for it.</li>').join('') + '</ul>' : '<p>All checklist items were marked. Make sure your write-up reports suitable evidence rather than only stating that checks were performed.</p>');
       html += '<p><strong>Marked as reported:</strong> ' + (done.length ? done.map(k => names[k]).join('; ') : 'none') + '.</p>';
       const work = ['Interpretation depends on the estimator, design, sample size and inferential target. Do not require every diagnostic for every method.'];
 
@@ -763,7 +773,7 @@ window.CKSTAT = window.CKSTAT || (function () {
 ::: {.ck-refs}
 **Scope note**
 
-This beta tool is a structured checklist, not a test of model assumptions. The relevant assumptions depend on the exact statistical procedure and intended inference. An unchecked item only means that you have not marked the check as reported; it does not establish that the paper omitted it. The residual diagnostic screens one set of residuals; it does not replace a full model diagnosis.
+This beta tool is a structured checklist, not a test of model assumptions. The relevant assumptions depend on the exact statistical procedure and intended inference. An unchecked item only means that you have not marked the check as reported. The residual diagnostic screens one set of residuals; it does not replace a full model diagnosis.
 
 Jarque, C.M., Bera, A.K. (1987). A test for normality of observations and regression residuals. *International Statistical Review* 55, 163–172. [doi:10.2307/1403192](https://doi.org/10.2307/1403192)
 
@@ -776,7 +786,7 @@ Durbin, J., Watson, G.S. (1950). Testing for serial correlation in least squares
 
 ## Model comparison audit <span class="ck-beta">BETA</span>
 
-Use this checklist when a paper claims that one model performs better than another. It checks comparability of the evaluation design. With paired fold scores it also tests the difference properly (cross-validation folds share training data, so a plain paired t-test is too optimistic), and with the counts of cases where two classifiers disagree it runs McNemar's test.
+Use this checklist when your work claims that one model performs better than another. It checks comparability of the evaluation design. With paired fold scores it also tests the difference properly (cross-validation folds share training data, so a plain paired t-test is too optimistic), and with the counts of cases where two classifiers disagree it runs McNemar's test.
 
 ```{=html}
 <div class="hmc" id="modelcmp"></div>
@@ -784,12 +794,12 @@ Use this checklist when a paper claims that one model performs better than anoth
 (function () {
   const S = window.CKSTAT;
   const fields = [
-    ['data', 'Evaluation observations', [['same', 'Same held-out observations for all models'], ['different', 'Different observations / folds'], ['unknown', 'Not clear from the paper']], 'different', 'If models are evaluated on different observations or folds, the metric difference can reflect the evaluation data as well as model performance. Prefer paired predictions on the same held-out cases where the comparison target allows it.'],
-    ['scale', 'Response and scale', [['same', 'Same response, units and transformation'], ['different', 'Different response scale / target'], ['unknown', 'Not clear from the paper']], 'different', 'Metrics on different response scales or targets are generally not directly comparable. Confirm the target, units, transformations and any retransformation correction.'],
-    ['validation', 'Validation strategy', [['same', 'Same split or resampling strategy'], ['different', 'Different validation strategies'], ['unknown', 'Not clear from the paper']], 'different', 'Different splits or resampling strategies can change the difficulty of the task. Re-evaluate models under a common strategy that matches the intended deployment setting.'],
-    ['metric', 'Metric definition and direction', [['same', 'Same metric definition; direction understood'], ['different', 'Metrics differ or are not directly comparable'], ['unknown', 'Not clear from the paper']], 'different', 'Confirm the exact metric formula, units, weighting, aggregation across folds and whether higher or lower is better. Similar names do not guarantee identical definitions.'],
-    ['tuning', 'Tuning and preprocessing', [['nested', 'Tuning / preprocessing confined to training data'], ['leak', 'Possible test-data use or leakage'], ['unknown', 'Not clear from the paper']], 'leak', 'Potential leakage: feature selection, scaling, imputation, target encoding and hyperparameter tuning should be learned inside training folds, not from held-out data.'],
-    ['uncertainty', 'Uncertainty in the difference', [['reported', 'Uncertainty or paired differences reported'], ['none', 'Only point estimates reported'], ['unknown', 'Not clear from the paper']], 'none', 'Point estimates alone do not show whether a performance difference is stable. Consider paired differences across appropriate resamples or an independent test set, while avoiding treating dependent folds as independent replicates.']
+    ['data', 'Evaluation observations', [['same', 'Same held-out observations for all models'], ['different', 'Different observations / folds'], ['unknown', 'Not sure or not recorded']], 'different', 'If models are evaluated on different observations or folds, the metric difference can reflect the evaluation data as well as model performance. Prefer paired predictions on the same held-out cases where the comparison target allows it.'],
+    ['scale', 'Response and scale', [['same', 'Same response, units and transformation'], ['different', 'Different response scale / target'], ['unknown', 'Not sure or not recorded']], 'different', 'Metrics on different response scales or targets are generally not directly comparable. Confirm the target, units, transformations and any retransformation correction.'],
+    ['validation', 'Validation strategy', [['same', 'Same split or resampling strategy'], ['different', 'Different validation strategies'], ['unknown', 'Not sure or not recorded']], 'different', 'Different splits or resampling strategies can change the difficulty of the task. Re-evaluate models under a common strategy that matches the intended deployment setting.'],
+    ['metric', 'Metric definition and direction', [['same', 'Same metric definition; direction understood'], ['different', 'Metrics differ or are not directly comparable'], ['unknown', 'Not sure or not recorded']], 'different', 'Confirm the exact metric formula, units, weighting, aggregation across folds and whether higher or lower is better. Similar names do not guarantee identical definitions.'],
+    ['tuning', 'Tuning and preprocessing', [['nested', 'Tuning / preprocessing confined to training data'], ['leak', 'Possible test-data use or leakage'], ['unknown', 'Not sure or not recorded']], 'leak', 'Potential leakage: feature selection, scaling, imputation, target encoding and hyperparameter tuning should be learned inside training folds, not from held-out data.'],
+    ['uncertainty', 'Uncertainty in the difference', [['reported', 'Uncertainty or paired differences reported'], ['none', 'Only point estimates reported'], ['unknown', 'Not sure or not recorded']], 'none', 'Point estimates alone do not show whether a performance difference is stable. Consider paired differences across appropriate resamples or an independent test set, while avoiding treating dependent folds as independent replicates.']
   ];
   const ex = 'model A,model B\n0.412,0.424\n0.398,0.400\n0.445,0.455\n0.420,0.416\n0.405,0.420\n0.431,0.437\n0.415,0.426\n0.402,0.400\n0.437,0.450\n0.410,0.407';
   HM.tool({
@@ -811,7 +821,7 @@ Use this checklist when a paper claims that one model performs better than anoth
       const label = level === 'bad' ? 'Potential leakage or non-comparable target' : level === 'warn' ? 'Comparability needs review' : 'Core comparability checks look aligned';
       let html = `<p><span class="tag ${level}">${label}</span></p>`;
       if (issues.length) html += '<h3>Issues to investigate</h3><ul>' + issues.map(f => `<li><strong>${f[1]}:</strong> ${f[4]}</li>`).join('') + '</ul>';
-      if (unknown.length) html += '<h3>Information to locate in the paper</h3><ul>' + unknown.map(f => `<li><strong>${f[1]}:</strong> check the methods, supplement or code to confirm this choice.</li>`).join('') + '</ul>';
+      if (unknown.length) html += '<h3>Information to confirm</h3><ul>' + unknown.map(f => `<li><strong>${f[1]}:</strong> check your methods, supplement or code to confirm this choice.</li>`).join('') + '</ul>';
       if (!issues.length && !unknown.length) html += '<p>The selected answers indicate aligned evaluation conditions. This does not prove that the comparison is unbiased or that the observed difference is meaningful.</p>';
       const work = [];
       const given = x => x !== '' && x !== null && x !== undefined && isFinite(Number(x));
@@ -860,7 +870,7 @@ Use this checklist when a paper claims that one model performs better than anoth
         }
       }
 
-      html += '<h3>Questions reviewers might ask</h3><ul><li>Were all models assessed on the same observations and target?</li><li>Were preprocessing, feature selection and tuning repeated inside each training split?</li><li>Does the validation design match the intended use (new locations, groups, or future times)?</li><li>Is the reported performance difference large relative to its uncertainty and practical importance?</li></ul>';
+      html += '<h3>Questions to answer before you share</h3><ul><li>Were all models assessed on the same observations and target?</li><li>Were preprocessing, feature selection and tuning repeated inside each training split?</li><li>Does the validation design match the intended use (new locations, groups, or future times)?</li><li>Is the reported performance difference large relative to its uncertainty and practical importance?</li></ul>';
       work.push('Model comparisons are strongest when the evaluation target, test cases, metric definitions and resampling design are aligned. No universal threshold determines whether a model is meaningfully better.');
       return { html, work };
     }

@@ -2,6 +2,16 @@
 title: "Tools for researchers"
 page-layout: full
 anchor-sections: false
+google-scholar: true
+citation:
+  type: software
+  title: "Tools for researchers: soil and environmental analysis in the browser"
+  author:
+    - name: Trevan Flynn
+      orcid: 0000-0002-5187-9946
+  issued: 2026
+  version: "1.0"
+  # doi: 10.5281/zenodo.XXXXXXX   # add the Zenodo concept DOI once minted
 ---
 
 ```{=html}
@@ -125,6 +135,8 @@ body.quarto-dark .rk-tools {
 .rk-tools .advanced a.cta { font-weight: 600; text-decoration: none; }
 .rk-tools .advanced a.cta:hover { text-decoration: underline; }
 .rk-tools .refs { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
+.rk-tools .cite { font-size: .8rem; color: var(--ink-2); margin-top: 10px; padding-top: 8px; border-top: 1px dashed var(--surface-2); }
+.rk-tools .cite b { font-weight: 600; }
 .rk-tools .two { display: grid; grid-template-columns: 1fr; gap: 16px; }
 @media (min-width: 760px) { .rk-tools .two { grid-template-columns: 1fr 1fr; } }
 .rk-tools { color: var(--ink); }
@@ -4183,6 +4195,35 @@ openFromHash();
 window.addEventListener("hashchange", openFromHash);
 document.querySelectorAll("nav.rk-tabs button[data-tip]").forEach(btn => { const place = () => btn.classList.toggle("tip-r", btn.getBoundingClientRect().left + 250 > document.documentElement.clientWidth); btn.addEventListener("mouseenter", place); btn.addEventListener("focus", place); });
 ["kr-check", "ev-check-cont", "ev-check-cat", "c-check", "s-check"].forEach(id => { const c = document.getElementById(id); if (!c) return; const p = document.createElement("p"); p.className = "hint"; p.style.marginTop = "12px"; p.innerHTML = '<a href="checks.html">More plausibility checks →</a>'; c.appendChild(p); });
+})();
+</script>
+<script>
+/* How to cite: each tool cites the software (one place to update) and the
+   method references already listed in that tool. */
+(() => {
+  const SOFTWARE = {
+    author: "Flynn, T.",
+    year: 2026,
+    collection: "Tools for researchers: soil and environmental analysis in the browser",
+    version: "1.0",
+    doi: ""            // e.g. "10.5281/zenodo.XXXXXXX" once minted
+  };
+  const base = location.origin + location.pathname;
+  document.querySelectorAll("section.tool[id^='tab-']").forEach(sec => {
+    const h2 = sec.querySelector("h2");
+    if (!h2) return;
+    const tab = sec.id.replace(/^tab-/, "");
+    const url = base + "#" + tab;
+    const link = SOFTWARE.doi
+      ? `<a href="https://doi.org/${SOFTWARE.doi}">doi:${SOFTWARE.doi}</a>`
+      : `<a href="${url}">${url}</a>`;
+    const hasRefs = !!sec.querySelector(".refs");
+    const p = document.createElement("p");
+    p.className = "cite";
+    p.innerHTML = `<b>How to cite:</b> ${SOFTWARE.author} (${SOFTWARE.year}). ${h2.textContent}. In: <i>${SOFTWARE.collection}</i>, version ${SOFTWARE.version} [software]. ${link}` +
+      (hasRefs ? " Please also cite the method references above." : "");
+    sec.appendChild(p);
+  });
 })();
 </script>
 </div>
