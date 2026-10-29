@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
+           xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
+           xsi:type="TaskPaneApp">
+  <Id>98d88d18-090a-41b4-b324-bfd0c4fafc7b</Id>
+  <Version>1.0.0.0</Version>
+  <ProviderName>RafikiArdhi LLC</ProviderName>
+  <DefaultLocale>en-US</DefaultLocale>
+  <DisplayName DefaultValue="RafikiArdhi Checks"/>
+  <Description DefaultValue="Check the equations in a manuscript: readability, domain, rearrangements and worked examples. No AI; runs in your browser."/>
+  <IconUrl DefaultValue="https://rafikiardhi.earth/addin/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://rafikiardhi.earth/addin/icon-64.png"/>
+  <SupportUrl DefaultValue="https://rafikiardhi.earth/checks.html"/>
+  <AppDomains>
+    <AppDomain>https://rafikiardhi.earth</AppDomain>
+  </AppDomains>
+  <Hosts>
+    <Host Name="Document"/>
+  </Hosts>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://rafikiardhi.earth/addin/taskpane.html"/>
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Document">
+        <DesktopFormFactor>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <OfficeTab id="TabHome">
+              <Group id="RA.Group">
+                <Label resid="RA.GroupLabel"/>
+                <Icon>
+                  <bt:Image size="16" resid="RA.Icon16"/>
+                  <bt:Image size="32" resid="RA.Icon32"/>
+                  <bt:Image size="80" resid="RA.Icon80"/>
+                </Icon>
+                <Control xsi:type="Button" id="RA.OpenButton">
+                  <Label resid="RA.ButtonLabel"/>
+                  <Supertip>
+                    <Title resid="RA.ButtonLabel"/>
+                    <Description resid="RA.ButtonTip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="RA.Icon16"/>
+                    <bt:Image size="32" resid="RA.Icon32"/>
+                    <bt:Image size="80" resid="RA.Icon80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>RAChecks</TaskpaneId>
+                    <SourceLocation resid="RA.Taskpane"/>
+                  </Action>
+                </Control>
+              </Group>
+            </OfficeTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="RA.Icon16" DefaultValue="https://rafikiardhi.earth/addin/icon-16.png"/>
+        <bt:Image id="RA.Icon32" DefaultValue="https://rafikiardhi.earth/addin/icon-32.png"/>
+        <bt:Image id="RA.Icon80" DefaultValue="https://rafikiardhi.earth/addin/icon-80.png"/>
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="RA.Taskpane" DefaultValue="https://rafikiardhi.earth/addin/taskpane.html"/>
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="RA.GroupLabel" DefaultValue="RafikiArdhi"/>
+        <bt:String id="RA.ButtonLabel" DefaultValue="Check equations"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="RA.ButtonTip" DefaultValue="Open the RafikiArdhi equation check for the selected text or the whole document."/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
