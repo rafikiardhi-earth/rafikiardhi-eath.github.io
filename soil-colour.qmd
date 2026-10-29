@@ -5,6 +5,10 @@ description: "Estimate the Munsell soil colour of a matrix from a photo, with op
 page-layout: full
 toc: false
 image: images/soilColor.png
+open-graph:
+  image: images/soilColor.png
+twitter-card:
+  image: images/soilColor.png
 google-scholar: true
 appendix-cite-as: false   # keep the citation metadata, hide the BibTeX appendix
 citation:
