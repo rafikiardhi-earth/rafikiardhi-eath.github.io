@@ -266,6 +266,13 @@
     "text": "Coordinates and distances\nA degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and “metres” computed from degrees are wrong. Convert a distance, or paste coordinates to check them.\n\n\n\nMethod\nNo paper needed: standard spherical geometry (haversine formula, mean Earth radius 6,371 km)."
   },
   {
+    "objectID": "checks.html#equation-check-beta",
+    "href": "checks.html#equation-check-beta",
+    "title": "Check a result",
+    "section": "Equation check BETA",
+    "text": "Equation check BETA\nPaste the equations from a paper, one per line, in plain text, Word’s linear format or LaTeX. The check reads each one symbolically, flags anything that can’t be read or evaluated, tests whether rearranged equations really follow from each other, and, given a worked example, solves for the missing value so it can be compared with the paper. No AI: the same equations always give the same answer.\n\n\n\n\nMethod\nSymbolic parsing and evaluation with math.js: de Jong, J. (2013–2024). math.js: an extensive math library for JavaScript and Node.js. https://mathjs.org. Equivalence is tested numerically at random points, a standard approach to symbolic identity testing (Schwartz, J.T. (1980). Fast probabilistic algorithms for verification of polynomial identities. Journal of the ACM 27, 701–717. doi:10.1145/322217.322225)."
+  },
+  {
     "objectID": "services.html",
     "href": "services.html",
     "title": "Services",
