@@ -2,7 +2,11 @@
 title: ""
 pagetitle: "RafikiArdhi — open science, creative freedom"
 page-layout: full
-image: favicon.png
+image: logo-small.png
+open-graph:
+  image: logo-small.png
+twitter-card:
+  image: logo-small.png
 ---
 
 ::: {.hero}
