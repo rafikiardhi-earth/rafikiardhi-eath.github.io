@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RafikiArdhi Checks</title>
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<style>
+.hmc {
+  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
+  --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f; --warn: #e0a440; --good: #5cc28f; --bad: #e07070;
+  color: var(--ink); font-size: 1.02rem; line-height: 1.5; max-width: 620px; margin: 8px auto 28px;
+}
+body.quarto-light .hmc {
+  --bg: #f7f5f0; --surface: #fffdf9; --surface-2: #efebe2; --ink: #1f1c17; --ink-2: #57514a; --ink-3: #8a8379;
+  --line: #ddd6ca; --accent: #8a4b22; --accent-ink: #ffffff; --accent-soft: #f3e6da; --warn: #9a6400; --good: #1f7a4d; --bad: #b3261e;
+}
+.hmc * { box-sizing: border-box; }
+.hmc .cx { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 12px; }
+.hmc .step { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 0 0 6px; }
+.hmc .hint { font-size: .9rem; color: var(--ink-2); margin: 6px 0 0; }
+.hmc .fg { display: grid; grid-template-columns: repeat(6, 1fr); column-gap: 10px; }
+.hmc .fg > div { grid-column: span 6; }
+.hmc .fg > div.w3 { grid-column: span 3; }
+.hmc .fg > div.w2 { grid-column: span 2; }
+.hmc .fg > div[hidden] { display: none; }
+.hmc label { display: block; font-size: .9rem; font-weight: 600; color: var(--ink-2); margin: 10px 0 4px; }
+.hmc label .u { font-weight: 400; color: var(--ink-3); }
+.hmc input[type=text], .hmc select {
+  width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
+  font: inherit; padding: 8px 12px;
+}
+.hmc textarea { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: .88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px 12px; resize: vertical; }
+.hmc input:focus, .hmc select:focus, .hmc textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.hmc input.bad { border-color: var(--bad); }
+.hmc .chk { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0 2px; font-weight: 500; color: var(--ink); font-size: .98rem; }
+.hmc .chk input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.hmc .seg { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.hmc .seg button { flex: 1 1 auto; min-height: 42px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
+.hmc .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.hmc .res { border: 2px solid var(--accent); }
+.hmc .res .big { font-size: 2rem; font-weight: 700; line-height: 1.15; margin: 2px 0 6px; font-family: "Source Serif 4", Georgia, serif; }
+.hmc .res .sub { color: var(--ink-2); margin: 0 0 10px; }
+.hmc .res ul.kv { list-style: none; padding: 0; margin: 10px 0 0; }
+.hmc .res ul.kv li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+.hmc .res ul.kv li span:first-child { color: var(--ink-2); }
+.hmc .res ul.kv li span:last-child { font-weight: 600; text-align: right; }
+.hmc .res h3 { font-size: 1.05rem; margin: 16px 0 6px; }
+.hmc .res ul.plain { margin: 6px 0 0; padding-left: 20px; color: var(--ink-2); font-size: .95rem; }
+.hmc .res ul.plain li { margin-bottom: 6px; }
+.hmc .note { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink-2); margin-top: 10px; }
+.hmc .note.good { border-left-color: var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
+.hmc .note.bad { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 10%, transparent); }
+.hmc .tag { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; padding: 1px 9px; border: 1px solid currentColor; }
+.hmc .tag.good { color: var(--good); } .hmc .tag.warn { color: var(--warn); } .hmc .tag.bad { color: var(--bad); }
+.hmc table.tt { width: 100%; border-collapse: collapse; font-size: .93rem; margin-top: 8px; }
+.hmc table.tt th, .hmc table.tt td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; }
+.hmc table.tt th { color: var(--ink-3); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; border-top: none; }
+.hmc table.tt td.r, .hmc table.tt th.r { text-align: right; }
+.hmc .say { margin-top: 12px; background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .95rem; }
+.hmc .say .lab { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; display: block; margin-bottom: 2px; }
+.hmc .linkbtn { background: none; border: none; color: var(--accent); font: inherit; font-weight: 600; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.hmc .empty { color: var(--ink-3); margin: 0; }
+.hmc details.cx { padding: 0; }
+.hmc details summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--accent); list-style: none; }
+.hmc details summary::-webkit-details-marker { display: none; }
+.hmc details summary::before { content: "＋ "; }
+.hmc details[open] summary::before { content: "－ "; }
+.hmc details .db { padding: 0 16px 16px; }
+.hmc ol.work { font-size: .92rem; color: var(--ink-2); margin: 0; padding-left: 18px; }
+.hmc ol.work li { margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.hmc .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
+.hmc .actions button { min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: .92rem; cursor: pointer; }
+.hmc .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 50; }
+.hmc .toast.on { opacity: 1; }
+.hmc .smallprint { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
+@media (max-width: 460px) { .hmc .fg > div.w2, .hmc .fg > div.w3 { grid-column: span 6; } }
+@media print { .hmc .actions, .hmc .toast, .hmc .linkbtn { display: none !important; } .hmc .cx { break-inside: avoid; } }
+</style>
+<script>
+/* RafikiArdhi Homeowners tools: shared helpers and form framework. Everything runs in the browser. */
+window.HM = (function () {
+  const ES = (document.documentElement.lang || '').toLowerCase().startsWith('es');
+  const T = ES ? {
+    units: 'Unidades', us: 'Unidades de EE. UU.', si: 'Métricas', yours: 'Sus datos', work: 'Ver el cálculo', example: 'Ejemplo', link: 'Copiar enlace', print: 'Imprimir', reset: 'Empezar de nuevo',
+    small: 'Gratis, sin registro, sin anuncios, y nada de lo que escribe sale de su navegador. Los valores típicos son un punto de partida; cámbielos según su situación.',
+    sayLab: 'Copie esto', copy: 'Copiar', linkCopied: 'Enlace copiado', copied: 'Copiado', check: 'Revise sus números.', copyThis: 'Copie esto:'
+  } : {
+    units: 'Units', us: 'US units', si: 'Metric', yours: 'Your numbers', work: 'Show the working', example: 'Example', link: 'Copy link', print: 'Print', reset: 'Start over',
+    small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.',
+    sayLab: 'Copy this', copy: 'Copy', linkCopied: 'Link copied', copied: 'Copied', check: 'Check your numbers.', copyThis: 'Copy this:'
+  };
+  // SI value = displayed value × factor
+  const C = {
+    len: { us: [0.3048, 'ft'], si: [1, 'm'] },
+    dep: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
+    dia: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
+    area: { us: [0.09290304, 'ft²'], si: [1, 'm²'] },
+    vol: { us: [0.764554858, 'yd³'], si: [1, 'm³'] },
+    cuft: { us: [0.0283168466, 'ft³'], si: [0.001, 'L'] },
+    gal: { us: [3.785411784, 'gal'], si: [1, 'L'] },
+    wdep: { us: [25.4, 'in'], si: [1, 'mm'] },
+    rate: { us: [25.4, 'in/hr'], si: [1, 'mm/hr'] },
+    mass: { us: [0.45359237, 'lb'], si: [1, 'kg'] },
+    ton: { us: [0.90718474, (ES ? 'toneladas' : 'tons')], si: [1, 't'] },
+    arate: { us: [4.88242764, (ES ? 'lb por 1,000 ft²' : 'lb per 1,000 ft²')], si: [1, 'g/m²'] },
+    flow: { us: [3.785411784, 'gal/hr'], si: [1, 'L/hr'] },
+    dens: { us: [1.18655, (ES ? 'toneladas por yd³' : 'tons per yd³')], si: [1, (ES ? 't por m³' : 't per m³')] },
+    pct: { us: [1, '%'], si: [1, '%'] },
+    num: { us: [1, ''], si: [1, ''] },
+    min: { us: [1, 'min'], si: [1, 'min'] },
+    money: { us: [1, '$'], si: [1, ''] },
+    pvol: { us: [1 / 0.764554858, (ES ? '$ por yd³' : '$ per yd³')], si: [1, (ES ? 'por m³' : 'per m³')] },
+    pton: { us: [1 / 0.90718474, (ES ? '$ por tonelada' : '$ per ton')], si: [1, (ES ? 'por tonelada métrica' : 'per tonne')] },
+    pwater: { us: [1 / 3.785411784, (ES ? '$ por 1,000 gal' : '$ per 1,000 gal')], si: [1, (ES ? 'por m³' : 'per m³')] }
+  };
+  const UNITLESS = ['num', 'pct', 'min', 'money', 'select', 'seg', 'check', 'info', 'sec', 'text', 'textarea'];
+
+  const num = s => { s = String(s).replace(/[$,\s%]/g, ''); if (s === '') return null; return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN; };
+  function feet(s) {
+    s = String(s).trim().toLowerCase().replace(/[’′]/g, "'").replace(/[”″]/g, '"');
+    if (!s) return null; let m;
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:'|ft|feet|foot|pies?)\s*(?:(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)?)?$/))) return +m[1] + (m[2] ? +m[2] / 12 : 0);
+    if ((m = s.match(/^(\d*\.?\d+)\s*(?:"|in|inch|inches|pulg(?:adas?)?)$/))) return +m[1] / 12;
+    if ((m = s.match(/^(\d+)\s+(\d*\.?\d+)$/))) return +m[1] + +m[2] / 12;
+    return num(s);
+  }
+  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function getUnits() { try { const s = localStorage.getItem('ra-units'); if (s === 'si' || s === 'us') return s; } catch (e) { } return 'us'; }
+  function setUnits(u) { try { localStorage.setItem('ra-units', u); } catch (e) { } }
+  function toast(root, msg) { const t = root.querySelector('.toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); }
+  function copy(root, text, msg) {
+    const done = () => toast(root, msg);
+    const fb = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { window.prompt(T.copyThis, text); } ta.remove(); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fb); else fb();
+  }
+
+  function tool(cfg) {
+    const root = document.getElementById(cfg.id);
+    if (!root) return;
+    let u = getUnits(), f = {}, raw = {};
+    const inputs = cfg.inputs;
+    const byK = Object.fromEntries(inputs.filter(i => i.k).map(i => [i.k, i]));
+    const hasUnits = cfg.units !== false && inputs.some(i => i.t && !UNITLESS.includes(i.t) && !(i.t === 'list' && UNITLESS.includes(i.of)));
+    const unitOf = i => i.t === 'list' ? i.of : i.t;
+
+    // restore from link
+    try {
+      const m = cfg.hash === false ? null : location.hash.match(new RegExp('^#' + cfg.id + '=(.+)$'));
+      if (m) { const o = JSON.parse(decodeURIComponent(escape(atob(m[1])))); if (o && o.f && typeof o.f === 'object') { f = o.f; if (o.u === 'si' || o.u === 'us') u = o.u; } }
+    } catch (e) { f = {}; }
+
+    function defOf(i) {
+      let d = typeof i.d === 'function' ? i.d(u, read()) : i.d;
+      if (d && typeof d === 'object' && !Array.isArray(d)) d = d[u];
+      return d;
+    }
+    function siDefault(i) {
+      const d = defOf(i);
+      if (d == null) return null;
+      if (['select', 'seg', 'check', 'text', 'textarea'].includes(i.t)) return d;
+      const fac = C[unitOf(i)][u][0];
+      return Array.isArray(d) ? d.map(x => x * fac) : d * fac;
+    }
+    function read() {
+      const v = {};
+      inputs.forEach(i => { if (!i.k) return; v[i.k] = f[i.k] !== undefined ? f[i.k] : (i._noDef ? null : siDefaultSafe(i)); });
+      return v;
+    }
+    let guard = false;
+    function siDefaultSafe(i) { if (guard) return typeof i.d === 'function' ? null : siDefault(i); guard = true; try { return siDefault(i); } finally { guard = false; } }
+
+    function parse(i, s) {
+      const t = unitOf(i);
+      if (i.t === 'list') {
+        const parts = String(s).split(/[,;\s]+/).map(p => p.trim()).filter(Boolean);
+        if (!parts.length) return null;
+        const out = parts.map(p => { const x = (t === 'len' && u === 'us') ? feet(p) : num(p); return x == null || isNaN(x) ? NaN : x * C[t][u][0]; });
+        return out.some(isNaN) ? NaN : out;
+      }
+      const x = (t === 'len' && u === 'us') ? feet(s) : num(s);
+      return x == null || isNaN(x) ? x : x * C[t][u][0];
+    }
+    function shown(i) {
+      if (raw[i.k] !== undefined) return raw[i.k];
+      const v = f[i.k] !== undefined ? f[i.k] : siDefaultSafe(i);
+      if (v == null) return '';
+      const fac = C[unitOf(i)][u][0];
+      if (Array.isArray(v)) return v.map(x => fmt(x / fac, 3).replace(/,/g, '')).join(', ');
+      return fmt(v / fac, 3).replace(/,/g, '');
+    }
+    const lab = i => typeof i.l === 'function' ? i.l(u) : i.l;
+    function fieldHTML(i) {
+      const w = i.w ? ' class="w' + i.w + '"' : '';
+      const id = cfg.id + '-' + i.k;
+      const hint = i.h ? `<p class="hint">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : '';
+      if (i.t === 'info') return `<div${w} data-w="${i.k || ''}"><p class="hint">${typeof i.h === 'function' ? i.h(u) : i.h}</p></div>`;
+      if (i.t === 'select') {
+        const opts = typeof i.opts === 'function' ? i.opts(u) : i.opts, cur = String(read()[i.k]);
+        return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><select id="${id}" data-k="${i.k}">${opts.map(o => `<option value="${esc(o[0])}"${String(o[0]) === cur ? ' selected' : ''}>${esc(o[1])}</option>`).join('')}</select>${hint}</div>`;
+      }
+      if (i.t === 'seg') {
+        const opts = typeof i.opts === 'function' ? i.opts(u) : i.opts, cur = String(read()[i.k]);
+        return `<div${w} data-w="${i.k}">${i.l ? `<label>${lab(i)}</label>` : ''}<div class="seg" role="group">${opts.map(o => `<button type="button" data-seg="${i.k}" data-v="${esc(o[0])}" aria-pressed="${String(o[0]) === cur}">${esc(o[1])}</button>`).join('')}</div>${hint}</div>`;
+      }
+      if (i.t === 'textarea') { const val = read()[i.k] ?? ''; return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><textarea id="${id}" data-k="${i.k}" rows="${i.rows || 6}" spellcheck="false" placeholder="${esc(typeof i.ph === 'function' ? i.ph(u) : (i.ph || ''))}">${esc(val)}</textarea>${hint}</div>`; }
+      if (i.t === 'check') return `<div${w} data-w="${i.k}"><label class="chk"><input type="checkbox" data-k="${i.k}"${read()[i.k] ? ' checked' : ''}> <span>${lab(i)}</span></label>${hint}</div>`;
+      const un = C[unitOf(i)][u][1];
+      const ph = typeof i.ph === 'function' ? i.ph(u) : (i.ph || '');
+      return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}${un && unitOf(i) !== 'money' && unitOf(i) !== 'num' ? ` <span class="u">(${un})</span>` : ''}</label><input type="text" id="${id}" data-k="${i.k}" inputmode="${i.t === 'list' ? 'text' : 'decimal'}" autocomplete="off" value="${esc(shown(i))}" placeholder="${esc(ph)}">${hint}</div>`;
+    }
+
+    function render() {
+      let h = hasUnits ? `<div class="seg" role="group" aria-label="${T.units}"><button type="button" data-u="us" aria-pressed="${u === 'us'}">${T.us}</button><button type="button" data-u="si" aria-pressed="${u === 'si'}">${T.si}</button></div>` : '';
+      let open = false;
+      inputs.forEach((i, n) => {
+        if (i.t === 'sec' || n === 0) {
+          if (open) h += '</div></section>';
+          h += `<section class="cx"${i.t === 'sec' && i.k ? ` data-sec="${i.k}"` : ''}><div class="step">${i.t === 'sec' ? lab(i) : (cfg.step || T.yours)}</div>${i.t === 'sec' && i.h ? `<p class="hint" style="margin-top:0">${typeof i.h === 'function' ? i.h(u) : i.h}</p>` : ''}<div class="fg">`;
+          open = true;
+          if (i.t === 'sec') return;
+        }
+        h += fieldHTML(i);
+      });
+      if (open) h += '</div></section>';
+      h += `<section class="cx res" aria-live="polite"></section>
+        <details class="cx hm-work"><summary>${T.work}</summary><div class="db"></div></details>
+        ${cfg.after || ''}
+        <div class="actions" style="grid-template-columns:repeat(${(cfg.example ? 1 : 0) + (cfg.hash === false ? 0 : 1) + 2},1fr)">${cfg.example ? `<button type="button" data-act="example">${T.example}</button>` : ''}${cfg.hash === false ? '' : `<button type="button" data-act="link">${T.link}</button>`}<button type="button" data-act="print">${T.print}</button><button type="button" data-act="reset">${T.reset}</button></div>
+        <p class="smallprint">${cfg.smallprint || T.small}</p><div class="toast"></div>`;
+      root.innerHTML = h;
+      run();
+    }
+
+    const U = {
+      get us() { return u === 'us'; },
+      val: (si, t) => si == null ? null : si / C[t][u][0],
+      unit: t => C[t][u][1],
+      f: (si, t, d = 2) => si == null || !isFinite(si) ? '–' : fmt(si / C[t][u][0], d) + (C[t][u][1] && t !== 'money' ? (C[t][u][1].startsWith('$') ? ' ' : ' ') + C[t][u][1].replace(/^\$ /, '') : ''),
+      n: fmt, fix,
+      money: x => (u === 'us' ? '$' : '') + fix(x, 2),
+      kv: rows => `<ul class="kv">${rows.filter(Boolean).map(r => `<li><span>${r[0]}</span><span>${r[1]}</span></li>`).join('')}</ul>`,
+      note: (h, cls) => `<div class="note${cls ? ' ' + cls : ''}">${h}</div>`,
+      big: (label, val, sub) => `<div class="step">${label}</div><div class="big">${val}</div>${sub ? `<p class="sub">${sub}</p>` : ''}`,
+      say: t => `<div class="say"><span class="lab">${cfg.sayLabel || T.sayLab}</span><span class="hm-say">${esc(t)}</span> <button type="button" class="linkbtn" data-act="say">${T.copy}</button></div>`,
+      empty: t => `<p class="empty">${t}</p>`,
+      esc
+    };
+
+    function run() {
+      const v = read();
+      // validity marks and conditional visibility
+      root.querySelectorAll('input[type=text][data-k]').forEach(inp => {
+        const k = inp.dataset.k, r = raw[k];
+        inp.classList.toggle('bad', r !== undefined && r.trim() !== '' && (f[k] === undefined || (typeof f[k] === 'number' && isNaN(f[k]))));
+      });
+      inputs.forEach(i => {
+        if (!i.show) return;
+        const sel = i.t === 'sec' ? `[data-sec="${i.k}"]` : `[data-w="${i.k}"]`;
+        const el = root.querySelector(sel);
+        if (el) el.hidden = !i.show(v, u);
+      });
+      const clean = {};
+      Object.keys(v).forEach(k => { const x = v[k]; clean[k] = (typeof x === 'number' && isNaN(x)) ? null : x; });
+      let out;
+      try { out = cfg.compute(clean, U) || {}; } catch (e) { out = { html: U.empty(T.check) }; console.warn(e); }
+      if (typeof out === 'string') out = { html: out };
+      root.querySelector('.res').innerHTML = out.html || '';
+      const wd = root.querySelector('.hm-work');
+      wd.hidden = !out.work || !out.work.length;
+      wd.querySelector('.db').innerHTML = out.work && out.work.length ? `<ol class="work">${out.work.map(w => `<li>${w}</li>`).join('')}</ol>` : '';
+      try {
+        const keep = {}; Object.keys(f).forEach(k => { if (f[k] !== null && !(typeof f[k] === 'number' && isNaN(f[k]))) keep[k] = f[k]; });
+        if (cfg.hash === false) return;
+        const hsh = Object.keys(keep).length ? '#' + cfg.id + '=' + btoa(unescape(encodeURIComponent(JSON.stringify({ u, f: keep })))).replace(/=+$/, '') : '';
+        if (location.hash !== hsh) history.replaceState(null, '', location.pathname + location.search + hsh);
+      } catch (e) { }
+    }
+
+    function set(k, si) { f[k] = si; delete raw[k]; const inp = root.querySelector(`input[type=text][data-k="${k}"]`); if (inp) inp.value = shown(byK[k]); }
+    function setChoice(k, val) { f[k] = val; const el = root.querySelector(`[data-w="${k}"]`); if (el) el.outerHTML = fieldHTML(byK[k]); }
+    const setDisp = (k, d) => set(k, d * C[unitOf(byK[k])][u][0]);
+    const api = { set, setDisp, setChoice, get: k => read()[k], units: () => u, rerender: render };
+
+    root.addEventListener('input', e => {
+      const ta = e.target.closest('textarea[data-k]');
+      if (ta) { f[ta.dataset.k] = ta.value; if (cfg.onChange) cfg.onChange(ta.dataset.k, api); run(); return; }
+      const inp = e.target.closest('input[type=text][data-k]');
+      if (!inp) return;
+      const i = byK[inp.dataset.k];
+      raw[i.k] = inp.value;
+      const val = inp.value.trim() === '' ? null : parse(i, inp.value);
+      if (val == null) { f[i.k] = null; } else f[i.k] = val;
+      if (cfg.onChange) cfg.onChange(i.k, api);
+      run();
+    });
+    root.addEventListener('change', e => {
+      const el = e.target;
+      if (el.tagName === 'SELECT' && el.dataset.k) { f[el.dataset.k] = el.value; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
+      else if (el.type === 'checkbox' && el.dataset.k) { f[el.dataset.k] = el.checked; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
+    });
+    root.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      if (b.dataset.u && b.dataset.u !== u) { u = b.dataset.u; setUnits(u); raw = {}; render(); return; }
+      if (b.dataset.seg) {
+        f[b.dataset.seg] = b.dataset.v;
+        b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        if (cfg.onChange) cfg.onChange(b.dataset.seg, api);
+        run(); return;
+      }
+      const a = b.dataset.act;
+      if (a === 'link') copy(root, location.href, T.linkCopied);
+      else if (a === 'print') { root.querySelectorAll('details').forEach(d => d.open = true); window.print(); }
+      else if (a === 'reset') { f = {}; raw = {}; history.replaceState(null, '', location.pathname + location.search); render(); }
+      else if (a === 'example' && cfg.example) {
+        f = {}; raw = {};
+        Object.entries(cfg.example).forEach(([k, val]) => { const i = byK[k]; if (!i) return; f[k] = (typeof val === 'number' && !['select', 'seg', 'check'].includes(i.t)) ? val * C[unitOf(i)][u][0] : val; });
+        render();
+      }
+      else if (a === 'say') { const s = root.querySelector('.hm-say'); if (s) copy(root, s.textContent, T.copied); }
+      else if (cfg.onAction) cfg.onAction(a, api, b);
+    });
+    render();
+    return api;
+  }
+
+  return { tool, C, fmt, fix, num, feet, esc };
+})();
+</script>
+
+<style>
+body { margin: 0; padding: 10px 12px 24px; background: #f7f5f0; font-family: "Segoe UI", system-ui, sans-serif; }
+body .hmc { max-width: 100%; margin: 6px 0 16px; }
+.ra-bar { display: grid; gap: 8px; margin: 4px 0 6px; }
+.ra-bar button { min-height: 40px; border-radius: 10px; border: 1px solid #ddd6ca; background: #fffdf9; color: #1f1c17; font: inherit; font-weight: 600; cursor: pointer; }
+.ra-bar button.p { background: #8a4b22; border-color: #8a4b22; color: #fff; }
+.ra-msg { font-size: .85rem; color: #57514a; min-height: 1.2em; }
+h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-size: .82rem; color: #8a8379; margin: 0 0 8px; }
+.ra-foot { font-size: .75rem; color: #8a8379; } .ra-foot a { color: #8a4b22; }
+</style></head>
+<body class="quarto-light">
+<h1>RafikiArdhi · Equation check <span class="ck-beta" style="font-size:.6rem;border:1px solid #9a6400;color:#9a6400;border-radius:4px;padding:1px 5px">BETA</span></h1>
+<p class="ra-sub">No AI. Runs in this panel; nothing leaves your computer.</p>
+<div class="ra-bar">
+  <button class="p" id="ra-sel">Check the selected equations</button>
+  <button id="ra-doc">Find all equations in the document</button>
+  <button id="ra-com">Add the findings as a comment</button>
+  <button id="ra-all" onclick="location.href='https://rafikiardhi.earth/checks.html'">Open all checks (enter values by hand)</button>
+</div>
+<div class="ra-msg" id="ra-msg"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+<div class="hmc" id="eq"></div>
+<script>
+(function () {
+  const GREEK = { α: 'alpha', β: 'beta', γ: 'gamma', δ: 'delta', ε: 'epsilon', ζ: 'zeta', η: 'eta', θ: 'theta', κ: 'kappa', λ: 'lambda', μ: 'mu', ν: 'nu', ξ: 'xi', ρ: 'rho', σ: 'sigma', τ: 'tau', φ: 'phi', χ: 'chi', ψ: 'psi', ω: 'omega', Δ: 'Delta', Γ: 'Gamma', Θ: 'Theta', Λ: 'Lambda', Σ: 'Sigma', Φ: 'Phi', Ψ: 'Psi', Ω: 'Omega', π: 'pi' };
+  const FUN = ['sqrt', 'exp', 'log', 'log10', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'nthRoot', 'erf', 'pi'];
+  const SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-' };
+  function group(s, i) { let d = 0, j = i; for (; j < s.length; j++) { if (s[j] === '{') d++; else if (s[j] === '}') { d--; if (!d) break; } } return [s.slice(i + 1, j), j + 1]; }
+  function fromLatex(s) {
+    s = s.replace(/\\left|\\right|\\,|\\;|\\!|\\quad/g, '').replace(/\\cdot|\\times/g, '*').replace(/\\div/g, '/');
+    let out = '', i = 0;
+    while (i < s.length) {
+      if (s.startsWith('\\frac', i) || s.startsWith('\\dfrac', i)) { i = s.indexOf('{', i); const [a, j] = group(s, i); const [b, k] = group(s, j); out += `((${fromLatex(a)})/(${fromLatex(b)}))`; i = k; continue; }
+      if (s.startsWith('\\sqrt', i)) { i += 5; let n = null; if (s[i] === '[') { const e = s.indexOf(']', i); n = s.slice(i + 1, e); i = e + 1; } const [a, j] = group(s, i); out += n ? `nthRoot(${fromLatex(a)},${n})` : `sqrt(${fromLatex(a)})`; i = j; continue; }
+      if (s[i] === '^' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += `^(${fromLatex(a)})`; i = j; continue; }
+      if (s[i] === '_' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += '_' + a.replace(/[^A-Za-z0-9]/g, ''); i = j; continue; }
+      if (s[i] === '\\') { const m = s.slice(i + 1).match(/^[A-Za-z]+/); const w = m ? m[0] : ''; out += ' ' + ({ ln: 'log', log: 'log10' }[w] || w) + ' '; i += 1 + w.length; continue; }
+      if (s[i] === '{') { out += '('; i++; continue; } if (s[i] === '}') { out += ')'; i++; continue; }
+      out += s[i]; i++;
+    }
+    // in LaTeX, adjacent letters are a product: ab = a*b (function names, subscripted names and greek words kept)
+    return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z_0-9]*\()/g, (m, p, w) => FUN.includes(w) || Object.values(GREEK).includes(w) ? m : p + w.split('').join('*'));
+  }
+  function norm(line) {
+    let s = line.trim().replace(/^\(?\d+\)?[.:)]\s*/, '').replace(/^[A-Za-z]?\d+[.:]\s*/, '');
+    const latex = /\\|[{}]/.test(s);
+    s = s.replace(/[−–]/g, '-').replace(/[×·⋅]/g, '*').replace(/[÷∕]/g, '/').replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)')
+      .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')').replace(/[α-ωΑ-Ω]/g, c => GREEK[c] ? ' ' + GREEK[c] + ' ' : c).replace(/\bln\s*\(/g, 'log(');
+    if (latex) s = fromLatex(s);
+    return s.replace(/\s+_/g, '_');
+  }
+  const scope = (vars, f) => Object.fromEntries(vars.map(v => [v, f(v)]));
+  function vars(node) { const s = new Set(); node.traverse((n, path, parent) => { if (n.isSymbolNode && !(parent && parent.isFunctionNode && parent.fn === n) && !['pi', 'e', 'i', 'E'].includes(n.name) && !(n.name in math && typeof math[n.name] === 'function')) s.add(n.name); }); return [...s]; }
+  const rnd = (pos) => { const x = Math.exp(Math.log(0.2) + Math.random() * Math.log(50)); return pos || Math.random() < 0.5 ? x : -x; };
+  function root(f, guess) {
+    const grid = []; for (let e = -4; e <= 4; e += 0.1) { grid.push(10 ** e); grid.push(-(10 ** e)); }
+    grid.sort((a, b) => a - b); let prev = null, best = null;
+    for (const x of grid) { const y = f(x); if (!isFinite(y)) { prev = null; continue; } if (prev && Math.sign(y) !== Math.sign(prev[1])) { let a = prev[0], b = x, fa = prev[1]; for (let k = 0; k < 80; k++) { const m = (a + b) / 2, fm = f(m); if (Math.sign(fm) === Math.sign(fa)) { a = m; fa = fm; } else b = m; } const r = (a + b) / 2; if (best == null || Math.abs(r - (guess || 1)) < Math.abs(best - (guess || 1))) best = r; } prev = [x, y]; }
+    return best;
+  }
+  HM.tool({
+    id: 'eq', step: 'Equations', units: false, hash: false,
+    inputs: [
+      { k: 'eqs', l: 'Equations, one per line (numbers like "(3)" at the start are ignored)', t: 'textarea', rows: 6, ph: 'q = -K*dh/dz\nK = q*dz/dh\n\\theta = \\theta_{r} + \\frac{\\theta_{s}-\\theta_{r}}{(1+(\\alpha h)^{n})^{1-1/n}}' },
+      { k: 'vals', l: 'Worked example from the paper (optional): known values, e.g. q = 0.5, dz = 10, dh = -2', t: 'textarea', rows: 2 },
+      { k: 'sign', l: 'Variables are', t: 'seg', d: 'pos', opts: [['pos', 'Positive'], ['any', 'Any sign']], h: 'Used to search for division by zero, logs and roots of negatives, and to test rearrangements.' }
+    ],
+    compute(v, U) {
+      if (typeof math === 'undefined') return U.empty('The maths engine is still loading. Try again in a moment.');
+      const lines = String(v.eqs || '').split(/\r?\n/).filter(l => l.trim());
+      if (!lines.length) return U.empty('Paste at least one equation.');
+      const pos = v.sign === 'pos', E = [], rows = [], notes = [], work = [];
+      lines.forEach((ln, i) => {
+        const s = norm(ln), parts = s.split(/(?<![<>!=])=(?!=)/);
+        if (parts.length !== 2) { rows.push([i + 1, ln, '<span class="tag bad">Not one equation</span>', parts.length < 2 ? 'No "=" sign.' : 'More than one "=" sign.']); return; }
+        try {
+          const L = math.parse(parts[0]), R = math.parse(parts[1]), f = math.parse(`(${parts[0]})-(${parts[1]})`).compile();
+          const vs = [...new Set([...vars(L), ...vars(R)])];
+          let bad = 0, n = 200, ex = null;
+          for (let k = 0; k < n; k++) { const sc = scope(vs, () => rnd(pos)); let y; try { y = f.evaluate(sc); } catch (e) { y = NaN; } if (typeof y !== 'number' || !isFinite(y)) { bad++; if (!ex) ex = sc; } }
+          E.push({ i: i + 1, ln, L, R, f, vs, lhsSym: L.isSymbolNode ? L.name : null });
+          const tag = bad === 0 ? '<span class="tag good">Reads and evaluates</span>' : bad === n ? '<span class="tag bad">Never evaluates</span>' : '<span class="tag warn">Undefined in places</span>';
+          rows.push([i + 1, `${U.esc(L.toString())} = ${U.esc(R.toString())}`, tag, `Variables: ${vs.join(', ') || 'none'}${bad && bad < n ? `. Undefined for ${Math.round(100 * bad / n)}% of ${pos ? 'positive' : ''} test values (division by zero, log or root of a negative), e.g. ${Object.entries(ex).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ')}.` : bad === n ? '. No test value gives a real number: check the signs and the domain.' : '.'}`]);
+        } catch (err) { rows.push([i + 1, U.esc(ln), '<span class="tag bad">Cannot read</span>', U.esc(err.message) + (s !== ln.trim() ? ` (read as: ${U.esc(s)})` : '')]); }
+      });
+      // rearrangements: pairs of equations with the same variables
+      const pairs = [];
+      for (let a = 0; a < E.length; a++) for (let b = a + 1; b < E.length; b++) {
+        const A = E[a], B = E[b], sa = A.vs.slice().sort().join(), sb = B.vs.slice().sort().join();
+        if (!A.vs.length || sa !== sb) continue;
+        const u = B.lhsSym && B.vs.includes(B.lhsSym) ? B.lhsSym : A.lhsSym && A.vs.includes(A.lhsSym) ? A.lhsSym : A.vs[0];
+        const [P, Q] = B.lhsSym === u ? [A, B] : [B, A];
+        let ok = 0, tried = 0, fail = null;
+        for (let k = 0; k < 40 && tried < 12; k++) {
+          const sc = scope(P.vs.filter(x => x !== u), () => rnd(pos));
+          const g = x => { try { return Q.f.evaluate({ ...sc, [u]: x }); } catch (e) { return NaN; } };
+          const r = root(g); if (r == null) continue; tried++;
+          let res; try { res = P.f.evaluate({ ...sc, [u]: r }); } catch (e) { res = NaN; }
+          const scale = Math.max(1e-9, Math.abs(math.evaluate(`abs(${P.L.toString()})+abs(${P.R.toString()})`, { ...sc, [u]: r })));
+          if (isFinite(res) && Math.abs(res) / scale < 1e-6) ok++; else if (!fail) fail = { sc, r, res };
+        }
+        if (!tried) continue;
+        pairs.push(ok === tried ? U.note(`Equation ${Q.i} is consistent with equation ${P.i}: solving ${Q.i} for ${u} satisfies ${P.i} in all ${tried} random tests.`, 'good')
+          : U.note(`Equation ${Q.i} does not follow from equation ${P.i}. For ${Object.entries(fail.sc).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ')}, equation ${Q.i} gives ${u} = ${HM.fmt(fail.r, 4)}, which leaves equation ${P.i} off by ${HM.fmt(fail.res, 4)}. Check signs, exponents and which terms were moved.`, 'bad'));
+      }
+      // worked example
+      const known = {}; String(v.vals || '').split(/[,;\n]+/).forEach(p => { const m = p.split('='); if (m.length === 2) { const name = norm(m[0]).trim(), val = Number(m[1].trim().replace(/\s/g, '')); if (name && isFinite(val)) known[name] = val; } });
+      const ex = [];
+      if (Object.keys(known).length) E.forEach(e => {
+        const miss = e.vs.filter(x => !(x in known));
+        if (miss.length === 0) { let r; try { r = e.f.evaluate(known); } catch (err) { r = NaN; } const sc = Math.max(1e-12, Math.abs(math.evaluate(`abs(${e.L.toString()})+abs(${e.R.toString()})`, known))); ex.push(isFinite(r) && Math.abs(r) / sc < 1e-3 ? U.note(`Equation ${e.i} holds for the example values.`, 'good') : U.note(`Equation ${e.i} does not hold for the example: left side − right side = ${HM.fmt(r, 4)}.`, 'bad')); }
+        else if (miss.length === 1) { const u = miss[0], r = root(x => { try { return e.f.evaluate({ ...known, [u]: x }); } catch (err) { return NaN; } }); ex.push(r == null ? U.note(`Equation ${e.i}: no real ${u} satisfies it with the example values.`, 'bad') : U.note(`Equation ${e.i} gives <b>${u} = ${HM.fmt(r, 5)}</b> from the example values. Compare with the paper.`, 'good')); }
+        else ex.push(U.note(`Equation ${e.i}: ${miss.length} unknowns (${miss.join(', ')}), give all but one to solve it.`));
+      });
+      let h = `<table class="tt"><thead><tr><th>#</th><th>Read as</th><th>Status</th></tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td><code>${r[1]}</code><br><span style="font-size:.85rem; color:var(--ink-2)">${r[3]}</span></td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
+      if (pairs.length) h += '<h3>Rearrangements</h3>' + pairs.join(''); else if (E.length > 1) h += U.note('No two equations use exactly the same variables, so no rearrangement could be tested.');
+      if (ex.length) h += '<h3>Worked example</h3>' + ex.join('');
+      h += U.note('Check that each line was read as intended. In LaTeX, adjacent letters are a product (ab = a·b); in plain text, ab is one variable, so write a*b. e and pi are the constants.');
+      return { html: h, work: ['Each equation is parsed into a symbolic expression tree (math.js) and evaluated as left side − right side.', 'Domain: 200 random values per variable (0.2 to 10, log-spaced; both signs if "Any sign"); any non-real result is flagged.', 'Rearrangement: equations with the same variables are compared by solving one numerically for the isolated variable at 12 random points and substituting into the other (relative tolerance 10⁻⁶).', 'Worked example: with all values known the residual is tested; with one unknown it is solved by bracketing and bisection.'] };
+    }
+  });
+})();
+</script>
+
+<p class="ra-foot">How to cite: Flynn, T. (2026). <i>Check a result: plausibility checks for soil and environmental results</i> [software]. <a href="https://doi.org/10.5281/zenodo.23736495" target="_blank" rel="noopener">https://doi.org/10.5281/zenodo.23736495</a> · <a href="https://rafikiardhi.earth/checks.html" target="_blank" rel="noopener">All checks</a></p>
+<script>
+(function () {
+  const msg = t => document.getElementById('ra-msg').textContent = t;
+  const setEqs = text => { const el = document.getElementById('eq-eqs'); if (!el) return; el.value = text; el.dispatchEvent(new Event('input', { bubbles: true })); };
+  // a line looks like an equation if it has one "=" and something on both sides, and is short
+  const eqLines = t => t.split(/\r?\n|\r/).map(s => s.replace(/\s+/g, ' ').trim()).filter(s => s.length < 300 && /[^=<>!]=[^=]/.test(s) && !/[.?!]\s+[A-Z][a-z]+\s/.test(s));
+  const noWord = () => msg('Open this panel inside Word to read the document. You can still paste equations below.');
+  if (typeof Office === 'undefined') { noWord(); return; }
+  Office.onReady(info => {
+    if (info.host !== Office.HostType.Word) { noWord(); return; }
+    document.getElementById('ra-sel').onclick = () => Word.run(async ctx => {
+      const r = ctx.document.getSelection(); r.load('text'); await ctx.sync();
+      const lines = eqLines(r.text || '');
+      if (!lines.length) { msg('No equations found in the selection. Select one or more equations (Word equations or typed lines with "=").'); return; }
+      setEqs(lines.join('\n')); msg(`Read ${lines.length} equation${lines.length > 1 ? 's' : ''} from the selection.`);
+    }).catch(e => msg('Could not read the selection: ' + e.message));
+    document.getElementById('ra-doc').onclick = () => Word.run(async ctx => {
+      const ps = ctx.document.body.paragraphs; ps.load('items/text'); await ctx.sync();
+      const lines = ps.items.flatMap(p => eqLines(p.text || ''));
+      if (!lines.length) { msg('No equation-like lines found in the document.'); return; }
+      setEqs(lines.slice(0, 60).join('\n')); msg(`Found ${lines.length} equation-like line${lines.length > 1 ? 's' : ''}${lines.length > 60 ? ' (first 60 shown)' : ''}. Remove any that aren't equations.`);
+    }).catch(e => msg('Could not read the document: ' + e.message));
+    document.getElementById('ra-com').onclick = () => Word.run(async ctx => {
+      const res = document.querySelector('#eq .res');
+      const bad = res ? [...res.querySelectorAll('.note.bad')].map(n => n.textContent.trim()) : [];
+      const tags = res ? [...res.querySelectorAll('tbody tr')].filter(tr => tr.querySelector('.tag.bad, .tag.warn')).map(tr => `Eq ${tr.cells[0].textContent}: ${tr.cells[2].textContent.trim()}, ${tr.cells[1].querySelector('span') ? tr.cells[1].querySelector('span').textContent.trim() : ''}`) : [];
+      const text = (tags.concat(bad).join('\n') || 'Equation check: no problems found.') + '\n(RafikiArdhi equation check, https://doi.org/10.5281/zenodo.23736495)';
+      const r = ctx.document.getSelection();
+      if (Office.context.requirements.isSetSupported('WordApi', '1.4')) { r.insertComment(text); await ctx.sync(); msg('Comment added to the selection.'); }
+      else { r.insertText('\n[' + text + ']', 'After'); await ctx.sync(); msg('This version of Word has no comment support from add-ins, so the findings were inserted as text after the selection.'); }
+    }).catch(e => msg('Could not add the comment: ' + e.message));
+  });
+})();
+</script>
+</body></html>
