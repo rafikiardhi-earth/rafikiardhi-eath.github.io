@@ -15,8 +15,9 @@ website:
   page-navigation: false
   open-graph: true
   twitter-card: true
+  image: "logo-small.png"
   navbar:
-    logo: images/logo-small.png
+    logo: logo-small.png
     logo-alt: "RafikiArdhi logo"
     left:
       - href: index.qmd
