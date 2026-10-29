@@ -2084,9 +2084,14 @@ window.CKSTAT = window.CKSTAT || (function () {
       const parts = []; { let d = 0, cur = ''; for (const c of String(v.vals || '')) { if ('[('.includes(c)) d++; if ('])'.includes(c)) d--; if (!d && /[,;\n]/.test(c)) { parts.push(cur); cur = ''; } else cur += c; } parts.push(cur); }
       parts.forEach(p => { const k = p.indexOf('='); if (k < 0) return; const name = norm(p.slice(0, k) + '= 0').s.split('=')[0].trim(); let val; try { val = MJ.evaluate(p.slice(k + 1).trim()); } catch (e) { return; } if (name && (isArr(val) || isFinite(real(val)))) known[name] = isArr(val) ? val : real(val); });
 
+      // two equations on one line: split at \quad / \qquad, or at a comma followed by wide spacing outside brackets
+      const splitLine = t => { const out = []; let d = 0, cur = ''; t = t.replace(/,?\s*\\q?quad\s*/g, '\u0001');
+        for (let k = 0; k < t.length; k++) { const c = t[k]; if ('([{'.includes(c)) d++; else if (')]}'.includes(c)) d--;
+          if (c === '\u0001' || (!d && c === ',' && /^\s{2,}\S/.test(t.slice(k + 1)))) { out.push(cur); cur = ''; } else cur += c; }
+        out.push(cur); return out; };
       // a chain a = b = c is checked as a = b and b = c
       const items = [];
-      lines.forEach((ln0, i) => ln0.split(/,?\s*\\q?quad\s*|,\s{2,}(?=\S)/).filter(x => x.trim()).forEach((ln, j, all) => {
+      lines.forEach((ln0, i) => splitLine(ln0).filter(x => x.trim()).forEach((ln, j, all) => {
         const i2 = all.length > 1 ? `${i + 1}${'abcdefghij'[j]}` : i + 1;
         const nr = norm(ln), sp = nr.unsupported ? [] : nr.s.split(/(?<![<>!=])=(?!=)/);
         if (sp.length > 2) sp.slice(0, -1).forEach((a, k) => items.push({ ln, lab: `${i2}${all.length > 1 ? '.' : ''}${'abcdefghij'[k]}`, nr: { s: `${a}=${sp[k + 1]}`, unsupported: false } }));
