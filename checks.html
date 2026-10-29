@@ -1809,7 +1809,9 @@ window.CKSTAT = window.CKSTAT || (function () {
     const latex = /\\|[{}]/.test(s);
     if (!latex) {
       // plain-text superscript star and prime: X*, X_u* (a * not followed by an operand) → X_star
-      s = s.replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\*(?=\s*(?:[-+=)\/,|]|$))/g, '$1_star').replace(/([A-Za-z0-9_Ͱ-Ͽ])[′']/g, '$1_prime');
+      // Word linear writes a superscript star as ^* or ^(*): X_u^* → X_u_star (also inside ■ matrices, before @ & ) ])
+      s = s.replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\^\s*(?:\*|\(\s*\*\s*\))/g, '$1_star')
+           .replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\*(?=\s*(?:[-+=)\]\/,;|@&]|$))/g, '$1_star').replace(/([A-Za-z0-9_Ͱ-Ͽ])[′']/g, '$1_prime');
     }
     // derivatives are read as one variable: dX/dz, ∂X/∂z, \frac{\partial X}{\partial z} → dX_dz
     s = s.replace(/\\frac\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}/g, 'd$1_d$2')
