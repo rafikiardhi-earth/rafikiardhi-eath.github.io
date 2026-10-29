@@ -1122,6 +1122,8 @@ Paste the equations from a paper, one per line, in plain text, Word's linear for
       if (sl || (!latex && (s[i] === '∑' || s[i] === '∏' || (s[i] === 'Σ' && s[i + 1] === '_') || (s[i] === 'Π' && s[i + 1] === '_')))) {
         const prod = latex ? s.startsWith('\\prod', i) : (s[i] === '∏' || s[i] === 'Π');
         const [lo, hi, j] = bounds(s, i + (sl ? (prod ? 5 : 4) : 1), latex);
+        // a Greek Σ or Π without an index (Σ_x, Σ^(-1)) is a symbol, e.g. a covariance matrix, not a sum
+        if (!latex && (s[i] === 'Σ' || s[i] === 'Π') && (!lo || !lo.includes('=') || hi == null)) { out += s[i]; i++; continue; }
         if (!lo || !lo.includes('=') || hi == null) return null;
         const [v, a] = lo.split('=').map(x => x.trim());
         const e = sumEnd(s, j); const f = structural(s.slice(j, e).replace(/^[\s▒]+/, ''), latex); if (f == null) return null;
@@ -1186,6 +1188,7 @@ Paste the equations from a paper, one per line, in plain text, Word's linear for
       .replace(/(?:\t|\s{2,})\(\s*\d+[a-z]?\s*\)\s*$/, '')   // equation number at the end after a tab or spaces, e.g. "   (3)"
       .replace(/[\s.,;]+$/, '');                          // trailing punctuation
     // superscripts and subscripts before compatibility normalisation (which would turn x² into x2)
+    s = s.replace(/ᵀ/g, '^(T)')                                          // transpose sign, before normalisation turns it into a plain T
     s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁽⁾ⁿ]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')')
          .replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]+/g, m => '_' + [...m].map(c => SUB[c]).join(''))
          .replace(/(\S)[̅̄]/g, '$1_bar').replace(/(\S)̂/g, '$1_hat').replace(/(\S)̃/g, '$1_tilde').replace(/(\S)̇/g, '$1_dot');
@@ -1197,7 +1200,7 @@ Paste the equations from a paper, one per line, in plain text, Word's linear for
     if (!latex) {
       // plain-text superscript star and prime: X*, X_u* (a * not followed by an operand) → X_star
       // Word linear subscripts in brackets: F_(xy,u,l) → F_xyul (sum limits such as ∑_(n=1) have no name before them)
-      s = s.replace(/([A-Za-z\u0370-\u03FF][A-Za-z0-9\u0370-\u03FF]*)_\(([^()]*)\)/g, (m, a, b) => a + '_' + b.replace(/[^A-Za-z0-9\u0370-\u03FF]/g, ''));
+      s = s.replace(/([A-Za-z\u0370-\u03FF][A-Za-z0-9\u0370-\u03FF]*)_\(([^()]*)\)/g, (m, a, b) => b.includes('=') ? m : a + '_' + b.replace(/[^A-Za-z0-9\u0370-\u03FF]/g, ''));   // _(i=1) is a sum's index, not a subscript
       // Word linear writes a superscript star as ^* or ^(*): X_u^* → X_u_star (also inside ■ matrices, before @ & ) ])
       s = s.replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\^\s*(?:\*|\(\s*\*\s*\))/g, '$1_star')
            .replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\*(?=\s*(?:[-+=)\]\/,;|@&]|$))/g, '$1_star').replace(/([A-Za-z0-9_Ͱ-Ͽ])[′']/g, '$1_prime');
@@ -1216,6 +1219,8 @@ Paste the equations from a paper, one per line, in plain text, Word's linear for
     if (latex) s = fromLatex(s);
     // transpose: A^T, A^⊤ → transpose(A)
     s = s.replace(new RegExp(`(${NAME})\\s*\\^\\s*\\(?\\s*[T⊤]\\s*\\)?(?![A-Za-z0-9_])`, 'gu'), 'transpose($1)');
+    // transpose of a bracket: (x_i − x_j)^T → transpose((x_i − x_j))
+    s = s.replace(/(\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\))\s*\^\s*\(?\s*[T⊤]\s*\)?(?![A-Za-z0-9_])/g, 'transpose$1');
     s = s.replace(/[×·⋅•∙∗]/g, '*').replace(/[÷∕]/g, '/')
       .replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)').replace(/π/g, ' pi ')
       .replace(new RegExp('∇\\s*(' + NAME + ')', 'gu'), 'grad_$1').replace(/[∂𝜕]\s*/g, 'd_')
@@ -1342,7 +1347,10 @@ Paste the equations from a paper, one per line, in plain text, Word's linear for
   function prodn(args, m, scope) { return series(args, scope, true); }
   function indef() { return NaN; }   // an indefinite integral has no value; it is checked by differentiation
   integ.rawArgs = sumn.rawArgs = prodn.rawArgs = indef.rawArgs = true;
-  MJ.import({ integ, sumn, prodn, indef }, { override: true });
+  // a 1×1 matrix (e.g. vᵀΣ⁻¹v) is a scalar, so it can divide or be compared with one
+  const sq = x => (x && (Array.isArray(x) || x.isMatrix) && MJ.size(x).valueOf().reduce((a, b) => a * b, 1) === 1) ? MJ.flatten(MJ.matrix(x)).valueOf()[0] : x;
+  MJ.import({ integ, sumn, prodn, indef, sq }, { override: true });
+  const wrapSq = n => { const m = n.map(c => wrapSq(c)); return m.isOperatorNode || (m.isFunctionNode && m.fn && !OPS.includes(m.fn.name) && m.fn.name !== 'sq') ? new MJ.FunctionNode(new MJ.SymbolNode('sq'), [m]) : m; };
 
   // readable form of the parsed expressions
   const show = node => node.toString({ handler: (n, o) => {
@@ -1486,7 +1494,7 @@ Paste the equations from a paper, one per line, in plain text, Word's linear for
         if (sp.length !== 2) { rows.push([lab, U.esc(ln), '<span class="tag bad">Not one equation</span>', sp.length < 2 ? 'No "=" sign.' : 'More than one "=" sign.']); return; }
         try {
           const L = MJ.parse(sp[0]), R = MJ.parse(sp[1]);
-          const e = { i: lab, ln, src: s, L, R, Lc: L.compile(), Rc: R.compile(), lhsSym: L.isSymbolNode ? L.name : null };
+          const e = { i: lab, ln, src: s, L, R, Lc: wrapSq(L).compile(), Rc: wrapSq(R).compile(), lhsSym: L.isSymbolNode ? L.name : null };
           e.kinds = mergeKinds(freeVars(L), freeVars(R)); e.vs = Object.keys(e.kinds);
           e.heavy = /integ\(|sumn\(|prodn\(/.test(s);
           e.indef = /indef\(/.test(s);
