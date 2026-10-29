@@ -87,7 +87,6 @@ window.HM = (function () {
     small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.',
     sayLab: 'Copy this', copy: 'Copy', linkCopied: 'Link copied', copied: 'Copied', check: 'Check your numbers.', copyThis: 'Copy this:'
   };
-  // SI value = displayed value × factor
   const C = {
     len: { us: [0.3048, 'ft'], si: [1, 'm'] },
     dep: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
@@ -143,7 +142,6 @@ window.HM = (function () {
     const hasUnits = cfg.units !== false && inputs.some(i => i.t && !UNITLESS.includes(i.t) && !(i.t === 'list' && UNITLESS.includes(i.of)));
     const unitOf = i => i.t === 'list' ? i.of : i.t;
 
-    // restore from link
     try {
       const m = cfg.hash === false ? null : location.hash.match(new RegExp('^#' + cfg.id + '=(.+)$'));
       if (m) { const o = JSON.parse(decodeURIComponent(escape(atob(m[1])))); if (o && o.f && typeof o.f === 'object') { f = o.f; if (o.u === 'si' || o.u === 'us') u = o.u; } }
@@ -248,7 +246,6 @@ window.HM = (function () {
 
     function run() {
       const v = read();
-      // validity marks and conditional visibility
       root.querySelectorAll('input[type=text][data-k]').forEach(inp => {
         const k = inp.dataset.k, r = raw[k];
         inp.classList.toggle('bad', r !== undefined && r.trim() !== '' && (f[k] === undefined || (typeof f[k] === 'number' && isNaN(f[k]))));
@@ -329,17 +326,37 @@ window.HM = (function () {
 </script>
 
 <style>
-body { margin: 0; padding: 10px 12px 24px; background: #f7f5f0; font-family: "Segoe UI", system-ui, sans-serif; }
+/* Outer document background and typography for Dark/Light Mode */
+body { margin: 0; padding: 10px 12px 24px; font-family: "Segoe UI", system-ui, sans-serif; }
+body.quarto-dark { background: #161412; color: #f0ece4; }
+body.quarto-light { background: #f7f5f0; color: #1f1c17; }
+
 body .hmc { max-width: 100%; margin: 6px 0 16px; }
 .ra-bar { display: grid; gap: 8px; margin: 4px 0 6px; }
-.ra-bar button { min-height: 40px; border-radius: 10px; border: 1px solid #ddd6ca; background: #fffdf9; color: #1f1c17; font: inherit; font-weight: 600; cursor: pointer; }
-.ra-bar button.p { background: #8a4b22; border-color: #8a4b22; color: #fff; }
-.ra-msg { font-size: .85rem; color: #57514a; min-height: 1.2em; }
-h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-size: .82rem; color: #8a8379; margin: 0 0 8px; }
-.ra-foot { font-size: .75rem; color: #8a8379; } .ra-foot a { color: #8a4b22; }
+
+/* Buttons styling matched for dark and light modes */
+body.quarto-dark .ra-bar button { min-height: 40px; border-radius: 10px; border: 1px solid #3a352f; background: #1f1c19; color: #f0ece4; font: inherit; font-weight: 600; cursor: pointer; }
+body.quarto-dark .ra-bar button.p { background: #d98b56; border-color: #d98b56; color: #1a1410; }
+
+body.quarto-light .ra-bar button { min-height: 40px; border-radius: 10px; border: 1px solid #ddd6ca; background: #fffdf9; color: #1f1c17; font: inherit; font-weight: 600; cursor: pointer; }
+body.quarto-light .ra-bar button.p { background: #8a4b22; border-color: #8a4b22; color: #fff; }
+
+body.quarto-dark h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #f0ece4; }
+body.quarto-light h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; }
+
+body.quarto-dark .ra-sub { font-size: .82rem; color: #c4bdb1; margin: 0 0 8px; }
+body.quarto-light .ra-sub { font-size: .82rem; color: #8a8379; margin: 0 0 8px; }
+
+body.quarto-dark .ra-msg { font-size: .85rem; color: #c4bdb1; min-height: 1.2em; }
+body.quarto-light .ra-msg { font-size: .85rem; color: #57514a; min-height: 1.2em; }
+
+.ra-foot { font-size: .75rem; color: #8a8379; } 
+body.quarto-dark .ra-foot a { color: #d98b56; }
+body.quarto-light .ra-foot a { color: #8a4b22; }
 </style></head>
-<body class="quarto-light">
-<h1>RafikiArdhi · Equation check <span class="ck-beta" style="font-size:.6rem;border:1px solid #9a6400;color:#9a6400;border-radius:4px;padding:1px 5px">BETA</span></h1>
+
+<body class="quarto-dark">
+<h1>RafikiArdhi · Equation check <span class="ck-beta" style="font-size:.6rem;border:1px solid #e0a440;color:#e0a440;border-radius:4px;padding:1px 5px">BETA</span></h1>
 <p class="ra-sub">No AI. Runs in this panel; nothing leaves your computer.</p>
 <div class="ra-bar">
   <button class="p" id="ra-sel">Check the selected equations</button>
@@ -352,22 +369,17 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
 <div class="hmc" id="eq"></div>
 <script>
 (function () {
-  // ======================= reading equations =======================
-  // plain text, Word linear format, LaTeX, or copied from a PDF → math.js syntax
   const GREEK = { alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', epsilon: 'ε', varepsilon: 'ε', zeta: 'ζ', eta: 'η', theta: 'θ', vartheta: 'θ', kappa: 'κ', lambda: 'λ', mu: 'μ', nu: 'ν', xi: 'ξ', rho: 'ρ', varrho: 'ρ', sigma: 'σ', tau: 'τ', phi: 'φ', varphi: 'φ', chi: 'χ', psi: 'ψ', omega: 'ω', Delta: 'Δ', Gamma: 'Γ', Theta: 'Θ', Lambda: 'Λ', Sigma: 'Σ', Phi: 'Φ', Psi: 'Ψ', Omega: 'Ω', Xi: 'Ξ', Pi: 'Π', Upsilon: 'Υ', upsilon: 'υ', iota: 'ι' };
   const OPS = ['integ', 'indef', 'sumn', 'prodn'];
   const FUN = ['sqrt', 'exp', 'log', 'log10', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'nthRoot', 'erf', 'pi', 'max', 'min', 'det', 'inv', 'transpose', 'Infinity'].concat(OPS);
   const SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+', '⁽': '(', '⁾': ')', 'ⁿ': 'n' };
   const SUB = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9', 'ₐ': 'a', 'ₑ': 'e', 'ᵢ': 'i', 'ⱼ': 'j', 'ₖ': 'k', 'ₗ': 'l', 'ₘ': 'm', 'ₙ': 'n', 'ₒ': 'o', 'ₚ': 'p', 'ᵣ': 'r', 'ₛ': 's', 'ₜ': 't', 'ᵤ': 'u', 'ᵥ': 'v', 'ₓ': 'x' };
-  const NAME = '[A-Za-z\\u0370-\\u03FF][A-Za-z0-9_\\u0370-\\u03FF]*';   // a symbol name, Latin or Greek
+  const NAME = '[A-Za-z\\u0370-\\u03FF][A-Za-z0-9_\\u0370-\\u03FF]*';
   const UNSUPPORTED = /[∬∭∮∯]|\\(iint|iiint|oint|lim)(?![A-Za-z])|\blim\b/;
   const STAR = '(\\*|\\\\ast|\\\\star)', PRIME = '(\\\\prime)';
   const OPEN = { '{': '}', '(': ')', '[': ']' };
 
-  // ---------- integrals, sums, products and matrices ----------
-  // index of the bracket closing the one at i
   function close(s, i) { const o = s[i], c = OPEN[o]; let d = 0; for (let j = i; j < s.length; j++) { if (s[j] === o) d++; else if (s[j] === c && !--d) return j; } return s.length; }
-  // read one bound after _ or ^ : {…}, (…), \cmd or a token
   function bound(s, i, latex) {
     while (s[i] === ' ') i++;
     if (s[i] === '{' || s[i] === '(') { const j = close(s, i); return [s.slice(i + 1, j), j + 1]; }
@@ -384,7 +396,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     }
     return [lo, hi, i];
   }
-  // where the integrand ends: the differential d<var> at depth 0 → [start, end, var]
   function differential(s, i, latex) {
     let d = 0;
     for (let j = i; j < s.length; j++) {
@@ -397,7 +408,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     }
     return null;
   }
-  // where a sum's body ends: the next + - = at depth 0, or the end of the enclosing group
   function sumEnd(s, i) {
     let d = 0, j = i; while (s[j] === ' ' || s[j] === '▒') j++;
     if (s[j] === '-' || s[j] === '+') j++;
@@ -417,7 +427,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     let out = '', i = 0;
     const L = latex ? '{' : '(', R = latex ? '}' : ')';
     while (i < s.length) {
-      // matrices
       if (latex && s.startsWith('\\begin{', i)) {
         const env = s.slice(i + 7, s.indexOf('}', i)), end = s.indexOf('\\end{' + env + '}', i);
         if (/matrix$/.test(env) && end > 0) {
@@ -427,7 +436,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         }
       }
       if (!latex && s[i] === '■' && s[i + 1] === '(') { const j = close(s, i + 1); out += matrix(structural(s.slice(i + 2, j), latex), '@', '&'); i = j + 1; continue; }
-      // integrals
       const intL = latex && s.startsWith('\\int', i) && !/^[A-Za-z]/.test(s[i + 4] || ' ');
       if (intL || (!latex && s[i] === '∫')) {
         let [lo, hi, j] = bounds(s, i + (intL ? 4 : 1), latex);
@@ -440,12 +448,10 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         if (out.includes('null')) return null;
         i = next; continue;
       }
-      // sums and products
       const sl = latex && (s.startsWith('\\sum', i) || s.startsWith('\\prod', i)) && !/^[A-Za-z]/.test(s[i + (s.startsWith('\\sum', i) ? 4 : 5)] || ' ');
       if (sl || (!latex && (s[i] === '∑' || s[i] === '∏' || (s[i] === 'Σ' && s[i + 1] === '_') || (s[i] === 'Π' && s[i + 1] === '_')))) {
         const prod = latex ? s.startsWith('\\prod', i) : (s[i] === '∏' || s[i] === 'Π');
         const [lo, hi, j] = bounds(s, i + (sl ? (prod ? 5 : 4) : 1), latex);
-        // a Greek Σ or Π without an index (Σ_x, Σ^(-1)) is a symbol, e.g. a covariance matrix, not a sum
         if (!latex && (s[i] === 'Σ' || s[i] === 'Π') && (!lo || !lo.includes('=') || hi == null)) { out += s[i]; i++; continue; }
         if (!lo || !lo.includes('=') || hi == null) return null;
         const [v, a] = lo.split('=').map(x => x.trim());
@@ -463,17 +469,15 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
   function group(s, i) { let d = 0, j = i; for (; j < s.length; j++) { if (s[j] === '{') d++; else if (s[j] === '}') { d--; if (!d) break; } } return [s.slice(i + 1, j), j + 1]; }
   const FNAMES = { ln: 'ln', log: 'log', exp: 'exp', sin: 'sin', cos: 'cos', tan: 'tan', sinh: 'sinh', cosh: 'cosh', tanh: 'tanh', arcsin: 'asin', arccos: 'acos', arctan: 'atan' };
   function fromLatex(s) {
-    // \ln 2, \sin x: a function with a bare argument → \ln(2)
     s = s.replace(/\\(ln|log|exp|sin|cos|tan|sinh|cosh|tanh|arcsin|arccos|arctan)(?![A-Za-z])\s*(?![\s({\[]|\\left)((?:\\[A-Za-z]+|[A-Za-z0-9.]+)(?:_\{[^}]*\}|_[A-Za-z0-9])?)/g, (m, f, a) => `\\${f}(${a})`)
       .replace(/\\(arcsin|arccos|arctan)(?![A-Za-z])/g, (m, f) => FNAMES[f])
-      .replace(/(?<![A-Za-z])\{\s*(\\(?:overline|bar|hat|tilde)\s*\{[^{}]*\}|[A-Za-z]+)\s*\}(?=\s*[_^])/g, '$1');   // {\overline{X}}_{…} → \overline{X}_{…}
+      .replace(/(?<![A-Za-z])\{\s*(\\(?:overline|bar|hat|tilde)\s*\{[^{}]*\}|[A-Za-z]+)\s*\}(?=\s*[_^])/g, '$1');
     s = s.replace(/\\left|\\right|\\bigg|\\Bigg|\\big|\\Big|\\,|\\;|\\:|\\!|\\qquad|\\quad|\\displaystyle/g, '')
       .replace(/\\ /g, ' ')
-      .replace(/\\(?:mathcal|mathscr|mathrm|mathbf|mathit|mathsf|mathbb|boldsymbol|bm|operatorname|textrm|textit|text|mathnormal)\s*\{([^{}]*)\}/g, '$1')
+      .replace(/\\(?:mathcal|mathscr|mathrm|mathbf|mathit|mathsf|mathbb|boldsymbol|bm| खान|operatorname|textrm|textit|text|mathnormal)\s*\{([^{}]*)\}/g, '$1')
       .replace(/\\(?:overline|bar)\s*\{\s*([^{}]*?)\s*\}/g, '$1_bar').replace(/\\(?:widehat|hat)\s*\{\s*([^{}]*?)\s*\}/g, '$1_hat')
       .replace(/\\(?:widetilde|tilde)\s*\{\s*([^{}]*?)\s*\}/g, '$1_tilde').replace(/\\dot\s*\{\s*([^{}]*?)\s*\}/g, '$1_dot')
       .replace(/\\(?:overline|bar)\s*([A-Za-z])/g, '$1_bar').replace(/\\hat\s*([A-Za-z])/g, '$1_hat')
-      // Word's LaTeX puts the star outside a brace: {(E}^{*}, {\partial E}^{*} → (E^{*}, \partial E^{*}
       .replace(new RegExp('\\{\\s*(\\(\\s*[A-Za-z]|\\\\partial\\s*[A-Za-z])\\s*\\}\\s*\\^\\s*\\{\\s*' + STAR + '\\s*\\}', 'g'), '$1^{*}')
       .replace(new RegExp('\\^\\s*\\{\\s*' + STAR + '\\s*\\}|\\^\\s*' + STAR, 'g'), '_star')
       .replace(new RegExp('\\^\\s*\\{\\s*' + PRIME + '\\s*\\}|\\^\\s*' + PRIME, 'g'), '_prime').replace(/([A-Za-z0-9}])'/g, '$1_prime')
@@ -488,36 +492,34 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         const o = s.indexOf('{', i); if (o < 0) { out += s.slice(i + 5); break; }
         const [a, j] = group(s, o); if (s[j] !== '{') { out += `(${fromLatex(a)})`; i = j; continue; }
         const [b, k] = group(s, j);
-        // a partial derivative \frac{\partial E^{*}}{\partial x} is one symbol, dE_star_dx (\partial was already turned into d_)
         const pn = a.match(/^\s*d_([\s\S]+?)\s*$/), pd = b.match(/^\s*d_([A-Za-zͰ-Ͽ])\s*$/);
         if (pn && pd) { out += ` d${fromLatex(pn[1]).replace(/[\s()*]/g, '')}_d${pd[1]} `; i = k; continue; }
         out += `((${fromLatex(a)})/(${fromLatex(b)}))`; i = k; continue;
       }
       if (s.startsWith('\\sqrt', i)) { i += 5; let n = null; if (s[i] === '[') { const e = s.indexOf(']', i); n = s.slice(i + 1, e); i = e + 1; } if (s[i] !== '{') { out += 'sqrt'; continue; } const [a, j] = group(s, i); out += n ? `nthRoot(${fromLatex(a)},${n})` : `sqrt(${fromLatex(a)})`; i = j; continue; }
       if (s[i] === '^' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += `^(${fromLatex(a)})`; i = j; continue; }
-      // a subscript ends the name: X_{u}Y → X_u Y
       if (s[i] === '_' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += '_' + a.replace(/\\([A-Za-z]+)/g, (m, w) => GREEK[w] || w).replace(/[^A-Za-z0-9Ͱ-Ͽ]/g, '') + ' '; i = j; continue; }
       if (s[i] === '\\') { const m = s.slice(i + 1).match(/^[A-Za-z]+/); const w = m ? m[0] : ''; out += GREEK[w] ? GREEK[w] + ' ' : w === 'pi' ? ' pi ' : ' ' + ({ ln: 'log', log: 'log10' }[w] || w) + ' '; i += 1 + (w.length || 1); continue; }
       if (s[i] === '{') { out += '('; i++; continue; } if (s[i] === '}') { out += ')'; i++; continue; }
       out += s[i]; i++;
     }
     out = out.replace(/\s+_/g, '_');
-    // in LaTeX, adjacent letters are a product: ab = a*b (whole words that are functions, or names with a subscript, are kept)
     return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z0-9_])(\s*\()?/g, (m, p, w, par) => FUN.includes(w) || (par && w in math && typeof math[w] === 'function') ? m : p + w.split('').join('*') + (par || ''));
   }
-  // returns { s, unsupported }
+
   function norm(line) {
     let s = line.trim().replace(/^\(?\d+\)?[.:)]\s*/, '').replace(/^[A-Za-z]?\d+[.:]\s+/, '')
-      .replace(/(?:\t|\s{2,})\(\s*\d+[a-z]?\s*\)\s*$/, '')   // equation number at the end after a tab or spaces, e.g. "   (3)"
-      .replace(/[\s.,;]+$/, '');                          // trailing punctuation
-    // superscripts and subscripts before compatibility normalisation (which would turn x² into x2)
-    s = s.replace(/ᵀ/g, '^(T)')                                          // transpose sign, before normalisation turns it into a plain T
-    s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁽⁾ⁿ]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')')
-         .replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]+/g, m => '_' + [...m].map(c => SUB[c]).join(''))
-         .replace(/(\S)[̅̄]/g, '$1_bar').replace(/(\S)̂/g, '$1_hat').replace(/(\S)̃/g, '$1_tilde').replace(/(\S)̇/g, '$1_dot');
+      .replace(/(?:\t|\s{2,})\(\s*\d+[a-z]?\s*\)\s*$/, '')
+      .replace(/[\s.,;]+$/, '');
+    s = s.replace(/ᵀ/g, '^(T)')
+      .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁽⁾ⁿ]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')')
+      .replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]+/g, m => '_' + [...m].map(c => SUB[c]).join(''))
+      .replace(/(\S)[̅̄]/g, '$1_bar').replace(/(\S)̂/g, '$1_hat').replace(/(\S)̃/g, '$1_tilde').replace(/(\S)̇/g, '$1_dot');
 
-    // Clean Word Unicode Artifacts & Smart Quotes/Spaces
-    s = s.replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
+    s = s.replace(/[\u25A0\u25A1\u25FE\u200B-\u200D\uFEFF]/g, '')
+         .replace(/(?:^|[\s,])[\.,]*(?=[A-Za-z0-9_=+-])/g, ' ')
+         .replace(/,([A-Za-z_])=/g, ' $1=')
+         .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
          .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'")
          .replace(/[\u00A0\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
          .normalize('NFKC')
@@ -526,60 +528,47 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
          .replace(/[〖〔]/g, '(')
          .replace(/[〗〕]/g, ')')
          .replace(/[┬┴]/g, ' ')
-         .replace(/[−–—]/g, '-');
+         .replace(/[−–—]/g, '-')
+         .replace(/,\s*,+/g, ',')
+         .replace(/\b\.\b/g, '')
+         .replace(/\s+/g, ' ')
+         .trim();
 
     if (UNSUPPORTED.test(s)) return { s, unsupported: true };
     const latex = /\\|[{}]/.test(s);
     if (!latex) {
-      // plain-text superscript star and prime: X*, X_u* (a * not followed by an operand) → X_star
-      // Word linear subscripts in brackets: F_(xy,u,l) → F_xyul (sum limits such as ∑_(n=1) have no name before them)
-      s = s.replace(/([A-Za-z\u0370-\u03FF][A-Za-z0-9\u0370-\u03FF]*)_\(([^()]*)\)/g, (m, a, b) => b.includes('=') ? m : a + '_' + b.replace(/[^A-Za-z0-9\u0370-\u03FF]/g, ''));   // _(i=1) is a sum's index, not a subscript
-      // Word linear writes a superscript star as ^* or ^(*): X_u^* → X_u_star (also inside ■ matrices, before @ & ) ])
+      s = s.replace(/([A-Za-z\u0370-\u03FF][A-Za-z0-9\u0370-\u03FF]*)_\(([^()]*)\)/g, (m, a, b) => b.includes('=') ? m : a + '_' + b.replace(/[^A-Za-z0-9\u0370-\u03FF]/g, ''));
       s = s.replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\^\s*(?:\*|\(\s*\*\s*\))/g, '$1_star')
            .replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\*(?=\s*(?:[-+=)\]\/,;|@&]|$))/g, '$1_star').replace(/([A-Za-z0-9_Ͱ-Ͽ])[′']/g, '$1_prime');
     }
-    // derivatives are read as one variable: dX/dz, ∂X/∂z, \frac{\partial X}{\partial z} → dX_dz
     s = s.replace(/\\frac\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}/g, 'd$1_d$2')
          .replace(/[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)\s*\/\s*[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)/g, 'd$1_d$2');
-    // Word/PDF partials in brackets: (∂E^*)/∂x, (∂X_(u,l))/(∂x) → dE_star_dx, the same single symbol as ∂E/∂x
-    s = s.replace(new RegExp(`\\(\\s*[∂𝜕]\\s*(${NAME})\\s*\\)\\s*\\/\\s*\\(?\\s*[∂𝜕]\\s*([A-Za-z\\u0370-\\u03FF])(?:\\s*\\))?`, 'gu'), 'd$1_d$2');   // the closing bracket is optional; spaces after the symbol are kept
-    // integrals, sums, products and matrices → integ(), indef(), sumn(), prodn(), ⟦ ⟧
+    s = s.replace(new RegExp(`\\(\\s*[∂𝜕]\\s*(${NAME})\\s*\\)\\s*\\/\\s*\\(?\\s*[∂𝜕]\\s*([A-Za-z\\u0370-\\u03FF])(?:\\s*\\))?`, 'gu'), 'd$1_d$2');
     if (latex) s = s.replace(/\\mathrm\s*\{\s*d\s*\}/g, 'd').replace(/\\(?:d|diff)\s*(?=[A-Za-z\\])/g, 'd');
     const st = structural(s, latex);
     if (st == null) return { s, unsupported: true, reason: 'structure' };
     s = st.replace(/▒/g, ' ');
     s = s.replace(/\\(?:text|mathrm)\s*\{\s*const\s*\}|\bconst\b/g, 'C');
     if (latex) s = fromLatex(s);
-    // transpose: A^T, A^⊤ → transpose(A)
     s = s.replace(new RegExp(`(${NAME})\\s*\\^\\s*\\(?\\s*[T⊤]\\s*\\)?(?![A-Za-z0-9_])`, 'gu'), 'transpose($1)');
-    // transpose of a bracket: (x_i − x_j)^T → transpose((x_i − x_j))
     s = s.replace(/(\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\))\s*\^\s*\(?\s*[T⊤]\s*\)?(?![A-Za-z0-9_])/g, 'transpose$1');
     s = s.replace(/[×·⋅•∙∗]/g, '*').replace(/[÷∕]/g, '/')
       .replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)').replace(/π/g, ' pi ')
       .replace(new RegExp('∇\\s*(' + NAME + ')', 'gu'), 'grad_$1').replace(/[∂𝜕]\s*/g, 'd_')
       .replace(/\bln\s*\(/g, 'log(');
     if (!latex) {
-      // ln 2, sin x: a function with a bare argument → ln(2)
       s = s.replace(/\b(ln|log|exp|sin|cos|tan|sinh|cosh|tanh)\s+([A-Za-z0-9.]+(?:_[A-Za-z0-9]+)?)(?![A-Za-z0-9_(])/g, '$1($2)').replace(/\bln\s*\(/g, 'log(');
-      // a Greek letter written next to another symbol is a product in plain text: αh → α h
       s = s.replace(/([Ͱ-Ͽ])(?=[A-Za-z0-9Ͱ-Ͽ])/g, '$1 ').replace(/([A-Za-z0-9])(?=[Ͱ-Ͽ])/g, '$1 ');
     }
-    // absolute values |x| (and max|x|, min|x|)
     let prev, guard = 0; do { prev = s; s = s.replace(/\b(max|min)?\s*\|([^|]+)\|/g, (m, f, a) => f ? `${f}(abs(${a}))` : `abs(${a})`); } while (s !== prev && ++guard < 10);
-    // square brackets: a matrix if they hold a top-level comma or semicolon, otherwise grouping
     s = s.replace(/\[/g, '⟨').replace(/\]/g, '⟩');
     for (let k = 0; k < 20 && s.includes('⟨'); k++) s = s.replace(/⟨([^⟨⟩]*)⟩/g, (m, a) => { let d = 0, top = false; for (const c of a) { if ('(⟦'.includes(c)) d++; else if (')⟧'.includes(c)) d--; else if (!d && (c === ',' || c === ';')) top = true; } return top ? `⟦${a}⟧` : `(${a})`; });
-    // a matrix next to a bracket or a name is a product, not indexing: (1/det A)[…] → (1/det A) * […]
     s = s.replace(/([)A-Za-z0-9_\u0370-\u03FF])\s*⟦/g, '$1 * ⟦').replace(/⟧\s*(?=[(A-Za-z0-9\u0370-\u03FF])/g, '⟧ * ');
     s = s.replace(/⟧\s*⟦/g, '⟧ * ⟦').replace(/⟦/g, '[').replace(/⟧/g, ']').replace(/\s+_/g, '_').replace(/,\s*\)/g, ')');
-    // a left side written as a function of its arguments, ℒ(X_u, X_l) or f(x), is the quantity being defined
     s = s.replace(new RegExp(`^\\s*(${NAME})\\s*\\(\\s*${NAME}(?:\\s*,\\s*${NAME})*\\s*\\)\\s*=(?!=)`, 'u'), (m, f) => (f in math && typeof math[f] === 'function') || OPS.includes(f) ? m : `${f} =`);
-    // "a/b (…)" or "a/b c" as written in papers and Word: the fraction ends at the space → (a/b)·(…)
     const atom = `(?:${NAME}\\((?:[^()]|\\([^()]*\\))*\\)|${NAME}|[0-9.]+|\\((?:[^()]|\\([^()]*\\))*\\))`;
     s = s.replace(new RegExp(`(${atom})\\s*/\\s*(${atom}(?:\\^(?:[0-9.]+|\\([^()]*\\)))?)(?=\\s+[A-Za-z0-9(\\u0370-\\u03FF])`, 'gu'), (m, a, b) => OPS.includes(a) ? m : `((${a})/(${b}))`);
-    // a variable followed by "(" is a product, not a function call: λ (…) → λ*(…); real functions are kept
     s = s.replace(new RegExp(`(${NAME})(\\s*)\\(`, 'gu'), (m, f, sp) => (FUN.includes(f) || (f in math && typeof math[f] === 'function' && !sp)) ? m : `${f}*(`);
-    // ∇A·∇B → Σ ∂A/∂xᵢ · ∂B/∂xᵢ over the coordinates whose partials appear on the line (x and y if none do)
     if (/grad_/.test(s)) {
       const co = [...new Set([...s.matchAll(new RegExp(`(?<![A-Za-z0-9_\\u0370-\\u03FF])d${NAME}_d([A-Za-z\\u0370-\\u03FF])(?![A-Za-z0-9_\\u0370-\\u03FF])`, 'gu'))].map(m => m[1]))].sort();
       const coords = co.length ? co : ['x', 'y'];
@@ -588,7 +577,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     return { s, unsupported: false };
   }
 
-  // ======================= evaluating =======================
   const MJ = math.create(math.all);
   class Child { constructor(p) { this.p = p; this.m = new Map(); } get(k) { return this.m.has(k) ? this.m.get(k) : this.p.get(k); } has(k) { return this.m.has(k) || this.p.has(k); } set(k, v) { this.m.set(k, v); return this; } keys() { return new Set([...this.m.keys(), ...this.p.keys()]).values(); } delete(k) { return this.m.delete(k); } clear() { this.m.clear(); } forEach(cb) { for (const k of this.keys()) cb(this.get(k), k); } [Symbol.iterator]() { return [...this.keys()].map(k => [k, this.get(k)])[Symbol.iterator](); } }
   const cache = new WeakMap();
@@ -929,8 +917,16 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
 
   const noWord = () => msg('Open this panel inside Word to read the document. You can still paste equations below.');
   if (typeof Office === 'undefined') { noWord(); return; }
+  
   Office.onReady(info => {
     if (info.host !== Office.HostType.Word) { noWord(); return; }
+
+    // Detect Word/OS theme mode automatically
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      document.body.className = 'quarto-dark';
+    } else {
+      document.body.className = 'quarto-light';
+    }
     
     document.getElementById('ra-sel').onclick = () => Word.run(async ctx => {
       const r = ctx.document.getSelection();
@@ -953,13 +949,19 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         }
       }
 
-      const cleanedString = rawString
+      let cleanedString = rawString
+        .replace(/[\u25A0\u25A1\u25FE\u200B-\u200D\uFEFF]/g, '')
+        .replace(/(?:^|[\s,])[\.,]*(?=[A-Za-z0-9_=+-])/g, ' ')
+        .replace(/,([A-Za-z_])=/g, ' $1=')
         .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
         .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'")
         .replace(/[\u00A0\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
         .normalize('NFKC')
-        .replace(/[⁡-⁤​-‍﻿\uFEFF]/g, '')
-        .replace(/[−–—]/g, '-');
+        .replace(/[−–—]/g, '-')
+        .replace(/,\s*,+/g, ',')
+        .replace(/\b\.\b/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
 
       const lines = eqLines(cleanedString);
       if (!lines.length) { msg('No equations found in the selection. Select one or more equations (Word equations or typed lines with "=").'); return; }
