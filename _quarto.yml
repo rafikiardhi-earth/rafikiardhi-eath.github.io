@@ -5,7 +5,7 @@ project:
     - CNAME
     - images/
     - wrb_profiles_template.csv
-    -addin/
+    - addin/
 
 website:
   title: "RafikiArdhi"
