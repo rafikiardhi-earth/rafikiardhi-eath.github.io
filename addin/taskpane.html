@@ -485,7 +485,11 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
       if (s.startsWith('\\frac', i) || s.startsWith('\\dfrac', i) || s.startsWith('\\tfrac', i)) {
         const o = s.indexOf('{', i); if (o < 0) { out += s.slice(i + 5); break; }
         const [a, j] = group(s, o); if (s[j] !== '{') { out += `(${fromLatex(a)})`; i = j; continue; }
-        const [b, k] = group(s, j); out += `((${fromLatex(a)})/(${fromLatex(b)}))`; i = k; continue;
+        const [b, k] = group(s, j);
+        // a partial derivative \frac{\partial E^{*}}{\partial x} is one symbol, dE_star_dx (\partial was already turned into d_)
+        const pn = a.match(/^\s*d_([\s\S]+?)\s*$/), pd = b.match(/^\s*d_([A-Za-zͰ-Ͽ])\s*$/);
+        if (pn && pd) { out += ` d${fromLatex(pn[1]).replace(/[\s()*]/g, '')}_d${pd[1]} `; i = k; continue; }
+        out += `((${fromLatex(a)})/(${fromLatex(b)}))`; i = k; continue;
       }
       if (s.startsWith('\\sqrt', i)) { i += 5; let n = null; if (s[i] === '[') { const e = s.indexOf(']', i); n = s.slice(i + 1, e); i = e + 1; } if (s[i] !== '{') { out += 'sqrt'; continue; } const [a, j] = group(s, i); out += n ? `nthRoot(${fromLatex(a)},${n})` : `sqrt(${fromLatex(a)})`; i = j; continue; }
       if (s[i] === '^' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += `^(${fromLatex(a)})`; i = j; continue; }
@@ -524,6 +528,8 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     // derivatives are read as one variable: dX/dz, ∂X/∂z, \frac{\partial X}{\partial z} → dX_dz
     s = s.replace(/\\frac\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}/g, 'd$1_d$2')
          .replace(/[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)\s*\/\s*[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)/g, 'd$1_d$2');
+    // Word/PDF partials in brackets: (∂E^*)/∂x, (∂X_(u,l))/(∂x) → dE_star_dx, the same single symbol as ∂E/∂x
+    s = s.replace(new RegExp(`\\(\\s*[∂𝜕]\\s*(${NAME})\\s*\\)\\s*\\/\\s*\\(?\\s*[∂𝜕]\\s*([A-Za-z\\u0370-\\u03FF])\\s*\\)?`, 'gu'), 'd$1_d$2');
     // integrals, sums, products and matrices → integ(), indef(), sumn(), prodn(), ⟦ ⟧
     if (latex) s = s.replace(/\\mathrm\s*\{\s*d\s*\}/g, 'd').replace(/\\(?:d|diff)\s*(?=[A-Za-z\\])/g, 'd');
     const st = structural(s, latex);
@@ -558,6 +564,12 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     s = s.replace(new RegExp(`(${atom})\\s*/\\s*(${atom}(?:\\^(?:[0-9.]+|\\([^()]*\\)))?)(?=\\s+[A-Za-z0-9(\\u0370-\\u03FF])`, 'gu'), (m, a, b) => OPS.includes(a) ? m : `((${a})/(${b}))`);
     // a variable followed by "(" is a product, not a function call: λ (…) → λ*(…); real functions are kept
     s = s.replace(new RegExp(`(${NAME})(\\s*)\\(`, 'gu'), (m, f, sp) => (FUN.includes(f) || (f in math && typeof math[f] === 'function' && !sp)) ? m : `${f}*(`);
+    // ∇A·∇B → Σ ∂A/∂xᵢ · ∂B/∂xᵢ over the coordinates whose partials appear on the line (x and y if none do)
+    if (/grad_/.test(s)) {
+      const co = [...new Set([...s.matchAll(new RegExp(`(?<![A-Za-z0-9_\\u0370-\\u03FF])d${NAME}_d([A-Za-z\\u0370-\\u03FF])(?![A-Za-z0-9_\\u0370-\\u03FF])`, 'gu'))].map(m => m[1]))].sort();
+      const coords = co.length ? co : ['x', 'y'];
+      s = s.replace(new RegExp(`grad_(${NAME})\\s*\\*\\s*grad_(${NAME})`, 'gu'), (m, p, q) => '(' + coords.map(c => `d${p}_d${c} * d${q}_d${c}`).join(' + ') + ')');
+    }
     return { s, unsupported: false };
   }
 
