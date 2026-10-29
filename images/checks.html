@@ -1,0 +1,1911 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="description" content="Plausibility checks for soil and environmental results: kriging error, R² vs RMSE, classification accuracy, detectable change, back-transformation, carbon stock arithmetic, area estimation, effective sample size, spatial cross-validation, lab conversions, coordinates, and beta checks for independence, assumptions and model comparison.">
+
+<title>Check a result – RafikiArdhi</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-b626d73c4c936ccc3cb08be7d45d1df6.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-91b37be6a859139f3fd5aa9272ea880b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-f00c18cbcac3fa40f44d16cf2eb4ba8b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-8QXXQWKPTD"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-8QXXQWKPTD', { 'anonymize_ip': true});
+</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+<meta property="og:title" content="Check a result – RafikiArdhi">
+<meta property="og:description" content="Plausibility checks for soil and environmental results: kriging error, R² vs RMSE, classification accuracy, detectable change, back-transformation, carbon stock arithmetic, area estimation, effective sample size, spatial cross-validation, lab conversions, coordinates, and beta checks for independence, assumptions and model comparison.">
+<meta property="og:image" content="https://rafikiardhi.earth/images/logo-small.png">
+<meta property="og:site_name" content="RafikiArdhi">
+<meta property="og:image:height" content="2029">
+<meta property="og:image:width" content="1419">
+<meta name="twitter:title" content="Check a result – RafikiArdhi">
+<meta name="twitter:description" content="Plausibility checks for soil and environmental results: kriging error, R² vs RMSE, classification accuracy, detectable change, back-transformation, carbon stock arithmetic, area estimation, effective sample size, spatial cross-validation, lab conversions, coordinates, and beta checks for independence, assumptions and model comparison.">
+<meta name="twitter:image" content="https://rafikiardhi.earth/images/logo-small.png">
+<meta name="twitter:image-height" content="2029">
+<meta name="twitter:image-width" content="1419">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://rafikiardhi.earth/images/checks.html">
+<meta name="citation_title" content="Check a result: plausibility checks for soil and environmental results">
+<meta name="citation_author" content="Trevan Flynn">
+<meta name="citation_publication_date" content="2026">
+<meta name="citation_cover_date" content="2026">
+<meta name="citation_year" content="2026">
+<meta name="citation_fulltext_html_url" content="https://rafikiardhi.earth/images/checks.html">
+<meta name="citation_doi" content="10.5281/zenodo.23736495">
+<meta name="citation_language" content="en">
+</head>
+
+<body class="nav-fixed fullcontent quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = true;
+    const darkModeDefault = authorPrefersDark;
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a href="../index.html" class="navbar-brand navbar-brand-logo">
+    <img src="../logo-small.png" alt="RafikiArdhi logo" class="navbar-logo light-content">
+    <img src="../logo-small.png" alt="RafikiArdhi logo" class="navbar-logo dark-content">
+    </a>
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">RafikiArdhi</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-services" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Services</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-services">    
+        <li>
+    <a class="dropdown-item" href="../services.html">
+ <span class="dropdown-text">All services</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Independent Review</li>
+        <li>
+    <a class="dropdown-item" href="../services-review.html">
+ <span class="dropdown-text">Third party review</span></a>
+  </li>  
+        <li class="dropdown-header">Build</li>
+        <li>
+    <a class="dropdown-item" href="../services-build.html">
+ <span class="dropdown-text">Problem solving</span></a>
+  </li>  
+        <li class="dropdown-header">Partner</li>
+        <li>
+    <a class="dropdown-item" href="../services-partner.html">
+ <span class="dropdown-text">Research collaboration</span></a>
+  </li>  
+        <li class="dropdown-header">Learn</li>
+        <li>
+    <a class="dropdown-item" href="../services-learn.html">
+ <span class="dropdown-text">Training</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-tools" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Tools</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-tools">    
+        <li class="dropdown-header">For homeowners</li>
+        <li>
+    <a class="dropdown-item" href="../homeowners.html">
+ <span class="dropdown-text">Gardening &amp; landscapes</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">For researchers</li>
+        <li>
+    <a class="dropdown-item" href="../tools.html">
+ <span class="dropdown-text">Research tools</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../checks.html">
+ <span class="dropdown-text">Research checks</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Learners</li>
+        <li>
+    <a class="dropdown-item" href="../soil-keys.html">
+ <span class="dropdown-text">Soil classification</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../soil-colour.html">
+ <span class="dropdown-text">Soil colour</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../work-places.html"> 
+<span class="menu-text">Places</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../publications.html"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../contact.html"> 
+<span class="menu-text">Contact</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Check a result</h1>
+</div>
+
+<div>
+  <div class="description">
+    Plausibility checks for soil and environmental results: kriging error, R² vs RMSE, classification accuracy, detectable change, back-transformation, carbon stock arithmetic, area estimation, effective sample size, spatial cross-validation, lab conversions, coordinates, and beta checks for independence, assumptions and model comparison.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<style>
+#ck-hub .ck-intro { font-size: 1.05rem; max-width: 70ch; }
+#ck-hub h2 { font-size: 1.25rem; margin: 26px 0 4px; border: none; }
+#ck-hub .ck-sub { opacity: .75; margin: 0 0 8px; font-size: .95rem; }
+.ck-cards h3 a { text-decoration: none; }
+.ck-beta { display:inline-block; margin-left:7px; padding:2px 6px; border:1px solid var(--bs-border-color, #888); border-radius:4px; font-size:.65rem; font-weight:600; letter-spacing:.04em; vertical-align:middle; opacity:.8; }
+.ck-cards small { display: block; margin-top: 8px; font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; opacity: .6; }
+.ck-back { display: inline-block; margin: 4px 0 10px; font-weight: 600; text-decoration: none; }
+.ck-rel { margin-top: 30px; border-top: 1px solid var(--bs-border-color, #3a352f); padding-top: 14px; }
+.ck-rel h3 { font-size: 1.05rem; margin: 0 0 6px; }
+.ck-refs { margin-top: 22px; font-size: .85rem; opacity: .85; }
+.ck-refs p { margin: 0 0 6px; padding-left: 1.5em; text-indent: -1.5em; }
+.ck-refs p:first-child { text-indent: 0; padding-left: 0; }
+.ck-sec[hidden], #ck-hub[hidden] { display: none !important; }
+</style>
+<div id="ck-hub">
+  <p class="ck-intro">Use these checks to investigate whether your own results and methods hold together, whether the work is in progress or already published. They test reported figures against what the method allows, and highlight questions worth answering before you share your work. Nothing you enter leaves your browser.</p>
+  <p class="ck-cite" style="font-size:.8rem; opacity:.75; margin-top:-4px;"><b>How to cite:</b> Flynn, T. (2026). <i>Check a result: plausibility checks for soil and environmental results</i>, version 1.0 [software]. <a href="https://doi.org/10.5281/zenodo.23736495">https://doi.org/10.5281/zenodo.23736495</a>. Please also cite the method references given with each check. <a href="cite.html#checks">All citations →</a></p>
+  <div id="ck-groups"></div>
+</div>
+<script>
+window.CK = {
+  groups: [
+    ['acc', 'Model accuracy and validation', 'Is the model as good as the reported accuracy suggests?'],
+    ['spat', 'Spatial structure and sampling', 'Do the variogram, the sampling and the map fit together?'],
+    ['data', 'Soil data and units', 'Do the numbers follow from the inputs?'],
+    ['review', 'Study design and statistical reasoning', 'Do the observations, the assumptions and the model comparison match the question?'],
+    ['math', 'Equations', 'Do the equations hold together, and do they reproduce the paper\'s numbers?']
+  ],
+  items: {
+    'r2': { g: 'acc', t: 'R², RMSE and SD', d: 'Can the reported R² and RMSE both be true? Are they better than the lab precision allows?', href: 'tools.html#eval/ev-check-cont', where: 'Model evaluation' },
+    'acc': { g: 'acc', t: 'Classification accuracy', d: 'Confidence interval, chance baseline, and whether one map really beats another.', href: 'tools.html#eval/ev-check-cat', where: 'Model evaluation' },
+    'picp': { g: 'acc', t: 'Honest uncertainty', d: 'Do prediction intervals cover what they claim (PICP)?', href: 'tools.html#eval', where: 'Model evaluation' },
+    'area-estimation': { g: 'acc', t: 'Area from a confusion matrix', d: 'Unbiased class areas with confidence intervals, instead of pixel counts.', rel: ['acc', 'spatial-cv', 'pixel-size'] },
+    'spatial-cv': { g: 'acc', t: 'Spatial cross-validation and leakage', d: 'Is the validation optimistic? A guided checklist.', rel: ['r2', 'krig', 'effective-sample-size', 'independence'] },
+    'independence': { g: 'review', t: 'Independence and study design', d: 'Are the sampling unit, analysis and validation aligned? How much does grouping shrink the effective sample size?', beta: true, rel: ['effective-sample-size', 'spatial-cv', 'detect'] },
+    'assumptions-check': { g: 'review', t: 'Statistical assumptions check', d: 'Which assumptions matter for this method? Paste residuals for skewness, outliers, unequal spread and autocorrelation.', beta: true, rel: ['independence', 'r2', 'effective-sample-size'] },
+    'model-comparison': { g: 'review', t: 'Model comparison audit', d: 'Are competing models evaluated on comparable terms? Test the difference with paired fold scores or McNemar.', beta: true, rel: ['spatial-cv', 'r2', 'acc'] },
+    'krig': { g: 'spat', t: 'Kriging error vs. variogram', d: 'Is a reported kriging RMSE possible, given the range, nugget and sample spacing?', href: 'tools.html#krige/kr-check', where: 'Variogram & kriging' },
+    'smap': { g: 'spat', t: 'Samples for a map', d: 'How many samples a target map error needs, from the variogram.', href: 'tools.html#sampling/s-check', where: 'Sampling density' },
+    'effective-sample-size': { g: 'spat', t: 'Effective sample size', d: 'How much clustered samples are really worth.', rel: ['smap', 'detect', 'spatial-cv'] },
+    'detect': { g: 'spat', t: 'Detectable change', d: 'Could the sampling design detect the change in soil carbon being claimed?', href: 'tools.html#carbon/c-check', where: 'Carbon stocks' },
+    'pixel-size': { g: 'spat', t: 'Finding the right pixel size', d: 'Coarsest legible, finest legible and recommended resolution for a map.', rel: ['smap', 'coordinates', 'krig'] },
+    'stock-arithmetic': { g: 'data', t: 'Carbon stock arithmetic', d: 'Rebuild a stock from its inputs and catch unit and stone-fraction slips.', rel: ['lab-conversions', 'detect', 'back-transform'] },
+    'back-transform': { g: 'data', t: 'Back-transformation', d: 'Was a log-scale result reported as the median or the mean?', rel: ['stock-arithmetic', 'krig', 'r2'] },
+    'lab-conversions': { g: 'data', t: 'Lab method conversions', d: 'Walkley–Black, organic matter factors, pH in CaCl₂ vs. water, oxides.', rel: ['stock-arithmetic', 'back-transform'] },
+    'equations': { g: 'math', t: 'Equation check', d: 'Paste equations to catch unreadable or undefined expressions, rearrangements that don\'t follow, and worked examples that don\'t reproduce.', beta: true, rel: ['stock-arithmetic', 'back-transform', 'lab-conversions'] },
+    'coordinates': { g: 'data', t: 'Coordinates and distances', d: 'Degrees treated as metres, and how far a degree really is.', rel: ['pixel-size', 'krig', 'effective-sample-size'] }
+  },
+  card(id) { const c = this.items[id]; return `<div class="card-item"><h3><a href="${c.href || '#' + id}">${c.t}</a>${c.beta ? '<span class="ck-beta">BETA</span>' : ''}</h3><p>${c.d}</p>${c.href ? '<small>Opens in ' + c.where + '</small>' : ''}</div>`; }
+};
+document.getElementById('ck-groups').innerHTML = CK.groups.map(([g, title, sub]) => `<h2>${title}</h2><p class="ck-sub">${sub}</p><div class="cards ck-cards">${Object.keys(CK.items).filter(id => CK.items[id].g === g).map(id => CK.card(id)).join('')}</div>`).join('');
+</script>
+<div id="pixel-size" class="ck-sec">
+<section id="finding-the-right-pixel-size" class="level2">
+<h2 data-anchor-id="finding-the-right-pixel-size">Finding the right pixel size</h2>
+<p>Grid resolution is often chosen by habit (30 m because that’s Landsat). Hengl (2006) set out rules that tie it to what the data can actually support. For each aspect of a dataset they give a <strong>coarsest legible</strong> resolution (the largest pixel that still represents it), a <strong>finest legible</strong> resolution (below which pixels “are probably just waste of memory”) and a <strong>recommended compromise</strong>. Fill in whatever you know; the overall range is where the rules agree.</p>
+<div class="hmc" id="px"></div>
+<script>
+(function () {
+  const NICE = [0.5, 1, 2, 2.5, 5, 10, 12.5, 20, 25, 30, 40, 50, 60, 75, 90, 100, 125, 150, 200, 250, 300, 400, 500, 750, 1000, 1500, 2000, 2500, 5000, 10000];
+  HM.tool({
+    id: 'px', step: 'Working scale', units: false, hash: false,
+    example: { sn: 50000, r95: 15, area: 10, n: 100, lay: 'random', hr: 525 },
+    inputs: [
+      { k: 'sn', l: 'Scale number of the output map (e.g. 50000 for 1:50,000)', t: 'num' },
+      { t: 'sec', l: 'Positioning error (optional)' },
+      { k: 'r95', l: '95% error radius (m)', t: 'num', w: 2 }, { k: 'r99', l: '99% error radius (m)', t: 'num', w: 2 }, { k: 'rbar', l: 'Average error (m)', t: 'num', w: 2 },
+      { t: 'sec', l: 'Point samples (optional)' },
+      { k: 'area', l: 'Area of the study (km²)', t: 'num', w: 3 },
+      { k: 'n', l: 'Number of sampled points', t: 'num', w: 3 },
+      { k: 'lay', l: 'Sampling layout', t: 'seg', d: 'random', opts: [['random', 'Random or irregular'], ['grid', 'Regular']] },
+      { k: 'xy', l: 'Coordinates in metres, x, y per line (gives the distances between closest point pairs)', t: 'textarea', rows: 3 },
+      { k: 'hr', l: 'Range of spatial dependence (m)', t: 'num', h: 'The distance at which the variogram levels off (the practical range).' },
+      { t: 'sec', l: 'Objects and terrain (optional)' },
+      { k: 'abar', l: 'Average size of delineations (m²)', t: 'num', w: 2 }, { k: 'amld', l: 'Smallest object to map (m²)', t: 'num', w: 2 }, { k: 'wmld', l: 'Narrowest object (m)', t: 'num', w: 2 },
+      { k: 'cont', l: 'Total length of contours (km), with the area above', t: 'num' }
+    ],
+    compute(v, U) {
+      const rows = [], warn = [];
+      const add = (rule, coarse, fine, rec, why) => rows.push({ rule, coarse, fine, rec, why });
+      if (v.sn > 0) add('Working scale (1:' + HM.fmt(v.sn, 0) + ')', 0.0025 * v.sn, 0.0001 * v.sn, 0.0005 * v.sn, 'Coarsest ≤ 0.0025·SN (four cells in the 0.25 cm² minimum legible delineation); finest ≥ 0.0001·SN (0.1 mm location accuracy on the map); recommended = 0.0005·SN (the 0.5 mm rule).');
+      if (v.r95 > 0 || v.r99 > 0 || v.rbar > 0) add('GPS positioning error', v.r99 > 0 ? 1.8 * v.r99 : null, v.rbar > 0 ? v.rbar * Math.sqrt(Math.PI) : null, v.r95 > 0 ? 1.8 * v.r95 : null, 'Coarsest ≤ 1.8·r(99%); finest ≥ average error·√π (the error circle fits in one pixel); recommended = 1.8·r(95%) (95% of fixes fall within the pixel).');
+      if (v.abar > 0 || v.amld > 0 || v.wmld > 0) add('Size of reference objects', v.abar > 0 ? Math.sqrt(v.abar) / 4 : null, v.wmld > 0 ? v.wmld / 2 : null, v.amld > 0 ? Math.sqrt(v.amld) / 4 : null, 'Coarsest ≤ √(average delineation size) ÷ 4; finest ≥ narrowest width ÷ 2; recommended = √(smallest object) ÷ 4, as in Table 1. (The text\'s Eq. 7 gives the looser √(a/4), four pixels per object; Table 1\'s forms are used here. Table 1 prints the finest as √w ÷ 2; w ÷ 2 is used, as a width can\'t be square-rooted.)');
+      const A = v.area > 0 ? v.area * 1e6 : null;
+      let pts = String(v.xy || '').split(/\r?\n/).map(l => l.split(/[,;\t\s]+/).map(Number)).filter(q => q.length >= 2 && isFinite(q[0]) && isFinite(q[1]));
+      if (pts.length < 3) pts = null;
+      const N = pts ? pts.length : v.n;
+      let hbar = null, h5 = null;
+      if (pts) { const nnd = pts.map((p, i) => { let b = Infinity; pts.forEach((q, j) => { if (i !== j) { const d = Math.hypot(p[0] - q[0], p[1] - q[1]); if (d < b) b = d; } }); return b; }).sort((a, b) => a - b); hbar = nnd.reduce((a, b) => a + b, 0) / nnd.length; h5 = nnd[Math.floor(0.05 * (nnd.length - 1))]; }
+      if (A && N > 1) {
+        const s = Math.sqrt(A / N);
+        add(`Inspection density (${HM.fmt(N, 0)} points)`, 0.1 * s, 0.05 * s, 0.0791 * s, 'Coarsest ≤ 0.1·√(A/N); finest ≥ 0.05·√(A/N); recommended = 0.0791·√(A/N) (2.5 observations per cm² of map with the 0.5 mm rule).');
+        const hb = hbar ?? (v.lay === 'grid' ? s : 0.5 * s);
+        add('Distance between points', hb / 2, h5, (v.lay === 'grid' ? 0.5 : 0.25) * s, `Coarsest ≤ half the mean distance between closest point pairs (${hbar ? 'from your coordinates' : v.lay === 'grid' ? '√(A/N) on a regular grid' : '≈ 0.5·√(A/N) for random points'}); finest ≥ the 5% shortest closest-pair distance${h5 ? '' : ' (needs coordinates)'}; recommended = ${v.lay === 'grid' ? '0.5' : '0.25'}·√(A/N).`);
+        if (v.hr > 0) {
+          let m, how;
+          if (pts) { m = 0; for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) if (Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]) <= v.hr) m++; how = 'counted from your coordinates'; }
+          else { m = Math.min(N * (N - 1) / 2, N * (N - 1) / 2 * Math.PI * v.hr * v.hr / A); how = 'estimated for points spread over the area'; }
+          add('Spatial dependence structure', v.hr / 2, h5, m >= 1 ? v.hr * Math.pow(m, -1 / 3) : null, `Coarsest ≤ range ÷ 2; finest ≥ the 5% shortest closest-pair distance${h5 ? '' : ' (needs coordinates)'}; recommended = range × m^(−1/3), with m = ${HM.fmt(m, 0)} point pairs within the range (${how}).`);
+        }
+      } else if (v.hr > 0) warn.push('The spatial-dependence rule also needs the area and number of points.');
+      if (v.cont > 0 && A) add('Complexity of terrain', A / (v.cont * 1000), v.wmld > 0 ? v.wmld / 2 : null, A / (2 * v.cont * 1000), 'Coarsest ≤ area ÷ total contour length; recommended = area ÷ (2 × total contour length), half the average contour spacing; finest ≥ narrowest width ÷ 2.');
+      if (!rows.length) return U.empty('Enter at least one aspect: a map scale, a positioning error, or the area and number of points. The Example button fills in values from Hengl\'s worked examples.');
+      const cs = rows.map(r => r.coarse).filter(x => x > 0), fs = rows.map(r => r.fine).filter(x => x > 0), rs = rows.map(r => r.rec).filter(x => x > 0);
+      const coarse = cs.length ? Math.min(...cs) : null, fine = fs.length ? Math.max(...fs) : null;
+      let rec = rs.length ? rs.slice().sort((a, b) => a - b)[Math.floor((rs.length - 1) / 2)] : null;
+      const conflict = fine != null && coarse != null && fine > coarse;
+      if (rec != null && !conflict) { if (coarse != null) rec = Math.min(rec, coarse); if (fine != null) rec = Math.max(rec, fine); }
+      const inside = NICE.filter(x => x >= (fine ?? 0) * 0.999 && x <= (coarse ?? Infinity) * 1.001);
+      const pick = x => (inside.length && !conflict ? inside : NICE).reduce((b, n) => Math.abs(Math.log(n / x)) < Math.abs(Math.log(b / x)) ? n : b);
+      const f = x => x == null ? '–' : (x < 10 ? HM.fmt(x, 1) : HM.fmt(x, 0)) + ' m';
+      let h = U.big('Recommended resolution', rec != null ? `${pick(rec)} m` : '–', `${rec != null ? f(rec) + ' before rounding to a common grid size. ' : ''}Legible range: ${f(fine)} (finest) to ${f(coarse)} (coarsest).`);
+      if (conflict) h += U.note(`<b>The rules conflict:</b> the finest legible resolution (${f(fine)}) is coarser than the coarsest legible one (${f(coarse)}). The datasets don't support each other: for example, positional error or sample spacing too coarse for the map scale or object size you want. Look at which rows set the two limits.`, 'bad');
+      h += `<table class="tt"><thead><tr><th>Aspect</th><th class="r">Coarsest ≤</th><th class="r">Finest ≥</th><th class="r">Recommended</th></tr></thead><tbody>` + rows.map(r => `<tr><td>${r.rule}</td><td class="r"${r.coarse === coarse ? ' style="font-weight:700"' : ''}>${f(r.coarse)}</td><td class="r"${r.fine === fine ? ' style="font-weight:700"' : ''}>${f(r.fine)}</td><td class="r">${f(r.rec)}</td></tr>`).join('') + '</tbody></table>';
+      h += U.note('The overall coarsest is the strictest (smallest) coarsest value and the overall finest is the largest finest value (both in bold). The recommendation is the median of the recommended values, kept inside that range, then rounded to the nearest common grid size within it.');
+      warn.forEach(w => { h += U.note(w); });
+      return { html: h, work: rows.map(r => `<b>${r.rule}.</b> ${r.why}`).concat(['Equations from Table 1 of Hengl, T. (2006). Finding the right pixel size. Computers & Geosciences 32, 1283–1298.']) };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>Reference</strong></p>
+<p>Hengl, T. (2006). Finding the right pixel size. <em>Computers &amp; Geosciences</em> 32, 1283–1298. <a href="https://doi.org/10.1016/j.cageo.2005.11.008">doi:10.1016/j.cageo.2005.11.008</a></p>
+</div>
+</section>
+</div>
+<div id="back-transform" class="ck-sec">
+<section id="back-transformation" class="level2">
+<h2 data-anchor-id="back-transformation">Back-transformation</h2>
+<p>A mean calculated on log values, then exponentiated, is the <strong>median</strong> (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter the value on the log scale.</p>
+<div class="hmc" id="bt"></div>
+<script>
+(function () {
+  HM.tool({
+    id: 'bt', step: 'Log-scale results', units: false, hash: false,
+    example: { base: 'ln', c: 0, mu: 0.4, sd: 0.65, rep: 1.49 },
+    inputs: [
+      { k: 'base', l: 'Logarithm', t: 'seg', d: 'ln', opts: [['ln', 'Natural (ln)'], ['log10', 'Base 10']] },
+      { k: 'mu', l: 'Mean of the log values', t: 'num', w: 3 },
+      { k: 'sd', l: 'SD of the log values', t: 'num', w: 3, h: 'For a kriged estimate, use the square root of the kriging variance.' },
+      { k: 'c', l: 'Constant added before logging, if log(x + c)', t: 'num', d: 0, w: 3 },
+      { k: 'rep', l: 'Value reported in original units (optional)', t: 'num', w: 3 }
+    ],
+    compute(v, U) {
+      if (v.mu == null || !(v.sd >= 0)) return U.empty('Enter the mean and SD of the log values.');
+      const est = (base, mu, sd) => { const k = base === 'ln' ? 1 : Math.LN10; return { med: Math.exp(k * mu) - (v.c || 0), mean: Math.exp(k * mu + (k * sd) ** 2 / 2) - (v.c || 0), lo: Math.exp(k * (mu - 1.96 * sd)) - (v.c || 0), hi: Math.exp(k * (mu + 1.96 * sd)) - (v.c || 0) }; };
+      const e = est(v.base, v.mu, v.sd), d = Math.abs(e.mean) < 10 ? 3 : 2;
+      let h = U.kv([['Median (geometric mean)', HM.fmt(e.med, d)], ['Mean (arithmetic, lognormal)', HM.fmt(e.mean, d)], ['Mean ÷ median', HM.fmt(e.mean / e.med, 3)], ['Range holding 95% of values', `${HM.fmt(e.lo, d)} – ${HM.fmt(e.hi, d)}`]]);
+      if (v.rep > 0) {
+        const near = (a, b) => Math.abs(a - b) / Math.abs(b) < 0.03;
+        if (near(v.rep, e.med)) h = U.note(`<b>The reported ${v.rep} is the median, not the mean.</b> The arithmetic mean is about ${HM.fmt(e.mean, d)}, ${HM.fmt((e.mean / e.med - 1) * 100, 0)}% higher. That matters for totals, stocks and loads, which add up means.`, 'bad') + h;
+        else if (near(v.rep, e.mean)) h = U.note(`<b>The reported ${v.rep} is the bias-corrected mean.</b> Correctly back-transformed.`, 'good') + h;
+        else {
+          const alt = est(v.base === 'ln' ? 'log10' : 'ln', v.mu, v.sd);
+          if (near(v.rep, alt.med) || near(v.rep, alt.mean)) h = U.note(`<b>The reported ${v.rep} matches ${v.base === 'ln' ? 'base-10' : 'natural'} logs</b> (${near(v.rep, alt.med) ? 'median' : 'mean'}), not ${v.base === 'ln' ? 'natural' : 'base-10'} logs. Check which logarithm was used.`, 'bad') + h;
+          else h = U.note(`The reported ${v.rep} matches neither the median (${HM.fmt(e.med, d)}) nor the mean (${HM.fmt(e.mean, d)}). Check the logarithm base, any constant added before logging, and whether the SD is of the logs or of the original values.`) + h;
+        }
+      }
+      const k = v.base === 'ln' ? 'e' : '10', kk = v.base === 'ln' ? '' : ' × ln 10';
+      return { html: h, work: [`Median = ${k}^μ${v.c ? ' − c' : ''} = ${HM.fmt(e.med, d + 1)}`, `Mean = ${k}^(μ + σ²${kk ? '·ln10' : ''}/2)${v.c ? ' − c' : ''} = ${HM.fmt(e.mean, d + 1)}${v.base === 'log10' ? ' (σ is converted to natural-log units first: σ × ln 10)' : ''}`, 'This assumes the log values are roughly normal. For lognormal kriging, the variogram tool applies the full correction, including the Lagrange term.'] };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>References</strong></p>
+<p>Aitchison, J., Brown, J.A.C. (1957). <em>The Lognormal Distribution</em>. Cambridge University Press.</p>
+<p>Journel, A.G. (1980). The lognormal approach to predicting local distributions of selective mining unit grades. <em>Mathematical Geology</em> 12, 285–303. <a href="https://doi.org/10.1007/BF01029417">doi:10.1007/BF01029417</a></p>
+<p>Webster, R., Oliver, M.A.&nbsp;(2007). <em>Geostatistics for Environmental Scientists</em>, 2nd ed.&nbsp;Wiley.</p>
+</div>
+</section>
+</div>
+<div id="stock-arithmetic" class="ck-sec">
+<section id="carbon-stock-arithmetic" class="level2">
+<h2 data-anchor-id="carbon-stock-arithmetic">Carbon stock arithmetic</h2>
+<p>Rebuild a reported stock from its inputs. If it doesn’t match, the check tries the common slips (% vs g/kg, stones ignored or on the wrong basis, organic matter instead of carbon, kg/m² vs Mg/ha) and tells you which one reproduces the reported number.</p>
+<div class="hmc" id="sa"></div>
+<script>
+(function () {
+  const RHO_G = 2.65; // particle density of coarse fragments, g/cm³
+  function stock(p) { // returns Mg C/ha
+    const C = p.cunit === 'pct' ? p.c * 10 : p.cunit === 'mgkg' ? p.c / 1000 : p.c;           // g/kg
+    const bd = p.bdunit === 'kgm3' ? p.bd / 1000 : p.bd;                                         // g/cm³
+    const dep = p.dunit === 'm' ? p.dep * 100 : p.dunit === 'mm' ? p.dep / 10 : p.dep;           // cm
+    const cf = (p.cf || 0) / 100;
+    let mfe; // g of fine earth per cm³ of whole soil
+    if (p.bdbasis === 'whole') mfe = p.cfbasis === 'mass' ? bd * (1 - cf) : bd - cf * RHO_G;
+    else { const cfv = p.cfbasis === 'vol' ? cf : (cf / RHO_G) / (cf / RHO_G + (1 - cf) / bd); mfe = bd * (1 - cfv); }
+    return { s: C * mfe * dep * 0.1, C, bd, dep, mfe };
+  }
+  HM.tool({
+    id: 'sa', step: 'Inputs as reported', units: false, hash: false,
+    example: { c: 1.8, cunit: 'pct', bd: 1.35, bdunit: 'gcm3', bdbasis: 'fine', dep: 30, dunit: 'cm', cf: 15, cfbasis: 'vol', rep: 72.9, repunit: 'mgha' },
+    inputs: [
+      { k: 'c', l: 'Organic carbon', t: 'num', w: 3 }, { k: 'cunit', l: 'Units', t: 'select', d: 'pct', w: 3, opts: [['pct', '%'], ['gkg', 'g/kg (= mg/g)'], ['mgkg', 'mg/kg']] },
+      { k: 'bd', l: 'Bulk density', t: 'num', w: 3 }, { k: 'bdunit', l: 'Units', t: 'select', d: 'gcm3', w: 3, opts: [['gcm3', 'g/cm³ (= Mg/m³)'], ['kgm3', 'kg/m³']] },
+      { k: 'bdbasis', l: 'Bulk density is of', t: 'select', d: 'fine', opts: [['fine', 'Fine earth only (stones removed, volume corrected)'], ['whole', 'Whole soil, stones included']] },
+      { k: 'dep', l: 'Layer thickness', t: 'num', w: 3 }, { k: 'dunit', l: 'Units', t: 'select', d: 'cm', w: 3, opts: [['cm', 'cm'], ['m', 'm'], ['mm', 'mm']] },
+      { k: 'cf', l: 'Coarse fragments (stones, gravel)', t: 'num', d: 0, w: 3, h: '% of the soil.' }, { k: 'cfbasis', l: 'Fragments measured by', t: 'select', d: 'vol', w: 3, opts: [['vol', 'Volume'], ['mass', 'Mass']] },
+      { t: 'sec', l: 'Reported stock (optional)' },
+      { k: 'rep', l: 'Stock', t: 'num', w: 3 }, { k: 'repunit', l: 'Units', t: 'select', d: 'mgha', w: 3, opts: [['mgha', 'Mg C/ha (= t C/ha)'], ['kgm2', 'kg C/m²']] }
+    ],
+    compute(v, U) {
+      if (!(v.c > 0) || !(v.bd > 0) || !(v.dep > 0) || !(v.cf >= 0 && v.cf < 100)) return U.empty('Enter carbon, bulk density, thickness and coarse fragments.');
+      const r = stock(v);
+      let h = U.big('Recalculated stock', `${HM.fmt(r.s, 2)} Mg C/ha`, `= ${HM.fmt(r.s / 10, 3)} kg C/m²`);
+      const work = [`Carbon = ${HM.fmt(r.C, 3)} g/kg; bulk density = ${HM.fmt(r.bd, 3)} g/cm³; thickness = ${HM.fmt(r.dep, 2)} cm`,
+        `Fine earth per volume of soil = ${HM.fmt(r.mfe, 3)} g/cm³ (${v.bdbasis === 'whole' ? 'whole-soil bulk density' : 'fine-earth bulk density'}, fragments by ${v.cfbasis === 'vol' ? 'volume' : 'mass'}${v.cfbasis !== (v.bdbasis === 'whole' ? 'mass' : 'vol') ? `, converted using a stone density of ${RHO_G} g/cm³` : ''})`,
+        `Stock = C (g/kg) × fine earth (g/cm³) × thickness (cm) × 0.1 = ${HM.fmt(r.s, 2)} Mg C/ha`];
+      if (v.rep > 0) {
+        const rep = v.repunit === 'kgm2' ? v.rep * 10 : v.rep, near = x => Math.abs(x - rep) / rep < 0.03;
+        if (near(r.s)) h += U.note(`<b>Matches.</b> The reported stock (${HM.fmt(rep, 2)} Mg C/ha) follows from the inputs.`, 'good');
+        else {
+          const tries = [
+            ['% read as g/kg (carbon 10× too low)', { ...v, cunit: v.cunit === 'pct' ? 'gkg' : 'pct' }],
+            ['Stones ignored', { ...v, cf: 0 }],
+            ['Stone fraction on the wrong basis (volume vs. mass)', { ...v, cfbasis: v.cfbasis === 'vol' ? 'mass' : 'vol' }],
+            ['Bulk density on the wrong basis (fine earth vs. whole soil)', { ...v, bdbasis: v.bdbasis === 'fine' ? 'whole' : 'fine' }],
+            ['Stones subtracted twice (fine-earth bulk density and a volume correction)', null],
+            ['Organic matter used instead of carbon (× 1.724)', { ...v, c: v.c * 1.724 }],
+            ['Thickness in mm read as cm, or cm as mm', { ...v, dunit: v.dunit === 'cm' ? 'mm' : 'cm' }]
+          ];
+          const hits = [];
+          tries.forEach(([name, p]) => {
+            let val;
+            if (p) val = stock(p).s; else val = r.s * (1 - (v.cf || 0) / 100);
+            if (isFinite(val) && near(val)) hits.push(`${name}: gives ${HM.fmt(val, 2)}`);
+          });
+          if (Math.abs(r.s / 10 - rep) / rep < 0.03) hits.push(`The stock is in kg C/m² but labelled Mg C/ha (10× too low)`);
+          if (Math.abs(r.s * 10 - rep) / rep < 0.03) hits.push(`The stock is 10× too high: kg C/m² and Mg C/ha mixed up`);
+          h += hits.length ? U.note(`<b>Doesn't match (${HM.fmt((rep / r.s - 1) * 100, 0)}% off).</b> This slip reproduces the reported value:<br>• ${hits.join('<br>• ')}`, 'bad')
+            : U.note(`<b>Doesn't match (${HM.fmt((rep / r.s - 1) * 100, 0)}% off),</b> and none of the common slips explains it. Check whether the stock is for a different depth, an equivalent soil mass basis, or a sum of several layers.`);
+        }
+      }
+      return { html: h, work };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>References</strong></p>
+<p>Poeplau, C., Vos, C., Don, A. (2017). Soil organic carbon stocks are systematically overestimated by misuse of the parameters bulk density and rock fragment content. <em>SOIL</em> 3, 61–66. <a href="https://doi.org/10.5194/soil-3-61-2017">doi:10.5194/soil-3-61-2017</a></p>
+<p>Pribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. <em>Geoderma</em> 156, 75–83. <a href="https://doi.org/10.1016/j.geoderma.2010.02.003">doi:10.1016/j.geoderma.2010.02.003</a></p>
+</div>
+</section>
+</div>
+<div id="area-estimation" class="ck-sec">
+<section id="area-from-a-confusion-matrix" class="level2">
+<h2 data-anchor-id="area-from-a-confusion-matrix">Area from a confusion matrix</h2>
+<p>Counting pixels in a map gives biased class areas, because every map has errors. With a stratified accuracy sample, the confusion matrix gives unbiased areas with confidence intervals (Olofsson et al.&nbsp;2014). Rows are <strong>map</strong> classes, columns are <strong>reference</strong> classes, and the last column is each map class’s mapped area.</p>
+<div class="hmc" id="oa"></div>
+<script>
+(function () {
+  const EX = `class,Deforestation,Gain,Stable forest,Stable non-forest,area
+Deforestation,66,0,5,4,200000
+Gain,0,55,8,12,150000
+Stable forest,1,0,153,11,3200000
+Stable non-forest,2,1,9,313,6450000`;
+  HM.tool({
+    id: 'oa', step: 'Sample counts and mapped areas', units: false, hash: false,
+    example: { m: EX, unit: 'px', px: 30 },
+    inputs: [
+      { k: 'm', l: 'Confusion matrix (comma, semicolon or tab separated)', t: 'textarea', rows: 7, ph: 'class,A,B,C,area\nA,..' },
+      { k: 'unit', l: 'Mapped area is in', t: 'select', d: 'ha', w: 3, opts: [['ha', 'hectares'], ['km2', 'km²'], ['px', 'pixels']] },
+      { k: 'px', l: 'Pixel size (m)', t: 'num', d: 30, w: 3, show: v => v.unit === 'px' }
+    ],
+    compute(v, U) {
+      const lines = String(v.m || '').trim().split(/\r?\n/).filter(l => l.trim());
+      if (lines.length < 3) return U.empty('Paste a matrix with a header row, at least two classes and a final area column. The Example button shows the layout.');
+      const sp = l => l.split(/[,;\t]/).map(x => x.trim());
+      const head = sp(lines[0]), cls = head.slice(1, -1), k = cls.length;
+      const rows = lines.slice(1).map(sp);
+      if (rows.length !== k || rows.some(r => r.length !== k + 2)) return U.empty(`Expected ${k} rows of ${k} counts plus an area, matching the ${k} classes in the header.`);
+      const n = rows.map(r => r.slice(1, k + 1).map(Number)), A = rows.map(r => Number(r[k + 1]));
+      if (n.some(r => r.some(x => !(x >= 0))) || A.some(x => !(x > 0))) return U.empty('Counts must be zero or more and areas above zero.');
+      const toHa = v.unit === 'ha' ? 1 : v.unit === 'km2' ? 100 : (v.px * v.px) / 10000;
+      const Atot = A.reduce((a, b) => a + b, 0), W = A.map(a => a / Atot), ni = n.map(r => r.reduce((a, b) => a + b, 0));
+      if (ni.some(x => x < 2)) return U.empty('Every map class needs at least two sample points.');
+      const p = n.map((r, i) => r.map(x => W[i] * x / ni[i]));
+      const pj = cls.map((_, j) => p.reduce((s, r) => s + r[j], 0));
+      const se = cls.map((_, j) => Math.sqrt(n.reduce((s, r, i) => s + W[i] ** 2 * (r[j] / ni[i]) * (1 - r[j] / ni[i]) / (ni[i] - 1), 0)));
+      const Ui = cls.map((_, i) => n[i][i] / ni[i]), seU = Ui.map((u, i) => Math.sqrt(u * (1 - u) / (ni[i] - 1)));
+      const OA = pj.reduce((s, _, j) => s + p[j][j], 0), seOA = Math.sqrt(Ui.reduce((s, u, i) => s + W[i] ** 2 * u * (1 - u) / (ni[i] - 1), 0));
+      const Nhat = cls.map((_, j) => A.reduce((s, a, i) => s + a * n[i][j] / ni[i], 0));
+      const Pj = cls.map((_, j) => p[j][j] / pj[j]);
+      const seP = cls.map((_, j) => {
+        const term1 = A[j] ** 2 * (1 - Pj[j]) ** 2 * Ui[j] * (1 - Ui[j]) / (ni[j] - 1);
+        const term2 = Pj[j] ** 2 * A.reduce((s, a, i) => i === j ? s : s + a ** 2 * (n[i][j] / ni[i]) * (1 - n[i][j] / ni[i]) / (ni[i] - 1), 0);
+        return Math.sqrt((term1 + term2)) / Nhat[j];
+      });
+      const fa = x => HM.fmt(x * toHa, 0);
+      let h = `<table class="tt"><thead><tr><th>Class</th><th class="r">Mapped (ha)</th><th class="r">Estimated (ha)</th><th class="r">User's</th><th class="r">Producer's</th></tr></thead><tbody>` +
+        cls.map((c, j) => { const est = pj[j] * Atot, ci = 1.96 * se[j] * Atot, diff = (A[j] - est) / est * 100;
+          return `<tr><td>${HM.esc(c)}${Math.abs(diff) > 10 ? `<br><span class="tag ${Math.abs(diff) > 25 ? 'bad' : 'warn'}">map ${diff > 0 ? 'over' : 'under'} by ${HM.fmt(Math.abs(diff), 0)}%</span>` : ''}</td><td class="r">${fa(A[j])}</td><td class="r">${fa(est)}<br><span style="color:var(--ink-3)">± ${fa(ci)}</span></td><td class="r">${HM.fmt(Ui[j] * 100, 0)}% ± ${HM.fmt(1.96 * seU[j] * 100, 0)}</td><td class="r">${HM.fmt(Pj[j] * 100, 0)}% ± ${HM.fmt(1.96 * seP[j] * 100, 0)}</td></tr>`; }).join('') + '</tbody></table>';
+      h += U.kv([['Overall accuracy', `${HM.fmt(OA * 100, 1)}% ± ${HM.fmt(1.96 * seOA * 100, 1)}`], ['Total area', `${fa(Atot)} ha`]]);
+      h += U.note('± values are 95% confidence intervals. Estimated areas correct the pixel count for the errors in the map; report these, not mapped areas, along with their intervals. The method assumes the sample was stratified by map class (or random).');
+      return { html: h, work: [`Weights W = mapped area of each map class ÷ total`, `Estimated proportion p(i,j) = W(i) × n(i,j) ÷ n(i·); class area = total area × Σᵢ p(i,j)`, `Standard error of each area proportion = √Σᵢ W(i)² × (n(i,j)/n(i·)) × (1 − n(i,j)/n(i·)) ÷ (n(i·) − 1)`, 'Accuracy standard errors follow Olofsson et al. (2014), Remote Sensing of Environment 148, 42–57.'] };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>Reference</strong></p>
+<p>Olofsson, P., Foody, G.M., Herold, M., Stehman, S.V., Woodcock, C.E., Wulder, M.A.&nbsp;(2014). Good practices for estimating area and assessing accuracy of land change. <em>Remote Sensing of Environment</em> 148, 42–57. <a href="https://doi.org/10.1016/j.rse.2014.02.015">doi:10.1016/j.rse.2014.02.015</a></p>
+</div>
+</section>
+</div>
+<section id="effective-sample-size" class="level2 ck-sec">
+<h2 data-anchor-id="effective-sample-size">Effective sample size</h2>
+<p>Samples close together carry overlapping information. For estimating an average, a cluster of ten nearby samples can be worth little more than one. This uses the variogram to work out how many independent samples your layout is really worth.</p>
+<div class="hmc" id="es"></div>
+<script>
+(function () {
+  const F = { sph: (h, r) => h >= r ? 1 : 1.5 * h / r - 0.5 * (h / r) ** 3, exp: (h, r) => 1 - Math.exp(-3 * h / r), gau: (h, r) => 1 - Math.exp(-3 * (h / r) ** 2) };
+  let ex = 'x,y'; const s = [[100, 100], [600, 150], [350, 500], [800, 700], [150, 850]];
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  s.forEach(c => { for (let i = 0; i < 10; i++) ex += `\n${Math.round(c[0] + (rnd() - 0.5) * 40)},${Math.round(c[1] + (rnd() - 0.5) * 40)}`; });
+  HM.tool({
+    id: 'es', step: 'Sample locations and variogram', units: false, hash: false,
+    example: { xy: ex, model: 'sph', nug: 20, r: 200 },
+    inputs: [
+      { k: 'xy', l: 'Coordinates, one sample per line: x, y (metres)', t: 'textarea', rows: 6, ph: 'x,y\n120,340\n135,352' },
+      { k: 'model', l: 'Variogram model', t: 'select', d: 'sph', w: 2, opts: [['sph', 'Spherical'], ['exp', 'Exponential'], ['gau', 'Gaussian']] },
+      { k: 'nug', l: 'Nugget (% of sill)', t: 'num', d: 20, w: 2 },
+      { k: 'r', l: 'Range, practical (m)', t: 'num', w: 2 }
+    ],
+    compute(v, U) {
+      const pts = String(v.xy || '').split(/\r?\n/).map(l => l.split(/[,;\t\s]+/).map(Number)).filter(q => q.length >= 2 && isFinite(q[0]) && isFinite(q[1]));
+      if (pts.length < 3 || !(v.r > 0) || !(v.nug >= 0 && v.nug <= 100)) return U.empty('Enter at least three coordinate pairs, the nugget and the range.');
+      const n = pts.length, c1 = 1 - v.nug / 100, f = F[v.model];
+      const rho = (a, b) => { const d = Math.hypot(a[0] - b[0], a[1] - b[1]); return d === 0 ? (a === b ? 1 : c1) : c1 * (1 - f(d, v.r)); };
+      const sumRho = P => { let s = 0; for (let i = 0; i < P.length; i++) for (let j = 0; j < P.length; j++) s += i === j ? 1 : rho(P[i], P[j]); return s; };
+      const S = sumRho(pts), neff = n * n / S;
+      const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]), w = Math.max(...xs) - Math.min(...xs), hgt = Math.max(...ys) - Math.min(...ys);
+      const kx = Math.max(1, Math.round(Math.sqrt(n * (w || 1) / (hgt || 1)))), ky = Math.max(1, Math.round(n / kx)), grid = [];
+      for (let i = 0; i < kx; i++) for (let j = 0; j < ky; j++) grid.push([Math.min(...xs) + (i + 0.5) * (w || 1) / kx, Math.min(...ys) + (j + 0.5) * (hgt || 1) / ky]);
+      const ng = grid.length, neffG = ng * ng / sumRho(grid);
+      let h = U.big('Effective sample size', HM.fmt(neff, 1), `out of ${n} samples: each is worth about ${HM.fmt(neff / n, 2)} of an independent sample.`);
+      h += U.kv([['Same number spread on a grid over the same area', `${HM.fmt(neffG * n / ng, 1)} effective`], ['Standard error of the mean, vs. assuming independence', `${HM.fmt(Math.sqrt(n / neff), 2)}× larger`]]);
+      if (neff / n < 0.5) h += U.note(`Clustering costs a lot here. Confidence intervals that treat the ${n} samples as independent are about ${HM.fmt(Math.sqrt(n / neff), 1)}× too narrow, and tests will find "significant" differences too easily.`, 'bad');
+      return { html: h, work: [`Correlation between two samples = (1 − nugget share) × (1 − variogram shape at their distance); 1 for a sample with itself`, `Effective n = n² ÷ ΣΣ correlation = ${n}² ÷ ${HM.fmt(S, 1)} = ${HM.fmt(neff, 2)}`, 'This is for estimating a mean by simple averaging; kriging weights would recover a little more information.'] };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>References</strong></p>
+<p>Cressie, N.A.C. (1993). <em>Statistics for Spatial Data</em>, revised ed.&nbsp;Wiley. Section 1.3.</p>
+<p>Webster, R., Oliver, M.A.&nbsp;(2007). <em>Geostatistics for Environmental Scientists</em>, 2nd ed.&nbsp;Wiley.</p>
+</div>
+</section>
+<div id="spatial-cv" class="ck-sec">
+<section id="spatial-cross-validation-and-leakage" class="level2">
+<h2 data-anchor-id="spatial-cross-validation-and-leakage">Spatial cross-validation and leakage</h2>
+<p>Random cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won’t achieve between samples. Tick anything that applies to your study.</p>
+<div class="hmc" id="cv"></div>
+<script>
+(function () {
+  const ITEMS = [
+    ['rand', 'Random k-fold or leave-one-out cross-validation on clustered or densely sampled points', 'Test points sit next to training points. Use spatial block CV, buffered leave-one-out, or NNDM (Milà et al. 2022) so test distances match prediction distances.'],
+    ['prof', 'Horizons or depths from the same profile are split between training and test folds', 'Layers of one profile are strongly related. Keep whole profiles (or sites) in the same fold.'],
+    ['rep', 'Repeat measurements of the same sites (different years or replicates) are split across folds', 'The model is tested on sites it has already seen. Group folds by site.'],
+    ['pre', 'Feature selection, scaling, outlier removal or covariate tuning was done on the full dataset before splitting', 'Information from the test data leaks into the model. Do every data-driven step inside each training fold.'],
+    ['tune', 'Hyperparameters were tuned on the same folds used to report accuracy', 'The reported accuracy is optimistic. Use nested CV or a separate test set.'],
+    ['target', 'A covariate was derived from the target or from the same samples (for example an existing map made with these points)', 'The model can recover the answer from the covariate. Remove it, or show it was independent.'],
+    ['scope', 'Validation data come from the same area or campaign, but the map is claimed for a wider area or another time', 'Accuracy doesn\'t transfer automatically. Validate in the target area, or limit the claim (area of applicability, Meyer & Pebesma 2021).'],
+    ['dup', 'Duplicate or near-duplicate coordinates exist across folds', 'Identical locations in training and test inflate accuracy. Merge or group them.'],
+    ['fit', 'Accuracy is reported on calibration data ("fitted vs. observed")', 'That is goodness of fit, not prediction accuracy. Ask for independent or cross-validated results.']
+  ];
+  HM.tool({
+    id: 'cv', step: 'What applies to your study', units: false, hash: false,
+    example: { rand: true, pre: true, dcv: 40, dpred: 380, r: 250 },
+    inputs: ITEMS.map(([k, l]) => ({ k, l, t: 'check', d: false })).concat([
+      { t: 'sec', l: 'Distances (optional)', h: 'If you know them: the typical distance from each test point to its nearest training point in the cross-validation, and from map pixels to their nearest sample.' },
+      { k: 'dcv', l: 'Test → nearest training (m)', t: 'num', w: 2 },
+      { k: 'dpred', l: 'Map pixel → nearest sample (m)', t: 'num', w: 2 },
+      { k: 'r', l: 'Variogram range (m)', t: 'num', w: 2 }
+    ]),
+    compute(v, U) {
+      const hit = ITEMS.filter(([k]) => v[k]);
+      let distNote = '';
+      if (v.dcv > 0 && v.dpred > 0) {
+        const ratio = v.dpred / v.dcv;
+        if (v.r > 0 && v.dcv < v.r && v.dpred > v.r) distNote = U.note(`<b>Cross-validation tests inside the range; the map predicts beyond it.</b> Test points are about ${HM.fmt(v.dcv, 0)} m from training data, within the ${HM.fmt(v.r, 0)} m range where neighbours help, but map pixels are typically ${HM.fmt(v.dpred, 0)} m away, beyond it. The reported accuracy won't hold across most of the map.`, 'bad');
+        else if (ratio > 2) distNote = U.note(`<b>Test points are ${HM.fmt(ratio, 1)}× closer to training data than map pixels are to samples.</b> The cross-validation is likely optimistic.`, 'bad');
+        else distNote = U.note('Test distances are similar to prediction distances: the validation reflects how the map is used.', 'good');
+      }
+      const level = hit.length === 0 && !distNote.includes('bad') ? ['good', 'No warning signs ticked'] : hit.length <= 1 ? ['warn', 'Some risk of optimistic accuracy'] : ['bad', 'High risk of optimistic accuracy'];
+      return `<p><span class="tag ${level[0]}">${level[1]}</span></p>` + distNote + (hit.length ? `<h3>Questions to answer before you share</h3><ul class="plain">${hit.map(([, l, fix]) => `<li><b>${l}.</b> ${fix}</li>`).join('')}</ul>` : '');
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>References</strong></p>
+<p>Roberts, D.R. et al.&nbsp;(2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. <em>Ecography</em> 40, 913–929. <a href="https://doi.org/10.1111/ecog.02881">doi:10.1111/ecog.02881</a></p>
+<p>Meyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. <em>Methods in Ecology and Evolution</em> 12, 1620–1633. <a href="https://doi.org/10.1111/2041-210X.13650">doi:10.1111/2041-210X.13650</a></p>
+<p>Milà, C., Mateu, J., Pebesma, E., Meyer, H. (2022). Nearest neighbour distance matching leave-one-out cross-validation for map validation. <em>Methods in Ecology and Evolution</em> 13, 1304–1316. <a href="https://doi.org/10.1111/2041-210X.13851">doi:10.1111/2041-210X.13851</a></p>
+</div>
+</section>
+</div>
+<div id="independence" class="ck-sec">
+<section id="independence-and-study-design-beta" class="level2">
+<h2 data-anchor-id="independence-and-study-design-beta">Independence and study design <span class="ck-beta">BETA</span></h2>
+<p>Independence is a property of the study design and the question being asked, not a box that a single diagnostic can certify. Use this guided check to identify common sources of dependence and mismatches between the sampling unit, statistical analysis, and validation design. It flags issues to investigate; it does not automatically invalidate a study. If you know how many observations and groups there are, it also shows how much the grouping shrinks the effective sample size.</p>
+<div class="hmc" id="indep"></div>
+<script>
+(function () {
+  const structureOptions = [
+    ['none', 'No obvious grouping or repeated observations'],
+    ['group', 'Observations grouped within sites, plots, subjects, catchments, batches, etc.'],
+    ['repeat', 'Repeated measurements of the same units (time, depth, treatment, or replicate)'],
+    ['space', 'Spatially located observations with possible spatial dependence'],
+    ['time', 'Ordered time series or observations close together in time'],
+    ['multi', 'More than one structure (e.g. repeated measurements within spatial sites)']
+  ];
+  const goalOptions = [
+    ['describe', 'Describe or compare the sampled units'],
+    ['population', 'Infer a population mean, difference, or relationship'],
+    ['predict', 'Predict new observations in the same sampled setting'],
+    ['newgroup', 'Predict for new sites, subjects, regions, or groups'],
+    ['future', 'Predict future observations']
+  ];
+  const splitOptions = [
+    ['na', 'Not a predictive modelling study / not applicable'],
+    ['random', 'Random train/test split or random cross-validation'],
+    ['group', 'Groups or sites kept wholly in one fold'],
+    ['space', 'Spatial blocks, spatial buffers, or distance-matched validation'],
+    ['time', 'Forward-chaining or time-ordered validation'],
+    ['external', 'Independent external dataset or campaign']
+  ];
+  HM.tool({
+    id: 'indep', step: 'Study structure and intended inference', units: false, hash: false,
+    example: { structure: 'multi', unit: 'profile', goal: 'newgroup', split: 'random', groups: true, pseudorep: true, overlap: true, leakage: false, balanced: false, nobs: 240, ngrp: 30, icc: 0.4 },
+    inputs: [
+      { k: 'structure', l: 'What structure is present in the observations?', t: 'select', d: 'none', opts: structureOptions },
+      { k: 'unit', l: 'What is the independent sampling or experimental unit?', t: 'select', d: 'sample', opts: [['sample', 'Each individual observation'], ['plot', 'Plot, site, subject, or other group'], ['profile', 'Profile, core, or sampling location'], ['cluster', 'Catchment, region, school, clinic, or higher-level cluster'], ['timeunit', 'Time point or time block'], ['unclear', 'Not stated or unclear']] },
+      { k: 'goal', l: 'What is the main inferential or prediction goal?', t: 'select', d: 'population', opts: goalOptions },
+      { k: 'split', l: 'If predicting, how was validation separated?', t: 'select', d: 'na', opts: splitOptions },
+      { t: 'sec', l: 'Potential issues in your design or analysis' },
+      { k: 'groups', l: 'Several observations come from the same group, site, subject, profile, or experimental unit', t: 'check', d: false },
+      { k: 'pseudorep', l: 'The analysis appears to count subsamples, repeated measures, pixels, or technical replicates as independent replicates', t: 'check', d: false },
+      { k: 'overlap', l: 'Nearby locations, adjacent time points, or related observations may occur in both training and test data', t: 'check', d: false },
+      { k: 'leakage', l: 'Preprocessing, feature selection, tuning, or covariate construction may have used information from the held-out data', t: 'check', d: false },
+      { k: 'balanced', l: 'You used a design-aware method (e.g. mixed model, cluster-robust SE, block design, or grouped validation)', t: 'check', d: false },
+      { t: 'sec', l: 'Numbers, if known (optional): how much the grouping costs' },
+      { k: 'nobs', l: 'Observations analysed', t: 'num', w: 2 },
+      { k: 'ngrp', l: 'Independent groups (sites, profiles, subjects…)', t: 'num', w: 2 },
+      { k: 'icc', l: 'Intraclass correlation (ICC, 0–1), if reported', t: 'num', w: 2 }
+    ],
+    compute(v, U) {
+      const findings = [];
+      const add = (level, title, detail) => findings.push({level, title, detail});
+      // design effect (Kish 1965): DEFF = 1 + (m - 1) * ICC, m = mean group size
+      const given = x => x !== '' && x !== null && x !== undefined && isFinite(Number(x));
+      const nn = Number(v.nobs), kk = Number(v.ngrp), icc = Number(v.icc);
+      let numHtml = '', numWork = [];
+      if (given(v.nobs) && given(v.ngrp) && nn > 0 && kk > 0 && kk <= nn) {
+        const m = nn / kk;
+        const neffOf = r => nn / (1 + (m - 1) * r);
+        if (given(v.icc) && icc >= 0 && icc <= 1) {
+          const deff = 1 + (m - 1) * icc, neff = nn / deff;
+          numHtml = U.big('Effective sample size', HM.fmt(neff, 1), `out of ${nn} observations in ${kk} groups (about ${HM.fmt(m, 1)} per group), with ICC ${HM.fmt(icc, 2)}.`)
+            + U.kv([['Design effect', HM.fmt(deff, 2)], ['Standard errors that ignore the grouping are too small by', `${HM.fmt(Math.sqrt(deff), 2)}×`], ['Effective n lies between', `${kk} (groups) and ${nn} (observations)`]]);
+          if (neff < nn / 2) add('high', 'Grouping removes most of the apparent replication', `With this ICC the ${nn} observations carry about as much information as ${HM.fmt(neff, 0)} independent ones. Tests and intervals that use n = ${nn} will look far more certain than the data support.`);
+          numWork = [`Mean group size m = ${nn} ÷ ${kk} = ${HM.fmt(m, 2)}`, `Design effect = 1 + (m − 1) × ICC = 1 + ${HM.fmt(m - 1, 2)} × ${HM.fmt(icc, 2)} = ${HM.fmt(deff, 3)}`, `Effective n = ${nn} ÷ ${HM.fmt(deff, 3)} = ${HM.fmt(neff, 1)}`];
+        } else {
+          const rows = [0.1, 0.3, 0.5, 0.8].map(r => [`ICC ${r}`, `${HM.fmt(neffOf(r), 1)} effective (standard errors ${HM.fmt(Math.sqrt(1 + (m - 1) * r), 2)}× too small)`]);
+          numHtml = '<h3>Effective sample size for a range of ICC values</h3>' + U.kv(rows)
+            + `<p>Effective n lies between ${kk} (the number of groups) and ${nn} (the number of observations). Soil properties measured repeatedly within a profile or site often have ICCs well above 0.3.</p>`;
+          numWork = [`Mean group size m = ${nn} ÷ ${kk} = ${HM.fmt(m, 2)}; design effect = 1 + (m − 1) × ICC for each ICC shown`];
+        }
+        numWork.push('This is the Kish design effect for estimating a mean with groups of similar size. For a regression slope it also depends on how strongly the predictor itself clusters (Moulton 1990); unequal group sizes raise it further.');
+        if (v.unit === 'sample' && kk < nn) add('warn', 'The stated unit may be wrong', `You gave ${kk} groups for ${nn} observations, but chose “each individual observation” as the independent unit. If the observations within a group are related, the group is the independent unit.`);
+      } else if (given(v.nobs) || given(v.ngrp)) {
+        numHtml = U.note('Enter both the number of observations and the number of groups (groups no more than observations) to see the effective sample size.', 'warn');
+      }
+      if (v.unit === 'unclear') add('warn', 'Independent unit is unclear', 'Identify the unit independently sampled or assigned to treatment. The number of measurements is not necessarily the number of independent replicates.');
+      if (v.groups || ['group','repeat','multi'].includes(v.structure)) {
+        if (v.balanced) add('info', 'Grouped or repeated data: check the stated adjustment', 'You used a design-aware method. Confirm that it matches the grouping structure and the estimand; a mixed model or robust standard error does not automatically solve every dependence problem.');
+        else add('warn', 'Grouped or repeated observations may be dependent', 'Check whether inference accounts for the group or repeated-measure structure. Possible approaches include group-level summaries, mixed-effects models, GEE, cluster-robust uncertainty, or a design-specific repeated-measures analysis. The appropriate choice depends on the question and design.');
+      }
+      if (v.pseudorep) add('high', 'Possible pseudoreplication', 'Check whether treatment or sampling was independently replicated at the level claimed. Subsamples and technical replicates can improve measurement precision, but do not create additional independent experimental units.');
+      if (['space','multi'].includes(v.structure)) {
+        if (v.goal === 'newgroup' && v.split !== 'space' && v.split !== 'external') add('high', 'Validation may not match prediction to new places', 'For a claim about new sites or regions, random folds can place nearby observations in training and test sets. Consider spatial blocking, buffers, distance-matched validation, or an independent target-area dataset.');
+        else add('warn', 'Check spatial dependence against the analysis goal', 'Spatial autocorrelation does not by itself make an analysis invalid. Check whether residual dependence affects standard errors or whether validation distances represent the locations where predictions will be used.');
+      }
+      if (['time','multi'].includes(v.structure)) {
+        if (v.goal === 'future' && v.split !== 'time' && v.split !== 'external') add('high', 'Validation may use information from the future', 'For forecasting, random splits can allow future observations to inform predictions of earlier periods. Use time-ordered evaluation, ideally preserving the forecast horizon and any temporal grouping.');
+        else add('warn', 'Check temporal dependence and ordering', 'Adjacent time points or repeated measurements may be correlated. Confirm that the uncertainty model accounts for dependence and that any validation preserves the intended time direction.');
+      }
+      if (v.overlap) add('high', 'Potential train–test dependence', 'Check whether related observations, nearby points, repeated measures, profiles, or duplicate coordinates cross the training/test boundary. Choose grouping or spatial/temporal separation to match the intended deployment setting.');
+      if (v.leakage) add('high', 'Potential information leakage', 'All data-driven preprocessing, feature selection, imputation, scaling, and tuning should be fitted using training data only within each resampling split. Target-derived covariates need particular scrutiny.');
+      if (v.goal === 'newgroup' && v.split === 'random') add('high', 'Random validation may answer the wrong question', 'Random validation estimates performance for data resembling the sampled dataset, often with represented groups in both sets. It does not establish performance at genuinely new sites, subjects, or regions.');
+      if (v.goal === 'future' && v.split === 'random') add('high', 'Random validation is usually unsuitable for forecasting', 'A random split can mix past and future information. Prefer a time-ordered split or rolling-origin evaluation that mimics the actual forecast task.');
+      if (v.structure === 'none' && !v.groups && !v.pseudorep && !v.overlap && !v.leakage) add('info', 'No obvious dependence issue selected', 'This is not proof of independence. Confirm that the sampling design, residual structure, and data-processing workflow support the assumption for the specific analysis.');
+      if (v.split === 'group' && v.goal === 'newgroup') add('info', 'Grouped validation is aligned in principle', 'Keeping entire groups out of training is generally appropriate when the target is new groups. Check that the groups correspond to the real deployment unit and that enough independent groups are held out.');
+      if (v.split === 'space' && ['space','multi'].includes(v.structure)) add('info', 'Spatially separated validation selected', 'Confirm that block size or buffer distance is justified by the spatial structure and matches the distances expected at prediction time. Spatial blocking is not automatically sufficient if blocks are too small or the target region differs.');
+      if (v.split === 'time' && ['time','multi'].includes(v.structure)) add('info', 'Time-ordered validation selected', 'Confirm that all preprocessing and tuning occur within each training window and that the evaluation reflects the intended forecast horizon.');
+      const rank = {high: 0, warn: 1, info: 2};
+      findings.sort((a,b) => rank[a.level] - rank[b.level]);
+      const label = findings.some(x => x.level === 'high') ? ['bad','Potential design mismatch or leakage to investigate'] : findings.some(x => x.level === 'warn') ? ['warn','Independence assumptions need a closer look'] : ['good','No major warning selected; verify against your design'];
+      let html = `<p><span class="tag ${label[0]}">${label[1]}</span></p>`;
+      html += '<p>This is a guided screening result based on the selections above, not a statistical test of independence.</p>';
+      html += numHtml;
+      html += findings.map(f => U.note(`<b>${f.title}.</b> ${f.detail}`, f.level === 'high' ? 'bad' : f.level === 'warn' ? 'warn' : 'good')).join('');
+      html += '<h3>Questions to answer before you share</h3><ul class="plain"><li>What is the independently sampled or randomised unit?</li><li>Does the statistical model account for dependence at that unit?</li><li>Does the validation split mimic the population, location, group, or time period to which the conclusions are intended to apply?</li><li>Were all data-dependent modelling decisions confined to the training data?</li></ul>';
+      return { html, work: [
+        ...numWork,
+        'Independence is design- and estimand-specific. A dependence structure may affect standard errors, effective sample size, or predictive validation in different ways; these are related but not interchangeable issues.',
+        'The checklist reports potential risks from user-selected study characteristics. It does not estimate correlation, effective sample size, or the magnitude of bias.',
+        'For spatial data, select validation separation based on the prediction task and expected distance to training observations. For forecasting, preserve temporal order. For grouped data, keep the relevant independent groups together.',
+        'A lack of detected dependence is not evidence that observations are independent. Review the design, residuals, and analysis assumptions.'
+      ] };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>References</strong></p>
+<p>Hurlbert, S.H. (1984). Pseudoreplication and the design of ecological field experiments. <em>Ecological Monographs</em> 54, 187–211. <a href="https://doi.org/10.2307/1942661">doi:10.2307/1942661</a></p>
+<p>Roberts, D.R. et al.&nbsp;(2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. <em>Ecography</em> 40, 913–929. <a href="https://doi.org/10.1111/ecog.02881">doi:10.1111/ecog.02881</a></p>
+<p>Meyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. <em>Methods in Ecology and Evolution</em> 12, 1620–1633. <a href="https://doi.org/10.1111/2041-210X.13650">doi:10.1111/2041-210X.13650</a></p>
+<p>Kish, L. (1965). <em>Survey Sampling</em>. Wiley, New York.</p>
+<p>Moulton, B.R. (1990). An illustration of a pitfall in estimating the effects of aggregate variables on micro units. <em>Review of Economics and Statistics</em> 72, 334–338. <a href="https://doi.org/10.2307/2109724">doi:10.2307/2109724</a></p>
+</div>
+</section>
+</div>
+<div id="assumptions-check" class="ck-sec">
+<section id="statistical-assumptions-check-beta" class="level2">
+<h2 data-anchor-id="statistical-assumptions-check-beta">Statistical assumptions check <span class="ck-beta">BETA</span></h2>
+<p>A guided check for matching assumptions to the statistical method. Select the method and the diagnostics you have checked, then use the prompts to identify anything that may need further investigation. If you have the residuals, paste them: the check reports skewness, outliers, unequal spread, curvature and, for ordered data, autocorrelation, with a residual plot.</p>
+<div class="hmc" id="assump"></div>
+<script>
+/* Shared statistics helpers for the checks below (normal, t, exact binomial). */
+window.CKSTAT = window.CKSTAT || (function () {
+  const lgamma = z => {
+    const c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (z < 0.5) return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * z))) - lgamma(1 - z);
+    z -= 1; let x = c[0]; for (let i = 1; i < 9; i++) x += c[i] / (z + i);
+    const t = z + 7.5; return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+  };
+  const betacf = (a, b, x) => {
+    const FP = 1e-300; let qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap;
+    if (Math.abs(d) < FP) d = FP; d = 1 / d; let h = d;
+    for (let m = 1; m <= 300; m++) {
+      const m2 = 2 * m; let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+      d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d; h *= d * c;
+      aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+      d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d;
+      const del = d * c; h *= del; if (Math.abs(del - 1) < 3e-14) break;
+    }
+    return h;
+  };
+  const ibeta = (x, a, b) => {
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+    return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b;
+  };
+  const erf = x => { const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x);
+    return s * (1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x)); };
+  const normCdf = z => 0.5 * (1 + erf(z / Math.SQRT2));
+  const tTwoSided = (t, df) => ibeta(df / (df + t * t), df / 2, 0.5);
+  const binomTwoSided = (k, n) => { // exact two-sided sign test, p = 0.5
+    if (n === 0) return 1; const lo = Math.min(k, n - k); let s = 0;
+    for (let i = 0; i <= lo; i++) s += Math.exp(lgamma(n + 1) - lgamma(i + 1) - lgamma(n - i + 1) - n * Math.LN2);
+    return Math.min(1, 2 * s);
+  };
+  const ranks = a => { const o = a.map((v, i) => [v, i]).sort((p, q) => p[0] - q[0]), r = new Array(a.length);
+    for (let i = 0; i < o.length;) { let j = i; while (j + 1 < o.length && o[j + 1][0] === o[i][0]) j++; for (let k = i; k <= j; k++) r[o[k][1]] = (i + j) / 2 + 1; i = j + 1; } return r; };
+  const pearson = (x, y) => { const n = x.length, mx = x.reduce((s, v) => s + v, 0) / n, my = y.reduce((s, v) => s + v, 0) / n;
+    let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; syy += (y[i] - my) ** 2; }
+    return sxx > 0 && syy > 0 ? sxy / Math.sqrt(sxx * syy) : 0; };
+  const fmtP = p => p < 0.001 ? 'p < 0.001' : 'p = ' + p.toFixed(3);
+  const parseRows = txt => String(txt || '').split(/\r?\n/).map(l => l.trim()).filter(l => l && !/^[a-z]/i.test(l))
+    .map(l => l.split(/[,;\t\s]+/).map(Number)).filter(r => r.length && r.every(isFinite));
+  return { lgamma, ibeta, normCdf, tTwoSided, binomTwoSided, ranks, pearson, fmtP, parseRows };
+})();
+
+(function () {
+  const S = window.CKSTAT;
+  const methods = [['linear', 'Linear regression / ANCOVA'], ['anova', 'ANOVA / group comparison'], ['logistic', 'Logistic regression'], ['correlation', 'Pearson correlation'], ['mixed', 'Mixed-effects / repeated measures'], ['nonparam', 'Rank-based / nonparametric method'], ['other', 'Other or unclear']];
+  const names = { resid: 'Residual or model diagnostics', vari: 'Variance / dispersion', dist: 'Distributional assumption', infl: 'Influential observations', ind: 'Independence / grouping', form: 'Functional form / link' };
+  // example: a regression whose residual spread grows with the fitted value
+  let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const gauss = () => Math.sqrt(-2 * Math.log(rnd())) * Math.cos(2 * Math.PI * rnd());
+  let ex = 'fitted,residual'; for (let i = 0; i < 70; i++) { const f = 1 + i * 0.3; ex += `\n${f.toFixed(2)},${(gauss() * 0.15 * f).toFixed(3)}`; }
+
+  HM.tool({
+    id: 'assump', step: 'Method, aim and the checks reported', units: false, hash: false,
+    example: { method: 'linear', aim: 'inference', resid: true, vari: false, dist: true, infl: false, ind: false, form: true, data: ex, ordered: false },
+    inputs: [
+      { k: 'method', l: 'Method reported', t: 'select', d: 'linear', opts: methods },
+      { k: 'aim', l: 'Primary aim', t: 'select', d: 'inference', opts: [['inference', 'Inference (tests, estimates or confidence intervals)'], ['prediction', 'Prediction'], ['description', 'Description / exploration']] },
+      { t: 'sec', l: 'Which checks have you carried out or documented?' },
+      { k: 'resid', l: 'Residuals or model diagnostics inspected', t: 'check', d: false },
+      { k: 'vari', l: 'Variance / dispersion assessed', t: 'check', d: false },
+      { k: 'dist', l: 'Relevant distributional assumption assessed', t: 'check', d: false },
+      { k: 'infl', l: 'Influential points / outliers assessed where relevant', t: 'check', d: false },
+      { k: 'ind', l: 'Independence or grouping structure addressed', t: 'check', d: false },
+      { k: 'form', l: 'Functional form / link / linearity assessed where relevant', t: 'check', d: false },
+      { t: 'sec', l: 'Residuals (optional): paste them for a quick diagnostic' },
+      { k: 'data', l: 'One per line: residual, or fitted, residual. A header row is ignored.', t: 'textarea', rows: 6, ph: 'fitted,residual\n12.1,0.84\n13.4,-1.10' },
+      { k: 'ordered', l: 'Rows are in time order or along a transect (checks autocorrelation)', t: 'check', d: false }
+    ],
+    compute(v, U) {
+      const m = v.method, aim = v.aim, keys = Object.keys(names);
+      const done = keys.filter(k => v[k]), missing = keys.filter(k => !v[k]);
+      const relevant = [];
+      if (['linear', 'anova', 'mixed'].includes(m)) relevant.push('Check whether the model’s error structure and variance assumptions are appropriate for the design. Normality, where needed for inference, concerns the model errors or residuals—not automatically the raw response.');
+      if (m === 'linear') relevant.push('Check linearity / functional form, residual-versus-fitted structure, heteroscedasticity, leverage and influential observations.');
+      if (m === 'anova') relevant.push('Check independence at the experimental-unit level and whether variance homogeneity is plausible; the appropriate response to unequal variance depends on the design and method.');
+      if (m === 'logistic') relevant.push('Check the binary outcome and link specification, functional form for continuous predictors on the logit scale, separation, influential observations, and overdispersion where relevant. Normal residuals are not a standard logistic-regression requirement.');
+      if (m === 'correlation') relevant.push('For Pearson correlation, inspect linearity, influential points, and whether the inference accounts for dependence. Distributional assumptions depend on the inferential procedure; a scatterplot is essential.');
+      if (m === 'mixed') relevant.push('Identify the grouping / random-effects structure and check whether it matches the sampling or repeated-measures design. Residual and random-effect diagnostics answer different questions.');
+      if (m === 'nonparam') relevant.push('Do not assume “nonparametric” means assumption-free. Check independence, measurement scale, sampling design, and the specific method’s assumptions (for example, shape assumptions for some rank-based comparisons).');
+      if (m === 'other') relevant.push('The method is too broad to prescribe a valid assumption set. Identify the exact estimator, test, likelihood or algorithm before deciding which diagnostics are required.');
+      if (aim === 'prediction') relevant.push('For prediction, prioritise out-of-sample performance, calibration, distribution shift and leakage. A diagnostic that supports coefficient inference may not establish predictive performance.');
+      if (aim === 'description') relevant.push('For descriptive or exploratory work, distinguish assumptions needed for the reported summaries from assumptions needed for formal uncertainty or generalisation.');
+
+      let html = '<p><span class="tag warn">Guided check — not an automated verdict</span></p>';
+      html += '<h3>Method-specific prompts</h3><ul>' + relevant.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+      html += '<h3>Checks not marked as reported</h3>' + (missing.length ? '<ul>' + missing.map(k => '<li><strong>' + names[k] + ':</strong> confirm whether this is relevant to the chosen method and whether you report adequate evidence for it.</li>').join('') + '</ul>' : '<p>All checklist items were marked. Make sure your write-up reports suitable evidence rather than only stating that checks were performed.</p>');
+      html += '<p><strong>Marked as reported:</strong> ' + (done.length ? done.map(k => names[k]).join('; ') : 'none') + '.</p>';
+      const work = ['Interpretation depends on the estimator, design, sample size and inferential target. Do not require every diagnostic for every method.'];
+
+      // ---- optional residual diagnostics ----
+      const rows = S.parseRows(v.data);
+      if (rows.length) {
+        const two = rows.every(r => r.length >= 2), fit = two ? rows.map(r => r[0]) : null, e = rows.map(r => two ? r[1] : r[0]);
+        const n = e.length;
+        if (n < 8) {
+          html += U.note('Paste at least 8 residuals for the diagnostic.', 'warn');
+        } else {
+          const mean = e.reduce((s, x) => s + x, 0) / n, sd = Math.sqrt(e.reduce((s, x) => s + (x - mean) ** 2, 0) / (n - 1));
+          const m2 = e.reduce((s, x) => s + (x - mean) ** 2, 0) / n, m3 = e.reduce((s, x) => s + (x - mean) ** 3, 0) / n, m4 = e.reduce((s, x) => s + (x - mean) ** 4, 0) / n;
+          const g1 = m3 / m2 ** 1.5, g2 = m4 / m2 ** 2 - 3, jb = n / 6 * (g1 * g1 + g2 * g2 / 4), pjb = Math.exp(-jb / 2);
+          const z = e.map(x => (x - mean) / sd), out = z.filter(x => Math.abs(x) > 3).length, expOut = 0.0027 * n;
+          const kv = [['Residuals', `${n}`], ['Mean (should be near 0)', `${HM.fmt(mean, 3)} (${HM.fmt(sd > 0 ? mean / sd : 0, 2)} SD)`], ['Skewness', HM.fmt(g1, 2)], ['Excess kurtosis', HM.fmt(g2, 2)], ['Jarque–Bera normality test', `${S.fmtP(pjb)}`], ['Beyond ±3 SD', `${out} (about ${HM.fmt(expOut, 1)} expected if normal)`]];
+          const flags = [];
+          if (Math.abs(g1) > 1 || Math.abs(g2) > 2) flags.push(['warn', `The residuals are ${Math.abs(g1) > 1 ? (g1 > 0 ? 'strongly right-skewed' : 'strongly left-skewed') : 'heavy-tailed'}. For small samples this affects tests and intervals; a transformation, a different error distribution or robust methods may fit better.`]);
+          if (pjb < 0.05 && n >= 200) flags.push(['good', `The normality test rejects (${S.fmtP(pjb)}), but with ${n} residuals it detects departures too small to matter. Judge by the skewness, kurtosis and plot instead.`]);
+          else if (pjb < 0.05) flags.push(['warn', `The normality test rejects (${S.fmtP(pjb)}). With ${n} residuals this matters for tests and intervals that assume normal errors.`]);
+          else if (n < 30) flags.push(['good', `No departure from normality detected, but with only ${n} residuals the test has little power. Look at the plot.`]);
+          if (out > Math.max(1, 3 * expOut)) flags.push(['warn', `${out} residuals lie beyond ±3 SD, more than a normal distribution would give. Check them for data errors and their influence on the fit.`]);
+          if (fit) {
+            const rho = S.pearson(S.ranks(fit), S.ranks(e.map(Math.abs))), zr = rho * Math.sqrt(n - 1), pr = 2 * (1 - S.normCdf(Math.abs(zr)));
+            kv.push(['Spread vs fitted value (Spearman ρ of |residual|)', `${HM.fmt(rho, 2)}, ${S.fmtP(pr)}`]);
+            if (pr < 0.05 && Math.abs(rho) > 0.2) flags.push(['warn', `The spread of the residuals ${rho > 0 ? 'grows' : 'shrinks'} with the fitted value (ρ = ${HM.fmt(rho, 2)}). Standard errors that assume constant variance will be wrong; consider a transformation, weights or heteroscedasticity-robust standard errors.`]);
+            const ord = fit.map((f, i) => [f, e[i]]).sort((p, q) => p[0] - q[0]), k3 = Math.floor(n / 3);
+            const thirds = [ord.slice(0, k3), ord.slice(k3, n - k3), ord.slice(n - k3)].map(g => g.reduce((s, p) => s + p[1], 0) / g.length);
+            kv.push(['Mean residual: low / middle / high fitted thirds', thirds.map(t => HM.fmt(t, 2)).join(' / ')]);
+            if (thirds.some(t => Math.abs(t) > 0.5 * sd)) flags.push(['warn', 'The mean residual differs between the low, middle and high fitted values. That points to a missed curve or interaction, which a transformation or an extra term may fix.']);
+          }
+          if (v.ordered) {
+            let num = 0, den = 0; for (let i = 0; i < n; i++) { den += (e[i] - mean) ** 2; if (i) num += (e[i] - e[i - 1]) ** 2; }
+            const dw = num / den, r1 = 1 - dw / 2;
+            kv.push(['Durbin–Watson (lag-1 autocorrelation)', `${HM.fmt(dw, 2)} (r₁ ≈ ${HM.fmt(r1, 2)})`]);
+            if (r1 > 0.3) flags.push(['warn', `Neighbouring residuals are correlated (r₁ ≈ ${HM.fmt(r1, 2)}). The observations carry less independent information than their number suggests; see the independence check.`]);
+          }
+          // residual plot
+          const W = 520, Hh = 210, pad = 34, xs = fit || e.map((_, i) => i + 1), x0 = Math.min(...xs), x1 = Math.max(...xs), lim = Math.max(...e.map(Math.abs)) || 1;
+          const X = x => pad + (x1 > x0 ? (x - x0) / (x1 - x0) : 0.5) * (W - pad - 10), Y = y => Hh / 2 - y / lim * (Hh / 2 - 14);
+          let svg = `<svg viewBox="0 0 ${W} ${Hh}" style="width:100%;max-width:${W}px;height:auto;display:block;color:inherit" role="img" aria-label="Residual plot">`;
+          svg += `<line x1="${pad}" x2="${W - 10}" y1="${Y(0)}" y2="${Y(0)}" stroke="currentColor" stroke-opacity=".4"/>`;
+          svg += e.map((y, i) => `<circle cx="${X(xs[i]).toFixed(1)}" cy="${Y(y).toFixed(1)}" r="2.6" fill="currentColor" fill-opacity="${Math.abs(z[i]) > 3 ? 0.95 : 0.5}"/>`).join('');
+          svg += `<text x="${pad}" y="12" font-size="11" fill="currentColor" fill-opacity=".7">Residual</text><text x="${W - 10}" y="${Hh - 4}" font-size="11" text-anchor="end" fill="currentColor" fill-opacity=".7">${fit ? 'Fitted value' : 'Row order'}</text></svg>`;
+          html += '<h3>Residual diagnostic</h3>' + U.kv(kv) + svg;
+          html += flags.map(([lvl, t]) => U.note(t, lvl === 'warn' ? 'warn' : 'good')).join('');
+          if (!flags.length) html += U.note('No marked skew, outliers, unequal spread or curvature in these residuals. This supports, but does not prove, the assumptions for this model.', 'good');
+          work.push('Skewness and excess kurtosis use the population moments; Jarque–Bera = n/6 × (skew² + kurtosis²/4), compared with χ² on 2 degrees of freedom (p = e^(−JB/2)).',
+            'Unequal spread is screened with the Spearman rank correlation between |residual| and the fitted value (normal approximation, z = ρ√(n − 1)). Curvature is screened by the mean residual in each third of the fitted values.',
+            'Durbin–Watson = Σ(eₜ − eₜ₋₁)² ÷ Σ(eₜ − ē)², only meaningful when the rows are in time or spatial order. Values near 2 mean no lag-1 autocorrelation.',
+            'These are screening statistics for one set of residuals, not a full model diagnosis. Influence (leverage, Cook’s distance) needs the predictors, which are not entered here.');
+        }
+      }
+      return { html, work };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>Scope note</strong></p>
+<p>This beta tool is a structured checklist, not a test of model assumptions. The relevant assumptions depend on the exact statistical procedure and intended inference. An unchecked item only means that you have not marked the check as reported. The residual diagnostic screens one set of residuals; it does not replace a full model diagnosis.</p>
+<p>Jarque, C.M., Bera, A.K. (1987). A test for normality of observations and regression residuals. <em>International Statistical Review</em> 55, 163–172. <a href="https://doi.org/10.2307/1403192">doi:10.2307/1403192</a></p>
+<p>Durbin, J., Watson, G.S. (1950). Testing for serial correlation in least squares regression. I. <em>Biometrika</em> 37, 409–428. <a href="https://doi.org/10.1093/biomet/37.3-4.409">doi:10.1093/biomet/37.3-4.409</a></p>
+</div>
+</section>
+</div>
+<div id="model-comparison" class="ck-sec">
+<section id="model-comparison-audit-beta" class="level2">
+<h2 data-anchor-id="model-comparison-audit-beta">Model comparison audit <span class="ck-beta">BETA</span></h2>
+<p>Use this checklist when your work claims that one model performs better than another. It checks comparability of the evaluation design. With paired fold scores it also tests the difference properly (cross-validation folds share training data, so a plain paired t-test is too optimistic), and with the counts of cases where two classifiers disagree it runs McNemar’s test.</p>
+<div class="hmc" id="modelcmp"></div>
+<script>
+(function () {
+  const S = window.CKSTAT;
+  const fields = [
+    ['data', 'Evaluation observations', [['same', 'Same held-out observations for all models'], ['different', 'Different observations / folds'], ['unknown', 'Not sure or not recorded']], 'different', 'If models are evaluated on different observations or folds, the metric difference can reflect the evaluation data as well as model performance. Prefer paired predictions on the same held-out cases where the comparison target allows it.'],
+    ['scale', 'Response and scale', [['same', 'Same response, units and transformation'], ['different', 'Different response scale / target'], ['unknown', 'Not sure or not recorded']], 'different', 'Metrics on different response scales or targets are generally not directly comparable. Confirm the target, units, transformations and any retransformation correction.'],
+    ['validation', 'Validation strategy', [['same', 'Same split or resampling strategy'], ['different', 'Different validation strategies'], ['unknown', 'Not sure or not recorded']], 'different', 'Different splits or resampling strategies can change the difficulty of the task. Re-evaluate models under a common strategy that matches the intended deployment setting.'],
+    ['metric', 'Metric definition and direction', [['same', 'Same metric definition; direction understood'], ['different', 'Metrics differ or are not directly comparable'], ['unknown', 'Not sure or not recorded']], 'different', 'Confirm the exact metric formula, units, weighting, aggregation across folds and whether higher or lower is better. Similar names do not guarantee identical definitions.'],
+    ['tuning', 'Tuning and preprocessing', [['nested', 'Tuning / preprocessing confined to training data'], ['leak', 'Possible test-data use or leakage'], ['unknown', 'Not sure or not recorded']], 'leak', 'Potential leakage: feature selection, scaling, imputation, target encoding and hyperparameter tuning should be learned inside training folds, not from held-out data.'],
+    ['uncertainty', 'Uncertainty in the difference', [['reported', 'Uncertainty or paired differences reported'], ['none', 'Only point estimates reported'], ['unknown', 'Not sure or not recorded']], 'none', 'Point estimates alone do not show whether a performance difference is stable. Consider paired differences across appropriate resamples or an independent test set, while avoiding treating dependent folds as independent replicates.']
+  ];
+  const ex = 'model A,model B\n0.412,0.424\n0.398,0.400\n0.445,0.455\n0.420,0.416\n0.405,0.420\n0.431,0.437\n0.415,0.426\n0.402,0.400\n0.437,0.450\n0.410,0.407';
+  HM.tool({
+    id: 'modelcmp', step: 'How the models were compared', units: false, hash: false,
+    example: { data: 'same', scale: 'same', validation: 'same', metric: 'same', tuning: 'unknown', uncertainty: 'none', folds: ex, testfrac: 0.1, dir: 'lower', b: '', c: '' },
+    inputs: [
+      ...fields.map(f => ({ k: f[0], l: f[1], t: 'select', d: f[2][0][0], opts: f[2] })),
+      { t: 'sec', l: 'Optional: paired scores from the same folds' },
+      { k: 'folds', l: 'One line per fold (or per fold and repeat): score of model A, score of model B', t: 'textarea', rows: 6, ph: 'model A,model B\n0.41,0.43\n0.40,0.41' },
+      { k: 'testfrac', l: 'Share of the data in each test fold (0.2 for 5-fold, 0.1 for 10-fold)', t: 'num', w: 2 },
+      { k: 'dir', l: 'For this metric', t: 'select', d: 'lower', w: 2, opts: [['lower', 'lower is better (RMSE, MAE…)'], ['higher', 'higher is better (R², accuracy…)']] },
+      { t: 'sec', l: 'Optional: two classifiers on the same test cases (McNemar)' },
+      { k: 'b', l: 'Cases model A got right and model B got wrong', t: 'num', w: 2 },
+      { k: 'c', l: 'Cases model A got wrong and model B got right', t: 'num', w: 2 }
+    ],
+    compute(v, U) {
+      const issues = fields.filter(f => v[f[0]] === f[3]), unknown = fields.filter(f => v[f[0]] === 'unknown');
+      const level = issues.some(f => f[0] === 'tuning' || f[0] === 'scale') ? 'bad' : (issues.length || unknown.length) ? 'warn' : 'good';
+      const label = level === 'bad' ? 'Potential leakage or non-comparable target' : level === 'warn' ? 'Comparability needs review' : 'Core comparability checks look aligned';
+      let html = `<p><span class="tag ${level}">${label}</span></p>`;
+      if (issues.length) html += '<h3>Issues to investigate</h3><ul>' + issues.map(f => `<li><strong>${f[1]}:</strong> ${f[4]}</li>`).join('') + '</ul>';
+      if (unknown.length) html += '<h3>Information to confirm</h3><ul>' + unknown.map(f => `<li><strong>${f[1]}:</strong> check your methods, supplement or code to confirm this choice.</li>`).join('') + '</ul>';
+      if (!issues.length && !unknown.length) html += '<p>The selected answers indicate aligned evaluation conditions. This does not prove that the comparison is unbiased or that the observed difference is meaningful.</p>';
+      const work = [];
+      const given = x => x !== '' && x !== null && x !== undefined && isFinite(Number(x));
+
+      // ---- paired fold scores: corrected resampled t-test ----
+      const rows = S.parseRows(v.folds).filter(r => r.length >= 2);
+      if (rows.length) {
+        if (rows.length < 3) html += U.note('Enter scores for at least three folds.', 'warn');
+        else {
+          const J = rows.length, d = rows.map(r => r[0] - r[1]), dbar = d.reduce((s, x) => s + x, 0) / J;
+          const s2 = d.reduce((s, x) => s + (x - dbar) ** 2, 0) / (J - 1), df = J - 1;
+          const mA = rows.reduce((s, r) => s + r[0], 0) / J, mB = rows.reduce((s, r) => s + r[1], 0) / J;
+          const better = (v.dir === 'lower') === (dbar < 0) ? 'A' : 'B';
+          const tN = s2 > 0 ? dbar / Math.sqrt(s2 / J) : Infinity, pN = s2 > 0 ? S.tTwoSided(tN, df) : 0;
+          const kv = [['Folds', `${J}`], ['Mean score, model A', HM.fmt(mA, 4)], ['Mean score, model B', HM.fmt(mB, 4)], ['Mean difference (A − B)', `${HM.fmt(dbar, 4)} (model ${better} better)`], ['Model ' + better + ' wins in', `${d.filter(x => (v.dir === 'lower') === (better === 'A') ? x < 0 : x > 0).length} of ${J} folds`], ['Naive paired t-test (treats folds as independent)', `${S.fmtP(pN)}`]];
+          const tf = Number(v.testfrac);
+          if (given(v.testfrac) && tf > 0 && tf < 1) {
+            const ratio = tf / (1 - tf), tC = s2 > 0 ? dbar / Math.sqrt((1 / J + ratio) * s2) : Infinity, pC = s2 > 0 ? S.tTwoSided(tC, df) : 0;
+            kv.push(['Corrected resampled t-test (Nadeau & Bengio)', `t = ${HM.fmt(tC, 2)}, ${S.fmtP(pC)}`]);
+            html += '<h3>Paired fold scores</h3>' + U.kv(kv);
+            if (pN < 0.05 && pC >= 0.05) html += U.note(`The naive test calls the difference significant (${S.fmtP(pN)}), but once the overlap between training sets is accounted for it is not (${S.fmtP(pC)}). Folds share most of their training data, so their scores are not independent.`, 'bad');
+            else if (pC < 0.05) html += U.note(`Model ${better} is better even after correcting for overlapping training sets (${S.fmtP(pC)}). Check that the difference is also large enough to matter in practice.`, 'good');
+            else html += U.note(`No reliable difference between the models (corrected ${S.fmtP(pC)}).`, 'warn');
+            work.push(`Differences d = A − B per fold; mean ${HM.fmt(dbar, 5)}, variance ${HM.fmt(s2, 6)}, J = ${J}`,
+              `Corrected t = d̄ ÷ √[(1/J + n_test/n_train) × s²] = ${HM.fmt(dbar, 5)} ÷ √[(1/${J} + ${HM.fmt(ratio, 3)}) × ${HM.fmt(s2, 6)}] = ${HM.fmt(tC, 3)}, on ${df} degrees of freedom`,
+              'The naive paired t-test uses s²/J and is too liberal because training sets overlap between folds (Nadeau & Bengio 2003; Bouckaert & Frank 2004).');
+          } else {
+            html += '<h3>Paired fold scores</h3>' + U.kv(kv) + U.note('Enter the share of the data in each test fold to get the corrected test. Without it, only the naive test is shown, and it overstates significance for cross-validation.', 'warn');
+          }
+          if (v.data === 'different') html += U.note('You indicated the models were evaluated on different observations or folds; paired fold scores are only meaningful when both models used the same folds.', 'bad');
+        }
+      }
+
+      // ---- McNemar for two classifiers ----
+      if (given(v.b) || given(v.c)) {
+        const b = Number(v.b), c = Number(v.c);
+        if (!(given(v.b) && given(v.c)) || b < 0 || c < 0 || !Number.isInteger(b) || !Number.isInteger(c)) html += U.note('Enter both discordant counts as whole numbers.', 'warn');
+        else {
+          const n = b + c, pE = S.binomTwoSided(b, n), chi = n > 0 ? (Math.abs(b - c) - 1) ** 2 / n : 0;
+          const better = b > c ? 'A' : b < c ? 'B' : null;
+          html += '<h3>McNemar test (same test cases)</h3>' + U.kv([['Cases where the models disagree', `${n}`], ['Model A right, B wrong', `${b}`], ['Model A wrong, B right', `${c}`], ['Exact McNemar test', `${S.fmtP(pE)}`], ['χ² with continuity correction', HM.fmt(chi, 2)]]);
+          html += n === 0 ? U.note('The models never disagree, so there is nothing to test.', 'warn')
+            : pE < 0.05 ? U.note(`Model ${better} is more accurate on these test cases (${S.fmtP(pE)}). Cases where both models are right or both wrong do not enter the test.`, 'good')
+            : U.note(`No reliable accuracy difference: the ${n} disagreements split ${b} to ${c} (${S.fmtP(pE)}).`, 'warn');
+          work.push(`McNemar uses only the discordant cases: exact two-sided binomial test of ${b} against ${n} with p = 0.5 (McNemar 1947; Dietterich 1998).`);
+        }
+      }
+
+      html += '<h3>Questions to answer before you share</h3><ul><li>Were all models assessed on the same observations and target?</li><li>Were preprocessing, feature selection and tuning repeated inside each training split?</li><li>Does the validation design match the intended use (new locations, groups, or future times)?</li><li>Is the reported performance difference large relative to its uncertainty and practical importance?</li></ul>';
+      work.push('Model comparisons are strongest when the evaluation target, test cases, metric definitions and resampling design are aligned. No universal threshold determines whether a model is meaningfully better.');
+      return { html, work };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>Scope note</strong></p>
+<p>This beta check examines the comparability of model evaluations based on your selected answers, and tests a difference only from the paired scores or counts you enter. For spatial, temporal or grouped data, validation design should reflect the intended prediction task; see Roberts et al.&nbsp;(2017), <em>Ecography</em>, 40, 913–929. <a href="https://doi.org/10.1111/ecog.02881">doi:10.1111/ecog.02881</a>.</p>
+<p>Nadeau, C., Bengio, Y. (2003). Inference for the generalization error. <em>Machine Learning</em> 52, 239–281. <a href="https://doi.org/10.1023/A:1024068626366">doi:10.1023/A:1024068626366</a></p>
+<p>Bouckaert, R.R., Frank, E. (2004). Evaluating the replicability of significance tests for comparing learning algorithms. In: <em>Advances in Knowledge Discovery and Data Mining (PAKDD 2004)</em>, Lecture Notes in Computer Science 3056, 3–12. Springer.</p>
+<p>McNemar, Q. (1947). Note on the sampling error of the difference between correlated proportions or percentages. <em>Psychometrika</em> 12, 153–157. <a href="https://doi.org/10.1007/BF02295996">doi:10.1007/BF02295996</a></p>
+<p>Dietterich, T.G. (1998). Approximate statistical tests for comparing supervised classification learning algorithms. <em>Neural Computation</em> 10, 1895–1923. <a href="https://doi.org/10.1162/089976698300017197">doi:10.1162/089976698300017197</a></p>
+</div>
+</section>
+</div>
+<div id="lab-conversions" class="ck-sec">
+<section id="lab-method-conversions" class="level2">
+<h2 data-anchor-id="lab-method-conversions">Lab method conversions</h2>
+<p>Results from different methods aren’t directly comparable. These are the common conversion factors, with the assumption behind each stated, so you can see what you’re accepting when you convert.</p>
+<div class="hmc" id="lc"></div>
+<script>
+(function () {
+  const CONV = {
+    wb: { name: 'Walkley–Black carbon → total organic carbon', f: 1.30, fl: 'Correction factor (100 ÷ recovery %)', note: 'Walkley–Black oxidises only part of the organic carbon; 77% recovery (factor 1.30) is the classic assumption, but recovery varies from about 60% to over 90% with soil type, so a soil-specific factor is better.', from: 'WB carbon (%)', to: 'Total organic carbon (%)' },
+    som: { name: 'Organic carbon → organic matter', f: 1.724, fl: 'Factor', note: '1.724 (van Bemmelen) assumes organic matter is 58% carbon. Pribyl (2010) found about 50% is closer for most soils, giving a factor of 2. Always state which factor was used.', from: 'Organic carbon (%)', to: 'Organic matter (%)' },
+    loi: { name: 'Loss on ignition → organic carbon', f: 1.724, fl: 'Organic matter ÷ carbon factor', note: 'Treats all mass lost on ignition as organic matter. Clay minerals lose structural water and carbonates can decompose, so LOI overestimates organic matter in clay-rich or calcareous soils; a site-specific regression is better.', from: 'Loss on ignition (%)', to: 'Organic carbon (%)', inv: true },
+    ph: { name: 'pH in water → pH in 0.01 M CaCl₂', f: 0.6, fl: 'Offset (pH units subtracted)', note: 'CaCl₂ readings are typically 0.5–0.8 lower than water readings in non-saline soils; the gap narrows in saline soils and at high pH. Use a regression from your own region where possible.', from: 'pH (water)', to: 'pH (CaCl₂)', offset: true },
+    phk: { name: 'pH in water → pH in 1 M KCl', f: 0.9, fl: 'Offset (pH units subtracted)', note: 'KCl readings are usually about 0.5–1.2 lower than water; the gap varies with exchangeable acidity and is smallest in neutral to alkaline soils.', from: 'pH (water)', to: 'pH (KCl)', offset: true },
+    p: { name: 'P₂O₅ → elemental P', f: 0.4364, fl: 'Factor', note: 'Exact, from molar masses (2 × 30.97 ÷ 141.94). Fertilizer labels and some labs report P₂O₅.', from: 'P₂O₅', to: 'P' },
+    k: { name: 'K₂O → elemental K', f: 0.8301, fl: 'Factor', note: 'Exact, from molar masses (2 × 39.10 ÷ 94.20).', from: 'K₂O', to: 'K' },
+    pct: { name: '% → g/kg', f: 10, fl: 'Factor', note: 'Exact: 1% = 10 g/kg = 10,000 mg/kg (ppm). Also, meq/100 g = cmol(+)/kg exactly.', from: '%', to: 'g/kg' }
+  };
+  HM.tool({
+    id: 'lc', step: 'Conversion', units: false, hash: false,
+    inputs: [
+      { k: 'conv', l: 'Convert', t: 'select', d: 'wb', opts: Object.entries(CONV).map(([k, c]) => [k, c.name]) },
+      { k: 'dir', l: 'Direction', t: 'seg', d: 'fwd', opts: [['fwd', 'Forward'], ['rev', 'Reverse']] },
+      { k: 'x', l: 'Value', t: 'num', w: 3 },
+      { k: 'f', l: 'Factor', t: 'num', d: (u, v) => CONV[(v && v.conv) || 'wb'].f, w: 3 }
+    ],
+    onChange(k, api) { if (k === 'conv') api.set('f', CONV[api.get('conv')].f); },
+    compute(v, U) {
+      const c = CONV[v.conv], f = v.f;
+      if (v.x == null || !(f > 0) && !c.offset) return U.note(`<b>Assumption:</b> ${c.note}`);
+      const fwd = v.dir === 'fwd';
+      let y, formula;
+      if (c.offset) { y = fwd ? v.x - f : v.x + f; formula = fwd ? `${v.x} − ${f}` : `${v.x} + ${f}`; }
+      else if (c.inv) { y = fwd ? v.x / f : v.x * f; formula = fwd ? `${v.x} ÷ ${f}` : `${v.x} × ${f}`; }
+      else { y = fwd ? v.x * f : v.x / f; formula = fwd ? `${v.x} × ${f}` : `${v.x} ÷ ${f}`; }
+      const [a, b] = fwd ? [c.from, c.to] : [c.to, c.from];
+      return { html: U.big(b, HM.fmt(y, 4), `from ${a} = ${v.x}`) + U.note(`<b>Assumption:</b> ${c.note}`), work: [`${b} = ${formula} = ${HM.fmt(y, 5)}`] };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>References</strong></p>
+<p>Walkley, A., Black, I.A. (1934). An examination of the Degtjareff method for determining soil organic matter, and a proposed modification of the chromic acid titration method. <em>Soil Science</em> 37, 29–38.</p>
+<p>Pribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. <em>Geoderma</em> 156, 75–83. <a href="https://doi.org/10.1016/j.geoderma.2010.02.003">doi:10.1016/j.geoderma.2010.02.003</a></p>
+<p>Ahern, C.R., Baker, D.E., Aitken, R.L. (1995). Models for relating pH measurements in water and calcium chloride for a wide range of pH, soil types and depths. <em>Plant and Soil</em> 171, 47–52. <a href="https://doi.org/10.1007/BF00009563">doi:10.1007/BF00009563</a></p>
+<p>Oxide and unit conversions are exact, from molar masses.</p>
+</div>
+</section>
+</div>
+<div id="coordinates" class="ck-sec">
+<section id="coordinates-and-distances" class="level2">
+<h2 data-anchor-id="coordinates-and-distances">Coordinates and distances</h2>
+<p>A degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and “metres” computed from degrees are wrong. Convert a distance, or paste coordinates to check them.</p>
+<div class="hmc" id="co"></div>
+<script>
+(function () {
+  const R = 6371.0088;
+  HM.tool({
+    id: 'co', step: 'Check', units: false, hash: false,
+    inputs: [
+      { k: 'mode', l: 'I want to', t: 'seg', d: 'conv', opts: [['conv', 'Convert a distance'], ['pts', 'Check coordinates']] },
+      { k: 'lat', l: 'Latitude of the study area (°)', t: 'num', w: 3, show: v => v.mode === 'conv' },
+      { k: 'val', l: 'Distance', t: 'num', w: 3, show: v => v.mode === 'conv' },
+      { k: 'vu', l: 'Units', t: 'select', d: 'deg', show: v => v.mode === 'conv', opts: [['deg', 'degrees'], ['km', 'kilometres'], ['m', 'metres']] },
+      { k: 'xy', l: 'Coordinates, one point per line: x (or longitude), y (or latitude)', t: 'textarea', rows: 5, show: v => v.mode === 'pts', ph: '-107.21, 39.40\n-107.18, 39.42' }
+    ],
+    compute(v, U) {
+      if (v.mode === 'conv') {
+        if (!(Math.abs(v.lat) <= 90) || !(v.val > 0) || v.lat == null) return U.empty('Enter the latitude and a distance.');
+        const c = Math.cos(v.lat * Math.PI / 180), kmLat = Math.PI / 180 * R, kmLon = kmLat * c;
+        if (v.vu === 'deg') return { html: U.kv([['North–south', `${HM.fmt(v.val * kmLat, 3)} km`], ['East–west', `${HM.fmt(v.val * kmLon, 3)} km`], ['East–west ÷ north–south', HM.fmt(c, 3)]]) + (c < 0.95 ? U.note(`At ${v.lat}°, a degree of longitude is only ${HM.fmt(c * 100, 0)}% of a degree of latitude. Distances or variogram ranges computed in degrees mix the two and are distorted; project the coordinates first.`) : ''), work: [`1° latitude ≈ ${HM.fmt(kmLat, 2)} km; 1° longitude ≈ ${HM.fmt(kmLat, 2)} × cos(${v.lat}°) = ${HM.fmt(kmLon, 2)} km`] };
+        const km = v.vu === 'km' ? v.val : v.val / 1000;
+        return { html: U.kv([['In degrees of latitude', HM.fmt(km / kmLat, 6) + '°'], ['In degrees of longitude', HM.fmt(km / kmLon, 6) + '°']]) };
+      }
+      const pts = String(v.xy || '').split(/\r?\n/).map(l => l.split(/[,;\t\s]+/).map(Number)).filter(q => q.length >= 2 && isFinite(q[0]) && isFinite(q[1]));
+      if (pts.length < 2) return U.empty('Paste at least two points.');
+      const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]);
+      const geo = xs.every(x => Math.abs(x) <= 180) && ys.every(y => Math.abs(y) <= 90);
+      const span = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
+      if (!geo || span > 1000) return U.note(`These look like projected coordinates (values up to ${HM.fmt(Math.max(...xs.map(Math.abs), ...ys.map(Math.abs)), 0)}), so distances can be computed directly, in the projection's units (usually metres).`, 'good') + U.note('Check the projection suits the area: UTM, or a local equal-area or conformal projection, keeps distances accurate within its zone.');
+      const lat0 = ys.reduce((a, b) => a + b, 0) / ys.length, c = Math.cos(lat0 * Math.PI / 180);
+      const hav = (a, b) => { const p1 = a[1] * Math.PI / 180, p2 = b[1] * Math.PI / 180, dp = p2 - p1, dl = (b[0] - a[0]) * Math.PI / 180; return 2 * R * Math.asin(Math.sqrt(Math.sin(dp / 2) ** 2 + Math.cos(p1) * Math.cos(p2) * Math.sin(dl / 2) ** 2)); };
+      let maxd = 0, pair = [0, 1];
+      for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) { const d = hav(pts[i], pts[j]); if (d > maxd) { maxd = d; pair = [i, j]; } }
+      const naive = Math.hypot(pts[pair[0]][0] - pts[pair[1]][0], pts[pair[0]][1] - pts[pair[1]][1]) * 111.195;
+      return { html: U.note(`These look like longitude and latitude (around ${HM.fmt(lat0, 2)}°). Distances must be computed on the sphere or after projecting.`) +
+        U.kv([['Largest true distance between points', `${HM.fmt(maxd, 3)} km`], ['Same pair if degrees are treated as flat (× 111 km)', `${HM.fmt(naive, 3)} km`], ['East–west stretch if degrees are used directly', `${HM.fmt(1 / c, 2)}×`]]) +
+        (Math.abs(1 / c - 1) > 0.05 ? U.note(`Using degrees directly stretches east–west distances ${HM.fmt(1 / c, 2)}× relative to north–south here. A variogram computed this way is distorted and looks anisotropic when it isn't. Project the coordinates (for example to UTM) first.`, 'bad') : ''),
+        work: ['True distance by the haversine formula with Earth radius 6,371 km', `cos(${HM.fmt(lat0, 2)}°) = ${HM.fmt(c, 3)}`] };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>Method</strong></p>
+<p>No paper needed: standard spherical geometry (haversine formula, mean Earth radius 6,371 km).</p>
+</div>
+</section>
+</div>
+<div id="equations" class="ck-sec">
+<section id="equation-check-beta" class="level2">
+<h2 data-anchor-id="equation-check-beta">Equation check <span class="ck-beta">BETA</span></h2>
+<p>Paste the equations from a paper, one per line, in plain text, Word’s linear format or LaTeX. The check reads each one symbolically, flags anything that can’t be read or evaluated, tests whether rearranged equations really follow from each other, and, given a worked example, solves for the missing value so it can be compared with the paper. No AI: the same equations always give the same answer.</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+<div class="hmc" id="eq"></div>
+<script>
+(function () {
+  const GREEK = { α: 'alpha', β: 'beta', γ: 'gamma', δ: 'delta', ε: 'epsilon', ζ: 'zeta', η: 'eta', θ: 'theta', κ: 'kappa', λ: 'lambda', μ: 'mu', ν: 'nu', ξ: 'xi', ρ: 'rho', σ: 'sigma', τ: 'tau', φ: 'phi', χ: 'chi', ψ: 'psi', ω: 'omega', Δ: 'Delta', Γ: 'Gamma', Θ: 'Theta', Λ: 'Lambda', Σ: 'Sigma', Φ: 'Phi', Ψ: 'Psi', Ω: 'Omega', π: 'pi' };
+  const FUN = ['sqrt', 'exp', 'log', 'log10', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'nthRoot', 'erf', 'pi'];
+  const SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-' };
+  function group(s, i) { let d = 0, j = i; for (; j < s.length; j++) { if (s[j] === '{') d++; else if (s[j] === '}') { d--; if (!d) break; } } return [s.slice(i + 1, j), j + 1]; }
+  function fromLatex(s) {
+    s = s.replace(/\\left|\\right|\\,|\\;|\\!|\\quad/g, '').replace(/\\cdot|\\times/g, '*').replace(/\\div/g, '/');
+    let out = '', i = 0;
+    while (i < s.length) {
+      if (s.startsWith('\\frac', i) || s.startsWith('\\dfrac', i)) { i = s.indexOf('{', i); const [a, j] = group(s, i); const [b, k] = group(s, j); out += `((${fromLatex(a)})/(${fromLatex(b)}))`; i = k; continue; }
+      if (s.startsWith('\\sqrt', i)) { i += 5; let n = null; if (s[i] === '[') { const e = s.indexOf(']', i); n = s.slice(i + 1, e); i = e + 1; } const [a, j] = group(s, i); out += n ? `nthRoot(${fromLatex(a)},${n})` : `sqrt(${fromLatex(a)})`; i = j; continue; }
+      if (s[i] === '^' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += `^(${fromLatex(a)})`; i = j; continue; }
+      if (s[i] === '_' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += '_' + a.replace(/[^A-Za-z0-9]/g, ''); i = j; continue; }
+      if (s[i] === '\\') { const m = s.slice(i + 1).match(/^[A-Za-z]+/); const w = m ? m[0] : ''; out += ' ' + ({ ln: 'log', log: 'log10' }[w] || w) + ' '; i += 1 + w.length; continue; }
+      if (s[i] === '{') { out += '('; i++; continue; } if (s[i] === '}') { out += ')'; i++; continue; }
+      out += s[i]; i++;
+    }
+    // in LaTeX, adjacent letters are a product: ab = a*b (function names, subscripted names and greek words kept)
+    return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z_0-9]*\()/g, (m, p, w) => FUN.includes(w) || Object.values(GREEK).includes(w) ? m : p + w.split('').join('*'));
+  }
+  function norm(line) {
+    let s = line.trim().replace(/^\(?\d+\)?[.:)]\s*/, '').replace(/^[A-Za-z]?\d+[.:]\s*/, '');
+    const latex = /\\|[{}]/.test(s);
+    s = s.replace(/[−–]/g, '-').replace(/[×·⋅]/g, '*').replace(/[÷∕]/g, '/').replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)')
+      .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')').replace(/[α-ωΑ-Ω]/g, c => GREEK[c] ? ' ' + GREEK[c] + ' ' : c).replace(/\bln\s*\(/g, 'log(');
+    if (latex) s = fromLatex(s);
+    return s.replace(/\s+_/g, '_');
+  }
+  const scope = (vars, f) => Object.fromEntries(vars.map(v => [v, f(v)]));
+  function vars(node) { const s = new Set(); node.traverse((n, path, parent) => { if (n.isSymbolNode && !(parent && parent.isFunctionNode && parent.fn === n) && !['pi', 'e', 'i', 'E'].includes(n.name) && !(n.name in math && typeof math[n.name] === 'function')) s.add(n.name); }); return [...s]; }
+  const rnd = (pos) => { const x = Math.exp(Math.log(0.2) + Math.random() * Math.log(50)); return pos || Math.random() < 0.5 ? x : -x; };
+  function root(f, guess) {
+    const grid = []; for (let e = -4; e <= 4; e += 0.1) { grid.push(10 ** e); grid.push(-(10 ** e)); }
+    grid.sort((a, b) => a - b); let prev = null, best = null;
+    for (const x of grid) { const y = f(x); if (!isFinite(y)) { prev = null; continue; } if (prev && Math.sign(y) !== Math.sign(prev[1])) { let a = prev[0], b = x, fa = prev[1]; for (let k = 0; k < 80; k++) { const m = (a + b) / 2, fm = f(m); if (Math.sign(fm) === Math.sign(fa)) { a = m; fa = fm; } else b = m; } const r = (a + b) / 2; if (best == null || Math.abs(r - (guess || 1)) < Math.abs(best - (guess || 1))) best = r; } prev = [x, y]; }
+    return best;
+  }
+  HM.tool({
+    id: 'eq', step: 'Equations', units: false, hash: false,
+    inputs: [
+      { k: 'eqs', l: 'Equations, one per line (numbers like "(3)" at the start are ignored)', t: 'textarea', rows: 6, ph: 'q = -K*dh/dz\nK = q*dz/dh\n\\theta = \\theta_{r} + \\frac{\\theta_{s}-\\theta_{r}}{(1+(\\alpha h)^{n})^{1-1/n}}' },
+      { k: 'vals', l: 'Worked example from the paper (optional): known values, e.g. q = 0.5, dz = 10, dh = -2', t: 'textarea', rows: 2 },
+      { k: 'sign', l: 'Variables are', t: 'seg', d: 'pos', opts: [['pos', 'Positive'], ['any', 'Any sign']], h: 'Used to search for division by zero, logs and roots of negatives, and to test rearrangements.' }
+    ],
+    compute(v, U) {
+      if (typeof math === 'undefined') return U.empty('The maths engine is still loading. Try again in a moment.');
+      const lines = String(v.eqs || '').split(/\r?\n/).filter(l => l.trim());
+      if (!lines.length) return U.empty('Paste at least one equation.');
+      const pos = v.sign === 'pos', E = [], rows = [], notes = [], work = [];
+      lines.forEach((ln, i) => {
+        const s = norm(ln), parts = s.split(/(?<![<>!=])=(?!=)/);
+        if (parts.length !== 2) { rows.push([i + 1, ln, '<span class="tag bad">Not one equation</span>', parts.length < 2 ? 'No "=" sign.' : 'More than one "=" sign.']); return; }
+        try {
+          const L = math.parse(parts[0]), R = math.parse(parts[1]), f = math.parse(`(${parts[0]})-(${parts[1]})`).compile();
+          const vs = [...new Set([...vars(L), ...vars(R)])];
+          let bad = 0, n = 200, ex = null;
+          for (let k = 0; k < n; k++) { const sc = scope(vs, () => rnd(pos)); let y; try { y = f.evaluate(sc); } catch (e) { y = NaN; } if (typeof y !== 'number' || !isFinite(y)) { bad++; if (!ex) ex = sc; } }
+          E.push({ i: i + 1, ln, L, R, f, vs, lhsSym: L.isSymbolNode ? L.name : null });
+          const tag = bad === 0 ? '<span class="tag good">Reads and evaluates</span>' : bad === n ? '<span class="tag bad">Never evaluates</span>' : '<span class="tag warn">Undefined in places</span>';
+          rows.push([i + 1, `${U.esc(L.toString())} = ${U.esc(R.toString())}`, tag, `Variables: ${vs.join(', ') || 'none'}${bad && bad < n ? `. Undefined for ${Math.round(100 * bad / n)}% of ${pos ? 'positive' : ''} test values (division by zero, log or root of a negative), e.g. ${Object.entries(ex).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ')}.` : bad === n ? '. No test value gives a real number: check the signs and the domain.' : '.'}`]);
+        } catch (err) { rows.push([i + 1, U.esc(ln), '<span class="tag bad">Cannot read</span>', U.esc(err.message) + (s !== ln.trim() ? ` (read as: ${U.esc(s)})` : '')]); }
+      });
+      // rearrangements: pairs of equations with the same variables
+      const pairs = [];
+      for (let a = 0; a < E.length; a++) for (let b = a + 1; b < E.length; b++) {
+        const A = E[a], B = E[b], sa = A.vs.slice().sort().join(), sb = B.vs.slice().sort().join();
+        if (!A.vs.length || sa !== sb) continue;
+        const u = B.lhsSym && B.vs.includes(B.lhsSym) ? B.lhsSym : A.lhsSym && A.vs.includes(A.lhsSym) ? A.lhsSym : A.vs[0];
+        const [P, Q] = B.lhsSym === u ? [A, B] : [B, A];
+        let ok = 0, tried = 0, fail = null;
+        for (let k = 0; k < 40 && tried < 12; k++) {
+          const sc = scope(P.vs.filter(x => x !== u), () => rnd(pos));
+          const g = x => { try { return Q.f.evaluate({ ...sc, [u]: x }); } catch (e) { return NaN; } };
+          const r = root(g); if (r == null) continue; tried++;
+          let res; try { res = P.f.evaluate({ ...sc, [u]: r }); } catch (e) { res = NaN; }
+          const scale = Math.max(1e-9, Math.abs(math.evaluate(`abs(${P.L.toString()})+abs(${P.R.toString()})`, { ...sc, [u]: r })));
+          if (isFinite(res) && Math.abs(res) / scale < 1e-6) ok++; else if (!fail) fail = { sc, r, res };
+        }
+        if (!tried) continue;
+        pairs.push(ok === tried ? U.note(`Equation ${Q.i} is consistent with equation ${P.i}: solving ${Q.i} for ${u} satisfies ${P.i} in all ${tried} random tests.`, 'good')
+          : U.note(`Equation ${Q.i} does not follow from equation ${P.i}. For ${Object.entries(fail.sc).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ')}, equation ${Q.i} gives ${u} = ${HM.fmt(fail.r, 4)}, which leaves equation ${P.i} off by ${HM.fmt(fail.res, 4)}. Check signs, exponents and which terms were moved.`, 'bad'));
+      }
+      // worked example
+      const known = {}; String(v.vals || '').split(/[,;\n]+/).forEach(p => { const m = p.split('='); if (m.length === 2) { const name = norm(m[0]).trim(), val = Number(m[1].trim().replace(/\s/g, '')); if (name && isFinite(val)) known[name] = val; } });
+      const ex = [];
+      if (Object.keys(known).length) E.forEach(e => {
+        const miss = e.vs.filter(x => !(x in known));
+        if (miss.length === 0) { let r; try { r = e.f.evaluate(known); } catch (err) { r = NaN; } const sc = Math.max(1e-12, Math.abs(math.evaluate(`abs(${e.L.toString()})+abs(${e.R.toString()})`, known))); ex.push(isFinite(r) && Math.abs(r) / sc < 1e-3 ? U.note(`Equation ${e.i} holds for the example values.`, 'good') : U.note(`Equation ${e.i} does not hold for the example: left side − right side = ${HM.fmt(r, 4)}.`, 'bad')); }
+        else if (miss.length === 1) { const u = miss[0], r = root(x => { try { return e.f.evaluate({ ...known, [u]: x }); } catch (err) { return NaN; } }); ex.push(r == null ? U.note(`Equation ${e.i}: no real ${u} satisfies it with the example values.`, 'bad') : U.note(`Equation ${e.i} gives <b>${u} = ${HM.fmt(r, 5)}</b> from the example values. Compare with the paper.`, 'good')); }
+        else ex.push(U.note(`Equation ${e.i}: ${miss.length} unknowns (${miss.join(', ')}), give all but one to solve it.`));
+      });
+      let h = `<table class="tt"><thead><tr><th>#</th><th>Read as</th><th>Status</th></tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td><code>${r[1]}</code><br><span style="font-size:.85rem; color:var(--ink-2)">${r[3]}</span></td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
+      if (pairs.length) h += '<h3>Rearrangements</h3>' + pairs.join(''); else if (E.length > 1) h += U.note('No two equations use exactly the same variables, so no rearrangement could be tested.');
+      if (ex.length) h += '<h3>Worked example</h3>' + ex.join('');
+      h += U.note('Check that each line was read as intended. In LaTeX, adjacent letters are a product (ab = a·b); in plain text, ab is one variable, so write a*b. e and pi are the constants.');
+      return { html: h, work: ['Each equation is parsed into a symbolic expression tree (math.js) and evaluated as left side − right side.', 'Domain: 200 random values per variable (0.2 to 10, log-spaced; both signs if "Any sign"); any non-real result is flagged.', 'Rearrangement: equations with the same variables are compared by solving one numerically for the isolated variable at 12 random points and substituting into the other (relative tolerance 10⁻⁶).', 'Worked example: with all values known the residual is tested; with one unknown it is solved by bracketing and bisection.'] };
+    }
+  });
+})();
+</script>
+<div class="ck-refs">
+<p><strong>Method</strong></p>
+<p>Symbolic parsing and evaluation with math.js: de Jong, J. (2013–2024). <em>math.js: an extensive math library for JavaScript and Node.js</em>. https://mathjs.org. Equivalence is tested numerically at random points, a standard approach to symbolic identity testing (Schwartz, J.T. (1980). Fast probabilistic algorithms for verification of polynomial identities. <em>Journal of the ACM</em> 27, 701–717. <a href="https://doi.org/10.1145/322217.322225">doi:10.1145/322217.322225</a>).</p>
+</div>
+</section>
+</div>
+<script>
+(function () {
+  const secs = [...document.querySelectorAll('.ck-sec')], hub = document.getElementById('ck-hub');
+  secs.forEach(sec => {
+    const back = document.createElement('a'); back.className = 'ck-back'; back.href = '#'; back.textContent = '← All checks';
+    sec.insertBefore(back, sec.firstChild);
+    const rel = (CK.items[sec.id] || {}).rel || [];
+    if (rel.length) { const d = document.createElement('div'); d.className = 'ck-rel'; d.innerHTML = `<h3>Related checks</h3><div class="cards ck-cards">${rel.map(id => CK.card(id)).join('')}</div><a class="ck-back" href="#">← All checks</a>`; sec.appendChild(d); }
+  });
+  function show(scroll) {
+    const id = decodeURIComponent(location.hash.slice(1)), target = secs.find(s => s.id === id);
+    secs.forEach(s => { s.hidden = s !== target; });
+    hub.hidden = !!target;
+    const title = document.querySelector('#title-block-header, header.quarto-title-block');
+    if (scroll) window.scrollTo({ top: 0 });
+  }
+  show(false);
+  window.addEventListener('hashchange', () => show(true));
+})();
+</script>
+
+
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/rafikiardhi\.earth");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+            // target, if specified
+            link.setAttribute("target", "_blank");
+            if (link.getAttribute("rel") === null) {
+              link.setAttribute("rel", "noopener");
+            }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 RafikiArdhi LLC · Carbondale, Colorado · <a href="../privacy.html">Privacy</a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+    <li class="nav-item">
+ *Rafiki Ardhi* — Kiswahili for “land friend”
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://zenodo.org/communities/rafikiardhi">
+      <i class="bi bi-archive" role="img" aria-label="RafikiArdhi on Zenodo">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://orcid.org/0000-0002-5187-9946">
+      <i class="bi bi-person-badge" role="img" aria-label="ORCID">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:tflynn@rafikiardhi.earth">
+      <i class="bi bi-envelope" role="img" aria-label="Email">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://wa.me/RafikiArdhi">
+      <i class="bi bi-whatsapp" role="img" aria-label="WhatsApp">
+</i> 
+    </a>
+  </li>  
+</ul>
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>
