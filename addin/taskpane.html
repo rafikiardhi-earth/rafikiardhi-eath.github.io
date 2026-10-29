@@ -525,7 +525,10 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     const st = structural(s, latex);
     if (st == null) return { s, unsupported: true, reason: 'structure' };
     s = st.replace(/▒/g, ' ');
+    s = s.replace(/\\(?:text|mathrm)\s*\{\s*const\s*\}|\bconst\b/g, 'C');
     if (latex) s = fromLatex(s);
+    // transpose: A^T, A^⊤ → transpose(A)
+    s = s.replace(new RegExp(`(${NAME})\\s*\\^\\s*\\(?\\s*[T⊤]\\s*\\)?(?![A-Za-z0-9_])`, 'gu'), 'transpose($1)');
     s = s.replace(/[×·⋅•∙∗]/g, '*').replace(/[÷∕]/g, '/')
       .replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)').replace(/π/g, ' pi ')
       .replace(new RegExp('∇\\s*(' + NAME + ')', 'gu'), 'grad_$1').replace(/[∂𝜕]\s*/g, 'd_')
@@ -713,9 +716,9 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     const kinds = { ...E.kinds };
     for (const [v, x] of Object.entries(known)) if (kinds[v] === 's' && isArr(x)) kinds[v] = 'sz:' + sizeOf(x).join('x');
     const free = Object.keys(kinds).filter(v => kinds[v] === 's' && !(v in known));
-    const mctx = /\[|inv\(|det\(|transpose\(/.test(E.src) || Object.values(kinds).some(k => k.startsWith('sz:'));
+    const mctx = E.mctx = /\[|inv\(|det\(|transpose\(|\^\s*\(\s*-\s*1\s*\)/.test(E.src) || Object.values(kinds).some(k => k.startsWith('sz:'));
     if (!mctx || !free.length) return kinds;
-    const forced = new Set(); [E.L, E.R].forEach(n => n.traverse(x => { if (x.isFunctionNode && x.fn && ['inv', 'det'].includes(x.fn.name) && x.args[0].isSymbolNode) forced.add(x.args[0].name); }));
+    const forced = new Set(); [E.L, E.R].forEach(n => n.traverse(x => { if (x.isFunctionNode && x.fn && ['inv', 'det'].includes(x.fn.name) && x.args[0].isSymbolNode) forced.add(x.args[0].name); if (x.isOperatorNode && x.op === '^' && x.args[0].isSymbolNode && /^\(?\s*-\s*1\s*\)?$/.test(x.args[1].toString())) forced.add(x.args[0].name); }));
     const opts = ['v', 'm', 's'], vs = free.slice(0, 6);
     const total = 3 ** vs.length;
     for (let c = 0; c < total; c++) {
@@ -792,9 +795,16 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
       });
 
       // matrix sizes shared across equations: a variable given a size in one equation keeps it in the others
-      const shared = {}; E.forEach(e => { if (!e.skip) for (const [x, k] of Object.entries(e.kinds)) if (k !== 's' && !shared[x]) shared[x] = k; });
-      E.forEach(e => { if (e.skip) return; const k2 = { ...e.kinds }; let changed = false; for (const x of e.vs) if (shared[x] && k2[x] !== shared[x]) { k2[x] = shared[x]; changed = true; }
-        if (changed && [0, 1, 2].some(() => isFinite(residual(e, scopeOf(k2, true)).scale))) e.kinds = k2; });   // only if the equation still evaluates with those sizes
+      // sizes shared across equations: a variable given a size in one matrix equation keeps it in every other equation that
+      // works with matrices, so R·A⁻¹ is flagged when R is a vector elsewhere; purely scalar equations are left as they are
+      const shared = {}; E.forEach(e => { if (!e.skip) for (const [x, k] of Object.entries(e.kinds)) if (k !== 's' && (!shared[x] || k.startsWith('sz:'))) shared[x] = k; });
+      E.forEach(e => {
+        if (e.skip) return; const k2 = { ...e.kinds }; let changed = false;
+        for (const x of e.vs) if (shared[x] && k2[x] !== shared[x]) { k2[x] = shared[x]; changed = true; }
+        if (!changed) return;
+        if (e.mctx) { e.kinds = k2; e.sharedSizes = true; }                                            // matrix equation: sizes must agree
+        else if ([0, 1, 2].some(() => isFinite(residual(e, scopeOf(k2, true)).scale))) e.kinds = k2;    // other equations: only if they still work
+      });
       // domain, and whether the equation holds where nothing on the left is being defined
       E.forEach(e => {
         if (e.skip) return;
@@ -810,7 +820,7 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         let tag, txt = '';
         const kindTxt = Object.entries(e.kinds).filter(([, k]) => k !== 's').map(([x, k]) => `${x} (${{ int: 'whole number', vec: 'list', m: '2×2 matrix', v: '2×1 vector' }[k] || k.replace('sz:', '').replace('x', '×')})`);
         const scTxt = sc => Object.entries(sc).filter(([, x]) => !isArr(x)).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ');
-        if (bad === n) { tag = '<span class="tag bad">Never evaluates</span>'; txt = mism === n && e.vs.length ? ' The two sides never have the same size, or the expression cannot be evaluated: check the matrix dimensions.' : (e.heavy ? ' An integral or sum does not converge, or cannot be evaluated, for any test value.' : ' No test value gives a real, finite number: check the signs and the domain.'); }
+        if (bad === n) { tag = '<span class="tag bad">Never evaluates</span>'; txt = mism === n && e.vs.length ? (e.sharedSizes ? ' With the sizes these variables have in the other equations, the two sides cannot be multiplied or do not match: check the order of the matrix products and the dimensions.' : ' The two sides never have the same size, or the expression cannot be evaluated: check the matrix dimensions.') : (e.heavy ? ' An integral or sum does not converge, or cannot be evaluated, for any test value.' : ' No test value gives a real, finite number: check the signs and the domain.'); }
         else if (e.identity && !defines) { tag = '<span class="tag good">Holds</span>'; txt = e.vs.length ? ` Both sides agree for all ${ok} test values.` : ' Both sides agree.'; }
         else if (!defines && (e.heavy || !e.vs.length)) { tag = '<span class="tag bad">Does not hold</span>'; e.fails = true; const [l, r] = miss.val; txt = ` ${scTxt(miss.sc) ? `For ${scTxt(miss.sc)}, the` : 'The'} left side is ${fmtV(l)} and the right side is ${fmtV(r)}.`; }
         else tag = bad === 0 ? '<span class="tag good">Reads and evaluates</span>' : '<span class="tag warn">Undefined in places</span>';
