@@ -4,6 +4,7 @@ subtitle: "Munsell soil colour from a photo, with uncertainty"
 description: "Estimate the Munsell soil colour of a matrix from a photo, with optional grey or black-and-white card correction and probabilities over neighbouring chips."
 page-layout: full
 toc: false
+image: images/soilColor.png
 google-scholar: true
 appendix-cite-as: false   # keep the citation metadata, hide the BibTeX appendix
 citation:
