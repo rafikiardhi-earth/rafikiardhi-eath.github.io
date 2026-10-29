@@ -369,10 +369,13 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
       out += s[i]; i++;
     }
     // in LaTeX, adjacent letters are a product: ab = a*b (function names, subscripted names and greek words kept)
-    return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z_0-9]*\()/g, (m, p, w) => FUN.includes(w) || Object.values(GREEK).includes(w) ? m : p + w.split('').join('*'));
+    return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z_0-9]*\()(?!_)/g, (m, p, w) => FUN.includes(w) || Object.values(GREEK).includes(w) ? m : p + w.split('').join('*'));
   }
   function norm(line) {
     let s = line.trim().replace(/^\(?\d+\)?[.:)]\s*/, '').replace(/^[A-Za-z]?\d+[.:]\s*/, '');
+    // derivatives are read as one variable: dX/dz, ∂X/∂z, \frac{\partial X}{\partial z} → dX_dz
+    s = s.replace(/\\frac\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}/g, 'd$1_d$2')
+         .replace(/[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)\s*\/\s*[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)/g, 'd$1_d$2');
     const latex = /\\|[{}]/.test(s);
     s = s.replace(/[−–]/g, '-').replace(/[×·⋅]/g, '*').replace(/[÷∕]/g, '/').replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)')
       .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')').replace(/[α-ωΑ-Ω]/g, c => GREEK[c] ? ' ' + GREEK[c] + ' ' : c).replace(/\bln\s*\(/g, 'log(');
