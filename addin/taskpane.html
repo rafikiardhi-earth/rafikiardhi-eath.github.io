@@ -515,9 +515,19 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁽⁾ⁿ]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')')
          .replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]+/g, m => '_' + [...m].map(c => SUB[c]).join(''))
          .replace(/(\S)[̅̄]/g, '$1_bar').replace(/(\S)̂/g, '$1_hat').replace(/(\S)̃/g, '$1_tilde').replace(/(\S)̇/g, '$1_dot');
-    // PDF and Word copies: math italic letters (𝑋, 𝜆), script letters (ℒ), fraction slash, invisible operators
-    s = s.normalize('NFKC').replace(/ /g, ' ').replace(/[⁡-⁤​-‍﻿]/g, '')
-         .replace(/⁄/g, '/').replace(/[〖〔]/g, '(').replace(/[〗〕]/g, ')').replace(/[┬┴]/g, ' ').replace(/[−–—]/g, '-');
+
+    // Clean Word Unicode Artifacts & Smart Quotes/Spaces
+    s = s.replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
+         .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'")
+         .replace(/[\u00A0\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
+         .normalize('NFKC')
+         .replace(/[⁡-⁤​-‍﻿\uFEFF]/g, '')
+         .replace(/⁄/g, '/')
+         .replace(/[〖〔]/g, '(')
+         .replace(/[〗〕]/g, ')')
+         .replace(/[┬┴]/g, ' ')
+         .replace(/[−–—]/g, '-');
+
     if (UNSUPPORTED.test(s)) return { s, unsupported: true };
     const latex = /\\|[{}]/.test(s);
     if (!latex) {
@@ -580,12 +590,10 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
 
   // ======================= evaluating =======================
   const MJ = math.create(math.all);
-  // a scope that adds the integration/summation variable on top of the caller's
   class Child { constructor(p) { this.p = p; this.m = new Map(); } get(k) { return this.m.has(k) ? this.m.get(k) : this.p.get(k); } has(k) { return this.m.has(k) || this.p.has(k); } set(k, v) { this.m.set(k, v); return this; } keys() { return new Set([...this.m.keys(), ...this.p.keys()]).values(); } delete(k) { return this.m.delete(k); } clear() { this.m.clear(); } forEach(cb) { for (const k of this.keys()) cb(this.get(k), k); } [Symbol.iterator]() { return [...this.keys()].map(k => [k, this.get(k)])[Symbol.iterator](); } }
   const cache = new WeakMap();
   const comp = n => { let c = cache.get(n); if (!c) { c = n.compile(); cache.set(n, c); } return c; };
   const real = y => typeof y === 'number' ? y : (y && typeof y.re === 'number' && Math.abs(y.im) < 1e-12 * (1 + Math.abs(y.re))) ? y.re : NaN;
-  // adaptive Gauss–Kronrod (7/15) on a finite interval
   const XK = [0.991455371120813, 0.949107912342759, 0.864864423359769, 0.741531185599394, 0.586087235467691, 0.405845151377397, 0.207784955007898, 0];
   const WK = [0.022935322010529, 0.063092092629979, 0.104790010322250, 0.140653259715525, 0.169004726639267, 0.190350578064785, 0.204432940075298, 0.209482141084728];
   const WG = [0.129484966168870, 0.279705391489277, 0.381830050505119, 0.417959183673469];
@@ -594,7 +602,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     for (let j = 0; j < 7; j++) { const x = h * XK[j], s = f(c - x) + f(c + x); k += WK[j] * s; if (j % 2 === 1) g += WG[(j - 1) / 2] * s; }
     return [k * h, Math.abs((k - g) * h)];
   }
-  // returns [value, error estimate]; stops refining an interval at depth 40 or when the evaluation budget runs out
   function adapt(f, a, b, tol, depth, budget) {
     const [r, e] = gk(f, a, b); if (!isFinite(r)) return [NaN, Infinity];
     if (e <= tol || depth > 40 || budget.n <= 0) return [r, e];
@@ -610,12 +617,9 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     else if (a === -Infinity) { g = t => { const x = b - (1 - t) / t; return f(x) / (t * t); }; lo = 0; hi = 1; }
     const scale = Math.abs(gk(g, lo, hi)[0]);
     const [r, e] = adapt(g, lo, hi, Math.max(1e-10 * scale, 1e-14), 0, { n: 1500 });
-    // accept only a converged result: a divergent integral leaves a large error estimate
     return isFinite(r) && e <= 1e-7 * Math.max(1e-6, Math.abs(r)) + 1e-12 ? r : NaN;
   }
-  // Wynn's epsilon acceleration of a sequence of partial sums
   function wynn(S) {
-    // even columns of the ε-table hold the accelerated estimates; take the one that changes least from the previous column
     let e0 = S.map(() => 0), e1 = S.slice(), cands = [S[S.length - 1]];
     for (let k = 1; k < S.length && e1.length > 1; k++) {
       const e2 = []; for (let j = 0; j < e1.length - 1; j++) { const d = e1[j + 1] - e1[j]; e2.push(e0[j + 1] + (d === 0 ? 1e300 : 1 / d)); }
@@ -626,10 +630,8 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     for (let k = 1; k < cands.length; k++) { const d = Math.abs(cands[k] - cands[k - 1]); if (d < bd) { bd = d; best = cands[k]; } }
     return best;
   }
-  // infinite sum of f(n), n = a, a+1, …
   function infiniteSum(f, a) {
     if (isFinite(f(a + 0.5)) && isFinite(f(a + 100.5))) {
-      // smooth terms: Euler–Maclaurin, direct sum to N − 1, tail from the integral and end corrections
       const em = N => {
         let s = 0; for (let n = a; n < N; n++) s += f(n);
         const h = 0.25, d1 = (f(N + h) - f(N - h)) / (2 * h), d3 = (f(N + 2 * h) - 2 * f(N + h) + 2 * f(N - h) - f(N - 2 * h)) / (2 * h ** 3);
@@ -638,16 +640,13 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
       const s1 = em(a + 100), s2 = em(a + 200);
       if (isFinite(s1) && Math.abs(s1 - s2) <= 1e-7 * Math.max(1, Math.abs(s1))) return s2;
     }
-    // fast-converging series (e.g. xᵏ/k!): add terms until they are negligible and shrinking geometrically
     { let s = 0, small = 0, prev = NaN; for (let n = a; n < a + 100000; n++) { const t = real(f(n)); if (!isFinite(t)) break; s += t;
         if (Math.abs(t) <= 1e-16 * Math.abs(s) && Math.abs(t) <= 0.9 * Math.abs(prev)) { if (++small >= 5) return s; } else small = 0; if (t !== 0) prev = t; } }
-    // terms only defined at integers, e.g. (−1)^n: accelerate the partial sums
     const S = []; let s = 0; for (let n = a; n < a + 61; n++) { s += real(f(n)); S.push(s); }
     const w1 = wynn(S.slice(0, 41)), w2 = wynn(S);
     return isFinite(w2) && Math.abs(w1 - w2) <= 1e-7 * Math.max(1, Math.abs(w2)) ? w2 : NaN;
   }
   const num = (n, scope) => real(comp(n).evaluate(scope));
-  // sum body: data written x_i (with x given as a list) is read as x[i]
   function bodyFor(node, v, scope) {
     const src = node.toString(); const t = src.replace(new RegExp(`(${NAME})_${v}(?![A-Za-z0-9_])`, 'gu'), (m, b) => { const x = scope.has(b) ? scope.get(b) : null; return x && (Array.isArray(x) || x.isMatrix) ? `${b}[${v}]` : m; });
     return t === src ? node : MJ.parse(t);
@@ -663,19 +662,17 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     const f = n => { ch.set(v, n); return real(c.evaluate(ch)); };
     if (b !== Infinity) { if (b - a > 1e6) return NaN; let s = prod ? 1 : 0; for (let n = a; n <= b; n++) s = prod ? s * f(n) : s + f(n); return s; }
     if (!prod) return infiniteSum(f, a);
-    for (let n = a; n < a + 50; n++) if (!(f(n) > 0)) return NaN;   // infinite product of positive terms via the sum of logs
+    for (let n = a; n < a + 50; n++) if (!(f(n) > 0)) return NaN;
     return Math.exp(infiniteSum(n => Math.log(f(n)), a));
   }
   function sumn(args, m, scope) { return series(args, scope, false); }
   function prodn(args, m, scope) { return series(args, scope, true); }
-  function indef() { return NaN; }   // an indefinite integral has no value; it is checked by differentiation
+  function indef() { return NaN; }
   integ.rawArgs = sumn.rawArgs = prodn.rawArgs = indef.rawArgs = true;
-  // a 1×1 matrix (e.g. vᵀΣ⁻¹v) is a scalar, so it can divide or be compared with one
   const sq = x => (x && (Array.isArray(x) || x.isMatrix) && MJ.size(x).valueOf().reduce((a, b) => a * b, 1) === 1) ? MJ.flatten(MJ.matrix(x)).valueOf()[0] : x;
   MJ.import({ integ, sumn, prodn, indef, sq }, { override: true });
   const wrapSq = n => { const m = n.map(c => wrapSq(c)); return m.isOperatorNode || (m.isFunctionNode && m.fn && !OPS.includes(m.fn.name) && m.fn.name !== 'sq') ? new MJ.FunctionNode(new MJ.SymbolNode('sq'), [m]) : m; };
 
-  // readable form of the parsed expressions
   const show = node => node.toString({ handler: (n, o) => {
     if (!n.isFunctionNode || !n.fn || !OPS.includes(n.fn.name)) return undefined;
     const a = n.args.map(x => x.toString(o)), v = a[1];
@@ -684,7 +681,7 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     if (n.fn.name === 'indef') return `∫ ${a[0]} d${v}`;
     return `${n.fn.name === 'sumn' ? 'Σ' : 'Π'}[${v} = ${a[2]} → ${lim(a[3])}] ${a[0]}`;
   } });
-  // free variables, with the kind each needs: s scalar, int (a summation limit), vec (data indexed in a sum)
+
   function freeVars(node) {
     const kind = {};
     const walk = (n, bound, idx) => {
@@ -700,7 +697,7 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         if (m && idx.has(m[2])) { kind[m[1]] = 'vec'; return; }
         if (!kind[n.name]) kind[n.name] = 's'; return;
       }
-      if (n.isFunctionNode) { n.args.forEach(x => walk(x, bound, idx)); return; }   // the function name itself is not a variable
+      if (n.isFunctionNode) { n.args.forEach(x => walk(x, bound, idx)); return; }
       n.forEach(c => walk(c, bound, idx));
     };
     walk(node, new Set(), new Set());
@@ -726,7 +723,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     return rnd(pos);
   }
   const scopeOf = (kinds, pos, fixed = {}) => { const o = {}; for (const [v, k] of Object.entries(kinds)) o[v] = v in fixed ? fixed[v] : draw(k, pos, 2); return o; };
-  // both sides, evaluated; an error or a size mismatch gives null
   function sides(E, sc) {
     let l, r; try { l = E.Lc.evaluate({ ...sc }); r = E.Rc.evaluate({ ...sc }); } catch (e) { return null; }
     if (isArr(l) || isArr(r)) { if (JSON.stringify(sizeOf(l)) !== JSON.stringify(sizeOf(r))) return null; }
@@ -737,7 +733,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     let d; try { d = MJ.subtract(lr[0], lr[1]); } catch (e) { return { res: NaN, scale: NaN }; }
     return { res: mag(d), scale: Math.max(1e-12, mag(lr[0]) + mag(lr[1])), val: lr };
   }
-  // matrix equations: find sizes for the variables (scalar, 2×1 or 2×2) that make both sides agree in size
   function shapes(E, known) {
     const kinds = { ...E.kinds };
     for (const [v, x] of Object.entries(known)) if (kinds[v] === 's' && isArr(x)) kinds[v] = 'sz:' + sizeOf(x).join('x');
@@ -763,7 +758,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     return best;
   }
   const fmtV = x => isArr(x) ? MJ.format(x, { precision: 5 }) : HM.fmt(real(x), 5);
-  // indefinite integral: G = ∫ f dx holds if dG/dx = f (up to a constant)
   function checkIndef(E, pos) {
     let node = null; [E.L, E.R].forEach(side => side.traverse(x => { if (!node && x.isFunctionNode && x.fn && x.fn.name === 'indef') node = x; }));
     const inL = (() => { let f = false; E.L.traverse(x => { if (x === node) f = true; }); return f; })();
@@ -790,20 +784,23 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     ],
     compute(v, U) {
       if (typeof math === 'undefined') return U.empty('The maths engine is still loading. Try again in a moment.');
-      const lines = String(v.eqs || '').split(/\r?\n/).filter(l => l.trim());
+      
+      const rawText = String(v.eqs || '')
+        .replace(/[\u00A0\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
+        .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
+        .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'");
+
+      const lines = rawText.split(/\r?\n/).filter(l => l.trim());
       if (!lines.length) return U.empty('Paste at least one equation.');
       const pos = v.sign === 'pos', E = [], rows = [];
-      // worked example values (numbers, lists, matrices)
       const known = {};
       const parts = []; { let d = 0, cur = ''; for (const c of String(v.vals || '')) { if ('[('.includes(c)) d++; if ('])'.includes(c)) d--; if (!d && /[,;\n]/.test(c)) { parts.push(cur); cur = ''; } else cur += c; } parts.push(cur); }
       parts.forEach(p => { const k = p.indexOf('='); if (k < 0) return; const name = norm(p.slice(0, k) + '= 0').s.split('=')[0].trim(); let val; try { val = MJ.evaluate(p.slice(k + 1).trim()); } catch (e) { return; } if (name && (isArr(val) || isFinite(real(val)))) known[name] = isArr(val) ? val : real(val); });
 
-      // two equations on one line: split at \quad / \qquad, or at a comma followed by wide spacing outside brackets
       const splitLine = t => { const out = []; let d = 0, cur = ''; t = t.replace(/,?\s*\\q?quad\s*/g, '\u0001');
         for (let k = 0; k < t.length; k++) { const c = t[k]; if ('([{'.includes(c)) d++; else if (')]}'.includes(c)) d--;
           if (c === '\u0001' || (!d && c === ',' && /^\s{2,}\S/.test(t.slice(k + 1)))) { out.push(cur); cur = ''; } else cur += c; }
         out.push(cur); return out; };
-      // a chain a = b = c is checked as a = b and b = c
       const items = [];
       lines.forEach((ln0, i) => splitLine(ln0).filter(x => x.trim()).forEach((ln, j, all) => {
         const i2 = all.length > 1 ? `${i + 1}${'abcdefghij'[j]}` : i + 1;
@@ -832,18 +829,14 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         } catch (err) { rows.push([lab, U.esc(ln), '<span class="tag bad">Cannot read</span>', U.esc(err.message) + (s !== ln.trim() ? ` (read as: ${U.esc(s)})` : '')]); }
       });
 
-      // matrix sizes shared across equations: a variable given a size in one equation keeps it in the others
-      // sizes shared across equations: a variable given a size in one matrix equation keeps it in every other equation that
-      // works with matrices, so R·A⁻¹ is flagged when R is a vector elsewhere; purely scalar equations are left as they are
       const shared = {}; E.forEach(e => { if (!e.skip) for (const [x, k] of Object.entries(e.kinds)) if (k !== 's' && (!shared[x] || k.startsWith('sz:'))) shared[x] = k; });
       E.forEach(e => {
         if (e.skip) return; const k2 = { ...e.kinds }; let changed = false;
         for (const x of e.vs) if (shared[x] && k2[x] !== shared[x]) { k2[x] = shared[x]; changed = true; }
         if (!changed) return;
-        if (e.mctx) { e.kinds = k2; e.sharedSizes = true; }                                            // matrix equation: sizes must agree
-        else if ([0, 1, 2].some(() => isFinite(residual(e, scopeOf(k2, true)).scale))) e.kinds = k2;    // other equations: only if they still work
+        if (e.mctx) { e.kinds = k2; e.sharedSizes = true; }
+        else if ([0, 1, 2].some(() => isFinite(residual(e, scopeOf(k2, true)).scale))) e.kinds = k2;
       });
-      // domain, and whether the equation holds where nothing on the left is being defined
       E.forEach(e => {
         if (e.skip) return;
         const n = e.vs.length ? (e.heavy ? 30 : 200) : 1; let bad = 0, ex = null, mism = 0, held = 0, miss = null;
@@ -866,7 +859,6 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         rows[e.row] = [e.i, e.readAs, tag, `Variables: ${e.vs.join(', ') || 'none'}${kindTxt.length ? `; sizes: ${kindTxt.join(', ')}` : ''}.${txt}`];
       });
 
-      // rearrangements: pairs of equations with the same variables
       let samePairs = 0;
       const pairs = [], EE = E.filter(e => !e.skip), RR = EE.filter(e => !e.fails && !(e.identity && (e.heavy || !e.vs.length)));
       for (let a = 0; a < RR.length; a++) for (let b = a + 1; b < RR.length; b++) {
@@ -881,7 +873,7 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         for (let k = 0; k < 40 && tried < 12; k++) {
           const sc = scopeOf(kinds, pos); delete sc[u];
           let r;
-          if (iso(Q) === u) { try { r = Q.Rc.evaluate({ ...sc }); } catch (e) { continue; } }   // the isolated form gives u directly
+          if (iso(Q) === u) { try { r = Q.Rc.evaluate({ ...sc }); } catch (e) { continue; } }
           else if (kinds[u] === 's') { const g = x => { try { return real(Q.Lc.evaluate({ ...sc, [u]: x })) - real(Q.Rc.evaluate({ ...sc, [u]: x })); } catch (e) { return NaN; } }; r = root(g); if (r == null) continue; }
           else continue;
           if (!isArr(r) && !isFinite(real(r))) continue;
@@ -895,9 +887,8 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
           : U.note(`Equation ${Q.i} does not follow from equation ${P.i}.${scTxt(fail) ? ` For ${scTxt(fail)},` : ''} equation ${Q.i} gives ${u} = ${fmtV(fail.r)}, which leaves equation ${P.i} off by ${isFinite(fail.res) ? HM.fmt(fail.res, 4) : 'an undefined amount'}. Check signs, exponents, the order of matrix products and which terms were moved.`, 'bad'));
       }
 
-      // worked example
       const ex = [];
-      if (Object.keys(known).length) RR.forEach(e => {   // identities (closed-form integrals and sums) hold for any values, so they are not solved
+      if (Object.keys(known).length) RR.forEach(e => {
         const miss = e.vs.filter(x => !(x in known));
         if (miss.length === 0) { const r = residual(e, { ...known }); ex.push(isFinite(r.res) && r.res / r.scale < 1e-3 ? U.note(`Equation ${e.i} holds for the example values.`, 'good') : U.note(`Equation ${e.i} does not hold for the example: left side − right side = ${isFinite(r.res) ? (r.val ? fmtV(MJ.subtract(r.val[0], r.val[1])) : HM.fmt(r.res, 4)) : 'undefined'}.`, 'bad')); }
         else if (miss.length === 1) {
@@ -931,24 +922,57 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
 (function () {
   const msg = t => document.getElementById('ra-msg').textContent = t;
   const setEqs = text => { const el = document.getElementById('eq-eqs'); if (!el) return; el.value = text; el.dispatchEvent(new Event('input', { bubbles: true })); };
-  // a line looks like an equation if it has one "=" and something on both sides, and is short
-  const eqLines = t => t.split(/\r?\n|\r/).map(s => s.replace(/\s+/g, ' ').trim()).filter(s => s.length < 300 && /[^=<>!]=[^=]/.test(s) && !/[.?!]\s+[A-Z][a-z]+\s/.test(s));
+  
+  const eqLines = t => t.split(/\r?\n|\r/)
+    .map(s => s.replace(/[\u00A0\s]+/g, ' ').trim())
+    .filter(s => s.length > 0 && s.length < 500 && /[^=<>!]=[^=]/.test(s) && !/[.?!]\s+[A-Z][a-z]+\s/.test(s));
+
   const noWord = () => msg('Open this panel inside Word to read the document. You can still paste equations below.');
   if (typeof Office === 'undefined') { noWord(); return; }
   Office.onReady(info => {
     if (info.host !== Office.HostType.Word) { noWord(); return; }
+    
     document.getElementById('ra-sel').onclick = () => Word.run(async ctx => {
-      const r = ctx.document.getSelection(); r.load('text'); await ctx.sync();
-      const lines = eqLines(r.text || '');
+      const r = ctx.document.getSelection();
+      r.load('text');
+      
+      let eqCollection = null;
+      if (ctx.document.getSelection().equations) {
+        eqCollection = r.equations;
+        eqCollection.load('items/text');
+      }
+      
+      await ctx.sync();
+
+      let rawString = r.text || '';
+
+      if (eqCollection && eqCollection.items && eqCollection.items.length > 0) {
+        const eqTexts = eqCollection.items.map(e => e.text).filter(Boolean);
+        if (eqTexts.length > 0) {
+          rawString = eqTexts.join('\n');
+        }
+      }
+
+      const cleanedString = rawString
+        .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
+        .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'")
+        .replace(/[\u00A0\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
+        .normalize('NFKC')
+        .replace(/[⁡-⁤​-‍﻿\uFEFF]/g, '')
+        .replace(/[−–—]/g, '-');
+
+      const lines = eqLines(cleanedString);
       if (!lines.length) { msg('No equations found in the selection. Select one or more equations (Word equations or typed lines with "=").'); return; }
       setEqs(lines.join('\n')); msg(`Read ${lines.length} equation${lines.length > 1 ? 's' : ''} from the selection.`);
     }).catch(e => msg('Could not read the selection: ' + e.message));
+
     document.getElementById('ra-doc').onclick = () => Word.run(async ctx => {
       const ps = ctx.document.body.paragraphs; ps.load('items/text'); await ctx.sync();
       const lines = ps.items.flatMap(p => eqLines(p.text || ''));
       if (!lines.length) { msg('No equation-like lines found in the document.'); return; }
       setEqs(lines.slice(0, 60).join('\n')); msg(`Found ${lines.length} equation-like line${lines.length > 1 ? 's' : ''}${lines.length > 60 ? ' (first 60 shown)' : ''}. Remove any that aren't equations.`);
     }).catch(e => msg('Could not read the document: ' + e.message));
+
     document.getElementById('ra-com').onclick = () => Word.run(async ctx => {
       const res = document.querySelector('#eq .res');
       const bad = res ? [...res.querySelectorAll('.note.bad')].map(n => n.textContent.trim()) : [];
