@@ -352,38 +352,96 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
 <div class="hmc" id="eq"></div>
 <script>
 (function () {
-  const GREEK = { α: 'alpha', β: 'beta', γ: 'gamma', δ: 'delta', ε: 'epsilon', ζ: 'zeta', η: 'eta', θ: 'theta', κ: 'kappa', λ: 'lambda', μ: 'mu', ν: 'nu', ξ: 'xi', ρ: 'rho', σ: 'sigma', τ: 'tau', φ: 'phi', χ: 'chi', ψ: 'psi', ω: 'omega', Δ: 'Delta', Γ: 'Gamma', Θ: 'Theta', Λ: 'Lambda', Σ: 'Sigma', Φ: 'Phi', Ψ: 'Psi', Ω: 'Omega', π: 'pi' };
-  const FUN = ['sqrt', 'exp', 'log', 'log10', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'nthRoot', 'erf', 'pi'];
-  const SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-' };
+  // ---------- equation reading (plain text, Word linear format, LaTeX, PDF copy) ----------
+  const GREEK = { alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', epsilon: 'ε', varepsilon: 'ε', zeta: 'ζ', eta: 'η', theta: 'θ', vartheta: 'θ', kappa: 'κ', lambda: 'λ', mu: 'μ', nu: 'ν', xi: 'ξ', rho: 'ρ', varrho: 'ρ', sigma: 'σ', tau: 'τ', phi: 'φ', varphi: 'φ', chi: 'χ', psi: 'ψ', omega: 'ω', Delta: 'Δ', Gamma: 'Γ', Theta: 'Θ', Lambda: 'Λ', Sigma: 'Σ', Phi: 'Φ', Psi: 'Ψ', Omega: 'Ω', Xi: 'Ξ', Pi: 'Π', Upsilon: 'Υ', upsilon: 'υ', iota: 'ι' };
+  const FUN = ['sqrt', 'exp', 'log', 'log10', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'nthRoot', 'erf', 'pi', 'max', 'min'];
+  const SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+', '⁽': '(', '⁾': ')', 'ⁿ': 'n' };
+  const SUB = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9', 'ₐ': 'a', 'ₑ': 'e', 'ᵢ': 'i', 'ⱼ': 'j', 'ₖ': 'k', 'ₗ': 'l', 'ₘ': 'm', 'ₙ': 'n', 'ₒ': 'o', 'ₚ': 'p', 'ᵣ': 'r', 'ₛ': 's', 'ₜ': 't', 'ᵤ': 'u', 'ᵥ': 'v', 'ₓ': 'x' };
+  const NAME = '[A-Za-z\\u0370-\\u03FF][A-Za-z0-9_\\u0370-\\u03FF]*';   // a symbol name, Latin or Greek
+  const UNSUPPORTED = /[∑∫∮∏■█]|\\(sum|int|oint|iint|prod|begin|matrix|lim)(?![A-Za-z])/;
+  const STAR = '(\\*|\\\\ast|\\\\star)', PRIME = '(\\\\prime)';
   function group(s, i) { let d = 0, j = i; for (; j < s.length; j++) { if (s[j] === '{') d++; else if (s[j] === '}') { d--; if (!d) break; } } return [s.slice(i + 1, j), j + 1]; }
   function fromLatex(s) {
-    s = s.replace(/\\left|\\right|\\,|\\;|\\!|\\quad/g, '').replace(/\\cdot|\\times/g, '*').replace(/\\div/g, '/');
+    s = s.replace(/\\left|\\right|\\bigg|\\Bigg|\\big|\\Big|\\,|\\;|\\:|\\!|\\qquad|\\quad|\\displaystyle/g, '')
+      .replace(/\\ /g, ' ')
+      .replace(/\\(?:mathcal|mathscr|mathrm|mathbf|mathit|mathsf|mathbb|boldsymbol|bm|operatorname|textrm|textit|text|mathnormal)\s*\{([^{}]*)\}/g, '$1')
+      .replace(/\\(?:overline|bar)\s*\{\s*([^{}]*?)\s*\}/g, '$1_bar').replace(/\\(?:widehat|hat)\s*\{\s*([^{}]*?)\s*\}/g, '$1_hat')
+      .replace(/\\(?:widetilde|tilde)\s*\{\s*([^{}]*?)\s*\}/g, '$1_tilde').replace(/\\dot\s*\{\s*([^{}]*?)\s*\}/g, '$1_dot')
+      .replace(/\\(?:overline|bar)\s*([A-Za-z])/g, '$1_bar').replace(/\\hat\s*([A-Za-z])/g, '$1_hat')
+      // Word's LaTeX puts the star outside a brace: {(E}^{*}, {\partial E}^{*} → (E^{*}, \partial E^{*}
+      .replace(new RegExp('\\{\\s*(\\(\\s*[A-Za-z]|\\\\partial\\s*[A-Za-z])\\s*\\}\\s*\\^\\s*\\{\\s*' + STAR + '\\s*\\}', 'g'), '$1^{*}')
+      .replace(new RegExp('\\^\\s*\\{\\s*' + STAR + '\\s*\\}|\\^\\s*' + STAR, 'g'), '_star')
+      .replace(new RegExp('\\^\\s*\\{\\s*' + PRIME + '\\s*\\}|\\^\\s*' + PRIME, 'g'), '_prime').replace(/([A-Za-z0-9}])'/g, '$1_prime')
+      .replace(/\\lbrack|\\\[/g, '[').replace(/\\rbrack|\\\]/g, ']').replace(/\\lbrace|\\\{|\\langle/g, '(').replace(/\\rbrace|\\\}|\\rangle/g, ')')
+      .replace(/\\lvert|\\rvert|\\vert|\\mid|\\\|/g, '|')
+      .replace(/\\cdot|\\times|\\bullet|\\ast/g, '*').replace(/\\div/g, '/')
+      .replace(/\\nabla\s*(?:\{\s*\\?([A-Za-z]+)\s*\}|\\?([A-Za-z]+))/g, (m, a, b) => 'grad_' + (GREEK[a || b] || a || b))
+      .replace(/\\partial\s*(?:\{\s*\\?([A-Za-z]+)\s*\}|\\?([A-Za-z]+))/g, (m, a, b) => 'd_' + (GREEK[a || b] || a || b));
     let out = '', i = 0;
     while (i < s.length) {
-      if (s.startsWith('\\frac', i) || s.startsWith('\\dfrac', i)) { i = s.indexOf('{', i); const [a, j] = group(s, i); const [b, k] = group(s, j); out += `((${fromLatex(a)})/(${fromLatex(b)}))`; i = k; continue; }
-      if (s.startsWith('\\sqrt', i)) { i += 5; let n = null; if (s[i] === '[') { const e = s.indexOf(']', i); n = s.slice(i + 1, e); i = e + 1; } const [a, j] = group(s, i); out += n ? `nthRoot(${fromLatex(a)},${n})` : `sqrt(${fromLatex(a)})`; i = j; continue; }
+      if (s.startsWith('\\frac', i) || s.startsWith('\\dfrac', i) || s.startsWith('\\tfrac', i)) {
+        const o = s.indexOf('{', i); if (o < 0) { out += s.slice(i + 5); break; }
+        const [a, j] = group(s, o); if (s[j] !== '{') { out += `(${fromLatex(a)})`; i = j; continue; }
+        const [b, k] = group(s, j); out += `((${fromLatex(a)})/(${fromLatex(b)}))`; i = k; continue;
+      }
+      if (s.startsWith('\\sqrt', i)) { i += 5; let n = null; if (s[i] === '[') { const e = s.indexOf(']', i); n = s.slice(i + 1, e); i = e + 1; } if (s[i] !== '{') { out += 'sqrt'; continue; } const [a, j] = group(s, i); out += n ? `nthRoot(${fromLatex(a)},${n})` : `sqrt(${fromLatex(a)})`; i = j; continue; }
       if (s[i] === '^' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += `^(${fromLatex(a)})`; i = j; continue; }
-      if (s[i] === '_' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += '_' + a.replace(/[^A-Za-z0-9]/g, ''); i = j; continue; }
-      if (s[i] === '\\') { const m = s.slice(i + 1).match(/^[A-Za-z]+/); const w = m ? m[0] : ''; out += ' ' + ({ ln: 'log', log: 'log10' }[w] || w) + ' '; i += 1 + w.length; continue; }
+      // a subscript ends the name: X_{u}Y → X_u Y
+      if (s[i] === '_' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += '_' + a.replace(/\\([A-Za-z]+)/g, (m, w) => GREEK[w] || w).replace(/[^A-Za-z0-9Ͱ-Ͽ]/g, '') + ' '; i = j; continue; }
+      if (s[i] === '\\') { const m = s.slice(i + 1).match(/^[A-Za-z]+/); const w = m ? m[0] : ''; out += GREEK[w] ? GREEK[w] + ' ' : w === 'pi' ? ' pi ' : ' ' + ({ ln: 'log', log: 'log10' }[w] || w) + ' '; i += 1 + (w.length || 1); continue; }
       if (s[i] === '{') { out += '('; i++; continue; } if (s[i] === '}') { out += ')'; i++; continue; }
       out += s[i]; i++;
     }
-    // in LaTeX, adjacent letters are a product: ab = a*b (function names, subscripted names and greek words kept)
-    return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z_0-9]*\()(?!_)/g, (m, p, w) => FUN.includes(w) || Object.values(GREEK).includes(w) ? m : p + w.split('').join('*'));
+    out = out.replace(/\s+_/g, '_');
+    // in LaTeX, adjacent letters are a product: ab = a*b (whole words that are functions, or names with a subscript, are kept)
+    return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z0-9_])(\s*\()?/g, (m, p, w, par) => FUN.includes(w) || (par && w in math && typeof math[w] === 'function') ? m : p + w.split('').join('*') + (par || ''));
   }
+  // returns { s, unsupported }
   function norm(line) {
-    let s = line.trim().replace(/^\(?\d+\)?[.:)]\s*/, '').replace(/^[A-Za-z]?\d+[.:]\s*/, '');
+    let s = line.trim().replace(/^\(?\d+\)?[.:)]\s*/, '').replace(/^[A-Za-z]?\d+[.:]\s+/, '')
+      .replace(/\s*\(\s*\d+[a-z]?\s*\)\s*$/, '')        // equation number at the end, e.g. "(3)"
+      .replace(/[\s.,;]+$/, '');                          // trailing punctuation
+    // superscripts and subscripts before compatibility normalisation (which would turn x² into x2)
+    s = s.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁽⁾ⁿ]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')')
+         .replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]+/g, m => '_' + [...m].map(c => SUB[c]).join(''))
+         .replace(/(\S)[̅̄]/g, '$1_bar').replace(/(\S)̂/g, '$1_hat').replace(/(\S)̃/g, '$1_tilde').replace(/(\S)̇/g, '$1_dot');
+    // PDF and Word copies: math italic letters (𝑋, 𝜆), script letters (ℒ), fraction slash, invisible operators
+    s = s.normalize('NFKC').replace(/ /g, ' ').replace(/[⁡-⁤​-‍﻿]/g, '')
+         .replace(/⁄/g, '/').replace(/[〖〔]/g, '(').replace(/[〗〕]/g, ')').replace(/[▒┬┴]/g, ' ');
+    if (UNSUPPORTED.test(s)) return { s, unsupported: true };
+    const latex = /\\|[{}]/.test(s);
+    if (!latex) {
+      // plain-text superscript star and prime: X*, X_u*, X′ (a * not followed by an operand) → X_star
+      s = s.replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\*(?=\s*(?:[-+=)\/,|]|$))/g, '$1_star').replace(/([A-Za-z0-9_Ͱ-Ͽ])[′']/g, '$1_prime');
+    }
     // derivatives are read as one variable: dX/dz, ∂X/∂z, \frac{\partial X}{\partial z} → dX_dz
     s = s.replace(/\\frac\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}/g, 'd$1_d$2')
          .replace(/[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)\s*\/\s*[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)/g, 'd$1_d$2');
-    const latex = /\\|[{}]/.test(s);
-    s = s.replace(/[−–]/g, '-').replace(/[×·⋅]/g, '*').replace(/[÷∕]/g, '/').replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)')
-      .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')').replace(/[α-ωΑ-Ω]/g, c => GREEK[c] ? ' ' + GREEK[c] + ' ' : c).replace(/\bln\s*\(/g, 'log(');
     if (latex) s = fromLatex(s);
-    return s.replace(/\s+_/g, '_');
+    s = s.replace(/[−–—]/g, '-').replace(/[×·⋅•∙∗]/g, '*').replace(/[÷∕]/g, '/')
+      .replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)').replace(/π/g, ' pi ')
+      .replace(new RegExp('∇\\s*(' + NAME + ')', 'gu'), 'grad_$1').replace(/[∂𝜕]\s*/g, 'd_')
+      .replace(/\bln\s*\(/g, 'log(');
+    if (!latex) {
+      // a Greek letter written next to another symbol is a product in plain text: αh → α h
+      s = s.replace(/([Ͱ-Ͽ])(?=[A-Za-z0-9Ͱ-Ͽ])/g, '$1 ').replace(/([A-Za-z0-9])(?=[Ͱ-Ͽ])/g, '$1 ');
+    }
+    // absolute values |x| (and max|x|, min|x|)
+    let prev, guard = 0; do { prev = s; s = s.replace(/\b(max|min)?\s*\|([^|]+)\|/g, (m, f, a) => f ? `${f}(abs(${a}))` : `abs(${a})`); } while (s !== prev && ++guard < 10);
+    // square brackets are grouping, not matrices
+    s = s.replace(/\[/g, '(').replace(/\]/g, ')').replace(/\s+_/g, '_').replace(/,\s*\)/g, ')');
+    // a left side written as a function of its arguments, ℒ(X_u, X_l) or f(x), is the quantity being defined
+    s = s.replace(new RegExp(`^\\s*(${NAME})\\s*\\(\\s*${NAME}(?:\\s*,\\s*${NAME})*\\s*\\)\\s*=(?!=)`, 'u'), (m, f) => (f in math && typeof math[f] === 'function') ? m : `${f} =`);
+    // "a/b (…)" or "a/b c" as written in papers and Word: the fraction ends at the space → (a/b)·(…)
+    const atom = `(?:${NAME}|[0-9.]+|\\((?:[^()]|\\([^()]*\\))*\\))`;
+    s = s.replace(new RegExp(`(${atom})\\s*/\\s*(${atom}(?:\\^(?:[0-9.]+|\\([^()]*\\)))?)(?=\\s+[A-Za-z0-9(\\u0370-\\u03FF])`, 'gu'), '(($1)/($2))');
+    // a variable followed by "(" is a product, not a function call: λ (…) → λ*(…); real functions are kept
+    s = s.replace(new RegExp(`(${NAME})(\\s*)\\(`, 'gu'), (m, f, sp) => (FUN.includes(f) || (f in math && typeof math[f] === 'function' && !sp)) ? m : `${f}*(`);
+    return { s, unsupported: false };
   }
+  // symbols that are variables (not function names, not the constants pi, e, i)
+  function vars(node) { const s = new Set(); node.traverse((n, path, parent) => { if (n.isSymbolNode && !(parent && parent.isFunctionNode && parent.fn === n) && !['pi', 'e', 'i', 'E'].includes(n.name)) s.add(n.name); }); return [...s]; }
   const scope = (vars, f) => Object.fromEntries(vars.map(v => [v, f(v)]));
-  function vars(node) { const s = new Set(); node.traverse((n, path, parent) => { if (n.isSymbolNode && !(parent && parent.isFunctionNode && parent.fn === n) && !['pi', 'e', 'i', 'E'].includes(n.name) && !(n.name in math && typeof math[n.name] === 'function')) s.add(n.name); }); return [...s]; }
   const rnd = (pos) => { const x = Math.exp(Math.log(0.2) + Math.random() * Math.log(50)); return pos || Math.random() < 0.5 ? x : -x; };
   function root(f, guess) {
     const grid = []; for (let e = -4; e <= 4; e += 0.1) { grid.push(10 ** e); grid.push(-(10 ** e)); }
@@ -404,7 +462,9 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
       if (!lines.length) return U.empty('Paste at least one equation.');
       const pos = v.sign === 'pos', E = [], rows = [], notes = [], work = [];
       lines.forEach((ln, i) => {
-        const s = norm(ln), parts = s.split(/(?<![<>!=])=(?!=)/);
+        const { s, unsupported } = norm(ln);
+        if (unsupported) { rows.push([i + 1, U.esc(ln), '<span class="tag warn">Not checked</span>', 'Contains a sum, integral, limit or matrix, which this check cannot evaluate. Check it by hand, or write it out as scalar equations.']); return; }
+        const parts = s.split(/(?<![<>!=])=(?!=)/);
         if (parts.length !== 2) { rows.push([i + 1, ln, '<span class="tag bad">Not one equation</span>', parts.length < 2 ? 'No "=" sign.' : 'More than one "=" sign.']); return; }
         try {
           const L = math.parse(parts[0]), R = math.parse(parts[1]), f = math.parse(`(${parts[0]})-(${parts[1]})`).compile();
@@ -437,7 +497,7 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
           : U.note(`Equation ${Q.i} does not follow from equation ${P.i}. For ${Object.entries(fail.sc).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ')}, equation ${Q.i} gives ${u} = ${HM.fmt(fail.r, 4)}, which leaves equation ${P.i} off by ${HM.fmt(fail.res, 4)}. Check signs, exponents and which terms were moved.`, 'bad'));
       }
       // worked example
-      const known = {}; String(v.vals || '').split(/[,;\n]+/).forEach(p => { const m = p.split('='); if (m.length === 2) { const name = norm(m[0]).trim(), val = Number(m[1].trim().replace(/\s/g, '')); if (name && isFinite(val)) known[name] = val; } });
+      const known = {}; String(v.vals || '').split(/[,;\n]+/).forEach(p => { const m = p.split('='); if (m.length === 2) { const name = norm(m[0] + '= 0').s.split('=')[0].trim(), val = Number(m[1].trim().replace(/\s/g, '')); if (name && isFinite(val)) known[name] = val; } });
       const ex = [];
       if (Object.keys(known).length) E.forEach(e => {
         const miss = e.vs.filter(x => !(x in known));
@@ -448,7 +508,7 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
       let h = `<table class="tt"><thead><tr><th>#</th><th>Read as</th><th>Status</th></tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td><code>${r[1]}</code><br><span style="font-size:.85rem; color:var(--ink-2)">${r[3]}</span></td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
       if (pairs.length) h += '<h3>Rearrangements</h3>' + pairs.join(''); else if (E.length > 1) h += U.note('No two equations use exactly the same variables, so no rearrangement could be tested.');
       if (ex.length) h += '<h3>Worked example</h3>' + ex.join('');
-      h += U.note('Check that each line was read as intended. In LaTeX, adjacent letters are a product (ab = a·b); in plain text, ab is one variable, so write a*b. e and pi are the constants.');
+      h += U.note('Check that each line was read as intended. In LaTeX, adjacent letters are a product (ab = a·b); in plain text and Word, ab is one variable, so write a*b or a b. A Greek letter next to a symbol (αh) is a product. Equations copied from a PDF often lose their subscripts (X_u becomes Xu): the check still works, but compare the variable names. e and pi are the constants.');
       return { html: h, work: ['Each equation is parsed into a symbolic expression tree (math.js) and evaluated as left side − right side.', 'Domain: 200 random values per variable (0.2 to 10, log-spaced; both signs if "Any sign"); any non-real result is flagged.', 'Rearrangement: equations with the same variables are compared by solving one numerically for the isolated variable at 12 random points and substituting into the other (relative tolerance 10⁻⁶).', 'Worked example: with all values known the residual is tested; with one unknown it is solved by bracketing and bisection.'] };
     }
   });
