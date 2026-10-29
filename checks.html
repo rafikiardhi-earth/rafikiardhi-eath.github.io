@@ -1823,7 +1823,7 @@ window.CKSTAT = window.CKSTAT || (function () {
     s = s.replace(/\\frac\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}/g, 'd$1_d$2')
          .replace(/[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)\s*\/\s*[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)/g, 'd$1_d$2');
     // Word/PDF partials in brackets: (∂E^*)/∂x, (∂X_(u,l))/(∂x) → dE_star_dx, the same single symbol as ∂E/∂x
-    s = s.replace(new RegExp(`\\(\\s*[∂𝜕]\\s*(${NAME})\\s*\\)\\s*\\/\\s*\\(?\\s*[∂𝜕]\\s*([A-Za-z\\u0370-\\u03FF])\\s*\\)?`, 'gu'), 'd$1_d$2');
+    s = s.replace(new RegExp(`\\(\\s*[∂𝜕]\\s*(${NAME})\\s*\\)\\s*\\/\\s*\\(?\\s*[∂𝜕]\\s*([A-Za-z\\u0370-\\u03FF])(?:\\s*\\))?`, 'gu'), 'd$1_d$2');   // the closing bracket is optional; spaces after the symbol are kept
     // integrals, sums, products and matrices → integ(), indef(), sumn(), prodn(), ⟦ ⟧
     if (latex) s = s.replace(/\\mathrm\s*\{\s*d\s*\}/g, 'd').replace(/\\(?:d|diff)\s*(?=[A-Za-z\\])/g, 'd');
     const st = structural(s, latex);
