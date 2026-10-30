@@ -76,16 +76,71 @@ body.quarto-light .hmc {
 </style>
 <script>
 window.HM = (function () {
-  const ES = (document.documentElement.lang || '').toLowerCase().startsWith('es');
-  const T = ES ? {
-    units: 'Unidades', us: 'Unidades de EE. UU.', si: 'Métricas', yours: 'Sus datos', work: 'Ver el cálculo', example: 'Ejemplo', link: 'Copiar enlace', print: 'Imprimir', reset: 'Empezar de nuevo',
-    small: 'Gratis, sin registro, sin anuncios, y nada de lo que escribe sale de su navegador. Los valores típicos son un punto de partida; cámbielos según su situación.',
-    sayLab: 'Copie esto', copy: 'Copiar', linkCopied: 'Enlace copiado', copied: 'Copiado', check: 'Revise sus números.', copyThis: 'Copie esto:'
-  } : {
-    units: 'Units', us: 'US units', si: 'Metric', yours: 'Your numbers', work: 'Show the working', example: 'Example', link: 'Copy link', print: 'Print', reset: 'Start over',
-    small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.',
-    sayLab: 'Copy this', copy: 'Copy', linkCopied: 'Link copied', copied: 'Copied', check: 'Check your numbers.', copyThis: 'Copy this:'
+  const langStr = (document.documentElement.lang || '').toLowerCase();
+  const lang = langStr.startsWith('es') ? 'es' : langStr.startsWith('sw') ? 'sw' : 'en';
+
+  const DICT = {
+    en: {
+      title: 'RafikiArdhi · Equation check',
+      sub: 'No AI. Runs in this panel; nothing leaves your computer.',
+      btnSel: 'Check the selected equations',
+      btnDoc: 'Find all equations in the document',
+      btnCom: 'Add the findings as a comment',
+      btnAll: 'Open all checks (enter values by hand)',
+      units: 'Units', us: 'US units', si: 'Metric', yours: 'Your numbers', work: 'Show the working', example: 'Example', link: 'Copy link', print: 'Print', reset: 'Start over',
+      small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.',
+      sayLab: 'Copy this', copy: 'Copy', linkCopied: 'Link copied', copied: 'Copiado', check: 'Check your numbers.', copyThis: 'Copy this:',
+      lblEqs: 'Equations, one per line (numbers like "(3)" at the start or end are ignored)',
+      lblVals: 'Worked example from the paper (optional): known values, e.g. q = 0.5, dz = 10, dh = -2',
+      lblSign: 'Variables are', pos: 'Positive', any: 'Any sign',
+      hdrStatus: 'Status', hdrRead: 'Read as', hdrRearrange: 'Rearrangements', hdrWorked: 'Worked example',
+      noEqs: 'Paste at least one equation.', engineLoading: 'The maths engine is still loading. Try again in a moment.',
+      tagNotChecked: 'Not checked', tagNotOne: 'Not one equation', tagCannotRead: 'Cannot read',
+      tagNever: 'Never evaluates', tagHolds: 'Holds', tagNotHolds: 'Does not hold', tagGood: 'Reads and evaluates', tagWarn: 'Undefined in places',
+      tagAntiHolds: 'Antiderivative holds', tagNotAnti: 'Not an antiderivative'
+    },
+    es: {
+      title: 'RafikiArdhi · Verificación de ecuaciones',
+      sub: 'Sin IA. Se ejecuta en este panel; nada sale de su computadora.',
+      btnSel: 'Verificar ecuaciones seleccionadas',
+      btnDoc: 'Buscar todas las ecuaciones en el documento',
+      btnCom: 'Agregar resultados como comentario',
+      btnAll: 'Abrir todas las verificaciones (ingresar valores manualmente)',
+      units: 'Unidades', us: 'Unidades de EE. UU.', si: 'Métricas', yours: 'Sus datos', work: 'Ver el cálculo', example: 'Ejemplo', link: 'Copiar enlace', print: 'Imprimir', reset: 'Empezar de nuevo',
+      small: 'Gratis, sin registro, sin anuncios, y nada de lo que escribe sale de su navegador. Los valores típicos son un punto de partida; cámbielos según su situación.',
+      sayLab: 'Copie esto', copy: 'Copiar', linkCopied: 'Enlace copiado', copied: 'Copiado', check: 'Revise sus números.', copyThis: 'Copie esto:',
+      lblEqs: 'Ecuaciones, una por línea (se ignoran números como "(3)" al inicio o al final)',
+      lblVals: 'Ejemplo resuelto del artículo (opcional): valores conocidos, ej. q = 0.5, dz = 10, dh = -2',
+      lblSign: 'Las variables son', pos: 'Positivas', any: 'Cualquier signo',
+      hdrStatus: 'Estado', hdrRead: 'Interpretado como', hdrRearrange: 'Reordenamientos', hdrWorked: 'Ejemplo resuelto',
+      noEqs: 'Pegue al menos una ecuación.', engineLoading: 'El motor matemático se está cargando. Inténtelo de nuevo en un momento.',
+      tagNotChecked: 'No verificado', tagNotOne: 'No es una ecuación', tagCannotRead: 'No se puede leer',
+      tagNever: 'Nunca se evalúa', tagHolds: 'Se cumple', tagNotHolds: 'No se cumple', tagGood: 'Lee y evalúa', tagWarn: 'Indefinido en partes',
+      tagAntiHolds: 'Antiderivada válida', tagNotAnti: 'No es una antiderivada'
+    },
+    sw: {
+      title: 'RafikiArdhi · Uhakiki wa Milisho',
+      sub: 'Bila AI. Inafanya kazi katika paneli hii; hakuna kinachotoka kwenye kompyuta yako.',
+      btnSel: 'Hakiki milisho iliyochaguliwa',
+      btnDoc: 'Tafuta milisho yote katika hati',
+      btnCom: 'Ongeza matokeo kama maelezo',
+      btnAll: 'Fungua uhakiki wote (ingiza maadili kwa mkono)',
+      units: 'Vipimo', us: 'Vipimo vya Marekani', si: 'Metriki', yours: 'Nambari zakow', work: 'Onyesha hesabu', example: 'Mfano', link: 'Nakili kiungo', print: 'Chapisha', reset: 'Anza upya',
+      small: 'Bure, bila usajili, bila matangazo, na hakuna unachoingiza kinachotoka kwenye kivinjari chako. Maadili ya kawaida ni hatua ya kuanzia; yabadilishe kulingana na hali yako.',
+      sayLab: 'Nakili hii', copy: 'Nakili', linkCopied: 'Kiungo kimenakiliwa', copied: 'Imenakiliwa', check: 'Kagua nambari zako.', copyThis: 'Nakili hii:',
+      lblEqs: 'Milisho, moja kwa kila mstari (nambari kama "(3)" mwanzo au mwisho zinapuuzwa)',
+      lblVals: 'Mfano uliotatuliwa kutoka kwenye karatasi (hiari): maadili yanayojulikana, mfano q = 0.5, dz = 10, dh = -2',
+      lblSign: 'Mabadiliko ni', pos: 'Chanya', any: 'Ishara yoyote',
+      hdrStatus: 'Hali', hdrRead: 'Inasomwa kama', hdrRearrange: 'Urekebishaji', hdrWorked: 'Mfano uliotatuliwa',
+      noEqs: 'Weka angalau mlisho mmoja.', engineLoading: 'Injini ya hisabati bado inapakia. Jaribu tena baada ya muda mfupi.',
+      tagNotChecked: 'Haijahakikiwa', tagNotOne: 'Sio mlisho mmoja', tagCannotRead: 'Haisomeki',
+      tagNever: 'Haipimiki kamwe', tagHolds: 'Inashikilia', tagNotHolds: 'Haishikilii', tagGood: 'Inasoma na kupima', tagWarn: 'Haijafafanuliwa sehemu',
+      tagAntiHolds: 'Antiderivative inashikilia', tagNotAnti: 'Sio antiderivative'
+    }
   };
+
+  const T = DICT[lang];
+
   const C = {
     len: { us: [0.3048, 'ft'], si: [1, 'm'] },
     dep: { us: [0.0254, 'in'], si: [0.01, 'cm'] },
@@ -97,17 +152,14 @@ window.HM = (function () {
     wdep: { us: [25.4, 'in'], si: [1, 'mm'] },
     rate: { us: [25.4, 'in/hr'], si: [1, 'mm/hr'] },
     mass: { us: [0.45359237, 'lb'], si: [1, 'kg'] },
-    ton: { us: [0.90718474, (ES ? 'toneladas' : 'tons')], si: [1, 't'] },
-    arate: { us: [4.88242764, (ES ? 'lb por 1,000 ft²' : 'lb per 1,000 ft²')], si: [1, 'g/m²'] },
+    ton: { us: [0.90718474, (lang === 'es' ? 'toneladas' : lang === 'sw' ? 'tani' : 'tons')], si: [1, 't'] },
+    arate: { us: [4.88242764, (lang === 'es' ? 'lb por 1,000 ft²' : lang === 'sw' ? 'lb kwa 1,000 ft²' : 'lb per 1,000 ft²')], si: [1, 'g/m²'] },
     flow: { us: [3.785411784, 'gal/hr'], si: [1, 'L/hr'] },
-    dens: { us: [1.18655, (ES ? 'toneladas por yd³' : 'tons per yd³')], si: [1, (ES ? 't por m³' : 't per m³')] },
+    dens: { us: [1.18655, (lang === 'es' ? 'toneladas por yd³' : lang === 'sw' ? 'tani kwa yd³' : 'tons per yd³')], si: [1, (lang === 'es' ? 't por m³' : lang === 'sw' ? 't kwa m³' : 't per m³')] },
     pct: { us: [1, '%'], si: [1, '%'] },
     num: { us: [1, ''], si: [1, ''] },
     min: { us: [1, 'min'], si: [1, 'min'] },
-    money: { us: [1, '$'], si: [1, ''] },
-    pvol: { us: [1 / 0.764554858, (ES ? '$ por yd³' : '$ per yd³')], si: [1, (ES ? 'por m³' : 'per m³')] },
-    pton: { us: [1 / 0.90718474, (ES ? '$ por tonelada' : '$ per ton')], si: [1, (ES ? 'por tonelada métrica' : 'per tonne')] },
-    pwater: { us: [1 / 3.785411784, (ES ? '$ por 1,000 gal' : '$ per 1,000 gal')], si: [1, (ES ? 'por m³' : 'per m³')] }
+    money: { us: [1, '$'], si: [1, ''] }
   };
   const UNITLESS = ['num', 'pct', 'min', 'money', 'select', 'seg', 'check', 'info', 'sec', 'text', 'textarea'];
 
@@ -120,8 +172,8 @@ window.HM = (function () {
     if ((m = s.match(/^(\d+)\s+(\d*\.?\d+)$/))) return +m[1] + +m[2] / 12;
     return num(s);
   }
-  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
-  const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString(lang === 'es' ? 'es-ES' : 'en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString(lang === 'es' ? 'es-ES' : 'en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   function getUnits() { try { const s = localStorage.getItem('ra-units'); if (s === 'si' || s === 'us') return s; } catch (e) { } return 'us'; }
   function setUnits(u) { try { localStorage.setItem('ra-units', u); } catch (e) { } }
@@ -233,7 +285,7 @@ window.HM = (function () {
       val: (si, t) => si == null ? null : si / C[t][u][0],
       unit: t => C[t][u][1],
       f: (si, t, d = 2) => si == null || !isFinite(si) ? '–' : fmt(si / C[t][u][0], d) + (C[t][u][1] && t !== 'money' ? (C[t][u][1].startsWith('$') ? ' ' : ' ') + C[t][u][1].replace(/^\$ /, '') : ''),
-      n: fmt, fix,
+      n: fmt, fix, T,
       money: x => (u === 'us' ? '$' : '') + fix(x, 2),
       kv: rows => `<ul class="kv">${rows.filter(Boolean).map(r => `<li><span>${r[0]}</span><span>${r[1]}</span></li>`).join('')}</ul>`,
       note: (h, cls) => `<div class="note${cls ? ' ' + cls : ''}">${h}</div>`,
@@ -320,7 +372,7 @@ window.HM = (function () {
     return api;
   }
 
-  return { tool, C, fmt, fix, num, feet, esc };
+  return { tool, C, fmt, fix, num, feet, esc, T };
 })();
 </script>
 
@@ -335,19 +387,27 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
 .ra-foot { font-size: .75rem; color: #8a8379; } .ra-foot a { color: #8a4b22; }
 </style></head>
 <body class="quarto-light">
-<h1>RafikiArdhi · Equation check <span class="ck-beta" style="font-size:.6rem;border:1px solid #9a6400;color:#9a6400;border-radius:4px;padding:1px 5px">BETA</span></h1>
-<p class="ra-sub">No AI. Runs in this panel; nothing leaves your computer.</p>
+<h1 id="ra-title">RafikiArdhi · Equation check <span class="ck-beta" style="font-size:.6rem;border:1px solid #9a6400;color:#9a6400;border-radius:4px;padding:1px 5px">BETA</span></h1>
+<p class="ra-sub" id="ra-sub">No AI. Runs in this panel; nothing leaves your computer.</p>
 <div class="ra-bar">
-  <button class="p" id="ra-sel">Check the selected equations</button>
-  <button id="ra-doc">Find all equations in the document</button>
-  <button id="ra-com">Add the findings as a comment</button>
-  <button id="ra-all" onclick="location.href='https://rafikiardhi.earth/checks.html'">Open all checks (enter values by hand)</button>
+  <button class="p" id="ra-sel"></button>
+  <button id="ra-doc"></button>
+  <button id="ra-com"></button>
+  <button id="ra-all" onclick="location.href='https://rafikiardhi.earth/checks.html'"></button>
 </div>
 <div class="ra-msg" id="ra-msg"></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
 <div class="hmc" id="eq"></div>
 <script>
 (function () {
+  // Translate static interface buttons
+  document.getElementById('ra-title').firstChild.textContent = HM.T.title + ' ';
+  document.getElementById('ra-sub').textContent = HM.T.sub;
+  document.getElementById('ra-sel').textContent = HM.T.btnSel;
+  document.getElementById('ra-doc').textContent = HM.T.btnDoc;
+  document.getElementById('ra-com').textContent = HM.T.btnCom;
+  document.getElementById('ra-all').textContent = HM.T.btnAll;
+
   // ======================= reading equations =======================
   const GREEK = { alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', epsilon: 'ε', varepsilon: 'ε', zeta: 'ζ', eta: 'η', theta: 'θ', vartheta: 'θ', kappa: 'κ', lambda: 'λ', mu: 'μ', nu: 'ν', xi: 'ξ', rho: 'ρ', varrho: 'ρ', sigma: 'σ', tau: 'τ', phi: 'φ', varphi: 'φ', chi: 'χ', psi: 'ψ', omega: 'ω', Delta: 'Δ', Gamma: 'Γ', Theta: 'Θ', Lambda: 'Λ', Sigma: 'Σ', Phi: 'Φ', Psi: 'Ψ', Omega: 'Ω', Xi: 'Ξ', Pi: 'Π', Upsilon: 'Υ', upsilon: 'υ', iota: 'ι' };
   const OPS = ['integ', 'indef', 'sumn', 'prodn'];
@@ -437,8 +497,7 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         const [v, a] = lo.split('=').map(x => x.trim());
         const e = sumEnd(s, j); const f = structural(s.slice(j, e).replace(/^[\s▒]+/, ''), latex); if (f == null) return null;
         out += `${prod ? 'prodn' : 'sumn'}(${L}${f}${R}, ${v}, ${L}${bnd(a, latex)}${R}, ${L}${bnd(hi, latex)}${R})`;
-        i = e; continue;
-      }
+        i = e; continue; }
       if (latex && s.startsWith('\\infty', i)) { out += 'Infinity'; i += 6; continue; }
       if (!latex && s[i] === '∞') { out += 'Infinity'; i++; continue; }
       out += s[i]; i++;
@@ -449,17 +508,84 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
   function group(s, i) { let d = 0, j = i; for (; j < s.length; j++) { if (s[j] === '{') d++; else if (s[j] === '}') { d--; if (!d) break; } } return [s.slice(i + 1, j), j + 1]; }
   const FNAMES = { ln: 'ln', log: 'log', exp: 'exp', sin: 'sin', cos: 'cos', tan: 'tan', sinh: 'sinh', cosh: 'cosh', tanh: 'tanh', arcsin: 'asin', arccos: 'acos', arctan: 'atan' };
   
-  // Convert plain text, Unicode math, or Word linear math into standard LaTeX string
+  function ommlToLatex(node) {
+    if (!node) return '';
+    if (node.nodeType === 3) return node.nodeValue;
+    const name = node.localName || node.tagName || '';
+    const children = Array.from(node.childNodes).map(ommlToLatex).join('');
+    
+    switch (name) {
+      case 'f': {
+        const num = Array.from(node.childNodes).find(n => (n.localName || n.tagName) === 'num');
+        const den = Array.from(node.childNodes).find(n => (n.localName || n.tagName) === 'den');
+        return `\\frac{${ommlToLatex(num)}}{${ommlToLatex(den)}}`;
+      }
+      case 'sSub': {
+        const e = Array.from(node.childNodes).find(n => (n.localName || n.tagName) === 'e');
+        const sub = Array.from(node.childNodes).find(n => (n.localName || n.tagName) === 'sub');
+        return `${ommlToLatex(e)}_{${ommlToLatex(sub)}}`;
+      }
+      case 'sSup': {
+        const e = Array.from(node.childNodes).find(n => (n.localName || n.tagName) === 'e');
+        const sup = Array.from(node.childNodes).find(n => (n.localName || n.tagName) === 'sup');
+        return `${ommlToLatex(e)}^{${ommlToLatex(sup)}}`;
+      }
+      case 'm':
+      case 'mPr': return `\\begin{matrix}${children}\\end{matrix}`;
+      case 'mr': return children + ' \\\\ ';
+      case 'rad': {
+        const e = Array.from(node.childNodes).find(n => (n.localName || n.tagName) === 'e');
+        return `\\sqrt{${ommlToLatex(e)}}`;
+      }
+      case 'd': {
+        const e = Array.from(node.childNodes).find(n => (n.localName || n.tagName) === 'e');
+        const inner = ommlToLatex(e);
+        if (/^\(.*\)$|^\[.*\]$/.test(inner.trim())) return inner;
+        return `(${inner})`;
+      }
+      case 't': return children;
+      default: return children;
+    }
+  }
+
+  function parseXmlToLatex(xmlString) {
+    try {
+      const parser = new DOMParser();
+      const xmlDoc = parser.parseFromString(xmlString, 'text/xml');
+      return ommlToLatex(xmlDoc.documentElement);
+    } catch (err) {
+      return xmlString;
+    }
+  }
+
   function textToLatex(s) {
-    if (/\\|[{}]/.test(s)) return s; // Already LaTeX
+    if (s.includes('<m:oMath') || s.includes('<m:f')) {
+      s = parseXmlToLatex(s);
+    }
+    if (/\\|[{}]/.test(s)) return s;
     let out = s;
+    
+    out = out.replace(/[\u200B-\u200D\u200E\u200F\u2060\u2061\uFEFF]/g, '')
+             .replace(/^[,\s.:=]+|[,\s.:=]+$/g, '');
+
+    out = out.replace(/■\(([^()]+)\)/g, (m, body) => {
+      const rows = body.split('@').map(r => r.split('&').join(' & ')).join(' \\\\ ');
+      return `\\begin{matrix} ${rows} \\end{matrix}`;
+    });
+
+    out = out.replace(/([A-Za-z\u0370-\u03FF])\s*[-−]\s*([luabijnk0-9])/g, '$1_$2');
+    
     out = out.replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁽⁾ⁿ]+/g, m => '^{' + [...m].map(c => SUP[c]).join('') + '}')
              .replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]+/g, m => '_{' + [...m].map(c => SUB[c]).join('') + '}');
+    
+    out = out.replace(/[∂𝜕]/g, '\\partial ');
     const GREEK_REV = Object.fromEntries(Object.entries(GREEK).map(([k, v]) => [v, '\\' + k + ' ']));
     out = out.replace(/[\u0370-\u03FF]/g, c => GREEK_REV[c] || c);
+    
+    out = out.replace(/([A-Za-z0-9_]+)\s+\(([^()]+)\)/g, '$1($2)');
+    out = out.replace(/\(\s*\(([^()]+)\)\s*\/\s*\(([^()]+)\)\s*\)/g, '($1)/($2)');
     out = out.replace(/([A-Za-z0-9_.()+]+)\/([A-Za-z0-9_.()+]+)/g, '\\frac{$1}{$2}');
     out = out.replace(/√\(([^()]+)\)/g, '\\sqrt{$1}').replace(/√([A-Za-z0-9_.]+)/g, '\\sqrt{$1}');
-    out = out.replace(/[∂𝜕]/g, '\\partial ');
     return out;
   }
 
@@ -469,7 +595,7 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
       .replace(/(?<![A-Za-z])\{\s*(\\(?:overline|bar|hat|tilde)\s*\{[^{}]*\}|[A-Za-z]+)\s*\}(?=\s*[_^])/g, '$1');
     s = s.replace(/\\left|\\right|\\bigg|\\Bigg|\\big|\\Big|\\,|\\;|\\:|\\!|\\qquad|\\quad|\\displaystyle/g, '')
       .replace(/\\ /g, ' ')
-      .replace(/\\(?:mathcal|mathscr|mathrm|mathbf|mathit|mathsf|mathbb|boldsymbol|bm|operatorname|textrm|textit|text|mathnormal)\s*\{([^{}]*)\}/g, '$1')
+      .replace(/\\(?:mathcal|mathscr|mathrm|mathbf|mathit|mathsf|mb|operatorname|textrm|textit|text|mathnormal)\s*\{([^{}]*)\}/g, '$1')
       .replace(/\\(?:overline|bar)\s*\{\s*([^{}]*?)\s*\}/g, '$1_bar').replace(/\\(?:widehat|hat)\s*\{\s*([^{}]*?)\s*\}/g, '$1_hat')
       .replace(/\\(?:widetilde|tilde)\s*\{\s*([^{}]*?)\s*\}/g, '$1_tilde').replace(/\\dot\s*\{\s*([^{}]*?)\s*\}/g, '$1_dot')
       .replace(/\\(?:overline|bar)\s*([A-Za-z])/g, '$1_bar').replace(/\\hat\s*([A-Za-z])/g, '$1_hat')
@@ -530,8 +656,11 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     s = st.replace(/▒/g, ' ');
     s = s.replace(/\\(?:text|mathrm)\s*\{\s*const\s*\}|\bconst\b/g, 'C');
     if (latex) s = fromLatex(s);
+    
+    // Exact fixed transpose regex rule
     s = s.replace(new RegExp(`(${NAME})\\s*\\^\\s*\\(?\\s*[T⊤]\\s*\\)?(?![A-Za-z0-9_])`, 'gu'), 'transpose($1)');
     s = s.replace(/(\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\))\s*\^\s*\(?\s*[T⊤]\s*\)?(?![A-Za-z0-9_])/g, 'transpose$1');
+    
     s = s.replace(/[×·⋅•∙∗]/g, '*').replace(/[÷∕]/g, '/')
       .replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)').replace(/π/g, ' pi ')
       .replace(new RegExp('∇\\s*(' + NAME + ')', 'gu'), 'grad_$1').replace(/[∂𝜕]\s*/g, 'd_')
@@ -746,14 +875,15 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
   HM.tool({
     id: 'eq', step: 'Equations', units: false, hash: false,
     inputs: [
-      { k: 'eqs', l: 'Equations, one per line (numbers like "(3)" at the start or end are ignored)', t: 'textarea', rows: 6, ph: 'q = -K*dh/dz\nK = q*dz/dh\n\\int_{0}^{\\infty} e^{-kx} dx = 1/k\n\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}\n[a, -g; -g, a] * [x; y] = [r; s]' },
-      { k: 'vals', l: 'Worked example from the paper (optional): known values, e.g. q = 0.5, dz = 10, dh = -2 (lists and matrices as x = [1, 2, 3], A = [2, -1; -1, 2])', t: 'textarea', rows: 2 },
-      { k: 'sign', l: 'Variables are', t: 'seg', d: 'pos', opts: [['pos', 'Positive'], ['any', 'Any sign']], h: 'Used to search for division by zero, logs and roots of negatives, divergent integrals and sums, and to test rearrangements.' }
+      { k: 'eqs', l: u => HM.T.lblEqs, t: 'textarea', rows: 6, ph: 'q = -K*dh/dz\nK = q*dz/dh\n\\int_{0}^{\\infty} e^{-kx} dx = 1/k\n\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}\n[a, -g; -g, a] * [x; y] = [r; s]' },
+      { k: 'vals', l: u => HM.T.lblVals, t: 'textarea', rows: 2 },
+      { k: 'sign', l: u => HM.T.lblSign, t: 'seg', d: 'pos', opts: u => [[ 'pos', HM.T.pos ], [ 'any', HM.T.any ]] }
     ],
     compute(v, U) {
-      if (typeof math === 'undefined') return U.empty('The maths engine is still loading. Try again in a moment.');
+      const T = U.T;
+      if (typeof math === 'undefined') return U.empty(T.engineLoading);
       const lines = String(v.eqs || '').split(/\r?\n/).filter(l => l.trim());
-      if (!lines.length) return U.empty('Paste at least one equation.');
+      if (!lines.length) return U.empty(T.noEqs);
       const pos = v.sign === 'pos', E = [], rows = [];
       const known = {};
       const parts = []; { let d = 0, cur = ''; for (const c of String(v.vals || '')) { if ('[('.includes(c)) d++; if ('])'.includes(c)) d--; if (!d && /[,;\n]/.test(c)) { parts.push(cur); cur = ''; } else cur += c; } parts.push(cur); }
@@ -771,9 +901,9 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         else items.push({ ln, lab: i2, nr });
       }));
       items.forEach(({ ln, lab, nr }) => {
-        if (nr.unsupported) { rows.push([lab, U.esc(ln), '<span class="tag warn">Not checked</span>', nr.reason === 'structure' ? 'An integral or sum could not be read: give both limits, the index (n = 1) and the differential (dx).' : 'Contains a limit, a multiple or a contour integral, which this check cannot evaluate. Check it by hand.']); return; }
+        if (nr.unsupported) { rows.push([lab, U.esc(ln), `<span class="tag warn">${T.tagNotChecked}</span>`, nr.reason === 'structure' ? 'An integral or sum could not be read: give both limits, the index (n = 1) and the differential (dx).' : 'Contains a limit, a multiple or a contour integral, which this check cannot evaluate. Check it by hand.']); return; }
         const s = nr.s, sp = s.split(/(?<![<>!=])=(?!=)/);
-        if (sp.length !== 2) { rows.push([lab, U.esc(ln), '<span class="tag bad">Not one equation</span>', sp.length < 2 ? 'No "=" sign.' : 'More than one "=" sign.']); return; }
+        if (sp.length !== 2) { rows.push([lab, U.esc(ln), `<span class="tag bad">${T.tagNotOne}</span>`, sp.length < 2 ? 'No "=" sign.' : 'More than one "=" sign.']); return; }
         try {
           const L = MJ.parse(sp[0]), R = MJ.parse(sp[1]);
           const e = { i: lab, ln, src: s, L, R, Lc: wrapSq(L).compile(), Rc: wrapSq(R).compile(), lhsSym: L.isSymbolNode ? L.name : null };
@@ -783,12 +913,12 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
           const readAs = `${U.esc(show(L))} = ${U.esc(show(R))}`;
           if (e.indef) {
             const r = checkIndef(e, pos); e.skip = true; E.push(e);
-            const tag = !r.tried ? '<span class="tag bad">Never evaluates</span>' : r.ok === r.tried ? '<span class="tag good">Antiderivative holds</span>' : '<span class="tag bad">Not an antiderivative</span>';
+            const tag = !r.tried ? `<span class="tag bad">${T.tagNever}</span>` : r.ok === r.tried ? `<span class="tag good">${T.tagAntiHolds}</span>` : `<span class="tag bad">${T.tagNotAnti}</span>`;
             rows.push([lab, readAs, tag, !r.tried ? 'The other side could not be evaluated.' : r.ok === r.tried ? `Differentiating the other side with respect to ${r.v} gives the integrand in all ${r.tried} random tests (the constant of integration is ignored).` : `Differentiating the other side gives ${HM.fmt(r.fail.d, 4)} at ${r.fail.v} = ${HM.fmt(r.fail.x, 3)}, but the integrand is ${HM.fmt(r.fail.y, 4)}.`]);
             return;
           }
           e.kinds = shapes(e, known); e.vs = Object.keys(e.kinds); e.readAs = readAs; e.row = rows.length; rows.push(null); E.push(e);
-        } catch (err) { rows.push([lab, U.esc(ln), '<span class="tag bad">Cannot read</span>', U.esc(err.message) + (s !== ln.trim() ? ` (read as: ${U.esc(s)})` : '')]); }
+        } catch (err) { rows.push([lab, U.esc(ln), `<span class="tag bad">${T.tagCannotRead}</span>`, U.esc(err.message) + (s !== ln.trim() ? ` (read as: ${U.esc(s)})` : '')]); }
       });
 
       const shared = {}; E.forEach(e => { if (!e.skip) for (const [x, k] of Object.entries(e.kinds)) if (k !== 's' && (!shared[x] || k.startsWith('sz:'))) shared[x] = k; });
@@ -814,10 +944,10 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         let tag, txt = '';
         const kindTxt = Object.entries(e.kinds).filter(([, k]) => k !== 's').map(([x, k]) => `${x} (${{ int: 'whole number', vec: 'list', m: '2×2 matrix', v: '2×1 vector' }[k] || k.replace('sz:', '').replace('x', '×')})`);
         const scTxt = sc => Object.entries(sc).filter(([, x]) => !isArr(x)).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ');
-        if (bad === n) { tag = '<span class="tag bad">Never evaluates</span>'; txt = mism === n && e.vs.length ? (e.sharedSizes ? ' With the sizes these variables have in the other equations, the two sides cannot be multiplied or do not match: check the order of the matrix products and the dimensions.' : ' The two sides never have the same size, or the expression cannot be evaluated: check the matrix dimensions.') : (e.heavy ? ' An integral or sum does not converge, or cannot be evaluated, for any test value.' : ' No test value gives a real, finite number: check the signs and the domain.'); }
-        else if (e.identity && !defines) { tag = '<span class="tag good">Holds</span>'; txt = e.vs.length ? ` Both sides agree for all ${ok} test values.` : ' Both sides agree.'; }
-        else if (!defines && (e.heavy || !e.vs.length)) { tag = '<span class="tag bad">Does not hold</span>'; e.fails = true; const [l, r] = miss.val; txt = ` ${scTxt(miss.sc) ? `For ${scTxt(miss.sc)}, the` : 'The'} left side is ${fmtV(l)} and the right side is ${fmtV(r)}.`; }
-        else tag = bad === 0 ? '<span class="tag good">Reads and evaluates</span>' : '<span class="tag warn">Undefined in places</span>';
+        if (bad === n) { tag = `<span class="tag bad">${T.tagNever}</span>`; txt = mism === n && e.vs.length ? (e.sharedSizes ? ' With the sizes these variables have in the other equations, the two sides cannot be multiplied or do not match: check the order of the matrix products and the dimensions.' : ' The two sides never have the same size, or the expression cannot be evaluated: check the matrix dimensions.') : (e.heavy ? ' An integral or sum does not converge, or cannot be evaluated, for any test value.' : ' No test value gives a real, finite number: check the signs and the domain.'); }
+        else if (e.identity && !defines) { tag = `<span class="tag good">${T.tagHolds}</span>`; txt = e.vs.length ? ` Both sides agree for all ${ok} test values.` : ' Both sides agree.'; }
+        else if (!defines && (e.heavy || !e.vs.length)) { tag = `<span class="tag bad">${T.tagNotHolds}</span>`; e.fails = true; const [l, r] = miss.val; txt = ` ${scTxt(miss.sc) ? `For ${scTxt(miss.sc)}, the` : 'The'} left side is ${fmtV(l)} and the right side is ${fmtV(r)}.`; }
+        else tag = bad === 0 ? `<span class="tag good">${T.tagGood}</span>` : `<span class="tag warn">${T.tagWarn}</span>`;
         if (bad && bad < n) txt += ` Undefined for ${Math.round(100 * bad / n)}% of ${pos ? 'positive ' : ''}test values (division by zero, log or root of a negative, or a divergent integral or sum)${scTxt(ex) ? `, e.g. ${scTxt(ex)}` : ''}.`;
         rows[e.row] = [e.i, e.readAs, tag, `Variables: ${e.vs.join(', ') || 'none'}${kindTxt.length ? `; sizes: ${kindTxt.join(', ')}` : ''}.${txt}`];
       });
@@ -863,9 +993,9 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
         else ex.push(U.note(`Equation ${e.i}: ${miss.length} unknowns (${miss.join(', ')}), give all but one to solve it.`));
       });
 
-      let h = `<table class="tt"><thead><tr><th>#</th><th>Read as</th><th>Status</th></tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td><code>${r[1]}</code><br><span style="font-size:.85rem; color:var(--ink-2)">${r[3]}</span></td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
-      if (pairs.length) h += '<h3>Rearrangements</h3>' + pairs.join(''); else if (samePairs) h += U.note('Some equations share the same variables, but none has a single variable alone on one side to solve for (for example A⁻¹ = … or det(A) = …), so the rearrangement could not be tested. Add a line with the variable alone, such as A = […].'); else if (RR.length > 1) h += U.note('No two equations use exactly the same variables, so no rearrangement could be tested.');
-      if (ex.length) h += '<h3>Worked example</h3>' + ex.join('');
+      let h = `<table class="tt"><thead><tr><th>#</th><th>${T.hdrRead}</th><th>${T.hdrStatus}</th></tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td><code>${r[1]}</code><br><span style="font-size:.85rem; color:var(--ink-2)">${r[3]}</span></td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
+      if (pairs.length) h += `<h3>${T.hdrRearrange}</h3>` + pairs.join(''); else if (samePairs) h += U.note('Some equations share the same variables, but none has a single variable alone on one side to solve for (for example A⁻¹ = … or det(A) = …), so the rearrangement could not be tested. Add a line with the variable alone, such as A = […].'); else if (RR.length > 1) h += U.note('No two equations use exactly the same variables, so no rearrangement could be tested.');
+      if (ex.length) h += `<h3>${T.hdrWorked}</h3>` + ex.join('');
       h += U.note('Check that each line was read as intended. In LaTeX, adjacent letters are a product (ab = a·b); in plain text and Word, ab is one variable, so write a*b or a b. A Greek letter next to a symbol (αh) is a product. Equations copied from a PDF often lose their subscripts (X_u becomes Xu): the check still works, but compare the variable names. e and pi are the constants. Integrals and sums are evaluated numerically, so agreement means agreement to many digits, not a symbolic proof.');
       return { html: h, work: [
         'Each equation is parsed into a symbolic expression tree (math.js) and evaluated as left side − right side; for matrices, every element must agree and both sides must have the same size.',
@@ -892,9 +1022,18 @@ h1 { font-size: 1.05rem; margin: 2px 0 2px; color: #1f1c17; } .ra-sub { font-siz
     if (info.host !== Office.HostType.Word) { noWord(); return; }
     document.getElementById('ra-sel').onclick = () => Word.run(async ctx => {
       const r = ctx.document.getSelection(); 
-      r.load('text'); 
-      await ctx.sync();
-      const lines = eqLines(r.text || '');
+      let text = '';
+      if (typeof r.getOxml === 'function') {
+        const oxml = r.getOxml();
+        await ctx.sync();
+        text = oxml.value || '';
+      }
+      if (!text) {
+        r.load('text');
+        await ctx.sync();
+        text = r.text || '';
+      }
+      const lines = eqLines(text);
       if (!lines.length) { msg('No equations found in the selection. Select one or more equations (Word equations or typed lines with "=").'); return; }
       setEqs(lines.join('\n')); msg(`Read ${lines.length} equation${lines.length > 1 ? 's' : ''} from the selection.`);
     }).catch(e => msg('Could not read the selection: ' + e.message));
