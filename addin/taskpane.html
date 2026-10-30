@@ -22,12 +22,12 @@ body.quarto-light .hmc {
 .hmc .fg { display: grid; grid-template-columns: repeat(6, 1fr); column-gap: 10px; }
 .hmc .fg > div { grid-column: span 6; }
 .hmc label { display: block; font-size: .9rem; font-weight: 600; color: var(--ink-2); margin: 10px 0 4px; }
-.hmc textarea { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: .88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px 12px; resize: vertical; }
+.hmc textarea { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: .88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px 12px; resize: vertical; display: block; }
 .hmc input:focus, .hmc select:focus, .hmc textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
 .hmc .seg { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
 .hmc .seg button { flex: 1 1 auto; min-height: 38px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 4px 12px; font: inherit; font-weight: 600; cursor: pointer; }
 .hmc .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.hmc .res { border: 2px solid var(--accent); overflow-x: auto; }
+.hmc .res { border: 2px solid var(--accent); overflow-x: auto; margin-top: 12px; }
 .hmc .note { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink-2); margin-top: 10px; }
 .hmc .note.good { border-left-color: var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
 .hmc .note.bad { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 10%, transparent); }
@@ -83,7 +83,7 @@ body.quarto-light .ra-foot a { color: #8a4b22; }
 <div class="hmc" id="eq"></div>
 
 <script>
-// ATTACHED DIRECTLY TO WINDOW: Guarantees availability across Office JS event handlers
+// ATTACHED DIRECTLY TO WINDOW: Guarantees global availability for Office JS listeners
 window.ommlToLinear = function(element) {
   if (!element) return "";
   let result = "";
@@ -108,23 +108,23 @@ window.ommlToLinear = function(element) {
     else if (name === "m:f") { 
       const num = window.ommlToLinear(child.getElementsByTagName("m:num")[0]);
       const den = window.ommlToLinear(child.getElementsByTagName("m:den")[0]);
-      result += `((${num})/(${den}))`;
+      result += "((" + num + ")/(" + den + "))";
     } 
     else if (name === "m:sSub") { 
       const e = window.ommlToLinear(child.getElementsByTagName("m:e")[0]);
       const sub = window.ommlToLinear(child.getElementsByTagName("m:sub")[0]);
-      result += `${e}_${sub}`;
+      result += e + "_" + sub;
     } 
     else if (name === "m:sSup") { 
       const e = window.ommlToLinear(child.getElementsByTagName("m:e")[0]);
       const sup = window.ommlToLinear(child.getElementsByTagName("m:sup")[0]);
-      result += `${e}^(${sup})`;
+      result += e + "^(" + sup + ")";
     } 
     else if (name === "m:rad") {
       const e = window.ommlToLinear(child.getElementsByTagName("m:e")[0]);
       const degNode = child.getElementsByTagName("m:deg")[0];
       const deg = degNode ? window.ommlToLinear(degNode) : "";
-      result += deg ? `nthRoot(${e}, ${deg})` : `sqrt(${e})`;
+      result += deg ? "nthRoot(" + e + ", " + deg + ")" : "sqrt(" + e + ")";
     }
     else if (name === "m:d") {
       const eNode = child.getElementsByTagName("m:e")[0];
@@ -151,8 +151,8 @@ window.HM = (function () {
       btnSel: 'Check the selected equations',
       btnDoc: 'Find all equations in the document',
       btnCom: 'Add the findings as a comment',
-      lblEqs: 'Equations, one per line (numbers like "(3)" at the start or end are ignored)',
-      lblVals: 'Worked example from the paper (optional): known values, e.g. q = 0.5, dz = 10, dh = -2 (lists and matrices as x = [1, 2, 3], A = [2, -1; -1, 2])',
+      lblEqs: 'Equations, one per line (numbers like "(3)" at start/end are ignored):',
+      lblVals: 'Worked example from the paper (optional): known values, e.g. q = 0.5, dz = 10, dh = -2 (lists and matrices as x = [1, 2, 3], A = [2, -1; -1, 2]):',
       lblSign: 'Variables are',
       optPos: 'Positive', optAny: 'Any sign',
       work: 'Show the working',
@@ -168,9 +168,9 @@ window.HM = (function () {
       btnSel: 'Kagua milinganyo iliyochaguliwa',
       btnDoc: 'Tafuta milinganyo yote kwenye waraka',
       btnCom: 'Weka matokeo kama maoni (comment)',
-      lblEqs: 'Milinganyo, mmoja kwa kila mstari (namba kama "(3)" zinasahauliwa)',
-      lblVals: 'Mfano halisi kutoka kwa jarida (sio lazima): mfano q = 0.5, dz = 10, dh = -2 (matingo na tumbo kama x = [1, 2, 3], A = [2, -1; -1, 2])',
-      lblSign: 'Alama za vibadilika (variables)',
+      lblEqs: 'Milinganyo, mmoja kwa kila mstari (namba kama "(3)" zinasahauliwa):',
+      lblVals: 'Mfano halisi kutoka kwa jarida (sio lazima): mfano q = 0.5, dz = 10, dh = -2 (matingo na tumbo kama x = [1, 2, 3], A = [2, -1; -1, 2]):',
+      lblSign: 'Alama za vibadilika (variables):',
       optPos: 'Chanya', optAny: 'Alama yoyote',
       work: 'Onyesha hesabu',
       tblNum: '#', tblParsed: 'Inasomeka kama / Hali', tblStatus: 'Hali',
@@ -185,9 +185,9 @@ window.HM = (function () {
       btnSel: 'Revisar las ecuaciones seleccionadas',
       btnDoc: 'Buscar todas las ecuaciones en el documento',
       btnCom: 'Agregar hallazgos como comentario',
-      lblEqs: 'Ecuaciones, una por línea (los números como "(3)" se ignoran)',
-      lblVals: 'Ejemplo del artículo (opcional): valores conocidos, ej. q = 0.5, dz = 10, dh = -2 (listas y matrices como x = [1, 2, 3], A = [2, -1; -1, 2])',
-      lblSign: 'Las variables son',
+      lblEqs: 'Ecuaciones, una por línea (los números como "(3)" se ignoran):',
+      lblVals: 'Ejemplo del artículo (opcional): valores conocidos, ej. q = 0.5, dz = 10, dh = -2 (listas y matrices como x = [1, 2, 3], A = [2, -1; -1, 2]):',
+      lblSign: 'Las variables son:',
       optPos: 'Positivas', optAny: 'Cualquier signo',
       work: 'Ver el cálculo',
       tblNum: '#', tblParsed: 'Interpretado como / Estado', tblStatus: 'Estado',
@@ -200,7 +200,7 @@ window.HM = (function () {
 
   const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
   const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
   function updateUiLanguage(newLang) {
     lang = newLang;
@@ -230,26 +230,26 @@ window.HM = (function () {
       const id = cfg.id + '-' + i.k;
       if (i.t === 'textarea') {
         const label = i.k === 'eqs' ? t.lblEqs : t.lblVals;
-        return `<div><label for="${id}">${label}</label><textarea id="${id}" data-k="${i.k}" rows="${i.rows || 4}" placeholder="${esc(i.ph || '')}">${esc(f[i.k] || '')}</textarea></div>`;
+        return '<div><label for="' + id + '">' + label + '</label><textarea id="' + id + '" data-k="' + i.k + '" rows="' + (i.rows || 5) + '" placeholder="' + esc(i.ph || '') + '">' + esc(f[i.k] || '') + '</textarea></div>';
       }
       if (i.t === 'seg') {
         const cur = String(f[i.k] || i.d);
         const opts = [[ 'pos', t.optPos ], [ 'any', t.optAny ]];
-        return `<div><label>${t.lblSign}</label><div class="seg">${opts.map(o => `<button type="button" data-seg="${i.k}" data-v="${esc(o[0])}" aria-pressed="${String(o[0]) === cur}">${esc(o[1])}</button>`).join('')}</div></div>`;
+        return '<div><label>' + t.lblSign + '</label><div class="seg">' + opts.map(o => '<button type="button" data-seg="' + i.k + '" data-v="' + esc(o[0]) + '" aria-pressed="' + String(o[0] === cur) + '">' + esc(o[1]) + '</button>').join('') + '</div></div>';
       }
-      return `<div><label for="${id}">${i.l}</label><input type="text" id="${id}" data-k="${i.k}" value="${esc(f[i.k] || '')}"></div>`;
+      return '<div><label for="' + id + '">' + i.l + '</label><input type="text" id="' + id + '" data-k="' + i.k + '" value="' + esc(f[i.k] || '') + '"></div>';
     }
 
     function render() {
       const t = I18N[lang];
-      let h = `<div class="seg" style="margin-bottom:10px" role="group">
-        <button type="button" data-lang="en" aria-pressed="${lang === 'en'}">English</button>
-        <button type="button" data-lang="sw" aria-pressed="${lang === 'sw'}">Kiswahili</button>
-        <button type="button" data-lang="es" aria-pressed="${lang === 'es'}">Español</button>
-      </div><section class="cx"><div class="fg">`;
+      let h = '<div class="seg" style="margin-bottom:10px" role="group">' +
+        '<button type="button" data-lang="en" aria-pressed="' + String(lang === 'en') + '">English</button>' +
+        '<button type="button" data-lang="sw" aria-pressed="' + String(lang === 'sw') + '">Kiswahili</button>' +
+        '<button type="button" data-lang="es" aria-pressed="' + String(lang === 'es') + '">Español</button>' +
+      '</div><section class="cx"><div class="fg">';
       
       inputs.forEach(i => { h += fieldHTML(i); });
-      h += `</div></section><section class="cx res"></section><details class="cx hm-work"><summary>${t.work}</summary><div class="db"></div></details>`;
+      h += '</div></section><section class="cx res"></section><details class="cx hm-work"><summary>' + t.work + '</summary><div class="db"></div></details>';
       root.innerHTML = h;
       updateUiLanguage(lang);
       run();
@@ -257,8 +257,8 @@ window.HM = (function () {
 
     const U = {
       fmt, fix, esc, get lang() { return lang; }, get i18n() { return I18N[lang]; },
-      empty: t => `<p class="empty">${t}</p>`,
-      note: (h, cls) => `<div class="note${cls ? ' ' + cls : ''}">${h}</div>`
+      empty: t => '<p class="empty">' + t + '</p>',
+      note: (h, cls) => '<div class="note' + (cls ? ' ' + cls : '') + '">' + h + '</div>'
     };
 
     function run() {
@@ -268,7 +268,7 @@ window.HM = (function () {
       root.querySelector('.res').innerHTML = out.html || '';
       const wd = root.querySelector('.hm-work');
       wd.hidden = !out.work || !out.work.length;
-      wd.querySelector('.db').innerHTML = out.work && out.work.length ? `<ol class="work">${out.work.map(w => `<li>${w}</li>`).join('')}</ol>` : '';
+      wd.querySelector('.db').innerHTML = out.work && out.work.length ? '<ol class="work">' + out.work.map(w => '<li>' + w + '</li>').join('') + '</ol>' : '';
       
       if (window.MathJax && MathJax.typesetPromise) {
         MathJax.typesetPromise([root.querySelector('.res')]).catch(err => console.log(err));
@@ -295,7 +295,7 @@ window.HM = (function () {
     });
 
     render();
-    return { set: (k, val) => { f[k] = val; const ta = root.querySelector(`textarea[data-k="${k}"]`); if (ta) ta.value = val; run(); } };
+    return { set: (k, val) => { f[k] = val; const ta = root.querySelector('textarea[data-k="' + k + '"]'); if (ta) ta.value = val; run(); } };
   }
 
   return { tool, fmt, fix, esc };
@@ -714,7 +714,7 @@ window.HM = (function () {
         .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'");
 
       const lines = rawText.split(/\r?\n/).filter(l => l.trim());
-      if (!lines.length) return U.empty('Paste or select at least one equation.');
+      if (!lines.length) return U.empty('Paste equations into the text box above or select equations in Word.');
       const pos = v.sign === 'pos', E = [], rows = [];
 
       // Worked example known values parser
@@ -745,8 +745,8 @@ window.HM = (function () {
           e.heavy = /integ\(|sumn\(|prodn\(/.test(s);
           e.indef = /indef\(/.test(s);
 
-          const readAs = `<b>${t.lhsParsed}</b> <code>${U.esc(L.toString())}</code><br>` +
-                         `<b>${t.rhsParsed}</b> <code>${U.esc(R.toString())}</code>`;
+          const readAs = '<b>' + t.lhsParsed + '</b> <code>' + U.esc(L.toString()) + '</code><br>' +
+                         '<b>' + t.rhsParsed + '</b> <code>' + U.esc(R.toString()) + '</code>';
 
           if (e.indef) {
             const r = checkIndef(e, pos); e.skip = true; E.push(e);
@@ -831,9 +831,9 @@ window.HM = (function () {
         else ex.push(U.note(`Equation ${e.i}: ${miss.length} unknowns (${miss.join(', ')}), give all but one to solve it.`));
       });
 
-      let h = `<table class="tt"><thead><tr><th>${t.tblNum}</th><th>${t.tblParsed}</th><th>${t.tblStatus}</th></tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}<br><span style="font-size:.85rem; color:var(--ink-2)">${r[3]}</span></td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
-      if (pairs.length) h += `<h3>${t.rearr}</h3>` + pairs.join('');
-      if (ex.length) h += `<h3>${t.workedEx}</h3>` + ex.join('');
+      let h = '<table class="tt"><thead><tr><th>' + t.tblNum + '</th><th>' + t.tblParsed + '</th><th>' + t.tblStatus + '</th></tr></thead><tbody>' + rows.map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '<br><span style="font-size:.85rem; color:var(--ink-2)">' + r[3] + '</span></td><td>' + r[2] + '</td></tr>').join('') + '</tbody></table>';
+      if (pairs.length) h += '<h3>' + t.rearr + '</h3>' + pairs.join('');
+      if (ex.length) h += '<h3>' + t.workedEx + '</h3>' + ex.join('');
       return { html: h, work: [
         'Each equation is parsed into a symbolic expression tree (math.js) and evaluated as left side − right side; for matrices, every element must agree and both sides must have the same size.',
         'Domain: 200 random values per variable (30 if the equation contains integrals or sums), 0.2 to 10, log-spaced; both signs if "Any sign". Summation limits are whole numbers; data indexed in a sum (x_i) are lists.',
