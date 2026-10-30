@@ -91,7 +91,7 @@ body.quarto-light .ra-foot a { color: #8a4b22; }
 .hmc .fg > div.w3 { grid-column: span 3; }
 .hmc .fg > div.w2 { grid-column: span 2; }
 .hmc .fg > div[hidden] { display: none; }
-.hmc input[type=text], .hmc select { width: 100%; min-height: 42px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: inherit; padding: 8px 12px; }
+.hmc input[type=text], .hmc select { width: 100%; min-width: 0; max-width: 100%; min-height: 42px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: inherit; padding: 8px 12px; }
 .hmc input.bad { border-color: var(--bad); }
 .hmc .chk { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0 2px; font-weight: 500; color: var(--ink); font-size: .98rem; }
 .hmc .chk input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--accent); flex: none; }
@@ -112,13 +112,26 @@ body.quarto-light .ra-foot a { color: #8a4b22; }
 @media (max-width: 280px) { .hmc .fg > div.w2, .hmc .fg > div.w3 { grid-column: span 6; } }
 .hmc .fg { align-items: end; }   /* a value and its units line up even when one label wraps */
 
+.hmc .res h3 { font-size: 1rem; margin: 16px 0 6px; }
+.hmc .res ul.plain { margin: 6px 0 0; padding-left: 20px; color: var(--ink-2); font-size: .92rem; }
+.hmc .res ul.plain li { margin-bottom: 6px; }
+.hmc .res p { font-size: .93rem; }
+.hmc .tt-wrap { overflow-x: auto; }
+/* tables in the checks (not the equation checker): keep numbers whole, scroll sideways if needed */
+.hmc:not(#eq) table.tt th, .hmc:not(#eq) table.tt td { word-break: normal; overflow-wrap: normal; }
+.hmc:not(#eq) table.tt td.r, .hmc:not(#eq) table.tt th.r { white-space: nowrap; }
+.hmc:not(#eq) table.tt th { font-size: .72rem; letter-spacing: .02em; }
+.hmc:not(#eq) table.tt td { font-size: .88rem; padding: 6px 4px; }
+.hmc:not(#eq) table.tt .tag { white-space: nowrap; font-size: .66rem; }
+.hmc .chk span { font-size: .93rem; line-height: 1.35; }
+
 /* ---- frame: title, language, list of checks, buttons ---- */
 h1 { font-size: 1.25rem; margin: 2px 0 4px; }
 .ra-sub { font-size: .85rem; margin: 0 0 8px; opacity: .85; }
 .ra-beta { font-size: .6rem; border: 1px solid #e0a440; color: #e0a440; border-radius: 4px; padding: 1px 5px; vertical-align: middle; font-weight: 700; letter-spacing: .04em; }
 body.quarto-light .ra-beta { border-color: #9a6400; color: #9a6400; }
-.ra-nav { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 0 0 10px; }
-.ra-nav select { min-height: 40px; border-radius: 10px; font: inherit; font-weight: 600; padding: 4px 10px; cursor: pointer; }
+.ra-nav { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; margin: 0 0 10px; }
+.ra-nav select { width: 100%; min-width: 0; text-overflow: ellipsis; min-height: 40px; border-radius: 10px; font: inherit; font-weight: 600; padding: 4px 10px; cursor: pointer; }
 .ra-links { display: flex; gap: 8px; flex-wrap: wrap; }
 .ra-links button { flex: 1 1 auto; min-height: 36px; border-radius: 10px; font: inherit; font-size: .88rem; cursor: pointer; padding: 4px 10px; }
 body.quarto-dark .ra-nav select, body.quarto-dark .ra-links button { border: 1px solid #3a352f; background: #2a2622; color: #f0ece4; }
@@ -139,6 +152,17 @@ body.quarto-dark .ra-card:hover { border-color: #d98b56; } body.quarto-light .ra
 .ra-refs summary { cursor: pointer; font-weight: 600; }
 .ra-refs p { margin: 6px 0; }
 [hidden] { display: none !important; }
+.ra-docbar { margin: 0 0 8px; font-size: .82rem; }
+.ra-docbar.noteq { display: none !important; }
+.ra-legend { display: flex; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 6px; }
+.ra-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.ra-legend i { display: inline-block; width: 18px; height: 4px; border-radius: 2px; }
+.ra-legend .hint2 { flex-basis: 100%; opacity: .8; }
+.ra-docbar button { min-height: 32px; border-radius: 8px; font: inherit; padding: 2px 10px; cursor: pointer; }
+body.quarto-dark .ra-docbar button { border: 1px solid #3a352f; background: #2a2622; color: #f0ece4; }
+body.quarto-light .ra-docbar button { border: 1px solid #ddd6ca; background: #efebe2; color: #1f1c17; }
+#eq tbody tr { cursor: default; }
+body.in-word #eq.has-places tbody tr { cursor: pointer; }
 </style></head>
 
 <body class="quarto-dark">
@@ -158,6 +182,7 @@ body.quarto-dark .ra-card:hover { border-color: #d98b56; } body.quarto-light .ra
   <button id="ra-doc">Find all equations in the document</button>
   <button id="ra-com">Add the findings as a comment</button>
 </div>
+<div class="ra-docbar" id="ra-docbar" hidden><div class="ra-legend" id="ra-legend"></div><button type="button" id="ra-clr">Clear the colours</button></div>
 <div class="ra-lock" id="ra-lock" hidden></div>
 <div class="ra-msg" id="ra-msg"></div>
 
@@ -237,7 +262,7 @@ window.HM = (function () {
       inputs.forEach((i, n) => {
         if (i.t === 'sec' || n === 0) {
           if (open) h += '</div></section>';
-          h += `<section class="cx"${i.t === 'sec' && i.k ? ` data-sec="${i.k}"` : ''}><div class="step">${i.t === 'sec' ? lab(i) : cfg.step}</div><div class="fg">`;
+          h += `<section class="cx"${i.t === 'sec' && i.k ? ` data-sec="${i.k}"` : ''}><div class="step">${i.t === 'sec' ? lab(i) : cfg.step}</div>${i.t === 'sec' && i.h ? `<p class="hint" style="margin-top:0">${i.h}</p>` : ''}<div class="fg">`;
           open = true;
           if (i.t === 'sec') return;
         }
@@ -728,7 +753,1157 @@ window.RA_CHECKS = (function () {
       d: { en: 'Paste or select equations to catch unreadable or undefined expressions, rearrangements that don\'t follow, and worked examples that don\'t reproduce.', sw: 'Bandika au chagua milinganyo ili kugundua semi zisizosomeka au zisizo na maana, mipangilio upya isiyofuata, na mifano iliyokokotolewa isiyozalisha matokeo.', es: 'Pegue o seleccione ecuaciones para detectar expresiones ilegibles o indefinidas, reordenamientos que no se siguen y ejemplos resueltos que no se reproducen.' }
     }
   };
-  return { items, groups, refsLab, order: ['bt', 'sa', 'lc', 'co', 'eq'] };
+  return { items, groups, refsLab, order: ['oa', 'cv', 'ess', 'px', 'sa', 'bt', 'lc', 'co', 'indep', 'assump', 'modelcmp', 'eq'] };
+})();
+
+</script>
+<script>
+/* Calculation checks, second batch: pixel size, area from a confusion matrix, effective sample size.
+   Same calculations as on rafikiardhi.earth/checks.html; text in en, sw and es. */
+(function () {
+  const C = window.RA_CHECKS, F = (x, d) => HM.fmt(x, d), pick = (o, L) => o[L] || o.en;
+
+  // ---------------------------------------------------------------- Finding the right pixel size (Hengl 2006)
+  const NICE = [0.5, 1, 2, 2.5, 5, 10, 12.5, 20, 25, 30, 40, 50, 60, 75, 90, 100, 125, 150, 200, 250, 300, 400, 500, 750, 1000, 1500, 2000, 2500, 5000, 10000];
+  const PX = {
+    en: {
+      step: 'Working scale', sn: 'Scale number of the output map (e.g. 50000 for 1:50,000)', secPos: 'Positioning error (optional)', r95: '95% error radius (m)', r99: '99% error radius (m)', rbar: 'Average error (m)',
+      secPts: 'Point samples (optional)', area: 'Area of the study (km²)', n: 'Number of sampled points', lay: 'Sampling layout', rand: 'Random or irregular', grid: 'Regular',
+      xy: 'Coordinates in metres, x, y per line (gives the distances between closest point pairs)', hr: 'Range of spatial dependence (m)', hrh: 'The distance at which the variogram levels off (the practical range).',
+      secObj: 'Objects and terrain (optional)', abar: 'Average size of delineations (m²)', amld: 'Smallest object to map (m²)', wmld: 'Narrowest object (m)', cont: 'Total length of contours (km), with the area above',
+      rScale: sn => `Working scale (1:${sn})`, wScale: 'Coarsest ≤ 0.0025·SN (four cells in the 0.25 cm² minimum legible delineation); finest ≥ 0.0001·SN (0.1 mm location accuracy on the map); recommended = 0.0005·SN (the 0.5 mm rule).',
+      rGps: 'GPS positioning error', wGps: 'Coarsest ≤ 1.8·r(99%); finest ≥ average error·√π (the error circle fits in one pixel); recommended = 1.8·r(95%) (95% of fixes fall within the pixel).',
+      rObj: 'Size of reference objects', wObj: 'Coarsest ≤ √(average delineation size) ÷ 4; finest ≥ narrowest width ÷ 2; recommended = √(smallest object) ÷ 4, as in Table 1. (The text\'s Eq. 7 gives the looser √(a/4), four pixels per object; Table 1\'s forms are used here. Table 1 prints the finest as √w ÷ 2; w ÷ 2 is used, as a width can\'t be square-rooted.)',
+      rDens: N => `Inspection density (${N} points)`, wDens: 'Coarsest ≤ 0.1·√(A/N); finest ≥ 0.05·√(A/N); recommended = 0.0791·√(A/N) (2.5 observations per cm² of map with the 0.5 mm rule).',
+      rDist: 'Distance between points', fromXy: 'from your coordinates', onGrid: '√(A/N) on a regular grid', onRand: '≈ 0.5·√(A/N) for random points', needsXy: ' (needs coordinates)',
+      wDist: (src, nx, k) => `Coarsest ≤ half the mean distance between closest point pairs (${src}); finest ≥ the 5% shortest closest-pair distance${nx}; recommended = ${k}·√(A/N).`,
+      rDep: 'Spatial dependence structure', counted: 'counted from your coordinates', estimated: 'estimated for points spread over the area',
+      wDep: (nx, m, how) => `Coarsest ≤ range ÷ 2; finest ≥ the 5% shortest closest-pair distance${nx}; recommended = range × m^(−1/3), with m = ${m} point pairs within the range (${how}).`,
+      needArea: 'The spatial-dependence rule also needs the area and number of points.',
+      rTer: 'Complexity of terrain', wTer: 'Coarsest ≤ area ÷ total contour length; recommended = area ÷ (2 × total contour length), half the average contour spacing; finest ≥ narrowest width ÷ 2.',
+      empty: 'Enter at least one aspect: a map scale, a positioning error, or the area and number of points. The Example button fills in values from Hengl\'s worked examples.',
+      rec: 'Recommended resolution', before: x => `${x} before rounding to a common grid size. `, legible: (a, b) => `Legible range: ${a} (finest) to ${b} (coarsest).`,
+      conflict: (a, b) => `<b>The rules conflict:</b> the finest legible resolution (${a}) is coarser than the coarsest legible one (${b}). The datasets don't support each other: for example, positional error or sample spacing too coarse for the map scale or object size you want. Look at which rows set the two limits.`,
+      th: ['Aspect', 'Coarsest ≤', 'Finest ≥', 'Recommended'],
+      how: 'The overall coarsest is the strictest (smallest) coarsest value and the overall finest is the largest finest value (both in bold). The recommendation is the median of the recommended values, kept inside that range, then rounded to the nearest common grid size within it.',
+      src: 'Equations from Table 1 of Hengl, T. (2006). Finding the right pixel size. Computers & Geosciences 32, 1283–1298.'
+    },
+    sw: {
+      step: 'Kipimo cha ramani', sn: 'Namba ya kipimo cha ramani (mfano 50000 kwa 1:50,000)', secPos: 'Hitilafu ya mahali (si lazima)', r95: 'Nusu-kipenyo cha hitilafu 95% (m)', r99: 'Nusu-kipenyo cha hitilafu 99% (m)', rbar: 'Hitilafu wastani (m)',
+      secPts: 'Sampuli za nukta (si lazima)', area: 'Eneo la utafiti (km²)', n: 'Idadi ya nukta zilizochukuliwa sampuli', lay: 'Mpangilio wa sampuli', rand: 'Nasibu au usio wa kawaida', grid: 'Wa mraba (gridi)',
+      xy: 'Viwianishi kwa mita, x, y kwa kila mstari (hutoa umbali kati ya jozi za nukta zilizo karibu zaidi)', hr: 'Masafa ya utegemezi wa kijiografia (m)', hrh: 'Umbali ambapo variogram inatulia (masafa ya kivitendo, practical range).',
+      secObj: 'Vitu na ardhi (si lazima)', abar: 'Ukubwa wastani wa maeneo yaliyochorwa (m²)', amld: 'Kitu kidogo zaidi cha kuchora (m²)', wmld: 'Kitu chembamba zaidi (m)', cont: 'Urefu wa jumla wa mistari ya kontua (km), pamoja na eneo hapo juu',
+      rScale: sn => `Kipimo cha ramani (1:${sn})`, wScale: 'Kubwa zaidi ≤ 0.0025·SN (seli nne katika eneo dogo zaidi linalosomeka la 0.25 cm²); ndogo zaidi ≥ 0.0001·SN (usahihi wa mahali wa 0.1 mm kwenye ramani); inayopendekezwa = 0.0005·SN (kanuni ya 0.5 mm).',
+      rGps: 'Hitilafu ya mahali ya GPS', wGps: 'Kubwa zaidi ≤ 1.8·r(99%); ndogo zaidi ≥ hitilafu wastani·√π (duara la hitilafu linaingia kwenye pikseli moja); inayopendekezwa = 1.8·r(95%) (95% ya vipimo viko ndani ya pikseli).',
+      rObj: 'Ukubwa wa vitu vya marejeo', wObj: 'Kubwa zaidi ≤ √(ukubwa wastani wa maeneo) ÷ 4; ndogo zaidi ≥ upana mdogo zaidi ÷ 2; inayopendekezwa = √(kitu kidogo zaidi) ÷ 4, kama katika Jedwali 1. (Mlinganyo 7 wa makala unatoa √(a/4) iliyo legevu zaidi, pikseli nne kwa kila kitu; hapa zinatumika njia za Jedwali 1. Jedwali 1 linaandika ndogo zaidi kama √w ÷ 2; hapa w ÷ 2 inatumika, kwa sababu upana hauwezi kuchukuliwa kipeuo cha pili.)',
+      rDens: N => `Msongamano wa uchunguzi (nukta ${N})`, wDens: 'Kubwa zaidi ≤ 0.1·√(A/N); ndogo zaidi ≥ 0.05·√(A/N); inayopendekezwa = 0.0791·√(A/N) (vipimo 2.5 kwa kila cm² ya ramani kwa kanuni ya 0.5 mm).',
+      rDist: 'Umbali kati ya nukta', fromXy: 'kutoka kwa viwianishi vyako', onGrid: '√(A/N) kwenye gridi ya kawaida', onRand: '≈ 0.5·√(A/N) kwa nukta za nasibu', needsXy: ' (inahitaji viwianishi)',
+      wDist: (src, nx, k) => `Kubwa zaidi ≤ nusu ya umbali wastani kati ya jozi za nukta zilizo karibu zaidi (${src}); ndogo zaidi ≥ umbali wa 5% mfupi zaidi wa jozi zilizo karibu${nx}; inayopendekezwa = ${k}·√(A/N).`,
+      rDep: 'Muundo wa utegemezi wa kijiografia', counted: 'zimehesabiwa kutoka kwa viwianishi vyako', estimated: 'zimekadiriwa kwa nukta zilizotawanyika katika eneo',
+      wDep: (nx, m, how) => `Kubwa zaidi ≤ masafa ÷ 2; ndogo zaidi ≥ umbali wa 5% mfupi zaidi wa jozi zilizo karibu${nx}; inayopendekezwa = masafa × m^(−1/3), ambapo m = jozi ${m} za nukta ndani ya masafa (${how}).`,
+      needArea: 'Kanuni ya utegemezi wa kijiografia inahitaji pia eneo na idadi ya nukta.',
+      rTer: 'Utata wa ardhi', wTer: 'Kubwa zaidi ≤ eneo ÷ urefu wa jumla wa kontua; inayopendekezwa = eneo ÷ (2 × urefu wa jumla wa kontua), nusu ya nafasi wastani kati ya kontua; ndogo zaidi ≥ upana mdogo zaidi ÷ 2.',
+      empty: 'Weka angalau kipengele kimoja: kipimo cha ramani, hitilafu ya mahali, au eneo na idadi ya nukta. Kitufe cha Mfano kinajaza thamani kutoka kwa mifano ya Hengl.',
+      rec: 'Ukubwa wa pikseli unaopendekezwa', before: x => `${x} kabla ya kuzungushwa kwa ukubwa wa kawaida wa gridi. `, legible: (a, b) => `Kiwango kinachosomeka: ${a} (ndogo zaidi) hadi ${b} (kubwa zaidi).`,
+      conflict: (a, b) => `<b>Kanuni zinapingana:</b> pikseli ndogo zaidi inayosomeka (${a}) ni kubwa kuliko pikseli kubwa zaidi inayosomeka (${b}). Data haziendani: kwa mfano, hitilafu ya mahali au nafasi kati ya sampuli ni kubwa mno kwa kipimo cha ramani au ukubwa wa vitu unavyotaka. Angalia mistari ipi inaweka mipaka hiyo miwili.`,
+      th: ['Kipengele', 'Kubwa zaidi ≤', 'Ndogo zaidi ≥', 'Inayopendekezwa'],
+      how: 'Kubwa zaidi kwa ujumla ni thamani kali zaidi (ndogo zaidi) ya safu ya kubwa zaidi, na ndogo zaidi kwa ujumla ni thamani kubwa zaidi ya safu ya ndogo zaidi (zote kwa herufi nzito). Pendekezo ni wastani wa kati (median) wa thamani zinazopendekezwa, ukiwekwa ndani ya kiwango hicho, kisha kuzungushwa kwa ukubwa wa kawaida wa gridi ulio karibu zaidi ndani yake.',
+      src: 'Milinganyo kutoka Jedwali 1 la Hengl, T. (2006). Finding the right pixel size. Computers & Geosciences 32, 1283–1298.'
+    },
+    es: {
+      step: 'Escala de trabajo', sn: 'Denominador de escala del mapa (p. ej. 50000 para 1:50,000)', secPos: 'Error de posicionamiento (opcional)', r95: 'Radio de error al 95 % (m)', r99: 'Radio de error al 99 % (m)', rbar: 'Error medio (m)',
+      secPts: 'Muestras puntuales (opcional)', area: 'Área del estudio (km²)', n: 'Número de puntos muestreados', lay: 'Disposición del muestreo', rand: 'Aleatoria o irregular', grid: 'Regular',
+      xy: 'Coordenadas en metros, x, y por línea (da las distancias entre los pares de puntos más cercanos)', hr: 'Rango de dependencia espacial (m)', hrh: 'La distancia a la que el variograma se estabiliza (el rango práctico).',
+      secObj: 'Objetos y terreno (opcional)', abar: 'Tamaño medio de las delineaciones (m²)', amld: 'Objeto más pequeño a cartografiar (m²)', wmld: 'Objeto más estrecho (m)', cont: 'Longitud total de curvas de nivel (km), con el área de arriba',
+      rScale: sn => `Escala de trabajo (1:${sn})`, wScale: 'Más grueso ≤ 0.0025·SN (cuatro celdas en la delineación mínima legible de 0.25 cm²); más fino ≥ 0.0001·SN (precisión de localización de 0.1 mm en el mapa); recomendado = 0.0005·SN (la regla de 0.5 mm).',
+      rGps: 'Error de posicionamiento GPS', wGps: 'Más grueso ≤ 1.8·r(99 %); más fino ≥ error medio·√π (el círculo de error cabe en un píxel); recomendado = 1.8·r(95 %) (el 95 % de las posiciones caen dentro del píxel).',
+      rObj: 'Tamaño de los objetos de referencia', wObj: 'Más grueso ≤ √(tamaño medio de delineación) ÷ 4; más fino ≥ anchura mínima ÷ 2; recomendado = √(objeto más pequeño) ÷ 4, como en la Tabla 1. (La Ec. 7 del texto da la forma más laxa √(a/4), cuatro píxeles por objeto; aquí se usan las formas de la Tabla 1. La Tabla 1 imprime el más fino como √w ÷ 2; se usa w ÷ 2, ya que no se puede sacar la raíz de una anchura.)',
+      rDens: N => `Densidad de inspección (${N} puntos)`, wDens: 'Más grueso ≤ 0.1·√(A/N); más fino ≥ 0.05·√(A/N); recomendado = 0.0791·√(A/N) (2.5 observaciones por cm² de mapa con la regla de 0.5 mm).',
+      rDist: 'Distancia entre puntos', fromXy: 'a partir de sus coordenadas', onGrid: '√(A/N) en una malla regular', onRand: '≈ 0.5·√(A/N) para puntos aleatorios', needsXy: ' (requiere coordenadas)',
+      wDist: (src, nx, k) => `Más grueso ≤ la mitad de la distancia media entre pares de puntos más cercanos (${src}); más fino ≥ el 5 % de las distancias más cortas entre pares cercanos${nx}; recomendado = ${k}·√(A/N).`,
+      rDep: 'Estructura de dependencia espacial', counted: 'contados a partir de sus coordenadas', estimated: 'estimados para puntos repartidos por el área',
+      wDep: (nx, m, how) => `Más grueso ≤ rango ÷ 2; más fino ≥ el 5 % de las distancias más cortas entre pares cercanos${nx}; recomendado = rango × m^(−1/3), con m = ${m} pares de puntos dentro del rango (${how}).`,
+      needArea: 'La regla de dependencia espacial también necesita el área y el número de puntos.',
+      rTer: 'Complejidad del terreno', wTer: 'Más grueso ≤ área ÷ longitud total de curvas de nivel; recomendado = área ÷ (2 × longitud total de curvas de nivel), la mitad del espaciado medio entre curvas; más fino ≥ anchura mínima ÷ 2.',
+      empty: 'Introduzca al menos un aspecto: una escala de mapa, un error de posicionamiento, o el área y el número de puntos. El botón Ejemplo rellena valores de los ejemplos de Hengl.',
+      rec: 'Resolución recomendada', before: x => `${x} antes de redondear a un tamaño de malla habitual. `, legible: (a, b) => `Rango legible: de ${a} (más fino) a ${b} (más grueso).`,
+      conflict: (a, b) => `<b>Las reglas se contradicen:</b> la resolución legible más fina (${a}) es más gruesa que la más gruesa (${b}). Los datos no se respaldan entre sí: por ejemplo, el error de posición o el espaciado de muestras es demasiado grueso para la escala o el tamaño de objeto deseado. Vea qué filas fijan los dos límites.`,
+      th: ['Aspecto', 'Más grueso ≤', 'Más fino ≥', 'Recomendado'],
+      how: 'El más grueso global es el valor más estricto (el menor) de la columna más grueso, y el más fino global es el mayor valor de la columna más fino (ambos en negrita). La recomendación es la mediana de los valores recomendados, mantenida dentro de ese rango y redondeada al tamaño de malla habitual más cercano dentro de él.',
+      src: 'Ecuaciones de la Tabla 1 de Hengl, T. (2006). Finding the right pixel size. Computers & Geosciences 32, 1283–1298.'
+    }
+  };
+  function buildPX(L) {
+    const S = pick(PX, L);
+    return {
+      step: S.step,
+      example: { sn: 50000, r95: 15, area: 10, n: 100, lay: 'random', hr: 525 },
+      inputs: [
+        { k: 'sn', l: S.sn, t: 'num' },
+        { t: 'sec', l: S.secPos },
+        { k: 'r95', l: S.r95, t: 'num', w: 2 }, { k: 'r99', l: S.r99, t: 'num', w: 2 }, { k: 'rbar', l: S.rbar, t: 'num', w: 2 },
+        { t: 'sec', l: S.secPts },
+        { k: 'area', l: S.area, t: 'num', w: 3 },
+        { k: 'n', l: S.n, t: 'num', w: 3 },
+        { k: 'lay', l: S.lay, t: 'seg', d: 'random', opts: [['random', S.rand], ['grid', S.grid]] },
+        { k: 'xy', l: S.xy, t: 'textarea', rows: 3 },
+        { k: 'hr', l: S.hr, t: 'num', h: S.hrh },
+        { t: 'sec', l: S.secObj },
+        { k: 'abar', l: S.abar, t: 'num', w: 2 }, { k: 'amld', l: S.amld, t: 'num', w: 2 }, { k: 'wmld', l: S.wmld, t: 'num', w: 2 },
+        { k: 'cont', l: S.cont, t: 'num' }
+      ],
+      compute(v, U) {
+        const rows = [], warn = [];
+        const add = (rule, coarse, fine, rec, why) => rows.push({ rule, coarse, fine, rec, why });
+        if (v.sn > 0) add(S.rScale(F(v.sn, 0)), 0.0025 * v.sn, 0.0001 * v.sn, 0.0005 * v.sn, S.wScale);
+        if (v.r95 > 0 || v.r99 > 0 || v.rbar > 0) add(S.rGps, v.r99 > 0 ? 1.8 * v.r99 : null, v.rbar > 0 ? v.rbar * Math.sqrt(Math.PI) : null, v.r95 > 0 ? 1.8 * v.r95 : null, S.wGps);
+        if (v.abar > 0 || v.amld > 0 || v.wmld > 0) add(S.rObj, v.abar > 0 ? Math.sqrt(v.abar) / 4 : null, v.wmld > 0 ? v.wmld / 2 : null, v.amld > 0 ? Math.sqrt(v.amld) / 4 : null, S.wObj);
+        const A = v.area > 0 ? v.area * 1e6 : null;
+        let pts = String(v.xy || '').split(/\r?\n/).map(l => l.split(/[,;\t\s]+/).filter(Boolean).map(Number)).filter(q => q.length >= 2 && isFinite(q[0]) && isFinite(q[1]));
+        if (pts.length < 3) pts = null;
+        const N = pts ? pts.length : v.n;
+        let hbar = null, h5 = null;
+        if (pts) { const nnd = pts.map((p, i) => { let b = Infinity; pts.forEach((q, j) => { if (i !== j) { const d = Math.hypot(p[0] - q[0], p[1] - q[1]); if (d < b) b = d; } }); return b; }).sort((a, b) => a - b); hbar = nnd.reduce((a, b) => a + b, 0) / nnd.length; h5 = nnd[Math.floor(0.05 * (nnd.length - 1))]; }
+        if (A && N > 1) {
+          const s = Math.sqrt(A / N);
+          add(S.rDens(F(N, 0)), 0.1 * s, 0.05 * s, 0.0791 * s, S.wDens);
+          const hb = hbar ?? (v.lay === 'grid' ? s : 0.5 * s);
+          add(S.rDist, hb / 2, h5, (v.lay === 'grid' ? 0.5 : 0.25) * s, S.wDist(hbar ? S.fromXy : v.lay === 'grid' ? S.onGrid : S.onRand, h5 ? '' : S.needsXy, v.lay === 'grid' ? '0.5' : '0.25'));
+          if (v.hr > 0) {
+            let m, how;
+            if (pts) { m = 0; for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) if (Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]) <= v.hr) m++; how = S.counted; }
+            else { m = Math.min(N * (N - 1) / 2, N * (N - 1) / 2 * Math.PI * v.hr * v.hr / A); how = S.estimated; }
+            add(S.rDep, v.hr / 2, h5, m >= 1 ? v.hr * Math.pow(m, -1 / 3) : null, S.wDep(h5 ? '' : S.needsXy, F(m, 0), how));
+          }
+        } else if (v.hr > 0) warn.push(S.needArea);
+        if (v.cont > 0 && A) add(S.rTer, A / (v.cont * 1000), v.wmld > 0 ? v.wmld / 2 : null, A / (2 * v.cont * 1000), S.wTer);
+        if (!rows.length) return U.empty(S.empty);
+        const cs = rows.map(r => r.coarse).filter(x => x > 0), fs = rows.map(r => r.fine).filter(x => x > 0), rs = rows.map(r => r.rec).filter(x => x > 0);
+        const coarse = cs.length ? Math.min(...cs) : null, fine = fs.length ? Math.max(...fs) : null;
+        let rec = rs.length ? rs.slice().sort((a, b) => a - b)[Math.floor((rs.length - 1) / 2)] : null;
+        const conflict = fine != null && coarse != null && fine > coarse;
+        if (rec != null && !conflict) { if (coarse != null) rec = Math.min(rec, coarse); if (fine != null) rec = Math.max(rec, fine); }
+        const inside = NICE.filter(x => x >= (fine ?? 0) * 0.999 && x <= (coarse ?? Infinity) * 1.001);
+        const pk = x => (inside.length && !conflict ? inside : NICE).reduce((b, n) => Math.abs(Math.log(n / x)) < Math.abs(Math.log(b / x)) ? n : b);
+        const f = x => x == null ? '–' : (x < 10 ? F(x, 1) : F(x, 0)) + ' m';
+        let h = U.big(S.rec, rec != null ? `${pk(rec)} m` : '–', `${rec != null ? S.before(f(rec)) : ''}${S.legible(f(fine), f(coarse))}`);
+        if (conflict) h += U.note(S.conflict(f(fine), f(coarse)), 'bad');
+        h += `<div class="tt-wrap"><table class="tt"><thead><tr><th>${S.th[0]}</th><th class="r">${S.th[1]}</th><th class="r">${S.th[2]}</th><th class="r">${S.th[3]}</th></tr></thead><tbody>` + rows.map(r => `<tr><td>${r.rule}</td><td class="r"${r.coarse === coarse ? ' style="font-weight:700"' : ''}>${f(r.coarse)}</td><td class="r"${r.fine === fine ? ' style="font-weight:700"' : ''}>${f(r.fine)}</td><td class="r">${f(r.rec)}</td></tr>`).join('') + '</tbody></table></div>';
+        h += U.note(S.how);
+        warn.forEach(w => { h += U.note(w); });
+        return { html: h, work: rows.map(r => `<b>${r.rule}.</b> ${r.why}`).concat([S.src]) };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Area from a confusion matrix (Olofsson et al. 2014)
+  const OA_EX = `class,Deforestation,Gain,Stable forest,Stable non-forest,area
+Deforestation,66,0,5,4,200000
+Gain,0,55,8,12,150000
+Stable forest,1,0,153,11,3200000
+Stable non-forest,2,1,9,313,6450000`;
+  const OA = {
+    en: {
+      step: 'Sample counts and mapped areas', m: 'Confusion matrix (comma, semicolon or tab separated)', unit: 'Mapped area is in', ha: 'hectares', km2: 'km²', px: 'pixels', pxs: 'Pixel size (m)',
+      e1: 'Paste a matrix with a header row, at least two classes and a final area column. The Example button shows the layout.',
+      e2: k => `Expected ${k} rows of ${k} counts plus an area, matching the ${k} classes in the header.`, e3: 'Counts must be zero or more and areas above zero.', e4: 'Every map class needs at least two sample points.',
+      th: ['Class', 'Mapped (ha)', 'Estimated (ha)', 'User\'s', 'Producer\'s'], over: (o, p) => `map ${o ? 'over' : 'under'} by ${p}%`,
+      oa: 'Overall accuracy', tot: 'Total area',
+      note: '± values are 95% confidence intervals. Estimated areas correct the pixel count for the errors in the map; report these, not mapped areas, along with their intervals. The method assumes the sample was stratified by map class (or random).',
+      w: ['Weights W = mapped area of each map class ÷ total', 'Estimated proportion p(i,j) = W(i) × n(i,j) ÷ n(i·); class area = total area × Σᵢ p(i,j)', 'Standard error of each area proportion = √Σᵢ W(i)² × (n(i,j)/n(i·)) × (1 − n(i,j)/n(i·)) ÷ (n(i·) − 1)', 'Accuracy standard errors follow Olofsson et al. (2014), Remote Sensing of Environment 148, 42–57.']
+    },
+    sw: {
+      step: 'Idadi ya sampuli na maeneo yaliyochorwa', m: 'Jedwali la mkanganyiko (confusion matrix), lililotenganishwa kwa koma, nukta-mkato au tab', unit: 'Eneo lililochorwa liko katika', ha: 'hekta', km2: 'km²', px: 'pikseli', pxs: 'Ukubwa wa pikseli (m)',
+      e1: 'Bandika jedwali lenye mstari wa vichwa, angalau madaraja mawili na safu ya mwisho ya eneo. Kitufe cha Mfano kinaonyesha mpangilio.',
+      e2: k => `Inatarajiwa mistari ${k} yenye idadi ${k} pamoja na eneo, ikilingana na madaraja ${k} kwenye mstari wa vichwa.`, e3: 'Idadi lazima ziwe sifuri au zaidi, na maeneo zaidi ya sifuri.', e4: 'Kila daraja la ramani linahitaji angalau nukta mbili za sampuli.',
+      th: ['Daraja', 'Lililochorwa (ha)', 'Lililokadiriwa (ha)', 'Usahihi wa mtumiaji', 'Usahihi wa mtengenezaji'], over: (o, p) => `ramani ${o ? 'imezidisha' : 'imepunguza'} kwa ${p}%`,
+      oa: 'Usahihi wa jumla', tot: 'Eneo lote',
+      note: 'Thamani za ± ni vipindi vya uhakika vya 95%. Maeneo yaliyokadiriwa yanarekebisha hesabu ya pikseli kwa makosa ya ramani; ripoti haya, si maeneo yaliyochorwa, pamoja na vipindi vyake. Mbinu inachukulia kuwa sampuli ilipangwa kwa tabaka kulingana na daraja la ramani (au ya nasibu).',
+      w: ['Uzito W = eneo lililochorwa la kila daraja ÷ jumla', 'Uwiano uliokadiriwa p(i,j) = W(i) × n(i,j) ÷ n(i·); eneo la daraja = eneo lote × Σᵢ p(i,j)', 'Kosa sanifu la kila uwiano wa eneo = √Σᵢ W(i)² × (n(i,j)/n(i·)) × (1 − n(i,j)/n(i·)) ÷ (n(i·) − 1)', 'Makosa sanifu ya usahihi yanafuata Olofsson et al. (2014), Remote Sensing of Environment 148, 42–57.']
+    },
+    es: {
+      step: 'Conteos de muestra y áreas cartografiadas', m: 'Matriz de confusión (separada por comas, punto y coma o tabuladores)', unit: 'El área cartografiada está en', ha: 'hectáreas', km2: 'km²', px: 'píxeles', pxs: 'Tamaño de píxel (m)',
+      e1: 'Pegue una matriz con una fila de encabezado, al menos dos clases y una columna final de área. El botón Ejemplo muestra el formato.',
+      e2: k => `Se esperaban ${k} filas de ${k} conteos más un área, que coincidan con las ${k} clases del encabezado.`, e3: 'Los conteos deben ser cero o más y las áreas mayores que cero.', e4: 'Cada clase del mapa necesita al menos dos puntos de muestra.',
+      th: ['Clase', 'Cartografiada (ha)', 'Estimada (ha)', 'Del usuario', 'Del productor'], over: (o, p) => `el mapa ${o ? 'sobrestima' : 'subestima'} un ${p} %`,
+      oa: 'Exactitud global', tot: 'Área total',
+      note: 'Los valores ± son intervalos de confianza del 95 %. Las áreas estimadas corrigen el conteo de píxeles por los errores del mapa; informe estas, no las áreas cartografiadas, junto con sus intervalos. El método supone que la muestra se estratificó por clase del mapa (o fue aleatoria).',
+      w: ['Pesos W = área cartografiada de cada clase ÷ total', 'Proporción estimada p(i,j) = W(i) × n(i,j) ÷ n(i·); área de la clase = área total × Σᵢ p(i,j)', 'Error estándar de cada proporción de área = √Σᵢ W(i)² × (n(i,j)/n(i·)) × (1 − n(i,j)/n(i·)) ÷ (n(i·) − 1)', 'Los errores estándar de exactitud siguen a Olofsson et al. (2014), Remote Sensing of Environment 148, 42–57.']
+    }
+  };
+  function buildOA(L) {
+    const S = pick(OA, L);
+    return {
+      step: S.step,
+      example: { m: OA_EX, unit: 'px', px: 30 },
+      inputs: [
+        { k: 'm', l: S.m, t: 'textarea', rows: 7, ph: 'class,A,B,C,area\nA,..' },
+        { k: 'unit', l: S.unit, t: 'select', d: 'ha', w: 3, opts: [['ha', S.ha], ['km2', S.km2], ['px', S.px]] },
+        { k: 'px', l: S.pxs, t: 'num', d: 30, w: 3, show: v => v.unit === 'px' }
+      ],
+      compute(v, U) {
+        const lines = String(v.m || '').trim().split(/\r?\n/).filter(l => l.trim());
+        if (lines.length < 3) return U.empty(S.e1);
+        const sp = l => l.split(/[,;\t]/).map(x => x.trim());
+        const head = sp(lines[0]), cls = head.slice(1, -1), k = cls.length;
+        const rows = lines.slice(1).map(sp);
+        if (rows.length !== k || rows.some(r => r.length !== k + 2)) return U.empty(S.e2(k));
+        const n = rows.map(r => r.slice(1, k + 1).map(Number)), A = rows.map(r => Number(r[k + 1]));
+        if (n.some(r => r.some(x => !(x >= 0))) || A.some(x => !(x > 0))) return U.empty(S.e3);
+        const toHa = v.unit === 'ha' ? 1 : v.unit === 'km2' ? 100 : (v.px * v.px) / 10000;
+        const Atot = A.reduce((a, b) => a + b, 0), W = A.map(a => a / Atot), ni = n.map(r => r.reduce((a, b) => a + b, 0));
+        if (ni.some(x => x < 2)) return U.empty(S.e4);
+        const p = n.map((r, i) => r.map(x => W[i] * x / ni[i]));
+        const pj = cls.map((_, j) => p.reduce((s, r) => s + r[j], 0));
+        const se = cls.map((_, j) => Math.sqrt(n.reduce((s, r, i) => s + W[i] ** 2 * (r[j] / ni[i]) * (1 - r[j] / ni[i]) / (ni[i] - 1), 0)));
+        const Ui = cls.map((_, i) => n[i][i] / ni[i]), seU = Ui.map((u, i) => Math.sqrt(u * (1 - u) / (ni[i] - 1)));
+        const OAv = pj.reduce((s, _, j) => s + p[j][j], 0), seOA = Math.sqrt(Ui.reduce((s, u, i) => s + W[i] ** 2 * u * (1 - u) / (ni[i] - 1), 0));
+        const Nhat = cls.map((_, j) => A.reduce((s, a, i) => s + a * n[i][j] / ni[i], 0));
+        const Pj = cls.map((_, j) => p[j][j] / pj[j]);
+        const seP = cls.map((_, j) => {
+          const term1 = A[j] ** 2 * (1 - Pj[j]) ** 2 * Ui[j] * (1 - Ui[j]) / (ni[j] - 1);
+          const term2 = Pj[j] ** 2 * A.reduce((s, a, i) => i === j ? s : s + a ** 2 * (n[i][j] / ni[i]) * (1 - n[i][j] / ni[i]) / (ni[i] - 1), 0);
+          return Math.sqrt((term1 + term2)) / Nhat[j];
+        });
+        const fa = x => F(x * toHa, 0);
+        let h = `<div class="tt-wrap"><table class="tt"><thead><tr><th>${S.th[0]}</th><th class="r">${S.th[1]}</th><th class="r">${S.th[2]}</th><th class="r">${S.th[3]}</th><th class="r">${S.th[4]}</th></tr></thead><tbody>` +
+          cls.map((c, j) => { const est = pj[j] * Atot, ci = 1.96 * se[j] * Atot, diff = (A[j] - est) / est * 100;
+            return `<tr><td>${HM.esc(c)}${Math.abs(diff) > 10 ? `<br><span class="tag ${Math.abs(diff) > 25 ? 'bad' : 'warn'}">${S.over(diff > 0, F(Math.abs(diff), 0))}</span>` : ''}</td><td class="r">${fa(A[j])}</td><td class="r">${fa(est)}<br><span style="color:var(--ink-3)">± ${fa(ci)}</span></td><td class="r">${F(Ui[j] * 100, 0)}% ± ${F(1.96 * seU[j] * 100, 0)}</td><td class="r">${F(Pj[j] * 100, 0)}% ± ${F(1.96 * seP[j] * 100, 0)}</td></tr>`; }).join('') + '</tbody></table></div>';
+        h += U.kv([[S.oa, `${F(OAv * 100, 1)}% ± ${F(1.96 * seOA * 100, 1)}`], [S.tot, `${fa(Atot)} ha`]]);
+        h += U.note(S.note);
+        return { html: h, work: S.w };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Effective sample size (spatial)
+  const VG = { sph: (h, r) => h >= r ? 1 : 1.5 * h / r - 0.5 * (h / r) ** 3, exp: (h, r) => 1 - Math.exp(-3 * h / r), gau: (h, r) => 1 - Math.exp(-3 * (h / r) ** 2) };
+  let ES_EX = 'x,y';
+  (() => { const s = [[100, 100], [600, 150], [350, 500], [800, 700], [150, 850]]; let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    s.forEach(c => { for (let i = 0; i < 10; i++) ES_EX += `\n${Math.round(c[0] + (rnd() - 0.5) * 40)},${Math.round(c[1] + (rnd() - 0.5) * 40)}`; }); })();
+  const ES = {
+    en: {
+      step: 'Sample locations and variogram', xy: 'Coordinates, one sample per line: x, y (metres)', model: 'Variogram model', sph: 'Spherical', exp: 'Exponential', gau: 'Gaussian', nug: 'Nugget (% of sill)', r: 'Range, practical (m)',
+      empty: 'Enter at least three coordinate pairs, the nugget and the range.', big: 'Effective sample size', sub: (n, f) => `out of ${n} samples: each is worth about ${f} of an independent sample.`,
+      grid: 'Same number spread on a grid over the same area', eff: x => `${x} effective`, se: 'Standard error of the mean, vs. assuming independence', larger: x => `${x}× larger`,
+      bad: (n, x) => `Clustering costs a lot here. Confidence intervals that treat the ${n} samples as independent are about ${x}× too narrow, and tests will find "significant" differences too easily.`,
+      w1: 'Correlation between two samples = (1 − nugget share) × (1 − variogram shape at their distance); 1 for a sample with itself', w2: (n, s, e) => `Effective n = n² ÷ ΣΣ correlation = ${n}² ÷ ${s} = ${e}`,
+      w3: 'This is for estimating a mean by simple averaging; kriging weights would recover a little more information.'
+    },
+    sw: {
+      step: 'Mahali pa sampuli na variogram', xy: 'Viwianishi, sampuli moja kwa kila mstari: x, y (mita)', model: 'Modeli ya variogram', sph: 'Spherical', exp: 'Exponential', gau: 'Gaussian', nug: 'Nugget (% ya sill)', r: 'Masafa ya kivitendo (m)',
+      empty: 'Weka angalau jozi tatu za viwianishi, nugget na masafa.', big: 'Ukubwa halisi wa sampuli (effective sample size)', sub: (n, f) => `kati ya sampuli ${n}: kila moja ina thamani ya takriban ${f} ya sampuli huru.`,
+      grid: 'Idadi hiyo hiyo ikitawanywa kwenye gridi katika eneo lilelile', eff: x => `${x} halisi`, se: 'Kosa sanifu la wastani, ukilinganisha na kuchukulia uhuru', larger: x => `kubwa mara ${x}`,
+      bad: (n, x) => `Kukusanyika kwa sampuli kunagharimu sana hapa. Vipindi vya uhakika vinavyochukulia sampuli ${n} kuwa huru ni vyembamba mno takriban mara ${x}, na majaribio yatapata tofauti "muhimu" kwa urahisi mno.`,
+      w1: 'Uhusiano kati ya sampuli mbili = (1 − sehemu ya nugget) × (1 − umbo la variogram kwa umbali wao); 1 kwa sampuli na yenyewe', w2: (n, s, e) => `n halisi = n² ÷ ΣΣ uhusiano = ${n}² ÷ ${s} = ${e}`,
+      w3: 'Hii ni kwa kukadiria wastani kwa kujumlisha na kugawanya tu; uzito wa kriging ungerejesha taarifa kidogo zaidi.'
+    },
+    es: {
+      step: 'Ubicación de las muestras y variograma', xy: 'Coordenadas, una muestra por línea: x, y (metros)', model: 'Modelo de variograma', sph: 'Esférico', exp: 'Exponencial', gau: 'Gaussiano', nug: 'Pepita (% de la meseta)', r: 'Rango práctico (m)',
+      empty: 'Introduzca al menos tres pares de coordenadas, la pepita y el rango.', big: 'Tamaño de muestra efectivo', sub: (n, f) => `de ${n} muestras: cada una vale aproximadamente ${f} de una muestra independiente.`,
+      grid: 'El mismo número repartido en una malla sobre la misma área', eff: x => `${x} efectivas`, se: 'Error estándar de la media, frente a suponer independencia', larger: x => `${x} veces mayor`,
+      bad: (n, x) => `La agrupación cuesta mucho aquí. Los intervalos de confianza que tratan las ${n} muestras como independientes son unas ${x} veces demasiado estrechos, y las pruebas encontrarán diferencias "significativas" con demasiada facilidad.`,
+      w1: 'Correlación entre dos muestras = (1 − fracción de pepita) × (1 − forma del variograma a su distancia); 1 para una muestra consigo misma', w2: (n, s, e) => `n efectivo = n² ÷ ΣΣ correlación = ${n}² ÷ ${s} = ${e}`,
+      w3: 'Esto es para estimar una media por promedio simple; los pesos del kriging recuperarían algo más de información.'
+    }
+  };
+  function buildES(L) {
+    const S = pick(ES, L);
+    return {
+      step: S.step,
+      example: { xy: ES_EX, model: 'sph', nug: 20, r: 200 },
+      inputs: [
+        { k: 'xy', l: S.xy, t: 'textarea', rows: 6, ph: 'x,y\n120,340\n135,352' },
+        { k: 'model', l: S.model, t: 'select', d: 'sph', w: 2, opts: [['sph', S.sph], ['exp', S.exp], ['gau', S.gau]] },
+        { k: 'nug', l: S.nug, t: 'num', d: 20, w: 2 },
+        { k: 'r', l: S.r, t: 'num', w: 2 }
+      ],
+      compute(v, U) {
+        const pts = String(v.xy || '').split(/\r?\n/).map(l => l.split(/[,;\t\s]+/).filter(Boolean).map(Number)).filter(q => q.length >= 2 && isFinite(q[0]) && isFinite(q[1]));
+        if (pts.length < 3 || !(v.r > 0) || !(v.nug >= 0 && v.nug <= 100)) return U.empty(S.empty);
+        const n = pts.length, c1 = 1 - v.nug / 100, f = VG[v.model];
+        const rho = (a, b) => { const d = Math.hypot(a[0] - b[0], a[1] - b[1]); return d === 0 ? (a === b ? 1 : c1) : c1 * (1 - f(d, v.r)); };
+        const sumRho = P => { let s = 0; for (let i = 0; i < P.length; i++) for (let j = 0; j < P.length; j++) s += i === j ? 1 : rho(P[i], P[j]); return s; };
+        const Ssum = sumRho(pts), neff = n * n / Ssum;
+        const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]), w = Math.max(...xs) - Math.min(...xs), hgt = Math.max(...ys) - Math.min(...ys);
+        const kx = Math.max(1, Math.round(Math.sqrt(n * (w || 1) / (hgt || 1)))), ky = Math.max(1, Math.round(n / kx)), grid = [];
+        for (let i = 0; i < kx; i++) for (let j = 0; j < ky; j++) grid.push([Math.min(...xs) + (i + 0.5) * (w || 1) / kx, Math.min(...ys) + (j + 0.5) * (hgt || 1) / ky]);
+        const ng = grid.length, neffG = ng * ng / sumRho(grid);
+        let h = U.big(S.big, F(neff, 1), S.sub(n, F(neff / n, 2)));
+        h += U.kv([[S.grid, S.eff(F(neffG * n / ng, 1))], [S.se, S.larger(F(Math.sqrt(n / neff), 2))]]);
+        if (neff / n < 0.5) h += U.note(S.bad(n, F(Math.sqrt(n / neff), 1)), 'bad');
+        return { html: h, work: [S.w1, S.w2(n, F(Ssum, 1), F(neff, 2)), S.w3] };
+      }
+    };
+  }
+
+  Object.assign(C.items, {
+    px: {
+      g: 'spat', build: buildPX,
+      t: { en: 'Finding the right pixel size', sw: 'Kupata ukubwa sahihi wa pikseli', es: 'Encontrar el tamaño de píxel adecuado' },
+      d: { en: 'Coarsest legible, finest legible and recommended resolution for a map.', sw: 'Ukubwa mkubwa zaidi unaosomeka, mdogo zaidi unaosomeka, na unaopendekezwa kwa ramani.', es: 'Resolución legible más gruesa, más fina y recomendada para un mapa.' },
+      intro: {
+        en: 'Grid resolution is often chosen by habit (30 m because that\'s Landsat). Hengl (2006) set out rules that tie it to what the data can actually support: a <b>coarsest legible</b> resolution, a <b>finest legible</b> one (below which pixels are mostly wasted memory) and a <b>recommended compromise</b>. Fill in whatever you know; the overall range is where the rules agree.',
+        sw: 'Ukubwa wa gridi mara nyingi huchaguliwa kwa mazoea (m 30 kwa sababu ndivyo Landsat ilivyo). Hengl (2006) aliweka kanuni zinazouhusisha na kile ambacho data zinaweza kubeba kweli: ukubwa <b>mkubwa zaidi unaosomeka</b>, ukubwa <b>mdogo zaidi unaosomeka</b> (chini yake pikseli ni upotevu wa kumbukumbu) na <b>maafikiano yanayopendekezwa</b>. Jaza unachokijua; kiwango cha jumla ni pale kanuni zinapokubaliana.',
+        es: 'La resolución de la malla a menudo se elige por costumbre (30 m porque es Landsat). Hengl (2006) estableció reglas que la vinculan con lo que los datos realmente permiten: una resolución <b>legible más gruesa</b>, una <b>legible más fina</b> (por debajo de la cual los píxeles son sobre todo memoria desperdiciada) y un <b>compromiso recomendado</b>. Rellene lo que sepa; el rango global es donde las reglas coinciden.'
+      },
+      refs: ['Hengl, T. (2006). Finding the right pixel size. <i>Computers & Geosciences</i> 32, 1283–1298. doi:10.1016/j.cageo.2005.11.008']
+    },
+    oa: {
+      g: 'acc', build: buildOA,
+      t: { en: 'Area from a confusion matrix', sw: 'Eneo kutoka jedwali la mkanganyiko', es: 'Área a partir de una matriz de confusión' },
+      d: { en: 'Unbiased class areas with confidence intervals, instead of pixel counts.', sw: 'Maeneo ya madaraja yasiyo na upendeleo pamoja na vipindi vya uhakika, badala ya kuhesabu pikseli.', es: 'Áreas de clase insesgadas con intervalos de confianza, en lugar de conteos de píxeles.' },
+      intro: {
+        en: 'Counting pixels in a map gives biased class areas, because every map has errors. With a stratified accuracy sample, the confusion matrix gives unbiased areas with confidence intervals (Olofsson et al. 2014). Rows are <b>map</b> classes, columns are <b>reference</b> classes, and the last column is each map class\'s mapped area.',
+        sw: 'Kuhesabu pikseli kwenye ramani kunatoa maeneo ya madaraja yenye upendeleo, kwa sababu kila ramani ina makosa. Kwa sampuli ya usahihi iliyopangwa kwa tabaka, jedwali la mkanganyiko linatoa maeneo yasiyo na upendeleo pamoja na vipindi vya uhakika (Olofsson et al. 2014). Mistari ni madaraja ya <b>ramani</b>, safu ni madaraja ya <b>marejeo</b>, na safu ya mwisho ni eneo lililochorwa la kila daraja la ramani.',
+        es: 'Contar píxeles en un mapa da áreas de clase sesgadas, porque todo mapa tiene errores. Con una muestra de exactitud estratificada, la matriz de confusión da áreas insesgadas con intervalos de confianza (Olofsson et al. 2014). Las filas son clases del <b>mapa</b>, las columnas son clases de <b>referencia</b> y la última columna es el área cartografiada de cada clase del mapa.'
+      },
+      refs: ['Olofsson, P., Foody, G.M., Herold, M., Stehman, S.V., Woodcock, C.E., Wulder, M.A. (2014). Good practices for estimating area and assessing accuracy of land change. <i>Remote Sensing of Environment</i> 148, 42–57. doi:10.1016/j.rse.2014.02.015']
+    },
+    ess: {
+      g: 'spat', build: buildES,
+      t: { en: 'Effective sample size', sw: 'Ukubwa halisi wa sampuli', es: 'Tamaño de muestra efectivo' },
+      d: { en: 'How much clustered samples are really worth.', sw: 'Sampuli zilizokusanyika pamoja zina thamani kiasi gani kweli.', es: 'Cuánto valen realmente las muestras agrupadas.' },
+      intro: {
+        en: 'Samples close together carry overlapping information. For estimating an average, a cluster of ten nearby samples can be worth little more than one. This uses the variogram to work out how many independent samples your layout is really worth.',
+        sw: 'Sampuli zilizo karibu zinabeba taarifa zinazofanana. Kwa kukadiria wastani, kundi la sampuli kumi zilizo karibu linaweza kuwa na thamani kidogo tu zaidi ya sampuli moja. Hii inatumia variogram kukokotoa mpangilio wako una thamani ya sampuli huru ngapi kweli.',
+        es: 'Las muestras cercanas entre sí contienen información superpuesta. Para estimar una media, un grupo de diez muestras cercanas puede valer poco más que una. Esto usa el variograma para calcular cuántas muestras independientes vale realmente su disposición.'
+      },
+      refs: ['Cressie, N.A.C. (1993). <i>Statistics for Spatial Data</i>, revised ed. Wiley. Section 1.3.', 'Webster, R., Oliver, M.A. (2007). <i>Geostatistics for Environmental Scientists</i>, 2nd ed. Wiley.']
+    }
+  });
+  Object.assign(C.groups, {
+    acc: { en: ['Model accuracy and validation', 'Is the model as good as the reported accuracy suggests?'], sw: ['Usahihi wa modeli na uthibitishaji', 'Je, modeli ni nzuri kama usahihi ulioripotiwa unavyoonyesha?'], es: ['Exactitud y validación del modelo', '¿Es el modelo tan bueno como sugiere la exactitud informada?'] },
+    spat: { en: ['Spatial structure and sampling', 'Do the variogram, the sampling and the map fit together?'], sw: ['Muundo wa kijiografia na uchukuaji wa sampuli', 'Je, variogram, sampuli na ramani vinaendana?'], es: ['Estructura espacial y muestreo', '¿Encajan el variograma, el muestreo y el mapa?'] }
+  });
+})();
+
+</script>
+<script>
+/* Guided checklists, part 1: spatial cross-validation and leakage; independence and study design.
+   Same logic as on rafikiardhi.earth/checks.html; text in en, sw and es. */
+(function () {
+  const C = window.RA_CHECKS, F = (x, d) => HM.fmt(x, d), pick = (o, L) => o[L] || o.en;
+
+  // ---------------------------------------------------------------- Spatial cross-validation and leakage
+  const CV_KEYS = ['rand', 'prof', 'rep', 'pre', 'tune', 'target', 'scope', 'dup', 'fit'];
+  const CV = {
+    en: {
+      step: 'What applies to your study',
+      items: {
+        rand: ['Random k-fold or leave-one-out cross-validation on clustered or densely sampled points', 'Test points sit next to training points. Use spatial block CV, buffered leave-one-out, or NNDM (Milà et al. 2022) so test distances match prediction distances.'],
+        prof: ['Horizons or depths from the same profile are split between training and test folds', 'Layers of one profile are strongly related. Keep whole profiles (or sites) in the same fold.'],
+        rep: ['Repeat measurements of the same sites (different years or replicates) are split across folds', 'The model is tested on sites it has already seen. Group folds by site.'],
+        pre: ['Feature selection, scaling, outlier removal or covariate tuning was done on the full dataset before splitting', 'Information from the test data leaks into the model. Do every data-driven step inside each training fold.'],
+        tune: ['Hyperparameters were tuned on the same folds used to report accuracy', 'The reported accuracy is optimistic. Use nested CV or a separate test set.'],
+        target: ['A covariate was derived from the target or from the same samples (for example an existing map made with these points)', 'The model can recover the answer from the covariate. Remove it, or show it was independent.'],
+        scope: ['Validation data come from the same area or campaign, but the map is claimed for a wider area or another time', 'Accuracy doesn\'t transfer automatically. Validate in the target area, or limit the claim (area of applicability, Meyer & Pebesma 2021).'],
+        dup: ['Duplicate or near-duplicate coordinates exist across folds', 'Identical locations in training and test inflate accuracy. Merge or group them.'],
+        fit: ['Accuracy is reported on calibration data ("fitted vs. observed")', 'That is goodness of fit, not prediction accuracy. Ask for independent or cross-validated results.']
+      },
+      secD: 'Distances (optional)', secDh: 'If you know them: the typical distance from each test point to its nearest training point in the cross-validation, and from map pixels to their nearest sample.',
+      dcv: 'Test → nearest training (m)', dpred: 'Map pixel → nearest sample (m)', r: 'Variogram range (m)',
+      inside: (a, r, b) => `<b>Cross-validation tests inside the range; the map predicts beyond it.</b> Test points are about ${a} m from training data, within the ${r} m range where neighbours help, but map pixels are typically ${b} m away, beyond it. The reported accuracy won't hold across most of the map.`,
+      closer: x => `<b>Test points are ${x}× closer to training data than map pixels are to samples.</b> The cross-validation is likely optimistic.`,
+      similar: 'Test distances are similar to prediction distances: the validation reflects how the map is used.',
+      lv: ['No warning signs ticked', 'Some risk of optimistic accuracy', 'High risk of optimistic accuracy'], q: 'Questions to answer before you share'
+    },
+    sw: {
+      step: 'Kinachohusu utafiti wako',
+      items: {
+        rand: ['Uthibitishaji mtambuka (cross-validation) wa k-fold wa nasibu au wa kuacha-moja-nje kwenye nukta zilizokusanyika au zilizochukuliwa kwa wingi', 'Nukta za majaribio ziko karibu na nukta za mafunzo. Tumia CV ya vitalu vya kijiografia (spatial block CV), kuacha-moja-nje kwa kinga (buffer), au NNDM (Milà et al. 2022) ili umbali wa majaribio ulingane na umbali wa utabiri.'],
+        prof: ['Tabaka au kina kutoka wasifu (profile) mmoja vimegawanywa kati ya makundi ya mafunzo na majaribio', 'Tabaka za wasifu mmoja zinahusiana sana. Weka wasifu mzima (au eneo zima) katika kundi moja.'],
+        rep: ['Vipimo vinavyorudiwa vya maeneo yaleyale (miaka tofauti au marudio) vimegawanywa katika makundi tofauti', 'Modeli inajaribiwa kwenye maeneo ambayo tayari imeyaona. Panga makundi kwa eneo.'],
+        pre: ['Uchaguzi wa vigeu, kusawazisha vipimo (scaling), kuondoa thamani za kupindukia au kurekebisha vigeu-saidizi kulifanywa kwenye data zote kabla ya kugawanya', 'Taarifa kutoka data za majaribio zinavuja kuingia kwenye modeli. Fanya kila hatua inayotegemea data ndani ya kila kundi la mafunzo.'],
+        tune: ['Vigezo vya juu (hyperparameters) vilirekebishwa kwa makundi yaleyale yaliyotumika kuripoti usahihi', 'Usahihi ulioripotiwa una matumaini kupita kiasi. Tumia CV iliyo ndani ya CV (nested CV) au seti tofauti ya majaribio.'],
+        target: ['Kigeu-saidizi (covariate) kilitokana na kinacholengwa au na sampuli zilezile (kwa mfano ramani iliyopo iliyotengenezwa kwa nukta hizi)', 'Modeli inaweza kupata jibu kutoka kwa kigeu-saidizi. Kiondoe, au onyesha kwamba kilikuwa huru.'],
+        scope: ['Data za uthibitishaji zinatoka eneo au kampeni ileile, lakini ramani inadaiwa kuhusu eneo pana zaidi au wakati mwingine', 'Usahihi hauhamishiki moja kwa moja. Thibitisha katika eneo linalolengwa, au punguza dai (eneo la utumikaji, Meyer & Pebesma 2021).'],
+        dup: ['Kuna viwianishi vinavyojirudia au vinavyokaribiana sana katika makundi tofauti', 'Mahali pamoja katika mafunzo na majaribio huongeza usahihi kwa uongo. Viunganishe au viweke kundi moja.'],
+        fit: ['Usahihi umeripotiwa kwenye data za urekebishaji ("iliyokokotolewa dhidi ya iliyopimwa")', 'Huo ni ulinganifu (goodness of fit), si usahihi wa utabiri. Omba matokeo huru au ya uthibitishaji mtambuka.']
+      },
+      secD: 'Umbali (si lazima)', secDh: 'Ukiujua: umbali wa kawaida kutoka kila nukta ya majaribio hadi nukta ya mafunzo iliyo karibu zaidi katika uthibitishaji mtambuka, na kutoka pikseli za ramani hadi sampuli iliyo karibu zaidi.',
+      dcv: 'Majaribio → mafunzo ya karibu zaidi (m)', dpred: 'Pikseli ya ramani → sampuli ya karibu zaidi (m)', r: 'Masafa ya variogram (m)',
+      inside: (a, r, b) => `<b>Uthibitishaji mtambuka unajaribu ndani ya masafa; ramani inatabiri nje yake.</b> Nukta za majaribio ziko takriban m ${a} kutoka data za mafunzo, ndani ya masafa ya m ${r} ambapo majirani husaidia, lakini pikseli za ramani kwa kawaida ziko m ${b} mbali, nje yake. Usahihi ulioripotiwa hautadumu katika sehemu kubwa ya ramani.`,
+      closer: x => `<b>Nukta za majaribio ziko karibu zaidi mara ${x} na data za mafunzo kuliko pikseli za ramani zilivyo na sampuli.</b> Uthibitishaji mtambuka huenda una matumaini kupita kiasi.`,
+      similar: 'Umbali wa majaribio unafanana na umbali wa utabiri: uthibitishaji unaakisi jinsi ramani inavyotumika.',
+      lv: ['Hakuna dalili za onyo zilizowekewa alama', 'Hatari fulani ya usahihi wenye matumaini kupita kiasi', 'Hatari kubwa ya usahihi wenye matumaini kupita kiasi'], q: 'Maswali ya kujibu kabla ya kushiriki'
+    },
+    es: {
+      step: 'Qué se aplica a su estudio',
+      items: {
+        rand: ['Validación cruzada k-fold aleatoria o dejando uno fuera sobre puntos agrupados o muestreados densamente', 'Los puntos de prueba están junto a los de entrenamiento. Use validación cruzada por bloques espaciales, dejar-uno-fuera con zona de exclusión (buffer) o NNDM (Milà et al. 2022) para que las distancias de prueba coincidan con las de predicción.'],
+        prof: ['Horizontes o profundidades del mismo perfil están repartidos entre pliegues de entrenamiento y de prueba', 'Las capas de un mismo perfil están muy relacionadas. Mantenga perfiles (o sitios) completos en el mismo pliegue.'],
+        rep: ['Mediciones repetidas de los mismos sitios (distintos años o réplicas) están repartidas entre pliegues', 'El modelo se prueba en sitios que ya ha visto. Agrupe los pliegues por sitio.'],
+        pre: ['La selección de variables, el escalado, la eliminación de valores atípicos o el ajuste de covariables se hizo con todo el conjunto de datos antes de dividir', 'La información de los datos de prueba se filtra al modelo. Haga cada paso basado en los datos dentro de cada pliegue de entrenamiento.'],
+        tune: ['Los hiperparámetros se ajustaron con los mismos pliegues usados para informar la exactitud', 'La exactitud informada es optimista. Use validación cruzada anidada o un conjunto de prueba separado.'],
+        target: ['Una covariable se derivó de la variable objetivo o de las mismas muestras (por ejemplo, un mapa existente hecho con estos puntos)', 'El modelo puede recuperar la respuesta a partir de la covariable. Elimínela o demuestre que era independiente.'],
+        scope: ['Los datos de validación provienen de la misma área o campaña, pero el mapa se reivindica para un área más amplia u otro periodo', 'La exactitud no se transfiere automáticamente. Valide en el área objetivo o limite la afirmación (área de aplicabilidad, Meyer y Pebesma 2021).'],
+        dup: ['Hay coordenadas duplicadas o casi duplicadas entre pliegues', 'Las ubicaciones idénticas en entrenamiento y prueba inflan la exactitud. Fusiónelas o agrúpelas.'],
+        fit: ['La exactitud se informa sobre los datos de calibración ("ajustado frente a observado")', 'Eso es bondad de ajuste, no exactitud de predicción. Pida resultados independientes o de validación cruzada.']
+      },
+      secD: 'Distancias (opcional)', secDh: 'Si las conoce: la distancia típica de cada punto de prueba a su punto de entrenamiento más cercano en la validación cruzada, y de los píxeles del mapa a su muestra más cercana.',
+      dcv: 'Prueba → entrenamiento más cercano (m)', dpred: 'Píxel del mapa → muestra más cercana (m)', r: 'Rango del variograma (m)',
+      inside: (a, r, b) => `<b>La validación cruzada prueba dentro del rango; el mapa predice más allá.</b> Los puntos de prueba están a unos ${a} m de los datos de entrenamiento, dentro del rango de ${r} m en el que los vecinos ayudan, pero los píxeles del mapa suelen estar a ${b} m, fuera de él. La exactitud informada no se mantendrá en la mayor parte del mapa.`,
+      closer: x => `<b>Los puntos de prueba están ${x} veces más cerca de los datos de entrenamiento que los píxeles del mapa de las muestras.</b> La validación cruzada probablemente es optimista.`,
+      similar: 'Las distancias de prueba son similares a las de predicción: la validación refleja cómo se usa el mapa.',
+      lv: ['No se marcó ninguna señal de alerta', 'Cierto riesgo de exactitud optimista', 'Alto riesgo de exactitud optimista'], q: 'Preguntas a responder antes de compartir'
+    }
+  };
+  function buildCV(L) {
+    const S = pick(CV, L);
+    return {
+      step: S.step,
+      example: { rand: true, pre: true, dcv: 40, dpred: 380, r: 250 },
+      inputs: CV_KEYS.map(k => ({ k, l: S.items[k][0], t: 'check', d: false })).concat([
+        { t: 'sec', l: S.secD, h: S.secDh },
+        { k: 'dcv', l: S.dcv, t: 'num', w: 2 },
+        { k: 'dpred', l: S.dpred, t: 'num', w: 2 },
+        { k: 'r', l: S.r, t: 'num', w: 2 }
+      ]),
+      compute(v, U) {
+        const hit = CV_KEYS.filter(k => v[k]);
+        let distNote = '';
+        if (v.dcv > 0 && v.dpred > 0) {
+          const ratio = v.dpred / v.dcv;
+          if (v.r > 0 && v.dcv < v.r && v.dpred > v.r) distNote = U.note(S.inside(F(v.dcv, 0), F(v.r, 0), F(v.dpred, 0)), 'bad');
+          else if (ratio > 2) distNote = U.note(S.closer(F(ratio, 1)), 'bad');
+          else distNote = U.note(S.similar, 'good');
+        }
+        const level = hit.length === 0 && !distNote.includes('bad') ? ['good', S.lv[0]] : hit.length <= 1 ? ['warn', S.lv[1]] : ['bad', S.lv[2]];
+        return `<p><span class="tag ${level[0]}">${level[1]}</span></p>` + distNote + (hit.length ? `<h3>${S.q}</h3><ul class="plain">${hit.map(k => `<li><b>${S.items[k][0]}.</b> ${S.items[k][1]}</li>`).join('')}</ul>` : '');
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Independence and study design
+  const IN = {
+    en: {
+      step: 'Study structure and intended inference',
+      structure: 'What structure is present in the observations?', structureO: [['none', 'No obvious grouping or repeated observations'], ['group', 'Observations grouped within sites, plots, subjects, catchments, batches, etc.'], ['repeat', 'Repeated measurements of the same units (time, depth, treatment, or replicate)'], ['space', 'Spatially located observations with possible spatial dependence'], ['time', 'Ordered time series or observations close together in time'], ['multi', 'More than one structure (e.g. repeated measurements within spatial sites)']],
+      unit: 'What is the independent sampling or experimental unit?', unitO: [['sample', 'Each individual observation'], ['plot', 'Plot, site, subject, or other group'], ['profile', 'Profile, core, or sampling location'], ['cluster', 'Catchment, region, school, clinic, or higher-level cluster'], ['timeunit', 'Time point or time block'], ['unclear', 'Not stated or unclear']],
+      goal: 'What is the main inferential or prediction goal?', goalO: [['describe', 'Describe or compare the sampled units'], ['population', 'Infer a population mean, difference, or relationship'], ['predict', 'Predict new observations in the same sampled setting'], ['newgroup', 'Predict for new sites, subjects, regions, or groups'], ['future', 'Predict future observations']],
+      split: 'If predicting, how was validation separated?', splitO: [['na', 'Not a predictive modelling study / not applicable'], ['random', 'Random train/test split or random cross-validation'], ['group', 'Groups or sites kept wholly in one fold'], ['space', 'Spatial blocks, spatial buffers, or distance-matched validation'], ['time', 'Forward-chaining or time-ordered validation'], ['external', 'Independent external dataset or campaign']],
+      secIss: 'Potential issues in your design or analysis',
+      groups: 'Several observations come from the same group, site, subject, profile, or experimental unit',
+      pseudorep: 'The analysis appears to count subsamples, repeated measures, pixels, or technical replicates as independent replicates',
+      overlap: 'Nearby locations, adjacent time points, or related observations may occur in both training and test data',
+      leakage: 'Preprocessing, feature selection, tuning, or covariate construction may have used information from the held-out data',
+      balanced: 'You used a design-aware method (e.g. mixed model, cluster-robust SE, block design, or grouped validation)',
+      secNum: 'Numbers, if known (optional): how much the grouping costs', nobs: 'Observations analysed', ngrp: 'Independent groups (sites, profiles, subjects…)', icc: 'Intraclass correlation (ICC, 0–1), if reported',
+      neff: 'Effective sample size', neffSub: (n, k, m, icc) => `out of ${n} observations in ${k} groups (about ${m} per group), with ICC ${icc}.`,
+      deff: 'Design effect', seSmall: 'Standard errors that ignore the grouping are too small by', between: 'Effective n lies between', betweenV: (k, n) => `${k} (groups) and ${n} (observations)`,
+      fMost: ['Grouping removes most of the apparent replication', (n, e) => `With this ICC the ${n} observations carry about as much information as ${e} independent ones. Tests and intervals that use n = ${n} will look far more certain than the data support.`],
+      wM: (n, k, m) => `Mean group size m = ${n} ÷ ${k} = ${m}`, wD: (m1, icc, d) => `Design effect = 1 + (m − 1) × ICC = 1 + ${m1} × ${icc} = ${d}`, wE: (n, d, e) => `Effective n = ${n} ÷ ${d} = ${e}`,
+      rangeH: 'Effective sample size for a range of ICC values', rangeRow: (e, s) => `${e} effective (standard errors ${s}× too small)`,
+      rangeP: (k, n) => `Effective n lies between ${k} (the number of groups) and ${n} (the number of observations). Soil properties measured repeatedly within a profile or site often have ICCs well above 0.3.`,
+      wRange: (n, k, m) => `Mean group size m = ${n} ÷ ${k} = ${m}; design effect = 1 + (m − 1) × ICC for each ICC shown`,
+      wKish: 'This is the Kish design effect for estimating a mean with groups of similar size. For a regression slope it also depends on how strongly the predictor itself clusters (Moulton 1990); unequal group sizes raise it further.',
+      fUnit: ['The stated unit may be wrong', (k, n) => `You gave ${k} groups for ${n} observations, but chose “each individual observation” as the independent unit. If the observations within a group are related, the group is the independent unit.`],
+      needBoth: 'Enter both the number of observations and the number of groups (groups no more than observations) to see the effective sample size.',
+      f: {
+        unclear: ['Independent unit is unclear', 'Identify the unit independently sampled or assigned to treatment. The number of measurements is not necessarily the number of independent replicates.'],
+        grpAdj: ['Grouped or repeated data: check the stated adjustment', 'You used a design-aware method. Confirm that it matches the grouping structure and the estimand; a mixed model or robust standard error does not automatically solve every dependence problem.'],
+        grp: ['Grouped or repeated observations may be dependent', 'Check whether inference accounts for the group or repeated-measure structure. Possible approaches include group-level summaries, mixed-effects models, GEE, cluster-robust uncertainty, or a design-specific repeated-measures analysis. The appropriate choice depends on the question and design.'],
+        pseudo: ['Possible pseudoreplication', 'Check whether treatment or sampling was independently replicated at the level claimed. Subsamples and technical replicates can improve measurement precision, but do not create additional independent experimental units.'],
+        spNew: ['Validation may not match prediction to new places', 'For a claim about new sites or regions, random folds can place nearby observations in training and test sets. Consider spatial blocking, buffers, distance-matched validation, or an independent target-area dataset.'],
+        sp: ['Check spatial dependence against the analysis goal', 'Spatial autocorrelation does not by itself make an analysis invalid. Check whether residual dependence affects standard errors or whether validation distances represent the locations where predictions will be used.'],
+        tFut: ['Validation may use information from the future', 'For forecasting, random splits can allow future observations to inform predictions of earlier periods. Use time-ordered evaluation, ideally preserving the forecast horizon and any temporal grouping.'],
+        t: ['Check temporal dependence and ordering', 'Adjacent time points or repeated measurements may be correlated. Confirm that the uncertainty model accounts for dependence and that any validation preserves the intended time direction.'],
+        overlap: ['Potential train–test dependence', 'Check whether related observations, nearby points, repeated measures, profiles, or duplicate coordinates cross the training/test boundary. Choose grouping or spatial/temporal separation to match the intended deployment setting.'],
+        leak: ['Potential information leakage', 'All data-driven preprocessing, feature selection, imputation, scaling, and tuning should be fitted using training data only within each resampling split. Target-derived covariates need particular scrutiny.'],
+        rndNew: ['Random validation may answer the wrong question', 'Random validation estimates performance for data resembling the sampled dataset, often with represented groups in both sets. It does not establish performance at genuinely new sites, subjects, or regions.'],
+        rndFut: ['Random validation is usually unsuitable for forecasting', 'A random split can mix past and future information. Prefer a time-ordered split or rolling-origin evaluation that mimics the actual forecast task.'],
+        none: ['No obvious dependence issue selected', 'This is not proof of independence. Confirm that the sampling design, residual structure, and data-processing workflow support the assumption for the specific analysis.'],
+        grpOk: ['Grouped validation is aligned in principle', 'Keeping entire groups out of training is generally appropriate when the target is new groups. Check that the groups correspond to the real deployment unit and that enough independent groups are held out.'],
+        spOk: ['Spatially separated validation selected', 'Confirm that block size or buffer distance is justified by the spatial structure and matches the distances expected at prediction time. Spatial blocking is not automatically sufficient if blocks are too small or the target region differs.'],
+        tOk: ['Time-ordered validation selected', 'Confirm that all preprocessing and tuning occur within each training window and that the evaluation reflects the intended forecast horizon.']
+      },
+      lv: ['Potential design mismatch or leakage to investigate', 'Independence assumptions need a closer look', 'No major warning selected; verify against your design'],
+      screen: 'This is a guided screening result based on the selections above, not a statistical test of independence.',
+      q: 'Questions to answer before you share', qs: ['What is the independently sampled or randomised unit?', 'Does the statistical model account for dependence at that unit?', 'Does the validation split mimic the population, location, group, or time period to which the conclusions are intended to apply?', 'Were all data-dependent modelling decisions confined to the training data?'],
+      w: ['Independence is design- and estimand-specific. A dependence structure may affect standard errors, effective sample size, or predictive validation in different ways; these are related but not interchangeable issues.', 'The checklist reports potential risks from user-selected study characteristics. It does not estimate correlation, effective sample size, or the magnitude of bias.', 'For spatial data, select validation separation based on the prediction task and expected distance to training observations. For forecasting, preserve temporal order. For grouped data, keep the relevant independent groups together.', 'A lack of detected dependence is not evidence that observations are independent. Review the design, residuals, and analysis assumptions.']
+    },
+    sw: {
+      step: 'Muundo wa utafiti na hitimisho linalokusudiwa',
+      structure: 'Kuna muundo gani katika vipimo?', structureO: [['none', 'Hakuna makundi au vipimo vinavyorudiwa vinavyoonekana'], ['group', 'Vipimo vimepangwa ndani ya maeneo, vitalu, wahusika, mabonde, makundi ya maabara, n.k.'], ['repeat', 'Vipimo vinavyorudiwa vya vitu vilevile (muda, kina, tiba au marudio)'], ['space', 'Vipimo vyenye mahali vinavyoweza kuwa na utegemezi wa kijiografia'], ['time', 'Mfululizo wa muda au vipimo vilivyo karibu kwa wakati'], ['multi', 'Muundo zaidi ya mmoja (mfano vipimo vinavyorudiwa ndani ya maeneo ya kijiografia)']],
+      unit: 'Kipimo huru cha sampuli au cha jaribio ni kipi?', unitO: [['sample', 'Kila kipimo kimoja kimoja'], ['plot', 'Kitalu, eneo, mhusika au kundi jingine'], ['profile', 'Wasifu, kiini (core) au mahali pa sampuli'], ['cluster', 'Bonde, kanda, shule, kliniki au kundi la ngazi ya juu'], ['timeunit', 'Wakati au kipindi cha wakati'], ['unclear', 'Hakijatajwa au hakiko wazi']],
+      goal: 'Lengo kuu la hitimisho au utabiri ni lipi?', goalO: [['describe', 'Kueleza au kulinganisha vitu vilivyochukuliwa sampuli'], ['population', 'Kuhitimisha wastani, tofauti au uhusiano wa jamii nzima (population)'], ['predict', 'Kutabiri vipimo vipya katika mazingira yaleyale ya sampuli'], ['newgroup', 'Kutabiri kwa maeneo, wahusika, kanda au makundi mapya'], ['future', 'Kutabiri vipimo vya baadaye']],
+      split: 'Ikiwa ni utabiri, uthibitishaji ulitenganishwa vipi?', splitO: [['na', 'Si utafiti wa modeli ya utabiri / haihusiki'], ['random', 'Mgawanyo wa nasibu wa mafunzo/majaribio au uthibitishaji mtambuka wa nasibu'], ['group', 'Makundi au maeneo yamewekwa yote katika kundi moja la uthibitishaji'], ['space', 'Vitalu vya kijiografia, kinga za kijiografia (buffers) au uthibitishaji unaolinganisha umbali'], ['time', 'Uthibitishaji unaofuata mpangilio wa muda (forward-chaining)'], ['external', 'Seti huru ya data ya nje au kampeni nyingine']],
+      secIss: 'Matatizo yanayowezekana katika mpango au uchambuzi wako',
+      groups: 'Vipimo kadhaa vinatoka kundi, eneo, mhusika, wasifu au kipimo cha jaribio kilekile',
+      pseudorep: 'Uchambuzi unaonekana kuhesabu sampuli ndogo, vipimo vinavyorudiwa, pikseli au marudio ya kiufundi kama marudio huru',
+      overlap: 'Mahali yaliyo karibu, nyakati zinazofuatana au vipimo vinavyohusiana vinaweza kuwepo katika data za mafunzo na za majaribio',
+      leakage: 'Uandaaji wa data, uchaguzi wa vigeu, urekebishaji au ujenzi wa vigeu-saidizi unaweza kuwa ulitumia taarifa kutoka data zilizowekwa kando',
+      balanced: 'Ulitumia mbinu inayozingatia mpango (mfano mixed model, makosa sanifu thabiti kwa makundi, mpango wa vitalu, au uthibitishaji kwa makundi)',
+      secNum: 'Namba, kama zinajulikana (si lazima): makundi yanagharimu kiasi gani', nobs: 'Vipimo vilivyochambuliwa', ngrp: 'Makundi huru (maeneo, wasifu, wahusika…)', icc: 'Uhusiano ndani ya makundi (ICC, 0–1), kama umeripotiwa',
+      neff: 'Ukubwa halisi wa sampuli', neffSub: (n, k, m, icc) => `kati ya vipimo ${n} katika makundi ${k} (takriban ${m} kwa kila kundi), na ICC ${icc}.`,
+      deff: 'Athari ya mpango (design effect)', seSmall: 'Makosa sanifu yanayopuuza makundi ni madogo mno kwa', between: 'n halisi iko kati ya', betweenV: (k, n) => `${k} (makundi) na ${n} (vipimo)`,
+      fMost: ['Makundi yanaondoa sehemu kubwa ya marudio yanayoonekana', (n, e) => `Kwa ICC hii vipimo ${n} vinabeba taarifa takriban sawa na vipimo huru ${e}. Majaribio na vipindi vinavyotumia n = ${n} vitaonekana kuwa na uhakika zaidi kuliko data zinavyoruhusu.`],
+      wM: (n, k, m) => `Ukubwa wastani wa kundi m = ${n} ÷ ${k} = ${m}`, wD: (m1, icc, d) => `Athari ya mpango = 1 + (m − 1) × ICC = 1 + ${m1} × ${icc} = ${d}`, wE: (n, d, e) => `n halisi = ${n} ÷ ${d} = ${e}`,
+      rangeH: 'Ukubwa halisi wa sampuli kwa thamani mbalimbali za ICC', rangeRow: (e, s) => `${e} halisi (makosa sanifu madogo mno mara ${s})`,
+      rangeP: (k, n) => `n halisi iko kati ya ${k} (idadi ya makundi) na ${n} (idadi ya vipimo). Sifa za udongo zinazopimwa mara kwa mara ndani ya wasifu au eneo mara nyingi zina ICC zaidi sana ya 0.3.`,
+      wRange: (n, k, m) => `Ukubwa wastani wa kundi m = ${n} ÷ ${k} = ${m}; athari ya mpango = 1 + (m − 1) × ICC kwa kila ICC iliyoonyeshwa`,
+      wKish: 'Hii ni athari ya mpango ya Kish kwa kukadiria wastani pale makundi yana ukubwa unaofanana. Kwa mteremko wa regresheni inategemea pia jinsi kigeu chenyewe kinavyokusanyika kwa makundi (Moulton 1990); makundi yenye ukubwa usio sawa huiongeza zaidi.',
+      fUnit: ['Kipimo kilichotajwa kinaweza kuwa si sahihi', (k, n) => `Ulitoa makundi ${k} kwa vipimo ${n}, lakini ukachagua “kila kipimo kimoja kimoja” kama kipimo huru. Ikiwa vipimo ndani ya kundi vinahusiana, kundi ndilo kipimo huru.`],
+      needBoth: 'Weka idadi ya vipimo na idadi ya makundi (makundi yasizidi vipimo) ili kuona ukubwa halisi wa sampuli.',
+      f: {
+        unclear: ['Kipimo huru hakiko wazi', 'Tambua kipimo kilichochukuliwa sampuli au kupewa tiba kwa uhuru. Idadi ya vipimo si lazima iwe idadi ya marudio huru.'],
+        grpAdj: ['Data za makundi au zinazorudiwa: kagua marekebisho yaliyotajwa', 'Ulitumia mbinu inayozingatia mpango. Hakikisha inalingana na muundo wa makundi na kinachokadiriwa; mixed model au kosa sanifu thabiti haitatui kila tatizo la utegemezi moja kwa moja.'],
+        grp: ['Vipimo vya makundi au vinavyorudiwa vinaweza kutegemeana', 'Kagua kama hitimisho linazingatia muundo wa makundi au vipimo vinavyorudiwa. Njia zinazowezekana ni pamoja na muhtasari wa ngazi ya kundi, mixed-effects models, GEE, kutokuwa na uhakika kulikoimarishwa kwa makundi, au uchambuzi maalum wa vipimo vinavyorudiwa. Chaguo sahihi linategemea swali na mpango.'],
+        pseudo: ['Huenda kuna marudio bandia (pseudoreplication)', 'Kagua kama tiba au sampuli zilirudiwa kwa uhuru katika ngazi inayodaiwa. Sampuli ndogo na marudio ya kiufundi yanaweza kuboresha usahihi wa kipimo, lakini hayaongezi vipimo huru vya jaribio.'],
+        spNew: ['Uthibitishaji unaweza usilingane na utabiri kwa maeneo mapya', 'Kwa dai kuhusu maeneo au kanda mpya, makundi ya nasibu yanaweza kuweka vipimo vilivyo karibu katika seti za mafunzo na majaribio. Fikiria vitalu vya kijiografia, kinga (buffers), uthibitishaji unaolinganisha umbali, au seti huru ya data ya eneo linalolengwa.'],
+        sp: ['Kagua utegemezi wa kijiografia dhidi ya lengo la uchambuzi', 'Uhusiano wa kijiografia (spatial autocorrelation) wenyewe haufanyi uchambuzi kuwa batili. Kagua kama utegemezi wa mabaki unaathiri makosa sanifu au kama umbali wa uthibitishaji unawakilisha mahali ambapo utabiri utatumika.'],
+        tFut: ['Uthibitishaji unaweza kutumia taarifa kutoka wakati ujao', 'Kwa utabiri wa baadaye, migawanyo ya nasibu inaweza kuruhusu vipimo vya baadaye kuarifu utabiri wa vipindi vya awali. Tumia tathmini inayofuata mpangilio wa muda, ikiwezekana ukihifadhi upeo wa utabiri na makundi yoyote ya muda.'],
+        t: ['Kagua utegemezi wa muda na mpangilio', 'Nyakati zinazofuatana au vipimo vinavyorudiwa vinaweza kuhusiana. Hakikisha modeli ya kutokuwa na uhakika inazingatia utegemezi na kwamba uthibitishaji wowote unahifadhi mwelekeo wa muda unaokusudiwa.'],
+        overlap: ['Huenda kuna utegemezi kati ya mafunzo na majaribio', 'Kagua kama vipimo vinavyohusiana, nukta zilizo karibu, vipimo vinavyorudiwa, wasifu au viwianishi vinavyojirudia vinavuka mpaka wa mafunzo/majaribio. Chagua makundi au utengano wa kijiografia/wa muda unaolingana na mazingira ya matumizi yanayokusudiwa.'],
+        leak: ['Huenda kuna uvujaji wa taarifa (leakage)', 'Uandaaji wote wa data unaotegemea data, uchaguzi wa vigeu, ujazaji wa data zinazokosekana, kusawazisha vipimo na urekebishaji vinapaswa kufanywa kwa data za mafunzo pekee ndani ya kila mgawanyo. Vigeu-saidizi vinavyotokana na kinacholengwa vinahitaji uchunguzi maalum.'],
+        rndNew: ['Uthibitishaji wa nasibu unaweza kujibu swali lisilo sahihi', 'Uthibitishaji wa nasibu unakadiria utendaji kwa data zinazofanana na seti ya sampuli, mara nyingi makundi yaleyale yakiwa katika seti zote mbili. Hauthibitishi utendaji katika maeneo, wahusika au kanda mpya kabisa.'],
+        rndFut: ['Uthibitishaji wa nasibu kwa kawaida haufai kwa utabiri wa baadaye', 'Mgawanyo wa nasibu unaweza kuchanganya taarifa za zamani na za baadaye. Pendelea mgawanyo unaofuata mpangilio wa muda au tathmini ya mwanzo-unaosogea (rolling-origin) inayoiga kazi halisi ya utabiri.'],
+        none: ['Hakuna tatizo la utegemezi lililochaguliwa', 'Huu si uthibitisho wa uhuru. Hakikisha mpango wa sampuli, muundo wa mabaki na mtiririko wa uchakataji wa data vinaunga mkono dhana hiyo kwa uchambuzi husika.'],
+        grpOk: ['Uthibitishaji kwa makundi unalingana kimsingi', 'Kuweka makundi mazima nje ya mafunzo kwa kawaida kunafaa pale lengo ni makundi mapya. Kagua kwamba makundi yanalingana na kipimo halisi cha matumizi na kwamba makundi huru ya kutosha yamewekwa kando.'],
+        spOk: ['Uthibitishaji uliotenganishwa kijiografia umechaguliwa', 'Hakikisha ukubwa wa vitalu au umbali wa kinga unahalalishwa na muundo wa kijiografia na unalingana na umbali unaotarajiwa wakati wa utabiri. Vitalu vya kijiografia havitoshi moja kwa moja ikiwa ni vidogo mno au kanda inayolengwa ni tofauti.'],
+        tOk: ['Uthibitishaji unaofuata mpangilio wa muda umechaguliwa', 'Hakikisha uandaaji wote wa data na urekebishaji unafanyika ndani ya kila dirisha la mafunzo na kwamba tathmini inaakisi upeo wa utabiri unaokusudiwa.']
+      },
+      lv: ['Huenda kuna kutolingana kwa mpango au uvujaji wa kuchunguza', 'Dhana za uhuru zinahitaji kuangaliwa kwa karibu zaidi', 'Hakuna onyo kubwa lililochaguliwa; hakikisha dhidi ya mpango wako'],
+      screen: 'Haya ni matokeo ya uchunguzi wa awali yanayotokana na machaguo hapo juu, si jaribio la kitakwimu la uhuru.',
+      q: 'Maswali ya kujibu kabla ya kushiriki', qs: ['Kipimo kilichochukuliwa sampuli au kupangwa kwa nasibu kwa uhuru ni kipi?', 'Je, modeli ya kitakwimu inazingatia utegemezi katika kipimo hicho?', 'Je, mgawanyo wa uthibitishaji unaiga jamii, mahali, kundi au kipindi ambacho hitimisho linakusudiwa kuhusu?', 'Je, maamuzi yote ya modeli yanayotegemea data yalifanywa kwa data za mafunzo pekee?'],
+      w: ['Uhuru unategemea mpango na kinachokadiriwa. Muundo wa utegemezi unaweza kuathiri makosa sanifu, ukubwa halisi wa sampuli au uthibitishaji wa utabiri kwa njia tofauti; haya yanahusiana lakini hayabadilishani.', 'Orodha hii inaripoti hatari zinazowezekana kutokana na sifa za utafiti ulizochagua. Haikadirii uhusiano, ukubwa halisi wa sampuli wala ukubwa wa upendeleo.', 'Kwa data za kijiografia, chagua utengano wa uthibitishaji kulingana na kazi ya utabiri na umbali unaotarajiwa hadi vipimo vya mafunzo. Kwa utabiri wa baadaye, hifadhi mpangilio wa muda. Kwa data za makundi, weka makundi huru husika pamoja.', 'Kutogundua utegemezi si ushahidi kwamba vipimo ni huru. Pitia mpango, mabaki na dhana za uchambuzi.']
+    },
+    es: {
+      step: 'Estructura del estudio e inferencia prevista',
+      structure: '¿Qué estructura hay en las observaciones?', structureO: [['none', 'Sin agrupación evidente ni observaciones repetidas'], ['group', 'Observaciones agrupadas en sitios, parcelas, sujetos, cuencas, lotes, etc.'], ['repeat', 'Mediciones repetidas de las mismas unidades (tiempo, profundidad, tratamiento o réplica)'], ['space', 'Observaciones georreferenciadas con posible dependencia espacial'], ['time', 'Series temporales ordenadas u observaciones cercanas en el tiempo'], ['multi', 'Más de una estructura (p. ej. mediciones repetidas dentro de sitios espaciales)']],
+      unit: '¿Cuál es la unidad independiente de muestreo o experimental?', unitO: [['sample', 'Cada observación individual'], ['plot', 'Parcela, sitio, sujeto u otro grupo'], ['profile', 'Perfil, núcleo o punto de muestreo'], ['cluster', 'Cuenca, región, escuela, clínica u otro conglomerado de nivel superior'], ['timeunit', 'Momento o bloque de tiempo'], ['unclear', 'No indicada o poco clara']],
+      goal: '¿Cuál es el objetivo principal de inferencia o predicción?', goalO: [['describe', 'Describir o comparar las unidades muestreadas'], ['population', 'Inferir una media, diferencia o relación poblacional'], ['predict', 'Predecir nuevas observaciones en el mismo contexto muestreado'], ['newgroup', 'Predecir para nuevos sitios, sujetos, regiones o grupos'], ['future', 'Predecir observaciones futuras']],
+      split: 'Si se predice, ¿cómo se separó la validación?', splitO: [['na', 'No es un estudio de modelización predictiva / no aplica'], ['random', 'División aleatoria entrenamiento/prueba o validación cruzada aleatoria'], ['group', 'Grupos o sitios mantenidos completos en un pliegue'], ['space', 'Bloques espaciales, zonas de exclusión o validación ajustada por distancia'], ['time', 'Validación encadenada hacia delante u ordenada en el tiempo'], ['external', 'Conjunto de datos externo independiente u otra campaña']],
+      secIss: 'Posibles problemas en su diseño o análisis',
+      groups: 'Varias observaciones provienen del mismo grupo, sitio, sujeto, perfil o unidad experimental',
+      pseudorep: 'El análisis parece contar submuestras, medidas repetidas, píxeles o réplicas técnicas como réplicas independientes',
+      overlap: 'Ubicaciones cercanas, momentos contiguos u observaciones relacionadas pueden aparecer tanto en los datos de entrenamiento como en los de prueba',
+      leakage: 'El preprocesamiento, la selección de variables, el ajuste o la construcción de covariables pueden haber usado información de los datos reservados',
+      balanced: 'Usó un método que tiene en cuenta el diseño (p. ej. modelo mixto, errores estándar robustos por conglomerado, diseño en bloques o validación agrupada)',
+      secNum: 'Números, si se conocen (opcional): cuánto cuesta la agrupación', nobs: 'Observaciones analizadas', ngrp: 'Grupos independientes (sitios, perfiles, sujetos…)', icc: 'Correlación intraclase (CCI, 0–1), si se informa',
+      neff: 'Tamaño de muestra efectivo', neffSub: (n, k, m, icc) => `de ${n} observaciones en ${k} grupos (unas ${m} por grupo), con CCI ${icc}.`,
+      deff: 'Efecto de diseño', seSmall: 'Los errores estándar que ignoran la agrupación son demasiado pequeños en', between: 'El n efectivo está entre', betweenV: (k, n) => `${k} (grupos) y ${n} (observaciones)`,
+      fMost: ['La agrupación elimina la mayor parte de la replicación aparente', (n, e) => `Con esta CCI, las ${n} observaciones contienen tanta información como unas ${e} independientes. Las pruebas e intervalos que usan n = ${n} parecerán mucho más seguros de lo que los datos permiten.`],
+      wM: (n, k, m) => `Tamaño medio de grupo m = ${n} ÷ ${k} = ${m}`, wD: (m1, icc, d) => `Efecto de diseño = 1 + (m − 1) × CCI = 1 + ${m1} × ${icc} = ${d}`, wE: (n, d, e) => `n efectivo = ${n} ÷ ${d} = ${e}`,
+      rangeH: 'Tamaño de muestra efectivo para varios valores de CCI', rangeRow: (e, s) => `${e} efectivas (errores estándar ${s} veces demasiado pequeños)`,
+      rangeP: (k, n) => `El n efectivo está entre ${k} (el número de grupos) y ${n} (el número de observaciones). Las propiedades del suelo medidas repetidamente en un perfil o sitio suelen tener CCI muy por encima de 0.3.`,
+      wRange: (n, k, m) => `Tamaño medio de grupo m = ${n} ÷ ${k} = ${m}; efecto de diseño = 1 + (m − 1) × CCI para cada CCI mostrada`,
+      wKish: 'Este es el efecto de diseño de Kish para estimar una media con grupos de tamaño similar. Para la pendiente de una regresión también depende de cuánto se agrupa el propio predictor (Moulton 1990); los tamaños de grupo desiguales lo aumentan más.',
+      fUnit: ['La unidad indicada puede ser incorrecta', (k, n) => `Indicó ${k} grupos para ${n} observaciones, pero eligió “cada observación individual” como unidad independiente. Si las observaciones dentro de un grupo están relacionadas, el grupo es la unidad independiente.`],
+      needBoth: 'Introduzca tanto el número de observaciones como el de grupos (los grupos no más que las observaciones) para ver el tamaño de muestra efectivo.',
+      f: {
+        unclear: ['La unidad independiente no está clara', 'Identifique la unidad muestreada o asignada al tratamiento de forma independiente. El número de mediciones no es necesariamente el número de réplicas independientes.'],
+        grpAdj: ['Datos agrupados o repetidos: compruebe el ajuste indicado', 'Usó un método que tiene en cuenta el diseño. Confirme que corresponde a la estructura de agrupación y al estimando; un modelo mixto o un error estándar robusto no resuelve automáticamente todo problema de dependencia.'],
+        grp: ['Las observaciones agrupadas o repetidas pueden ser dependientes', 'Compruebe si la inferencia tiene en cuenta la estructura de grupos o de medidas repetidas. Posibles enfoques: resúmenes a nivel de grupo, modelos de efectos mixtos, GEE, incertidumbre robusta por conglomerado o un análisis de medidas repetidas específico del diseño. La opción adecuada depende de la pregunta y del diseño.'],
+        pseudo: ['Posible pseudorreplicación', 'Compruebe si el tratamiento o el muestreo se replicó de forma independiente al nivel indicado. Las submuestras y las réplicas técnicas pueden mejorar la precisión de la medición, pero no crean unidades experimentales independientes adicionales.'],
+        spNew: ['La validación puede no corresponder a la predicción en lugares nuevos', 'Para una afirmación sobre sitios o regiones nuevos, los pliegues aleatorios pueden poner observaciones cercanas en los conjuntos de entrenamiento y de prueba. Considere bloques espaciales, zonas de exclusión, validación ajustada por distancia o un conjunto independiente del área objetivo.'],
+        sp: ['Compruebe la dependencia espacial frente al objetivo del análisis', 'La autocorrelación espacial no invalida por sí misma un análisis. Compruebe si la dependencia de los residuos afecta a los errores estándar o si las distancias de validación representan los lugares donde se usarán las predicciones.'],
+        tFut: ['La validación puede usar información del futuro', 'En pronósticos, las divisiones aleatorias pueden permitir que observaciones futuras informen las predicciones de periodos anteriores. Use una evaluación ordenada en el tiempo, idealmente conservando el horizonte de pronóstico y cualquier agrupación temporal.'],
+        t: ['Compruebe la dependencia temporal y el orden', 'Los momentos contiguos o las mediciones repetidas pueden estar correlacionados. Confirme que el modelo de incertidumbre tiene en cuenta la dependencia y que la validación conserva la dirección temporal prevista.'],
+        overlap: ['Posible dependencia entre entrenamiento y prueba', 'Compruebe si observaciones relacionadas, puntos cercanos, medidas repetidas, perfiles o coordenadas duplicadas cruzan el límite entre entrenamiento y prueba. Elija una agrupación o separación espacial/temporal acorde con el contexto de uso previsto.'],
+        leak: ['Posible filtración de información', 'Todo preprocesamiento basado en los datos, selección de variables, imputación, escalado y ajuste debe hacerse solo con los datos de entrenamiento dentro de cada división. Las covariables derivadas de la variable objetivo requieren especial atención.'],
+        rndNew: ['La validación aleatoria puede responder a la pregunta equivocada', 'La validación aleatoria estima el rendimiento para datos parecidos al conjunto muestreado, a menudo con los mismos grupos en ambos conjuntos. No demuestra el rendimiento en sitios, sujetos o regiones realmente nuevos.'],
+        rndFut: ['La validación aleatoria no suele ser adecuada para pronósticos', 'Una división aleatoria puede mezclar información pasada y futura. Prefiera una división ordenada en el tiempo o una evaluación con origen móvil que imite la tarea de pronóstico real.'],
+        none: ['No se seleccionó ningún problema de dependencia evidente', 'Esto no prueba la independencia. Confirme que el diseño muestral, la estructura de los residuos y el flujo de procesamiento de datos respaldan el supuesto para el análisis concreto.'],
+        grpOk: ['La validación agrupada está alineada en principio', 'Mantener grupos completos fuera del entrenamiento suele ser adecuado cuando el objetivo son grupos nuevos. Compruebe que los grupos corresponden a la unidad real de uso y que se reservan suficientes grupos independientes.'],
+        spOk: ['Se seleccionó validación separada espacialmente', 'Confirme que el tamaño de bloque o la distancia de exclusión se justifican por la estructura espacial y corresponden a las distancias esperadas al predecir. Los bloques espaciales no bastan automáticamente si son demasiado pequeños o la región objetivo es distinta.'],
+        tOk: ['Se seleccionó validación ordenada en el tiempo', 'Confirme que todo el preprocesamiento y el ajuste ocurren dentro de cada ventana de entrenamiento y que la evaluación refleja el horizonte de pronóstico previsto.']
+      },
+      lv: ['Posible desajuste de diseño o filtración a investigar', 'Los supuestos de independencia requieren una revisión más detallada', 'No se seleccionó ninguna alerta importante; verifique con su diseño'],
+      screen: 'Este es un resultado de cribado guiado basado en las selecciones anteriores, no una prueba estadística de independencia.',
+      q: 'Preguntas a responder antes de compartir', qs: ['¿Cuál es la unidad muestreada o aleatorizada de forma independiente?', '¿Tiene en cuenta el modelo estadístico la dependencia en esa unidad?', '¿Imita la división de validación la población, ubicación, grupo o periodo al que se pretenden aplicar las conclusiones?', '¿Se limitaron todas las decisiones de modelización dependientes de los datos a los datos de entrenamiento?'],
+      w: ['La independencia depende del diseño y del estimando. Una estructura de dependencia puede afectar de distintas formas a los errores estándar, al tamaño de muestra efectivo o a la validación predictiva; son cuestiones relacionadas pero no intercambiables.', 'La lista informa de riesgos potenciales a partir de las características del estudio seleccionadas. No estima la correlación, el tamaño de muestra efectivo ni la magnitud del sesgo.', 'Para datos espaciales, elija la separación de validación según la tarea de predicción y la distancia esperada a las observaciones de entrenamiento. Para pronósticos, conserve el orden temporal. Para datos agrupados, mantenga juntos los grupos independientes pertinentes.', 'No detectar dependencia no es evidencia de que las observaciones sean independientes. Revise el diseño, los residuos y los supuestos del análisis.']
+    }
+  };
+  function buildIN(L) {
+    const S = pick(IN, L);
+    return {
+      step: S.step,
+      example: { structure: 'multi', unit: 'profile', goal: 'newgroup', split: 'random', groups: true, pseudorep: true, overlap: true, leakage: false, balanced: false, nobs: 240, ngrp: 30, icc: 0.4 },
+      inputs: [
+        { k: 'structure', l: S.structure, t: 'select', d: 'none', opts: S.structureO },
+        { k: 'unit', l: S.unit, t: 'select', d: 'sample', opts: S.unitO },
+        { k: 'goal', l: S.goal, t: 'select', d: 'population', opts: S.goalO },
+        { k: 'split', l: S.split, t: 'select', d: 'na', opts: S.splitO },
+        { t: 'sec', l: S.secIss },
+        { k: 'groups', l: S.groups, t: 'check', d: false },
+        { k: 'pseudorep', l: S.pseudorep, t: 'check', d: false },
+        { k: 'overlap', l: S.overlap, t: 'check', d: false },
+        { k: 'leakage', l: S.leakage, t: 'check', d: false },
+        { k: 'balanced', l: S.balanced, t: 'check', d: false },
+        { t: 'sec', l: S.secNum },
+        { k: 'nobs', l: S.nobs, t: 'num', w: 2 },
+        { k: 'ngrp', l: S.ngrp, t: 'num', w: 2 },
+        { k: 'icc', l: S.icc, t: 'num', w: 2 }
+      ],
+      compute(v, U) {
+        const findings = [];
+        const add = (level, f, detail) => findings.push({ level, title: f[0], detail: detail || f[1] });
+        const given = x => x !== '' && x !== null && x !== undefined && isFinite(Number(x));
+        const nn = Number(v.nobs), kk = Number(v.ngrp), icc = Number(v.icc);
+        let numHtml = '', numWork = [];
+        if (given(v.nobs) && given(v.ngrp) && nn > 0 && kk > 0 && kk <= nn) {
+          const m = nn / kk;
+          const neffOf = r => nn / (1 + (m - 1) * r);
+          if (given(v.icc) && icc >= 0 && icc <= 1) {
+            const deff = 1 + (m - 1) * icc, neff = nn / deff;
+            numHtml = U.big(S.neff, F(neff, 1), S.neffSub(nn, kk, F(m, 1), F(icc, 2)))
+              + U.kv([[S.deff, F(deff, 2)], [S.seSmall, `${F(Math.sqrt(deff), 2)}×`], [S.between, S.betweenV(kk, nn)]]);
+            if (neff < nn / 2) add('high', S.fMost, S.fMost[1](nn, F(neff, 0)));
+            numWork = [S.wM(nn, kk, F(m, 2)), S.wD(F(m - 1, 2), F(icc, 2), F(deff, 3)), S.wE(nn, F(deff, 3), F(neff, 1))];
+          } else {
+            const rows = [0.1, 0.3, 0.5, 0.8].map(r => [`ICC ${r}`, S.rangeRow(F(neffOf(r), 1), F(Math.sqrt(1 + (m - 1) * r), 2))]);
+            numHtml = `<h3>${S.rangeH}</h3>` + U.kv(rows) + `<p>${S.rangeP(kk, nn)}</p>`;
+            numWork = [S.wRange(nn, kk, F(m, 2))];
+          }
+          numWork.push(S.wKish);
+          if (v.unit === 'sample' && kk < nn) add('warn', S.fUnit, S.fUnit[1](kk, nn));
+        } else if (given(v.nobs) || given(v.ngrp)) {
+          numHtml = U.note(S.needBoth, 'warn');
+        }
+        const f = S.f;
+        if (v.unit === 'unclear') add('warn', f.unclear);
+        if (v.groups || ['group', 'repeat', 'multi'].includes(v.structure)) {
+          if (v.balanced) add('info', f.grpAdj); else add('warn', f.grp);
+        }
+        if (v.pseudorep) add('high', f.pseudo);
+        if (['space', 'multi'].includes(v.structure)) {
+          if (v.goal === 'newgroup' && v.split !== 'space' && v.split !== 'external') add('high', f.spNew); else add('warn', f.sp);
+        }
+        if (['time', 'multi'].includes(v.structure)) {
+          if (v.goal === 'future' && v.split !== 'time' && v.split !== 'external') add('high', f.tFut); else add('warn', f.t);
+        }
+        if (v.overlap) add('high', f.overlap);
+        if (v.leakage) add('high', f.leak);
+        if (v.goal === 'newgroup' && v.split === 'random') add('high', f.rndNew);
+        if (v.goal === 'future' && v.split === 'random') add('high', f.rndFut);
+        if (v.structure === 'none' && !v.groups && !v.pseudorep && !v.overlap && !v.leakage) add('info', f.none);
+        if (v.split === 'group' && v.goal === 'newgroup') add('info', f.grpOk);
+        if (v.split === 'space' && ['space', 'multi'].includes(v.structure)) add('info', f.spOk);
+        if (v.split === 'time' && ['time', 'multi'].includes(v.structure)) add('info', f.tOk);
+        const rank = { high: 0, warn: 1, info: 2 };
+        findings.sort((a, b) => rank[a.level] - rank[b.level]);
+        const label = findings.some(x => x.level === 'high') ? ['bad', S.lv[0]] : findings.some(x => x.level === 'warn') ? ['warn', S.lv[1]] : ['good', S.lv[2]];
+        let html = `<p><span class="tag ${label[0]}">${label[1]}</span></p>`;
+        html += `<p>${S.screen}</p>`;
+        html += numHtml;
+        html += findings.map(x => U.note(`<b>${x.title}.</b> ${x.detail}`, x.level === 'high' ? 'bad' : x.level === 'warn' ? 'warn' : 'good')).join('');
+        html += `<h3>${S.q}</h3><ul class="plain">${S.qs.map(q => `<li>${q}</li>`).join('')}</ul>`;
+        return { html, work: [...numWork, ...S.w] };
+      }
+    };
+  }
+
+  Object.assign(C.items, {
+    cv: {
+      g: 'acc', build: buildCV,
+      t: { en: 'Spatial cross-validation and leakage', sw: 'Uthibitishaji mtambuka wa kijiografia na uvujaji', es: 'Validación cruzada espacial y filtración' },
+      d: { en: 'Is the validation optimistic? A guided checklist.', sw: 'Je, uthibitishaji una matumaini kupita kiasi? Orodha ya kuongozwa.', es: '¿Es optimista la validación? Una lista guiada.' },
+      intro: {
+        en: 'Random cross-validation on spatial data usually tests points close to the training data, so it reports accuracy the map won\'t achieve between samples. Tick anything that applies to your study.',
+        sw: 'Uthibitishaji mtambuka wa nasibu kwenye data za kijiografia kwa kawaida hujaribu nukta zilizo karibu na data za mafunzo, kwa hiyo huripoti usahihi ambao ramani haitaufikia kati ya sampuli. Weka alama kwenye chochote kinachohusu utafiti wako.',
+        es: 'La validación cruzada aleatoria con datos espaciales suele probar puntos cercanos a los de entrenamiento, por lo que informa una exactitud que el mapa no alcanzará entre muestras. Marque lo que se aplique a su estudio.'
+      },
+      refs: ['Roberts, D.R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. <i>Ecography</i> 40, 913–929. doi:10.1111/ecog.02881',
+        'Meyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. <i>Methods in Ecology and Evolution</i> 12, 1620–1633. doi:10.1111/2041-210X.13650',
+        'Milà, C., Mateu, J., Pebesma, E., Meyer, H. (2022). Nearest neighbour distance matching leave-one-out cross-validation for map validation. <i>Methods in Ecology and Evolution</i> 13, 1304–1316. doi:10.1111/2041-210X.13851']
+    },
+    indep: {
+      g: 'review', beta: true, build: buildIN,
+      t: { en: 'Independence and study design', sw: 'Uhuru wa vipimo na mpango wa utafiti', es: 'Independencia y diseño del estudio' },
+      d: { en: 'Are the sampling unit, analysis and validation aligned? How much does grouping shrink the effective sample size?', sw: 'Je, kipimo cha sampuli, uchambuzi na uthibitishaji vinaendana? Makundi yanapunguza ukubwa halisi wa sampuli kwa kiasi gani?', es: '¿Están alineados la unidad de muestreo, el análisis y la validación? ¿Cuánto reduce la agrupación el tamaño de muestra efectivo?' },
+      intro: {
+        en: 'Independence is a property of the study design and the question being asked, not a box that a single diagnostic can certify. This guided check flags common sources of dependence and mismatches between the sampling unit, the analysis and the validation. It flags issues to investigate; it does not automatically invalidate a study. With the numbers of observations and groups, it also shows how much the grouping shrinks the effective sample size.',
+        sw: 'Uhuru ni sifa ya mpango wa utafiti na swali linaloulizwa, si kisanduku ambacho kipimo kimoja cha uchunguzi kinaweza kuthibitisha. Ukaguzi huu wa kuongozwa unaonyesha vyanzo vya kawaida vya utegemezi na kutolingana kati ya kipimo cha sampuli, uchambuzi na uthibitishaji. Unaonyesha mambo ya kuchunguza; haubatilishi utafiti moja kwa moja. Ukiwa na idadi ya vipimo na ya makundi, unaonyesha pia makundi yanapunguza ukubwa halisi wa sampuli kwa kiasi gani.',
+        es: 'La independencia es una propiedad del diseño del estudio y de la pregunta planteada, no una casilla que un solo diagnóstico pueda certificar. Esta comprobación guiada señala fuentes comunes de dependencia y desajustes entre la unidad de muestreo, el análisis y la validación. Señala cuestiones a investigar; no invalida automáticamente un estudio. Con el número de observaciones y de grupos, también muestra cuánto reduce la agrupación el tamaño de muestra efectivo.'
+      },
+      refs: ['Hurlbert, S.H. (1984). Pseudoreplication and the design of ecological field experiments. <i>Ecological Monographs</i> 54, 187–211. doi:10.2307/1942661',
+        'Roberts, D.R. et al. (2017). Cross-validation strategies for data with temporal, spatial, hierarchical, or phylogenetic structure. <i>Ecography</i> 40, 913–929. doi:10.1111/ecog.02881',
+        'Meyer, H., Pebesma, E. (2021). Predicting into unknown space? Estimating the area of applicability of spatial prediction models. <i>Methods in Ecology and Evolution</i> 12, 1620–1633. doi:10.1111/2041-210X.13650',
+        'Kish, L. (1965). <i>Survey Sampling</i>. Wiley, New York.',
+        'Moulton, B.R. (1990). An illustration of a pitfall in estimating the effects of aggregate variables on micro units. <i>Review of Economics and Statistics</i> 72, 334–338. doi:10.2307/2109724']
+    }
+  });
+  Object.assign(C.groups, {
+    review: { en: ['Study design and statistical reasoning', 'Do the observations, the assumptions and the model comparison match the question?'], sw: ['Mpango wa utafiti na hoja za kitakwimu', 'Je, vipimo, dhana na ulinganisho wa modeli vinaendana na swali?'], es: ['Diseño del estudio y razonamiento estadístico', '¿Corresponden las observaciones, los supuestos y la comparación de modelos a la pregunta?'] }
+  });
+})();
+
+</script>
+<script>
+/* Guided checklists, part 2: statistical assumptions (with residual diagnostics) and model comparison
+   (corrected resampled t-test, McNemar). Same statistics as on rafikiardhi.earth/checks.html; text in en, sw, es. */
+window.CKSTAT = window.CKSTAT || (function () {
+  const lgamma = z => {
+    const c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059, 12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+    if (z < 0.5) return Math.log(Math.PI / Math.abs(Math.sin(Math.PI * z))) - lgamma(1 - z);
+    z -= 1; let x = c[0]; for (let i = 1; i < 9; i++) x += c[i] / (z + i);
+    const t = z + 7.5; return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x);
+  };
+  const betacf = (a, b, x) => {
+    const FP = 1e-300; let qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap;
+    if (Math.abs(d) < FP) d = FP; d = 1 / d; let h = d;
+    for (let m = 1; m <= 300; m++) {
+      const m2 = 2 * m; let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+      d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d; h *= d * c;
+      aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+      d = 1 + aa * d; if (Math.abs(d) < FP) d = FP; c = 1 + aa / c; if (Math.abs(c) < FP) c = FP; d = 1 / d;
+      const del = d * c; h *= del; if (Math.abs(del - 1) < 3e-14) break;
+    }
+    return h;
+  };
+  const ibeta = (x, a, b) => {
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+    return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b;
+  };
+  const erf = x => { const s = Math.sign(x); x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x);
+    return s * (1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x)); };
+  const normCdf = z => 0.5 * (1 + erf(z / Math.SQRT2));
+  const tTwoSided = (t, df) => ibeta(df / (df + t * t), df / 2, 0.5);
+  const binomTwoSided = (k, n) => {
+    if (n === 0) return 1; const lo = Math.min(k, n - k); let s = 0;
+    for (let i = 0; i <= lo; i++) s += Math.exp(lgamma(n + 1) - lgamma(i + 1) - lgamma(n - i + 1) - n * Math.LN2);
+    return Math.min(1, 2 * s);
+  };
+  const ranks = a => { const o = a.map((v, i) => [v, i]).sort((p, q) => p[0] - q[0]), r = new Array(a.length);
+    for (let i = 0; i < o.length;) { let j = i; while (j + 1 < o.length && o[j + 1][0] === o[i][0]) j++; for (let k = i; k <= j; k++) r[o[k][1]] = (i + j) / 2 + 1; i = j + 1; } return r; };
+  const pearson = (x, y) => { const n = x.length, mx = x.reduce((s, v) => s + v, 0) / n, my = y.reduce((s, v) => s + v, 0) / n;
+    let sxy = 0, sxx = 0, syy = 0; for (let i = 0; i < n; i++) { sxy += (x[i] - mx) * (y[i] - my); sxx += (x[i] - mx) ** 2; syy += (y[i] - my) ** 2; }
+    return sxx > 0 && syy > 0 ? sxy / Math.sqrt(sxx * syy) : 0; };
+  const fmtP = p => p < 0.001 ? 'p < 0.001' : 'p = ' + p.toFixed(3);
+  const parseRows = txt => String(txt || '').split(/\r?\n/).map(l => l.trim()).filter(l => l && !/^[a-z]/i.test(l))
+    .map(l => l.split(/[,;\t\s]+/).map(Number)).filter(r => r.length && r.every(isFinite));
+  return { lgamma, ibeta, normCdf, tTwoSided, binomTwoSided, ranks, pearson, fmtP, parseRows };
+})();
+
+(function () {
+  const C = window.RA_CHECKS, St = window.CKSTAT, F = (x, d) => HM.fmt(x, d), pick = (o, L) => o[L] || o.en;
+
+  // ---------------------------------------------------------------- Statistical assumptions check
+  let AS_EX = 'fitted,residual';
+  (() => { let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const gauss = () => Math.sqrt(-2 * Math.log(rnd())) * Math.cos(2 * Math.PI * rnd());
+    for (let i = 0; i < 70; i++) { const f = 1 + i * 0.3; AS_EX += `\n${f.toFixed(2)},${(gauss() * 0.15 * f).toFixed(3)}`; } })();
+  const AK = ['resid', 'vari', 'dist', 'infl', 'ind', 'form'];
+  const AS = {
+    en: {
+      step: 'Method, aim and the checks reported', method: 'Method reported', methods: [['linear', 'Linear regression / ANCOVA'], ['anova', 'ANOVA / group comparison'], ['logistic', 'Logistic regression'], ['correlation', 'Pearson correlation'], ['mixed', 'Mixed-effects / repeated measures'], ['nonparam', 'Rank-based / nonparametric method'], ['other', 'Other or unclear']],
+      aim: 'Primary aim', aims: [['inference', 'Inference (tests, estimates or confidence intervals)'], ['prediction', 'Prediction'], ['description', 'Description / exploration']],
+      secDone: 'Which checks have you carried out or documented?',
+      chk: { resid: 'Residuals or model diagnostics inspected', vari: 'Variance / dispersion assessed', dist: 'Relevant distributional assumption assessed', infl: 'Influential points / outliers assessed where relevant', ind: 'Independence or grouping structure addressed', form: 'Functional form / link / linearity assessed where relevant' },
+      names: { resid: 'Residual or model diagnostics', vari: 'Variance / dispersion', dist: 'Distributional assumption', infl: 'Influential observations', ind: 'Independence / grouping', form: 'Functional form / link' },
+      secRes: 'Residuals (optional): paste them for a quick diagnostic', data: 'One per line: residual, or fitted, residual. A header row is ignored.', ordered: 'Rows are in time order or along a transect (checks autocorrelation)',
+      p: {
+        lam: 'Check whether the model’s error structure and variance assumptions are appropriate for the design. Normality, where needed for inference, concerns the model errors or residuals—not automatically the raw response.',
+        linear: 'Check linearity / functional form, residual-versus-fitted structure, heteroscedasticity, leverage and influential observations.',
+        anova: 'Check independence at the experimental-unit level and whether variance homogeneity is plausible; the appropriate response to unequal variance depends on the design and method.',
+        logistic: 'Check the binary outcome and link specification, functional form for continuous predictors on the logit scale, separation, influential observations, and overdispersion where relevant. Normal residuals are not a standard logistic-regression requirement.',
+        correlation: 'For Pearson correlation, inspect linearity, influential points, and whether the inference accounts for dependence. Distributional assumptions depend on the inferential procedure; a scatterplot is essential.',
+        mixed: 'Identify the grouping / random-effects structure and check whether it matches the sampling or repeated-measures design. Residual and random-effect diagnostics answer different questions.',
+        nonparam: 'Do not assume “nonparametric” means assumption-free. Check independence, measurement scale, sampling design, and the specific method’s assumptions (for example, shape assumptions for some rank-based comparisons).',
+        other: 'The method is too broad to prescribe a valid assumption set. Identify the exact estimator, test, likelihood or algorithm before deciding which diagnostics are required.',
+        prediction: 'For prediction, prioritise out-of-sample performance, calibration, distribution shift and leakage. A diagnostic that supports coefficient inference may not establish predictive performance.',
+        description: 'For descriptive or exploratory work, distinguish assumptions needed for the reported summaries from assumptions needed for formal uncertainty or generalisation.'
+      },
+      guided: 'Guided check — not an automated verdict', hPrompts: 'Method-specific prompts', hMissing: 'Checks not marked as reported',
+      missing: n => `<strong>${n}:</strong> confirm whether this is relevant to the chosen method and whether you report adequate evidence for it.`,
+      allDone: 'All checklist items were marked. Make sure your write-up reports suitable evidence rather than only stating that checks were performed.',
+      marked: 'Marked as reported:', none: 'none', wBase: 'Interpretation depends on the estimator, design, sample size and inferential target. Do not require every diagnostic for every method.',
+      need8: 'Paste at least 8 residuals for the diagnostic.',
+      kv: { n: 'Residuals', mean: 'Mean (should be near 0)', skew: 'Skewness', kurt: 'Excess kurtosis', jb: 'Jarque–Bera normality test', out: 'Beyond ±3 SD', outV: (o, e) => `${o} (about ${e} expected if normal)`, spread: 'Spread vs fitted value (Spearman ρ of |residual|)', thirds: 'Mean residual: low / middle / high fitted thirds', dw: 'Durbin–Watson (lag-1 autocorrelation)' },
+      fSkew: k => `The residuals are ${k}. For small samples this affects tests and intervals; a transformation, a different error distribution or robust methods may fit better.`, rSkew: 'strongly right-skewed', lSkew: 'strongly left-skewed', heavy: 'heavy-tailed',
+      fBig: (p, n) => `The normality test rejects (${p}), but with ${n} residuals it detects departures too small to matter. Judge by the skewness, kurtosis and plot instead.`,
+      fRej: (p, n) => `The normality test rejects (${p}). With ${n} residuals this matters for tests and intervals that assume normal errors.`,
+      fSmall: n => `No departure from normality detected, but with only ${n} residuals the test has little power. Look at the plot.`,
+      fOut: o => `${o} residuals lie beyond ±3 SD, more than a normal distribution would give. Check them for data errors and their influence on the fit.`,
+      fSpread: (g, r) => `The spread of the residuals ${g ? 'grows' : 'shrinks'} with the fitted value (ρ = ${r}). Standard errors that assume constant variance will be wrong; consider a transformation, weights or heteroscedasticity-robust standard errors.`,
+      fCurve: 'The mean residual differs between the low, middle and high fitted values. That points to a missed curve or interaction, which a transformation or an extra term may fix.',
+      fAuto: r => `Neighbouring residuals are correlated (r₁ ≈ ${r}). The observations carry less independent information than their number suggests; see the independence check.`,
+      plotY: 'Residual', plotXf: 'Fitted value', plotXo: 'Row order', hRes: 'Residual diagnostic',
+      ok: 'No marked skew, outliers, unequal spread or curvature in these residuals. This supports, but does not prove, the assumptions for this model.',
+      wRes: ['Skewness and excess kurtosis use the population moments; Jarque–Bera = n/6 × (skew² + kurtosis²/4), compared with χ² on 2 degrees of freedom (p = e^(−JB/2)).',
+        'Unequal spread is screened with the Spearman rank correlation between |residual| and the fitted value (normal approximation, z = ρ√(n − 1)). Curvature is screened by the mean residual in each third of the fitted values.',
+        'Durbin–Watson = Σ(eₜ − eₜ₋₁)² ÷ Σ(eₜ − ē)², only meaningful when the rows are in time or spatial order. Values near 2 mean no lag-1 autocorrelation.',
+        'These are screening statistics for one set of residuals, not a full model diagnosis. Influence (leverage, Cook’s distance) needs the predictors, which are not entered here.']
+    },
+    sw: {
+      step: 'Mbinu, lengo na ukaguzi ulioripotiwa', method: 'Mbinu iliyoripotiwa', methods: [['linear', 'Regresheni ya mstari / ANCOVA'], ['anova', 'ANOVA / ulinganisho wa makundi'], ['logistic', 'Regresheni ya logistic'], ['correlation', 'Uhusiano wa Pearson'], ['mixed', 'Mixed-effects / vipimo vinavyorudiwa'], ['nonparam', 'Mbinu ya vyeo (rank) / isiyo ya kiparamita'], ['other', 'Nyingine au haiko wazi']],
+      aim: 'Lengo kuu', aims: [['inference', 'Hitimisho (majaribio, makadirio au vipindi vya uhakika)'], ['prediction', 'Utabiri'], ['description', 'Maelezo / uchunguzi wa awali']],
+      secDone: 'Umefanya au kuandika ukaguzi upi?',
+      chk: { resid: 'Mabaki (residuals) au uchunguzi wa modeli umeangaliwa', vari: 'Tofauti (variance) / mtawanyiko umetathminiwa', dist: 'Dhana husika ya mgawanyo imetathminiwa', infl: 'Nukta zenye ushawishi / thamani za kupindukia zimetathminiwa inapohusika', ind: 'Uhuru au muundo wa makundi umeshughulikiwa', form: 'Umbo la utendaji / kiungo (link) / mstari umetathminiwa inapohusika' },
+      names: { resid: 'Mabaki au uchunguzi wa modeli', vari: 'Tofauti / mtawanyiko', dist: 'Dhana ya mgawanyo', infl: 'Vipimo vyenye ushawishi', ind: 'Uhuru / makundi', form: 'Umbo la utendaji / kiungo' },
+      secRes: 'Mabaki (si lazima): yabandike kwa uchunguzi wa haraka', data: 'Moja kwa kila mstari: baki, au thamani iliyokokotolewa, baki. Mstari wa vichwa unapuuzwa.', ordered: 'Mistari iko kwa mpangilio wa muda au kando ya njia (transect) (hukagua uhusiano wa mfululizo)',
+      p: {
+        lam: 'Kagua kama muundo wa makosa na dhana za tofauti (variance) za modeli zinafaa mpango. Mgawanyo wa kawaida (normality), pale unapohitajika kwa hitimisho, unahusu makosa ya modeli au mabaki, si data ghafi moja kwa moja.',
+        linear: 'Kagua mstari / umbo la utendaji, muundo wa mabaki dhidi ya thamani zilizokokotolewa, tofauti zisizo sawa (heteroscedasticity), nguvu ya nukta (leverage) na vipimo vyenye ushawishi.',
+        anova: 'Kagua uhuru katika ngazi ya kipimo cha jaribio na kama usawa wa tofauti unaaminika; jinsi ya kushughulikia tofauti zisizo sawa inategemea mpango na mbinu.',
+        logistic: 'Kagua matokeo ya pande mbili na kiungo (link), umbo la utendaji la vigeu endelevu kwenye kipimo cha logit, utengano (separation), vipimo vyenye ushawishi, na mtawanyiko wa ziada pale unapohusika. Mabaki ya mgawanyo wa kawaida si sharti la kawaida la regresheni ya logistic.',
+        correlation: 'Kwa uhusiano wa Pearson, kagua mstari, nukta zenye ushawishi, na kama hitimisho linazingatia utegemezi. Dhana za mgawanyo zinategemea utaratibu wa hitimisho; mchoro wa nukta (scatterplot) ni muhimu.',
+        mixed: 'Tambua muundo wa makundi / athari nasibu (random effects) na kagua kama unalingana na mpango wa sampuli au vipimo vinavyorudiwa. Uchunguzi wa mabaki na wa athari nasibu hujibu maswali tofauti.',
+        nonparam: 'Usichukulie “isiyo ya kiparamita” kumaanisha bila dhana. Kagua uhuru, kipimo cha vipimo, mpango wa sampuli, na dhana za mbinu husika (kwa mfano, dhana za umbo kwa baadhi ya ulinganisho wa vyeo).',
+        other: 'Mbinu ni pana mno kuagiza seti halali ya dhana. Tambua kikadiriaji, jaribio, likelihood au algorithimu mahususi kabla ya kuamua uchunguzi upi unahitajika.',
+        prediction: 'Kwa utabiri, tanguliza utendaji nje ya sampuli, ulinganifu (calibration), mabadiliko ya mgawanyo na uvujaji wa taarifa. Uchunguzi unaounga mkono hitimisho la vigezo huenda usithibitishe utendaji wa utabiri.',
+        description: 'Kwa kazi ya maelezo au uchunguzi wa awali, tofautisha dhana zinazohitajika kwa muhtasari ulioripotiwa na dhana zinazohitajika kwa kutokuwa na uhakika rasmi au kwa kujumlisha matokeo.'
+      },
+      guided: 'Ukaguzi wa kuongozwa, si hukumu ya kiotomatiki', hPrompts: 'Maswali mahususi kwa mbinu', hMissing: 'Ukaguzi usiowekewa alama kama umeripotiwa',
+      missing: n => `<strong>${n}:</strong> hakikisha kama hili linahusu mbinu iliyochaguliwa na kama unaripoti ushahidi wa kutosha kwalo.`,
+      allDone: 'Vipengele vyote vya orodha vimewekewa alama. Hakikisha maandishi yako yanaripoti ushahidi unaofaa badala ya kusema tu kwamba ukaguzi ulifanywa.',
+      marked: 'Vilivyowekewa alama kama vimeripotiwa:', none: 'hakuna', wBase: 'Tafsiri inategemea kikadiriaji, mpango, ukubwa wa sampuli na lengo la hitimisho. Usidai kila uchunguzi kwa kila mbinu.',
+      need8: 'Bandika angalau mabaki 8 kwa uchunguzi.',
+      kv: { n: 'Mabaki', mean: 'Wastani (unapaswa kuwa karibu na 0)', skew: 'Upindaji (skewness)', kurt: 'Kurtosis ya ziada', jb: 'Jaribio la Jarque–Bera la mgawanyo wa kawaida', out: 'Nje ya ±3 SD', outV: (o, e) => `${o} (takriban ${e} zinatarajiwa kama ni wa kawaida)`, spread: 'Mtawanyiko dhidi ya thamani iliyokokotolewa (Spearman ρ ya |baki|)', thirds: 'Baki wastani: theluthi ya chini / kati / juu ya thamani zilizokokotolewa', dw: 'Durbin–Watson (uhusiano wa mfululizo wa hatua 1)' },
+      fSkew: k => `Mabaki ${k}. Kwa sampuli ndogo hili huathiri majaribio na vipindi; ubadilishaji, mgawanyo mwingine wa makosa au mbinu thabiti (robust) huenda zikafaa zaidi.`, rSkew: 'yamepinda sana kulia', lSkew: 'yamepinda sana kushoto', heavy: 'yana mikia mizito',
+      fBig: (p, n) => `Jaribio la mgawanyo wa kawaida linakataa (${p}), lakini kwa mabaki ${n} linagundua tofauti ndogo mno kuwa na maana. Hukumu kwa upindaji, kurtosis na mchoro badala yake.`,
+      fRej: (p, n) => `Jaribio la mgawanyo wa kawaida linakataa (${p}). Kwa mabaki ${n} hili ni muhimu kwa majaribio na vipindi vinavyochukulia makosa ya kawaida.`,
+      fSmall: n => `Hakuna tofauti na mgawanyo wa kawaida iliyogunduliwa, lakini kwa mabaki ${n} tu jaribio lina nguvu ndogo. Angalia mchoro.`,
+      fOut: o => `Mabaki ${o} yako nje ya ±3 SD, zaidi ya mgawanyo wa kawaida ungetoa. Yakague kwa makosa ya data na ushawishi wake kwenye modeli.`,
+      fSpread: (g, r) => `Mtawanyiko wa mabaki ${g ? 'unaongezeka' : 'unapungua'} pamoja na thamani iliyokokotolewa (ρ = ${r}). Makosa sanifu yanayochukulia tofauti isiyobadilika yatakuwa si sahihi; fikiria ubadilishaji, uzito (weights) au makosa sanifu thabiti dhidi ya heteroscedasticity.`,
+      fCurve: 'Baki wastani linatofautiana kati ya thamani za chini, za kati na za juu zilizokokotolewa. Hilo linaashiria mkunjo au mwingiliano uliokosekana, ambao ubadilishaji au kipengele cha ziada kinaweza kurekebisha.',
+      fAuto: r => `Mabaki yanayofuatana yanahusiana (r₁ ≈ ${r}). Vipimo vinabeba taarifa huru chache kuliko idadi yake inavyoashiria; angalia ukaguzi wa uhuru.`,
+      plotY: 'Baki', plotXf: 'Thamani iliyokokotolewa', plotXo: 'Mpangilio wa mistari', hRes: 'Uchunguzi wa mabaki',
+      ok: 'Hakuna upindaji, thamani za kupindukia, mtawanyiko usio sawa au mkunjo unaoonekana katika mabaki haya. Hili linaunga mkono, lakini halithibitishi, dhana za modeli hii.',
+      wRes: ['Upindaji na kurtosis ya ziada vinatumia moments za jamii; Jarque–Bera = n/6 × (upindaji² + kurtosis²/4), ikilinganishwa na χ² yenye digrii 2 za uhuru (p = e^(−JB/2)).',
+        'Mtawanyiko usio sawa unachunguzwa kwa uhusiano wa vyeo wa Spearman kati ya |baki| na thamani iliyokokotolewa (makadirio ya kawaida, z = ρ√(n − 1)). Mkunjo unachunguzwa kwa baki wastani katika kila theluthi ya thamani zilizokokotolewa.',
+        'Durbin–Watson = Σ(eₜ − eₜ₋₁)² ÷ Σ(eₜ − ē)², ina maana tu pale mistari iko kwa mpangilio wa muda au wa kijiografia. Thamani karibu na 2 inamaanisha hakuna uhusiano wa mfululizo wa hatua 1.',
+        'Hizi ni takwimu za uchunguzi wa awali kwa seti moja ya mabaki, si uchunguzi kamili wa modeli. Ushawishi (leverage, Cook’s distance) unahitaji vigeu, ambavyo havijawekwa hapa.']
+    },
+    es: {
+      step: 'Método, objetivo y comprobaciones informadas', method: 'Método informado', methods: [['linear', 'Regresión lineal / ANCOVA'], ['anova', 'ANOVA / comparación de grupos'], ['logistic', 'Regresión logística'], ['correlation', 'Correlación de Pearson'], ['mixed', 'Efectos mixtos / medidas repetidas'], ['nonparam', 'Método basado en rangos / no paramétrico'], ['other', 'Otro o poco claro']],
+      aim: 'Objetivo principal', aims: [['inference', 'Inferencia (pruebas, estimaciones o intervalos de confianza)'], ['prediction', 'Predicción'], ['description', 'Descripción / exploración']],
+      secDone: '¿Qué comprobaciones ha realizado o documentado?',
+      chk: { resid: 'Residuos o diagnósticos del modelo inspeccionados', vari: 'Varianza / dispersión evaluada', dist: 'Supuesto distribucional pertinente evaluado', infl: 'Puntos influyentes / valores atípicos evaluados cuando corresponde', ind: 'Independencia o estructura de agrupación tratada', form: 'Forma funcional / enlace / linealidad evaluada cuando corresponde' },
+      names: { resid: 'Residuos o diagnósticos del modelo', vari: 'Varianza / dispersión', dist: 'Supuesto distribucional', infl: 'Observaciones influyentes', ind: 'Independencia / agrupación', form: 'Forma funcional / enlace' },
+      secRes: 'Residuos (opcional): péguelos para un diagnóstico rápido', data: 'Uno por línea: residuo, o ajustado, residuo. Se ignora una fila de encabezado.', ordered: 'Las filas están en orden temporal o a lo largo de un transecto (comprueba la autocorrelación)',
+      p: {
+        lam: 'Compruebe si la estructura de error del modelo y los supuestos de varianza son adecuados para el diseño. La normalidad, cuando se necesita para la inferencia, se refiere a los errores o residuos del modelo, no automáticamente a la respuesta bruta.',
+        linear: 'Compruebe la linealidad / forma funcional, la estructura de residuos frente a ajustados, la heterocedasticidad, el apalancamiento y las observaciones influyentes.',
+        anova: 'Compruebe la independencia al nivel de la unidad experimental y si la homogeneidad de varianzas es plausible; la respuesta adecuada a varianzas desiguales depende del diseño y del método.',
+        logistic: 'Compruebe la respuesta binaria y la especificación del enlace, la forma funcional de los predictores continuos en la escala logit, la separación, las observaciones influyentes y la sobredispersión cuando corresponda. Los residuos normales no son un requisito estándar de la regresión logística.',
+        correlation: 'Para la correlación de Pearson, inspeccione la linealidad, los puntos influyentes y si la inferencia tiene en cuenta la dependencia. Los supuestos distribucionales dependen del procedimiento inferencial; un diagrama de dispersión es esencial.',
+        mixed: 'Identifique la estructura de agrupación / efectos aleatorios y compruebe si corresponde al diseño muestral o de medidas repetidas. Los diagnósticos de residuos y de efectos aleatorios responden a preguntas distintas.',
+        nonparam: 'No suponga que “no paramétrico” significa sin supuestos. Compruebe la independencia, la escala de medida, el diseño muestral y los supuestos del método concreto (por ejemplo, supuestos de forma en algunas comparaciones basadas en rangos).',
+        other: 'El método es demasiado amplio para prescribir un conjunto válido de supuestos. Identifique el estimador, la prueba, la verosimilitud o el algoritmo exactos antes de decidir qué diagnósticos se requieren.',
+        prediction: 'Para la predicción, priorice el rendimiento fuera de muestra, la calibración, el cambio de distribución y la filtración. Un diagnóstico que respalda la inferencia sobre coeficientes puede no establecer el rendimiento predictivo.',
+        description: 'Para trabajo descriptivo o exploratorio, distinga los supuestos necesarios para los resúmenes informados de los necesarios para la incertidumbre formal o la generalización.'
+      },
+      guided: 'Comprobación guiada, no un veredicto automático', hPrompts: 'Indicaciones específicas del método', hMissing: 'Comprobaciones no marcadas como informadas',
+      missing: n => `<strong>${n}:</strong> confirme si es pertinente para el método elegido y si informa evidencia suficiente al respecto.`,
+      allDone: 'Se marcaron todos los elementos de la lista. Asegúrese de que su texto informe evidencia adecuada en lugar de solo afirmar que se hicieron las comprobaciones.',
+      marked: 'Marcado como informado:', none: 'ninguno', wBase: 'La interpretación depende del estimador, el diseño, el tamaño de muestra y el objetivo inferencial. No exija todos los diagnósticos para todos los métodos.',
+      need8: 'Pegue al menos 8 residuos para el diagnóstico.',
+      kv: { n: 'Residuos', mean: 'Media (debería estar cerca de 0)', skew: 'Asimetría', kurt: 'Curtosis en exceso', jb: 'Prueba de normalidad de Jarque–Bera', out: 'Más allá de ±3 DE', outV: (o, e) => `${o} (unos ${e} esperados si fuera normal)`, spread: 'Dispersión frente al valor ajustado (ρ de Spearman de |residuo|)', thirds: 'Residuo medio: tercios bajo / medio / alto de los ajustados', dw: 'Durbin–Watson (autocorrelación de retardo 1)' },
+      fSkew: k => `Los residuos ${k}. En muestras pequeñas esto afecta a las pruebas e intervalos; una transformación, otra distribución del error o métodos robustos pueden ajustarse mejor.`, rSkew: 'tienen una fuerte asimetría a la derecha', lSkew: 'tienen una fuerte asimetría a la izquierda', heavy: 'tienen colas pesadas',
+      fBig: (p, n) => `La prueba de normalidad rechaza (${p}), pero con ${n} residuos detecta desviaciones demasiado pequeñas para importar. Juzgue por la asimetría, la curtosis y el gráfico.`,
+      fRej: (p, n) => `La prueba de normalidad rechaza (${p}). Con ${n} residuos esto importa para las pruebas e intervalos que suponen errores normales.`,
+      fSmall: n => `No se detectó desviación de la normalidad, pero con solo ${n} residuos la prueba tiene poca potencia. Mire el gráfico.`,
+      fOut: o => `${o} residuos están más allá de ±3 DE, más de lo que daría una distribución normal. Revíselos por errores de datos y por su influencia en el ajuste.`,
+      fSpread: (g, r) => `La dispersión de los residuos ${g ? 'aumenta' : 'disminuye'} con el valor ajustado (ρ = ${r}). Los errores estándar que suponen varianza constante serán incorrectos; considere una transformación, ponderaciones o errores estándar robustos a la heterocedasticidad.`,
+      fCurve: 'El residuo medio difiere entre los valores ajustados bajos, medios y altos. Eso apunta a una curva o interacción omitida, que una transformación o un término adicional pueden corregir.',
+      fAuto: r => `Los residuos vecinos están correlacionados (r₁ ≈ ${r}). Las observaciones contienen menos información independiente de lo que sugiere su número; vea la comprobación de independencia.`,
+      plotY: 'Residuo', plotXf: 'Valor ajustado', plotXo: 'Orden de filas', hRes: 'Diagnóstico de residuos',
+      ok: 'No hay asimetría, valores atípicos, dispersión desigual ni curvatura marcadas en estos residuos. Esto respalda, pero no demuestra, los supuestos de este modelo.',
+      wRes: ['La asimetría y la curtosis en exceso usan los momentos poblacionales; Jarque–Bera = n/6 × (asimetría² + curtosis²/4), comparado con χ² con 2 grados de libertad (p = e^(−JB/2)).',
+        'La dispersión desigual se criba con la correlación de rangos de Spearman entre |residuo| y el valor ajustado (aproximación normal, z = ρ√(n − 1)). La curvatura se criba con el residuo medio en cada tercio de los valores ajustados.',
+        'Durbin–Watson = Σ(eₜ − eₜ₋₁)² ÷ Σ(eₜ − ē)², solo tiene sentido cuando las filas están en orden temporal o espacial. Valores cercanos a 2 indican ausencia de autocorrelación de retardo 1.',
+        'Son estadísticos de cribado para un conjunto de residuos, no un diagnóstico completo del modelo. La influencia (apalancamiento, distancia de Cook) necesita los predictores, que no se introducen aquí.']
+    }
+  };
+  function buildAS(L) {
+    const S = pick(AS, L);
+    return {
+      step: S.step,
+      example: { method: 'linear', aim: 'inference', resid: true, vari: false, dist: true, infl: false, ind: false, form: true, data: AS_EX, ordered: false },
+      inputs: [
+        { k: 'method', l: S.method, t: 'select', d: 'linear', opts: S.methods },
+        { k: 'aim', l: S.aim, t: 'select', d: 'inference', opts: S.aims },
+        { t: 'sec', l: S.secDone },
+        ...AK.map(k => ({ k, l: S.chk[k], t: 'check', d: false })),
+        { t: 'sec', l: S.secRes },
+        { k: 'data', l: S.data, t: 'textarea', rows: 6, ph: 'fitted,residual\n12.1,0.84\n13.4,-1.10' },
+        { k: 'ordered', l: S.ordered, t: 'check', d: false }
+      ],
+      compute(v, U) {
+        const m = v.method, aim = v.aim;
+        const done = AK.filter(k => v[k]), missing = AK.filter(k => !v[k]);
+        const relevant = [];
+        if (['linear', 'anova', 'mixed'].includes(m)) relevant.push(S.p.lam);
+        if (S.p[m] && m !== 'prediction' && m !== 'description') relevant.push(S.p[m]);
+        if (aim === 'prediction') relevant.push(S.p.prediction);
+        if (aim === 'description') relevant.push(S.p.description);
+        let html = `<p><span class="tag warn">${S.guided}</span></p>`;
+        html += `<h3>${S.hPrompts}</h3><ul class="plain">` + relevant.map(x => '<li>' + x + '</li>').join('') + '</ul>';
+        html += `<h3>${S.hMissing}</h3>` + (missing.length ? '<ul class="plain">' + missing.map(k => '<li>' + S.missing(S.names[k]) + '</li>').join('') + '</ul>' : `<p>${S.allDone}</p>`);
+        html += `<p><strong>${S.marked}</strong> ` + (done.length ? done.map(k => S.names[k]).join('; ') : S.none) + '.</p>';
+        const work = [S.wBase];
+        const rows = St.parseRows(v.data);
+        if (rows.length) {
+          const two = rows.every(r => r.length >= 2), fit = two ? rows.map(r => r[0]) : null, e = rows.map(r => two ? r[1] : r[0]);
+          const n = e.length;
+          if (n < 8) html += U.note(S.need8, 'warn');
+          else {
+            const mean = e.reduce((s, x) => s + x, 0) / n, sd = Math.sqrt(e.reduce((s, x) => s + (x - mean) ** 2, 0) / (n - 1));
+            const m2 = e.reduce((s, x) => s + (x - mean) ** 2, 0) / n, m3 = e.reduce((s, x) => s + (x - mean) ** 3, 0) / n, m4 = e.reduce((s, x) => s + (x - mean) ** 4, 0) / n;
+            const g1 = m3 / m2 ** 1.5, g2 = m4 / m2 ** 2 - 3, jb = n / 6 * (g1 * g1 + g2 * g2 / 4), pjb = Math.exp(-jb / 2);
+            const z = e.map(x => (x - mean) / sd), out = z.filter(x => Math.abs(x) > 3).length, expOut = 0.0027 * n;
+            const K = S.kv;
+            const kv = [[K.n, `${n}`], [K.mean, `${F(mean, 3)} (${F(sd > 0 ? mean / sd : 0, 2)} SD)`], [K.skew, F(g1, 2)], [K.kurt, F(g2, 2)], [K.jb, `${St.fmtP(pjb)}`], [K.out, K.outV(out, F(expOut, 1))]];
+            const flags = [];
+            if (Math.abs(g1) > 1 || Math.abs(g2) > 2) flags.push(['warn', S.fSkew(Math.abs(g1) > 1 ? (g1 > 0 ? S.rSkew : S.lSkew) : S.heavy)]);
+            if (pjb < 0.05 && n >= 200) flags.push(['good', S.fBig(St.fmtP(pjb), n)]);
+            else if (pjb < 0.05) flags.push(['warn', S.fRej(St.fmtP(pjb), n)]);
+            else if (n < 30) flags.push(['good', S.fSmall(n)]);
+            if (out > Math.max(1, 3 * expOut)) flags.push(['warn', S.fOut(out)]);
+            if (fit) {
+              const rho = St.pearson(St.ranks(fit), St.ranks(e.map(Math.abs))), zr = rho * Math.sqrt(n - 1), pr = 2 * (1 - St.normCdf(Math.abs(zr)));
+              kv.push([K.spread, `${F(rho, 2)}, ${St.fmtP(pr)}`]);
+              if (pr < 0.05 && Math.abs(rho) > 0.2) flags.push(['warn', S.fSpread(rho > 0, F(rho, 2))]);
+              const ord = fit.map((f, i) => [f, e[i]]).sort((p, q) => p[0] - q[0]), k3 = Math.floor(n / 3);
+              const thirds = [ord.slice(0, k3), ord.slice(k3, n - k3), ord.slice(n - k3)].map(g => g.reduce((s, p) => s + p[1], 0) / g.length);
+              kv.push([K.thirds, thirds.map(t => F(t, 2)).join(' / ')]);
+              if (thirds.some(t => Math.abs(t) > 0.5 * sd)) flags.push(['warn', S.fCurve]);
+            }
+            if (v.ordered) {
+              let num = 0, den = 0; for (let i = 0; i < n; i++) { den += (e[i] - mean) ** 2; if (i) num += (e[i] - e[i - 1]) ** 2; }
+              const dw = num / den, r1 = 1 - dw / 2;
+              kv.push([K.dw, `${F(dw, 2)} (r₁ ≈ ${F(r1, 2)})`]);
+              if (r1 > 0.3) flags.push(['warn', S.fAuto(F(r1, 2))]);
+            }
+            const W = 520, Hh = 210, pad = 34, xs = fit || e.map((_, i) => i + 1), x0 = Math.min(...xs), x1 = Math.max(...xs), lim = Math.max(...e.map(Math.abs)) || 1;
+            const X = x => pad + (x1 > x0 ? (x - x0) / (x1 - x0) : 0.5) * (W - pad - 10), Y = y => Hh / 2 - y / lim * (Hh / 2 - 14);
+            let svg = `<svg viewBox="0 0 ${W} ${Hh}" style="width:100%;max-width:${W}px;height:auto;display:block;color:inherit;margin-top:8px" role="img" aria-label="${S.plotY}">`;
+            svg += `<line x1="${pad}" x2="${W - 10}" y1="${Y(0)}" y2="${Y(0)}" stroke="currentColor" stroke-opacity=".4"/>`;
+            svg += e.map((y, i) => `<circle cx="${X(xs[i]).toFixed(1)}" cy="${Y(y).toFixed(1)}" r="2.6" fill="currentColor" fill-opacity="${Math.abs(z[i]) > 3 ? 0.95 : 0.5}"/>`).join('');
+            svg += `<text x="${pad}" y="12" font-size="11" fill="currentColor" fill-opacity=".7">${S.plotY}</text><text x="${W - 10}" y="${Hh - 4}" font-size="11" text-anchor="end" fill="currentColor" fill-opacity=".7">${fit ? S.plotXf : S.plotXo}</text></svg>`;
+            html += `<h3>${S.hRes}</h3>` + U.kv(kv) + svg;
+            html += flags.map(([lvl, t]) => U.note(t, lvl === 'warn' ? 'warn' : 'good')).join('');
+            if (!flags.length) html += U.note(S.ok, 'good');
+            work.push(...S.wRes);
+          }
+        }
+        return { html, work };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Model comparison audit
+  const MC_EX = 'model A,model B\n0.412,0.424\n0.398,0.400\n0.445,0.455\n0.420,0.416\n0.405,0.420\n0.431,0.437\n0.415,0.426\n0.402,0.400\n0.437,0.450\n0.410,0.407';
+  // field: key, the values offered, and which value is the problem (same order in every language)
+  const MF = [['data', ['same', 'different', 'unknown'], 'different'], ['scale', ['same', 'different', 'unknown'], 'different'], ['validation', ['same', 'different', 'unknown'], 'different'],
+    ['metric', ['same', 'different', 'unknown'], 'different'], ['tuning', ['nested', 'leak', 'unknown'], 'leak'], ['uncertainty', ['reported', 'none', 'unknown'], 'none']];
+  const MC = {
+    en: {
+      step: 'How the models were compared',
+      f: {
+        data: ['Evaluation observations', ['Same held-out observations for all models', 'Different observations / folds', 'Not sure or not recorded'], 'If models are evaluated on different observations or folds, the metric difference can reflect the evaluation data as well as model performance. Prefer paired predictions on the same held-out cases where the comparison target allows it.'],
+        scale: ['Response and scale', ['Same response, units and transformation', 'Different response scale / target', 'Not sure or not recorded'], 'Metrics on different response scales or targets are generally not directly comparable. Confirm the target, units, transformations and any retransformation correction.'],
+        validation: ['Validation strategy', ['Same split or resampling strategy', 'Different validation strategies', 'Not sure or not recorded'], 'Different splits or resampling strategies can change the difficulty of the task. Re-evaluate models under a common strategy that matches the intended deployment setting.'],
+        metric: ['Metric definition and direction', ['Same metric definition; direction understood', 'Metrics differ or are not directly comparable', 'Not sure or not recorded'], 'Confirm the exact metric formula, units, weighting, aggregation across folds and whether higher or lower is better. Similar names do not guarantee identical definitions.'],
+        tuning: ['Tuning and preprocessing', ['Tuning / preprocessing confined to training data', 'Possible test-data use or leakage', 'Not sure or not recorded'], 'Potential leakage: feature selection, scaling, imputation, target encoding and hyperparameter tuning should be learned inside training folds, not from held-out data.'],
+        uncertainty: ['Uncertainty in the difference', ['Uncertainty or paired differences reported', 'Only point estimates reported', 'Not sure or not recorded'], 'Point estimates alone do not show whether a performance difference is stable. Consider paired differences across appropriate resamples or an independent test set, while avoiding treating dependent folds as independent replicates.']
+      },
+      secF: 'Optional: paired scores from the same folds', folds: 'One line per fold (or per fold and repeat): score of model A, score of model B', testfrac: 'Share of the data in each test fold (0.2 for 5-fold, 0.1 for 10-fold)',
+      dir: 'For this metric', lower: 'lower is better (RMSE, MAE…)', higher: 'higher is better (R², accuracy…)',
+      secM: 'Optional: two classifiers on the same test cases (McNemar)', b: 'Cases model A got right and model B got wrong', c: 'Cases model A got wrong and model B got right',
+      lv: ['Potential leakage or non-comparable target', 'Comparability needs review', 'Core comparability checks look aligned'],
+      hIss: 'Issues to investigate', hConf: 'Information to confirm', conf: 'check your methods, supplement or code to confirm this choice.',
+      aligned: 'The selected answers indicate aligned evaluation conditions. This does not prove that the comparison is unbiased or that the observed difference is meaningful.',
+      min3: 'Enter scores for at least three folds.',
+      k: { folds: 'Folds', mA: 'Mean score, model A', mB: 'Mean score, model B', diff: 'Mean difference (A − B)', better: x => `model ${x} better`, wins: x => `Model ${x} wins in`, winsV: (a, b) => `${a} of ${b} folds`, naive: 'Naive paired t-test (treats folds as independent)', corr: 'Corrected resampled t-test (Nadeau & Bengio)' },
+      hFolds: 'Paired fold scores',
+      nOnly: (pn, pc) => `The naive test calls the difference significant (${pn}), but once the overlap between training sets is accounted for it is not (${pc}). Folds share most of their training data, so their scores are not independent.`,
+      cSig: (m, p) => `Model ${m} is better even after correcting for overlapping training sets (${p}). Check that the difference is also large enough to matter in practice.`,
+      noDiff: p => `No reliable difference between the models (corrected ${p}).`,
+      w1: (d, s, J) => `Differences d = A − B per fold; mean ${d}, variance ${s}, J = ${J}`,
+      w2: (d, J, r, s, t, df) => `Corrected t = d̄ ÷ √[(1/J + n_test/n_train) × s²] = ${d} ÷ √[(1/${J} + ${r}) × ${s}] = ${t}, on ${df} degrees of freedom`,
+      w3: 'The naive paired t-test uses s²/J and is too liberal because training sets overlap between folds (Nadeau & Bengio 2003; Bouckaert & Frank 2004).',
+      needFrac: 'Enter the share of the data in each test fold to get the corrected test. Without it, only the naive test is shown, and it overstates significance for cross-validation.',
+      diffObs: 'You indicated the models were evaluated on different observations or folds; paired fold scores are only meaningful when both models used the same folds.',
+      bothCounts: 'Enter both discordant counts as whole numbers.',
+      hMc: 'McNemar test (same test cases)', mk: { n: 'Cases where the models disagree', b: 'Model A right, B wrong', c: 'Model A wrong, B right', ex: 'Exact McNemar test', chi: 'χ² with continuity correction' },
+      never: 'The models never disagree, so there is nothing to test.',
+      mSig: (m, p) => `Model ${m} is more accurate on these test cases (${p}). Cases where both models are right or both wrong do not enter the test.`,
+      mNo: (n, b, c, p) => `No reliable accuracy difference: the ${n} disagreements split ${b} to ${c} (${p}).`,
+      wMc: (b, n) => `McNemar uses only the discordant cases: exact two-sided binomial test of ${b} against ${n} with p = 0.5 (McNemar 1947; Dietterich 1998).`,
+      q: 'Questions to answer before you share', qs: ['Were all models assessed on the same observations and target?', 'Were preprocessing, feature selection and tuning repeated inside each training split?', 'Does the validation design match the intended use (new locations, groups, or future times)?', 'Is the reported performance difference large relative to its uncertainty and practical importance?'],
+      wEnd: 'Model comparisons are strongest when the evaluation target, test cases, metric definitions and resampling design are aligned. No universal threshold determines whether a model is meaningfully better.'
+    },
+    sw: {
+      step: 'Jinsi modeli zilivyolinganishwa',
+      f: {
+        data: ['Vipimo vya tathmini', ['Vipimo vilevile vilivyowekwa kando kwa modeli zote', 'Vipimo / makundi tofauti', 'Sina uhakika au haijaandikwa'], 'Modeli zikitathminiwa kwa vipimo au makundi tofauti, tofauti ya kipimo cha utendaji inaweza kuakisi data za tathmini na pia utendaji wa modeli. Pendelea utabiri uliooanishwa kwa kesi zilezile zilizowekwa kando pale lengo la ulinganisho linaporuhusu.'],
+        scale: ['Kinachojibiwa na kipimo chake', ['Kinachojibiwa, vipimo na ubadilishaji vilevile', 'Kipimo / lengo tofauti', 'Sina uhakika au haijaandikwa'], 'Vipimo vya utendaji kwenye vipimo au malengo tofauti kwa kawaida havilinganishwi moja kwa moja. Hakikisha lengo, vipimo, ubadilishaji na marekebisho yoyote ya kurejesha.'],
+        validation: ['Mkakati wa uthibitishaji', ['Mgawanyo au mkakati uleule wa sampuli-upya', 'Mikakati tofauti ya uthibitishaji', 'Sina uhakika au haijaandikwa'], 'Migawanyo au mikakati tofauti ya sampuli-upya inaweza kubadilisha ugumu wa kazi. Tathmini upya modeli kwa mkakati mmoja unaolingana na mazingira ya matumizi yanayokusudiwa.'],
+        metric: ['Ufafanuzi na mwelekeo wa kipimo', ['Ufafanuzi uleule wa kipimo; mwelekeo unaeleweka', 'Vipimo vinatofautiana au havilinganishwi moja kwa moja', 'Sina uhakika au haijaandikwa'], 'Hakikisha fomula halisi ya kipimo, vipimo, uzito, ujumlishaji katika makundi na kama juu au chini ni bora. Majina yanayofanana hayahakikishi ufafanuzi unaofanana.'],
+        tuning: ['Urekebishaji na uandaaji wa data', ['Urekebishaji / uandaaji umefanywa kwa data za mafunzo pekee', 'Huenda data za majaribio zilitumika au kuna uvujaji', 'Sina uhakika au haijaandikwa'], 'Huenda kuna uvujaji: uchaguzi wa vigeu, kusawazisha vipimo, ujazaji, usimbaji wa lengo na urekebishaji wa hyperparameters vinapaswa kujifunzwa ndani ya makundi ya mafunzo, si kutoka data zilizowekwa kando.'],
+        uncertainty: ['Kutokuwa na uhakika katika tofauti', ['Kutokuwa na uhakika au tofauti zilizooanishwa zimeripotiwa', 'Makadirio ya nukta pekee yameripotiwa', 'Sina uhakika au haijaandikwa'], 'Makadirio ya nukta pekee hayaonyeshi kama tofauti ya utendaji ni thabiti. Fikiria tofauti zilizooanishwa katika sampuli-upya zinazofaa au seti huru ya majaribio, bila kuchukulia makundi yanayotegemeana kama marudio huru.']
+      },
+      secF: 'Si lazima: alama zilizooanishwa kutoka makundi yaleyale', folds: 'Mstari mmoja kwa kila kundi (au kwa kila kundi na marudio): alama ya modeli A, alama ya modeli B', testfrac: 'Sehemu ya data katika kila kundi la majaribio (0.2 kwa makundi 5, 0.1 kwa makundi 10)',
+      dir: 'Kwa kipimo hiki', lower: 'chini ni bora (RMSE, MAE…)', higher: 'juu ni bora (R², usahihi…)',
+      secM: 'Si lazima: viainishi (classifiers) viwili kwenye kesi zilezile za majaribio (McNemar)', b: 'Kesi ambazo modeli A ilipata sahihi na modeli B ikakosea', c: 'Kesi ambazo modeli A ilikosea na modeli B ikapata sahihi',
+      lv: ['Huenda kuna uvujaji au lengo lisilolinganishika', 'Ulinganifu unahitaji kupitiwa', 'Ukaguzi wa msingi wa ulinganifu unaonekana kuendana'],
+      hIss: 'Mambo ya kuchunguza', hConf: 'Taarifa za kuthibitisha', conf: 'kagua mbinu zako, nyongeza (supplement) au msimbo ili kuthibitisha chaguo hili.',
+      aligned: 'Majibu yaliyochaguliwa yanaonyesha mazingira ya tathmini yanayoendana. Hili halithibitishi kwamba ulinganisho hauna upendeleo au kwamba tofauti iliyoonekana ina maana.',
+      min3: 'Weka alama za angalau makundi matatu.',
+      k: { folds: 'Makundi', mA: 'Alama wastani, modeli A', mB: 'Alama wastani, modeli B', diff: 'Tofauti wastani (A − B)', better: x => `modeli ${x} ni bora`, wins: x => `Modeli ${x} inashinda katika`, winsV: (a, b) => `makundi ${a} kati ya ${b}`, naive: 'Jaribio la t lililooanishwa la kawaida (linachukulia makundi kuwa huru)', corr: 'Jaribio la t lililorekebishwa la sampuli-upya (Nadeau & Bengio)' },
+      hFolds: 'Alama zilizooanishwa za makundi',
+      nOnly: (pn, pc) => `Jaribio la kawaida linaita tofauti kuwa muhimu (${pn}), lakini mara mwingiliano kati ya seti za mafunzo unapozingatiwa haiko hivyo (${pc}). Makundi yanashiriki sehemu kubwa ya data zao za mafunzo, kwa hiyo alama zao si huru.`,
+      cSig: (m, p) => `Modeli ${m} ni bora hata baada ya kurekebisha kwa seti za mafunzo zinazoingiliana (${p}). Hakikisha tofauti pia ni kubwa ya kutosha kuwa na maana kivitendo.`,
+      noDiff: p => `Hakuna tofauti ya kuaminika kati ya modeli (iliyorekebishwa ${p}).`,
+      w1: (d, s, J) => `Tofauti d = A − B kwa kila kundi; wastani ${d}, tofauti (variance) ${s}, J = ${J}`,
+      w2: (d, J, r, s, t, df) => `t iliyorekebishwa = d̄ ÷ √[(1/J + n_test/n_train) × s²] = ${d} ÷ √[(1/${J} + ${r}) × ${s}] = ${t}, kwa digrii ${df} za uhuru`,
+      w3: 'Jaribio la t lililooanishwa la kawaida linatumia s²/J na ni legevu mno kwa sababu seti za mafunzo zinaingiliana kati ya makundi (Nadeau & Bengio 2003; Bouckaert & Frank 2004).',
+      needFrac: 'Weka sehemu ya data katika kila kundi la majaribio ili kupata jaribio lililorekebishwa. Bila hiyo, jaribio la kawaida pekee linaonyeshwa, na linazidisha umuhimu kwa uthibitishaji mtambuka.',
+      diffObs: 'Ulionyesha kwamba modeli zilitathminiwa kwa vipimo au makundi tofauti; alama zilizooanishwa za makundi zina maana tu pale modeli zote mbili zilitumia makundi yaleyale.',
+      bothCounts: 'Weka idadi zote mbili za kutokubaliana kama namba kamili.',
+      hMc: 'Jaribio la McNemar (kesi zilezile za majaribio)', mk: { n: 'Kesi ambazo modeli hazikubaliani', b: 'Modeli A sahihi, B imekosea', c: 'Modeli A imekosea, B sahihi', ex: 'Jaribio kamili la McNemar', chi: 'χ² pamoja na marekebisho ya mwendelezo' },
+      never: 'Modeli hazitofautiani kamwe, kwa hiyo hakuna cha kujaribu.',
+      mSig: (m, p) => `Modeli ${m} ni sahihi zaidi kwenye kesi hizi za majaribio (${p}). Kesi ambazo modeli zote mbili ziko sahihi au zote zimekosea haziingii kwenye jaribio.`,
+      mNo: (n, b, c, p) => `Hakuna tofauti ya usahihi inayoaminika: kutokubaliana ${n} kumegawanyika ${b} kwa ${c} (${p}).`,
+      wMc: (b, n) => `McNemar inatumia kesi za kutokubaliana pekee: jaribio kamili la binomial la pande mbili la ${b} dhidi ya ${n} na p = 0.5 (McNemar 1947; Dietterich 1998).`,
+      q: 'Maswali ya kujibu kabla ya kushiriki', qs: ['Je, modeli zote zilitathminiwa kwa vipimo na lengo lilelile?', 'Je, uandaaji wa data, uchaguzi wa vigeu na urekebishaji vilirudiwa ndani ya kila mgawanyo wa mafunzo?', 'Je, mpango wa uthibitishaji unalingana na matumizi yanayokusudiwa (maeneo mapya, makundi, au nyakati za baadaye)?', 'Je, tofauti ya utendaji iliyoripotiwa ni kubwa ukilinganisha na kutokuwa na uhakika kwake na umuhimu wake kivitendo?'],
+      wEnd: 'Ulinganisho wa modeli una nguvu zaidi pale lengo la tathmini, kesi za majaribio, ufafanuzi wa vipimo na mpango wa sampuli-upya vinapoendana. Hakuna kiwango kimoja kinachoamua kama modeli ni bora kwa maana.'
+    },
+    es: {
+      step: 'Cómo se compararon los modelos',
+      f: {
+        data: ['Observaciones de evaluación', ['Las mismas observaciones reservadas para todos los modelos', 'Observaciones / pliegues distintos', 'No estoy seguro o no se registró'], 'Si los modelos se evalúan con observaciones o pliegues distintos, la diferencia en la métrica puede reflejar los datos de evaluación además del rendimiento del modelo. Prefiera predicciones pareadas sobre los mismos casos reservados cuando el objetivo de la comparación lo permita.'],
+        scale: ['Respuesta y escala', ['Misma respuesta, unidades y transformación', 'Escala de respuesta / objetivo distinto', 'No estoy seguro o no se registró'], 'Las métricas en escalas de respuesta u objetivos distintos generalmente no son directamente comparables. Confirme el objetivo, las unidades, las transformaciones y cualquier corrección de retransformación.'],
+        validation: ['Estrategia de validación', ['Misma división o estrategia de remuestreo', 'Estrategias de validación distintas', 'No estoy seguro o no se registró'], 'Distintas divisiones o estrategias de remuestreo pueden cambiar la dificultad de la tarea. Reevalúe los modelos con una estrategia común acorde con el contexto de uso previsto.'],
+        metric: ['Definición y dirección de la métrica', ['Misma definición de métrica; dirección entendida', 'Las métricas difieren o no son directamente comparables', 'No estoy seguro o no se registró'], 'Confirme la fórmula exacta de la métrica, las unidades, la ponderación, la agregación entre pliegues y si es mejor más alto o más bajo. Nombres parecidos no garantizan definiciones idénticas.'],
+        tuning: ['Ajuste y preprocesamiento', ['Ajuste / preprocesamiento limitado a los datos de entrenamiento', 'Posible uso de datos de prueba o filtración', 'No estoy seguro o no se registró'], 'Posible filtración: la selección de variables, el escalado, la imputación, la codificación del objetivo y el ajuste de hiperparámetros deben aprenderse dentro de los pliegues de entrenamiento, no a partir de los datos reservados.'],
+        uncertainty: ['Incertidumbre de la diferencia', ['Se informa incertidumbre o diferencias pareadas', 'Solo se informan estimaciones puntuales', 'No estoy seguro o no se registró'], 'Las estimaciones puntuales por sí solas no muestran si una diferencia de rendimiento es estable. Considere diferencias pareadas entre remuestreos adecuados o un conjunto de prueba independiente, sin tratar pliegues dependientes como réplicas independientes.']
+      },
+      secF: 'Opcional: puntuaciones pareadas de los mismos pliegues', folds: 'Una línea por pliegue (o por pliegue y repetición): puntuación del modelo A, puntuación del modelo B', testfrac: 'Fracción de los datos en cada pliegue de prueba (0.2 para 5 pliegues, 0.1 para 10)',
+      dir: 'Para esta métrica', lower: 'más bajo es mejor (RMSE, MAE…)', higher: 'más alto es mejor (R², exactitud…)',
+      secM: 'Opcional: dos clasificadores en los mismos casos de prueba (McNemar)', b: 'Casos que el modelo A acertó y el B falló', c: 'Casos que el modelo A falló y el B acertó',
+      lv: ['Posible filtración u objetivo no comparable', 'La comparabilidad requiere revisión', 'Las comprobaciones básicas de comparabilidad parecen alineadas'],
+      hIss: 'Cuestiones a investigar', hConf: 'Información a confirmar', conf: 'revise sus métodos, el material suplementario o el código para confirmar esta elección.',
+      aligned: 'Las respuestas seleccionadas indican condiciones de evaluación alineadas. Esto no demuestra que la comparación sea insesgada ni que la diferencia observada sea relevante.',
+      min3: 'Introduzca puntuaciones de al menos tres pliegues.',
+      k: { folds: 'Pliegues', mA: 'Puntuación media, modelo A', mB: 'Puntuación media, modelo B', diff: 'Diferencia media (A − B)', better: x => `mejor el modelo ${x}`, wins: x => `El modelo ${x} gana en`, winsV: (a, b) => `${a} de ${b} pliegues`, naive: 'Prueba t pareada ingenua (trata los pliegues como independientes)', corr: 'Prueba t de remuestreo corregida (Nadeau y Bengio)' },
+      hFolds: 'Puntuaciones pareadas por pliegue',
+      nOnly: (pn, pc) => `La prueba ingenua considera la diferencia significativa (${pn}), pero al tener en cuenta el solapamiento entre conjuntos de entrenamiento no lo es (${pc}). Los pliegues comparten la mayor parte de sus datos de entrenamiento, así que sus puntuaciones no son independientes.`,
+      cSig: (m, p) => `El modelo ${m} es mejor incluso tras corregir el solapamiento de los conjuntos de entrenamiento (${p}). Compruebe que la diferencia también sea lo bastante grande para importar en la práctica.`,
+      noDiff: p => `No hay una diferencia fiable entre los modelos (corregida ${p}).`,
+      w1: (d, s, J) => `Diferencias d = A − B por pliegue; media ${d}, varianza ${s}, J = ${J}`,
+      w2: (d, J, r, s, t, df) => `t corregida = d̄ ÷ √[(1/J + n_prueba/n_entrenamiento) × s²] = ${d} ÷ √[(1/${J} + ${r}) × ${s}] = ${t}, con ${df} grados de libertad`,
+      w3: 'La prueba t pareada ingenua usa s²/J y es demasiado liberal porque los conjuntos de entrenamiento se solapan entre pliegues (Nadeau y Bengio 2003; Bouckaert y Frank 2004).',
+      needFrac: 'Introduzca la fracción de datos en cada pliegue de prueba para obtener la prueba corregida. Sin ella solo se muestra la prueba ingenua, que exagera la significación en la validación cruzada.',
+      diffObs: 'Indicó que los modelos se evaluaron con observaciones o pliegues distintos; las puntuaciones pareadas por pliegue solo tienen sentido si ambos modelos usaron los mismos pliegues.',
+      bothCounts: 'Introduzca ambos conteos discordantes como números enteros.',
+      hMc: 'Prueba de McNemar (mismos casos de prueba)', mk: { n: 'Casos en que los modelos discrepan', b: 'Modelo A acierta, B falla', c: 'Modelo A falla, B acierta', ex: 'Prueba exacta de McNemar', chi: 'χ² con corrección de continuidad' },
+      never: 'Los modelos nunca discrepan, así que no hay nada que probar.',
+      mSig: (m, p) => `El modelo ${m} es más exacto en estos casos de prueba (${p}). Los casos en que ambos modelos aciertan o ambos fallan no entran en la prueba.`,
+      mNo: (n, b, c, p) => `No hay una diferencia de exactitud fiable: las ${n} discrepancias se reparten ${b} a ${c} (${p}).`,
+      wMc: (b, n) => `McNemar usa solo los casos discordantes: prueba binomial exacta bilateral de ${b} frente a ${n} con p = 0.5 (McNemar 1947; Dietterich 1998).`,
+      q: 'Preguntas a responder antes de compartir', qs: ['¿Se evaluaron todos los modelos con las mismas observaciones y el mismo objetivo?', '¿Se repitieron el preprocesamiento, la selección de variables y el ajuste dentro de cada división de entrenamiento?', '¿Corresponde el diseño de validación al uso previsto (nuevas ubicaciones, grupos o momentos futuros)?', '¿Es la diferencia de rendimiento informada grande en relación con su incertidumbre e importancia práctica?'],
+      wEnd: 'Las comparaciones de modelos son más sólidas cuando el objetivo de evaluación, los casos de prueba, las definiciones de las métricas y el diseño de remuestreo están alineados. Ningún umbral universal determina si un modelo es mejor de forma relevante.'
+    }
+  };
+  function buildMC(L) {
+    const S = pick(MC, L);
+    return {
+      step: S.step,
+      example: { data: 'same', scale: 'same', validation: 'same', metric: 'same', tuning: 'unknown', uncertainty: 'none', folds: MC_EX, testfrac: 0.1, dir: 'lower', b: null, c: null },
+      inputs: [
+        ...MF.map(([k, vals]) => ({ k, l: S.f[k][0], t: 'select', d: vals[0], opts: vals.map((x, i) => [x, S.f[k][1][i]]) })),
+        { t: 'sec', l: S.secF },
+        { k: 'folds', l: S.folds, t: 'textarea', rows: 6, ph: 'model A,model B\n0.41,0.43\n0.40,0.41' },
+        { k: 'testfrac', l: S.testfrac, t: 'num', w: 3 },
+        { k: 'dir', l: S.dir, t: 'select', d: 'lower', w: 3, opts: [['lower', S.lower], ['higher', S.higher]] },
+        { t: 'sec', l: S.secM },
+        { k: 'b', l: S.b, t: 'num', w: 3 },
+        { k: 'c', l: S.c, t: 'num', w: 3 }
+      ],
+      compute(v, U) {
+        const issues = MF.filter(([k, , bad]) => v[k] === bad), unknown = MF.filter(([k]) => v[k] === 'unknown');
+        const level = issues.some(([k]) => k === 'tuning' || k === 'scale') ? 'bad' : (issues.length || unknown.length) ? 'warn' : 'good';
+        const label = level === 'bad' ? S.lv[0] : level === 'warn' ? S.lv[1] : S.lv[2];
+        let html = `<p><span class="tag ${level}">${label}</span></p>`;
+        if (issues.length) html += `<h3>${S.hIss}</h3><ul class="plain">` + issues.map(([k]) => `<li><strong>${S.f[k][0]}:</strong> ${S.f[k][2]}</li>`).join('') + '</ul>';
+        if (unknown.length) html += `<h3>${S.hConf}</h3><ul class="plain">` + unknown.map(([k]) => `<li><strong>${S.f[k][0]}:</strong> ${S.conf}</li>`).join('') + '</ul>';
+        if (!issues.length && !unknown.length) html += `<p>${S.aligned}</p>`;
+        const work = [];
+        const given = x => x !== '' && x !== null && x !== undefined && isFinite(Number(x));
+        const K = S.k;
+        const rows = St.parseRows(v.folds).filter(r => r.length >= 2);
+        if (rows.length) {
+          if (rows.length < 3) html += U.note(S.min3, 'warn');
+          else {
+            const J = rows.length, d = rows.map(r => r[0] - r[1]), dbar = d.reduce((s, x) => s + x, 0) / J;
+            const s2 = d.reduce((s, x) => s + (x - dbar) ** 2, 0) / (J - 1), df = J - 1;
+            const mA = rows.reduce((s, r) => s + r[0], 0) / J, mB = rows.reduce((s, r) => s + r[1], 0) / J;
+            const better = (v.dir === 'lower') === (dbar < 0) ? 'A' : 'B';
+            const tN = s2 > 0 ? dbar / Math.sqrt(s2 / J) : Infinity, pN = s2 > 0 ? St.tTwoSided(tN, df) : 0;
+            const kv = [[K.folds, `${J}`], [K.mA, F(mA, 4)], [K.mB, F(mB, 4)], [K.diff, `${F(dbar, 4)} (${K.better(better)})`], [K.wins(better), K.winsV(d.filter(x => (v.dir === 'lower') === (better === 'A') ? x < 0 : x > 0).length, J)], [K.naive, `${St.fmtP(pN)}`]];
+            const tf = Number(v.testfrac);
+            if (given(v.testfrac) && tf > 0 && tf < 1) {
+              const ratio = tf / (1 - tf), tC = s2 > 0 ? dbar / Math.sqrt((1 / J + ratio) * s2) : Infinity, pC = s2 > 0 ? St.tTwoSided(tC, df) : 0;
+              kv.push([K.corr, `t = ${F(tC, 2)}, ${St.fmtP(pC)}`]);
+              html += `<h3>${S.hFolds}</h3>` + U.kv(kv);
+              if (pN < 0.05 && pC >= 0.05) html += U.note(S.nOnly(St.fmtP(pN), St.fmtP(pC)), 'bad');
+              else if (pC < 0.05) html += U.note(S.cSig(better, St.fmtP(pC)), 'good');
+              else html += U.note(S.noDiff(St.fmtP(pC)), 'warn');
+              work.push(S.w1(F(dbar, 5), F(s2, 6), J), S.w2(F(dbar, 5), J, F(ratio, 3), F(s2, 6), F(tC, 3), df), S.w3);
+            } else {
+              html += `<h3>${S.hFolds}</h3>` + U.kv(kv) + U.note(S.needFrac, 'warn');
+            }
+            if (v.data === 'different') html += U.note(S.diffObs, 'bad');
+          }
+        }
+        if (given(v.b) || given(v.c)) {
+          const b = Number(v.b), c = Number(v.c);
+          if (!(given(v.b) && given(v.c)) || b < 0 || c < 0 || !Number.isInteger(b) || !Number.isInteger(c)) html += U.note(S.bothCounts, 'warn');
+          else {
+            const n = b + c, pE = St.binomTwoSided(b, n), chi = n > 0 ? (Math.abs(b - c) - 1) ** 2 / n : 0;
+            const better = b > c ? 'A' : b < c ? 'B' : null;
+            html += `<h3>${S.hMc}</h3>` + U.kv([[S.mk.n, `${n}`], [S.mk.b, `${b}`], [S.mk.c, `${c}`], [S.mk.ex, `${St.fmtP(pE)}`], [S.mk.chi, F(chi, 2)]]);
+            html += n === 0 ? U.note(S.never, 'warn') : pE < 0.05 ? U.note(S.mSig(better, St.fmtP(pE)), 'good') : U.note(S.mNo(n, b, c, St.fmtP(pE)), 'warn');
+            work.push(S.wMc(b, n));
+          }
+        }
+        html += `<h3>${S.q}</h3><ul class="plain">${S.qs.map(q => `<li>${q}</li>`).join('')}</ul>`;
+        work.push(S.wEnd);
+        return { html, work };
+      }
+    };
+  }
+
+  Object.assign(C.items, {
+    assump: {
+      g: 'review', beta: true, build: buildAS,
+      t: { en: 'Statistical assumptions check', sw: 'Ukaguzi wa dhana za kitakwimu', es: 'Comprobación de supuestos estadísticos' },
+      d: { en: 'Which assumptions matter for this method? Paste residuals for skewness, outliers, unequal spread and autocorrelation.', sw: 'Dhana zipi ni muhimu kwa mbinu hii? Bandika mabaki kwa upindaji, thamani za kupindukia, mtawanyiko usio sawa na uhusiano wa mfululizo.', es: '¿Qué supuestos importan para este método? Pegue los residuos para asimetría, valores atípicos, dispersión desigual y autocorrelación.' },
+      intro: {
+        en: 'A guided check for matching assumptions to the statistical method. Select the method and the diagnostics you have checked, then use the prompts to identify anything that may need further investigation. If you have the residuals, paste them: the check reports skewness, outliers, unequal spread, curvature and, for ordered data, autocorrelation, with a residual plot.',
+        sw: 'Ukaguzi wa kuongozwa wa kulinganisha dhana na mbinu ya kitakwimu. Chagua mbinu na uchunguzi uliofanya, kisha tumia maswali kutambua chochote kinachoweza kuhitaji uchunguzi zaidi. Ukiwa na mabaki (residuals), yabandike: ukaguzi unaripoti upindaji, thamani za kupindukia, mtawanyiko usio sawa, mkunjo na, kwa data zilizopangwa, uhusiano wa mfululizo, pamoja na mchoro wa mabaki.',
+        es: 'Una comprobación guiada para ajustar los supuestos al método estadístico. Seleccione el método y los diagnósticos que ha comprobado, y use las indicaciones para identificar lo que pueda requerir más investigación. Si tiene los residuos, péguelos: la comprobación informa de asimetría, valores atípicos, dispersión desigual, curvatura y, para datos ordenados, autocorrelación, con un gráfico de residuos.'
+      },
+      refs: [{ en: 'This beta tool is a structured checklist, not a test of model assumptions. The relevant assumptions depend on the exact statistical procedure and intended inference. An unchecked item only means that you have not marked the check as reported. The residual diagnostic screens one set of residuals; it does not replace a full model diagnosis.',
+        sw: 'Zana hii ya majaribio (beta) ni orodha iliyopangwa, si jaribio la dhana za modeli. Dhana husika zinategemea utaratibu halisi wa kitakwimu na hitimisho linalokusudiwa. Kipengele kisichowekewa alama kinamaanisha tu kwamba hujakiwekea alama kama kimeripotiwa. Uchunguzi wa mabaki unakagua seti moja ya mabaki; haubadilishi uchunguzi kamili wa modeli.',
+        es: 'Esta herramienta beta es una lista estructurada, no una prueba de los supuestos del modelo. Los supuestos pertinentes dependen del procedimiento estadístico exacto y de la inferencia prevista. Un elemento sin marcar solo significa que no ha marcado la comprobación como informada. El diagnóstico de residuos criba un conjunto de residuos; no sustituye un diagnóstico completo del modelo.' },
+        'Jarque, C.M., Bera, A.K. (1987). A test for normality of observations and regression residuals. <i>International Statistical Review</i> 55, 163–172. doi:10.2307/1403192',
+        'Durbin, J., Watson, G.S. (1950). Testing for serial correlation in least squares regression. I. <i>Biometrika</i> 37, 409–428. doi:10.1093/biomet/37.3-4.409']
+    },
+    modelcmp: {
+      g: 'review', beta: true, build: buildMC,
+      t: { en: 'Model comparison audit', sw: 'Ukaguzi wa ulinganisho wa modeli', es: 'Auditoría de comparación de modelos' },
+      d: { en: 'Are competing models evaluated on comparable terms? Test the difference with paired fold scores or McNemar.', sw: 'Je, modeli shindani zinatathminiwa kwa masharti yanayolinganishika? Jaribu tofauti kwa alama zilizooanishwa za makundi au McNemar.', es: '¿Se evalúan los modelos rivales en condiciones comparables? Pruebe la diferencia con puntuaciones pareadas por pliegue o McNemar.' },
+      intro: {
+        en: 'Use this checklist when your work claims that one model performs better than another. It checks comparability of the evaluation design. With paired fold scores it also tests the difference properly (cross-validation folds share training data, so a plain paired t-test is too optimistic), and with the counts of cases where two classifiers disagree it runs McNemar\'s test.',
+        sw: 'Tumia orodha hii pale kazi yako inapodai kwamba modeli moja ni bora kuliko nyingine. Inakagua ulinganifu wa mpango wa tathmini. Ukiwa na alama zilizooanishwa za makundi inajaribu pia tofauti ipasavyo (makundi ya uthibitishaji mtambuka yanashiriki data za mafunzo, kwa hiyo jaribio la t lililooanishwa la kawaida lina matumaini kupita kiasi), na kwa idadi ya kesi ambazo viainishi viwili havikubaliani inafanya jaribio la McNemar.',
+        es: 'Use esta lista cuando su trabajo afirme que un modelo rinde mejor que otro. Comprueba la comparabilidad del diseño de evaluación. Con puntuaciones pareadas por pliegue también prueba la diferencia correctamente (los pliegues de validación cruzada comparten datos de entrenamiento, por lo que una prueba t pareada simple es demasiado optimista), y con los conteos de casos en que dos clasificadores discrepan aplica la prueba de McNemar.'
+      },
+      refs: [{ en: 'This beta check examines the comparability of model evaluations based on your selected answers, and tests a difference only from the paired scores or counts you enter. For spatial, temporal or grouped data, validation design should reflect the intended prediction task (Roberts et al. 2017, Ecography 40, 913–929).',
+        sw: 'Ukaguzi huu wa majaribio (beta) unachunguza ulinganifu wa tathmini za modeli kulingana na majibu uliyochagua, na unajaribu tofauti tu kutoka kwa alama zilizooanishwa au idadi unazoweka. Kwa data za kijiografia, za muda au za makundi, mpango wa uthibitishaji unapaswa kuakisi kazi ya utabiri inayokusudiwa (Roberts et al. 2017, Ecography 40, 913–929).',
+        es: 'Esta comprobación beta examina la comparabilidad de las evaluaciones de modelos según las respuestas seleccionadas, y prueba una diferencia solo a partir de las puntuaciones pareadas o conteos que introduzca. Para datos espaciales, temporales o agrupados, el diseño de validación debe reflejar la tarea de predicción prevista (Roberts et al. 2017, Ecography 40, 913–929).' },
+        'Nadeau, C., Bengio, Y. (2003). Inference for the generalization error. <i>Machine Learning</i> 52, 239–281. doi:10.1023/A:1024068626366',
+        'Bouckaert, R.R., Frank, E. (2004). Evaluating the replicability of significance tests for comparing learning algorithms. In: <i>Advances in Knowledge Discovery and Data Mining (PAKDD 2004)</i>, LNCS 3056, 3–12. Springer.',
+        'McNemar, Q. (1947). Note on the sampling error of the difference between correlated proportions or percentages. <i>Psychometrika</i> 12, 153–157. doi:10.1007/BF02295996',
+        'Dietterich, T.G. (1998). Approximate statistical tests for comparing supervised classification learning algorithms. <i>Neural Computation</i> 10, 1895–1923. doi:10.1162/089976698300017197']
+    }
+  });
 })();
 
 </script>
@@ -864,6 +2039,29 @@ window.RA_CHECKS = (function () {
       eqLines(text).forEach(x => out.push(x));
     }
     return out;
+  };
+
+  // Same as equationsFromOoxml, but also records where each equation is: the paragraph's position in
+  // the document (p) and whether the paragraph holds only the equation (display), so it can be
+  // coloured and jumped to. count = number of paragraphs found, to check against Word's own count.
+  window.equationPlaces = (ooxml, eqLines) => {
+    const doc = new DOMParser().parseFromString(ooxml, 'text/xml');
+    const body = all(doc.documentElement, 'body')[0] || doc.documentElement;
+    const paras = all(body, 'p');
+    const items = [];
+    paras.forEach((p, i) => {
+      const maths = all(p, 'omath');
+      if (maths.length) {
+        // text outside the equations: nothing but spaces, an equation number "(3)" or punctuation → a display equation
+        const outside = all(p, 't').filter(t => { let n = t.parentNode; while (n && n !== p) { if (nm(n) === 'omath') return false; n = n.parentNode; } return true; }).map(t => t.textContent).join('');
+        const display = !/[^\s\d().,;: ]/.test(outside);
+        maths.forEach(m => lin(m).split('\n').map(tidy).filter(Boolean).forEach(x => items.push({ t: x, p: i, display })));
+        return;
+      }
+      const text = all(p, 't').map(t => t.textContent).join('');
+      eqLines(text).forEach(x => items.push({ t: x, p: i, display: true }));
+    });
+    return { count: paras.length, items };
   };
 
   // Equations from clipboard HTML copied out of Word (OMML hidden in msEquation comments)
@@ -1010,6 +2208,8 @@ window.HMEQ = (function () {
       if (window.MathJax && MathJax.typesetPromise) {
         MathJax.typesetPromise([root.querySelector('.res')]).catch(err => console.log(err));
       }
+      // tell the Word side the results changed (it recolours equations found in the document)
+      try { window.dispatchEvent(new CustomEvent('ra-eq-run')); } catch (e) { }
     }
 
     root.addEventListener('input', e => {
@@ -1284,6 +2484,8 @@ window.HMEQ = (function () {
     // name (covariance matrix). Renaming it "Sigma" made LaTeX split it into S·i·g·m·a.
     s = s.replace(/\\left|\\right/g, '');
     s = funcPowers(s);
+    // a font wrapper around one letter is just that letter: \mathcal{L} -> L (so ∂\mathcal{L}/∂X_u reads as a derivative)
+    s = s.replace(/\\(?:mathcal|mathscr|mathrm|mathbf|mathit|mathsf|mathbb|boldsymbol|bm)\s*\{\s*([A-Za-z])\s*\}/g, '$1');
     // LaTeX transpose signs: A^{\top}, A^\intercal, A^{\mathsf{T}} -> A^{T}
     s = s.replace(/\^\s*\{?\s*\\(?:top|intercal|mathsf\s*\{\s*T\s*\}|mathrm\s*\{\s*T\s*\})\s*\}?/g, '^{T}');
     // Keep braces on LaTeX-like lines (contains \ or {) — they carry grouping that
@@ -1324,8 +2526,10 @@ window.HMEQ = (function () {
       s = s.replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\^\s*(?:\*|\(\s*\*\s*\))/g, '$1_star')
            .replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\*(?=\s*(?:[-+=)\]\/,;|@&]|$))/g, '$1_star').replace(/([A-Za-z0-9_Ͱ-Ͽ])[′']/g, '$1_prime');
     }
-    s = s.replace(/\\frac\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}/g, 'd$1_d$2')
+    s = s.replace(/\\frac\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*(?:_\{[A-Za-z0-9,\s]*\})?)\s*\}\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*(?:_\{[A-Za-z0-9,\s]*\})?)\s*\}/g, (m, a, b) => 'd' + a.replace(/[{},\s]/g, '') + '_d' + b.replace(/[{},\s]/g, ''))
          .replace(/[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)\s*\/\s*[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)/g, 'd$1_d$2');
+    // (∂ℒ)/(∂X_u) from Word: the variable underneath can have a subscript when it is in brackets
+    s = s.replace(new RegExp(`\\(\\s*[∂𝜕]\\s*(${NAME})\\s*\\)\\s*\\/\\s*\\(\\s*[∂𝜕]\\s*(${NAME})\\s*\\)`, 'gu'), 'd$1_d$2');
     s = s.replace(new RegExp(`\\(\\s*[∂𝜕]\\s*(${NAME})\\s*\\)\\s*\\/\\s*\\(?\\s*[∂𝜕]\\s*([A-Za-z\\u0370-\\u03FF])(?:\\s*\\))?`, 'gu'), 'd$1_d$2');
     if (latex) s = s.replace(/\\mathrm\s*\{\s*d\s*\}/g, 'd').replace(/\\(?:d|diff)\s*(?=[A-Za-z\\])/g, 'd');
     const st = structural(s, latex);
@@ -1504,7 +2708,10 @@ window.HMEQ = (function () {
   }
   const rnd = (pos) => { const x = Math.exp(Math.log(0.2) + Math.random() * Math.log(50)); return pos || Math.random() < 0.5 ? x : -x; };
   const VEC_LEN = 30;
+  // SPD: draw square matrices as symmetric positive definite (B·Bᵀ + n·I), as covariance matrices are
+  let SPD = false;
   function draw(kind, pos, n) {
+    if (kind === 'm' && SPD) { const B = Array.from({ length: n }, () => Array.from({ length: n }, () => rnd(false))); return MJ.matrix(Array.from({ length: n }, (r, i) => Array.from({ length: n }, (c, j) => B[i].reduce((a, x, k) => a + x * B[j][k], 0) + (i === j ? n : 0)))); }
     if (kind === 'int') return 2 + Math.floor(Math.random() * 11);
     if (kind === 'vec') return Array.from({ length: VEC_LEN }, () => rnd(pos));
     if (kind.startsWith('tab')) { const mk = d => d ? Array.from({ length: 13 }, () => mk(d - 1)) : rnd(pos); return mk(+kind.slice(3)); }  // up to 12 categories per index
@@ -1546,7 +2753,7 @@ window.HMEQ = (function () {
   const prettyName = n => String(n).replace(/_star/g, '*').replace(/_prime/g, '′').replace(/_bar/g, '\u0304');
   function cxReason(E, sc) {
     const o = prep(E, sc || {}), short = n => { const t = String(n.toString()).replace(/_star/g, '*').replace(/ - /g, ' − ').replace(/^\((.*)\)$/, '$1'); return t.length > 40 || /sumn\(|prodn\(|integ\(|\[/.test(t) ? null : t; };
-    const val = n => { try { return n.compile().evaluate({ ...o }); } catch (e) { return undefined; } };
+    const val = n => { try { const y = n.compile().evaluate({ ...o }); return isArr(y) && MJ.flatten(MJ.matrix(y)).valueOf().length === 1 ? MJ.flatten(MJ.matrix(y)).valueOf()[0] : y; } catch (e) { return undefined; } };
     const at = n => { const xs = Object.keys(freeVars(n)).filter(v => typeof o[v] === 'number'); return xs.length ? ` for ${xs.slice(0, 4).map(v => `${prettyName(v)} = ${HM.fmt(o[v], 3)}`).join(', ')}` : ''; };
     let hit = null;
     [E.L, E.R].forEach(side => side.traverse(n => {
@@ -1749,6 +2956,9 @@ window.HMEQ = (function () {
           } return o; };
         let T = trial();
         // undefined in places on its own: try again with the other equations' definitions plugged in
+        // √ or log of a negative only because a matrix was general: try covariance-type matrices
+        // (symmetric, positive definite), e.g. Σ in (x − μ)ᵀ Σ⁻¹ (x − μ)
+        if (T.cx && Object.values(e.kinds).includes('m')) { SPD = true; const T2 = trial(); SPD = false; if (T2.bad < T.bad) { T = T2; e.spd = true; } }
         if (T.bad && e.deps.length) {
           // the paper's own definition (CN from equation 1) is the right one to test with; drop it
           // only if it makes the equation unreadable for a reason other than a complex value
@@ -1774,6 +2984,7 @@ window.HMEQ = (function () {
         }
         const N_ = Object.keys(e.kinds).filter(x => /^N_/.test(x));
         if (N_.length) txt += ` Sums written without limits run over all categories (1 … ${N_.join(', ')}).` + (e.weights.length ? ` ${e.weights.map(w => w.name).join(' and ')} ${e.weights.length > 1 ? 'are' : 'is'} taken as weights that sum to 1.` : '');
+        if (e.spd) { const ms = Object.keys(e.kinds).filter(x => e.kinds[x] === 'm'); txt += ` ${ms.map(pretty).join(', ')} ${ms.length > 1 ? 'are' : 'is'} taken as a covariance matrix (symmetric, positive definite); with a general matrix the value under √ can be negative.`; }
         if (e.useDeps) txt += ` ${e.deps.map(D => `${pretty(D.lhsSym)} is taken from equation ${D.i}`).join('; ')}.`;
         if (e.grad && e.identity) txt = ` The components are the partial derivatives of ${pretty(e.grad.name)} with respect to ${[...e.grad.c].join(' and ')}, in order.`;
         rows[e.row] = [e.i, e.readAs, tag, `Variables: ${e.vs.join(', ') || 'none'}${kindTxt.length ? `; sizes: ${kindTxt.join(', ')}` : ''}.${txt}`, e.li];
@@ -1891,26 +3102,127 @@ window.HMEQ = (function () {
       lastAuto = text;
       setEqs(text); msg(`Read ${plural(eqs.length)} from the selection.`);
     }).catch(e => { if (!quiet) msg('Could not read the selection: ' + e.message); });
-    document.getElementById('ra-sel').onclick = () => readSelection(false);
+    // leaving the document results (their colours are cleared) before reading a selection
+    document.getElementById('ra-sel').onclick = async () => { if (window.RA_DOC && window.RA_DOC.active()) await window.RA_DOC.clear(); readSelection(false); };
 
     // Check automatically when the selection changes (switch off with the tick box under the language menu)
     let timer = null;
     const autoOn = () => { try { return localStorage.getItem('ra-auto') !== '0'; } catch (e) { return true; } };
     Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, () => {
-      if (!autoOn() || window.RA_VIEW !== 'eq') return;
+      // paused while document results are shown (and right after jumping to an equation), so clicking around Word keeps the list
+      if (!autoOn() || window.RA_VIEW !== 'eq' || (window.RA_DOC && window.RA_DOC.active())) return;
       clearTimeout(timer); timer = setTimeout(() => readSelection(true), 350);
     });
 
     // Whole document: same OOXML route. Paragraphs without a Word equation only count when
     // they look like a formula, not a sentence that happens to contain "=" (e.g. "n = 30 samples were ...").
     const formulaLike = s => s.length < 120 && (s.match(/[A-Za-z]{4,}/g) || []).filter(w => !/^(sqrt|exp|log|sin|cos|tan|sinh|cosh|tanh|frac|left|right|partial|nabla|alpha|beta|gamma|delta|Delta|theta|lambda|sigma|Sigma|omega|Omega|infty|cdot|times|mathrm|text|bar|hat)$/.test(w)).length <= 2;
-    document.getElementById('ra-doc').onclick = () => Word.run(async ctx => {
-      const ox = ctx.document.body.getOoxml(); await ctx.sync();
-      const eqs = window.equationsFromOoxml(ox.value, t => eqLines(t).filter(formulaLike)).filter(x => /[^=<>!]=[^=]/.test(x));
-      if (!eqs.length) { msg('No equations found in the document.'); return; }
-      setEqs(eqs.slice(0, 60).join('\n'));
-      msg(`Found ${plural(eqs.length)}${eqs.length > 60 ? ' (first 60 shown)' : ''}. Remove any that aren't equations.`);
-    }).catch(e => msg('Could not read the document: ' + e.message));
+    // ---------- whole document: colour each equation by its status; click a row to go to it ----------
+    // docMode.places[i] = where line i of the box came from: { t: text, p: paragraph index, display }
+    let docMode = null;
+    const applied = new Map();   // paragraph index -> { orig: formatting before, cat: colour now, skip }
+    const COL = { holds: ['#2E9E5B', 'Lime'], clean: ['#2F6FDE', 'Turquoise'], unread: ['#C99A00', 'Yellow'], bad: ['#D13438', 'Pink'] };
+    const RANK = { bad: 4, unread: 3, clean: 2, holds: 1 };
+    const colourLine = () => Office.context.requirements.isSetSupported('WordApiDesktop', '1.3');   // underline colour: desktop Word only
+    const strip = s => String(s).replace(/^\s*#\s?/, '').trim();
+    const docbar = on => { const b = document.getElementById('ra-docbar'); if (b) b.hidden = !on; const q = document.getElementById('eq'); if (q) q.classList.toggle('has-places', on); };
+    let jumpUntil = 0;   // ignore the selection change our own jump causes
+    function lineStatuses() {   // box line -> colour, read from the result table (worst row wins)
+      const out = {};
+      document.querySelectorAll('#eq tbody tr').forEach(tr => {
+        const b = tr.querySelector('button.st'), tag = tr.querySelector('.tag'); if (!b || !tag) return;
+        const li = +b.dataset.line;
+        if (tr.classList.contains('off')) { out[li] = null; return; }
+        const t = tag.textContent.trim().toLowerCase();
+        const c = /cannot read|not one equation|not checked/.test(t) ? 'unread' : tag.classList.contains('bad') ? 'bad' : tag.classList.contains('warn') ? 'unread' : /holds/.test(t) ? 'holds' : 'clean';
+        if (out[li] !== null && (!out[li] || RANK[c] > RANK[out[li]])) out[li] = c;
+      });
+      return out;
+    }
+    function targets() {        // paragraph -> colour, for display equations whose line is unchanged in the box
+      const st = lineStatuses(), lines = String(box().value).split(/\r?\n/), want = new Map();
+      docMode.places.forEach((pl, i) => {
+        if (lines[i] == null || strip(lines[i]) !== pl.t || !pl.display || !st[i]) return;
+        const cur = want.get(pl.p); if (!cur || RANK[st[i]] > RANK[cur]) want.set(pl.p, st[i]);
+      });
+      return want;
+    }
+    const restore = (f, o, line) => { f.underline = o.u === 'Mixed' ? 'None' : o.u; if (line && o.uc) f.underlineColor = o.uc; f.highlightColor = o.h || null; };
+    let busy = false, again = false;
+    async function recolour() {
+      if (!docMode) return;
+      if (busy) { again = true; return; }
+      busy = true;
+      try {
+        await Word.run(async ctx => {
+          const paras = ctx.document.body.paragraphs; paras.load('items'); await ctx.sync();
+          if (paras.items.length !== docMode.count) { msg('The document has changed since it was checked. Click "Find all equations in the document" again to update the colours.'); return; }
+          const want = targets(), line = colourLine();
+          // remember the formatting of paragraphs coloured for the first time, so "Clear the colours" can put it back
+          const fresh = [...want.keys()].filter(p => !applied.has(p)).map(p => { const r = paras.items[p].getRange('Content'); r.load(line ? 'font/underline,font/underlineColor,font/highlightColor' : 'font/underline,font/highlightColor'); return [p, r]; });
+          if (fresh.length) await ctx.sync();
+          fresh.forEach(([p, r]) => { const f = r.font; applied.set(p, { orig: { u: f.underline, uc: line ? f.underlineColor : null, h: f.highlightColor }, cat: null, skip: f.underline !== 'None' || !!f.highlightColor }); });
+          applied.forEach((a, p) => {
+            const c = want.get(p) || null;
+            if (a.skip || a.cat === c) return;
+            const f = paras.items[p].getRange('Content').font;
+            if (!c) restore(f, a.orig, line);
+            else if (line) { f.underline = 'Thick'; f.underlineColor = COL[c][0]; }
+            else f.highlightColor = COL[c][1];
+            a.cat = c;
+          });
+          await ctx.sync();
+        });
+      } catch (e) { msg('Could not colour the equations: ' + e.message); }
+      busy = false;
+      if (again) { again = false; recolour(); }
+    }
+    async function clearColours() {
+      if (applied.size) await Word.run(async ctx => {
+        const paras = ctx.document.body.paragraphs; paras.load('items'); await ctx.sync();
+        const line = colourLine();
+        applied.forEach((a, p) => { if (a.cat && !a.skip && paras.items[p]) restore(paras.items[p].getRange('Content').font, a.orig, line); });
+        await ctx.sync();
+      }).catch(e => msg('Could not clear the colours: ' + e.message));
+      applied.clear(); docMode = null; docbar(false);
+    }
+    let rt = null;
+    window.addEventListener('ra-eq-run', () => { if (docMode) { clearTimeout(rt); rt = setTimeout(recolour, 400); } });
+
+    document.getElementById('ra-doc').onclick = async () => {
+      await clearColours();
+      await Word.run(async ctx => {
+        const paras = ctx.document.body.paragraphs; paras.load('items');
+        const ox = ctx.document.body.getOoxml(); await ctx.sync();
+        const found = window.equationPlaces(ox.value, t => eqLines(t).filter(formulaLike));
+        const items = found.items.filter(x => /[^=<>!]=[^=]/.test(x.t));
+        if (!items.length) { msg('No equations found in the document.'); return; }
+        const shown = items.slice(0, 60), inline = shown.filter(x => !x.display).length;
+        // positions are trusted only when the paragraph count read from the document matches Word's own
+        docMode = found.count === paras.items.length ? { places: shown, count: found.count } : null;
+        docbar(!!docMode);
+        setEqs(shown.map(x => x.t).join('\n'));
+        msg(`Found ${plural(items.length)}${items.length > 60 ? ' (first 60 shown)' : ''}. Remove any that aren't equations.` +
+          (docMode ? ' They are coloured in the document by status; clear the colours before you send it.' + (inline ? ` ${inline} inside a line of text ${inline === 1 ? 'is' : 'are'} not coloured; click ${inline === 1 ? 'its' : 'their'} row to go to ${inline === 1 ? 'it' : 'them'}.` : '')
+            : ' Their positions in the document could not be matched, so they are not coloured.'));
+      }).catch(e => msg('Could not read the document: ' + e.message));
+    };
+    document.getElementById('ra-clr').onclick = () => clearColours().then(() => msg('Colours cleared.'));
+    window.RA_DOC = { active: () => !!docMode || Date.now() < jumpUntil, clear: clearColours };
+
+    // click a row (not its status) to go to that equation in the document
+    document.getElementById('eq').addEventListener('click', e => {
+      if (!docMode || e.target.closest('button')) return;
+      const tr = e.target.closest('tbody tr'), b = tr && tr.querySelector('button.st'); if (!b) return;
+      const li = +b.dataset.line, pl = docMode.places[li], line = String(box().value).split(/\r?\n/)[li];
+      if (!pl || strip(line) !== pl.t) { msg('This line has been edited, so its place in the document is not known.'); return; }
+      Word.run(async ctx => {
+        const paras = ctx.document.body.paragraphs; paras.load('items'); await ctx.sync();
+        if (paras.items.length !== docMode.count) { msg('The document has changed since it was checked. Click "Find all equations in the document" again.'); return; }
+        jumpUntil = Date.now() + 2000;
+        paras.items[pl.p].select(); await ctx.sync();
+      }).catch(err => msg('Could not go to the equation: ' + err.message));
+    });
 
     document.getElementById('ra-com').onclick = () => Word.run(async ctx => {
       const res = document.querySelector('#eq .res');
@@ -1939,7 +3251,7 @@ window.HMEQ = (function () {
       sel: 'Check the highlighted text', doc: 'Check the whole document', com: 'Add the findings as a comment',
       eqSel: 'Check the selected equations', eqDoc: 'Find all equations in the document', eqCom: 'Add the findings as a comment',
       locked: 'Locked in this beta. This will read the numbers from your document for you; for now, type or paste them into the boxes below.', more: 'Learn more',
-      auto: 'Check equations automatically when I select them',
+      auto: 'Check equations automatically when I select them', clr: 'Clear the colours', lg: ['Holds', 'Evaluates cleanly', 'Not checked or partly undefined', 'Does not hold'], go: 'Click a row to go to that equation in the document.',
       citeEq: 'Equation checker: plausibility checks for soil and environmental results', citeCk: 'Check a result: plausibility checks for soil and environmental results', how: 'How to cite'
     },
     sw: {
@@ -1949,7 +3261,7 @@ window.HMEQ = (function () {
       sel: 'Kagua maandishi yaliyochaguliwa', doc: 'Kagua waraka wote', com: 'Weka matokeo kama maoni (comment)',
       eqSel: 'Kagua milinganyo iliyochaguliwa', eqDoc: 'Tafuta milinganyo yote kwenye waraka', eqCom: 'Weka matokeo kama maoni (comment)',
       locked: 'Imefungwa katika toleo hili la majaribio (beta). Kipengele hiki kitasoma namba kutoka kwenye waraka wako; kwa sasa, andika au bandika namba kwenye visanduku hapa chini.', more: 'Soma zaidi',
-      auto: 'Kagua milinganyo moja kwa moja ninapoichagua',
+      auto: 'Kagua milinganyo moja kwa moja ninapoichagua', clr: 'Ondoa rangi', lg: ['Unashikilia', 'Unakokotoleka vizuri', 'Haukukaguliwa au haufafanuki mahali fulani', 'Haushikilii'], go: 'Bofya mstari ili kwenda kwenye mlinganyo huo katika waraka.',
       citeEq: 'Equation checker: plausibility checks for soil and environmental results', citeCk: 'Check a result: plausibility checks for soil and environmental results', how: 'Jinsi ya kunukuu'
     },
     es: {
@@ -1959,7 +3271,7 @@ window.HMEQ = (function () {
       sel: 'Revisar el texto resaltado', doc: 'Revisar todo el documento', com: 'Agregar hallazgos como comentario',
       eqSel: 'Revisar las ecuaciones seleccionadas', eqDoc: 'Buscar todas las ecuaciones en el documento', eqCom: 'Agregar hallazgos como comentario',
       locked: 'Bloqueado en esta beta. Esto leerá los números de su documento por usted; por ahora, escríbalos o péguelos en las casillas de abajo.', more: 'Más información',
-      auto: 'Revisar las ecuaciones automáticamente al seleccionarlas',
+      auto: 'Revisar las ecuaciones automáticamente al seleccionarlas', clr: 'Quitar los colores', lg: ['Se cumple', 'Se evalúa sin problemas', 'No revisada o indefinida en partes', 'No se cumple'], go: 'Haga clic en una fila para ir a esa ecuación en el documento.',
       citeEq: 'Equation checker: plausibility checks for soil and environmental results', citeCk: 'Check a result: plausibility checks for soil and environmental results', how: 'Cómo citar'
     }
   };
@@ -2022,6 +3334,11 @@ window.HMEQ = (function () {
       const b = $(id); b.textContent = (isEq ? '' : '🔒 ') + txt; b.classList.toggle('locked', !isEq); b.setAttribute('aria-disabled', String(!isEq));
     });
     $('ra-lock').hidden = true;
+    // legend for the colours in the document (shown by the Word code after "Find all equations")
+    const cols = ['#2E9E5B', '#2F6FDE', '#C99A00', '#D13438'];
+    $('ra-legend').innerHTML = l.lg.map((t, i) => '<span><i style="background:' + cols[i] + '"></i>' + esc(t) + '</span>').join('') + '<span class="hint2">' + esc(l.go) + '</span>';
+    $('ra-clr').textContent = l.clr;
+    $('ra-docbar').classList.toggle('noteq', !isEq);
   }
   function renderHead() {
     const it = C.items[view];
