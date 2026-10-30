@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Equation checker</title>
+<title>Checks</title>
 <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -44,12 +44,14 @@ body.quarto-light .hmc {
 .hmc label.auto { display: none; margin: 0; font-weight: 500; font-size: .85rem; color: var(--ink-2); }
 body.in-word .hmc label.auto { display: inline-flex; align-items: center; gap: 6px; }
 
-.hmc table.tt { width: 100%; border-collapse: collapse; font-size: .93rem; margin-top: 8px; table-layout: fixed; }
+.hmc table.tt { width: 100%; border-collapse: collapse; font-size: .93rem; margin-top: 8px; }
+#eq table.tt { table-layout: fixed; }
 .hmc table.tt th, .hmc table.tt td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; word-break: break-word; overflow-wrap: break-word; }
 .hmc table.tt th { color: var(--ink-3); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; border-top: none; }
-.hmc table.tt td:nth-child(1) { width: 10%; }
-.hmc table.tt td:nth-child(2) { width: 65%; overflow-x: auto; }
-.hmc table.tt td:nth-child(3) { width: 25%; }
+#eq table.tt td:nth-child(1) { width: 10%; }
+#eq table.tt td:nth-child(2) { width: 65%; overflow-x: auto; }
+#eq table.tt td:nth-child(3) { width: 25%; }
+.hmc table.tt td.r, .hmc table.tt th.r { text-align: right; }
 
 .hmc details.cx { padding: 0; }
 .hmc details summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--accent); list-style: none; }
@@ -84,21 +86,652 @@ body.quarto-dark .ra-top label.auto { color: #c4bdb1; } body.quarto-light .ra-to
 body.in-word .ra-top label.auto { display: inline-flex; align-items: center; gap: 6px; }
 body.quarto-dark .ra-foot a { color: #d98b56; }
 body.quarto-light .ra-foot a { color: #8a4b22; }
+
+/* ---- form engine of the checks (number fields, dropdowns, results) ---- */
+.hmc .fg > div.w3 { grid-column: span 3; }
+.hmc .fg > div.w2 { grid-column: span 2; }
+.hmc .fg > div[hidden] { display: none; }
+.hmc input[type=text], .hmc select { width: 100%; min-height: 42px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: inherit; padding: 8px 12px; }
+.hmc input.bad { border-color: var(--bad); }
+.hmc .chk { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0 2px; font-weight: 500; color: var(--ink); font-size: .98rem; }
+.hmc .chk input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+.hmc .res .big { font-size: 1.7rem; font-weight: 700; line-height: 1.15; margin: 2px 0 6px; font-family: "Source Serif 4", Georgia, serif; }
+.hmc .res .sub { color: var(--ink-2); margin: 0 0 10px; }
+.hmc .res ul.kv { list-style: none; padding: 0; margin: 10px 0 0; }
+.hmc .res ul.kv li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
+.hmc .res ul.kv li span:first-child { color: var(--ink-2); }
+.hmc .res ul.kv li span:last-child { font-weight: 600; text-align: right; }
+.hmc .empty { color: var(--ink-3); margin: 0; }
+.hmc .actions { display: grid; gap: 8px; margin-top: 14px; }
+.hmc .actions button { min-height: 42px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: .92rem; cursor: pointer; }
+.hmc .linkbtn { background: none; border: none; color: var(--accent); font: inherit; font-weight: 600; padding: 0; cursor: pointer; text-decoration: underline; }
+.hmc .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 50; }
+.hmc .toast.on { opacity: 1; }
+.hmc .smallprint { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
+/* a value and its units stay side by side in Word's narrow pane; they stack only when very narrow */
+@media (max-width: 280px) { .hmc .fg > div.w2, .hmc .fg > div.w3 { grid-column: span 6; } }
+.hmc .fg { align-items: end; }   /* a value and its units line up even when one label wraps */
+
+/* ---- frame: title, language, list of checks, buttons ---- */
+h1 { font-size: 1.25rem; margin: 2px 0 4px; }
+.ra-sub { font-size: .85rem; margin: 0 0 8px; opacity: .85; }
+.ra-beta { font-size: .6rem; border: 1px solid #e0a440; color: #e0a440; border-radius: 4px; padding: 1px 5px; vertical-align: middle; font-weight: 700; letter-spacing: .04em; }
+body.quarto-light .ra-beta { border-color: #9a6400; color: #9a6400; }
+.ra-nav { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 0 0 10px; }
+.ra-nav select { min-height: 40px; border-radius: 10px; font: inherit; font-weight: 600; padding: 4px 10px; cursor: pointer; }
+.ra-links { display: flex; gap: 8px; flex-wrap: wrap; }
+.ra-links button { flex: 1 1 auto; min-height: 36px; border-radius: 10px; font: inherit; font-size: .88rem; cursor: pointer; padding: 4px 10px; }
+body.quarto-dark .ra-nav select, body.quarto-dark .ra-links button { border: 1px solid #3a352f; background: #2a2622; color: #f0ece4; }
+body.quarto-light .ra-nav select, body.quarto-light .ra-links button { border: 1px solid #ddd6ca; background: #efebe2; color: #1f1c17; }
+.ra-bar button.locked { opacity: .55; cursor: not-allowed; font-weight: 500; }
+.ra-lock { font-size: .85rem; border-left: 3px solid #e0a440; padding: 6px 10px; margin: 0 0 8px; border-radius: 0 8px 8px 0; background: rgba(224,164,64,.1); }
+.ra-lock a, .ra-refs a { color: inherit; font-weight: 600; }
+.ra-intro { font-size: .92rem; line-height: 1.45; margin: 4px 0 0; opacity: .9; }
+.ra-gh { font-size: 1rem; margin: 16px 0 2px; }
+.ra-gs { font-size: .85rem; margin: 0 0 8px; opacity: .75; }
+.ra-card { display: block; width: 100%; text-align: left; border-radius: 12px; padding: 10px 12px; margin: 0 0 8px; font: inherit; cursor: pointer; }
+.ra-card .ra-ct { display: block; font-weight: 700; margin-bottom: 2px; }
+.ra-card .ra-cd { display: block; font-size: .87rem; opacity: .8; line-height: 1.35; }
+body.quarto-dark .ra-card { border: 1px solid #3a352f; background: #1f1c19; color: #f0ece4; }
+body.quarto-light .ra-card { border: 1px solid #ddd6ca; background: #fffdf9; color: #1f1c17; }
+body.quarto-dark .ra-card:hover { border-color: #d98b56; } body.quarto-light .ra-card:hover { border-color: #8a4b22; }
+.ra-refs { font-size: .8rem; margin: 0 0 14px; opacity: .85; }
+.ra-refs summary { cursor: pointer; font-weight: 600; }
+.ra-refs p { margin: 6px 0; }
+[hidden] { display: none !important; }
 </style></head>
 
 <body class="quarto-dark">
-<h1>RafikiArdhi · <span id="lbl-title">Equation checker</span> <span class="ck-beta" style="font-size:.6rem;border:1px solid #e0a440;color:#e0a440;border-radius:4px;padding:1px 5px">BETA</span></h1>
+<h1><span id="lbl-title">Check a result</span> <span class="ra-beta">BETA</span></h1>
 <p class="ra-sub" id="lbl-sub">No AI. Runs in this panel; nothing leaves your computer.</p>
 <div class="ra-top" id="ra-top"></div>
+<div class="ra-nav">
+  <select id="ra-tool"></select>
+  <div class="ra-links"><button type="button" id="ra-back">← All checks</button><button type="button" id="ra-web">Tools on the website ↗</button></div>
+</div>
 
-<div class="ra-bar">
+<div id="view-home"></div>
+
+<div id="view-tool">
+<div class="ra-bar" id="ra-bar">
   <button class="p" id="ra-sel">Check the selected equations</button>
   <button id="ra-doc">Find all equations in the document</button>
   <button id="ra-com">Add the findings as a comment</button>
 </div>
+<div class="ra-lock" id="ra-lock" hidden></div>
 <div class="ra-msg" id="ra-msg"></div>
 
-<div class="hmc" id="eq"></div>
+<div class="ra-pane" data-pane="eq"><div class="hmc" id="eq"></div></div>
+</div>
+
+<script>
+/* Form framework for the checks (from the site's shared helpers), with English, Kiswahili and
+   Spanish. Everything runs in the panel. The equation checker keeps its own framework (HMEQ). */
+window.HM = (function () {
+  const TT = {
+    en: { work: 'Show the working', example: 'Example', reset: 'Start over', check: 'Check your numbers.', copy: 'Copy', copied: 'Copied', copyThis: 'Copy this:',
+          small: 'Nothing you enter leaves your computer.' },
+    sw: { work: 'Onyesha hesabu', example: 'Mfano', reset: 'Anza upya', check: 'Kagua namba zako.', copy: 'Nakili', copied: 'Imenakiliwa', copyThis: 'Nakili hiki:',
+          small: 'Hakuna unachoandika kinachotoka kwenye kompyuta yako.' },
+    es: { work: 'Ver el cálculo', example: 'Ejemplo', reset: 'Empezar de nuevo', check: 'Revise sus números.', copy: 'Copiar', copied: 'Copiado', copyThis: 'Copie esto:',
+          small: 'Nada de lo que escribe sale de su computadora.' }
+  };
+  let lang = 'en'; try { lang = localStorage.getItem('ra-lang') || 'en'; } catch (e) { }
+  if (!TT[lang]) lang = 'en';
+  const T = () => TT[lang] || TT.en;
+
+  const UNITLESS = ['num', 'select', 'seg', 'check', 'info', 'sec', 'text', 'textarea'];
+  const num = s => { s = String(s).replace(/[$,\s%]/g, ''); if (s === '') return null; return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN; };
+  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function toast(root, msg) { const t = root.querySelector('.toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); }
+  function copy(root, text, msg) {
+    const done = () => toast(root, msg);
+    const fb = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (e) { window.prompt(T().copyThis, text); } ta.remove(); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(done, fb); else fb();
+  }
+
+  // cfg.initial: values to start from (kept when the language changes); api.values() returns them
+  function tool(cfg) {
+    const root = document.getElementById(cfg.id);
+    if (!root) return;
+    let f = Object.assign({}, cfg.initial || {}), raw = {};
+    const inputs = cfg.inputs;
+    const byK = Object.fromEntries(inputs.filter(i => i.k).map(i => [i.k, i]));
+
+    function defOf(i) { return typeof i.d === 'function' ? i.d(null, read()) : i.d; }
+    function read() {
+      const v = {};
+      inputs.forEach(i => { if (!i.k) return; v[i.k] = f[i.k] !== undefined ? f[i.k] : defSafe(i); });
+      return v;
+    }
+    let guard = false;
+    function defSafe(i) { if (guard) return typeof i.d === 'function' ? null : i.d; guard = true; try { return defOf(i); } finally { guard = false; } }
+    function shown(i) {
+      if (raw[i.k] !== undefined) return raw[i.k];
+      const v = f[i.k] !== undefined ? f[i.k] : defSafe(i);
+      return v == null ? '' : fmt(v, 6).replace(/,/g, '');
+    }
+    const lab = i => typeof i.l === 'function' ? i.l() : i.l;
+    function fieldHTML(i) {
+      const w = i.w ? ' class="w' + i.w + '"' : '';
+      const id = cfg.id + '-' + i.k;
+      const hint = i.h ? `<p class="hint">${i.h}</p>` : '';
+      if (i.t === 'info') return `<div${w} data-w="${i.k || ''}"><p class="hint">${i.h}</p></div>`;
+      if (i.t === 'select') {
+        const cur = String(read()[i.k]);
+        return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><select id="${id}" data-k="${i.k}">${i.opts.map(o => `<option value="${esc(o[0])}"${String(o[0]) === cur ? ' selected' : ''}>${esc(o[1])}</option>`).join('')}</select>${hint}</div>`;
+      }
+      if (i.t === 'seg') {
+        const cur = String(read()[i.k]);
+        return `<div${w} data-w="${i.k}">${i.l ? `<label>${lab(i)}</label>` : ''}<div class="seg" role="group">${i.opts.map(o => `<button type="button" data-seg="${i.k}" data-v="${esc(o[0])}" aria-pressed="${String(o[0]) === cur}">${esc(o[1])}</button>`).join('')}</div>${hint}</div>`;
+      }
+      if (i.t === 'textarea') { const val = read()[i.k] ?? ''; return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><textarea id="${id}" data-k="${i.k}" rows="${i.rows || 6}" spellcheck="false" placeholder="${esc(i.ph || '')}">${esc(val)}</textarea>${hint}</div>`; }
+      if (i.t === 'check') return `<div${w} data-w="${i.k}"><label class="chk"><input type="checkbox" data-k="${i.k}"${read()[i.k] ? ' checked' : ''}> <span>${lab(i)}</span></label>${hint}</div>`;
+      return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><input type="text" id="${id}" data-k="${i.k}" inputmode="decimal" autocomplete="off" value="${esc(shown(i))}" placeholder="${esc(i.ph || '')}">${hint}</div>`;
+    }
+
+    function render() {
+      let h = '', open = false;
+      inputs.forEach((i, n) => {
+        if (i.t === 'sec' || n === 0) {
+          if (open) h += '</div></section>';
+          h += `<section class="cx"${i.t === 'sec' && i.k ? ` data-sec="${i.k}"` : ''}><div class="step">${i.t === 'sec' ? lab(i) : cfg.step}</div><div class="fg">`;
+          open = true;
+          if (i.t === 'sec') return;
+        }
+        h += fieldHTML(i);
+      });
+      if (open) h += '</div></section>';
+      const nAct = (cfg.example ? 1 : 0) + 1;
+      h += `<section class="cx res" aria-live="polite"></section>
+        <details class="cx hm-work"><summary>${T().work}</summary><div class="db"></div></details>
+        ${cfg.after || ''}
+        <div class="actions" style="grid-template-columns:repeat(${nAct},1fr)">${cfg.example ? `<button type="button" data-act="example">${T().example}</button>` : ''}<button type="button" data-act="reset">${T().reset}</button></div>
+        <p class="smallprint">${T().small}</p><div class="toast"></div>`;
+      root.innerHTML = h;
+      run();
+    }
+
+    const U = {
+      n: fmt, fix,
+      kv: rows => `<ul class="kv">${rows.filter(Boolean).map(r => `<li><span>${r[0]}</span><span>${r[1]}</span></li>`).join('')}</ul>`,
+      note: (h, cls) => `<div class="note${cls ? ' ' + cls : ''}">${h}</div>`,
+      big: (label, val, sub) => `<div class="step">${label}</div><div class="big">${val}</div>${sub ? `<p class="sub">${sub}</p>` : ''}`,
+      empty: t => `<p class="empty">${t}</p>`,
+      esc
+    };
+
+    function run() {
+      const v = read();
+      root.querySelectorAll('input[type=text][data-k]').forEach(inp => {
+        const k = inp.dataset.k, r = raw[k];
+        inp.classList.toggle('bad', r !== undefined && r.trim() !== '' && (f[k] === undefined || (typeof f[k] === 'number' && isNaN(f[k]))));
+      });
+      inputs.forEach(i => {
+        if (!i.show) return;
+        const el = root.querySelector(i.t === 'sec' ? `[data-sec="${i.k}"]` : `[data-w="${i.k}"]`);
+        if (el) el.hidden = !i.show(v);
+      });
+      const clean = {};
+      Object.keys(v).forEach(k => { const x = v[k]; clean[k] = (typeof x === 'number' && isNaN(x)) ? null : x; });
+      let out;
+      try { out = cfg.compute(clean, U) || {}; } catch (e) { out = { html: U.empty(T().check) }; console.warn(e); }
+      if (typeof out === 'string') out = { html: out };
+      root.querySelector('.res').innerHTML = out.html || '';
+      const wd = root.querySelector('.hm-work');
+      wd.hidden = !out.work || !out.work.length;
+      wd.querySelector('.db').innerHTML = out.work && out.work.length ? `<ol class="work">${out.work.map(w => `<li>${w}</li>`).join('')}</ol>` : '';
+    }
+
+    function set(k, val) { f[k] = val; delete raw[k]; const inp = root.querySelector(`input[type=text][data-k="${k}"]`); if (inp) inp.value = shown(byK[k]); }
+    const api = { set, get: k => read()[k], values: () => Object.assign({}, f), rerender: render };
+
+    root.addEventListener('input', e => {
+      const ta = e.target.closest('textarea[data-k]');
+      if (ta) { f[ta.dataset.k] = ta.value; if (cfg.onChange) cfg.onChange(ta.dataset.k, api); run(); return; }
+      const inp = e.target.closest('input[type=text][data-k]');
+      if (!inp) return;
+      const i = byK[inp.dataset.k];
+      raw[i.k] = inp.value;
+      f[i.k] = inp.value.trim() === '' ? null : num(inp.value);
+      if (cfg.onChange) cfg.onChange(i.k, api);
+      run();
+    });
+    root.addEventListener('change', e => {
+      const el = e.target;
+      if (el.tagName === 'SELECT' && el.dataset.k) { f[el.dataset.k] = el.value; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
+      else if (el.type === 'checkbox' && el.dataset.k) { f[el.dataset.k] = el.checked; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
+    });
+    root.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      if (b.dataset.seg) {
+        f[b.dataset.seg] = b.dataset.v;
+        b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        if (cfg.onChange) cfg.onChange(b.dataset.seg, api);
+        run(); return;
+      }
+      const a = b.dataset.act;
+      if (a === 'reset') { f = {}; raw = {}; render(); }
+      else if (a === 'example' && cfg.example) { f = Object.assign({}, cfg.example); raw = {}; render(); }
+      else if (a === 'say') { const s = root.querySelector('.hm-say'); if (s) copy(root, s.textContent, T().copied); }
+    });
+    render();
+    return api;
+  }
+
+  return { tool, fmt, fix, num, esc, get lang() { return lang; }, setLang(l) { if (TT[l]) lang = l; } };
+})();
+
+</script>
+<script>
+/* The checks offered in the add-in (free tier: values typed or pasted in). Each check has its text in
+   English (en), Kiswahili (sw) and Spanish (es), and build(L) returns the form for language L.
+   The calculations are the same as on rafikiardhi.earth/checks.html. */
+window.RA_CHECKS = (function () {
+  const F = (x, d) => HM.fmt(x, d);
+  const pick = (o, L) => o[L] || o.en;
+
+  // ---------------------------------------------------------------- Back-transformation
+  const BT = {
+    en: {
+      step: 'Log-scale results', base: 'Logarithm', ln: 'Natural (ln)', l10: 'Base 10', mu: 'Mean of the log values', sd: 'SD of the log values',
+      sdh: 'For a kriged estimate, use the square root of the kriging variance.', c: 'Constant added before logging, if log(x + c)', rep: 'Value reported in original units (optional)',
+      empty: 'Enter the mean and SD of the log values.', med: 'Median (geometric mean)', mean: 'Mean (arithmetic, lognormal)', ratio: 'Mean ÷ median', range: 'Range holding 95% of values',
+      isMed: (r, m, p) => `<b>The reported ${r} is the median, not the mean.</b> The arithmetic mean is about ${m}, ${p}% higher. That matters for totals, stocks and loads, which add up means.`,
+      isMean: r => `<b>The reported ${r} is the bias-corrected mean.</b> Correctly back-transformed.`,
+      other: (r, o, w, t) => `<b>The reported ${r} matches ${o} logs</b> (${w}), not ${t} logs. Check which logarithm was used.`,
+      nat: 'natural', b10: 'base-10', wMed: 'median', wMean: 'mean',
+      neither: (r, a, b) => `The reported ${r} matches neither the median (${a}) nor the mean (${b}). Check the logarithm base, any constant added before logging, and whether the SD is of the logs or of the original values.`,
+      wMedL: 'Median', wMeanL: 'Mean', wConv: '(σ is converted to natural-log units first: σ × ln 10)',
+      wAssume: 'This assumes the log values are roughly normal. For lognormal kriging, the variogram tool applies the full correction, including the Lagrange term.'
+    },
+    sw: {
+      step: 'Matokeo ya kipimo cha logariti', base: 'Logariti', ln: 'Asilia (ln)', l10: 'Msingi 10', mu: 'Wastani wa thamani za logariti', sd: 'Mkengeuko sanifu (SD) wa thamani za logariti',
+      sdh: 'Kwa makadirio ya kriging, tumia kipeuo cha pili (square root) cha tofauti ya kriging (kriging variance).', c: 'Kiasi kilichoongezwa kabla ya logariti, kama log(x + c)', rep: 'Thamani iliyoripotiwa katika vipimo asilia (si lazima)',
+      empty: 'Weka wastani na SD wa thamani za logariti.', med: 'Wastani wa kati (median; wastani wa kijiometri)', mean: 'Wastani (wa kawaida, lognormal)', ratio: 'Wastani ÷ wastani wa kati', range: 'Kiwango kinachobeba 95% ya thamani',
+      isMed: (r, m, p) => `<b>Thamani iliyoripotiwa ${r} ni wastani wa kati (median), si wastani (mean).</b> Wastani wa kawaida ni takriban ${m}, juu kwa ${p}%. Hili ni muhimu kwa jumla, akiba (stocks) na mizigo (loads), ambazo hujumlisha wastani.`,
+      isMean: r => `<b>Thamani iliyoripotiwa ${r} ni wastani uliorekebishwa kwa upendeleo (bias-corrected mean).</b> Imerejeshwa ipasavyo.`,
+      other: (r, o, w, t) => `<b>Thamani iliyoripotiwa ${r} inalingana na logariti za ${o}</b> (${w}), si logariti za ${t}. Kagua logariti ipi ilitumika.`,
+      nat: 'asilia', b10: 'msingi 10', wMed: 'wastani wa kati', wMean: 'wastani',
+      neither: (r, a, b) => `Thamani iliyoripotiwa ${r} hailingani na wastani wa kati (${a}) wala wastani (${b}). Kagua msingi wa logariti, kiasi chochote kilichoongezwa kabla ya logariti, na kama SD ni ya logariti au ya thamani asilia.`,
+      wMedL: 'Wastani wa kati', wMeanL: 'Wastani', wConv: '(σ hubadilishwa kwanza kuwa vipimo vya logariti asilia: σ × ln 10)',
+      wAssume: 'Hii inachukulia kuwa thamani za logariti zinakaribia mgawanyo wa kawaida (normal). Kwa kriging ya lognormal, zana ya variogram hutumia marekebisho kamili, ikiwemo kipengele cha Lagrange.'
+    },
+    es: {
+      step: 'Resultados en escala logarítmica', base: 'Logaritmo', ln: 'Natural (ln)', l10: 'Base 10', mu: 'Media de los valores logarítmicos', sd: 'DE de los valores logarítmicos',
+      sdh: 'Para una estimación por kriging, use la raíz cuadrada de la varianza de kriging.', c: 'Constante sumada antes del logaritmo, si log(x + c)', rep: 'Valor informado en unidades originales (opcional)',
+      empty: 'Introduzca la media y la DE de los valores logarítmicos.', med: 'Mediana (media geométrica)', mean: 'Media (aritmética, lognormal)', ratio: 'Media ÷ mediana', range: 'Rango que contiene el 95 % de los valores',
+      isMed: (r, m, p) => `<b>El valor informado ${r} es la mediana, no la media.</b> La media aritmética es de aproximadamente ${m}, un ${p} % mayor. Esto importa para totales, reservas y cargas, que suman medias.`,
+      isMean: r => `<b>El valor informado ${r} es la media corregida por sesgo.</b> Retransformado correctamente.`,
+      other: (r, o, w, t) => `<b>El valor informado ${r} coincide con logaritmos ${o}</b> (${w}), no con logaritmos ${t}. Verifique qué logaritmo se usó.`,
+      nat: 'naturales', b10: 'en base 10', wMed: 'mediana', wMean: 'media',
+      neither: (r, a, b) => `El valor informado ${r} no coincide ni con la mediana (${a}) ni con la media (${b}). Verifique la base del logaritmo, cualquier constante sumada antes del logaritmo y si la DE es de los logaritmos o de los valores originales.`,
+      wMedL: 'Mediana', wMeanL: 'Media', wConv: '(σ se convierte primero a unidades de logaritmo natural: σ × ln 10)',
+      wAssume: 'Esto supone que los valores logarítmicos son aproximadamente normales. Para el kriging lognormal, la herramienta de variograma aplica la corrección completa, incluido el término de Lagrange.'
+    }
+  };
+  function buildBT(L) {
+    const S = pick(BT, L);
+    return {
+      step: S.step,
+      example: { base: 'ln', c: 0, mu: 0.4, sd: 0.65, rep: 1.49 },
+      inputs: [
+        { k: 'base', l: S.base, t: 'seg', d: 'ln', opts: [['ln', S.ln], ['log10', S.l10]] },
+        { k: 'mu', l: S.mu, t: 'num', w: 3 },
+        { k: 'sd', l: S.sd, t: 'num', w: 3, h: S.sdh },
+        { k: 'c', l: S.c, t: 'num', d: 0, w: 3 },
+        { k: 'rep', l: S.rep, t: 'num', w: 3 }
+      ],
+      compute(v, U) {
+        if (v.mu == null || !(v.sd >= 0)) return U.empty(S.empty);
+        const est = (base, mu, sd) => { const k = base === 'ln' ? 1 : Math.LN10; return { med: Math.exp(k * mu) - (v.c || 0), mean: Math.exp(k * mu + (k * sd) ** 2 / 2) - (v.c || 0), lo: Math.exp(k * (mu - 1.96 * sd)) - (v.c || 0), hi: Math.exp(k * (mu + 1.96 * sd)) - (v.c || 0) }; };
+        const e = est(v.base, v.mu, v.sd), d = Math.abs(e.mean) < 10 ? 3 : 2;
+        let h = U.kv([[S.med, F(e.med, d)], [S.mean, F(e.mean, d)], [S.ratio, F(e.mean / e.med, 3)], [S.range, `${F(e.lo, d)} – ${F(e.hi, d)}`]]);
+        if (v.rep > 0) {
+          const near = (a, b) => Math.abs(a - b) / Math.abs(b) < 0.03;
+          if (near(v.rep, e.med)) h = U.note(S.isMed(v.rep, F(e.mean, d), F((e.mean / e.med - 1) * 100, 0)), 'bad') + h;
+          else if (near(v.rep, e.mean)) h = U.note(S.isMean(v.rep), 'good') + h;
+          else {
+            const alt = est(v.base === 'ln' ? 'log10' : 'ln', v.mu, v.sd);
+            if (near(v.rep, alt.med) || near(v.rep, alt.mean)) h = U.note(S.other(v.rep, v.base === 'ln' ? S.b10 : S.nat, near(v.rep, alt.med) ? S.wMed : S.wMean, v.base === 'ln' ? S.nat : S.b10), 'bad') + h;
+            else h = U.note(S.neither(v.rep, F(e.med, d), F(e.mean, d))) + h;
+          }
+        }
+        const k = v.base === 'ln' ? 'e' : '10', kk = v.base === 'ln' ? '' : ' × ln 10';
+        return { html: h, work: [`${S.wMedL} = ${k}^μ${v.c ? ' − c' : ''} = ${F(e.med, d + 1)}`, `${S.wMeanL} = ${k}^(μ + σ²${kk ? '·ln10' : ''}/2)${v.c ? ' − c' : ''} = ${F(e.mean, d + 1)}${v.base === 'log10' ? ' ' + S.wConv : ''}`, S.wAssume] };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Carbon stock arithmetic
+  const RHO_G = 2.65; // particle density of coarse fragments, g/cm³
+  function stock(p) { // returns Mg C/ha
+    const C = p.cunit === 'pct' ? p.c * 10 : p.cunit === 'mgkg' ? p.c / 1000 : p.c;           // g/kg
+    const bd = p.bdunit === 'kgm3' ? p.bd / 1000 : p.bd;                                         // g/cm³
+    const dep = p.dunit === 'm' ? p.dep * 100 : p.dunit === 'mm' ? p.dep / 10 : p.dep;           // cm
+    const cf = (p.cf || 0) / 100;
+    let mfe; // g of fine earth per cm³ of whole soil
+    if (p.bdbasis === 'whole') mfe = p.cfbasis === 'mass' ? bd * (1 - cf) : bd - cf * RHO_G;
+    else { const cfv = p.cfbasis === 'vol' ? cf : (cf / RHO_G) / (cf / RHO_G + (1 - cf) / bd); mfe = bd * (1 - cfv); }
+    return { s: C * mfe * dep * 0.1, C, bd, dep, mfe };
+  }
+  const SA = {
+    en: {
+      step: 'Inputs as reported', c: 'Organic carbon', units: 'Units', bd: 'Bulk density', bdbasis: 'Bulk density is of', fine: 'Fine earth only (stones removed, volume corrected)', whole: 'Whole soil, stones included',
+      dep: 'Layer thickness', cf: 'Coarse fragments (stones, gravel), % of the soil', cfh: '', cfbasis: 'Fragments measured by', vol: 'Volume', mass: 'Mass', sec: 'Reported stock (optional)', rep: 'Stock',
+      empty: 'Enter carbon, bulk density, thickness and coarse fragments.', big: 'Recalculated stock',
+      w1: (c, b, d) => `Carbon = ${c} g/kg; bulk density = ${b} g/cm³; thickness = ${d} cm`,
+      w2: (m, basis, by, conv) => `Fine earth per volume of soil = ${m} g/cm³ (${basis}, fragments by ${by}${conv ? `, converted using a stone density of ${RHO_G} g/cm³` : ''})`,
+      bWhole: 'whole-soil bulk density', bFine: 'fine-earth bulk density', byVol: 'volume', byMass: 'mass',
+      w3: s => `Stock = C (g/kg) × fine earth (g/cm³) × thickness (cm) × 0.1 = ${s} Mg C/ha`,
+      match: r => `<b>Matches.</b> The reported stock (${r} Mg C/ha) follows from the inputs.`,
+      tries: ['% read as g/kg (carbon 10× too low)', 'Stones ignored', 'Stone fraction on the wrong basis (volume vs. mass)', 'Bulk density on the wrong basis (fine earth vs. whole soil)', 'Stones subtracted twice (fine-earth bulk density and a volume correction)', 'Organic matter used instead of carbon (× 1.724)', 'Thickness in mm read as cm, or cm as mm'],
+      gives: 'gives', lowLab: 'The stock is in kg C/m² but labelled Mg C/ha (10× too low)', highLab: 'The stock is 10× too high: kg C/m² and Mg C/ha mixed up',
+      off: (p, hits) => `<b>Doesn't match (${p}% off).</b> This slip reproduces the reported value:<br>• ${hits}`,
+      none: p => `<b>Doesn't match (${p}% off),</b> and none of the common slips explains it. Check whether the stock is for a different depth, an equivalent soil mass basis, or a sum of several layers.`
+    },
+    sw: {
+      step: 'Data kama zilivyoripotiwa', c: 'Kaboni hai (organic carbon)', units: 'Vipimo', bd: 'Msongamano wa udongo (bulk density)', bdbasis: 'Msongamano ni wa', fine: 'Udongo laini pekee (mawe yameondolewa, ujazo umerekebishwa)', whole: 'Udongo wote, pamoja na mawe',
+      dep: 'Unene wa tabaka', cf: 'Vipande vikubwa (mawe, changarawe), % ya udongo', cfh: '', cfbasis: 'Vipande vimepimwa kwa', vol: 'Ujazo', mass: 'Uzito', sec: 'Akiba iliyoripotiwa (si lazima)', rep: 'Akiba',
+      empty: 'Weka kaboni, msongamano, unene na vipande vikubwa.', big: 'Akiba iliyokokotolewa upya',
+      w1: (c, b, d) => `Kaboni = ${c} g/kg; msongamano = ${b} g/cm³; unene = ${d} cm`,
+      w2: (m, basis, by, conv) => `Udongo laini kwa kila ujazo wa udongo = ${m} g/cm³ (${basis}, vipande kwa ${by}${conv ? `, imebadilishwa kwa kutumia msongamano wa mawe wa ${RHO_G} g/cm³` : ''})`,
+      bWhole: 'msongamano wa udongo wote', bFine: 'msongamano wa udongo laini', byVol: 'ujazo', byMass: 'uzito',
+      w3: s => `Akiba = C (g/kg) × udongo laini (g/cm³) × unene (cm) × 0.1 = ${s} Mg C/ha`,
+      match: r => `<b>Inalingana.</b> Akiba iliyoripotiwa (${r} Mg C/ha) inatokana na data zilizotolewa.`,
+      tries: ['% imesomwa kama g/kg (kaboni chini mara 10)', 'Mawe yamepuuzwa', 'Sehemu ya mawe kwa msingi usio sahihi (ujazo dhidi ya uzito)', 'Msongamano kwa msingi usio sahihi (udongo laini dhidi ya udongo wote)', 'Mawe yametolewa mara mbili (msongamano wa udongo laini na marekebisho ya ujazo)', 'Viumbehai (organic matter) vimetumika badala ya kaboni (× 1.724)', 'Unene wa mm umesomwa kama cm, au cm kama mm'],
+      gives: 'inatoa', lowLab: 'Akiba iko katika kg C/m² lakini imeandikwa Mg C/ha (chini mara 10)', highLab: 'Akiba iko juu mara 10: kg C/m² na Mg C/ha zimechanganywa',
+      off: (p, hits) => `<b>Hailingani (tofauti ya ${p}%).</b> Kosa hili linazalisha thamani iliyoripotiwa:<br>• ${hits}`,
+      none: p => `<b>Hailingani (tofauti ya ${p}%),</b> na hakuna kosa la kawaida linaloeleza. Kagua kama akiba ni ya kina tofauti, ya msingi wa uzito sawa wa udongo (equivalent soil mass), au jumla ya tabaka kadhaa.`
+    },
+    es: {
+      step: 'Datos tal como se informaron', c: 'Carbono orgánico', units: 'Unidades', bd: 'Densidad aparente', bdbasis: 'La densidad aparente es de', fine: 'Solo tierra fina (sin piedras, volumen corregido)', whole: 'Suelo completo, con piedras',
+      dep: 'Espesor de la capa', cf: 'Fragmentos gruesos (piedras, grava), % del suelo', cfh: '', cfbasis: 'Fragmentos medidos por', vol: 'Volumen', mass: 'Masa', sec: 'Reserva informada (opcional)', rep: 'Reserva',
+      empty: 'Introduzca el carbono, la densidad aparente, el espesor y los fragmentos gruesos.', big: 'Reserva recalculada',
+      w1: (c, b, d) => `Carbono = ${c} g/kg; densidad aparente = ${b} g/cm³; espesor = ${d} cm`,
+      w2: (m, basis, by, conv) => `Tierra fina por volumen de suelo = ${m} g/cm³ (${basis}, fragmentos por ${by}${conv ? `, convertido usando una densidad de piedra de ${RHO_G} g/cm³` : ''})`,
+      bWhole: 'densidad aparente del suelo completo', bFine: 'densidad aparente de la tierra fina', byVol: 'volumen', byMass: 'masa',
+      w3: s => `Reserva = C (g/kg) × tierra fina (g/cm³) × espesor (cm) × 0.1 = ${s} Mg C/ha`,
+      match: r => `<b>Coincide.</b> La reserva informada (${r} Mg C/ha) se deriva de los datos.`,
+      tries: ['% leído como g/kg (carbono 10 veces menor)', 'Piedras ignoradas', 'Fracción de piedras en la base equivocada (volumen frente a masa)', 'Densidad aparente en la base equivocada (tierra fina frente a suelo completo)', 'Piedras restadas dos veces (densidad aparente de tierra fina y corrección de volumen)', 'Materia orgánica usada en lugar de carbono (× 1.724)', 'Espesor en mm leído como cm, o en cm como mm'],
+      gives: 'da', lowLab: 'La reserva está en kg C/m² pero etiquetada como Mg C/ha (10 veces menor)', highLab: 'La reserva es 10 veces mayor: kg C/m² y Mg C/ha confundidos',
+      off: (p, hits) => `<b>No coincide (${p} % de diferencia).</b> Este error reproduce el valor informado:<br>• ${hits}`,
+      none: p => `<b>No coincide (${p} % de diferencia),</b> y ninguno de los errores comunes lo explica. Verifique si la reserva corresponde a otra profundidad, a una base de masa de suelo equivalente o a la suma de varias capas.`
+    }
+  };
+  function buildSA(L) {
+    const S = pick(SA, L);
+    return {
+      step: S.step,
+      example: { c: 1.8, cunit: 'pct', bd: 1.35, bdunit: 'gcm3', bdbasis: 'fine', dep: 30, dunit: 'cm', cf: 15, cfbasis: 'vol', rep: 72.9, repunit: 'mgha' },
+      inputs: [
+        { k: 'c', l: S.c, t: 'num', w: 3 }, { k: 'cunit', l: S.units, t: 'select', d: 'pct', w: 3, opts: [['pct', '%'], ['gkg', 'g/kg (= mg/g)'], ['mgkg', 'mg/kg']] },
+        { k: 'bd', l: S.bd, t: 'num', w: 3 }, { k: 'bdunit', l: S.units, t: 'select', d: 'gcm3', w: 3, opts: [['gcm3', 'g/cm³ (= Mg/m³)'], ['kgm3', 'kg/m³']] },
+        { k: 'bdbasis', l: S.bdbasis, t: 'select', d: 'fine', opts: [['fine', S.fine], ['whole', S.whole]] },
+        { k: 'dep', l: S.dep, t: 'num', w: 3 }, { k: 'dunit', l: S.units, t: 'select', d: 'cm', w: 3, opts: [['cm', 'cm'], ['m', 'm'], ['mm', 'mm']] },
+        { k: 'cf', l: S.cf, t: 'num', d: 0, w: 3 }, { k: 'cfbasis', l: S.cfbasis, t: 'select', d: 'vol', w: 3, opts: [['vol', S.vol], ['mass', S.mass]] },
+        { t: 'sec', l: S.sec },
+        { k: 'rep', l: S.rep, t: 'num', w: 3 }, { k: 'repunit', l: S.units, t: 'select', d: 'mgha', w: 3, opts: [['mgha', 'Mg C/ha (= t C/ha)'], ['kgm2', 'kg C/m²']] }
+      ],
+      compute(v, U) {
+        if (!(v.c > 0) || !(v.bd > 0) || !(v.dep > 0) || !(v.cf >= 0 && v.cf < 100)) return U.empty(S.empty);
+        const r = stock(v);
+        let h = U.big(S.big, `${F(r.s, 2)} Mg C/ha`, `= ${F(r.s / 10, 3)} kg C/m²`);
+        const work = [S.w1(F(r.C, 3), F(r.bd, 3), F(r.dep, 2)),
+          S.w2(F(r.mfe, 3), v.bdbasis === 'whole' ? S.bWhole : S.bFine, v.cfbasis === 'vol' ? S.byVol : S.byMass, v.cfbasis !== (v.bdbasis === 'whole' ? 'mass' : 'vol')),
+          S.w3(F(r.s, 2))];
+        if (v.rep > 0) {
+          const rep = v.repunit === 'kgm2' ? v.rep * 10 : v.rep, near = x => Math.abs(x - rep) / rep < 0.03;
+          if (near(r.s)) h += U.note(S.match(F(rep, 2)), 'good');
+          else {
+            const tries = [
+              { ...v, cunit: v.cunit === 'pct' ? 'gkg' : 'pct' },
+              { ...v, cf: 0 },
+              { ...v, cfbasis: v.cfbasis === 'vol' ? 'mass' : 'vol' },
+              { ...v, bdbasis: v.bdbasis === 'fine' ? 'whole' : 'fine' },
+              null,
+              { ...v, c: v.c * 1.724 },
+              { ...v, dunit: v.dunit === 'cm' ? 'mm' : 'cm' }
+            ];
+            const hits = [];
+            tries.forEach((p, n) => {
+              const val = p ? stock(p).s : r.s * (1 - (v.cf || 0) / 100);
+              if (isFinite(val) && near(val)) hits.push(`${S.tries[n]}: ${S.gives} ${F(val, 2)}`);
+            });
+            if (Math.abs(r.s / 10 - rep) / rep < 0.03) hits.push(S.lowLab);
+            if (Math.abs(r.s * 10 - rep) / rep < 0.03) hits.push(S.highLab);
+            h += hits.length ? U.note(S.off(F((rep / r.s - 1) * 100, 0), hits.join('<br>• ')), 'bad') : U.note(S.none(F((rep / r.s - 1) * 100, 0)));
+          }
+        }
+        return { html: h, work };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Lab method conversions
+  // factors and behaviour are fixed; the text is per language
+  const CF = {
+    wb: { f: 1.30 }, som: { f: 1.724 }, loi: { f: 1.724, inv: true }, ph: { f: 0.6, offset: true },
+    phk: { f: 0.9, offset: true }, p: { f: 0.4364 }, k: { f: 0.8301 }, pct: { f: 10 }
+  };
+  const LC = {
+    en: {
+      step: 'Conversion', conv: 'Convert', dir: 'Direction', fwd: 'Forward', rev: 'Reverse', x: 'Value', f: 'Factor', assume: 'Assumption:', from: (a, x) => `from ${a} = ${x}`,
+      c: {
+        wb: ['Walkley–Black carbon → total organic carbon', 'Walkley–Black oxidises only part of the organic carbon; 77% recovery (factor 1.30) is the classic assumption, but recovery varies from about 60% to over 90% with soil type, so a soil-specific factor is better.', 'WB carbon (%)', 'Total organic carbon (%)'],
+        som: ['Organic carbon → organic matter', '1.724 (van Bemmelen) assumes organic matter is 58% carbon. Pribyl (2010) found about 50% is closer for most soils, giving a factor of 2. Always state which factor was used.', 'Organic carbon (%)', 'Organic matter (%)'],
+        loi: ['Loss on ignition → organic carbon', 'Treats all mass lost on ignition as organic matter. Clay minerals lose structural water and carbonates can decompose, so LOI overestimates organic matter in clay-rich or calcareous soils; a site-specific regression is better.', 'Loss on ignition (%)', 'Organic carbon (%)'],
+        ph: ['pH in water → pH in 0.01 M CaCl₂', 'CaCl₂ readings are typically 0.5–0.8 lower than water readings in non-saline soils; the gap narrows in saline soils and at high pH. Use a regression from your own region where possible.', 'pH (water)', 'pH (CaCl₂)'],
+        phk: ['pH in water → pH in 1 M KCl', 'KCl readings are usually about 0.5–1.2 lower than water; the gap varies with exchangeable acidity and is smallest in neutral to alkaline soils.', 'pH (water)', 'pH (KCl)'],
+        p: ['P₂O₅ → elemental P', 'Exact, from molar masses (2 × 30.97 ÷ 141.94). Fertilizer labels and some labs report P₂O₅.', 'P₂O₅', 'P'],
+        k: ['K₂O → elemental K', 'Exact, from molar masses (2 × 39.10 ÷ 94.20).', 'K₂O', 'K'],
+        pct: ['% → g/kg', 'Exact: 1% = 10 g/kg = 10,000 mg/kg (ppm). Also, meq/100 g = cmol(+)/kg exactly.', '%', 'g/kg']
+      }
+    },
+    sw: {
+      step: 'Ubadilishaji', conv: 'Badilisha', dir: 'Mwelekeo', fwd: 'Mbele', rev: 'Kinyume', x: 'Thamani', f: 'Kigezo', assume: 'Dhana:', from: (a, x) => `kutoka ${a} = ${x}`,
+      c: {
+        wb: ['Kaboni ya Walkley–Black → jumla ya kaboni hai', 'Walkley–Black huoksidisha sehemu tu ya kaboni hai; urejeshaji wa 77% (kigezo 1.30) ndiyo dhana ya kawaida, lakini urejeshaji hutofautiana kutoka takriban 60% hadi zaidi ya 90% kulingana na aina ya udongo, kwa hiyo kigezo maalum cha udongo husika ni bora zaidi.', 'Kaboni ya WB (%)', 'Jumla ya kaboni hai (%)'],
+        som: ['Kaboni hai → viumbehai (organic matter)', '1.724 (van Bemmelen) inachukulia kuwa viumbehai vina kaboni 58%. Pribyl (2010) aligundua kuwa takriban 50% iko karibu zaidi kwa udongo mwingi, ikitoa kigezo cha 2. Daima eleza kigezo kipi kilitumika.', 'Kaboni hai (%)', 'Viumbehai (%)'],
+        loi: ['Upotevu kwa kuchoma (LOI) → kaboni hai', 'Inachukulia uzito wote unaopotea wakati wa kuchoma kuwa viumbehai. Madini ya mfinyanzi hupoteza maji ya kimuundo na kabonati zinaweza kuoza, kwa hiyo LOI hukadiria viumbehai kupita kiasi katika udongo wenye mfinyanzi mwingi au chokaa; regresheni maalum ya eneo ni bora zaidi.', 'Upotevu kwa kuchoma (%)', 'Kaboni hai (%)'],
+        ph: ['pH katika maji → pH katika 0.01 M CaCl₂', 'Vipimo vya CaCl₂ kwa kawaida huwa chini kwa 0.5–0.8 kuliko vya maji katika udongo usio na chumvi; tofauti hupungua katika udongo wenye chumvi na pH ya juu. Tumia regresheni ya eneo lako inapowezekana.', 'pH (maji)', 'pH (CaCl₂)'],
+        phk: ['pH katika maji → pH katika 1 M KCl', 'Vipimo vya KCl kwa kawaida huwa chini kwa takriban 0.5–1.2 kuliko vya maji; tofauti hubadilika kulingana na asidi inayobadilishana (exchangeable acidity) na ni ndogo zaidi katika udongo usio na asidi hadi wenye alkali.', 'pH (maji)', 'pH (KCl)'],
+        p: ['P₂O₅ → P ya kielementi', 'Sahihi kabisa, kutoka kwa masi za molari (2 × 30.97 ÷ 141.94). Lebo za mbolea na baadhi ya maabara huripoti P₂O₅.', 'P₂O₅', 'P'],
+        k: ['K₂O → K ya kielementi', 'Sahihi kabisa, kutoka kwa masi za molari (2 × 39.10 ÷ 94.20).', 'K₂O', 'K'],
+        pct: ['% → g/kg', 'Sahihi kabisa: 1% = 10 g/kg = 10,000 mg/kg (ppm). Pia, meq/100 g = cmol(+)/kg sawasawa.', '%', 'g/kg']
+      }
+    },
+    es: {
+      step: 'Conversión', conv: 'Convertir', dir: 'Dirección', fwd: 'Directa', rev: 'Inversa', x: 'Valor', f: 'Factor', assume: 'Supuesto:', from: (a, x) => `desde ${a} = ${x}`,
+      c: {
+        wb: ['Carbono Walkley–Black → carbono orgánico total', 'Walkley–Black oxida solo parte del carbono orgánico; una recuperación del 77 % (factor 1.30) es el supuesto clásico, pero la recuperación varía de alrededor del 60 % a más del 90 % según el tipo de suelo, por lo que es mejor un factor específico del suelo.', 'Carbono WB (%)', 'Carbono orgánico total (%)'],
+        som: ['Carbono orgánico → materia orgánica', '1.724 (van Bemmelen) supone que la materia orgánica tiene un 58 % de carbono. Pribyl (2010) encontró que alrededor del 50 % es más cercano para la mayoría de los suelos, lo que da un factor de 2. Indique siempre qué factor se usó.', 'Carbono orgánico (%)', 'Materia orgánica (%)'],
+        loi: ['Pérdida por ignición → carbono orgánico', 'Considera toda la masa perdida por ignición como materia orgánica. Los minerales arcillosos pierden agua estructural y los carbonatos pueden descomponerse, por lo que la LOI sobrestima la materia orgánica en suelos ricos en arcilla o calcáreos; es mejor una regresión específica del sitio.', 'Pérdida por ignición (%)', 'Carbono orgánico (%)'],
+        ph: ['pH en agua → pH en CaCl₂ 0.01 M', 'Las lecturas en CaCl₂ suelen ser 0.5–0.8 más bajas que en agua en suelos no salinos; la diferencia se reduce en suelos salinos y a pH alto. Use una regresión de su propia región cuando sea posible.', 'pH (agua)', 'pH (CaCl₂)'],
+        phk: ['pH en agua → pH en KCl 1 M', 'Las lecturas en KCl suelen ser 0.5–1.2 más bajas que en agua; la diferencia varía con la acidez intercambiable y es menor en suelos neutros a alcalinos.', 'pH (agua)', 'pH (KCl)'],
+        p: ['P₂O₅ → P elemental', 'Exacto, a partir de masas molares (2 × 30.97 ÷ 141.94). Las etiquetas de fertilizantes y algunos laboratorios informan P₂O₅.', 'P₂O₅', 'P'],
+        k: ['K₂O → K elemental', 'Exacto, a partir de masas molares (2 × 39.10 ÷ 94.20).', 'K₂O', 'K'],
+        pct: ['% → g/kg', 'Exacto: 1 % = 10 g/kg = 10,000 mg/kg (ppm). Además, meq/100 g = cmol(+)/kg exactamente.', '%', 'g/kg']
+      }
+    }
+  };
+  function buildLC(L) {
+    const S = pick(LC, L);
+    return {
+      step: S.step,
+      inputs: [
+        { k: 'conv', l: S.conv, t: 'select', d: 'wb', opts: Object.keys(CF).map(k => [k, S.c[k][0]]) },
+        { k: 'dir', l: S.dir, t: 'seg', d: 'fwd', opts: [['fwd', S.fwd], ['rev', S.rev]] },
+        { k: 'x', l: S.x, t: 'num', w: 3 },
+        { k: 'f', l: S.f, t: 'num', d: (u, v) => CF[(v && v.conv) || 'wb'].f, w: 3 }
+      ],
+      onChange(k, api) { if (k === 'conv') api.set('f', CF[api.get('conv')].f); },
+      compute(v, U) {
+        const c = CF[v.conv], t = S.c[v.conv], f = v.f;
+        if (v.x == null || !(f > 0) && !c.offset) return U.note(`<b>${S.assume}</b> ${t[1]}`);
+        const fwd = v.dir === 'fwd';
+        let y, formula;
+        if (c.offset) { y = fwd ? v.x - f : v.x + f; formula = fwd ? `${v.x} − ${f}` : `${v.x} + ${f}`; }
+        else if (c.inv) { y = fwd ? v.x / f : v.x * f; formula = fwd ? `${v.x} ÷ ${f}` : `${v.x} × ${f}`; }
+        else { y = fwd ? v.x * f : v.x / f; formula = fwd ? `${v.x} × ${f}` : `${v.x} ÷ ${f}`; }
+        const [a, b] = fwd ? [t[2], t[3]] : [t[3], t[2]];
+        return { html: U.big(b, F(y, 4), S.from(a, v.x)) + U.note(`<b>${S.assume}</b> ${t[1]}`), work: [`${b} = ${formula} = ${F(y, 5)}`] };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Coordinates and distances
+  const R = 6371.0088;
+  const CO = {
+    en: {
+      step: 'Check', mode: 'I want to', conv: 'Convert a distance', pts: 'Check coordinates', lat: 'Latitude of the study area (°)', val: 'Distance', units: 'Units', deg: 'degrees', km: 'kilometres', m: 'metres',
+      xy: 'Coordinates, one point per line: x (or longitude), y (or latitude)', empty1: 'Enter the latitude and a distance.', ns: 'North–south', ew: 'East–west', ratio: 'East–west ÷ north–south',
+      shrink: (lat, p) => `At ${lat}°, a degree of longitude is only ${p}% of a degree of latitude. Distances or variogram ranges computed in degrees mix the two and are distorted; project the coordinates first.`,
+      wDeg: (a, lat, b) => `1° latitude ≈ ${a} km; 1° longitude ≈ ${a} × cos(${lat}°) = ${b} km`,
+      inLat: 'In degrees of latitude', inLon: 'In degrees of longitude', empty2: 'Paste at least two points.',
+      proj: x => `These look like projected coordinates (values up to ${x}), so distances can be computed directly, in the projection's units (usually metres).`,
+      projNote: 'Check the projection suits the area: UTM, or a local equal-area or conformal projection, keeps distances accurate within its zone.',
+      geo: x => `These look like longitude and latitude (around ${x}°). Distances must be computed on the sphere or after projecting.`,
+      maxd: 'Largest true distance between points', flat: 'Same pair if degrees are treated as flat (× 111 km)', stretch: 'East–west stretch if degrees are used directly',
+      bad: x => `Using degrees directly stretches east–west distances ${x}× relative to north–south here. A variogram computed this way is distorted and looks anisotropic when it isn't. Project the coordinates (for example to UTM) first.`,
+      wHav: 'True distance by the haversine formula with Earth radius 6,371 km'
+    },
+    sw: {
+      step: 'Ukaguzi', mode: 'Nataka', conv: 'Kubadilisha umbali', pts: 'Kukagua viwianishi', lat: 'Latitudo ya eneo la utafiti (°)', val: 'Umbali', units: 'Vipimo', deg: 'digrii', km: 'kilomita', m: 'mita',
+      xy: 'Viwianishi, nukta moja kwa kila mstari: x (au longitudo), y (au latitudo)', empty1: 'Weka latitudo na umbali.', ns: 'Kaskazini–kusini', ew: 'Mashariki–magharibi', ratio: 'Mashariki–magharibi ÷ kaskazini–kusini',
+      shrink: (lat, p) => `Katika ${lat}°, digrii moja ya longitudo ni ${p}% tu ya digrii moja ya latitudo. Umbali au masafa ya variogram yanayokokotolewa kwa digrii huchanganya hizo mbili na hupotoka; fanya makadirio (project) ya viwianishi kwanza.`,
+      wDeg: (a, lat, b) => `1° ya latitudo ≈ ${a} km; 1° ya longitudo ≈ ${a} × cos(${lat}°) = ${b} km`,
+      inLat: 'Kwa digrii za latitudo', inLon: 'Kwa digrii za longitudo', empty2: 'Bandika angalau nukta mbili.',
+      proj: x => `Hivi vinaonekana kuwa viwianishi vilivyofanyiwa makadirio (projected; thamani hadi ${x}), kwa hiyo umbali unaweza kukokotolewa moja kwa moja, kwa vipimo vya makadirio hayo (kwa kawaida mita).`,
+      projNote: 'Hakikisha makadirio yanafaa eneo husika: UTM, au makadirio ya eneo yenye eneo-sawa (equal-area) au conformal, huweka umbali sahihi ndani ya ukanda wake.',
+      geo: x => `Hivi vinaonekana kuwa longitudo na latitudo (karibu na ${x}°). Umbali lazima ukokotolewe kwenye tufe au baada ya kufanya makadirio (projecting).`,
+      maxd: 'Umbali halisi mkubwa zaidi kati ya nukta', flat: 'Jozi hiyo hiyo ikiwa digrii zitachukuliwa kama tambarare (× 111 km)', stretch: 'Kunyooshwa kwa mashariki–magharibi ikiwa digrii zitatumika moja kwa moja',
+      bad: x => `Kutumia digrii moja kwa moja hunyoosha umbali wa mashariki–magharibi mara ${x} ukilinganisha na kaskazini–kusini hapa. Variogram inayokokotolewa hivi hupotoka na huonekana kuwa na anisotropi wakati haina. Fanya makadirio ya viwianishi (kwa mfano kuwa UTM) kwanza.`,
+      wHav: 'Umbali halisi kwa fomula ya haversine, na nusu-kipenyo cha Dunia km 6,371'
+    },
+    es: {
+      step: 'Comprobación', mode: 'Quiero', conv: 'Convertir una distancia', pts: 'Comprobar coordenadas', lat: 'Latitud del área de estudio (°)', val: 'Distancia', units: 'Unidades', deg: 'grados', km: 'kilómetros', m: 'metros',
+      xy: 'Coordenadas, un punto por línea: x (o longitud), y (o latitud)', empty1: 'Introduzca la latitud y una distancia.', ns: 'Norte–sur', ew: 'Este–oeste', ratio: 'Este–oeste ÷ norte–sur',
+      shrink: (lat, p) => `A ${lat}°, un grado de longitud es solo el ${p} % de un grado de latitud. Las distancias o los rangos del variograma calculados en grados mezclan ambos y están distorsionados; proyecte primero las coordenadas.`,
+      wDeg: (a, lat, b) => `1° de latitud ≈ ${a} km; 1° de longitud ≈ ${a} × cos(${lat}°) = ${b} km`,
+      inLat: 'En grados de latitud', inLon: 'En grados de longitud', empty2: 'Pegue al menos dos puntos.',
+      proj: x => `Parecen coordenadas proyectadas (valores de hasta ${x}), así que las distancias pueden calcularse directamente, en las unidades de la proyección (normalmente metros).`,
+      projNote: 'Compruebe que la proyección sea adecuada para el área: UTM, o una proyección local equivalente o conforme, mantiene las distancias precisas dentro de su zona.',
+      geo: x => `Parecen longitud y latitud (alrededor de ${x}°). Las distancias deben calcularse sobre la esfera o después de proyectar.`,
+      maxd: 'Mayor distancia real entre puntos', flat: 'El mismo par si los grados se tratan como planos (× 111 km)', stretch: 'Estiramiento este–oeste si se usan grados directamente',
+      bad: x => `Usar grados directamente estira las distancias este–oeste ${x} veces respecto a norte–sur aquí. Un variograma calculado así está distorsionado y parece anisótropo cuando no lo es. Proyecte primero las coordenadas (por ejemplo, a UTM).`,
+      wHav: 'Distancia real por la fórmula del haversine, con un radio terrestre de 6,371 km'
+    }
+  };
+  function buildCO(L) {
+    const S = pick(CO, L);
+    return {
+      step: S.step,
+      inputs: [
+        { k: 'mode', l: S.mode, t: 'seg', d: 'conv', opts: [['conv', S.conv], ['pts', S.pts]] },
+        { k: 'lat', l: S.lat, t: 'num', w: 3, show: v => v.mode === 'conv' },
+        { k: 'val', l: S.val, t: 'num', w: 3, show: v => v.mode === 'conv' },
+        { k: 'vu', l: S.units, t: 'select', d: 'deg', show: v => v.mode === 'conv', opts: [['deg', S.deg], ['km', S.km], ['m', S.m]] },
+        { k: 'xy', l: S.xy, t: 'textarea', rows: 5, show: v => v.mode === 'pts', ph: '-107.21, 39.40\n-107.18, 39.42' }
+      ],
+      compute(v, U) {
+        if (v.mode === 'conv') {
+          if (!(Math.abs(v.lat) <= 90) || !(v.val > 0) || v.lat == null) return U.empty(S.empty1);
+          const c = Math.cos(v.lat * Math.PI / 180), kmLat = Math.PI / 180 * R, kmLon = kmLat * c;
+          if (v.vu === 'deg') return { html: U.kv([[S.ns, `${F(v.val * kmLat, 3)} km`], [S.ew, `${F(v.val * kmLon, 3)} km`], [S.ratio, F(c, 3)]]) + (c < 0.95 ? U.note(S.shrink(v.lat, F(c * 100, 0))) : ''), work: [S.wDeg(F(kmLat, 2), v.lat, F(kmLon, 2))] };
+          const km = v.vu === 'km' ? v.val : v.val / 1000;
+          return { html: U.kv([[S.inLat, F(km / kmLat, 6) + '°'], [S.inLon, F(km / kmLon, 6) + '°']]) };
+        }
+        const pts = String(v.xy || '').split(/\r?\n/).map(l => l.split(/[,;\t\s]+/).filter(Boolean).map(Number)).filter(q => q.length >= 2 && isFinite(q[0]) && isFinite(q[1]));
+        if (pts.length < 2) return U.empty(S.empty2);
+        const xs = pts.map(q => q[0]), ys = pts.map(q => q[1]);
+        const geo = xs.every(x => Math.abs(x) <= 180) && ys.every(y => Math.abs(y) <= 90);
+        const span = Math.max(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys));
+        if (!geo || span > 1000) return U.note(S.proj(F(Math.max(...xs.map(Math.abs), ...ys.map(Math.abs)), 0)), 'good') + U.note(S.projNote);
+        const lat0 = ys.reduce((a, b) => a + b, 0) / ys.length, c = Math.cos(lat0 * Math.PI / 180);
+        const hav = (a, b) => { const p1 = a[1] * Math.PI / 180, p2 = b[1] * Math.PI / 180, dp = p2 - p1, dl = (b[0] - a[0]) * Math.PI / 180; return 2 * R * Math.asin(Math.sqrt(Math.sin(dp / 2) ** 2 + Math.cos(p1) * Math.cos(p2) * Math.sin(dl / 2) ** 2)); };
+        let maxd = 0, pair = [0, 1];
+        for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) { const d = hav(pts[i], pts[j]); if (d > maxd) { maxd = d; pair = [i, j]; } }
+        const naive = Math.hypot(pts[pair[0]][0] - pts[pair[1]][0], pts[pair[0]][1] - pts[pair[1]][1]) * 111.195;
+        return { html: U.note(S.geo(F(lat0, 2))) +
+          U.kv([[S.maxd, `${F(maxd, 3)} km`], [S.flat, `${F(naive, 3)} km`], [S.stretch, `${F(1 / c, 2)}×`]]) +
+          (Math.abs(1 / c - 1) > 0.05 ? U.note(S.bad(F(1 / c, 2)), 'bad') : ''),
+          work: [S.wHav, `cos(${F(lat0, 2)}°) = ${F(c, 3)}`] };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- registry
+  // groups follow the website's Check a result page
+  const groups = {
+    data: { en: ['Soil data and units', 'Do the numbers follow from the inputs?'], sw: ['Data za udongo na vipimo', 'Je, namba zinatokana na data zilizotumika?'], es: ['Datos de suelo y unidades', '¿Se derivan los números de los datos de entrada?'] },
+    math: { en: ['Equations', 'Do the equations hold together, and do they reproduce the paper\'s numbers?'], sw: ['Milinganyo', 'Je, milinganyo inaendana, na inatoa namba za jarida?'], es: ['Ecuaciones', '¿Son coherentes las ecuaciones y reproducen los números del artículo?'] }
+  };
+  const refsLab = { en: 'References', sw: 'Marejeo', es: 'Referencias' };
+  const items = {
+    bt: {
+      g: 'data', build: buildBT,
+      t: { en: 'Back-transformation', sw: 'Kurejesha kutoka logariti', es: 'Retransformación logarítmica' },
+      d: { en: 'Was a log-scale result reported as the median or the mean?', sw: 'Je, matokeo ya kipimo cha logariti yaliripotiwa kama wastani wa kati (median) au wastani (mean)?', es: '¿Se informó un resultado en escala logarítmica como mediana o como media?' },
+      intro: {
+        en: 'A mean calculated on log values, then exponentiated, is the <b>median</b> (geometric mean), not the mean. For skewed soil properties the difference is often 10–30%. Enter the values on the log scale.',
+        sw: 'Wastani uliokokotolewa kwa thamani za logariti, kisha kurejeshwa kwa kipeo (exponent), ni <b>wastani wa kati</b> (median, au wastani wa kijiometri), si wastani wa kawaida (mean). Kwa sifa za udongo zilizopinda (skewed), tofauti mara nyingi ni 10–30%. Weka thamani za kipimo cha logariti.',
+        es: 'Una media calculada sobre valores logarítmicos y luego exponenciada es la <b>mediana</b> (media geométrica), no la media. En propiedades del suelo sesgadas, la diferencia suele ser del 10–30 %. Introduzca los valores en escala logarítmica.'
+      },
+      refs: ['Aitchison, J., Brown, J.A.C. (1957). <i>The Lognormal Distribution</i>. Cambridge University Press.',
+        'Journel, A.G. (1980). The lognormal approach to predicting local distributions of selective mining unit grades. <i>Mathematical Geology</i> 12, 285–303. doi:10.1007/BF01029417',
+        'Webster, R., Oliver, M.A. (2007). <i>Geostatistics for Environmental Scientists</i>, 2nd ed. Wiley.']
+    },
+    sa: {
+      g: 'data', build: buildSA,
+      t: { en: 'Carbon stock arithmetic', sw: 'Hesabu ya akiba ya kaboni', es: 'Cálculo de reservas de carbono' },
+      d: { en: 'Rebuild a stock from its inputs and catch unit and stone-fraction slips.', sw: 'Jenga upya akiba kutoka kwa data zake na ugundue makosa ya vipimo na ya sehemu ya mawe.', es: 'Reconstruya una reserva a partir de sus datos y detecte errores de unidades y de fracción de piedras.' },
+      intro: {
+        en: 'Rebuild a reported stock from its inputs. If it doesn\'t match, the check tries the common slips (% vs g/kg, stones ignored or on the wrong basis, organic matter instead of carbon, kg/m² vs Mg/ha) and tells you which one reproduces the reported number.',
+        sw: 'Jenga upya akiba iliyoripotiwa kutoka kwa data zake. Isipolingana, ukaguzi hujaribu makosa ya kawaida (% dhidi ya g/kg, mawe kupuuzwa au kupimwa kwa msingi usio sahihi, viumbehai (organic matter) badala ya kaboni, kg/m² dhidi ya Mg/ha) na kukuambia lipi linazalisha namba iliyoripotiwa.',
+        es: 'Reconstruya una reserva informada a partir de sus datos. Si no coincide, la comprobación prueba los errores comunes (% frente a g/kg, piedras ignoradas o en la base equivocada, materia orgánica en lugar de carbono, kg/m² frente a Mg/ha) e indica cuál reproduce el número informado.'
+      },
+      refs: ['Poeplau, C., Vos, C., Don, A. (2017). Soil organic carbon stocks are systematically overestimated by misuse of the parameters bulk density and rock fragment content. <i>SOIL</i> 3, 61–66. doi:10.5194/soil-3-61-2017',
+        'Pribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. <i>Geoderma</i> 156, 75–83. doi:10.1016/j.geoderma.2010.02.003']
+    },
+    lc: {
+      g: 'data', build: buildLC,
+      t: { en: 'Lab method conversions', sw: 'Ubadilishaji wa mbinu za maabara', es: 'Conversiones entre métodos de laboratorio' },
+      d: { en: 'Walkley–Black, organic matter factors, pH in CaCl₂ vs. water, oxides.', sw: 'Walkley–Black, vigezo vya viumbehai, pH katika CaCl₂ dhidi ya maji, oksidi.', es: 'Walkley–Black, factores de materia orgánica, pH en CaCl₂ frente a agua, óxidos.' },
+      intro: {
+        en: 'Results from different methods aren\'t directly comparable. These are the common conversion factors, with the assumption behind each stated, so you can see what you\'re accepting when you convert.',
+        sw: 'Matokeo ya mbinu tofauti hayalinganishwi moja kwa moja. Hivi ni vigezo vya kawaida vya kubadilisha, na dhana ya kila kimoja imeelezwa, ili uone unachokubali unapobadilisha.',
+        es: 'Los resultados de distintos métodos no son directamente comparables. Estos son los factores de conversión habituales, con el supuesto detrás de cada uno, para que vea lo que acepta al convertir.'
+      },
+      refs: ['Walkley, A., Black, I.A. (1934). An examination of the Degtjareff method for determining soil organic matter, and a proposed modification of the chromic acid titration method. <i>Soil Science</i> 37, 29–38.',
+        'Pribyl, D.W. (2010). A critical review of the conventional SOC to SOM conversion factor. <i>Geoderma</i> 156, 75–83. doi:10.1016/j.geoderma.2010.02.003',
+        'Ahern, C.R., Baker, D.E., Aitken, R.L. (1995). Models for relating pH measurements in water and calcium chloride for a wide range of pH, soil types and depths. <i>Plant and Soil</i> 171, 47–52. doi:10.1007/BF00009563',
+        { en: 'Oxide and unit conversions are exact, from molar masses.', sw: 'Ubadilishaji wa oksidi na vipimo ni sahihi kabisa, kutoka kwa masi za molari.', es: 'Las conversiones de óxidos y unidades son exactas, a partir de masas molares.' }]
+    },
+    co: {
+      g: 'data', build: buildCO,
+      t: { en: 'Coordinates and distances', sw: 'Viwianishi na umbali', es: 'Coordenadas y distancias' },
+      d: { en: 'Degrees treated as metres, and how far a degree really is.', sw: 'Digrii zinazochukuliwa kama mita, na umbali halisi wa digrii moja.', es: 'Grados tratados como metros, y cuánto mide realmente un grado.' },
+      intro: {
+        en: 'A degree of longitude shrinks with latitude, so distances calculated directly on longitude and latitude are distorted, and "metres" computed from degrees are wrong. Convert a distance, or paste coordinates to check them.',
+        sw: 'Digrii moja ya longitudo hupungua kadiri latitudo inavyoongezeka, kwa hiyo umbali unaokokotolewa moja kwa moja kwa longitudo na latitudo hupotoka, na "mita" zinazotokana na digrii si sahihi. Badilisha umbali, au bandika viwianishi kuvikagua.',
+        es: 'Un grado de longitud se acorta con la latitud, por lo que las distancias calculadas directamente sobre longitud y latitud están distorsionadas, y los "metros" calculados a partir de grados son incorrectos. Convierta una distancia o pegue coordenadas para comprobarlas.'
+      },
+      refs: [{ en: 'No paper needed: standard spherical geometry (haversine formula, mean Earth radius 6,371 km).', sw: 'Hakuna jarida linalohitajika: jiometri ya kawaida ya tufe (fomula ya haversine, nusu-kipenyo wastani cha Dunia km 6,371).', es: 'No se necesita artículo: geometría esférica estándar (fórmula del haversine, radio terrestre medio de 6,371 km).' }]
+    },
+    eq: {
+      g: 'math', beta: true, isEq: true,
+      t: { en: 'Equation checker', sw: 'Uhakiki wa Milinganyo', es: 'Comprobación de ecuaciones' },
+      d: { en: 'Paste or select equations to catch unreadable or undefined expressions, rearrangements that don\'t follow, and worked examples that don\'t reproduce.', sw: 'Bandika au chagua milinganyo ili kugundua semi zisizosomeka au zisizo na maana, mipangilio upya isiyofuata, na mifano iliyokokotolewa isiyozalisha matokeo.', es: 'Pegue o seleccione ecuaciones para detectar expresiones ilegibles o indefinidas, reordenamientos que no se siguen y ejemplos resueltos que no se reproducen.' }
+    }
+  };
+  return { items, groups, refsLab, order: ['bt', 'sa', 'lc', 'co', 'eq'] };
+})();
+
+</script>
 
 <script>
 // ---------------------------------------------------------------------------
@@ -247,8 +880,10 @@ body.quarto-light .ra-foot a { color: #8a4b22; }
   };
 })();
 
-window.HM = (function () {
+window.HMEQ = (function () {
   let lang = localStorage.getItem('ra-lang') || 'en';
+  if (!['en', 'sw', 'es'].includes(lang)) lang = 'en';
+  const renders = [];   // re-render the equation checker when the language changes
 
   const I18N = {
     en: {
@@ -317,16 +952,8 @@ window.HM = (function () {
   const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-  function updateUiLanguage(newLang) {
-    lang = newLang;
-    localStorage.setItem('ra-lang', lang);
-    const t = I18N[lang];
-    document.getElementById('lbl-title').textContent = t.title;
-    document.getElementById('lbl-sub').textContent = t.sub;
-    document.getElementById('ra-sel').textContent = t.btnSel;
-    document.getElementById('ra-doc').textContent = t.btnDoc;
-    document.getElementById('ra-com').textContent = t.btnCom;
-  }
+  // title, buttons and the language menu belong to the frame (shell); this only keeps the language
+  function updateUiLanguage(newLang) { if (I18N[newLang]) lang = newLang; }
 
   function tool(cfg) {
     const root = document.getElementById(cfg.id);
@@ -357,21 +984,13 @@ window.HM = (function () {
 
     function render() {
       const t = I18N[lang];
-      let auto = true; try { auto = localStorage.getItem('ra-auto') !== '0'; } catch (e) {}
-      // the auto-check box only shows inside Word (body gets class "in-word")
-      // language menu (and the auto-check box, shown only inside Word) sit under the title, in #ra-top
-      const top = '<select class="ra-lang" data-lang-select aria-label="' + esc(t.lang) + '">' +
-        [['en', 'English'], ['sw', 'Kiswahili'], ['es', 'Español']].map(o => '<option value="' + o[0] + '"' + (o[0] === lang ? ' selected' : '') + '>' + o[1] + '</option>').join('') +
-        '</select><label class="auto"><input type="checkbox" data-auto' + (auto ? ' checked' : '') + '> ' + esc(t.auto) + '</label>';
-      const topEl = document.getElementById('ra-top');
-      if (topEl) topEl.innerHTML = top;
-      let h = (topEl ? '' : '<div class="topbar">' + top + '</div>') + '<section class="cx"><div class="fg">';
+      let h = '<section class="cx"><div class="fg">';
       inputs.forEach(i => { h += fieldHTML(i); });
       h += '</div></section><section class="cx res"></section><details class="cx hm-work"><summary>' + t.work + '</summary><div class="db"></div></details>';
       root.innerHTML = h;
-      updateUiLanguage(lang);
       run();
     }
+    renders.push(render);
 
     const U = {
       fmt, fix, esc, get lang() { return lang; }, get i18n() { return I18N[lang]; },
@@ -397,12 +1016,6 @@ window.HM = (function () {
       const ta = e.target.closest('textarea[data-k]');
       if (ta) { f[ta.dataset.k] = ta.value; run(); }
     });
-    const onChange = e => {
-      if (e.target.matches('[data-lang-select]')) { updateUiLanguage(e.target.value); render(); return; }
-      if (e.target.matches('[data-auto]')) { try { localStorage.setItem('ra-auto', e.target.checked ? '1' : '0'); } catch (err) {} }
-    };
-    root.addEventListener('change', onChange);
-    const topBox = document.getElementById('ra-top'); if (topBox) topBox.addEventListener('change', onChange);
     root.addEventListener('click', e => {
       const b = e.target.closest('button');
       if (!b) return;
@@ -425,14 +1038,14 @@ window.HM = (function () {
     return { set: (k, val) => { f[k] = val; const ta = root.querySelector('textarea[data-k="' + k + '"]'); if (ta) ta.value = val; run(); } };
   }
 
-  return { tool, fmt, fix, esc };
+  return { tool, fmt, fix, esc, setLang(l) { updateUiLanguage(l); renders.forEach(r => r()); } };
 })();
 
 (function () {
   // If the maths engine failed to load, still render the input boxes with an error
   // instead of the whole panel silently going blank.
   if (typeof math === 'undefined') {
-    if (window.HM) HM.tool({
+    if (window.HMEQ) HMEQ.tool({
       id: 'eq',
       inputs: [
         { k: 'eqs', t: 'textarea', rows: 6, ph: 'q = -K*dh/dz' },
@@ -1008,7 +1621,7 @@ window.HM = (function () {
     return { ok, tried, fail, v };
   }
 
-  HM.tool({
+  HMEQ.tool({
     id: 'eq', step: 'Equations', units: false, hash: false,
     inputs: [
       { k: 'eqs', t: 'textarea', rows: 6, ph: 'q = -K*dh/dz\nK = -q*dz/dh\n\\int_{0}^{\\infty} e^{-kx} dx = 1/k\n\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}\n[a, -g; -g, a] * [x; y] = [r; s]' },
@@ -1228,7 +1841,7 @@ window.HM = (function () {
 })();
 </script>
 
-<p class="ra-foot">How to cite: Flynn, T. (2026). <i>Equation checker: plausibility checks for soil and environmental results</i> [software]. <a href="https://doi.org/10.5281/zenodo.23787685" target="_blank" rel="noopener">https://doi.org/10.5281/zenodo.23787685</a></p>
+<p class="ra-foot" id="ra-foot"></p>
 
 <script>
 (function () {
@@ -1284,7 +1897,7 @@ window.HM = (function () {
     let timer = null;
     const autoOn = () => { try { return localStorage.getItem('ra-auto') !== '0'; } catch (e) { return true; } };
     Office.context.document.addHandlerAsync(Office.EventType.DocumentSelectionChanged, () => {
-      if (!autoOn()) return;
+      if (!autoOn() || window.RA_VIEW !== 'eq') return;
       clearTimeout(timer); timer = setTimeout(() => readSelection(true), 350);
     });
 
@@ -1310,5 +1923,165 @@ window.HM = (function () {
     }).catch(e => msg('Could not add the comment: ' + e.message));
   });
 })();
+</script>
+<script>
+/* The add-in's frame: title, language, the list of checks, the action buttons (locked in this beta
+   except on the equation checker), "All checks" and "Tools on the website". */
+(function () {
+  const MORE_URL = 'https://rafikiardhi.earth/';             // "Learn more" on a locked button: change when the page exists
+  const TOOLS_URL = 'https://rafikiardhi.earth/tools.html';  // "Tools on the website"
+  const C = window.RA_CHECKS;
+  const UI = {
+    en: {
+      home: 'Check a result', sub: 'No AI. Runs in this panel; nothing leaves your computer.', lang: 'Language',
+      intro: 'Choose a check. Type or paste the numbers from the paper; each check tests whether they hold together.',
+      all: 'All checks', back: '← All checks', web: 'Tools on the website ↗', pick: 'Check',
+      sel: 'Check the highlighted text', doc: 'Check the whole document', com: 'Add the findings as a comment',
+      eqSel: 'Check the selected equations', eqDoc: 'Find all equations in the document', eqCom: 'Add the findings as a comment',
+      locked: 'Locked in this beta. This will read the numbers from your document for you; for now, type or paste them into the boxes below.', more: 'Learn more',
+      auto: 'Check equations automatically when I select them',
+      citeEq: 'Equation checker: plausibility checks for soil and environmental results', citeCk: 'Check a result: plausibility checks for soil and environmental results', how: 'How to cite'
+    },
+    sw: {
+      home: 'Kagua matokeo', sub: 'Bila AI. Inafanya kazi hapa tu; hakuna kinachotoka kwenye kompyuta yako.', lang: 'Lugha',
+      intro: 'Chagua ukaguzi. Andika au bandika namba kutoka kwenye jarida; kila ukaguzi unapima kama zinaendana.',
+      all: 'Ukaguzi wote', back: '← Ukaguzi wote', web: 'Zana kwenye tovuti ↗', pick: 'Ukaguzi',
+      sel: 'Kagua maandishi yaliyochaguliwa', doc: 'Kagua waraka wote', com: 'Weka matokeo kama maoni (comment)',
+      eqSel: 'Kagua milinganyo iliyochaguliwa', eqDoc: 'Tafuta milinganyo yote kwenye waraka', eqCom: 'Weka matokeo kama maoni (comment)',
+      locked: 'Imefungwa katika toleo hili la majaribio (beta). Kipengele hiki kitasoma namba kutoka kwenye waraka wako; kwa sasa, andika au bandika namba kwenye visanduku hapa chini.', more: 'Soma zaidi',
+      auto: 'Kagua milinganyo moja kwa moja ninapoichagua',
+      citeEq: 'Equation checker: plausibility checks for soil and environmental results', citeCk: 'Check a result: plausibility checks for soil and environmental results', how: 'Jinsi ya kunukuu'
+    },
+    es: {
+      home: 'Comprobar un resultado', sub: 'Sin IA. Se ejecuta en este panel; nada sale de su computadora.', lang: 'Idioma',
+      intro: 'Elija una comprobación. Escriba o pegue los números del artículo; cada comprobación verifica si son coherentes.',
+      all: 'Todas las comprobaciones', back: '← Todas las comprobaciones', web: 'Herramientas en el sitio web ↗', pick: 'Comprobación',
+      sel: 'Revisar el texto resaltado', doc: 'Revisar todo el documento', com: 'Agregar hallazgos como comentario',
+      eqSel: 'Revisar las ecuaciones seleccionadas', eqDoc: 'Buscar todas las ecuaciones en el documento', eqCom: 'Agregar hallazgos como comentario',
+      locked: 'Bloqueado en esta beta. Esto leerá los números de su documento por usted; por ahora, escríbalos o péguelos en las casillas de abajo.', more: 'Más información',
+      auto: 'Revisar las ecuaciones automáticamente al seleccionarlas',
+      citeEq: 'Equation checker: plausibility checks for soil and environmental results', citeCk: 'Check a result: plausibility checks for soil and environmental results', how: 'Cómo citar'
+    }
+  };
+  const $ = id => document.getElementById(id);
+  const esc = HM.esc;
+  let lang = HM.lang;
+  let view = 'home'; try { const v = localStorage.getItem('ra-view'); if (v && (v === 'home' || C.items[v])) view = v; } catch (e) { }
+  const apis = {};   // the checks built so far
+  const L = () => UI[lang] || UI.en;
+  const tr = o => typeof o === 'string' ? o : (o[lang] || o.en);
+
+  function openUrl(u) {
+    try { if (window.Office && Office.context && Office.context.ui && Office.context.ui.openBrowserWindow) { Office.context.ui.openBrowserWindow(u); return; } } catch (e) { }
+    window.open(u, '_blank', 'noopener');
+  }
+
+  function renderTop() {
+    let auto = true; try { auto = localStorage.getItem('ra-auto') !== '0'; } catch (e) { }
+    $('ra-top').innerHTML = '<select class="ra-lang" id="ra-lang" aria-label="' + esc(L().lang) + '">' +
+      [['en', 'English'], ['sw', 'Kiswahili'], ['es', 'Español']].map(o => '<option value="' + o[0] + '"' + (o[0] === lang ? ' selected' : '') + '>' + o[1] + '</option>').join('') +
+      '</select><label class="auto" id="ra-auto-wrap"' + (view === 'eq' ? '' : ' hidden') + '><input type="checkbox" data-auto' + (auto ? ' checked' : '') + '> ' + esc(L().auto) + '</label>';
+  }
+  function renderNav() {
+    const groups = {};
+    C.order.forEach(id => { const g = C.items[id].g; (groups[g] = groups[g] || []).push(id); });
+    $('ra-tool').innerHTML = '<option value="home"' + (view === 'home' ? ' selected' : '') + '>' + esc(L().all) + '</option>' +
+      Object.keys(groups).map(g => '<optgroup label="' + esc(tr(C.groups[g])[0]) + '">' +
+        groups[g].map(id => '<option value="' + id + '"' + (id === view ? ' selected' : '') + '>' + esc(tr(C.items[id].t)) + '</option>').join('') + '</optgroup>').join('');
+    $('ra-tool').setAttribute('aria-label', L().pick);
+    $('ra-back').textContent = L().back;
+    $('ra-web').textContent = L().web;
+  }
+  function renderHome() {
+    const groups = {};
+    C.order.forEach(id => { const g = C.items[id].g; (groups[g] = groups[g] || []).push(id); });
+    $('view-home').innerHTML = '<p class="ra-intro">' + esc(L().intro) + '</p>' + Object.keys(groups).map(g => {
+      const [title, sub] = tr(C.groups[g]);
+      return '<h2 class="ra-gh">' + esc(title) + '</h2><p class="ra-gs">' + esc(sub) + '</p>' + groups[g].map(id => {
+        const it = C.items[id];
+        return '<button type="button" class="ra-card" data-open="' + id + '"><span class="ra-ct">' + esc(tr(it.t)) + (it.beta ? ' <span class="ra-beta">BETA</span>' : '') + '</span><span class="ra-cd">' + esc(tr(it.d)) + '</span></button>';
+      }).join('');
+    }).join('');
+  }
+  // a check's pane: intro, the form, references. Built the first time it is opened.
+  function buildCheck(id) {
+    const it = C.items[id], pane = document.querySelector('.ra-pane[data-pane="' + id + '"]');
+    if (!pane || it.isEq) return;
+    const keep = apis[id] ? apis[id].values() : undefined;
+    pane.innerHTML = '<p class="ra-intro">' + tr(it.intro) + '</p><div class="hmc" id="ck-' + id + '"></div>' +
+      (it.refs ? '<details class="ra-refs"><summary>' + esc(tr(C.refsLab)) + '</summary>' + it.refs.map(r => '<p>' + tr(r) + '</p>').join('') + '</details>' : '');
+    const cfg = it.build(lang);
+    cfg.id = 'ck-' + id;
+    cfg.initial = keep;
+    apis[id] = HM.tool(cfg);
+  }
+  function renderBar() {
+    const isEq = view === 'eq', l = L();
+    $('ra-bar').hidden = view === 'home';
+    [['ra-sel', isEq ? l.eqSel : l.sel], ['ra-doc', isEq ? l.eqDoc : l.doc], ['ra-com', isEq ? l.eqCom : l.com]].forEach(([id, txt]) => {
+      const b = $(id); b.textContent = (isEq ? '' : '🔒 ') + txt; b.classList.toggle('locked', !isEq); b.setAttribute('aria-disabled', String(!isEq));
+    });
+    $('ra-lock').hidden = true;
+  }
+  function renderHead() {
+    const it = C.items[view];
+    $('lbl-title').textContent = view === 'home' ? L().home : tr(it.t);
+    $('lbl-sub').textContent = L().sub;
+    const eqCite = view === 'eq';
+    $('ra-foot').innerHTML = esc(L().how) + ': Flynn, T. (2026). <i>' + esc(eqCite ? L().citeEq : L().citeCk) + '</i> [software]. ' +
+      (eqCite ? '<a href="https://doi.org/10.5281/zenodo.23787685" data-ext>https://doi.org/10.5281/zenodo.23787685</a>' : '<a href="https://doi.org/10.5281/zenodo.23736495" data-ext>https://doi.org/10.5281/zenodo.23736495</a>');
+  }
+  function show(id) {
+    view = (id === 'home' || C.items[id]) ? id : 'home';
+    window.RA_VIEW = view;
+    try { localStorage.setItem('ra-view', view); } catch (e) { }
+    $('view-home').hidden = view !== 'home';
+    $('view-tool').hidden = view === 'home';
+    document.querySelectorAll('.ra-pane').forEach(p => { p.hidden = p.dataset.pane !== view; });
+    if (view !== 'home' && !C.items[view].isEq && !apis[view]) buildCheck(view);
+    $('ra-back').hidden = view === 'home';
+    $('ra-msg').hidden = view !== 'eq';
+    const aw = $('ra-auto-wrap'); if (aw) aw.hidden = view !== 'eq';
+    renderHead(); renderBar(); renderNav();
+    window.scrollTo(0, 0);
+  }
+  function setLang(l) {
+    lang = UI[l] ? l : 'en';
+    try { localStorage.setItem('ra-lang', lang); } catch (e) { }
+    HM.setLang(lang);
+    if (window.HMEQ && HMEQ.setLang) HMEQ.setLang(lang);
+    Object.keys(apis).forEach(buildCheck);   // rebuild the opened checks in the new language, keeping their values
+    renderTop(); renderHome(); renderNav(); renderHead(); renderBar();
+  }
+
+  // panes for the checks (the equation checker's pane is already in the page)
+  const holder = $('view-tool');
+  C.order.forEach(id => { if (!C.items[id].isEq) { const d = document.createElement('div'); d.className = 'ra-pane'; d.dataset.pane = id; d.hidden = true; holder.appendChild(d); } });
+
+  document.addEventListener('change', e => {
+    if (e.target.id === 'ra-lang') setLang(e.target.value);
+    else if (e.target.id === 'ra-tool') show(e.target.value);
+    else if (e.target.matches('[data-auto]')) { try { localStorage.setItem('ra-auto', e.target.checked ? '1' : '0'); } catch (err) { } }
+  });
+  document.addEventListener('click', e => {
+    const card = e.target.closest('[data-open]'); if (card) { show(card.dataset.open); return; }
+    if (e.target.closest('#ra-back')) { show('home'); return; }
+    if (e.target.closest('#ra-web')) { openUrl(TOOLS_URL); return; }
+    const a = e.target.closest('a[data-ext]'); if (a) { e.preventDefault(); openUrl(a.href); return; }
+  });
+  // the three action buttons work on the equation checker; on the other checks they are locked
+  $('ra-bar').addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b || view === 'eq') return;
+    e.preventDefault(); e.stopPropagation();
+    const n = $('ra-lock');
+    n.innerHTML = esc(L().locked) + ' <a href="' + MORE_URL + '" data-ext>' + esc(L().more) + '</a>';
+    n.hidden = false;
+  }, true);
+
+  renderTop(); renderHome();
+  show(view);
+  window.RA_SHELL = { show, setLang };
+})();
+
 </script>
 </body></html>
