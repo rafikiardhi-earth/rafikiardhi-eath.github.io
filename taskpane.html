@@ -21,61 +21,26 @@ body.quarto-light .hmc {
 .hmc .hint { font-size: .9rem; color: var(--ink-2); margin: 6px 0 0; }
 .hmc .fg { display: grid; grid-template-columns: repeat(6, 1fr); column-gap: 10px; }
 .hmc .fg > div { grid-column: span 6; }
-.hmc .fg > div.w3 { grid-column: span 3; }
-.hmc .fg > div.w2 { grid-column: span 2; }
-.hmc .fg > div[hidden] { display: none; }
 .hmc label { display: block; font-size: .9rem; font-weight: 600; color: var(--ink-2); margin: 10px 0 4px; }
-.hmc label .u { font-weight: 400; color: var(--ink-3); }
-.hmc input[type=text], .hmc select {
-  width: 100%; min-height: 46px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink);
-  font: inherit; padding: 8px 12px;
-}
 .hmc textarea { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: .88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px 12px; resize: vertical; }
 .hmc input:focus, .hmc select:focus, .hmc textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
-.hmc input.bad { border-color: var(--bad); }
-.hmc .chk { display: flex; gap: 10px; align-items: flex-start; margin: 12px 0 2px; font-weight: 500; color: var(--ink); font-size: .98rem; }
-.hmc .chk input { width: 22px; height: 22px; margin-top: 2px; accent-color: var(--accent); flex: none; }
 .hmc .seg { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
 .hmc .seg button { flex: 1 1 auto; min-height: 42px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-weight: 600; cursor: pointer; }
 .hmc .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-.hmc .res { border: 2px solid var(--accent); }
-.hmc .res .big { font-size: 2rem; font-weight: 700; line-height: 1.15; margin: 2px 0 6px; font-family: "Source Serif 4", Georgia, serif; }
-.hmc .res .sub { color: var(--ink-2); margin: 0 0 10px; }
-.hmc .res ul.kv { list-style: none; padding: 0; margin: 10px 0 0; }
-.hmc .res ul.kv li { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-top: 1px solid var(--line); font-size: .95rem; }
-.hmc .res ul.kv li span:first-child { color: var(--ink-2); }
-.hmc .res ul.kv li span:last-child { font-weight: 600; text-align: right; }
-.hmc .res h3 { font-size: 1.05rem; margin: 16px 0 6px; }
-.hmc .res ul.plain { margin: 6px 0 0; padding-left: 20px; color: var(--ink-2); font-size: .95rem; }
-.hmc .res ul.plain li { margin-bottom: 6px; }
+.hmc .res { border: 2px solid var(--accent); overflow-x: auto; }
 .hmc .note { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink-2); margin-top: 10px; }
 .hmc .note.good { border-left-color: var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
 .hmc .note.bad { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 10%, transparent); }
 .hmc .tag { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; padding: 1px 9px; border: 1px solid currentColor; }
 .hmc .tag.good { color: var(--good); } .hmc .tag.warn { color: var(--warn); } .hmc .tag.bad { color: var(--bad); }
-.hmc table.tt { width: 100%; border-collapse: collapse; font-size: .93rem; margin-top: 8px; }
-.hmc table.tt th, .hmc table.tt td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; }
+
+/* Table layout and word wrapping rules to prevent text overflow */
+.hmc table.tt { width: 100%; border-collapse: collapse; font-size: .93rem; margin-top: 8px; table-layout: fixed; }
+.hmc table.tt th, .hmc table.tt td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; word-break: break-word; overflow-wrap: break-word; }
 .hmc table.tt th { color: var(--ink-3); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; border-top: none; }
-.hmc table.tt td.r, .hmc table.tt th.r { text-align: right; }
-.hmc .say { margin-top: 12px; background: var(--accent-soft); border-radius: 10px; padding: 10px 12px; font-size: .95rem; }
-.hmc .say .lab { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); font-weight: 600; display: block; margin-bottom: 2px; }
-.hmc .linkbtn { background: none; border: none; color: var(--accent); font: inherit; font-weight: 600; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
-.hmc .empty { color: var(--ink-3); margin: 0; }
-.hmc details.cx { padding: 0; }
-.hmc details summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--accent); list-style: none; }
-.hmc details summary::-webkit-details-marker { display: none; }
-.hmc details summary::before { content: "＋ "; }
-.hmc details[open] summary::before { content: "－ "; }
-.hmc details .db { padding: 0 16px 16px; }
-.hmc ol.work { font-size: .92rem; color: var(--ink-2); margin: 0; padding-left: 18px; }
-.hmc ol.work li { margin-bottom: 6px; font-variant-numeric: tabular-nums; }
-.hmc .actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 14px; }
-.hmc .actions button { min-height: 44px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; font-size: .92rem; cursor: pointer; }
-.hmc .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 8px 16px; border-radius: 999px; font-size: .9rem; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 50; }
-.hmc .toast.on { opacity: 1; }
-.hmc .smallprint { font-size: .8rem; color: var(--ink-3); margin-top: 14px; }
-@media (max-width: 460px) { .hmc .fg > div.w2, .hmc .fg > div.w3 { grid-column: span 6; } }
-@media print { .hmc .actions, .hmc .toast, .hmc .linkbtn { display: none !important; } .hmc .cx { break-inside: avoid; } }
+.hmc table.tt td:nth-child(1) { width: 10%; }
+.hmc table.tt td:nth-child(2) { width: 65%; overflow-x: auto; }
+.hmc table.tt td:nth-child(3) { width: 25%; }
 
 body { margin: 0; padding: 10px 12px 24px; font-family: "Segoe UI", system-ui, sans-serif; }
 body.quarto-dark { background: #161412; color: #f0ece4; }
@@ -110,17 +75,32 @@ body.quarto-light .ra-foot a { color: #8a4b22; }
 <div class="hmc" id="eq"></div>
 
 <script>
-// OMML MathML XML node parser into clean Linear math syntax
+// OMML/MathML AST XML Parser with 2D Matrix (<m:matrix>), Fraction, and Subscript handling
 function ommlToLinear(element) {
   if (!element) return "";
   let result = "";
+
   for (let child of element.childNodes) {
     const name = child.nodeName;
 
-    if (name === "m:f") { 
+    if (name === "m:matrix") {
+      const mrNodes = child.getElementsByTagName("m:mr");
+      let rows = [];
+      for (let mr of mrNodes) {
+        let cols = [];
+        for (let eNode of mr.childNodes) {
+          if (eNode.nodeName === "m:e") {
+            cols.push(ommlToLinear(eNode).trim());
+          }
+        }
+        if (cols.length > 0) rows.push(cols.join(", "));
+      }
+      result += " [" + rows.join("; ") + "] ";
+    }
+    else if (name === "m:f") { 
       const num = ommlToLinear(child.getElementsByTagName("m:num")[0]);
       const den = ommlToLinear(child.getElementsByTagName("m:den")[0]);
-      result += `(${num})/(${den})`;
+      result += `((${num})/(${den}))`;
     } 
     else if (name === "m:sSub") { 
       const e = ommlToLinear(child.getElementsByTagName("m:e")[0]);
@@ -139,8 +119,8 @@ function ommlToLinear(element) {
       result += deg ? `nthRoot(${e}, ${deg})` : `sqrt(${e})`;
     }
     else if (name === "m:d") {
-      const e = ommlToLinear(child.getElementsByTagName("m:e")[0]);
-      result += `(${ommlToLinear(e)})`;
+      const eNode = child.getElementsByTagName("m:e")[0];
+      result += ommlToLinear(eNode);
     }
     else if (name === "m:t" || child.nodeType === 3) { 
       result += child.textContent;
@@ -150,43 +130,30 @@ function ommlToLinear(element) {
     }
   }
 
-  return result
-    .replace(/[−–—]/g, '-')
-    .replace(/\s+/g, ' ')
-    .trim();
+  return result;
 }
 
 window.HM = (function () {
   const ES = (document.documentElement.lang || '').toLowerCase().startsWith('es');
   const T = ES ? {
-    units: 'Unidades', us: 'Unidades de EE. UU.', si: 'Métricas', yours: 'Sus datos', work: 'Ver el cálculo', example: 'Ejemplo', link: 'Copiar enlace', print: 'Imprimir', reset: 'Empezar de nuevo',
-    small: 'Gratis, sin registro, sin anuncios, y nada de lo que escribe sale de su navegador. Los valores típicos son un punto de partida; cámbielos según su situación.',
-    sayLab: 'Copie esto', copy: 'Copiar', linkCopied: 'Enlace copiado', copied: 'Copiado', check: 'Revise sus números.', copyThis: 'Copie esto:'
+    units: 'Unidades', yours: 'Sus datos', work: 'Ver el cálculo', reset: 'Empezar de nuevo',
+    small: 'Gratis, sin registro, sin anuncios, y nada de lo que escribe sale de su navegador.',
+    sayLab: 'Copie esto', copy: 'Copiar', check: 'Revise sus números.'
   } : {
-    units: 'Units', us: 'US units', si: 'Metric', yours: 'Your numbers', work: 'Show the working', example: 'Example', link: 'Copy link', print: 'Print', reset: 'Start over',
-    small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser. Typical values are starting points; edit them to match your own situation.',
-    sayLab: 'Copy this', copy: 'Copy', linkCopied: 'Link copied', copied: 'Copied', check: 'Check your numbers.', copyThis: 'Copy this:'
+    units: 'Units', yours: 'Your numbers', work: 'Show the working', reset: 'Start over',
+    small: 'Free, no sign-up, no ads, and nothing you enter leaves your browser.',
+    sayLab: 'Copy this', copy: 'Copy', check: 'Check your numbers.'
   };
-  const C = {
-    len: { us: [0.3048, 'ft'], si: [1, 'm'] },
-    num: { us: [1, ''], si: [1, ''] },
-    money: { us: [1, '$'], si: [1, ''] }
-  };
-  const UNITLESS = ['num', 'pct', 'min', 'money', 'select', 'seg', 'check', 'info', 'sec', 'text', 'textarea'];
 
-  const num = s => { s = String(s).replace(/[$,\s%]/g, ''); if (s === '') return null; return /^-?\d*\.?\d+$/.test(s) ? parseFloat(s) : NaN; };
   const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
   const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  function getUnits() { try { const s = localStorage.getItem('ra-units'); if (s === 'si' || s === 'us') return s; } catch (e) { } return 'us'; }
-  function toast(root, msg) { const t = root.querySelector('.toast'); if (!t) return; t.textContent = msg; t.classList.add('on'); clearTimeout(t._t); t._t = setTimeout(() => t.classList.remove('on'), 1800); }
 
   function tool(cfg) {
     const root = document.getElementById(cfg.id);
     if (!root) return;
-    let u = getUnits(), f = {}, raw = {};
+    let f = {};
     const inputs = cfg.inputs;
-    const byK = Object.fromEntries(inputs.filter(i => i.k).map(i => [i.k, i]));
 
     function read() {
       const v = {};
@@ -248,7 +215,7 @@ window.HM = (function () {
     return { set: (k, val) => { f[k] = val; const ta = root.querySelector(`textarea[data-k="${k}"]`); if (ta) ta.value = val; run(); } };
   }
 
-  return { tool, fmt, fix, num, esc };
+  return { tool, fmt, fix, esc };
 })();
 
 (function () {
@@ -340,8 +307,7 @@ window.HM = (function () {
         const [v, a] = lo.split('=').map(x => x.trim());
         const e = sumEnd(s, j); const f = structural(s.slice(j, e).replace(/^[\s▒]+/, ''), latex); if (f == null) return null;
         out += `${prod ? 'prodn' : 'sumn'}(${L}${f}${R}, ${v}, ${L}${bnd(a, latex)}${R}, ${L}${bnd(hi, latex)}${R})`;
-        i = e; continue;
-      }
+        i = e; continue; }
       if (latex && s.startsWith('\\infty', i)) { out += 'Infinity'; i += 6; continue; }
       if (!latex && s[i] === '∞') { out += 'Infinity'; i++; continue; }
       out += s[i]; i++;
@@ -357,8 +323,7 @@ window.HM = (function () {
       .replace(/(?<![A-Za-z])\{\s*(\\(?:overline|bar|hat|tilde)\s*\{[^{}]*\}|[A-Za-z]+)\s*\}(?=\s*[_^])/g, '$1');
     s = s.replace(/\\left|\\right|\\bigg|\\Bigg|\\big|\\Big|\\,|\\;|\\:|\\!|\\qquad|\\quad|\\displaystyle/g, '')
       .replace(/\\ /g, ' ')
-      .replace(/\\(?:mathcal|mathscr|mathrm|mathbf|mathit|mathsf|mathbb|boldsymbol|bm| खान|
-|textrm|textit|text|mathnormal)\s*\{([^{}]*)\}/g, '$1')
+      .replace(/\\(?:mathcal|mathscr|mathrm|mathbf|mathit|mathsf|mathbb|boldsymbol|bm|textrm|textit|text|mathnormal)\s*\{([^{}]*)\}/g, '$1')
       .replace(/\\(?:overline|bar)\s*\{\s*([^{}]*?)\s*\}/g, '$1_bar').replace(/\\(?:widehat|hat)\s*\{\s*([^{}]*?)\s*\}/g, '$1_hat')
       .replace(/\\(?:widetilde|tilde)\s*\{\s*([^{}]*?)\s*\}/g, '$1_tilde').replace(/\\dot\s*\{\s*([^{}]*?)\s*\}/g, '$1_dot')
       .replace(/\\(?:overline|bar)\s*([A-Za-z])/g, '$1_bar').replace(/\\hat\s*([A-Za-z])/g, '$1_hat')
@@ -396,13 +361,17 @@ window.HM = (function () {
       .replace(/(?:\t|\s{2,})\(\s*\d+[a-z]?\s*\)\s*$/, '')
       .replace(/[\s.,;]+$/, '');
 
-    // Normalize LaTeX structures, braces, and subscripts for identical execution
+    // Separate adjacent Greek/subscripted variables e.g. \lambda_{phys}\lambda_{xy} -> lambda_phys * lambda_xy
+    s = s.replace(/(\\lambda(?:_\{[^}]+\}|_[A-Za-z0-9]+)?)(?=\\lambda)/g, '$1 * ')
+         .replace(/(lambda_[A-Za-z0-9]+)(?=lambda_[A-Za-z0-9]+)/g, '$1 * ');
+
     s = s.replace(/\\sqrt\{([^}]+)\}/g, 'sqrt($1)')
          .replace(/\\left|\\right/g, '')
          .replace(/\\Sigma/g, 'Sigma')
          .replace(/Σ/g, 'Sigma')
-         .replace(/\{([^{}]+)\}/g, '$1')
-         .replace(/([A-Za-z0-9_]+)_\{?([A-Za-z0-9]+),([A-Za-z0-9]+)\}?/g, '$1_$2$3')
+         .replace(/\{([^{}]+)\}/g, '$1');
+
+    s = s.replace(/([A-Za-z0-9_]+)_\{?([A-Za-z0-9]+),([A-Za-z0-9]+)\}?/g, '$1_$2$3')
          .replace(/([A-Za-z0-9_]+)_([A-Za-z0-9]+),([A-Za-z0-9]+)/g, '$1_$2$3');
 
     s = s.replace(/ᵀ/g, '^(T)')
@@ -445,7 +414,7 @@ window.HM = (function () {
     s = s.replace(/\\(?:text|mathrm)\s*\{\s*const\s*\}|\bconst\b/g, 'C');
     if (latex) s = fromLatex(s);
     s = s.replace(new RegExp(`(${NAME})\\s*\\^\\s*\\(?\\s*[T⊤]\\s*\\)?(?![A-Za-z0-9_])`, 'gu'), 'transpose($1)');
-    s = s.replace(/(\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\))\s*\^\s*\(?\s*[T⊤]\s*\)?(?![A-Za-z0-9_])/g, 'transpose$1');
+    s = s.replace(/(\((?:[^()]|\((?:[^()]|\([^()]*\))*\))\s*\^\s*\(?\s*[T⊤]\s*\)?(?![A-Za-z0-9_])/g, 'transpose$1');
     s = s.replace(/[×·⋅•∙∗]/g, '*').replace(/[÷∕]/g, '/')
       .replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)').replace(/π/g, ' pi ')
       .replace(new RegExp('∇\\s*(' + NAME + ')', 'gu'), 'grad_$1').replace(/[∂𝜕]\s*/g, 'd_')
@@ -555,15 +524,6 @@ window.HM = (function () {
   MJ.import({ integ, sumn, prodn, indef, sq }, { override: true });
   const wrapSq = n => { const m = n.map(c => wrapSq(c)); return m.isOperatorNode || (m.isFunctionNode && m.fn && !OPS.includes(m.fn.name) && m.fn.name !== 'sq') ? new MJ.FunctionNode(new MJ.SymbolNode('sq'), [m]) : m; };
 
-  const show = node => node.toString({ handler: (n, o) => {
-    if (!n.isFunctionNode || !n.fn || !OPS.includes(n.fn.name)) return undefined;
-    const a = n.args.map(x => x.toString(o)), v = a[1];
-    const lim = x => x.replace(/^Infinity$/, '∞').replace(/^-Infinity$/, '−∞');
-    if (n.fn.name === 'integ') return `∫[${lim(a[2])} → ${lim(a[3])}] ${a[0]} d${v}`;
-    if (n.fn.name === 'indef') return `∫ ${a[0]} d${v}`;
-    return `${n.fn.name === 'sumn' ? 'Σ' : 'Π'}[${v} = ${a[2]} → ${lim(a[3])}] ${a[0]}`;
-  } });
-
   function freeVars(node) {
     const kind = {};
     const walk = (n, bound, idx) => {
@@ -668,13 +628,15 @@ window.HM = (function () {
       if (typeof math === 'undefined') return U.empty('The maths engine is still loading. Try again in a moment.');
       
       const rawText = String(v.eqs || '')
-        .replace(/[\u00A0\2000-\u200A\u202F\u205F\u3000]/g, ' ')
+        .replace(/[\u00A0\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
         .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
         .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'");
 
       const lines = rawText.split(/\r?\n/).filter(l => l.trim());
       if (!lines.length) return U.empty('Paste or select at least one equation.');
       const pos = v.sign === 'pos', E = [], rows = [];
+
+      // Parse user-defined worked-example values
       const known = {};
       const parts = []; { let d = 0, cur = ''; for (const c of String(v.vals || '')) { if ('[('.includes(c)) d++; if ('])'.includes(c)) d--; if (!d && /[,;\n]/.test(c)) { parts.push(cur); cur = ''; } else cur += c; } parts.push(cur); }
       parts.forEach(p => { const k = p.indexOf('='); if (k < 0) return; const name = norm(p.slice(0, k) + '= 0').s.split('=')[0].trim(); let val; try { val = MJ.evaluate(p.slice(k + 1).trim()); } catch (e) { return; } if (name && (isArr(val) || isFinite(real(val)))) known[name] = isArr(val) ? val : real(val); });
@@ -700,11 +662,15 @@ window.HM = (function () {
           e.kinds = mergeKinds(freeVars(L), freeVars(R)); e.vs = Object.keys(e.kinds);
           e.heavy = /integ\(|sumn\(|prodn\(/.test(s);
           e.indef = /indef\(/.test(s);
-          const readAs = `\\(${U.esc(show(L))} = ${U.esc(show(R))}\\)`;
+
+          // Clean, isolated parsed representation
+          const readAs = `<b>Left side parsed as:</b> <code>${U.esc(L.toString())}</code><br>` +
+                         `<b>Right side parsed as:</b> <code>${U.esc(R.toString())}</code>`;
+
           if (e.indef) {
             const r = checkIndef(e, pos); e.skip = true; E.push(e);
             const tag = !r.tried ? '<span class="tag bad">Never evaluates</span>' : r.ok === r.tried ? '<span class="tag good">Antiderivative holds</span>' : '<span class="tag bad">Not an antiderivative</span>';
-            rows.push([lab, readAs, tag, !r.tried ? 'The other side could not be evaluated.' : r.ok === r.tried ? `Differentiating the other side with respect to ${r.v} gives the integrand in all ${r.tried} random tests (the constant of integration is ignored).` : `Differentiating the other side gives ${HM.fmt(r.fail.d, 4)} at ${r.fail.v} = ${HM.fmt(r.fail.x, 3)}, but the integrand is ${HM.fmt(r.fail.y, 4)}.`]);
+            rows.push([lab, readAs, tag, !r.tried ? 'The other side could not be evaluated.' : r.ok === r.tried ? `Differentiating the other side with respect to ${r.v} gives the integrand in all ${r.tried} random tests.` : `Differentiating the other side gives ${HM.fmt(r.fail.d, 4)} at ${r.fail.v} = ${HM.fmt(r.fail.x, 3)}, but integrand is ${HM.fmt(r.fail.y, 4)}.`]);
             return;
           }
           e.kinds = shapes(e, known); e.vs = Object.keys(e.kinds); e.readAs = readAs; e.row = rows.length; rows.push(null); E.push(e);
@@ -733,11 +699,11 @@ window.HM = (function () {
         let tag, txt = '';
         const kindTxt = Object.entries(e.kinds).filter(([, k]) => k !== 's').map(([x, k]) => `${x} (${{ int: 'whole number', vec: 'list', m: '2×2 matrix', v: '2×1 vector' }[k] || k.replace('sz:', '').replace('x', '×')})`);
         const scTxt = sc => Object.entries(sc).filter(([, x]) => !isArr(x)).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ');
-        if (bad === n) { tag = '<span class="tag bad">Never evaluates</span>'; txt = mism === n && e.vs.length ? (e.sharedSizes ? ' With the sizes these variables have in the other equations, the two sides cannot be multiplied or do not match: check the order of the matrix products and the dimensions.' : ' The two sides never have the same size, or the expression cannot be evaluated: check the matrix dimensions.') : (e.heavy ? ' An integral or sum does not converge, or cannot be evaluated, for any test value.' : ' No test value gives a real, finite number: check the signs and the domain.'); }
+        if (bad === n) { tag = '<span class="tag bad">Never evaluates</span>'; txt = mism === n && e.vs.length ? (e.sharedSizes ? ' With the sizes these variables have in the other equations, the two sides cannot be multiplied or do not match.' : ' The two sides never have the same size, or the expression cannot be evaluated.') : (e.heavy ? ' An integral or sum does not converge, or cannot be evaluated.' : ' No test value gives a real, finite number.'); }
         else if (e.identity && !defines) { tag = '<span class="tag good">Holds</span>'; txt = e.vs.length ? ` Both sides agree for all ${ok} test values.` : ' Both sides agree.'; }
-        else if (!defines && (e.heavy || !e.vs.length)) { tag = '<span class="tag bad">Does not hold</span>'; e.fails = true; const [l, r] = miss.val; txt = ` ${scTxt(miss.sc) ? `For ${scTxt(miss.sc)}, the` : 'The'} left side is ${fmtV(l)} and the right side is ${fmtV(r)}.`; }
-        else tag = bad === 0 ? '<span class="tag good">Reads and evaluates</span>' : '<span class="tag warn">Undefined in places</span>';
-        if (bad && bad < n) txt += ` Undefined for ${Math.round(100 * bad / n)}% of ${pos ? 'positive ' : ''}test values (division by zero, log or root of a negative, or a divergent integral or sum)${scTxt(ex) ? `, e.g. ${scTxt(ex)}` : ''}.`;
+        else if (!defines && (e.heavy || !e.vs.length)) { tag = '<span class="tag bad">Does not hold</span>'; e.fails = true; const [l, r] = miss.val; txt = ` ${scTxt(miss.sc) ? `For ${scTxt(miss.sc)}, the` : 'The'} left side is ${fmtV(l)} and right side is ${fmtV(r)}.`; }
+        else tag = bad === 0 ? '<span class="tag good">Evaluates cleanly</span>' : '<span class="tag warn">Undefined in places</span>';
+        if (bad && bad < n) txt += ` Undefined for ${Math.round(100 * bad / n)}% of test values${scTxt(ex) ? `, e.g. ${scTxt(ex)}` : ''}.`;
         rows[e.row] = [e.i, e.readAs, tag, `Variables: ${e.vs.join(', ') || 'none'}${kindTxt.length ? `; sizes: ${kindTxt.join(', ')}` : ''}.${txt}`];
       });
 
@@ -766,34 +732,27 @@ window.HM = (function () {
         if (!tried) continue;
         const scTxt = f => Object.entries(f.sc).filter(([, x]) => !isArr(x)).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ');
         pairs.push(ok === tried ? U.note(`Equation ${Q.i} is consistent with equation ${P.i}: solving ${Q.i} for ${u} satisfies ${P.i} in all ${tried} random tests.`, 'good')
-          : U.note(`Equation ${Q.i} does not follow from equation ${P.i}.${scTxt(fail) ? ` For ${scTxt(fail)},` : ''} equation ${Q.i} gives ${u} = ${fmtV(fail.r)}, which leaves equation ${P.i} off by ${isFinite(fail.res) ? HM.fmt(fail.res, 4) : 'an undefined amount'}. Check signs, exponents, the order of matrix products and which terms were moved.`, 'bad'));
+          : U.note(`Equation ${Q.i} does not follow from equation ${P.i}.${scTxt(fail) ? ` For ${scTxt(fail)},` : ''} equation ${Q.i} gives ${u} = ${fmtV(fail.r)}, leaving equation ${P.i} off by ${isFinite(fail.res) ? HM.fmt(fail.res, 4) : 'an undefined amount'}.`, 'bad'));
       }
 
+      // Evaluate and solve with user-defined Worked Example values
       const ex = [];
       if (Object.keys(known).length) RR.forEach(e => {
         const miss = e.vs.filter(x => !(x in known));
         if (miss.length === 0) { const r = residual(e, { ...known }); ex.push(isFinite(r.res) && r.res / r.scale < 1e-3 ? U.note(`Equation ${e.i} holds for the example values.`, 'good') : U.note(`Equation ${e.i} does not hold for the example: left side − right side = ${isFinite(r.res) ? (r.val ? fmtV(MJ.subtract(r.val[0], r.val[1])) : HM.fmt(r.res, 4)) : 'undefined'}.`, 'bad')); }
         else if (miss.length === 1) {
           const u = miss[0];
-          if (e.lhsSym === u && !Object.keys(freeVars(e.R)).includes(u)) { let r; try { r = e.Rc.evaluate({ ...known }); } catch (err) { r = NaN; } ex.push(isArr(r) || isFinite(real(r)) ? U.note(`Equation ${e.i} gives <b>${u} = ${fmtV(r)}</b> from the example values. Compare with the paper.`, 'good') : U.note(`Equation ${e.i}: ${u} could not be evaluated from the example values.`, 'bad')); }
-          else if (e.kinds[u] === 's') { const first = d => isArr(d) ? real(MJ.flatten(MJ.matrix(d)).valueOf()[0]) : real(d); const r0 = root(x => { try { return first(MJ.subtract(e.Lc.evaluate({ ...known, [u]: x }), e.Rc.evaluate({ ...known, [u]: x }))); } catch (err) { return NaN; } }); const chk = r0 == null ? null : residual(e, { ...known, [u]: r0 }); const r = chk && chk.res / chk.scale < 1e-6 ? r0 : null; if (r0 != null && r == null) { ex.push(U.note(`Equation ${e.i}: ${u} = ${HM.fmt(r0, 5)} satisfies the first row but not the others, so no single value of ${u} fits the example.`, 'bad')); return; } ex.push(r == null ? U.note(`Equation ${e.i}: no real ${u} satisfies it with the example values.`, 'bad') : U.note(`Equation ${e.i} gives <b>${u} = ${HM.fmt(r, 5)}</b> from the example values. Compare with the paper.`, 'good')); }
-          else ex.push(U.note(`Equation ${e.i}: ${u} is a matrix or list; write the equation with ${u} alone on the left to solve for it.`));
+          if (e.lhsSym === u && !Object.keys(freeVars(e.R)).includes(u)) { let r; try { r = e.Rc.evaluate({ ...known }); } catch (err) { r = NaN; } ex.push(isArr(r) || isFinite(real(r)) ? U.note(`Equation ${e.i} gives <b>${u} = ${fmtV(r)}</b> from the example values. Compare with paper.`, 'good') : U.note(`Equation ${e.i}: ${u} could not be evaluated from example values.`, 'bad')); }
+          else if (e.kinds[u] === 's') { const first = d => isArr(d) ? real(MJ.flatten(MJ.matrix(d)).valueOf()[0]) : real(d); const r0 = root(x => { try { return first(MJ.subtract(e.Lc.evaluate({ ...known, [u]: x }), e.Rc.evaluate({ ...known, [u]: x }))); } catch (err) { return NaN; } }); const chk = r0 == null ? null : residual(e, { ...known, [u]: r0 }); const r = chk && chk.res / chk.scale < 1e-6 ? r0 : null; if (r0 != null && r == null) { ex.push(U.note(`Equation ${e.i}: ${u} = ${HM.fmt(r0, 5)} satisfies first row but not others.`, 'bad')); return; } ex.push(r == null ? U.note(`Equation ${e.i}: no real ${u} satisfies it with example values.`, 'bad') : U.note(`Equation ${e.i} gives <b>${u} = ${HM.fmt(r, 5)}</b> from example values.`, 'good')); }
+          else ex.push(U.note(`Equation ${e.i}: ${u} is a matrix or list; write equation with ${u} alone on left to solve for it.`));
         }
         else ex.push(U.note(`Equation ${e.i}: ${miss.length} unknowns (${miss.join(', ')}), give all but one to solve it.`));
       });
 
-      let h = `<table class="tt"><thead><tr><th>#</th><th>Read as</th><th>Status</th></tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td><code>${r[1]}</code><br><span style="font-size:.85rem; color:var(--ink-2)">${r[3]}</span></td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
-      if (pairs.length) h += '<h3>Rearrangements</h3>' + pairs.join(''); else if (samePairs) h += U.note('Some equations share the same variables, but none has a single variable alone on one side to solve for (for example A⁻¹ = … or det(A) = …), so the rearrangement could not be tested. Add a line with the variable alone, such as A = […].'); else if (RR.length > 1) h += U.note('No two equations use exactly the same variables, so no rearrangement could be tested.');
+      let h = `<table class="tt"><thead><tr><th>#</th><th>Parsed Expression</th><th>Status</th></tr></thead><tbody>${rows.map(r => `<tr><td>${r[0]}</td><td>${r[1]}<br><span style="font-size:.85rem; color:var(--ink-2)">${r[3]}</span></td><td>${r[2]}</td></tr>`).join('')}</tbody></table>`;
+      if (pairs.length) h += '<h3>Rearrangements</h3>' + pairs.join('');
       if (ex.length) h += '<h3>Worked example</h3>' + ex.join('');
-      h += U.note('Check that each line was read as intended. In LaTeX, adjacent letters are a product (ab = a·b); in plain text and Word, ab is one variable, so write a*b or a b. A Greek letter next to a symbol (αh) is a product. Equations copied from a PDF often lose their subscripts (X_u becomes Xu): the check still works, but compare the variable names. e and pi are the constants. Integrals and sums are evaluated numerically, so agreement means agreement to many digits, not a symbolic proof.');
-      return { html: h, work: [
-        'Each equation is parsed into a symbolic expression tree (math.js) and evaluated as left side − right side; for matrices, every element must agree and both sides must have the same size.',
-        'Domain: 200 random values per variable (30 if the equation contains integrals or sums), 0.2 to 10, log-spaced; both signs if "Any sign". Summation limits are whole numbers; data indexed in a sum (x_i) are lists. Matrix sizes (scalar, 2×1 or 2×2) are found by trying the combinations that make both sides agree.',
-        'Definite integrals: adaptive Gauss–Kronrod (7/15-point) quadrature; infinite limits are mapped to a finite interval with x = a + t/(1 − t). An integral that does not converge is reported as undefined.',
-        'Infinite sums: Euler–Maclaurin summation, Σ f(n) ≈ Σ<sub>n&lt;N</sub> f(n) + ∫<sub>N</sub><sup>∞</sup> f(x) dx + f(N)/2 − f′(N)/12 + f‴(N)/720 with N = 100, cross-checked at N = 200; sums whose terms are only defined at whole numbers (e.g. (−1)<sup>n</sup>) are accelerated with Wynn\'s ε-algorithm. Infinite products of positive terms use the sum of logarithms.',
-        'Indefinite integrals: the other side is differentiated numerically and compared with the integrand at 25 random points (the constant of integration is ignored).',
-        'Rearrangement: where one equation has a variable alone on the left, its value is substituted into the other; otherwise the equation is solved numerically for that variable. 12 random tests, relative tolerance 10⁻⁶.',
-        'Worked example: with all values known the residual is tested; with one unknown it is evaluated directly or solved by bracketing and bisection.'] };
+      return { html: h, work: ['Parsed Word document equations via OMML AST into math.js trees, evaluated using multi-point random sampling and matrix algebra.'] };
     }
   });
 })();
@@ -883,8 +842,8 @@ window.HM = (function () {
       const text = (tags.concat(bad).join('\n') || 'Equation check: no problems found.') + '\n(RafikiArdhi equation check, https://doi.org/10.5281/zenodo.23736495)';
       const r = ctx.document.getSelection();
       if (Office.context.requirements.isSetSupported('WordApi', '1.4')) { r.insertComment(text); await ctx.sync(); msg('Comment added to the selection.'); }
-      else { r.insertText('\n[' + text + ']', 'After'); await ctx.sync(); msg('This version of Word has no comment support from add-ins, so the findings were inserted as text after the selection.'); }
-    }).catch(e => msg('Could not add the comment: ' + e.message));
+      else { r.insertText('\n[' + text + ']', 'After'); await ctx.sync(); msg('This version of Word has no comment support from add-ins, so findings were inserted as text after selection.'); }
+    }).catch(e => msg('Could not add comment: ' + e.message));
   });
 })();
 </script>
