@@ -186,7 +186,7 @@
     "href": "checks.html",
     "title": "Check a result",
     "section": "",
-    "text": "Use these checks to investigate whether your own results and methods hold together, whether the work is in progress or already published. They test reported figures against what the method allows, and highlight questions worth answering before you share your work. Nothing you enter leaves your browser.\n  How to cite: Flynn, T. (2026). Check a result: plausibility checks for soil and environmental results, version 1.0 [software]. https://doi.org/10.5281/zenodo.23736495. Please also cite the method references given with each check. All citations →"
+    "text": "Tip\n\n\n\nThese checks also work inside Microsoft Word. Get the Word add-in (beta)"
   },
   {
     "objectID": "checks.html#finding-the-right-pixel-size",
