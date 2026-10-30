@@ -1,0 +1,1058 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Equation checker</title>
+<script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/11.11.0/math.min.js"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<style>
+.hmc {
+  --bg: #161412; --surface: #1f1c19; --surface-2: #2a2622; --ink: #f0ece4; --ink-2: #c4bdb1; --ink-3: #8f887d;
+  --line: #3a352f; --accent: #d98b56; --accent-ink: #1a1410; --accent-soft: #3a2a1f; --warn: #e0a440; --good: #5cc28f; --bad: #e07070;
+  color: var(--ink); font-size: 1.02rem; line-height: 1.5; max-width: 620px; margin: 8px auto 28px;
+}
+body.quarto-light .hmc {
+  --bg: #f7f5f0; --surface: #fffdf9; --surface-2: #efebe2; --ink: #1f1c17; --ink-2: #57514a; --ink-3: #8a8379;
+  --line: #ddd6ca; --accent: #8a4b22; --accent-ink: #ffffff; --accent-soft: #f3e6da; --warn: #9a6400; --good: #1f7a4d; --bad: #b3261e;
+}
+.hmc * { box-sizing: border-box; }
+.hmc .cx { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-top: 12px; }
+.hmc .step { font-size: .78rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .1em; font-weight: 600; margin: 0 0 6px; }
+.hmc .hint { font-size: .9rem; color: var(--ink-2); margin: 6px 0 0; }
+.hmc .fg { display: grid; grid-template-columns: repeat(6, 1fr); column-gap: 10px; }
+.hmc .fg > div { grid-column: span 6; }
+.hmc label { display: block; font-size: .9rem; font-weight: 600; color: var(--ink-2); margin: 10px 0 4px; }
+.hmc textarea { width: 100%; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); color: var(--ink); font: .88rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; padding: 8px 12px; resize: vertical; display: block; }
+.hmc input:focus, .hmc select:focus, .hmc textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.hmc .seg { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.hmc .seg button { flex: 1 1 auto; min-height: 38px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 999px; padding: 4px 12px; font: inherit; font-weight: 600; cursor: pointer; }
+.hmc .seg button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.hmc .res { border: 2px solid var(--accent); overflow-x: auto; margin-top: 12px; }
+.hmc .note { border-left: 3px solid var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); padding: 8px 12px; border-radius: 0 10px 10px 0; font-size: .9rem; color: var(--ink-2); margin-top: 10px; }
+.hmc .note.good { border-left-color: var(--good); background: color-mix(in srgb, var(--good) 10%, transparent); }
+.hmc .note.bad { border-left-color: var(--bad); background: color-mix(in srgb, var(--bad) 10%, transparent); }
+.hmc .tag { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; padding: 1px 9px; border: 1px solid currentColor; }
+.hmc .tag.good { color: var(--good); } .hmc .tag.warn { color: var(--warn); } .hmc .tag.bad { color: var(--bad); }
+
+.hmc table.tt { width: 100%; border-collapse: collapse; font-size: .93rem; margin-top: 8px; table-layout: fixed; }
+.hmc table.tt th, .hmc table.tt td { text-align: left; padding: 7px 6px; border-top: 1px solid var(--line); vertical-align: top; word-break: break-word; overflow-wrap: break-word; }
+.hmc table.tt th { color: var(--ink-3); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; border-top: none; }
+.hmc table.tt td:nth-child(1) { width: 10%; }
+.hmc table.tt td:nth-child(2) { width: 65%; overflow-x: auto; }
+.hmc table.tt td:nth-child(3) { width: 25%; }
+
+.hmc details.cx { padding: 0; }
+.hmc details summary { cursor: pointer; padding: 14px 16px; font-weight: 600; color: var(--accent); list-style: none; }
+.hmc details summary::-webkit-details-marker { display: none; }
+.hmc details summary::before { content: "＋ "; }
+.hmc details[open] summary::before { content: "－ "; }
+.hmc details .db { padding: 0 16px 16px; }
+.hmc ol.work { font-size: .92rem; color: var(--ink-2); margin: 0; padding-left: 18px; }
+.hmc ol.work li { margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+
+body { margin: 0; padding: 10px 12px 24px; font-family: "Segoe UI", system-ui, sans-serif; }
+body.quarto-dark { background: #161412; color: #f0ece4; }
+body.quarto-light { background: #f7f5f0; color: #1f1c17; }
+body .hmc { max-width: 100%; margin: 6px 0 16px; }
+.ra-bar { display: grid; gap: 8px; margin: 4px 0 6px; }
+
+body.quarto-dark .ra-bar button { min-height: 40px; border-radius: 10px; border: 1px solid #3a352f; background: #1f1c19; color: #f0ece4; font: inherit; font-weight: 600; cursor: pointer; }
+body.quarto-dark .ra-bar button.p { background: #d98b56; border-color: #d98b56; color: #1a1410; }
+body.quarto-light .ra-bar button { min-height: 40px; border-radius: 10px; border: 1px solid #ddd6ca; background: #fffdf9; color: #1f1c17; font: inherit; font-weight: 600; cursor: pointer; }
+body.quarto-light .ra-bar button.p { background: #8a4b22; border-color: #8a4b22; color: #fff; }
+
+body.quarto-dark h1, body.quarto-dark .ra-sub, body.quarto-dark .ra-msg { color: #f0ece4; }
+body.quarto-light h1, body.quarto-light .ra-sub, body.quarto-light .ra-msg { color: #1f1c17; }
+
+.ra-foot { font-size: .75rem; color: #8a8379; } 
+body.quarto-dark .ra-foot a { color: #d98b56; }
+body.quarto-light .ra-foot a { color: #8a4b22; }
+</style></head>
+
+<body class="quarto-dark">
+<h1>RafikiArdhi · <span id="lbl-title">Equation checker</span> <span class="ck-beta" style="font-size:.6rem;border:1px solid #e0a440;color:#e0a440;border-radius:4px;padding:1px 5px">BETA</span></h1>
+<p class="ra-sub" id="lbl-sub">No AI. Runs in this panel; nothing leaves your computer.</p>
+
+<div class="ra-bar">
+  <button class="p" id="ra-sel">Check the selected equations</button>
+  <button id="ra-doc">Find all equations in the document</button>
+  <button id="ra-com">Add the findings as a comment</button>
+</div>
+<div class="ra-msg" id="ra-msg"></div>
+
+<div class="hmc" id="eq"></div>
+
+<script>
+// ---------------------------------------------------------------------------
+// OMML (Word equation XML) -> linear text that norm() understands.
+// Works on OOXML from Word.run getOoxml() (XML DOM) and on the OMML Word puts
+// in the clipboard HTML when you copy an equation (HTML DOM, tag names keep
+// their "m:" prefix). Plain text from Word (",A-B." form) loses the difference
+// between fractions, subscripts and powers, so this is the reliable path.
+// ---------------------------------------------------------------------------
+(function () {
+  const nm = n => (n && n.nodeType === 1) ? n.nodeName.toLowerCase().split(':').pop() : '';
+  const kids = n => n ? [...n.childNodes].filter(c => c.nodeType === 1) : [];
+  const kid = (n, name) => kids(n).find(c => nm(c) === name) || null;
+  const kidsNamed = (n, name) => kids(n).filter(c => nm(c) === name);
+  const val = n => {
+    if (!n) return null;
+    for (const a of ['m:val', 'val', 'w:val']) { const v = n.getAttribute(a); if (v !== null) return v; }
+    return null;
+  };
+  const prop = (n, prName, key) => { const p = kid(n, prName); const k = p && kid(p, key); return k ? val(k) : undefined; };
+  const SIMPLE = /^[A-Za-z0-9.\u0370-\u03FF\u2202]+(?:_[A-Za-z0-9\u0370-\u03FF]+)?$/;
+  const wrap = s => (SIMPLE.test(s) || /^\(.*\)$|\)$|\]$/.test(s)) ? s : `(${s})`;
+  const clean = s => s.replace(/[^A-Za-z0-9\u0370-\u03FF]/g, '');
+  const ACC = { '\u0302': 'hat', '^': 'hat', '\u0303': 'tilde', '~': 'tilde', '\u0304': 'bar', '\u0305': 'bar', '\u00AF': 'bar', '\u203E': 'bar', '\u0332': 'bar', '\u0307': 'dot', '\u20D7': '', '\u2192': '' };
+  const SKIP = /pr$/; // property elements: rPr, fPr, dPr, ctrlPr, naryPr ...
+
+  function lin(n, sub) {                    // convert the children of n (sub: inside a subscript/name, keep letters together)
+    let out = '', prevStruct = false;
+    for (const c of n.childNodes) {
+      if (c.nodeType !== 1) continue;
+      const name = nm(c);
+      if (SKIP.test(name)) continue;
+      // r/t are text runs; non-OMML wrappers (span, i, b from clipboard HTML) are transparent
+      const isRun = name === 'r' || name === 't' || !c.nodeName.includes(':');
+      const s = (name === 'r' || name === 't') ? runText(c, sub) : isRun ? lin(c, sub) : one(c, sub);
+      if (!s) continue;
+      if (out && (!isRun || prevStruct || (!sub && /[A-Za-z0-9.\u0370-\u03FF]$/.test(out) && /^[A-Za-z\u0370-\u03FF]/.test(s) && !/[0-9.]$/.test(out.slice(-1)) ))) out += ' ';
+      out += s; prevStruct = !isRun;
+    }
+    return out.trim();
+  }
+  // In Word equations adjacent italic letters are a product (ax = a·x), so split
+  // them, except function names, upright (plain-style) text and subscripts.
+  const WORDS = /^(sin|cos|tan|cot|sec|csc|sinh|cosh|tanh|arcsin|arccos|arctan|asin|acos|atan|ln|log|exp|max|min|det|lim|sqrt|abs|erf|mod|inv|Infinity|pi)$/;
+  function runText(r, sub) {
+    const ts = kids(r).filter(c => nm(c) === 't');
+    let txt = (ts.length ? ts.map(t => t.textContent).join('') : r.textContent).replace(/\u2061/g, '').replace(/[\u2146]/g, 'd').normalize('NFKC');
+    const plain = prop(r, 'rpr', 'sty') === 'p' || /\bmathrm|upright/i.test(r.getAttribute && (r.getAttribute('style') || '') || '');
+    if (sub || plain) return txt;
+    return txt.replace(/[A-Za-z\u0370-\u03FF]{2,}/g, w => WORDS.test(w) ? w : w.split('').join(' '));
+  }
+  function one(c, sub) {
+    const name = nm(c), e = () => lin(kid(c, 'e'), sub);
+    switch (name) {
+      case 'f': {
+        const a = lin(kid(c, 'num'), sub), b = lin(kid(c, 'den'), sub);
+        if (/^[∂𝜕d]\s*\S/.test(a) && /^[∂𝜕]\s*\S|^d\s*[A-Za-z\u0370-\u03FF]$/.test(b) && /^[∂𝜕]/.test(a) === /^[∂𝜕]/.test(b))
+          return `(${a})/(${b})`;
+        return `((${a})/(${b}))`;
+      }
+      case 'ssub': { const b = e(); return /[)\]]$/.test(b) ? b : `${b}_${clean(lin(kid(c, 'sub'), true))}`; }
+      case 'ssup': return `${wrap(e())}^(${lin(kid(c, 'sup'), sub)})`;
+      case 'ssubsup': { const b = e(), sb = clean(lin(kid(c, 'sub'), true)); return `${wrap(/[)\]]$/.test(b) ? b : b + '_' + sb)}^(${lin(kid(c, 'sup'), sub)})`; }
+      case 'spre': return e();
+      case 'rad': {
+        const deg = lin(kid(c, 'deg'), sub), hide = prop(c, 'radpr', 'deghide');
+        return (deg && hide !== '1' && hide !== 'on' && hide !== 'true') ? `nthRoot(${e()}, ${deg})` : `sqrt(${e()})`;
+      }
+      case 'd': {
+        let beg = prop(c, 'dpr', 'begchr'), end = prop(c, 'dpr', 'endchr'), sep = prop(c, 'dpr', 'sepchr');
+        beg = beg === undefined ? '(' : (beg || ''); end = end === undefined ? ')' : (end || '');
+        sep = sep === undefined || sep === '' || sep === '|' || sep === '\u2502' ? ', ' : sep + ' ';
+        const es = kidsNamed(c, 'e');
+        const onlyMatrix = es.length === 1 && kids(es[0]).filter(x => !SKIP.test(nm(x))).length === 1 && nm(kids(es[0]).filter(x => !SKIP.test(nm(x)))[0]) === 'm';
+        const inner = es.map(x => lin(x, sub)).join(sep);
+        if (onlyMatrix) return (beg === '|' || beg === '\u2223') ? `det(${inner})` : inner;
+        if ((beg === '|' || beg === '\u2223' || beg === '\u2016') && (end === beg || end === '|' || end === '\u2016')) return `abs(${inner})`;
+        if (beg === '\u230A') return `floor(${inner})`;
+        if (beg === '\u2308') return `ceil(${inner})`;
+        const B = { '(': '(', '[': '[', '{': '(', '\u27E8': '(', '\u2329': '(', '': '' }, E = { ')': ')', ']': ']', '}': ')', '\u27E9': ')', '\u232A': ')', '': '' };
+        const b = beg in B ? B[beg] : '(', d = end in E ? E[end] : ')';
+        return b === '[' && d === ']' ? `[${inner}]` : `(${inner})`;   // [ ] with no commas is read as brackets by norm()
+      }
+      case 'm': {
+        const rows = kidsNamed(c, 'mr').map(r => kidsNamed(r, 'e').map(x => lin(x, sub) || '0').join(', '));
+        return `[${rows.join('; ')}]`;
+      }
+      case 'nary': {
+        const chr = prop(c, 'narypr', 'chr') || '\u222B';
+        const lo = lin(kid(c, 'sub'), sub), hi = lin(kid(c, 'sup'), sub);
+        let body = e();
+        if (chr === '\u222B') body = body.replace(/(^|[^A-Za-z0-9_])?d\s*([A-Za-z\u0370-\u03FF])\s*$/, (m, p, v) => `${p || ''} d${v}`);
+        const sym = chr === '\u2211' ? '∑' : chr === '\u220F' ? '∏' : chr;
+        return `${sym}${lo ? `_(${lo})` : ''}${hi ? `^(${hi})` : ''}▒(${body})`;
+      }
+      case 'func': {
+        const f = lin(kid(c, 'fname'), true).replace(/\s+/g, ''), a = e();
+        return /^\(.*\)$/.test(a) ? `${f}${a}` : `${f}(${a})`;
+      }
+      case 'acc': { const ch = prop(c, 'accpr', 'chr'), suf = ACC[ch === undefined ? '\u0302' : ch]; const b = e(); return suf && SIMPLE.test(b) ? `${b}_${suf}` : b; }
+      case 'bar': { const b = e(); return SIMPLE.test(b) ? `${b}_bar` : b; }
+      case 'limlow': case 'limupp': return `${lin(kid(c, 'e'), sub)} ${lin(kid(c, 'lim'), true)}`;
+      case 'eqarr': return kidsNamed(c, 'e').map(x => lin(x, sub)).join('\n');
+      case 'groupchr': case 'box': case 'borderbox': case 'phant': return e();
+      case 'r': case 't': return runText(c, sub);
+      default: return lin(c, sub);                 // oMath, e, num, spans/i/b from clipboard HTML ...
+    }
+  }
+
+  const all = (root, name) => { const out = []; const walk = n => { for (const c of kids(n)) { if (nm(c) === name) out.push(c); else walk(c); } }; walk(root); return out; };
+  const tidy = s => s.replace(/&/g, ' ').replace(/[\u00A0\s]+/g, ' ').trim();
+  // one linear string per equation (an equation array gives one per row)
+  window.ommlToLinear = node => node ? lin(node) : '';
+  window.ommlEquations = root => all(root, 'omath').flatMap(m => lin(m).split('\n')).map(tidy).filter(Boolean);
+
+  // Equations from Word OOXML (selection or whole document): each paragraph's
+  // equations are read from OMML; paragraphs without equations use their text.
+  window.equationsFromOoxml = (ooxml, eqLines) => {
+    const doc = new DOMParser().parseFromString(ooxml, 'text/xml');
+    const paras = all(doc.documentElement, 'p');
+    const out = [];
+    const roots = paras.length ? paras : [doc.documentElement];
+    for (const p of roots) {
+      const maths = all(p, 'omath');
+      if (maths.length) { maths.forEach(m => lin(m).split('\n').map(tidy).filter(Boolean).forEach(x => out.push(x))); continue; }
+      const text = all(p, 't').map(t => t.textContent).join('');
+      eqLines(text).forEach(x => out.push(x));
+    }
+    return out;
+  };
+
+  // Equations from clipboard HTML copied out of Word (OMML hidden in msEquation comments)
+  window.equationsFromClipboardHtml = html => {
+    if (!html) return [];
+    const blocks = [...html.matchAll(/<!--\[if gte msEquation 12\]>([\s\S]*?)<!\[endif\]-->/gi)].map(m => m[1]);
+    if (!blocks.length && /<m:oMath/i.test(html)) blocks.push(html);
+    const out = [];
+    for (const b of blocks) {
+      const doc = new DOMParser().parseFromString('<!doctype html><body>' + b + '</body>', 'text/html');
+      window.ommlEquations(doc.body).forEach(x => out.push(x));
+    }
+    return out;
+  };
+})();
+
+window.HM = (function () {
+  let lang = localStorage.getItem('ra-lang') || 'en';
+
+  const I18N = {
+    en: {
+      title: 'Equation checker',
+      sub: 'No AI. Runs in this panel; nothing leaves your computer.',
+      btnSel: 'Check the selected equations',
+      btnDoc: 'Find all equations in the document',
+      btnCom: 'Add the findings as a comment',
+      lblEqs: 'Equations, one per line (numbers like "(3)" at start/end are ignored):',
+      lblVals: 'Worked example from the paper (optional): known values, e.g. q = 0.5, dz = 10, dh = -2 (lists and matrices as x = [1, 2, 3], A = [2, -1; -1, 2]):',
+      lblSign: 'Variables are',
+      optPos: 'Positive', optAny: 'Any sign',
+      work: 'Show the working',
+      tblNum: '#', tblParsed: 'Read as / Status', tblStatus: 'Status',
+      lhsParsed: 'Left side parsed as:',
+      rhsParsed: 'Right side parsed as:',
+      rearr: 'Rearrangements',
+      workedEx: 'Worked example'
+    },
+    sw: {
+      title: 'Uhakiki wa Milinganyo',
+      sub: 'Bila AI. Inafanya kazi hapa tu; hakuna kinachotoka kwenye kompyuta yako.',
+      btnSel: 'Kagua milinganyo iliyochaguliwa',
+      btnDoc: 'Tafuta milinganyo yote kwenye waraka',
+      btnCom: 'Weka matokeo kama maoni (comment)',
+      lblEqs: 'Milinganyo, mmoja kwa kila mstari (namba kama "(3)" zinasahauliwa):',
+      lblVals: 'Mfano halisi kutoka kwa jarida (sio lazima): mfano q = 0.5, dz = 10, dh = -2 (matingo na tumbo kama x = [1, 2, 3], A = [2, -1; -1, 2]):',
+      lblSign: 'Alama za vibadilika (variables):',
+      optPos: 'Chanya', optAny: 'Alama yoyote',
+      work: 'Onyesha hesabu',
+      tblNum: '#', tblParsed: 'Inasomeka kama / Hali', tblStatus: 'Hali',
+      lhsParsed: 'Upande wa kushoto uliandikwa kama:',
+      rhsParsed: 'Upande wa kulia uliandikwa kama:',
+      rearr: 'Mabadiliko ya Milinganyo',
+      workedEx: 'Mfano Uliokokotolewa'
+    },
+    es: {
+      title: 'Comprobación de ecuaciones',
+      sub: 'Sin IA. Se ejecuta en este panel; nada sale de su navegador.',
+      btnSel: 'Revisar las ecuaciones seleccionadas',
+      btnDoc: 'Buscar todas las ecuaciones en el documento',
+      btnCom: 'Agregar hallazgos como comentario',
+      lblEqs: 'Ecuaciones, una por línea (los números como "(3)" se ignoran):',
+      lblVals: 'Ejemplo del artículo (opcional): valores conocidos, ej. q = 0.5, dz = 10, dh = -2 (listas y matrices como x = [1, 2, 3], A = [2, -1; -1, 2]):',
+      lblSign: 'Las variables son:',
+      optPos: 'Positivas', optAny: 'Cualquier signo',
+      work: 'Ver el cálculo',
+      tblNum: '#', tblParsed: 'Interpretado como / Estado', tblStatus: 'Estado',
+      lhsParsed: 'Lado izquierdo interpretado como:',
+      rhsParsed: 'Lado derecho interpretado como:',
+      rearr: 'Reordenamientos',
+      workedEx: 'Ejemplo resuelto'
+    }
+  };
+
+  const fmt = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: 0 });
+  const fix = (x, d = 2) => (x == null || !isFinite(x)) ? '–' : x.toLocaleString('en-US', { maximumFractionDigits: d, minimumFractionDigits: d });
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function updateUiLanguage(newLang) {
+    lang = newLang;
+    localStorage.setItem('ra-lang', lang);
+    const t = I18N[lang];
+    document.getElementById('lbl-title').textContent = t.title;
+    document.getElementById('lbl-sub').textContent = t.sub;
+    document.getElementById('ra-sel').textContent = t.btnSel;
+    document.getElementById('ra-doc').textContent = t.btnDoc;
+    document.getElementById('ra-com').textContent = t.btnCom;
+  }
+
+  function tool(cfg) {
+    const root = document.getElementById(cfg.id);
+    if (!root) return;
+    let f = {};
+    const inputs = cfg.inputs;
+
+    function read() {
+      const v = {};
+      inputs.forEach(i => { if (!i.k) return; v[i.k] = f[i.k] !== undefined ? f[i.k] : (i.d !== undefined ? i.d : null); });
+      return v;
+    }
+
+    function fieldHTML(i) {
+      const t = I18N[lang];
+      const id = cfg.id + '-' + i.k;
+      if (i.t === 'textarea') {
+        const label = i.k === 'eqs' ? t.lblEqs : t.lblVals;
+        return '<div><label for="' + id + '">' + label + '</label><textarea id="' + id + '" data-k="' + i.k + '" rows="' + (i.rows || 5) + '" placeholder="' + esc(i.ph || '') + '">' + esc(f[i.k] || '') + '</textarea></div>';
+      }
+      if (i.t === 'seg') {
+        const cur = String(f[i.k] || i.d);
+        const opts = [[ 'pos', t.optPos ], [ 'any', t.optAny ]];
+        return '<div><label>' + t.lblSign + '</label><div class="seg">' + opts.map(o => '<button type="button" data-seg="' + i.k + '" data-v="' + esc(o[0]) + '" aria-pressed="' + String(o[0] === cur) + '">' + esc(o[1]) + '</button>').join('') + '</div></div>';
+      }
+      return '<div><label for="' + id + '">' + i.l + '</label><input type="text" id="' + id + '" data-k="' + i.k + '" value="' + esc(f[i.k] || '') + '"></div>';
+    }
+
+    function render() {
+      const t = I18N[lang];
+      let h = '<div class="seg" style="margin-bottom:10px" role="group">' +
+        '<button type="button" data-lang="en" aria-pressed="' + String(lang === 'en') + '">English</button>' +
+        '<button type="button" data-lang="sw" aria-pressed="' + String(lang === 'sw') + '">Kiswahili</button>' +
+        '<button type="button" data-lang="es" aria-pressed="' + String(lang === 'es') + '">Español</button>' +
+      '</div><section class="cx"><div class="fg">';
+      
+      inputs.forEach(i => { h += fieldHTML(i); });
+      h += '</div></section><section class="cx res"></section><details class="cx hm-work"><summary>' + t.work + '</summary><div class="db"></div></details>';
+      root.innerHTML = h;
+      updateUiLanguage(lang);
+      run();
+    }
+
+    const U = {
+      fmt, fix, esc, get lang() { return lang; }, get i18n() { return I18N[lang]; },
+      empty: t => '<p class="empty">' + t + '</p>',
+      note: (h, cls) => '<div class="note' + (cls ? ' ' + cls : '') + '">' + h + '</div>'
+    };
+
+    function run() {
+      const v = read();
+      let out;
+      try { out = cfg.compute(v, U) || {}; } catch (e) { out = { html: U.empty("Error running calculation") }; console.warn(e); }
+      root.querySelector('.res').innerHTML = out.html || '';
+      const wd = root.querySelector('.hm-work');
+      wd.hidden = !out.work || !out.work.length;
+      wd.querySelector('.db').innerHTML = out.work && out.work.length ? '<ol class="work">' + out.work.map(w => '<li>' + w + '</li>').join('') + '</ol>' : '';
+      
+      if (window.MathJax && MathJax.typesetPromise) {
+        MathJax.typesetPromise([root.querySelector('.res')]).catch(err => console.log(err));
+      }
+    }
+
+    root.addEventListener('input', e => {
+      const ta = e.target.closest('textarea[data-k]');
+      if (ta) { f[ta.dataset.k] = ta.value; run(); }
+    });
+    root.addEventListener('click', e => {
+      const b = e.target.closest('button');
+      if (!b) return;
+      if (b.dataset.lang) {
+        updateUiLanguage(b.dataset.lang);
+        render();
+        return;
+      }
+      if (b.dataset.seg) {
+        f[b.dataset.seg] = b.dataset.v;
+        b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+        run();
+      }
+    });
+
+    render();
+    return { set: (k, val) => { f[k] = val; const ta = root.querySelector('textarea[data-k="' + k + '"]'); if (ta) ta.value = val; run(); } };
+  }
+
+  return { tool, fmt, fix, esc };
+})();
+
+(function () {
+  // If the maths engine failed to load, still render the input boxes with an error
+  // instead of the whole panel silently going blank.
+  if (typeof math === 'undefined') {
+    if (window.HM) HM.tool({
+      id: 'eq',
+      inputs: [
+        { k: 'eqs', t: 'textarea', rows: 6, ph: 'q = -K*dh/dz' },
+        { k: 'vals', t: 'textarea', rows: 2, ph: 'q = 0.5, dz = 10, dh = -2' },
+        { k: 'sign', t: 'seg', d: 'pos' }
+      ],
+      compute(v, U) { return { html: U.empty('The maths engine (math.js) failed to load. Check your internet connection and reopen this pane.') }; }
+    });
+    return;
+  }
+  const GREEK = { alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', epsilon: 'ε', varepsilon: 'ε', zeta: 'ζ', eta: 'η', theta: 'θ', vartheta: 'θ', kappa: 'κ', lambda: 'λ', mu: 'μ', nu: 'ν', xi: 'ξ', rho: 'ρ', varrho: 'ρ', sigma: 'σ', tau: 'τ', phi: 'φ', varphi: 'φ', chi: 'χ', psi: 'ψ', omega: 'ω', Delta: 'Δ', Gamma: 'Γ', Theta: 'Θ', Lambda: 'Λ', Sigma: 'Σ', Phi: 'Φ', Psi: 'Ψ', Omega: 'Ω', Xi: 'Ξ', Pi: 'Π', Upsilon: 'Υ', upsilon: 'υ', iota: 'ι' };
+  const OPS = ['integ', 'indef', 'sumn', 'prodn'];
+  const FUN = ['sqrt', 'exp', 'log', 'log10', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'nthRoot', 'erf', 'pi', 'max', 'min', 'det', 'inv', 'transpose', 'Infinity'].concat(OPS);
+  const SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+', '⁽': '(', '⁾': ')', 'ⁿ': 'n' };
+  const SUB = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9', 'ₐ': 'a', 'ₑ': 'e', 'ᵢ': 'i', 'ⱼ': 'j', 'ₖ': 'k', 'ₗ': 'l', 'ₘ': 'm', 'ₙ': 'n', 'ₒ': 'o', 'ₚ': 'p', 'ᵣ': 'r', 'ₛ': 's', 'ₜ': 't', 'ᵤ': 'u', 'ᵥ': 'v', 'ₓ': 'x' };
+  const NAME = '[A-Za-z\\u0370-\\u03FF][A-Za-z0-9_\\u0370-\\u03FF]*';
+  const UNSUPPORTED = /[∬∭∮∯]|\\(iint|iiint|oint|lim)(?![A-Za-z])|\blim\b/;
+  const STAR = '(\\*|\\\\ast|\\\\star)', PRIME = '(\\\\prime)';
+  const OPEN = { '{': '}', '(': ')', '[': ']' };
+
+  function close(s, i) { const o = s[i], c = OPEN[o]; let d = 0; for (let j = i; j < s.length; j++) { if (s[j] === o) d++; else if (s[j] === c && !--d) return j; } return s.length; }
+  function bound(s, i, latex) {
+    while (s[i] === ' ') i++;
+    if (s[i] === '{' || s[i] === '(') { const j = close(s, i); return [s.slice(i + 1, j), j + 1]; }
+    if (latex && s[i] === '\\') { const m = s.slice(i).match(/^\\[A-Za-z]+/); return [m[0], i + m[0].length]; }
+    const m = s.slice(i).match(latex ? /^[A-Za-z0-9.]/ : /^[A-Za-z0-9.∞Ͱ-Ͽ]+/); return m ? [m[0], i + m[0].length] : ['', i];
+  }
+  function bounds(s, i, latex) {
+    let lo = null, hi = null;
+    for (let k = 0; k < 2; k++) {
+      while (s[i] === ' ') i++;
+      if (latex && s.startsWith('\\limits', i)) { i += 7; k--; continue; }
+      if (latex && s.startsWith('\\nolimits', i)) { i += 9; k--; continue; }
+      if (s[i] === '_') [lo, i] = bound(s, i + 1, latex); else if (s[i] === '^') [hi, i] = bound(s, i + 1, latex); else break;
+    }
+    return [lo, hi, i];
+  }
+  function differential(s, i, latex) {
+    let d = 0;
+    for (let j = i; j < s.length; j++) {
+      const c = s[j];
+      if ('{(['.includes(c)) d++; else if ('})]'.includes(c)) { if (!d) return null; d--; }
+      else if (!d && c === 'd' && (j === i || /[\s})\]0-9,*]/.test(s[j - 1]) || s.startsWith('\\,', j - 2))) {
+        const m = s.slice(j + 1).match(latex ? /^\s*(\\[A-Za-z]+|[A-Za-z])(?![A-Za-z0-9_])/ : /^\s*([A-Za-zͰ-Ͽ])(?![A-Za-z0-9_Ͱ-Ͽ])/);
+        if (m && !(latex && !GREEK[m[1].slice(1)] && m[1][0] === '\\')) return [j, j + 1 + m[0].length, m[1]];
+      }
+    }
+    return null;
+  }
+  function sumEnd(s, i) {
+    let d = 0, j = i; while (s[j] === ' ' || s[j] === '▒') j++;
+    if (s[j] === '-' || s[j] === '+') j++;
+    for (; j < s.length; j++) {
+      const c = s[j];
+      if ('{(['.includes(c)) d++; else if ('})]'.includes(c)) { if (!d) return j; d--; }
+      else if (!d && (c === '+' || c === '-' || c === '=' || c === '−') && !/[eE^_]$/.test(s.slice(0, j).trimEnd())) return j;
+    }
+    return s.length;
+  }
+  const INF = { '\\infty': 'Infinity', '∞': 'Infinity', '+\\infty': 'Infinity', '-\\infty': '-Infinity', '-∞': '-Infinity', '+∞': 'Infinity', '\\infinity': 'Infinity' };
+  const bnd = (x, latex) => { if (x == null) return null; const t = x.replace(/\s+/g, ''); return INF[t] || structural(x, latex); };
+  function matrix(cells, rowSep, colSep) {
+    return '⟦' + cells.split(rowSep).map(r => r.trim()).filter(r => r).map(r => r.split(colSep).map(c => c.trim()).join(', ')).join('; ') + '⟧';
+  }
+  function structural(s, latex) {
+    let out = '', i = 0;
+    const L = latex ? '{' : '(', R = latex ? '}' : ')';
+    while (i < s.length) {
+      if (latex && s.startsWith('\\begin{', i)) {
+        const env = s.slice(i + 7, s.indexOf('}', i)), end = s.indexOf('\\end{' + env + '}', i);
+        if (/matrix$/.test(env) && end > 0) {
+          const body = structural(s.slice(s.indexOf('}', i) + 1, end), latex);
+          const m = matrix(body, /\\\\/, '&'); out += env === 'vmatrix' ? `det(${m})` : m;
+          i = end + env.length + 6; continue;
+        }
+      }
+      if (!latex && s[i] === '■' && s[i + 1] === '(') { const j = close(s, i + 1); out += matrix(structural(s.slice(i + 2, j), latex), '@', '&'); i = j + 1; continue; }
+      const intL = latex && s.startsWith('\\int', i) && !/^[A-Za-z]/.test(s[i + 4] || ' ');
+      if (intL || (!latex && s[i] === '∫')) {
+        let [lo, hi, j] = bounds(s, i + (intL ? 4 : 1), latex);
+        while (s[j] === ' ' || s[j] === '▒') j++;
+        let body, v, next;
+        if ((s[j] === '{' || s[j] === '(') ) { const k = close(s, j), inner = s.slice(j + 1, k), dd = differential(inner, 0, latex); if (dd && !inner.slice(dd[1]).trim()) { body = inner.slice(0, dd[0]); v = dd[2]; next = k + 1; } }
+        if (body == null) { const dd = differential(s, j, latex); if (!dd) return null; body = s.slice(j, dd[0]); v = dd[2]; next = dd[1]; }
+        const f = structural(body.replace(/\\,\s*$/, ''), latex); if (f == null) return null;
+        out += (lo == null && hi == null) ? `indef(${L}${f}${R}, ${v})` : (lo == null || hi == null) ? null : `integ(${L}${f}${R}, ${v}, ${L}${bnd(lo, latex)}${R}, ${L}${bnd(hi, latex)}${R})`;
+        if (out.includes('null')) return null;
+        i = next; continue;
+      }
+      const sl = latex && (s.startsWith('\\sum', i) || s.startsWith('\\prod', i)) && !/^[A-Za-z]/.test(s[i + (s.startsWith('\\sum', i) ? 4 : 5)] || ' ');
+      if (sl || (!latex && (s[i] === '∑' || s[i] === '∏' || (s[i] === 'Σ' && s[i + 1] === '_') || (s[i] === 'Π' && s[i + 1] === '_')))) {
+        const prod = latex ? s.startsWith('\\prod', i) : (s[i] === '∏' || s[i] === 'Π');
+        const [lo, hi, j] = bounds(s, i + (sl ? (prod ? 5 : 4) : 1), latex);
+        if (!latex && (s[i] === 'Σ' || s[i] === 'Π') && (!lo || !lo.includes('=') || hi == null)) { out += s[i]; i++; continue; }
+        if (!lo || !lo.includes('=') || hi == null) return null;
+        const [v, a] = lo.split('=').map(x => x.trim());
+        const e = sumEnd(s, j); const f = structural(s.slice(j, e).replace(/^[\s▒]+/, ''), latex); if (f == null) return null;
+        out += `${prod ? 'prodn' : 'sumn'}(${L}${f}${R}, ${v}, ${L}${bnd(a, latex)}${R}, ${L}${bnd(hi, latex)}${R})`;
+        i = e; continue; }
+      if (latex && s.startsWith('\\infty', i)) { out += 'Infinity'; i += 6; continue; }
+      if (!latex && s[i] === '∞') { out += 'Infinity'; i++; continue; }
+      out += s[i]; i++;
+    }
+    return out;
+  }
+
+  function group(s, i) { let d = 0, j = i; for (; j < s.length; j++) { if (s[j] === '{') d++; else if (s[j] === '}') { d--; if (!d) break; } } return [s.slice(i + 1, j), j + 1]; }
+  const FNAMES = { ln: 'ln', log: 'log', exp: 'exp', sin: 'sin', cos: 'cos', tan: 'tan', sinh: 'sinh', cosh: 'cosh', tanh: 'tanh', arcsin: 'asin', arccos: 'acos', arctan: 'atan' };
+  function fromLatex(s) {
+    s = s.replace(/\\(ln|log|exp|sin|cos|tan|sinh|cosh|tanh|arcsin|arccos|arctan)(?![A-Za-z])\s*(?![\s({\[]|\\left)((?:\\[A-Za-z]+|[A-Za-z0-9.]+)(?:_\{[^}]*\}|_[A-Za-z0-9])?)/g, (m, f, a) => `\\${f}(${a})`)
+      .replace(/\\(arcsin|arccos|arctan)(?![A-Za-z])/g, (m, f) => FNAMES[f])
+      .replace(/(?<![A-Za-z])\{\s*(\\(?:overline|bar|hat|tilde)\s*\{[^{}]*\}|[A-Za-z]+)\s*\}(?=\s*[_^])/g, '$1');
+    s = s.replace(/\\left|\\right|\\bigg|\\Bigg|\\big|\\Big|\\,|\\;|\\:|\\!|\\qquad|\\quad|\\displaystyle/g, '')
+      .replace(/\\ /g, ' ')
+      .replace(/\\(?:mathcal|mathscr|mathrm|mathbf|mathit|mathsf|mathbb|boldsymbol|bm|textrm|textit|text|mathnormal)\s*\{([^{}]*)\}/g, '$1')
+      .replace(/\\(?:overline|bar)\s*\{\s*([^{}]*?)\s*\}/g, '$1_bar').replace(/\\(?:widehat|hat)\s*\{\s*([^{}]*?)\s*\}/g, '$1_hat')
+      .replace(/\\(?:widetilde|tilde)\s*\{\s*([^{}]*?)\s*\}/g, '$1_tilde').replace(/\\dot\s*\{\s*([^{}]*?)\s*\}/g, '$1_dot')
+      .replace(/\\(?:overline|bar)\s*([A-Za-z])/g, '$1_bar').replace(/\\hat\s*([A-Za-z])/g, '$1_hat')
+      .replace(new RegExp('\\{\\s*(\\(\\s*[A-Za-z]|\\\\partial\\s*[A-Za-z])\\s*\\}\\s*\\^\\s*\\{\\s*' + STAR + '\\s*\\}', 'g'), '$1^{*}')
+      .replace(new RegExp('\\^\\s*\\{\\s*' + STAR + '\\s*\\}|\\^\\s*' + STAR, 'g'), '_star')
+      .replace(new RegExp('\\^\\s*\\{\\s*' + PRIME + '\\s*\\}|\\^\\s*' + PRIME, 'g'), '_prime').replace(/([A-Za-z0-9}])'/g, '$1_prime')
+      .replace(/\\lbrack|\\\[/g, '[').replace(/\\rbrack|\\\]/g, ']').replace(/\\lbrace|\\\{|\\langle/g, '(').replace(/\\rbrace|\\\}|\\rangle/g, ')')
+      .replace(/\\lvert|\\rvert|\\vert|\\mid|\\\|/g, '|')
+      .replace(/\\cdot|\\times|\\bullet|\\ast/g, '*').replace(/\\div/g, '/')
+      .replace(/\\nabla\s*(?:\{\s*\\?([A-Za-z]+)\s*\}|\\?([A-Za-z]+))/g, (m, a, b) => 'grad_' + (GREEK[a || b] || a || b))
+      .replace(/\\partial\s*(?:\{\s*\\?([A-Za-z]+)\s*\}|\\?([A-Za-z]+))/g, (m, a, b) => 'd_' + (GREEK[a || b] || a || b));
+    let out = '', i = 0;
+    while (i < s.length) {
+      if (s.startsWith('\\frac', i) || s.startsWith('\\dfrac', i) || s.startsWith('\\tfrac', i)) {
+        const o = s.indexOf('{', i); if (o < 0) { out += s.slice(i + 5); break; }
+        const [a, j] = group(s, o); if (s[j] !== '{') { out += `(${fromLatex(a)})`; i = j; continue; }
+        const [b, k] = group(s, j);
+        const pn = a.match(/^\s*d_([\s\S]+?)\s*$/), pd = b.match(/^\s*d_([A-Za-zͰ-Ͽ])\s*$/);
+        if (pn && pd) { out += ` d${fromLatex(pn[1]).replace(/[\s()*]/g, '')}_d${pd[1]} `; i = k; continue; }
+        out += `((${fromLatex(a)})/(${fromLatex(b)}))`; i = k; continue;
+      }
+      if (s.startsWith('\\sqrt', i)) { i += 5; let n = null; if (s[i] === '[') { const e = s.indexOf(']', i); n = s.slice(i + 1, e); i = e + 1; } if (s[i] !== '{') { out += 'sqrt'; continue; } const [a, j] = group(s, i); out += n ? `nthRoot(${fromLatex(a)},${n})` : `sqrt(${fromLatex(a)})`; i = j; continue; }
+      if (s[i] === '^' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += `^(${fromLatex(a)})`; i = j; continue; }
+      if (s[i] === '_' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += '_' + a.replace(/\\([A-Za-z]+)/g, (m, w) => GREEK[w] || w).replace(/[^A-Za-z0-9Ͱ-Ͽ]/g, '') + ' '; i = j; continue; }
+      if (s[i] === '\\') { const m = s.slice(i + 1).match(/^[A-Za-z]+/); const w = m ? m[0] : ''; out += GREEK[w] ? GREEK[w] + ' ' : w === 'pi' ? ' pi ' : ' ' + ({ ln: 'log', log: 'log10' }[w] || w) + ' '; i += 1 + (w.length || 1); continue; }
+      if (s[i] === '{') { out += '('; i++; continue; } if (s[i] === '}') { out += ')'; i++; continue; }
+      out += s[i]; i++;
+    }
+    out = out.replace(/\s+_/g, '_');
+    return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z0-9_])(\s*\()?/g, (m, p, w, par) => FUN.includes(w) || (par && w in math && typeof math[w] === 'function') ? m : p + w.split('').join('*') + (par || ''));
+  }
+
+  // Word sometimes pastes equations in a flattened form where every structure
+  // (fraction or subscript) becomes ",A-B." — e.g. ∂P/∂z = (P_l − P_u)/(z_l − z_u)
+  // arrives as ",𝜕𝑃-𝜕𝑧.= ,,𝑃-𝑙.−,𝑃-𝑢.-,𝑧-𝑙.−,𝑧-𝑢..". In this form a real minus is
+  // U+2212 "−", while ASCII "-" is only the separator. Convert it back to linear math.
+  function wordLinear(line) {
+    if (!line.includes(',') || !/[\u{1D400}-\u{1D7FF}\u2202\u2212]/u.test(line)) return line;
+    const s = line.normalize('NFKC');
+    let i = 0, ok = true;
+    const combine = (a, b) => {
+      a = a.trim(); b = b.trim();
+      if (/^∂/.test(a) && /^∂/.test(b)) return ` (${a})/(${b}) `;                       // derivative
+      if (/^[A-Za-z\u0370-\u03FF]$/.test(a) && /^[A-Za-z0-9\u0370-\u03FF]{1,3}$/.test(b)) return `${a}_${b}`; // subscript
+      return `((${a})/(${b}))`;                                                          // fraction
+    };
+    const isDecimal = k => /\d/.test(s[k - 1] || '') && /\d/.test(s[k + 1] || '');
+    function expr(stop) {
+      let out = '';
+      while (i < s.length && ok) {
+        const c = s[i];
+        if (c === ',') {
+          i++;
+          const a = expr('-'); if (s[i] !== '-') { ok = false; break; } i++;
+          const b = expr('.'); if (s[i] !== '.') { ok = false; break; } i++;
+          out += combine(a, b); continue;
+        }
+        if (c === stop && !(c === '.' && isDecimal(i))) return out;
+        out += c; i++;
+      }
+      return out;
+    }
+    const out = expr(null);
+    return ok ? out : line;
+  }
+
+  function norm(line) {
+    line = wordLinear(line);
+    // Strip equation labels like "(3)", "3.", "3:" — but not decimal coefficients
+    // like the "2." in "2.5*x = 5" (label must not be followed by a digit).
+    let s = line.trim().replace(/^\(?\d+\)?[.:)](?!\d)\s*/, '').replace(/^[A-Za-z]?\d+[.:]\s+/, '')
+      .replace(/(?:\t|\s{2,})\(\s*\d+[a-z]?\s*\)\s*$/, '')
+      .replace(/[\s.,;]+$/, '');
+
+    s = s.replace(/(\\lambda(?:_\{[^}]+\}|_[A-Za-z0-9]+)?)(?=\\lambda)/g, '$1 * ')
+         .replace(/(lambda_[A-Za-z0-9]+)(?=lambda_[A-Za-z0-9]+)/g, '$1 * ');
+
+    // NOTE: \sqrt{...} is NOT converted here — the early regex breaks at the first
+    // closing brace, which corrupts nested input like \sqrt{\frac{1}{4}}.
+    // fromLatex() below parses \sqrt with proper brace matching.
+    s = s.replace(/\\left|\\right/g, '')
+         .replace(/\\Sigma/g, 'Sigma').replace(/Σ/g, 'Sigma');
+    // Keep braces on LaTeX-like lines (contains \ or {) — they carry grouping that
+    // structural()/fromLatex() need (\frac{1}{2}, x^{2+1}, \sum_{...}). Only plain
+    // text lines get stray braces removed.
+    if (!/[\\{}]/.test(s)) s = s.replace(/\{([^{}]+)\}/g, '$1');
+
+    s = s.replace(/([A-Za-z0-9_]+)_\{?([A-Za-z0-9]+),([A-Za-z0-9]+)\}?/g, '$1_$2$3')
+         .replace(/([A-Za-z0-9_]+)_([A-Za-z0-9]+),([A-Za-z0-9]+)/g, '$1_$2$3');
+
+    s = s.replace(/ᵀ/g, '^(T)')
+      .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁽⁾ⁿ]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')')
+      .replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]+/g, m => '_' + [...m].map(c => SUB[c]).join(''))
+      .replace(/(\S)[̅̄]/g, '$1_bar').replace(/(\S)̂/g, '$1_hat').replace(/(\S)̃/g, '$1_tilde').replace(/(\S)̇/g, '$1_dot');
+
+    s = s.replace(/[\u25A0\u25A1\u25FE\u200B-\u200D\uFEFF]/g, '')
+         .replace(/(?:^|[\s,])[\.,]*(?=[A-Za-z0-9_=+-])/g, ' ')
+         .replace(/,([A-Za-z_])=/g, ' $1=')
+         .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
+         .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'")
+         .replace(/[\u00A0\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
+         .normalize('NFKC')
+         .replace(/[⁡-⁤​-‍﻿\uFEFF]/g, '')
+         .replace(/⁄/g, '/')
+         .replace(/[〖〔]/g, '(').replace(/[〗〕]/g, ')')
+         .replace(/[┬┴]/g, ' ')
+         .replace(/[−–—]/g, '-')
+         .replace(/,\s*,+/g, ',')
+         .replace(/\s+/g, ' ')
+         .trim();
+
+    if (UNSUPPORTED.test(s)) return { s, unsupported: true };
+    const latex = /\\|[{}]/.test(s);
+    if (!latex) {
+      s = s.replace(/([A-Za-z\u0370-\u03FF][A-Za-z0-9\u0370-\u03FF]*)_\(([^()]*)\)/g, (m, a, b) => b.includes('=') ? m : a + '_' + b.replace(/[^A-Za-z0-9\u0370-\u03FF]/g, ''));
+      s = s.replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\^\s*(?:\*|\(\s*\*\s*\))/g, '$1_star')
+           .replace(/([A-Za-z0-9_Ͱ-Ͽ)])\s*\*(?=\s*(?:[-+=)\]\/,;|@&]|$))/g, '$1_star').replace(/([A-Za-z0-9_Ͱ-Ͽ])[′']/g, '$1_prime');
+    }
+    s = s.replace(/\\frac\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}\{\s*(?:\\partial|d)\s*([A-Za-z][A-Za-z0-9_]*)\s*\}/g, 'd$1_d$2')
+         .replace(/[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)\s*\/\s*[∂𝜕]\s*([A-Za-z][A-Za-z0-9_]*)/g, 'd$1_d$2');
+    s = s.replace(new RegExp(`\\(\\s*[∂𝜕]\\s*(${NAME})\\s*\\)\\s*\\/\\s*\\(?\\s*[∂𝜕]\\s*([A-Za-z\\u0370-\\u03FF])(?:\\s*\\))?`, 'gu'), 'd$1_d$2');
+    if (latex) s = s.replace(/\\mathrm\s*\{\s*d\s*\}/g, 'd').replace(/\\(?:d|diff)\s*(?=[A-Za-z\\])/g, 'd');
+    const st = structural(s, latex);
+    if (st == null) return { s, unsupported: true, reason: 'structure' };
+    s = st.replace(/▒/g, ' ');
+    s = s.replace(/\\(?:text|mathrm)\s*\{\s*const\s*\}|\bconst\b/g, 'C');
+    if (latex) s = fromLatex(s);
+    s = s.replace(new RegExp(`(${NAME})\\s*\\^\\s*\\(?\\s*[T⊤]\\s*\\)?(?![A-Za-z0-9_])`, 'gu'), 'transpose($1)');
+    s = s.replace(/(\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\))\s*\^\s*\(?\s*[T⊤]\s*\)?(?![A-Za-z0-9_])/g, 'transpose$1');
+    s = s.replace(/[×·⋅•∙∗]/g, '*').replace(/[÷∕]/g, '/')
+      .replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)').replace(/π/g, ' pi ')
+      .replace(new RegExp('∇\\s*(' + NAME + ')', 'gu'), 'grad_$1').replace(/[∂𝜕]\s*/g, 'd_')
+      .replace(/\bln\s*\(/g, 'log(');
+    if (!latex) {
+      s = s.replace(/\b(ln|log|exp|sin|cos|tan|sinh|cosh|tanh)\s+([A-Za-z0-9.]+(?:_[A-Za-z0-9]+)?)(?![A-Za-z0-9_(])/g, '$1($2)').replace(/\bln\s*\(/g, 'log(');
+      s = s.replace(/([Ͱ-Ͽ])(?=[A-Za-z0-9Ͱ-Ͽ])/g, '$1 ').replace(/([A-Za-z0-9])(?=[Ͱ-Ͽ])/g, '$1 ');
+    }
+    let prev, guard = 0; do { prev = s; s = s.replace(/\b(max|min)?\s*\|([^|]+)\|/g, (m, f, a) => f ? `${f}(abs(${a}))` : `abs(${a})`); } while (s !== prev && ++guard < 10);
+    s = s.replace(/\[/g, '⟨').replace(/\]/g, '⟩');
+    for (let k = 0; k < 20 && s.includes('⟨'); k++) s = s.replace(/⟨([^⟨⟩]*)⟩/g, (m, a) => { let d = 0, top = false; for (const c of a) { if ('(⟦'.includes(c)) d++; else if (')⟧'.includes(c)) d--; else if (!d && (c === ',' || c === ';')) top = true; } return top ? `⟦${a}⟧` : `(${a})`; });
+    s = s.replace(/([)A-Za-z0-9_\u0370-\u03FF])\s*⟦/g, '$1 * ⟦').replace(/⟧\s*(?=[(A-Za-z0-9\u0370-\u03FF])/g, '⟧ * ');
+    s = s.replace(/⟧\s*⟦/g, '⟧ * ⟦').replace(/⟦/g, '[').replace(/⟧/g, ']').replace(/\s+_/g, '_').replace(/,\s*\)/g, ')');
+    s = s.replace(new RegExp(`^\\s*(${NAME})\\s*\\(\\s*${NAME}(?:\\s*,\\s*${NAME})*\\s*\\)\\s*=(?!=)`, 'u'), (m, f) => (f in math && typeof math[f] === 'function') || OPS.includes(f) ? m : `${f} =`);
+    const atom = `(?:${NAME}\\((?:[^()]|\\([^()]*\\))*\\)|${NAME}|[0-9.]+|\\((?:[^()]|\\([^()]*\\))*\\))`;
+    s = s.replace(new RegExp(`(${atom})\\s*/\\s*(${atom}(?:\\^(?:[0-9.]+|\\([^()]*\\)))?)(?=\\s+[A-Za-z0-9(\\u0370-\\u03FF])`, 'gu'), (m, a, b) => OPS.includes(a) ? m : `((${a})/(${b}))`);
+    s = s.replace(new RegExp(`(${NAME})(\\s*)\\(`, 'gu'), (m, f, sp) => (FUN.includes(f) || (f in math && typeof math[f] === 'function' && !sp)) ? m : `${f}*(`);
+    if (/grad_/.test(s)) {
+      const co = [...new Set([...s.matchAll(new RegExp(`(?<![A-Za-z0-9_\\u0370-\\u03FF])d${NAME}_d([A-Za-z\\u0370-\\u03FF])(?![A-Za-z0-9_\\u0370-\\u03FF])`, 'gu'))].map(m => m[1]))].sort();
+      const coords = co.length ? co : ['x', 'y'];
+      s = s.replace(new RegExp(`grad_(${NAME})\\s*\\*\\s*grad_(${NAME})`, 'gu'), (m, p, q) => '(' + coords.map(c => `d${p}_d${c} * d${q}_d${c}`).join(' + ') + ')');
+    }
+    return { s, unsupported: false };
+  }
+
+  const MJ = math.create(math.all);
+  class Child { constructor(p) { this.p = p; this.m = new Map(); } get(k) { return this.m.has(k) ? this.m.get(k) : this.p.get(k); } has(k) { return this.m.has(k) || this.p.has(k); } set(k, v) { this.m.set(k, v); return this; } keys() { return new Set([...this.m.keys(), ...this.p.keys()]).values(); } delete(k) { return this.m.delete(k); } clear() { this.m.clear(); } forEach(cb) { for (const k of this.keys()) cb(this.get(k), k); } [Symbol.iterator]() { return [...this.keys()].map(k => [k, this.get(k)])[Symbol.iterator](); } }
+  const cache = new WeakMap();
+  const comp = n => { let c = cache.get(n); if (!c) { c = n.compile(); cache.set(n, c); } return c; };
+  const real = y => typeof y === 'number' ? y : (y && typeof y.re === 'number' && Math.abs(y.im) < 1e-12 * (1 + Math.abs(y.re))) ? y.re : NaN;
+  const XK = [0.991455371120813, 0.949107912342759, 0.864864423359769, 0.741531185599394, 0.586087235467691, 0.405845151377397, 0.207784955007898, 0];
+  const WK = [0.022935322010529, 0.063092092629979, 0.104790010322250, 0.140653259715525, 0.169004726639267, 0.190350578064785, 0.204432940075298, 0.209482141084728];
+  const WG = [0.129484966168870, 0.279705391489277, 0.381830050505119, 0.417959183673469];
+  function gk(f, a, b) {
+    const c = (a + b) / 2, h = (b - a) / 2; let k = WK[7] * f(c), g = WG[3] * f(c);
+    for (let j = 0; j < 7; j++) { const x = h * XK[j], s = f(c - x) + f(c + x); k += WK[j] * s; if (j % 2 === 1) g += WG[(j - 1) / 2] * s; }
+    return [k * h, Math.abs((k - g) * h)];
+  }
+  function adapt(f, a, b, tol, depth, budget) {
+    const [r, e] = gk(f, a, b); if (!isFinite(r)) return [NaN, Infinity];
+    if (e <= tol || depth > 40 || budget.n <= 0) return [r, e];
+    budget.n -= 2;
+    const m = (a + b) / 2, L = adapt(f, a, m, tol / 2, depth + 1, budget), R = adapt(f, m, b, tol / 2, depth + 1, budget);
+    return [L[0] + R[0], L[1] + R[1]];
+  }
+  function quad(f, a, b) {
+    if (a === b) return 0; if (a > b) return -quad(f, b, a);
+    let g = f, lo = a, hi = b;
+    if (a === -Infinity && b === Infinity) return quad(f, -Infinity, 0) + quad(f, 0, Infinity);
+    if (b === Infinity) { g = t => { const x = a + t / (1 - t); return f(x) / ((1 - t) * (1 - t)); }; lo = 0; hi = 1; }
+    else if (a === -Infinity) { g = t => { const x = b - (1 - t) / t; return f(x) / (t * t); }; lo = 0; hi = 1; }
+    const scale = Math.abs(gk(g, lo, hi)[0]);
+    const [r, e] = adapt(g, lo, hi, Math.max(1e-10 * scale, 1e-14), 0, { n: 1500 });
+    return isFinite(r) && e <= 1e-7 * Math.max(1e-6, Math.abs(r)) + 1e-12 ? r : NaN;
+  }
+  function wynn(S) {
+    let e0 = S.map(() => 0), e1 = S.slice(), cands = [S[S.length - 1]];
+    for (let k = 1; k < S.length && e1.length > 1; k++) {
+      const e2 = []; for (let j = 0; j < e1.length - 1; j++) { const d = e1[j + 1] - e1[j]; e2.push(e0[j + 1] + (d === 0 ? 1e300 : 1 / d)); }
+      if (k % 2 === 0 && e2.length && isFinite(e2[e2.length - 1]) && Math.abs(e2[e2.length - 1]) < 1e100) cands.push(e2[e2.length - 1]);
+      e0 = e1; e1 = e2;
+    }
+    let best = cands[cands.length - 1], bd = Infinity;
+    for (let k = 1; k < cands.length; k++) { const d = Math.abs(cands[k] - cands[k - 1]); if (d < bd) { bd = d; best = cands[k]; } }
+    return best;
+  }
+  function infiniteSum(f, a) {
+    if (isFinite(f(a + 0.5)) && isFinite(f(a + 100.5))) {
+      const em = N => {
+        let s = 0; for (let n = a; n < N; n++) s += f(n);
+        const h = 0.25, d1 = (f(N + h) - f(N - h)) / (2 * h), d3 = (f(N + 2 * h) - 2 * f(N + h) + 2 * f(N - h) - f(N - 2 * h)) / (2 * h ** 3);
+        return s + quad(f, N, Infinity) + f(N) / 2 - d1 / 12 + d3 / 720;
+      };
+      const s1 = em(a + 100), s2 = em(a + 200);
+      if (isFinite(s1) && Math.abs(s1 - s2) <= 1e-7 * Math.max(1, Math.abs(s1))) return s2;
+    }
+    { let s = 0, small = 0, prev = NaN; for (let n = a; n < a + 100000; n++) { const t = real(f(n)); if (!isFinite(t)) break; s += t;
+        if (Math.abs(t) <= 1e-16 * Math.abs(s) && Math.abs(t) <= 0.9 * Math.abs(prev)) { if (++small >= 5) return s; } else small = 0; if (t !== 0) prev = t; } }
+    const S = []; let s = 0; for (let n = a; n < a + 61; n++) { s += real(f(n)); S.push(s); }
+    const w1 = wynn(S.slice(0, 41)), w2 = wynn(S);
+    return isFinite(w2) && Math.abs(w1 - w2) <= 1e-7 * Math.max(1, Math.abs(w2)) ? w2 : NaN;
+  }
+  const num = (n, scope) => real(comp(n).evaluate(scope));
+  function bodyFor(node, v, scope) {
+    const src = node.toString(); const t = src.replace(new RegExp(`(${NAME})_${v}(?![A-Za-z0-9_])`, 'gu'), (m, b) => { const x = scope.has(b) ? scope.get(b) : null; return x && (Array.isArray(x) || x.isMatrix) ? `${b}[${v}]` : m; });
+    return t === src ? node : MJ.parse(t);
+  }
+  function integ(args, m, scope) {
+    const v = args[1].name, a = num(args[2], scope), b = num(args[3], scope), c = comp(args[0]), ch = new Child(scope);
+    if (isNaN(a) || isNaN(b)) return NaN;
+    return quad(x => { ch.set(v, x); return real(c.evaluate(ch)); }, a, b);
+  }
+  function series(args, scope, prod) {
+    const v = args[1].name, a = num(args[2], scope), b = num(args[3], scope), ch = new Child(scope), c = comp(bodyFor(args[0], v, scope));
+    if (!Number.isInteger(a) || !(Number.isInteger(b) || b === Infinity)) return NaN;
+    const f = n => { ch.set(v, n); return real(c.evaluate(ch)); };
+    if (b !== Infinity) { if (b - a > 1e6) return NaN; let s = prod ? 1 : 0; for (let n = a; n <= b; n++) s = prod ? s * f(n) : s + f(n); return s; }
+    if (!prod) return infiniteSum(f, a);
+    for (let n = a; n < a + 50; n++) if (!(f(n) > 0)) return NaN;
+    return Math.exp(infiniteSum(n => Math.log(f(n)), a));
+  }
+  function sumn(args, m, scope) { return series(args, scope, false); }
+  function prodn(args, m, scope) { return series(args, scope, true); }
+  function indef() { return NaN; }
+  integ.rawArgs = sumn.rawArgs = prodn.rawArgs = indef.rawArgs = true;
+  const sq = x => (x && (Array.isArray(x) || x.isMatrix) && MJ.size(x).valueOf().reduce((a, b) => a * b, 1) === 1) ? MJ.flatten(MJ.matrix(x)).valueOf()[0] : x;
+  MJ.import({ integ, sumn, prodn, indef, sq }, { override: true });
+  const wrapSq = n => { const m = n.map(c => wrapSq(c)); return m.isOperatorNode || (m.isFunctionNode && m.fn && !OPS.includes(m.fn.name) && m.fn.name !== 'sq') ? new MJ.FunctionNode(new MJ.SymbolNode('sq'), [m]) : m; };
+
+  function freeVars(node) {
+    const kind = {};
+    const walk = (n, bound, idx) => {
+      if (n.isFunctionNode && n.fn && n.fn.isSymbolNode && OPS.includes(n.fn.name)) {
+        const v = n.args[1] && n.args[1].name; const b2 = new Set(bound).add(v), i2 = n.fn.name === 'sumn' || n.fn.name === 'prodn' ? new Set(idx).add(v) : idx;
+        walk(n.args[0], b2, i2);
+        for (const k of [2, 3]) if (n.args[k]) walk(n.args[k], bound, idx), (n.fn.name !== 'integ') && n.args[k].traverse(x => { if (x.isSymbolNode && kind[x.name] === 's') kind[x.name] = 'int'; });
+        return;
+      }
+      if (n.isSymbolNode) {
+        if (bound.has(n.name) || ['pi', 'e', 'i', 'E', 'Infinity'].includes(n.name)) return;
+        const m = n.name.match(/^(.+)_([A-Za-zͰ-Ͽ])$/u);
+        if (m && idx.has(m[2])) { kind[m[1]] = 'vec'; return; }
+        if (!kind[n.name]) kind[n.name] = 's'; return;
+      }
+      if (n.isFunctionNode) { n.args.forEach(x => walk(x, bound, idx)); return; }
+      n.forEach(c => walk(c, bound, idx));
+    };
+    walk(node, new Set(), new Set());
+    return kind;
+  }
+  const mergeKinds = (...ks) => { const o = {}; for (const k of ks) for (const [v, t] of Object.entries(k)) if (!o[v] || o[v] === 's') o[v] = t; return o; };
+  const isArr = x => x && (Array.isArray(x) || x.isMatrix);
+  const sizeOf = x => isArr(x) ? MJ.size(x).valueOf ? MJ.size(x).valueOf() : MJ.size(x) : [];
+  function mag(x) {
+    if (typeof x === 'number') return Math.abs(x);
+    if (x && typeof x.re === 'number') return Math.hypot(x.re, x.im);
+    if (isArr(x)) { const f = MJ.flatten(MJ.matrix(x)).valueOf(); return f.length ? Math.max(...f.map(mag)) : 0; }
+    return NaN;
+  }
+  const rnd = (pos) => { const x = Math.exp(Math.log(0.2) + Math.random() * Math.log(50)); return pos || Math.random() < 0.5 ? x : -x; };
+  const VEC_LEN = 30;
+  function draw(kind, pos, n) {
+    if (kind === 'int') return 2 + Math.floor(Math.random() * 11);
+    if (kind === 'vec') return Array.from({ length: VEC_LEN }, () => rnd(pos));
+    if (kind === 'm') return MJ.matrix(Array.from({ length: n }, (r, i) => Array.from({ length: n }, (c, j) => rnd(pos) + (i === j ? n : 0))));
+    if (kind.startsWith('sz:')) { const d = kind.slice(3).split('x').map(Number); return d.length === 1 ? MJ.matrix(Array.from({ length: d[0] }, () => rnd(pos))) : MJ.matrix(Array.from({ length: d[0] }, (r, i) => Array.from({ length: d[1] }, (c, j) => rnd(pos) + (i === j ? d[0] : 0)))); }
+    if (kind === 'v') return MJ.matrix(Array.from({ length: n }, () => [rnd(pos)]));
+    return rnd(pos);
+  }
+  const scopeOf = (kinds, pos, fixed = {}) => { const o = {}; for (const [v, k] of Object.entries(kinds)) o[v] = v in fixed ? fixed[v] : draw(k, pos, 2); return o; };
+  function sides(E, sc) {
+    let l, r; try { l = E.Lc.evaluate({ ...sc }); r = E.Rc.evaluate({ ...sc }); } catch (e) { return null; }
+    if (isArr(l) || isArr(r)) { if (JSON.stringify(sizeOf(l)) !== JSON.stringify(sizeOf(r))) return null; }
+    return [l, r];
+  }
+  function residual(E, sc) {
+    const lr = sides(E, sc); if (!lr) return { res: NaN, scale: NaN };
+    let d; try { d = MJ.subtract(lr[0], lr[1]); } catch (e) { return { res: NaN, scale: NaN }; }
+    return { res: mag(d), scale: Math.max(1e-12, mag(lr[0]) + mag(lr[1])), val: lr };
+  }
+  function shapes(E, known) {
+    const kinds = { ...E.kinds };
+    for (const [v, x] of Object.entries(known)) if (kinds[v] === 's' && isArr(x)) kinds[v] = 'sz:' + sizeOf(x).join('x');
+    const free = Object.keys(kinds).filter(v => kinds[v] === 's' && !(v in known));
+    const mctx = E.mctx = /\[|inv\(|det\(|transpose\(|\^\s*\(\s*-\s*1\s*\)/.test(E.src) || Object.values(kinds).some(k => k.startsWith('sz:'));
+    if (!mctx || !free.length) return kinds;
+    const forced = new Set(); [E.L, E.R].forEach(n => n.traverse(x => { if (x.isFunctionNode && x.fn && ['inv', 'det'].includes(x.fn.name) && x.args[0].isSymbolNode) forced.add(x.args[0].name); if (x.isOperatorNode && x.op === '^' && x.args[0].isSymbolNode && /^\(?\s*-\s*1\s*\)?$/.test(x.args[1].toString())) forced.add(x.args[0].name); }));
+    const opts = ['v', 'm', 's'], vs = free.slice(0, 6);
+    const total = 3 ** vs.length;
+    for (let c = 0; c < total; c++) {
+      const k2 = { ...kinds }; let t = c, skip = false;
+      for (const v of vs) { k2[v] = opts[t % 3]; t = Math.floor(t / 3); if (forced.has(v) && k2[v] !== 'm') skip = true; }
+      if (skip) continue;
+      const sc = scopeOf(k2, true); const r = residual(E, sc);
+      if (isFinite(r.scale)) return k2;
+    }
+    return kinds;
+  }
+  function root(f, guess) {
+    const grid = []; for (let e = -4; e <= 4; e += 0.1) { grid.push(10 ** e); grid.push(-(10 ** e)); }
+    grid.sort((a, b) => a - b); let prev = null, best = null;
+    for (const x of grid) { const y = f(x); if (!isFinite(y)) { prev = null; continue; } if (prev && Math.sign(y) !== Math.sign(prev[1])) { let a = prev[0], b = x, fa = prev[1]; for (let k = 0; k < 80; k++) { const m = (a + b) / 2, fm = f(m); if (Math.sign(fm) === Math.sign(fa)) { a = m; fa = fm; } else b = m; } const r = (a + b) / 2; if (best == null || Math.abs(r - (guess || 1)) < Math.abs(best - (guess || 1))) best = r; } prev = [x, y]; }
+    return best;
+  }
+  const fmtV = x => isArr(x) ? MJ.format(x, { precision: 5 }) : HM.fmt(real(x), 5);
+  function checkIndef(E, pos) {
+    let node = null; [E.L, E.R].forEach(side => side.traverse(x => { if (!node && x.isFunctionNode && x.fn && x.fn.name === 'indef') node = x; }));
+    const inL = (() => { let f = false; E.L.traverse(x => { if (x === node) f = true; }); return f; })();
+    const withZero = (inL ? E.L : E.R).transform(x => x === node ? new MJ.ConstantNode(0) : x);
+    const G = new MJ.OperatorNode('-', 'subtract', [inL ? E.R : E.L, withZero]).compile();
+    const f = node.args[0].compile(), v = node.args[1].name;
+    const kinds = { ...E.kinds }; delete kinds.C; delete kinds.c;
+    let ok = 0, tried = 0, fail = null;
+    for (let k = 0; k < 60 && tried < 25; k++) {
+      const sc = scopeOf(kinds, pos); sc.C = 0; sc.c = 0; const x = rnd(pos); const h = 1e-5 * Math.max(1, Math.abs(x));
+      let d, y; try { d = (real(G.evaluate({ ...sc, [v]: x + h })) - real(G.evaluate({ ...sc, [v]: x - h }))) / (2 * h); y = real(f.evaluate({ ...sc, [v]: x })); } catch (e) { continue; }
+      if (!isFinite(d) || !isFinite(y)) continue; tried++;
+      if (Math.abs(d - y) <= 1e-4 * Math.max(1e-6, Math.abs(d) + Math.abs(y))) ok++; else if (!fail) fail = { x, d, y, v };
+    }
+    return { ok, tried, fail, v };
+  }
+
+  HM.tool({
+    id: 'eq', step: 'Equations', units: false, hash: false,
+    inputs: [
+      { k: 'eqs', t: 'textarea', rows: 6, ph: 'q = -K*dh/dz\nK = -q*dz/dh\n\\int_{0}^{\\infty} e^{-kx} dx = 1/k\n\\sum_{n=1}^{\\infty} \\frac{1}{n^2} = \\frac{\\pi^2}{6}\n[a, -g; -g, a] * [x; y] = [r; s]' },
+      { k: 'vals', t: 'textarea', rows: 2, ph: 'q = 0.5, dz = 10, dh = -2' },
+      { k: 'sign', t: 'seg', d: 'pos' }
+    ],
+    compute(v, U) {
+      if (typeof math === 'undefined') return { html: U.empty('The maths engine is still loading. Try again in a moment.') };
+      const t = U.i18n;
+
+      const rawText = String(v.eqs || '')
+        .replace(/[\u00A0\u2000-\u200A\u202F\u205F\u3000]/g, ' ')
+        .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
+        .replace(/[\u2018\u2019\u201A\u201B\u2032\u2035]/g, "'");
+
+      const lines = rawText.split(/\r?\n/).filter(l => l.trim());
+      if (!lines.length) return { html: U.empty('Paste equations into the text box above or select equations in Word.') };
+      const pos = v.sign === 'pos', E = [], rows = [];
+
+      // Worked example known values parser (unreadable entries are reported, not silently dropped)
+      const known = {}; const badVals = [];
+      const parts = []; { let d = 0, cur = ''; for (const c of String(v.vals || '')) { if ('[('.includes(c)) d++; if ('])'.includes(c)) d--; if (!d && /[,;\n]/.test(c)) { parts.push(cur); cur = ''; } else cur += c; } parts.push(cur); }
+      parts.forEach(p => { const k = p.indexOf('='); if (k < 0) return; const name = norm(p.slice(0, k) + '= 0').s.split('=')[0].trim(); let val; try { val = MJ.evaluate(p.slice(k + 1).trim()); } catch (e) { val = undefined; } if (name && (isArr(val) || isFinite(real(val)))) known[name] = isArr(val) ? val : real(val); else if (p.trim()) badVals.push(p.trim()); });
+
+      const splitLine = txt => { const out = []; let d = 0, cur = ''; txt = txt.replace(/,?\s*\\q?quad\s*/g, '\u0001');
+        for (let k = 0; k < txt.length; k++) { const c = txt[k]; if ('([{'.includes(c)) d++; else if (')]}'.includes(c)) d--;
+          if (c === '\u0001' || (!d && c === ',' && /^\s{2,}\S/.test(txt.slice(k + 1)))) { out.push(cur); cur = ''; } else cur += c; }
+        out.push(cur); return out; };
+      const items = [];
+      lines.forEach((ln0, i) => splitLine(ln0).filter(x => x.trim()).forEach((ln, j, all) => {
+        const i2 = all.length > 1 ? `${i + 1}${'abcdefghij'[j]}` : i + 1;
+        const nr = norm(ln), sp = nr.unsupported ? [] : nr.s.split(/(?<![<>!=])=(?!=)/);
+        if (sp.length > 2) sp.slice(0, -1).forEach((a, k) => items.push({ ln, lab: `${i2}${all.length > 1 ? '.' : ''}${'abcdefghij'[k]}`, nr: { s: `${a}=${sp[k + 1]}`, unsupported: false } }));
+        else items.push({ ln, lab: i2, nr });
+      }));
+
+      items.forEach(({ ln, lab, nr }) => {
+        if (nr.unsupported) { rows.push([lab, U.esc(ln), '<span class="tag warn">Not checked</span>', nr.reason === 'structure' ? 'An integral or sum could not be read.' : 'Contains unsupported operators.']); return; }
+        const s = nr.s, sp = s.split(/(?<![<>!=])=(?!=)/);
+        if (sp.length !== 2) { rows.push([lab, U.esc(ln), '<span class="tag bad">Not one equation</span>', sp.length < 2 ? 'No "=" sign.' : 'More than one "=" sign.']); return; }
+        try {
+          const L = MJ.parse(sp[0]), R = MJ.parse(sp[1]);
+          const e = { i: lab, ln, src: s, L, R, Lc: wrapSq(L).compile(), Rc: wrapSq(R).compile(), lhsSym: L.isSymbolNode ? L.name : null };
+          e.kinds = mergeKinds(freeVars(L), freeVars(R)); e.vs = Object.keys(e.kinds);
+          e.heavy = /integ\(|sumn\(|prodn\(/.test(s);
+          e.indef = /indef\(/.test(s);
+
+          const readAs = '<b>' + t.lhsParsed + '</b> <code>' + U.esc(L.toString()) + '</code><br>' +
+                         '<b>' + t.rhsParsed + '</b> <code>' + U.esc(R.toString()) + '</code>';
+
+          if (e.indef) {
+            const r = checkIndef(e, pos); e.skip = true; E.push(e);
+            const tag = !r.tried ? '<span class="tag bad">Never evaluates</span>' : r.ok === r.tried ? '<span class="tag good">Antiderivative holds</span>' : '<span class="tag bad">Not an antiderivative</span>';
+            rows.push([lab, readAs, tag, !r.tried ? 'The other side could not be evaluated.' : r.ok === r.tried ? `Differentiating the other side with respect to ${r.v} gives the integrand in all ${r.tried} tests.` : `Derivative gives ${HM.fmt(r.fail.d, 4)} at ${r.fail.v} = ${HM.fmt(r.fail.x, 3)}, but integrand is ${HM.fmt(r.fail.y, 4)}.`]);
+            return;
+          }
+          e.kinds = shapes(e, known); e.vs = Object.keys(e.kinds); e.readAs = readAs; e.row = rows.length; rows.push(null); E.push(e);
+        } catch (err) { rows.push([lab, U.esc(ln), '<span class="tag bad">Cannot read</span>', U.esc(err.message) + (/,[^,]*-[^,]*\./.test(ln) && /[\u{1D400}-\u{1D7FF}\u2212]/u.test(ln) ? ' This is Word\'s flattened text, which loses fractions, subscripts and powers. Highlight the equation in Word and click "Check the selected equations", or copy it in Word and paste it straight into this box.' : '')]); }
+      });
+
+      const shared = {}; E.forEach(e => { if (!e.skip) for (const [x, k] of Object.entries(e.kinds)) if (k !== 's' && (!shared[x] || k.startsWith('sz:'))) shared[x] = k; });
+      E.forEach(e => {
+        if (e.skip) return; const k2 = { ...e.kinds }; let changed = false;
+        for (const x of e.vs) if (shared[x] && k2[x] !== shared[x]) { k2[x] = shared[x]; changed = true; }
+        if (!changed) return;
+        if (e.mctx) { e.kinds = k2; e.sharedSizes = true; }
+        else if ([0, 1, 2].some(() => isFinite(residual(e, scopeOf(k2, true)).scale))) e.kinds = k2;
+      });
+      E.forEach(e => {
+        if (e.skip) return;
+        const n = e.vs.length ? (e.heavy ? 30 : 200) : 1; let bad = 0, ex = null, mism = 0, held = 0, miss = null;
+        for (let k = 0; k < n; k++) {
+          const sc = scopeOf(e.kinds, pos); const r = residual(e, sc);
+          if (!isFinite(r.scale) || !isFinite(r.res)) { bad++; if (!ex) ex = sc; if (!sides(e, sc)) mism++; }
+          else if (r.res / r.scale < 1e-6) held++; else if (!miss) miss = { sc, val: r.val };
+        }
+        const defines = e.lhsSym && !Object.keys(freeVars(e.R)).includes(e.lhsSym);
+        const ok = n - bad;
+        e.identity = ok > 0 && held === ok;
+        let tag, txt = '';
+        const kindTxt = Object.entries(e.kinds).filter(([, k]) => k !== 's').map(([x, k]) => `${x} (${{ int: 'whole number', vec: 'list', m: '2×2 matrix', v: '2×1 vector' }[k] || k.replace('sz:', '').replace('x', '×')})`);
+        const scTxt = sc => Object.entries(sc).filter(([, x]) => !isArr(x)).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ');
+        if (bad === n) { tag = '<span class="tag bad">Never evaluates</span>'; txt = mism === n && e.vs.length ? (e.sharedSizes ? ' Variable dimensions mismatch across equations.' : ' Matrices or expressions cannot be evaluated.') : ' Expression does not produce real finite numbers.'; }
+        else if (e.identity && !defines) { tag = '<span class="tag good">Holds</span>'; txt = e.vs.length ? ` Both sides agree for all ${ok} test values.` : ' Both sides agree.'; }
+        else if (!defines && (e.heavy || !e.vs.length)) { tag = '<span class="tag bad">Does not hold</span>'; e.fails = true; const [l, r] = miss.val; txt = ` Left side is ${fmtV(l)} and right side is ${fmtV(r)}.`; }
+        else tag = bad === 0 ? '<span class="tag good">Evaluates cleanly</span>' : '<span class="tag warn">Undefined in places</span>';
+        if (bad && bad < n) txt += ` Undefined for ${Math.round(100 * bad / n)}% of test values${scTxt(ex) ? `, e.g. ${scTxt(ex)}` : ''}.`;
+        rows[e.row] = [e.i, e.readAs, tag, `Variables: ${e.vs.join(', ') || 'none'}${kindTxt.length ? `; sizes: ${kindTxt.join(', ')}` : ''}.${txt}`];
+      });
+
+      // Rearrangement consistency tests
+      let samePairs = 0;
+      const pairs = [], EE = E.filter(e => !e.skip), RR = EE.filter(e => !e.fails && !(e.identity && (e.heavy || !e.vs.length)));
+      for (let a = 0; a < RR.length; a++) for (let b = a + 1; b < RR.length; b++) {
+        const A = RR[a], B = RR[b], sa = A.vs.slice().sort().join(), sb = B.vs.slice().sort().join();
+        if (!A.vs.length || sa !== sb) continue;
+        samePairs++;
+        const iso = X => X.lhsSym && !Object.keys({ ...freeVars(X.R) }).includes(X.lhsSym) ? X.lhsSym : null;
+        const u = iso(B) || iso(A) || (B.lhsSym && B.vs.includes(B.lhsSym) ? B.lhsSym : A.lhsSym && A.vs.includes(A.lhsSym) ? A.lhsSym : A.vs[0]);
+        const [P, Q] = B.lhsSym === u ? [A, B] : [B, A];
+        const kinds = { ...P.kinds, ...Q.kinds };
+        let ok = 0, tried = 0, fail = null;
+        for (let k = 0; k < 40 && tried < 12; k++) {
+          const sc = scopeOf(kinds, pos); delete sc[u];
+          let r;
+          if (iso(Q) === u) { try { r = Q.Rc.evaluate({ ...sc }); } catch (e) { continue; } }
+          else if (kinds[u] === 's') { const g = x => { try { return real(Q.Lc.evaluate({ ...sc, [u]: x })) - real(Q.Rc.evaluate({ ...sc, [u]: x })); } catch (e) { return NaN; } }; r = root(g); if (r == null) continue; }
+          else continue;
+          if (!isArr(r) && !isFinite(real(r))) continue;
+          tried++;
+          const rs = residual(P, { ...sc, [u]: r });
+          if (isFinite(rs.res) && rs.res / rs.scale < 1e-6) ok++; else if (!fail) fail = { sc, r, res: rs.res };
+        }
+        if (!tried) continue;
+        const scTxt = f => Object.entries(f.sc).filter(([, x]) => !isArr(x)).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ');
+        pairs.push(ok === tried ? U.note(`Equation ${Q.i} is consistent with equation ${P.i}: solving ${Q.i} for ${u} satisfies ${P.i} in all ${tried} random tests.`, 'good')
+          : U.note(`Equation ${Q.i} does not follow from equation ${P.i}.${scTxt(fail) ? ` For ${scTxt(fail)},` : ''} equation ${Q.i} gives ${u} = ${fmtV(fail.r)}, which leaves equation ${P.i} off by ${isFinite(fail.res) ? HM.fmt(fail.res, 4) : 'an undefined amount'}.`, 'bad'));
+      }
+
+      // Worked example solving
+      const ex = [];
+      if (Object.keys(known).length) RR.forEach(e => {
+        const miss = e.vs.filter(x => !(x in known));
+        if (miss.length === 0) { const r = residual(e, { ...known }); ex.push(isFinite(r.res) && r.res / r.scale < 1e-3 ? U.note(`Equation ${e.i} holds for the example values.`, 'good') : U.note(`Equation ${e.i} does not hold for the example: left side − right side = ${isFinite(r.res) ? (r.val ? fmtV(MJ.subtract(r.val[0], r.val[1])) : HM.fmt(r.res, 4)) : 'undefined'}.`, 'bad')); }
+        else if (miss.length === 1) {
+          const u = miss[0];
+          if (e.lhsSym === u && !Object.keys(freeVars(e.R)).includes(u)) { let r; try { r = e.Rc.evaluate({ ...known }); } catch (err) { r = NaN; } ex.push(isArr(r) || isFinite(real(r)) ? U.note(`Equation ${e.i} gives <b>${u} = ${fmtV(r)}</b> from the example values.`, 'good') : U.note(`Equation ${e.i}: ${u} could not be evaluated from example values.`, 'bad')); }
+          else if (e.kinds[u] === 's') { const first = d => isArr(d) ? real(MJ.flatten(MJ.matrix(d)).valueOf()[0]) : real(d); const r0 = root(x => { try { return first(MJ.subtract(e.Lc.evaluate({ ...known, [u]: x }), e.Rc.evaluate({ ...known, [u]: x }))); } catch (err) { return NaN; } }); const chk = r0 == null ? null : residual(e, { ...known, [u]: r0 }); const r = chk && chk.res / chk.scale < 1e-6 ? r0 : null; if (r0 != null && r == null) { ex.push(U.note(`Equation ${e.i}: ${u} = ${HM.fmt(r0, 5)} satisfies first row but not others.`, 'bad')); return; } ex.push(r == null ? U.note(`Equation ${e.i}: no real ${u} satisfies it with example values.`, 'bad') : U.note(`Equation ${e.i} gives <b>${u} = ${HM.fmt(r, 5)}</b> from example values.`, 'good')); }
+          else ex.push(U.note(`Equation ${e.i}: ${u} is a matrix or list; write equation with ${u} alone on left to solve for it.`));
+        }
+        else ex.push(U.note(`Equation ${e.i}: ${miss.length} unknowns (${miss.join(', ')}), give all but one to solve it.`));
+      });
+
+      let h = '<table class="tt"><thead><tr><th>' + t.tblNum + '</th><th>' + t.tblParsed + '</th><th>' + t.tblStatus + '</th></tr></thead><tbody>' + rows.map(r => '<tr><td>' + r[0] + '</td><td>' + r[1] + '<br><span style="font-size:.85rem; color:var(--ink-2)">' + r[3] + '</span></td><td>' + r[2] + '</td></tr>').join('') + '</tbody></table>';
+      if (badVals.length) h = U.note('Could not read these value entries (ignored): ' + badVals.map(x => U.esc(x)).join('; '), '') + h;
+      if (pairs.length) h += '<h3>' + t.rearr + '</h3>' + pairs.join('');
+      if (ex.length) h += '<h3>' + t.workedEx + '</h3>' + ex.join('');
+      return { html: h, work: [
+        'Each equation is parsed into a symbolic expression tree (math.js) and evaluated as left side − right side; for matrices, every element must agree and both sides must have the same size.',
+        'Domain: 200 random values per variable (30 if the equation contains integrals or sums), 0.2 to 10, log-spaced; both signs if "Any sign". Summation limits are whole numbers; data indexed in a sum (x_i) are lists.',
+        'Definite integrals: adaptive Gauss–Kronrod (7/15-point) quadrature; infinite limits are mapped to a finite interval with x = a + t/(1 − t).',
+        'Infinite sums: Euler–Maclaurin summation with N = 100, cross-checked at N = 200; sums with alternating signs are accelerated with Wynn\'s ε-algorithm.',
+        'Indefinite integrals: the other side is differentiated numerically and compared with the integrand at 25 random points.',
+        'Rearrangement: where one equation has a variable alone on the left, its value is substituted into the other; otherwise solved numerically. 12 random tests, relative tolerance 10⁻⁶.',
+        'Worked example: with all values known the residual is tested; with one unknown it is evaluated directly or solved by bracketing and bisection.'] };
+    }
+  });
+})();
+</script>
+
+<p class="ra-foot">How to cite: Flynn, T. (2026). <i>Equation checker: plausibility checks for soil and environmental results</i> [software]. <a href="https://doi.org/10.5281/zenodo.23787685" target="_blank" rel="noopener">https://doi.org/10.5281/zenodo.23787685</a></p>
+
+<script>
+(function () {
+  const msg = t => document.getElementById('ra-msg').textContent = t;
+  const box = () => document.getElementById('eq-eqs');
+  const setEqs = text => { const el = box(); if (!el) return; el.value = text; el.dispatchEvent(new Event('input', { bubbles: true })); };
+  const eqLines = t => t.split(/\r?\n|\r/).map(s => s.replace(/[\u00A0\s]+/g, ' ').trim()).filter(s => s.length > 0 && s.length < 400 && /[^=<>!]=[^=]/.test(s));
+  const withEquals = xs => { const w = xs.filter(x => /[^=<>!]=[^=]/.test(x)); return w.length ? w : xs; };
+  const plural = n => `${n} equation${n === 1 ? '' : 's'}`;
+
+  // Paste: when the clipboard comes from Word it carries the equation's OMML in its
+  // HTML. Read that instead of the flattened plain text (which mixes up fractions,
+  // subscripts and powers). Works in Word's panel and in a normal browser.
+  document.addEventListener('paste', ev => {
+    const el = ev.target;
+    if (!el || el.id !== 'eq-eqs' || !ev.clipboardData) return;
+    let eqs = [];
+    try { eqs = window.equationsFromClipboardHtml(ev.clipboardData.getData('text/html')); } catch (e) { console.warn(e); }
+    if (!eqs.length) return;                       // not from Word: normal paste
+    ev.preventDefault();
+    const s = el.selectionStart ?? el.value.length, t = el.selectionEnd ?? el.value.length;
+    const before = el.value.slice(0, s), after = el.value.slice(t);
+    const ins = (before && !before.endsWith('\n') ? '\n' : '') + eqs.join('\n') + (after && !after.startsWith('\n') ? '\n' : '');
+    el.value = before + ins + after;
+    el.selectionStart = el.selectionEnd = (before + ins).length;
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+    msg(`Read ${plural(eqs.length)} from the Word equation you pasted.`);
+  }, true);
+
+  if (typeof Office === 'undefined') { msg('Running outside Word. Paste equations into the box below.'); return; }
+
+  Office.onReady(info => {
+    if (info.host !== Office.HostType.Word) { msg('Running outside Word. Paste equations into the box below.'); return; }
+    document.body.className = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'quarto-dark' : 'quarto-light';
+
+    // Selection: read the selection's OOXML so Word equations keep their structure
+    document.getElementById('ra-sel').onclick = () => Word.run(async ctx => {
+      const sel = ctx.document.getSelection();
+      const ox = sel.getOoxml(); await ctx.sync();
+      let eqs = withEquals(window.equationsFromOoxml(ox.value, eqLines));
+      if (!eqs.length) { sel.load('text'); await ctx.sync(); eqs = eqLines(sel.text || ''); }
+      if (!eqs.length) { msg('No equations found in the selection. Highlight one or more equations (Word equations or typed lines with "=").'); return; }
+      setEqs(eqs.join('\n')); msg(`Read ${plural(eqs.length)} from the selection.`);
+    }).catch(e => msg('Could not read the selection: ' + e.message));
+
+    // Whole document: same OOXML route
+    document.getElementById('ra-doc').onclick = () => Word.run(async ctx => {
+      const ox = ctx.document.body.getOoxml(); await ctx.sync();
+      const eqs = window.equationsFromOoxml(ox.value, eqLines).filter(x => /[^=<>!]=[^=]/.test(x));
+      if (!eqs.length) { msg('No equations found in the document.'); return; }
+      setEqs(eqs.slice(0, 60).join('\n'));
+      msg(`Found ${plural(eqs.length)}${eqs.length > 60 ? ' (first 60 shown)' : ''}. Remove any that aren't equations.`);
+    }).catch(e => msg('Could not read the document: ' + e.message));
+
+    document.getElementById('ra-com').onclick = () => Word.run(async ctx => {
+      const res = document.querySelector('#eq .res');
+      const bad = res ? [...res.querySelectorAll('.note.bad')].map(n => n.textContent.trim()) : [];
+      const tags = res ? [...res.querySelectorAll('tbody tr')].filter(tr => tr.querySelector('.tag.bad, .tag.warn')).map(tr => `Eq ${tr.cells[0].textContent}: ${tr.cells[2].textContent.trim()}, ${tr.cells[1].querySelector('span') ? tr.cells[1].querySelector('span').textContent.trim() : ''}`) : [];
+      const text = (tags.concat(bad).join('\n') || 'Equation check: no problems found.') + '\n(Equation checker, https://doi.org/10.5281/zenodo.23787685)';
+      const r = ctx.document.getSelection();
+      if (Office.context.requirements.isSetSupported('WordApi', '1.4')) { r.insertComment(text); await ctx.sync(); msg('Comment added to the selection.'); }
+      else { r.insertText('\n[' + text + ']', 'After'); await ctx.sync(); msg('Findings inserted as text after the selection.'); }
+    }).catch(e => msg('Could not add the comment: ' + e.message));
+  });
+})();
+</script>
+</body></html>
