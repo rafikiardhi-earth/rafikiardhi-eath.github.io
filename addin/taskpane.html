@@ -117,9 +117,20 @@ body.quarto-light .ra-foot a { color: #8a4b22; }
 .hmc .res ul.plain li { margin-bottom: 6px; }
 .hmc .res p { font-size: .93rem; }
 .hmc .tt-wrap { overflow-x: auto; }
+.hmc .actions button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
+.hmc .res ul.stats li span:first-child small { display: block; font-size: .78rem; color: var(--ink-3); margin-top: 1px; }
+.hmc .res svg.chart { width: 100%; height: auto; display: block; margin-top: 6px; }
+.hmc .res svg.chart text { fill: var(--ink-2); font-size: 11px; }
+.hmc .res svg.chart .grid line { stroke: var(--line); }
+.hmc .res .tt-wrap.tall { max-height: 320px; overflow: auto; }
+.hmc table.tt td.diag { font-weight: 700; color: var(--good); }
+.hmc table.tt td.part { font-weight: 700; color: var(--warn); }
+.hmc .ev-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: .82rem; color: var(--ink-2); margin-top: 4px; }
+.hmc .ev-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
 /* tables in the checks (not the equation checker): keep numbers whole, scroll sideways if needed */
 .hmc:not(#eq) table.tt th, .hmc:not(#eq) table.tt td { word-break: normal; overflow-wrap: normal; }
-.hmc:not(#eq) table.tt td.r, .hmc:not(#eq) table.tt th.r { white-space: nowrap; }
+.hmc:not(#eq) table.tt td.r { white-space: nowrap; }
+.hmc:not(#eq) table.tt th { white-space: normal; vertical-align: bottom; }
 .hmc:not(#eq) table.tt th { font-size: .72rem; letter-spacing: .02em; }
 .hmc:not(#eq) table.tt td { font-size: .88rem; padding: 6px 4px; }
 .hmc:not(#eq) table.tt .tag { white-space: nowrap; font-size: .66rem; }
@@ -194,11 +205,11 @@ body.in-word #eq.has-places tbody tr { cursor: pointer; }
    Spanish. Everything runs in the panel. The equation checker keeps its own framework (HMEQ). */
 window.HM = (function () {
   const TT = {
-    en: { work: 'Show the working', example: 'Example', reset: 'Start over', check: 'Check your numbers.', copy: 'Copy', copied: 'Copied', copyThis: 'Copy this:',
+    en: { work: 'Show the working', example: 'Example', reset: 'Start over', check: 'Check your numbers.', press: b => `Enter the values, then press ${b}.`, stale: b => `The inputs have changed: press ${b} to update.`, copy: 'Copy', copied: 'Copied', copyThis: 'Copy this:',
           small: 'Nothing you enter leaves your computer.' },
-    sw: { work: 'Onyesha hesabu', example: 'Mfano', reset: 'Anza upya', check: 'Kagua namba zako.', copy: 'Nakili', copied: 'Imenakiliwa', copyThis: 'Nakili hiki:',
+    sw: { work: 'Onyesha hesabu', example: 'Mfano', reset: 'Anza upya', check: 'Kagua namba zako.', press: b => `Weka thamani, kisha bonyeza ${b}.`, stale: b => `Data zimebadilika: bonyeza ${b} ili kusasisha.`, copy: 'Nakili', copied: 'Imenakiliwa', copyThis: 'Nakili hiki:',
           small: 'Hakuna unachoandika kinachotoka kwenye kompyuta yako.' },
-    es: { work: 'Ver el cálculo', example: 'Ejemplo', reset: 'Empezar de nuevo', check: 'Revise sus números.', copy: 'Copiar', copied: 'Copiado', copyThis: 'Copie esto:',
+    es: { work: 'Ver el cálculo', example: 'Ejemplo', reset: 'Empezar de nuevo', check: 'Revise sus números.', press: b => `Introduzca los valores y pulse ${b}.`, stale: b => `Los datos han cambiado: pulse ${b} para actualizar.`, copy: 'Copiar', copied: 'Copiado', copyThis: 'Copie esto:',
           small: 'Nada de lo que escribe sale de su computadora.' }
   };
   let lang = 'en'; try { lang = localStorage.getItem('ra-lang') || 'en'; } catch (e) { }
@@ -243,7 +254,7 @@ window.HM = (function () {
       const w = i.w ? ' class="w' + i.w + '"' : '';
       const id = cfg.id + '-' + i.k;
       const hint = i.h ? `<p class="hint">${i.h}</p>` : '';
-      if (i.t === 'info') return `<div${w} data-w="${i.k || ''}"><p class="hint">${i.h}</p></div>`;
+      if (i.t === 'info') return `<div${w} data-w="${i.k || ''}"><p class="hint">${i.h}</p></div>`;   // give it a k to make it conditional (show)
       if (i.t === 'select') {
         const cur = String(read()[i.k]);
         return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><select id="${id}" data-k="${i.k}">${i.opts.map(o => `<option value="${esc(o[0])}"${String(o[0]) === cur ? ' selected' : ''}>${esc(o[1])}</option>`).join('')}</select>${hint}</div>`;
@@ -257,7 +268,9 @@ window.HM = (function () {
       return `<div${w} data-w="${i.k}"><label for="${id}">${lab(i)}</label><input type="text" id="${id}" data-k="${i.k}" inputmode="decimal" autocomplete="off" value="${esc(shown(i))}" placeholder="${esc(i.ph || '')}">${hint}</div>`;
     }
 
-    function render() {
+    // cfg.button: heavy checks compute only when this button (or Example) is pressed, as on the website
+    let ran = false, lastKey = null;   // cfg.live: keys whose change re-runs at once once the check has been run
+    function render(force) {
       let h = '', open = false;
       inputs.forEach((i, n) => {
         if (i.t === 'sec' || n === 0) {
@@ -269,26 +282,27 @@ window.HM = (function () {
         h += fieldHTML(i);
       });
       if (open) h += '</div></section>';
-      const nAct = (cfg.example ? 1 : 0) + 1;
+      const nAct = (cfg.example ? 1 : 0) + 1 + (cfg.button ? 1 : 0);
       h += `<section class="cx res" aria-live="polite"></section>
         <details class="cx hm-work"><summary>${T().work}</summary><div class="db"></div></details>
         ${cfg.after || ''}
-        <div class="actions" style="grid-template-columns:repeat(${nAct},1fr)">${cfg.example ? `<button type="button" data-act="example">${T().example}</button>` : ''}<button type="button" data-act="reset">${T().reset}</button></div>
+        <div class="actions" style="grid-template-columns:repeat(${nAct},1fr)">${cfg.button ? `<button type="button" class="primary" data-act="run">${cfg.button}</button>` : ''}${cfg.example ? `<button type="button" data-act="example">${T().example}</button>` : ''}<button type="button" data-act="reset">${T().reset}</button></div>
         <p class="smallprint">${T().small}</p><div class="toast"></div>`;
       root.innerHTML = h;
-      run();
+      run(force);
     }
 
     const U = {
       n: fmt, fix,
       kv: rows => `<ul class="kv">${rows.filter(Boolean).map(r => `<li><span>${r[0]}</span><span>${r[1]}</span></li>`).join('')}</ul>`,
       note: (h, cls) => `<div class="note${cls ? ' ' + cls : ''}">${h}</div>`,
+      stats: rows => `<ul class="kv stats">${rows.filter(Boolean).map(r => `<li><span>${r[0]}${r[2] ? `<small>${r[2]}</small>` : ''}</span><span>${r[1]}</span></li>`).join('')}</ul>`,
       big: (label, val, sub) => `<div class="step">${label}</div><div class="big">${val}</div>${sub ? `<p class="sub">${sub}</p>` : ''}`,
       empty: t => `<p class="empty">${t}</p>`,
       esc
     };
 
-    function run() {
+    function run(force) {
       const v = read();
       root.querySelectorAll('input[type=text][data-k]').forEach(inp => {
         const k = inp.dataset.k, r = raw[k];
@@ -301,6 +315,14 @@ window.HM = (function () {
       });
       const clean = {};
       Object.keys(v).forEach(k => { const x = v[k]; clean[k] = (typeof x === 'number' && isNaN(x)) ? null : x; });
+      const liveKey = ran && cfg.live && cfg.live.includes(lastKey); lastKey = null;
+      if (cfg.button && !force && !liveKey) {
+        const res = root.querySelector('.res');
+        if (!ran) { res.innerHTML = U.empty(T().press(cfg.button)); root.querySelector('.hm-work').hidden = true; }
+        else if (!res.querySelector('.stale-note')) res.insertAdjacentHTML('afterbegin', `<div class="note stale-note">${T().stale(cfg.button)}</div>`);
+        return;
+      }
+      ran = true;
       let out;
       try { out = cfg.compute(clean, U) || {}; } catch (e) { out = { html: U.empty(T().check) }; console.warn(e); }
       if (typeof out === 'string') out = { html: out };
@@ -311,39 +333,40 @@ window.HM = (function () {
     }
 
     function set(k, val) { f[k] = val; delete raw[k]; const inp = root.querySelector(`input[type=text][data-k="${k}"]`); if (inp) inp.value = shown(byK[k]); }
-    const api = { set, get: k => read()[k], values: () => Object.assign({}, f), rerender: render };
+    const api = { set, get: k => read()[k], values: () => Object.assign({}, f), rerender: render, ran: () => ran };
 
     root.addEventListener('input', e => {
       const ta = e.target.closest('textarea[data-k]');
-      if (ta) { f[ta.dataset.k] = ta.value; if (cfg.onChange) cfg.onChange(ta.dataset.k, api); run(); return; }
+      if (ta) { f[ta.dataset.k] = ta.value; lastKey = ta.dataset.k; if (cfg.onChange) cfg.onChange(ta.dataset.k, api); run(); return; }
       const inp = e.target.closest('input[type=text][data-k]');
       if (!inp) return;
       const i = byK[inp.dataset.k];
-      raw[i.k] = inp.value;
+      raw[i.k] = inp.value; lastKey = i.k;
       f[i.k] = inp.value.trim() === '' ? null : num(inp.value);
       if (cfg.onChange) cfg.onChange(i.k, api);
       run();
     });
     root.addEventListener('change', e => {
       const el = e.target;
-      if (el.tagName === 'SELECT' && el.dataset.k) { f[el.dataset.k] = el.value; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
+      if (el.tagName === 'SELECT' && el.dataset.k) { f[el.dataset.k] = el.value; lastKey = el.dataset.k; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
       else if (el.type === 'checkbox' && el.dataset.k) { f[el.dataset.k] = el.checked; if (cfg.onChange) cfg.onChange(el.dataset.k, api); run(); }
     });
     root.addEventListener('click', e => {
       const b = e.target.closest('button');
       if (!b) return;
       if (b.dataset.seg) {
-        f[b.dataset.seg] = b.dataset.v;
+        f[b.dataset.seg] = b.dataset.v; lastKey = b.dataset.seg;
         b.parentElement.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
         if (cfg.onChange) cfg.onChange(b.dataset.seg, api);
         run(); return;
       }
       const a = b.dataset.act;
-      if (a === 'reset') { f = {}; raw = {}; render(); }
-      else if (a === 'example' && cfg.example) { f = Object.assign({}, cfg.example); raw = {}; render(); }
+      if (a === 'reset') { f = {}; raw = {}; ran = false; render(); }
+      else if (a === 'example' && cfg.example) { f = Object.assign({}, typeof cfg.example === 'function' ? cfg.example(read()) : cfg.example); raw = {}; render(true); }
+      else if (a === 'run') run(true);
       else if (a === 'say') { const s = root.querySelector('.hm-say'); if (s) copy(root, s.textContent, T().copied); }
     });
-    render();
+    render(!!cfg.initialRun);
     return api;
   }
 
@@ -1907,6 +1930,867 @@ window.CKSTAT = window.CKSTAT || (function () {
 })();
 
 </script>
+<script>
+/* Checks from the Tools page (rafikiardhi.earth/tools.html): kriging error against the variogram, samples for a map,
+   detectable change, R² with RMSE, classification accuracy, and model evaluation with observed-vs-predicted and PICP plots.
+   Same calculations as on the website; text in en, sw and es. */
+(function () {
+  const C = window.RA_CHECKS, pick = (o, L) => o[L] || o.en;
+  // the website prints these numbers with toFixed (no thousands separators), so the same is done here
+  const fx = (v, d = 2) => (v == null || !isFinite(v)) ? '–' : Number(v).toFixed(d);
+  const N = x => (x == null || x === '') ? NaN : Number(x);   // empty box → NaN, as on the website
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  // ---------------------------------------------------------------- shared maths (copied from the website)
+  function lgamma(x) {
+    const c = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5];
+    let y = x, t = x + 5.5; t -= (x + 0.5) * Math.log(t); let s = 1.000000000190015;
+    for (const k of c) s += k / ++y;
+    return -t + Math.log(2.5066282746310005 * s / x);
+  }
+  function betacf(a, b, x) {
+    let qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap;
+    if (Math.abs(d) < 1e-30) d = 1e-30; d = 1 / d; let h = d;
+    for (let m = 1; m <= 200; m++) {
+      const m2 = 2 * m; let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+      d = 1 + aa * d; if (Math.abs(d) < 1e-30) d = 1e-30; c = 1 + aa / c; if (Math.abs(c) < 1e-30) c = 1e-30; d = 1 / d; h *= d * c;
+      aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+      d = 1 + aa * d; if (Math.abs(d) < 1e-30) d = 1e-30; c = 1 + aa / c; if (Math.abs(c) < 1e-30) c = 1e-30; d = 1 / d;
+      const del = d * c; h *= del; if (Math.abs(del - 1) < 3e-12) break;
+    }
+    return h;
+  }
+  function ibeta(a, b, x) {
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+    return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b;
+  }
+  const tcdf = (t, df) => 1 - 0.5 * ibeta(df / 2, 0.5, df / (df + t * t));
+  function tinv(p, df) { let lo = 0, hi = 1000; for (let i = 0; i < 100; i++) { const mid = (lo + hi) / 2; if (tcdf(mid, df) < p) lo = mid; else hi = mid; } return (lo + hi) / 2; }
+  function erf(x) { const t = 1 / (1 + 0.3275911 * Math.abs(x)), y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; }
+
+  // evaluation statistics
+  const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
+  function contStats(obs, pred) {
+    const n = obs.length, mo = mean(obs), mp = mean(pred);
+    let sse = 0, sae = 0, sst = 0, sxy = 0, sxx = 0, syy = 0;
+    for (let i = 0; i < n; i++) {
+      const e = pred[i] - obs[i];
+      sse += e * e; sae += Math.abs(e); sst += (obs[i] - mo) ** 2;
+      sxy += (obs[i] - mo) * (pred[i] - mp); sxx += (obs[i] - mo) ** 2; syy += (pred[i] - mp) ** 2;
+    }
+    const r = sxy / Math.sqrt(sxx * syy);
+    const vx = sxx / (n - 1), vy = syy / (n - 1), cxy = sxy / (n - 1);
+    const ccc = 2 * cxy / (vx + vy + (mo - mp) ** 2);
+    return { n, me: mp - mo, mae: sae / n, rmse: Math.sqrt(sse / n), r2: r * r, nse: 1 - sse / sst, ccc };
+  }
+  function lgam(x) {
+    const g = [57.1562356658629235, -59.5979603554754912, 14.1360979747417471, -0.491913816097620199, 0.339946499848118887e-4,
+      0.465236289270485756e-4, -0.983744753048795646e-4, 0.158088703224912494e-3, -0.210264441724104883e-3, 0.217439618115212643e-3,
+      -0.164318106536763890e-3, 0.844182239838527433e-4, -0.261908384015814087e-4, 0.368991826595316234e-5];
+    let y = x, tmp = x + 5.24218750000000000; tmp = (x + 0.5) * Math.log(tmp) - tmp;
+    let ser = 0.999999999999997092; for (const c of g) ser += c / ++y;
+    return tmp + Math.log(2.5066282746310005 * ser / x);
+  }
+  function gammaQ(a, x) {
+    if (x <= 0) return 1;
+    const gln = lgam(a);
+    if (x < a + 1) { let ap = a, del = 1 / a, sum = del; for (let i = 0; i < 500; i++) { ap++; del *= x / ap; sum += del; if (Math.abs(del) < Math.abs(sum) * 1e-16) break; } return 1 - sum * Math.exp(-x + a * Math.log(x) - gln); }
+    let b = x + 1 - a, c = 1e300, d = 1 / b, h = d;
+    for (let i = 1; i < 500; i++) { const an = -i * (i - a); b += 2; d = an * d + b; if (Math.abs(d) < 1e-300) d = 1e-300; c = b + an / c; if (Math.abs(c) < 1e-300) c = 1e-300; d = 1 / d; const del = d * c; h *= del; if (Math.abs(del - 1) < 1e-16) break; }
+    return Math.exp(-x + a * Math.log(x) - gln) * h;
+  }
+  const pnorm = x => x < 0 ? 0.5 * gammaQ(0.5, x * x / 2) : 1 - 0.5 * gammaQ(0.5, x * x / 2);
+  function qnorm0(p) {
+    const a = [-3.969683028665376e+01, 2.209460984245205e+02, -2.759285104469687e+02, 1.383577518672690e+02, -3.066479806614716e+01, 2.506628277459239e+00];
+    const b = [-5.447609879822406e+01, 1.615858368580409e+02, -1.556989798598866e+02, 6.680131188771972e+01, -1.328068155288572e+01];
+    const c = [-7.784894002430293e-03, -3.223964580411365e-01, -2.400758277161838e+00, -2.549671010139714e+00, 4.374664141464968e+00, 2.938163982698783e+00];
+    const d = [7.784695709041462e-03, 3.224671290700398e-01, 2.445134137142996e+00, 3.754408661907416e+00];
+    const pl = 0.02425;
+    if (p < pl) { const q = Math.sqrt(-2 * Math.log(p)); return (((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    if (p > 1 - pl) { const q = Math.sqrt(-2 * Math.log(1 - p)); return -(((((c[0] * q + c[1]) * q + c[2]) * q + c[3]) * q + c[4]) * q + c[5]) / ((((d[0] * q + d[1]) * q + d[2]) * q + d[3]) * q + 1); }
+    const q = p - 0.5, r = q * q;
+    return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
+  }
+  function qnorm(p) { const x0 = qnorm0(p), e = pnorm(x0) - p, u = e * Math.sqrt(2 * Math.PI) * Math.exp(x0 * x0 / 2); return x0 - u / (1 + x0 * u / 2); }
+  const PICP_LEVELS = [99, 97.5, 95, 90, 80, 60, 40, 20, 10, 5];
+  const picpNormal = (obs, pred, sd) => PICP_LEVELS.map(cl => { const z = qnorm(0.5 + cl / 200); let k = 0; for (let i = 0; i < obs.length; i++) if (Math.abs(obs[i] - pred[i]) <= z * sd[i]) k++; return { cl, picp: 100 * k / obs.length }; });
+  const picpBounds = (obs, lo, hi) => { let k = 0; for (let i = 0; i < obs.length; i++) if (obs[i] >= lo[i] && obs[i] <= hi[i]) k++; return 100 * k / obs.length; };
+  function catStats(obs, pred) {
+    const classes = [...new Set(obs.concat(pred))].sort();
+    const ix = new Map(classes.map((c, i) => [c, i])), K = classes.length, n = obs.length;
+    const M = Array.from({ length: K }, () => new Array(K).fill(0));
+    for (let i = 0; i < n; i++) M[ix.get(obs[i])][ix.get(pred[i])]++;
+    const rowT = M.map(r => r.reduce((s, v) => s + v, 0)), colT = classes.map((_, j) => M.reduce((s, r) => s + r[j], 0));
+    const diag = M.reduce((s, r, i) => s + r[i], 0);
+    const po = diag / n, pe = rowT.reduce((s, v, i) => s + v * colT[i], 0) / (n * n);
+    const kappa = pe === 1 ? NaN : (po - pe) / (1 - pe);
+    const producers = classes.map((_, i) => rowT[i] ? M[i][i] / rowT[i] : NaN);
+    const users = classes.map((_, j) => colT[j] ? M[j][j] / colT[j] : NaN);
+    return { classes, M, rowT, colT, n, accuracy: po, kappa, producers, users };
+  }
+  function confusionIndex(p) { const s = p.slice().sort((a, b) => b - a); const p1 = s[0], p2 = s.length > 1 ? s[1] : 0; return { p1, p2, ci: 1 - (p1 - p2) }; }
+  function parseCSV(text) {
+    const lines = String(text || '').replace(/\r/g, '').split('\n').filter(l => l.trim() !== '');
+    if (!lines.length) return { header: [], rows: [] };
+    const first = lines[0];
+    const sep = first.includes('\t') ? '\t' : (first.split(';').length > first.split(',').length ? ';' : ',');
+    const split = l => { const out = []; let cur = '', q = false; for (let i = 0; i < l.length; i++) { const ch = l[i]; if (ch === '"') { if (q && l[i + 1] === '"') { cur += '"'; i++; } else q = !q; } else if (ch === sep && !q) { out.push(cur.trim()); cur = ''; } else cur += ch; } out.push(cur.trim()); return out; };
+    return { header: split(first), rows: lines.slice(1).map(split) };
+  }
+  const num = v => { if (v == null) return NaN; const s = String(v).trim(); return s === '' ? NaN : Number(s); };
+  function niceTicks(lo, hi, n) {
+    const span = hi - lo || 1, step0 = span / n, mag = Math.pow(10, Math.floor(Math.log10(step0)));
+    const step = [1, 2, 2.5, 5, 10].map(m => m * mag).find(s => s >= step0) || 10 * mag;
+    const t = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) t.push(+v.toFixed(10));
+    return t;
+  }
+
+  // ordinary kriging (the website's Krige module, spherical / exponential / Gaussian)
+  const MODELS = {
+    sph: (h, r) => h >= r ? 1 : 1.5 * h / r - 0.5 * Math.pow(h / r, 3),
+    exp: (h, r) => 1 - Math.exp(-3 * h / r),
+    gau: (h, r) => 1 - Math.exp(-3 * (h / r) * (h / r))
+  };
+  const gamma = (m, h) => h <= 0 ? 0 : m.c0 + m.c1 * MODELS[m.type](h, m.r);
+  function solve(A, b) {
+    const n = b.length, M = A.map((row, i) => row.concat([b[i]]));
+    for (let c = 0; c < n; c++) {
+      let p = c;
+      for (let r = c + 1; r < n; r++) if (Math.abs(M[r][c]) > Math.abs(M[p][c])) p = r;
+      if (Math.abs(M[p][c]) < 1e-14) return null;
+      if (p !== c) { const t = M[c]; M[c] = M[p]; M[p] = t; }
+      for (let r = c + 1; r < n; r++) { const f = M[r][c] / M[c][c]; if (f) for (let k = c; k <= n; k++) M[r][k] -= f * M[c][k]; }
+    }
+    const x = new Array(n).fill(0);
+    for (let r = n - 1; r >= 0; r--) { let s = M[r][n]; for (let k = r + 1; k < n; k++) s -= M[r][k] * x[k]; x[r] = s / M[r][r]; }
+    return x;
+  }
+  function okAt(xs, ys, zs, idx, x0, y0, m) {
+    const k = idx.length, sill = m.c0 + m.c1, eps = 1e-10 * (sill || 1);
+    const A = Array.from({ length: k + 1 }, () => new Array(k + 1).fill(0)), b = new Array(k + 1).fill(0);
+    for (let a = 0; a < k; a++) {
+      for (let c = a + 1; c < k; c++) { const g = gamma(m, Math.hypot(xs[idx[a]] - xs[idx[c]], ys[idx[a]] - ys[idx[c]])); A[a][c] = g; A[c][a] = g; }
+      A[a][a] = -eps; A[a][k] = 1; A[k][a] = 1;
+      b[a] = gamma(m, Math.hypot(xs[idx[a]] - x0, ys[idx[a]] - y0));
+    }
+    b[k] = 1;
+    const sol = solve(A, b);
+    if (!sol) return null;
+    let pred = 0, v = sol[k];
+    for (let a = 0; a < k; a++) { pred += sol[a] * zs[idx[a]]; v += sol[a] * b[a]; }
+    return { pred, var: Math.max(0, v), mu: sol[k] };
+  }
+  // expected kriging error for a layout: "loo" = at samples, leaving each out; "map" = at random unsampled locations
+  function krExpected(m, n, ha, grid, reps, mode) {
+    const A = ha * 10000, spacing = Math.sqrt(A / n), nn = Math.min(n, 400), side = Math.sqrt(nn) * spacing;
+    let seed = 12345; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const out = [];
+    for (let t = 0; t < reps; t++) {
+      const xs = [], ys = [];
+      if (grid) { const k = Math.max(2, Math.round(Math.sqrt(nn))); for (let i = 0; i < k; i++) for (let j = 0; j < k; j++) { xs.push((i + 0.5) * spacing); ys.push((j + 0.5) * spacing); } }
+      else for (let i = 0; i < nn; i++) { xs.push(rnd() * side); ys.push(rnd() * side); }
+      const L = xs.length, S = grid ? Math.round(Math.sqrt(nn)) * spacing : side, zs = xs.map(() => 0), edge = n > 400 ? S * 0.2 : 0;
+      const targets = [];
+      if (mode === 'loo') { for (let i = 0; i < L; i++) if (!(edge && (xs[i] < edge || ys[i] < edge || xs[i] > S - edge || ys[i] > S - edge))) targets.push([xs[i], ys[i], i]); }
+      else for (let i = 0; i < 300; i++) targets.push([edge + rnd() * (S - 2 * edge), edge + rnd() * (S - 2 * edge), -1]);
+      let sv = 0, cnt = 0;
+      targets.forEach(([x0, y0, self]) => {
+        const d = []; for (let j = 0; j < L; j++) if (j !== self) d.push([Math.hypot(x0 - xs[j], y0 - ys[j]), j]);
+        d.sort((a, b) => a[0] - b[0]);
+        const q = okAt(xs, ys, zs, d.slice(0, 16).map(p => p[1]), x0, y0, m);
+        if (q) { sv += q.var; cnt++; }
+      });
+      out.push(Math.sqrt(sv / cnt));
+    }
+    out.sort((a, b) => a - b);
+    const pct = p => out[Math.min(out.length - 1, Math.max(0, Math.round(p * (out.length - 1))))];
+    return { mid: pct(0.5), lo: pct(0.05), hi: pct(0.95), spacing };
+  }
+
+  // the variogram as reported: nugget : sill ratio, nugget + sill, or nugget + partial sill
+  const VGT = {
+    en: { model: 'Variogram model', sph: 'Spherical', exp: 'Exponential', gau: 'Gaussian', vform: 'Variogram reported as', ratio: 'Nugget : sill ratio', sill: 'Nugget and sill', psill: 'Nugget and partial sill',
+      q: 'Nugget : sill (0–1)', c0: 'Nugget', s2: 'Sill', ps: 'Partial sill', r: 'Range, practical (m)', area: 'Area (ha)',
+      eRatio: 'The nugget : sill ratio must be between 0 and 1 (for example 0.25, not 25%).', eP: 'Enter the nugget and partial sill (zero or more).', eS: 'Enter the nugget and sill (zero or more).',
+      eSill: 'The sill must be above zero.', eBig: 'The nugget can\'t be larger than the sill. If your value is the partial sill, choose "Nugget and partial sill".' },
+    sw: { model: 'Modeli ya variogram', sph: 'Spherical', exp: 'Exponential', gau: 'Gaussian', vform: 'Variogram imeripotiwa kama', ratio: 'Uwiano wa nugget : sill', sill: 'Nugget na sill', psill: 'Nugget na partial sill',
+      q: 'Nugget : sill (0–1)', c0: 'Nugget', s2: 'Sill', ps: 'Partial sill', r: 'Masafa ya kivitendo (m)', area: 'Eneo (ha)',
+      eRatio: 'Uwiano wa nugget : sill lazima uwe kati ya 0 na 1 (kwa mfano 0.25, si 25%).', eP: 'Weka nugget na partial sill (sifuri au zaidi).', eS: 'Weka nugget na sill (sifuri au zaidi).',
+      eSill: 'Sill lazima iwe zaidi ya sifuri.', eBig: 'Nugget haiwezi kuwa kubwa kuliko sill. Kama thamani yako ni partial sill, chagua "Nugget na partial sill".' },
+    es: { model: 'Modelo de variograma', sph: 'Esférico', exp: 'Exponencial', gau: 'Gaussiano', vform: 'Variograma informado como', ratio: 'Razón pepita : meseta', sill: 'Pepita y meseta', psill: 'Pepita y meseta parcial',
+      q: 'Pepita : meseta (0–1)', c0: 'Pepita', s2: 'Meseta', ps: 'Meseta parcial', r: 'Rango práctico (m)', area: 'Área (ha)',
+      eRatio: 'La razón pepita : meseta debe estar entre 0 y 1 (por ejemplo 0.25, no 25%).', eP: 'Introduzca la pepita y la meseta parcial (cero o más).', eS: 'Introduzca la pepita y la meseta (cero o más).',
+      eSill: 'La meseta debe ser mayor que cero.', eBig: 'La pepita no puede ser mayor que la meseta. Si su valor es la meseta parcial, elija "Pepita y meseta parcial".' }
+  };
+  const vgInputs = (V, ratioD) => [
+    { k: 'model', l: V.model, t: 'select', d: 'sph', opts: [['sph', V.sph], ['exp', V.exp], ['gau', V.gau]] },
+    { k: 'vform', l: V.vform, t: 'select', d: 'ratio', opts: [['ratio', V.ratio], ['sill', V.sill], ['psill', V.psill]] },
+    { k: 'ratio', l: V.q, t: 'num', d: ratioD, show: v => v.vform === 'ratio' },
+    { k: 'c0', l: V.c0, t: 'num', w: 3, show: v => v.vform !== 'ratio' },
+    { k: 's2', l: V.s2, t: 'num', w: 3, show: v => v.vform === 'sill' },
+    { k: 'ps', l: V.ps, t: 'num', w: 3, show: v => v.vform === 'psill' }
+  ];
+  function vgRead(v, V) {
+    if (v.vform === 'ratio') {
+      const q = N(v.ratio), ratio = isFinite(q) ? q : 0;
+      if (!(ratio >= 0 && ratio <= 1)) return { err: V.eRatio };
+      return { ratio, sill: null };
+    }
+    const c0 = N(v.c0), s = N(v.vform === 'psill' ? v.ps : v.s2), nug = isFinite(c0) ? c0 : 0;
+    if (!(nug >= 0) || !(s >= 0)) return { err: v.vform === 'psill' ? V.eP : V.eS };
+    const sill = v.vform === 'psill' ? nug + s : s;
+    if (!(sill > 0)) return { err: V.eSill };
+    if (nug > sill) return { err: V.eBig };
+    return { ratio: nug / sill, sill };
+  }
+  const head = (cls, h, b) => [`<b>${h}</b> ${b}`, cls === 'warn' ? '' : cls];
+  const verdict = (cls, h, b) => { const [t, c] = head(cls, h, b); return `<div class="note${c ? ' ' + c : ''}">${t}</div>`; };
+
+  // ---------------------------------------------------------------- Kriging error vs the variogram
+  const KR = {
+    en: {
+      step: 'Variogram and sampling', sd: 'Standard deviation of the data', n: 'Number of samples', lay: 'Sample layout', random: 'Random', grid: 'Regular grid', rmse: 'Reported RMSE (optional)', btn: 'Check',
+      h1: 'Enter the variogram the way it was reported: as the nugget : sill ratio, as the nugget and sill, or as the nugget and partial sill (the sill minus the nugget; gstat reports this as psill, and many papers do too). The sill is the total: nugget + partial sill. With the ratio, the sill is taken as the variance of the data (SD²); with a nugget and sill, the stated sill is used, and the standard deviation becomes optional.',
+      h2: 'If the nugget isn\'t reported, leave it at 0: that is the most generous assumption, so a result that still looks too good really is.',
+      eSill: 'Enter the range, number of samples (10 or more) and area.', eSd: 'Enter the standard deviation, range, number of samples (10 or more) and area.',
+      spacing: 'Sample spacing', sGrid: 'grid', sRand: 'average, random layout', ratio: 'Spacing ÷ range', beyond: 'samples beyond the range', within: 'within the range',
+      exp: 'Expected RMSE', fromVar: 'from the kriging variance', band: (a, b) => `5–95%: ${a}–${b}`, floor: 'Lowest possible', nug: '√nugget', noSkill: 'No spatial skill', sdU: 'standard deviation',
+      rep: 'Reported RMSE', ofExp: p => `${p}% of expected`,
+      low: 'Implausibly low.', lowB: (r, s, m, far, rep) => `With a range of ${r} m and samples about ${s} m apart, kriging should give an RMSE of about ${m}${far ? ', close to the standard deviation itself, because most samples are beyond the range of each other' : ''}. A reported ${rep} needs explaining: validation points that weren't independent, a variogram or SD from a different dataset, or errors on a transformed scale.`,
+      high: 'Worse than the variogram implies.', highB: 'Possible causes: a poorly fitted variogram, outliers, a trend, or a nugget larger than stated.',
+      ok: 'Consistent', okB: 'with the stated variogram and sampling density.',
+      far: (m, sd) => `Samples are further apart than the range, so kriging can do little better than the mean here: expect an RMSE near ${m}, compared with a standard deviation of ${sd}.`,
+      why: (grid, reps) => `Expected RMSE is the square root of the average ordinary kriging variance at each sample, predicted from its 16 nearest neighbours with itself left out, using the stated variogram${grid ? '' : `, over ${reps} random layouts`}.`
+    },
+    sw: {
+      step: 'Variogram na uchukuaji wa sampuli', sd: 'Mkengeuko sanifu (SD) wa data', n: 'Idadi ya sampuli', lay: 'Mpangilio wa sampuli', random: 'Nasibu', grid: 'Gridi ya kawaida', rmse: 'RMSE iliyoripotiwa (si lazima)', btn: 'Kagua',
+      h1: 'Weka variogram jinsi ilivyoripotiwa: kama uwiano wa nugget : sill, kama nugget na sill, au kama nugget na partial sill (sill toa nugget; gstat huiripoti kama psill, na makala nyingi pia). Sill ni jumla: nugget + partial sill. Ukitumia uwiano, sill inachukuliwa kuwa tofauti (variance) ya data (SD²); ukitumia nugget na sill, sill iliyotajwa inatumika, na mkengeuko sanifu unakuwa si lazima.',
+      h2: 'Kama nugget haikuripotiwa, iache kwenye 0: hiyo ndiyo dhana ya ukarimu zaidi, kwa hiyo matokeo yanayoonekana mazuri mno hata hivyo ni mazuri mno kweli.',
+      eSill: 'Weka masafa, idadi ya sampuli (10 au zaidi) na eneo.', eSd: 'Weka mkengeuko sanifu, masafa, idadi ya sampuli (10 au zaidi) na eneo.',
+      spacing: 'Umbali kati ya sampuli', sGrid: 'gridi', sRand: 'wastani, mpangilio wa nasibu', ratio: 'Umbali ÷ masafa', beyond: 'sampuli ziko nje ya masafa', within: 'ndani ya masafa',
+      exp: 'RMSE inayotarajiwa', fromVar: 'kutoka tofauti ya kriging', band: (a, b) => `5–95%: ${a}–${b}`, floor: 'Ndogo kabisa inayowezekana', nug: '√nugget', noSkill: 'Bila ujuzi wa kijiografia', sdU: 'mkengeuko sanifu',
+      rep: 'RMSE iliyoripotiwa', ofExp: p => `${p}% ya inayotarajiwa`,
+      low: 'Ndogo kupita kiasi kuaminika.', lowB: (r, s, m, far, rep) => `Kwa masafa ya m ${r} na sampuli zilizo takriban m ${s} mbali, kriging inapaswa kutoa RMSE ya takriban ${m}${far ? ', karibu na mkengeuko sanifu wenyewe, kwa sababu sampuli nyingi ziko nje ya masafa ya nyingine' : ''}. RMSE iliyoripotiwa ya ${rep} inahitaji maelezo: nukta za uthibitishaji ambazo hazikuwa huru, variogram au SD kutoka seti nyingine ya data, au makosa kwenye kipimo kilichobadilishwa.`,
+      high: 'Mbaya kuliko variogram inavyoonyesha.', highB: 'Sababu zinazowezekana: variogram iliyolinganishwa vibaya, thamani za kipekee (outliers), mwelekeo (trend), au nugget kubwa kuliko ilivyotajwa.',
+      ok: 'Inaendana', okB: 'na variogram iliyotajwa na msongamano wa sampuli.',
+      far: (m, sd) => `Sampuli ziko mbali zaidi kuliko masafa, kwa hiyo kriging haiwezi kufanya vizuri zaidi sana kuliko wastani hapa: tarajia RMSE karibu na ${m}, ukilinganisha na mkengeuko sanifu wa ${sd}.`,
+      why: (grid, reps) => `RMSE inayotarajiwa ni kipeuo cha pili cha wastani wa tofauti ya kriging ya kawaida (ordinary kriging variance) kwenye kila sampuli, ikitabiriwa kutoka majirani wake 16 walio karibu zaidi bila yenyewe, kwa kutumia variogram iliyotajwa${grid ? '' : `, katika mipangilio ${reps} ya nasibu`}.`
+    },
+    es: {
+      step: 'Variograma y muestreo', sd: 'Desviación estándar de los datos', n: 'Número de muestras', lay: 'Disposición de las muestras', random: 'Aleatoria', grid: 'Malla regular', rmse: 'RMSE informado (opcional)', btn: 'Comprobar',
+      h1: 'Introduzca el variograma tal como se informó: como razón pepita : meseta, como pepita y meseta, o como pepita y meseta parcial (la meseta menos la pepita; gstat la informa como psill, y muchos artículos también). La meseta es el total: pepita + meseta parcial. Con la razón, la meseta se toma como la varianza de los datos (SD²); con pepita y meseta se usa la meseta indicada, y la desviación estándar pasa a ser opcional.',
+      h2: 'Si no se informa la pepita, déjela en 0: es el supuesto más generoso, así que un resultado que aun así parece demasiado bueno realmente lo es.',
+      eSill: 'Introduzca el rango, el número de muestras (10 o más) y el área.', eSd: 'Introduzca la desviación estándar, el rango, el número de muestras (10 o más) y el área.',
+      spacing: 'Distancia entre muestras', sGrid: 'malla', sRand: 'media, disposición aleatoria', ratio: 'Distancia ÷ rango', beyond: 'muestras más allá del rango', within: 'dentro del rango',
+      exp: 'RMSE esperado', fromVar: 'a partir de la varianza de kriging', band: (a, b) => `5–95%: ${a}–${b}`, floor: 'Mínimo posible', nug: '√pepita', noSkill: 'Sin capacidad espacial', sdU: 'desviación estándar',
+      rep: 'RMSE informado', ofExp: p => `${p}% del esperado`,
+      low: 'Inverosímilmente bajo.', lowB: (r, s, m, far, rep) => `Con un rango de ${r} m y muestras a unos ${s} m de distancia, el kriging debería dar un RMSE de alrededor de ${m}${far ? ', cercano a la propia desviación estándar, porque la mayoría de las muestras están fuera del rango unas de otras' : ''}. Un valor informado de ${rep} necesita explicación: puntos de validación que no eran independientes, un variograma o SD de otro conjunto de datos, o errores en una escala transformada.`,
+      high: 'Peor de lo que implica el variograma.', highB: 'Causas posibles: un variograma mal ajustado, valores atípicos, una tendencia o una pepita mayor de la indicada.',
+      ok: 'Coherente', okB: 'con el variograma indicado y la densidad de muestreo.',
+      far: (m, sd) => `Las muestras están más separadas que el rango, así que el kriging apenas puede mejorar la media aquí: espere un RMSE cercano a ${m}, frente a una desviación estándar de ${sd}.`,
+      why: (grid, reps) => `El RMSE esperado es la raíz cuadrada de la varianza media del kriging ordinario en cada muestra, predicha a partir de sus 16 vecinos más cercanos dejándola fuera, con el variograma indicado${grid ? '' : `, sobre ${reps} disposiciones aleatorias`}.`
+    }
+  };
+  function buildKR(L) {
+    const S = pick(KR, L), V = pick(VGT, L);
+    return {
+      step: S.step, button: S.btn,
+      example: { model: 'sph', sd: 8, vform: 'ratio', ratio: 0, r: 46, n: 100, area: 50, lay: 'random', rmse: 3 },
+      inputs: [
+        ...vgInputs(V, 0).slice(0, 1),
+        { k: 'sd', l: S.sd, t: 'num' },
+        ...vgInputs(V, 0).slice(1),
+        { k: 'r', l: V.r, t: 'num', w: 3 }, { k: 'n', l: S.n, t: 'num', w: 3 },
+        { k: 'area', l: V.area, t: 'num', w: 3 },
+        { k: 'lay', l: S.lay, t: 'select', d: 'random', w: 3, opts: [['random', S.random], ['grid', S.grid]] },
+        { k: 'rmse', l: S.rmse, t: 'num' },
+        { t: 'info', h: S.h1 }, { t: 'info', h: S.h2 }
+      ],
+      compute(v, U) {
+        const VV = vgRead(v, V), sdIn = N(v.sd), r = N(v.r), n = Math.round(N(v.n)), ha = N(v.area), rep = N(v.rmse);
+        if (VV.err) return U.note(VV.err, 'bad');
+        const sd = VV.sill != null && !(sdIn > 0) ? Math.sqrt(VV.sill) : sdIn;
+        if (!(sd > 0) || !(r > 0) || !(n >= 10) || !(ha > 0)) return U.empty(VV.sill != null ? S.eSill : S.eSd);
+        const sill = VV.sill != null ? VV.sill : sd * sd, m = { type: v.model, c0: sill * VV.ratio, c1: sill * (1 - VV.ratio), r };
+        const grid = v.lay === 'grid', reps = grid ? 1 : 25;
+        const E = krExpected(m, n, ha, grid, reps, 'loo'), spacing = E.spacing, lo = E.lo, mid = E.mid, hi = E.hi, floor = Math.sqrt(m.c0);
+        const d = sd < 10 ? 3 : 2;
+        let h = U.stats([
+          [S.spacing, fx(spacing, 0) + ' m', grid ? S.sGrid : S.sRand], [S.ratio, fx(spacing / r, 2), spacing > r ? S.beyond : S.within],
+          [S.exp, fx(mid, d), grid ? S.fromVar : S.band(fx(lo, d), fx(hi, d))], [S.floor, fx(floor, d), S.nug], [S.noSkill, fx(sd, d), S.sdU],
+          isFinite(rep) && rep > 0 ? [S.rep, fx(rep, d), S.ofExp(fx(rep / mid * 100, 0))] : null
+        ]);
+        if (isFinite(rep) && rep > 0) {
+          const lowLim = grid ? mid * 0.8 : lo * 0.85, hiLim = grid ? mid * 1.25 : hi * 1.15;
+          if (rep < Math.max(floor * 0.95, lowLim)) h += verdict('bad', S.low, S.lowB(fx(r, 0), fx(spacing, 0), fx(mid, d), spacing > r, fx(rep, d)));
+          else if (rep > hiLim) h += verdict('warn', S.high, S.highB);
+          else h += verdict('good', S.ok, S.okB);
+        } else if (spacing > r) h += U.note(S.far(fx(mid, d), fx(sd, d)));
+        return { html: h, work: [S.why(grid, reps)] };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Samples for a map (from the variogram)
+  const SV = {
+    en: {
+      step: 'Variogram and target', target: 'Target map error (% of SD)', btn: 'Calculate',
+      h1: 'Enter the variogram the way it was reported: as the nugget : sill ratio, as the nugget and sill, or as the nugget and partial sill (the sill minus the nugget; gstat reports this as psill, and many papers do too). The sill is the total: nugget + partial sill. Only the ratio matters here, so any of the three gives the same answer.',
+      h2: 'Map error is the root mean kriging error at unsampled locations, as a share of the standard deviation of the property. 100% means no better than the mean; the nugget sets the lowest error any density can reach.',
+      noStruct: 'With a nugget equal to the sill there is no spatial structure to map: every density gives the same error.', enter: 'Enter the range, area and target error.',
+      need: 'Samples needed', perHa: x => `regular grid, ${x} per ha`, gsp: 'Grid spacing', xr: x => `${x} × the range`, notReach: 'target not reachable', lowest: 'Lowest possible error', nugShare: '√(nugget share)',
+      th: ['Samples', 'Spacing (m)', 'Spacing ÷ range', 'Map error (% of SD)'],
+      below: f => `The target is below √nugget (${f}%): no sampling density can reach it, because the nugget is variation you can't map at any spacing.`, never: 'Even 10,000 samples don\'t reach the target: check the range and nugget.',
+      why: 'Map error is the square root of the average ordinary kriging variance at 300 random locations between samples (16 nearest neighbours), relative to the sill. It assumes the variogram holds across the whole area. Spacing well beyond the range leaves the map close to the mean (error near 100%).'
+    },
+    sw: {
+      step: 'Variogram na lengo', target: 'Kosa la ramani linalolengwa (% ya SD)', btn: 'Kokotoa',
+      h1: 'Weka variogram jinsi ilivyoripotiwa: kama uwiano wa nugget : sill, kama nugget na sill, au kama nugget na partial sill (sill toa nugget; gstat huiripoti kama psill, na makala nyingi pia). Sill ni jumla: nugget + partial sill. Hapa uwiano pekee ndio muhimu, kwa hiyo yoyote kati ya hizo tatu inatoa jibu lilelile.',
+      h2: 'Kosa la ramani ni kipeuo cha pili cha wastani wa kosa la kriging mahali pasipo na sampuli, kama sehemu ya mkengeuko sanifu wa sifa hiyo. 100% inamaanisha si bora kuliko wastani; nugget inaweka kosa dogo kabisa ambalo msongamano wowote unaweza kufikia.',
+      noStruct: 'Nugget ikiwa sawa na sill hakuna muundo wa kijiografia wa kuchora: kila msongamano unatoa kosa lilelile.', enter: 'Weka masafa, eneo na kosa linalolengwa.',
+      need: 'Sampuli zinazohitajika', perHa: x => `gridi ya kawaida, ${x} kwa ha`, gsp: 'Umbali wa gridi', xr: x => `${x} × masafa`, notReach: 'lengo halifikiki', lowest: 'Kosa dogo kabisa linalowezekana', nugShare: '√(sehemu ya nugget)',
+      th: ['Sampuli', 'Umbali (m)', 'Umbali ÷ masafa', 'Kosa la ramani (% ya SD)'],
+      below: f => `Lengo liko chini ya √nugget (${f}%): hakuna msongamano wa sampuli unaoweza kulifikia, kwa sababu nugget ni tofauti usiyoweza kuichora kwa umbali wowote.`, never: 'Hata sampuli 10,000 hazifikii lengo: kagua masafa na nugget.',
+      why: 'Kosa la ramani ni kipeuo cha pili cha wastani wa tofauti ya kriging ya kawaida katika maeneo 300 ya nasibu kati ya sampuli (majirani 16 walio karibu zaidi), ukilinganisha na sill. Inachukulia kwamba variogram inashika eneo lote. Umbali unaozidi masafa kwa mbali huacha ramani karibu na wastani (kosa karibu 100%).'
+    },
+    es: {
+      step: 'Variograma y objetivo', target: 'Error objetivo del mapa (% de la SD)', btn: 'Calcular',
+      h1: 'Introduzca el variograma tal como se informó: como razón pepita : meseta, como pepita y meseta, o como pepita y meseta parcial (la meseta menos la pepita; gstat la informa como psill, y muchos artículos también). La meseta es el total: pepita + meseta parcial. Aquí solo importa la razón, así que cualquiera de las tres da la misma respuesta.',
+      h2: 'El error del mapa es la raíz del error medio de kriging en lugares no muestreados, como fracción de la desviación estándar de la propiedad. 100% significa no mejor que la media; la pepita fija el error mínimo que puede alcanzar cualquier densidad.',
+      noStruct: 'Con una pepita igual a la meseta no hay estructura espacial que cartografiar: todas las densidades dan el mismo error.', enter: 'Introduzca el rango, el área y el error objetivo.',
+      need: 'Muestras necesarias', perHa: x => `malla regular, ${x} por ha`, gsp: 'Distancia de la malla', xr: x => `${x} × el rango`, notReach: 'objetivo inalcanzable', lowest: 'Error mínimo posible', nugShare: '√(fracción de pepita)',
+      th: ['Muestras', 'Distancia (m)', 'Distancia ÷ rango', 'Error del mapa (% de la SD)'],
+      below: f => `El objetivo está por debajo de √pepita (${f}%): ninguna densidad de muestreo puede alcanzarlo, porque la pepita es variación que no se puede cartografiar a ninguna distancia.`, never: 'Ni siquiera 10,000 muestras alcanzan el objetivo: revise el rango y la pepita.',
+      why: 'El error del mapa es la raíz cuadrada de la varianza media del kriging ordinario en 300 lugares aleatorios entre muestras (16 vecinos más cercanos), relativa a la meseta. Supone que el variograma vale para toda el área. Una distancia muy superior al rango deja el mapa cerca de la media (error cercano al 100%).'
+    }
+  };
+  function buildSV(L) {
+    const S = pick(SV, L), V = pick(VGT, L);
+    return {
+      step: S.step, button: S.btn,
+      example: { model: 'sph', vform: 'ratio', ratio: 0.2, r: 250, area: 50, target: 60 },
+      inputs: [
+        ...vgInputs(V, 0.2),
+        { k: 'r', l: V.r, t: 'num', d: 250, w: 3 }, { k: 'area', l: V.area, t: 'num', d: 50, w: 3 },
+        { k: 'target', l: S.target, t: 'num', d: 60 },
+        { t: 'info', h: S.h1 }, { t: 'info', h: S.h2 }
+      ],
+      compute(v, U) {
+        const VV = vgRead(v, V), r = N(v.r), ha = N(v.area), tgt = N(v.target) / 100;
+        if (VV.err) return U.note(VV.err, 'bad');
+        if (!(VV.ratio < 1) || !(r > 0) || !(ha > 0) || !(tgt > 0 && tgt <= 1)) return !(VV.ratio < 1) ? U.note(S.noStruct, 'bad') : U.empty(S.enter);
+        const m = { type: v.model, c0: VV.ratio, c1: 1 - VV.ratio, r }, floor = Math.sqrt(m.c0);
+        const err = n => krExpected(m, n, ha, true, 1, 'map').mid;
+        const rows = [], cand = [9, 16, 25, 36, 49, 64, 100, 144, 225, 400, 625, 900, 1600, 2500, 4900, 10000];
+        let need = null;
+        for (const n of cand) { const e = err(n), sp = Math.sqrt(ha * 10000 / n); rows.push([n, fx(sp, 0), fx(sp / r, 2), fx(e * 100, 0) + '%']); if (need == null && e <= tgt) need = n; }
+        if (need != null) { let lo = cand[Math.max(0, cand.indexOf(need) - 1)], hi = need; if (lo !== hi) { while (hi - lo > Math.max(1, lo * 0.02)) { const mid = Math.round((lo + hi) / 2); if (err(mid) <= tgt) hi = mid; else lo = mid; } need = hi; } }
+        const sp = need ? Math.sqrt(ha * 10000 / need) : null;
+        const msg = tgt <= floor ? S.below(fx(floor * 100, 0)) : (need ? '' : S.never);
+        let h = msg ? U.note(msg, 'bad') : '';
+        h += U.stats([
+          need ? [S.need, need, S.perHa(fx(need / ha, need / ha < 1 ? 2 : 1))] : [S.need, '–', S.notReach],
+          need ? [S.gsp, fx(sp, 0) + ' m', S.xr(fx(sp / r, 2))] : null,
+          [S.lowest, fx(floor * 100, 0) + '%', S.nugShare]
+        ]);
+        h += `<div class="tt-wrap"><table class="tt"><thead><tr>${S.th.map((t, i) => `<th${i ? ' class="r"' : ''}>${t}</th>`).join('')}</tr></thead><tbody>` +
+          rows.map(r => `<tr>${r.map((c, i) => `<td${i ? ' class="r"' : ''}>${c}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>';
+        return { html: h, work: [S.why] };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Detectable change in carbon
+  const CM = {
+    en: {
+      step: 'Sampling design', cv: 'Variability, CV of stocks (%)', n: 'Samples per sampling time', des: 'Design', ind: 'Different locations each time', pair: 'Same locations resampled',
+      rho: 'Correlation between times', alpha: 'Significance level', pow: 'Power', claim: 'Claimed change (%, optional)',
+      hint: 'Field CVs for soil carbon stocks are typically 20–50%. Resampling the same locations removes much of the spatial variation from the comparison; the correlation says how much (0.5–0.8 is common).',
+      empty: 'Enter the CV and the number of samples per sampling time.', many: '> 100,000',
+      mdd: 'Smallest detectable change', withN: n => `with ${n} samples per time`, for10: 'Samples for a 10% change', for5: 'Samples for a 5% change', per: 'per sampling time', forX: c => `Samples for ${c}%`,
+      yes: 'Detectable.', yesB: (c, m) => `A ${c}% change is larger than the ${m}% this design can detect.`,
+      no: 'Not detectable with this design.', noB: (c, m, need, pair) => `A ${c}% change is smaller than the ${m}% this design can reliably detect. A reported change of that size could easily be sampling noise; detecting it would take about ${need ?? 'more than 100,000'} samples per sampling time${pair ? '' : ', or fewer by resampling the same locations'}.`,
+      why: (a, p, pair, rho) => `Smallest detectable change = (t for ${a}% confidence + t for ${p}% power) × CV × √(2(1 − ρ) ÷ n)${pair ? `, with ρ = ${rho} for resampled locations` : ''}. It assumes the change is expressed relative to the mean stock, and it doesn't include errors in bulk density or depth, which make real designs less sensitive.`
+    },
+    sw: {
+      step: 'Muundo wa uchukuaji wa sampuli', cv: 'Utofauti, CV ya akiba (%)', n: 'Sampuli kwa kila wakati wa uchukuaji', des: 'Muundo', ind: 'Mahali tofauti kila wakati', pair: 'Mahali palepale pamechukuliwa tena',
+      rho: 'Uhusiano kati ya nyakati', alpha: 'Kiwango cha umuhimu', pow: 'Nguvu (power)', claim: 'Mabadiliko yanayodaiwa (%, si lazima)',
+      hint: 'CV za shambani kwa akiba ya kaboni ya udongo kwa kawaida ni 20–50%. Kuchukua sampuli tena mahali palepale kunaondoa sehemu kubwa ya tofauti za kijiografia kwenye ulinganisho; uhusiano unaonyesha kiasi gani (0.5–0.8 ni kawaida).',
+      empty: 'Weka CV na idadi ya sampuli kwa kila wakati wa uchukuaji.', many: '> 100,000',
+      mdd: 'Mabadiliko madogo kabisa yanayogundulika', withN: n => `kwa sampuli ${n} kila wakati`, for10: 'Sampuli kwa mabadiliko ya 10%', for5: 'Sampuli kwa mabadiliko ya 5%', per: 'kwa kila wakati wa uchukuaji', forX: c => `Sampuli kwa ${c}%`,
+      yes: 'Yanagundulika.', yesB: (c, m) => `Mabadiliko ya ${c}% ni makubwa kuliko ${m}% ambayo muundo huu unaweza kugundua.`,
+      no: 'Hayagunduliki kwa muundo huu.', noB: (c, m, need, pair) => `Mabadiliko ya ${c}% ni madogo kuliko ${m}% ambayo muundo huu unaweza kugundua kwa uhakika. Mabadiliko yaliyoripotiwa ya ukubwa huo yanaweza kuwa kelele ya sampuli tu; kuyagundua kungehitaji takriban sampuli ${need ?? 'zaidi ya 100,000'} kwa kila wakati wa uchukuaji${pair ? '' : ', au chache zaidi kwa kuchukua tena mahali palepale'}.`,
+      why: (a, p, pair, rho) => `Mabadiliko madogo kabisa yanayogundulika = (t kwa uhakika wa ${a}% + t kwa nguvu ya ${p}%) × CV × √(2(1 − ρ) ÷ n)${pair ? `, na ρ = ${rho} kwa mahali palipochukuliwa tena` : ''}. Inachukulia kwamba mabadiliko yameelezwa kulingana na wastani wa akiba, na haijumuishi makosa ya msongamano (bulk density) au kina, ambayo hufanya miundo halisi isiwe nyeti sana.`
+    },
+    es: {
+      step: 'Diseño de muestreo', cv: 'Variabilidad, CV de los stocks (%)', n: 'Muestras por fecha de muestreo', des: 'Diseño', ind: 'Lugares distintos cada vez', pair: 'Mismos lugares remuestreados',
+      rho: 'Correlación entre fechas', alpha: 'Nivel de significación', pow: 'Potencia', claim: 'Cambio declarado (%, opcional)',
+      hint: 'Los CV de campo de los stocks de carbono del suelo suelen ser del 20–50%. Remuestrear los mismos lugares elimina gran parte de la variación espacial de la comparación; la correlación dice cuánta (0.5–0.8 es habitual).',
+      empty: 'Introduzca el CV y el número de muestras por fecha de muestreo.', many: '> 100,000',
+      mdd: 'Cambio mínimo detectable', withN: n => `con ${n} muestras por fecha`, for10: 'Muestras para un cambio del 10%', for5: 'Muestras para un cambio del 5%', per: 'por fecha de muestreo', forX: c => `Muestras para ${c}%`,
+      yes: 'Detectable.', yesB: (c, m) => `Un cambio del ${c}% es mayor que el ${m}% que este diseño puede detectar.`,
+      no: 'No detectable con este diseño.', noB: (c, m, need, pair) => `Un cambio del ${c}% es menor que el ${m}% que este diseño puede detectar con fiabilidad. Un cambio informado de ese tamaño podría ser fácilmente ruido de muestreo; detectarlo requeriría unas ${need ?? 'más de 100,000'} muestras por fecha de muestreo${pair ? '' : ', o menos remuestreando los mismos lugares'}.`,
+      why: (a, p, pair, rho) => `Cambio mínimo detectable = (t para ${a}% de confianza + t para ${p}% de potencia) × CV × √(2(1 − ρ) ÷ n)${pair ? `, con ρ = ${rho} para lugares remuestreados` : ''}. Supone que el cambio se expresa respecto al stock medio, y no incluye errores de densidad aparente ni de profundidad, que hacen menos sensibles los diseños reales.`
+    }
+  };
+  function buildCM(L) {
+    const S = pick(CM, L);
+    return {
+      step: S.step,
+      inputs: [
+        { k: 'cv', l: S.cv, t: 'num', d: 30, w: 3 }, { k: 'n', l: S.n, t: 'num', d: 20, w: 3 },
+        { k: 'des', l: S.des, t: 'select', d: 'ind', opts: [['ind', S.ind], ['pair', S.pair]] },
+        { k: 'rho', l: S.rho, t: 'num', d: 0.6, show: v => v.des === 'pair' },
+        { k: 'alpha', l: S.alpha, t: 'select', d: '0.05', w: 3, opts: [['0.1', '0.10'], ['0.05', '0.05'], ['0.01', '0.01']] },
+        { k: 'pow', l: S.pow, t: 'select', d: '0.8', w: 3, opts: [['0.8', '80%'], ['0.9', '90%']] },
+        { k: 'claim', l: S.claim, t: 'num' },
+        { t: 'info', h: S.hint }
+      ],
+      compute(v, U) {
+        const cv = N(v.cv), n = Math.round(N(v.n)), pair = v.des === 'pair', rho = pair ? N(v.rho) : 0;
+        const alpha = Number(v.alpha), pow = Number(v.pow), claim = N(v.claim);
+        if (!(cv > 0) || !(n >= 2) || !(rho >= 0 && rho < 1)) return U.empty(S.empty);
+        const mdd = nn => { const df = pair ? nn - 1 : 2 * nn - 2; return (tinv(1 - alpha / 2, Math.max(1, df)) + tinv(pow, Math.max(1, df))) * cv * Math.sqrt(2 * (1 - rho) / nn); };
+        const nFor = target => { for (let nn = 2; nn <= 100000; nn = nn < 50 ? nn + 1 : Math.ceil(nn * 1.05)) if (mdd(nn) <= target) { let lo = Math.max(2, Math.floor(nn / 1.05)), hi = nn; while (lo < hi) { const mid = Math.floor((lo + hi) / 2); if (mdd(mid) <= target) hi = mid; else lo = mid + 1; } return lo; } return null; };
+        const m = mdd(n);
+        const rows = [[S.mdd, '±' + fx(m, 1) + '%', S.withN(n)], [S.for10, nFor(10) ?? S.many, S.per], [S.for5, nFor(5) ?? S.many, S.per]];
+        let vh = '';
+        if (claim > 0) {
+          const need = nFor(claim);
+          rows.push([S.forX(claim), need ?? S.many, S.per]);
+          vh = claim >= m ? verdict('good', S.yes, S.yesB(claim, fx(m, 1))) : verdict('bad', S.no, S.noB(claim, fx(m, 1), need, pair));
+        }
+        return { html: U.stats(rows) + vh, work: [S.why(Math.round((1 - alpha) * 100), Math.round(pow * 100), pair, rho)] };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- R², RMSE and SD
+  const EC = {
+    en: {
+      step: 'Reported figures', r2: 'Reported R²', rmse: 'Reported RMSE', sd: 'SD of the observed values', n: 'Validation points', lab: 'Lab or field repeatability SD (optional)',
+      hint: 'SD of the observed values is often in a summary-statistics table. Repeatability is the SD of repeated measurements of the same sample; labs or method papers report it.',
+      empty: 'Enter R² (0–1), RMSE and the SD of the observed values.',
+      floor: 'Lowest RMSE this R² allows', floorU: 'SD × √(1 − R²)', ratio: 'Reported ÷ lowest', ratioU: '1 = perfectly calibrated',
+      cant: 'These numbers can\'t all be true.', cantB: (r2, sd, f, rmse) => `With R² = ${r2} and an SD of ${sd}, even perfectly rescaled predictions would have an RMSE of ${f}. A reported ${rmse} is lower than that. Usually one figure comes from a different dataset (calibration vs. validation), a different scale (log vs. original), or the SD is not of the same observations.`,
+      flat: 'R² flatters the predictions.', flatB: x => `The RMSE is ${x}× what R² alone implies, so the predictions are biased or wrongly scaled: they rise and fall with the observations but miss them. R² measures correlation, not agreement; Lin's CCC or RMSE tell the real story.`,
+      cons: 'R² and RMSE are consistent.', consB: 'The error is close to what the correlation implies, so the predictions are reasonably unbiased and well scaled.',
+      ceil: 'Highest achievable R²', ceilU: 'given repeatability', lowR: 'Lowest achievable RMSE', lowRU: 'the repeatability SD',
+      better: 'Better than the measurements allow.', betterB: (lab, c) => `The observations themselves carry a repeatability error of about ${lab}, which no model can predict. That caps R² near ${c} and RMSE near ${lab}. A result beyond this suggests averaged replicates, overfitting, or validation data that weren't independent.`,
+      r2i: 'R² 95% interval', from: n => `from ${n} points`, rmsei: 'RMSE 95% interval', approx: 'approximate',
+      small: 'Small validation set.', smallB: n => `With ${n} points the intervals are wide, so differences between models of a few hundredths of R² mean little.`,
+      why: 'Why: the mean squared error of any prediction is at least SD² × (1 − R²), which is the error left after the best possible straight-line rescaling. Anything above that is bias or wrong scaling. Repeatability error sits in the observations themselves, so it sets a floor no model can get under.'
+    },
+    sw: {
+      step: 'Takwimu zilizoripotiwa', r2: 'R² iliyoripotiwa', rmse: 'RMSE iliyoripotiwa', sd: 'SD ya thamani zilizopimwa', n: 'Nukta za uthibitishaji', lab: 'SD ya kurudiwa kwa maabara au shamba (si lazima)',
+      hint: 'SD ya thamani zilizopimwa mara nyingi iko kwenye jedwali la takwimu za muhtasari. Kurudiwa (repeatability) ni SD ya vipimo vilivyorudiwa vya sampuli ileile; maabara au makala za mbinu huiripoti.',
+      empty: 'Weka R² (0–1), RMSE na SD ya thamani zilizopimwa.',
+      floor: 'RMSE ndogo kabisa ambayo R² hii inaruhusu', floorU: 'SD × √(1 − R²)', ratio: 'Iliyoripotiwa ÷ ndogo kabisa', ratioU: '1 = imerekebishwa kikamilifu',
+      cant: 'Namba hizi haziwezi zote kuwa kweli.', cantB: (r2, sd, f, rmse) => `Kwa R² = ${r2} na SD ya ${sd}, hata utabiri uliopimwa upya kikamilifu ungekuwa na RMSE ya ${f}. RMSE iliyoripotiwa ya ${rmse} ni ndogo kuliko hiyo. Kwa kawaida namba moja inatoka seti nyingine ya data (calibration dhidi ya uthibitishaji), kipimo kingine (logariti dhidi ya asilia), au SD si ya vipimo vilevile.`,
+      flat: 'R² inapendezesha utabiri.', flatB: x => `RMSE ni mara ${x} ya ile ambayo R² peke yake inaonyesha, kwa hiyo utabiri una upendeleo au umepimwa vibaya: unapanda na kushuka pamoja na vipimo lakini unavikosa. R² inapima uhusiano, si makubaliano; CCC ya Lin au RMSE zinaeleza hali halisi.`,
+      cons: 'R² na RMSE zinaendana.', consB: 'Kosa liko karibu na kile ambacho uhusiano unaonyesha, kwa hiyo utabiri hauna upendeleo mkubwa na umepimwa vizuri.',
+      ceil: 'R² kubwa kabisa inayofikika', ceilU: 'kutokana na kurudiwa', lowR: 'RMSE ndogo kabisa inayofikika', lowRU: 'SD ya kurudiwa',
+      better: 'Bora kuliko vipimo vinavyoruhusu.', betterB: (lab, c) => `Vipimo vyenyewe vina kosa la kurudiwa la takriban ${lab}, ambalo hakuna modeli inayoweza kulitabiri. Hilo linazuia R² karibu na ${c} na RMSE karibu na ${lab}. Matokeo yanayozidi hapo yanaashiria marudio yaliyochanganywa kwa wastani, overfitting, au data za uthibitishaji ambazo hazikuwa huru.`,
+      r2i: 'Kipindi cha 95% cha R²', from: n => `kutoka nukta ${n}`, rmsei: 'Kipindi cha 95% cha RMSE', approx: 'takriban',
+      small: 'Seti ndogo ya uthibitishaji.', smallB: n => `Kwa nukta ${n} vipindi ni vipana, kwa hiyo tofauti kati ya modeli za mia chache za R² hazina maana kubwa.`,
+      why: 'Kwa nini: wastani wa mraba wa kosa (mean squared error) wa utabiri wowote ni angalau SD² × (1 − R²), ambalo ni kosa linalobaki baada ya kupima upya kwa mstari ulionyooka kwa njia bora kabisa. Chochote juu ya hapo ni upendeleo au upimaji mbaya. Kosa la kurudiwa liko ndani ya vipimo vyenyewe, kwa hiyo linaweka sakafu ambayo hakuna modeli inaweza kushuka chini yake.'
+    },
+    es: {
+      step: 'Cifras informadas', r2: 'R² informado', rmse: 'RMSE informado', sd: 'SD de los valores observados', n: 'Puntos de validación', lab: 'SD de repetibilidad de laboratorio o campo (opcional)',
+      hint: 'La SD de los valores observados suele estar en una tabla de estadísticos descriptivos. La repetibilidad es la SD de mediciones repetidas de la misma muestra; la informan los laboratorios o los artículos de métodos.',
+      empty: 'Introduzca R² (0–1), el RMSE y la SD de los valores observados.',
+      floor: 'RMSE mínimo que permite este R²', floorU: 'SD × √(1 − R²)', ratio: 'Informado ÷ mínimo', ratioU: '1 = calibración perfecta',
+      cant: 'Estos números no pueden ser todos ciertos.', cantB: (r2, sd, f, rmse) => `Con R² = ${r2} y una SD de ${sd}, incluso unas predicciones reescaladas perfectamente tendrían un RMSE de ${f}. Un valor informado de ${rmse} es menor. Normalmente una de las cifras viene de otro conjunto de datos (calibración frente a validación), de otra escala (logarítmica frente a original), o la SD no es de las mismas observaciones.`,
+      flat: 'El R² favorece a las predicciones.', flatB: x => `El RMSE es ${x}× lo que implica el R² por sí solo, así que las predicciones están sesgadas o mal escaladas: suben y bajan con las observaciones pero no aciertan. El R² mide correlación, no concordancia; el CCC de Lin o el RMSE cuentan la historia real.`,
+      cons: 'El R² y el RMSE son coherentes.', consB: 'El error se acerca a lo que implica la correlación, así que las predicciones son razonablemente insesgadas y están bien escaladas.',
+      ceil: 'R² máximo alcanzable', ceilU: 'dada la repetibilidad', lowR: 'RMSE mínimo alcanzable', lowRU: 'la SD de repetibilidad',
+      better: 'Mejor de lo que permiten las mediciones.', betterB: (lab, c) => `Las propias observaciones tienen un error de repetibilidad de alrededor de ${lab}, que ningún modelo puede predecir. Eso limita el R² a cerca de ${c} y el RMSE a cerca de ${lab}. Un resultado más allá sugiere réplicas promediadas, sobreajuste o datos de validación que no eran independientes.`,
+      r2i: 'Intervalo del 95% del R²', from: n => `a partir de ${n} puntos`, rmsei: 'Intervalo del 95% del RMSE', approx: 'aproximado',
+      small: 'Conjunto de validación pequeño.', smallB: n => `Con ${n} puntos los intervalos son anchos, así que diferencias entre modelos de unas centésimas de R² significan poco.`,
+      why: 'Por qué: el error cuadrático medio de cualquier predicción es al menos SD² × (1 − R²), que es el error que queda tras el mejor reescalado lineal posible. Lo que exceda eso es sesgo o mala escala. El error de repetibilidad está en las propias observaciones, así que fija un mínimo por debajo del cual ningún modelo puede bajar.'
+    }
+  };
+  function buildEC(L) {
+    const S = pick(EC, L);
+    return {
+      step: S.step,
+      example: { r2: 0.85, rmse: 0.25, sd: 0.9, n: 40, lab: 0.15 },
+      inputs: [
+        { k: 'r2', l: S.r2, t: 'num', w: 3 }, { k: 'rmse', l: S.rmse, t: 'num', w: 3 },
+        { k: 'sd', l: S.sd, t: 'num', w: 3 }, { k: 'n', l: S.n, t: 'num', w: 3 },
+        { k: 'lab', l: S.lab, t: 'num' }, { t: 'info', h: S.hint }
+      ],
+      compute(v, U) {
+        const r2 = N(v.r2), rmse = N(v.rmse), sd = N(v.sd), n = Math.round(N(v.n)), lab = N(v.lab);
+        if (!(r2 >= 0 && r2 <= 1) || !(rmse > 0) || !(sd > 0)) return U.empty(S.empty);
+        const floor = sd * Math.sqrt(1 - r2), ratio = rmse / floor, d = sd < 10 ? 3 : 2;
+        const st = [[S.floor, fx(floor, d), S.floorU], [S.ratio, fx(ratio, 2), S.ratioU]], vv = [];
+        if (rmse < floor * 0.97) vv.push(verdict('bad', S.cant, S.cantB(r2, sd, fx(floor, d), rmse)));
+        else if (ratio > 1.5) vv.push(verdict('warn', S.flat, S.flatB(fx(ratio, 1))));
+        else vv.push(verdict('good', S.cons, S.consB));
+        if (lab > 0) {
+          const ceil = Math.max(0, 1 - (lab * lab) / (sd * sd));
+          st.push([S.ceil, fx(ceil, 3), S.ceilU], [S.lowR, fx(lab, d), S.lowRU]);
+          if (r2 > ceil + 0.01 || rmse < lab * 0.95) vv.push(verdict('bad', S.better, S.betterB(lab, fx(ceil, 2))));
+        }
+        if (n >= 4 && r2 > 0 && r2 < 1) {
+          const r = Math.sqrt(r2), z = Math.atanh(r), se = 1 / Math.sqrt(n - 3), lo = Math.tanh(z - 1.96 * se), hi = Math.tanh(z + 1.96 * se);
+          st.push([S.r2i, `${fx(Math.max(0, lo) ** 2, 2)}–${fx(hi ** 2, 2)}`, S.from(n)], [S.rmsei, `${fx(rmse * Math.sqrt(n / (n + 1.96 * Math.sqrt(2 * n))), d)}–${fx(rmse * Math.sqrt(n / Math.max(1, n - 1.96 * Math.sqrt(2 * n))), d)}`, S.approx]);
+          if (n < 30) vv.push(verdict('warn', S.small, S.smallB(n)));
+        }
+        return { html: U.stats(st) + vv.join(''), work: [S.why] };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Classification accuracy
+  const CC = {
+    en: {
+      step: 'Reported accuracy', acc: 'Overall accuracy (%)', n: 'Validation points', k: 'Number of classes', maj: 'Largest class share (%, optional)', acc2: 'Compare with: accuracy (%, optional)', n2: '…and its validation points',
+      hint: 'The largest class share is the accuracy of a "map" that predicts the most common class everywhere. If it isn\'t given, an even split between classes is assumed, which flatters the map.',
+      empty: 'Enter the accuracy, number of validation points and number of classes.',
+      ci: '95% interval', from: n => `from ${n} points`, base: 'Chance baseline', largest: 'predict the largest class', even: k => `even split over ${k} classes`, skill: 'Skill over baseline', skillU: 'share of the possible improvement', pts: 'Points for ±5%', ptsU: 'to pin accuracy down',
+      guess: 'Not clearly better than guessing.', guessB: (lo, hi, b, maj) => `The 95% interval (${lo}–${hi}%) reaches down to the ${b}% you would get ${maj ? 'by predicting the most common class everywhere' : 'by chance'}.`,
+      beats: 'Better than the baseline.', beatsB: (lo, b, p) => `Even the low end of the interval (${lo}%) is above the ${b}% baseline (one-sided p ${p}).`,
+      other: 'Other map\'s interval', real: 'The difference is real.', realB: (a, b, p) => `${a}% vs. ${b}% is unlikely to be chance (two-sided p = ${p}).`,
+      may: 'The difference may be chance.', mayB: (a, b, p) => `${a}% vs. ${b}% is within what different validation samples would give (two-sided p = ${p}). Claims that one map is better need more validation points. If both maps were checked on the same points, a paired test (McNemar) is more powerful.`
+    },
+    sw: {
+      step: 'Usahihi ulioripotiwa', acc: 'Usahihi wa jumla (%)', n: 'Nukta za uthibitishaji', k: 'Idadi ya madaraja', maj: 'Sehemu ya daraja kubwa zaidi (%, si lazima)', acc2: 'Linganisha na: usahihi (%, si lazima)', n2: '…na nukta zake za uthibitishaji',
+      hint: 'Sehemu ya daraja kubwa zaidi ni usahihi wa "ramani" inayotabiri daraja la kawaida zaidi kila mahali. Kama haijatolewa, mgawanyo sawa kati ya madaraja unachukuliwa, jambo linaloipendezesha ramani.',
+      empty: 'Weka usahihi, idadi ya nukta za uthibitishaji na idadi ya madaraja.',
+      ci: 'Kipindi cha 95%', from: n => `kutoka nukta ${n}`, base: 'Msingi wa bahati', largest: 'kutabiri daraja kubwa zaidi', even: k => `mgawanyo sawa kwa madaraja ${k}`, skill: 'Ujuzi juu ya msingi', skillU: 'sehemu ya uboreshaji unaowezekana', pts: 'Nukta kwa ±5%', ptsU: 'kubaini usahihi kwa uhakika',
+      guess: 'Si bora waziwazi kuliko kubahatisha.', guessB: (lo, hi, b, maj) => `Kipindi cha 95% (${lo}–${hi}%) kinashuka hadi ${b}% ambayo ungepata ${maj ? 'kwa kutabiri daraja la kawaida zaidi kila mahali' : 'kwa bahati'}.`,
+      beats: 'Bora kuliko msingi.', beatsB: (lo, b, p) => `Hata ncha ya chini ya kipindi (${lo}%) iko juu ya msingi wa ${b}% (p ya upande mmoja ${p}).`,
+      other: 'Kipindi cha ramani nyingine', real: 'Tofauti ni ya kweli.', realB: (a, b, p) => `${a}% dhidi ya ${b}% haielekei kuwa bahati (p ya pande mbili = ${p}).`,
+      may: 'Tofauti inaweza kuwa bahati.', mayB: (a, b, p) => `${a}% dhidi ya ${b}% iko ndani ya kile ambacho sampuli tofauti za uthibitishaji zingetoa (p ya pande mbili = ${p}). Madai kwamba ramani moja ni bora yanahitaji nukta zaidi za uthibitishaji. Kama ramani zote mbili zilikaguliwa kwenye nukta zilezile, jaribio la jozi (McNemar) lina nguvu zaidi.`
+    },
+    es: {
+      step: 'Exactitud informada', acc: 'Exactitud global (%)', n: 'Puntos de validación', k: 'Número de clases', maj: 'Proporción de la clase mayor (%, opcional)', acc2: 'Comparar con: exactitud (%, opcional)', n2: '…y sus puntos de validación',
+      hint: 'La proporción de la clase mayor es la exactitud de un "mapa" que predice la clase más común en todas partes. Si no se indica, se supone un reparto igual entre clases, lo que favorece al mapa.',
+      empty: 'Introduzca la exactitud, el número de puntos de validación y el número de clases.',
+      ci: 'Intervalo del 95%', from: n => `a partir de ${n} puntos`, base: 'Referencia por azar', largest: 'predecir la clase mayor', even: k => `reparto igual entre ${k} clases`, skill: 'Mejora sobre la referencia', skillU: 'fracción de la mejora posible', pts: 'Puntos para ±5%', ptsU: 'para precisar la exactitud',
+      guess: 'No es claramente mejor que adivinar.', guessB: (lo, hi, b, maj) => `El intervalo del 95% (${lo}–${hi}%) llega hasta el ${b}% que se obtendría ${maj ? 'prediciendo la clase más común en todas partes' : 'por azar'}.`,
+      beats: 'Mejor que la referencia.', beatsB: (lo, b, p) => `Incluso el extremo inferior del intervalo (${lo}%) supera la referencia del ${b}% (p unilateral ${p}).`,
+      other: 'Intervalo del otro mapa', real: 'La diferencia es real.', realB: (a, b, p) => `${a}% frente a ${b}% difícilmente se debe al azar (p bilateral = ${p}).`,
+      may: 'La diferencia puede deberse al azar.', mayB: (a, b, p) => `${a}% frente a ${b}% está dentro de lo que darían distintas muestras de validación (p bilateral = ${p}). Afirmar que un mapa es mejor requiere más puntos de validación. Si ambos mapas se evaluaron en los mismos puntos, una prueba pareada (McNemar) es más potente.`
+    }
+  };
+  function buildCC(L) {
+    const S = pick(CC, L);
+    return {
+      step: S.step,
+      example: { acc: 72, n: 45, k: 6, maj: 48, acc2: 64, n2: 45 },
+      inputs: [
+        { k: 'acc', l: S.acc, t: 'num', w: 3 }, { k: 'n', l: S.n, t: 'num', w: 3 },
+        { k: 'k', l: S.k, t: 'num', w: 3 }, { k: 'maj', l: S.maj, t: 'num', w: 3 },
+        { k: 'acc2', l: S.acc2, t: 'num', w: 3 }, { k: 'n2', l: S.n2, t: 'num', w: 3 },
+        { t: 'info', h: S.hint }
+      ],
+      compute(v, U) {
+        const a = N(v.acc) / 100, n = Math.round(N(v.n)), k = Math.round(N(v.k)), maj = N(v.maj) / 100;
+        const a2 = N(v.acc2) / 100, n2 = Math.round(N(v.n2));
+        if (!(a >= 0 && a <= 1) || !(n >= 5) || !(k >= 2)) return U.empty(S.empty);
+        const wilson = (p, m) => { const z = 1.96, den = 1 + z * z / m, c = (p + z * z / (2 * m)) / den, h = z * Math.sqrt(p * (1 - p) / m + z * z / (4 * m * m)) / den; return [Math.max(0, c - h), Math.min(1, c + h)]; };
+        const [lo, hi] = wilson(a, n), base = maj > 0 ? maj : 1 / k;
+        const z = (a - base) / Math.sqrt(base * (1 - base) / n), pBase = 1 - 0.5 * (1 + erf(z / Math.SQRT2));
+        const kappaLike = (a - base) / (1 - base);
+        const nNeed = Math.ceil(1.96 * 1.96 * a * (1 - a) / 0.0025);
+        const st = [[S.ci, `${fx(lo * 100, 0)}–${fx(hi * 100, 0)}%`, S.from(n)], [S.base, fx(base * 100, 0) + '%', maj > 0 ? S.largest : S.even(k)],
+          [S.skill, fx(kappaLike * 100, 0) + '%', S.skillU], [S.pts, nNeed, S.ptsU]], vv = [];
+        if (lo <= base) vv.push(verdict('bad', S.guess, S.guessB(fx(lo * 100, 0), fx(hi * 100, 0), fx(base * 100, 0), maj > 0)));
+        else vv.push(verdict('good', S.beats, S.beatsB(fx(lo * 100, 0), fx(base * 100, 0), pBase < 0.001 ? '< 0.001' : '= ' + fx(pBase, 3))));
+        if (a2 >= 0 && a2 <= 1 && n2 >= 5) {
+          const se = Math.sqrt(a * (1 - a) / n + a2 * (1 - a2) / n2), zz = (a - a2) / se, p2 = 2 * (1 - 0.5 * (1 + erf(Math.abs(zz) / Math.SQRT2)));
+          const [l2, h2] = wilson(a2, n2);
+          st.push([S.other, `${fx(l2 * 100, 0)}–${fx(h2 * 100, 0)}%`, S.from(n2)]);
+          vv.push(p2 < 0.05 ? verdict('good', S.real, S.realB(fx(a * 100, 0), fx(a2 * 100, 0), fx(p2, 3))) : verdict('warn', S.may, S.mayB(fx(a * 100, 0), fx(a2 * 100, 0), fx(p2, 2))));
+        }
+        return { html: U.stats(st) + vv.join('') };
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Model evaluation (pasted observed and predicted values)
+  const EV_EX = {"cont": "id,obs,pred,sd\nS1,2.14,1.73,0.427\nS2,2.65,2.14,0.513\nS3,1.96,1.3,0.413\nS4,1.82,1.78,0.442\nS5,2.81,2.23,0.483\nS6,1.9,1.67,0.476\nS7,2.32,2.17,0.484\nS8,2.21,2.07,0.55\nS9,2.81,2.63,0.571\nS10,1.66,1.44,0.429\nS11,3.27,2.62,0.571\nS12,1.45,1.28,0.38\nS13,2.39,1.47,0.493\nS14,2.26,1.45,0.443\nS15,1.39,0.8,0.408\nS16,2.49,1.79,0.437\nS17,1.73,1.67,0.466\nS18,1.15,0.75,0.374\nS19,2.64,2.13,0.557\nS20,0.93,1.35,0.442\nS21,1.27,1.04,0.401\nS22,1.95,1.97,0.474\nS23,2.8,2.06,0.489\nS24,2.56,2.13,0.515\nS25,2.12,1.51,0.445\nS26,0.76,0.64,0.316\nS27,1.42,1.58,0.491\nS28,1.58,0.81,0.421\nS29,1.12,1.2,0.384\nS30,0.65,0.75,0.38\nS31,1.99,1.53,0.414\nS32,2.6,1.72,0.489\nS33,1.52,1.39,0.417\nS34,2.78,2.19,0.535\nS35,0.86,0.92,0.415\nS36,1.09,1.03,0.43\nS37,1.97,2.29,0.49\nS38,1.45,1.23,0.465\nS39,2.5,1.79,0.452\nS40,2.31,2.06,0.46", "cat": "id,obs,pred\nS1,SC,SC\nS2,SCL,SCL\nS3,C,LS\nS4,C,LS\nS5,SCL,SCL\nS6,LS,LS\nS7,SL,SL\nS8,SCL,SCL\nS9,SL,SL\nS10,LS,LS\nS11,SL,SC\nS12,SL,SL\nS13,SCL,SL\nS14,LS,LS\nS15,LS,LS\nS16,SC,SL\nS17,LS,SCL\nS18,LS,LS\nS19,SCL,SCL\nS20,SCL,SCL\nS21,C,C\nS22,SC,SC\nS23,SCL,SCL\nS24,SL,SL\nS25,SC,SC\nS26,SL,SL\nS27,LS,LS\nS28,SL,SL\nS29,SL,SC\nS30,C,C\nS31,SL,SL\nS32,SL,SL\nS33,SC,SC\nS34,LS,LS\nS35,SL,SL\nS36,SCL,SCL\nS37,C,C\nS38,LS,LS\nS39,SCL,SCL\nS40,SL,SL\nS41,SL,SC\nS42,SL,SL\nS43,SL,SL\nS44,SC,SL\nS45,SL,C\nS46,SCL,SCL\nS47,SC,SL\nS48,SC,SC\nS49,SL,SL\nS50,C,SL", "ci": "id,SL,SCL,SC,C\nS1,0.326,0.463,0.153,0.058\nS2,0.511,0.329,0.101,0.060\nS3,0.285,0.341,0.059,0.316\nS4,0.321,0.384,0.286,0.009\nS5,0.606,0.284,0.048,0.062\nS6,0.646,0.232,0.056,0.066\nS7,0.465,0.363,0.052,0.121\nS8,0.620,0.180,0.190,0.010\nS9,0.302,0.278,0.011,0.408\nS10,0.767,0.072,0.095,0.066\nS11,0.610,0.004,0.253,0.133\nS12,0.439,0.420,0.027,0.114\nS13,0.400,0.400,0.150,0.050"};
+  const EV = {
+    en: {
+      mode: 'What to evaluate', cont: 'Continuous', cat: 'Classes', ci: 'Confusion index', btn: 'Evaluate',
+      dCont: 'Observed and predicted values (paste CSV)', dCat: 'Observed and predicted classes (paste CSV)', dCi: 'Class probabilities (paste CSV)',
+      hCont: 'Columns named <b>obs</b> and <b>pred</b>. Add <b>sd</b> (prediction standard deviation) for a coverage curve, or <b>lower</b> and <b>upper</b> for the coverage of your own intervals. Copy the columns straight from a spreadsheet: tabs, commas or semicolons all work.',
+      hCat: 'Columns named <b>obs</b> and <b>pred</b>, one site per row.', hCi: 'First column is the site id, then one column of probability per class.',
+      lev: 'Your interval\'s nominal level (%)', paste: 'Paste your data (with a header row), then press Evaluate. The Example button loads a sample dataset.',
+      needCols: 'Columns named obs and pred are required.', need3: 'Need at least three complete rows.', need2: 'Need at least two complete rows.',
+      sdBad: 'Some sd values are missing or negative, so coverage was skipped.', skipped: k => `${k} row${k > 1 ? 's' : ''} skipped because of missing values.`,
+      sites: 'Sites', rmseU: 'root mean square error', maeU: 'mean absolute error', bias: 'Bias (ME)', biasU: 'mean of pred − obs', r2U: 'squared Pearson r', ccc: 'Lin\'s CCC', cccU: 'agreement with 1:1', nseU: 'model efficiency',
+      cov: 'Coverage of your intervals', nominal: l => `nominal ${l}%`,
+      scatter: 'Observed vs predicted', sitesL: 'Sites', one: '1:1 line', obsAx: 'Observed', predAx: 'Predicted', tipS: (id, o, p) => `${id} · obs ${o} · pred ${p}`,
+      picp: 'Prediction interval coverage (PICP)', picpL: 'PICP', ideal: 'Ideal (1:1)', clAx: 'Confidence level (%)', picpAx: 'PICP (%)', tipP: (cl, p) => `${cl}% interval · ${p}% of sites inside`,
+      picpHint: 'Points below the line mean the intervals are too narrow (overconfident); above means too wide.',
+      acc: 'Overall accuracy', kappa: 'Cohen\'s kappa', kappaU: 'agreement beyond chance', classes: 'Classes', cm: 'Confusion matrix',
+      cmHint: 'Rows are observed classes, columns are predicted. Producer\'s accuracy: share of each observed class predicted correctly. User\'s accuracy: share of each predicted class that is correct.',
+      corner: 'Obs ↓ Pred →', total: 'Total', prod: 'Producer\'s', user: 'User\'s',
+      needCi: 'Need an id column and at least two class columns.', noRows: 'No usable rows.', tie: ' (tie)',
+      meanCi: 'Mean CI', over: 'Sites with CI > 0.5', overU: 'top two classes close', ciTh: ['id', 'most_likely', 'P1', 'P2', 'CI'],
+      skipCi: k => `${k} row${k > 1 ? 's' : ''} skipped (missing or negative values)`, sumCi: k => `${k} row${k > 1 ? 's don\'t' : ' doesn\'t'} sum to 1 (or 100%); check they are probabilities`,
+      ciHint: 'CI = 1 − (P1 − P2), where P1 and P2 are the two highest class probabilities. 0 means one class clearly wins; 1 means the top two are tied.', copy: 'Copy the table (CSV)',
+      wCont: 'RMSE = √(mean of (pred − obs)²); MAE = mean |pred − obs|; R² = square of the Pearson correlation; NSE = 1 − Σ(pred − obs)² ÷ Σ(obs − mean)²; Lin\'s CCC uses sample (n − 1) variances.',
+      wPicp: 'PICP: for each confidence level, the share of sites whose observed value lies within pred ± z × sd (normal intervals), plotted against the level (Malone et al. 2011).',
+      wCat: 'Overall accuracy = correct ÷ total; kappa = (observed agreement − chance agreement) ÷ (1 − chance agreement).'
+    },
+    sw: {
+      mode: 'Cha kutathmini', cont: 'Endelevu', cat: 'Madaraja', ci: 'Kielezo cha mkanganyiko', btn: 'Tathmini',
+      dCont: 'Thamani zilizopimwa na zilizotabiriwa (bandika CSV)', dCat: 'Madaraja yaliyopimwa na yaliyotabiriwa (bandika CSV)', dCi: 'Uwezekano wa madaraja (bandika CSV)',
+      hCont: 'Safu zenye majina <b>obs</b> na <b>pred</b>. Ongeza <b>sd</b> (mkengeuko sanifu wa utabiri) kwa mkunjo wa ufunikaji, au <b>lower</b> na <b>upper</b> kwa ufunikaji wa vipindi vyako mwenyewe. Nakili safu moja kwa moja kutoka lahajedwali: tab, koma au semikoloni zote zinafanya kazi.',
+      hCat: 'Safu zenye majina <b>obs</b> na <b>pred</b>, eneo moja kwa kila mstari.', hCi: 'Safu ya kwanza ni kitambulisho cha eneo, kisha safu moja ya uwezekano kwa kila daraja.',
+      lev: 'Kiwango rasmi cha kipindi chako (%)', paste: 'Bandika data yako (pamoja na mstari wa vichwa), kisha bonyeza Tathmini. Kitufe cha Mfano kinaleta data ya mfano.',
+      needCols: 'Safu zenye majina obs na pred zinahitajika.', need3: 'Inahitaji angalau mistari mitatu kamili.', need2: 'Inahitaji angalau mistari miwili kamili.',
+      sdBad: 'Baadhi ya thamani za sd hazipo au ni hasi, kwa hiyo ufunikaji umerukwa.', skipped: k => `Mistari ${k} imerukwa kwa sababu ya thamani zinazokosekana.`,
+      sites: 'Maeneo', rmseU: 'kipeuo cha wastani wa mraba wa kosa', maeU: 'wastani wa kosa kamili', bias: 'Upendeleo (ME)', biasU: 'wastani wa pred − obs', r2U: 'r ya Pearson iliyopigwa mraba', ccc: 'CCC ya Lin', cccU: 'makubaliano na 1:1', nseU: 'ufanisi wa modeli',
+      cov: 'Ufunikaji wa vipindi vyako', nominal: l => `rasmi ${l}%`,
+      scatter: 'Zilizopimwa dhidi ya zilizotabiriwa', sitesL: 'Maeneo', one: 'Mstari wa 1:1', obsAx: 'Zilizopimwa', predAx: 'Zilizotabiriwa', tipS: (id, o, p) => `${id} · obs ${o} · pred ${p}`,
+      picp: 'Ufunikaji wa vipindi vya utabiri (PICP)', picpL: 'PICP', ideal: 'Bora (1:1)', clAx: 'Kiwango cha uhakika (%)', picpAx: 'PICP (%)', tipP: (cl, p) => `Kipindi cha ${cl}% · ${p}% ya maeneo ndani`,
+      picpHint: 'Nukta chini ya mstari zinamaanisha vipindi ni vyembamba mno (kujiamini kupita kiasi); juu yake inamaanisha ni vipana mno.',
+      acc: 'Usahihi wa jumla', kappa: 'Kappa ya Cohen', kappaU: 'makubaliano zaidi ya bahati', classes: 'Madaraja', cm: 'Jedwali la mkanganyiko',
+      cmHint: 'Mistari ni madaraja yaliyopimwa, safu ni yaliyotabiriwa. Usahihi wa mzalishaji (producer\'s): sehemu ya kila daraja lililopimwa iliyotabiriwa sahihi. Usahihi wa mtumiaji (user\'s): sehemu ya kila daraja lililotabiriwa iliyo sahihi.',
+      corner: 'Obs ↓ Pred →', total: 'Jumla', prod: 'Mzalishaji', user: 'Mtumiaji',
+      needCi: 'Inahitaji safu ya kitambulisho na angalau safu mbili za madaraja.', noRows: 'Hakuna mistari inayotumika.', tie: ' (sare)',
+      meanCi: 'CI wastani', over: 'Maeneo yenye CI > 0.5', overU: 'madaraja mawili ya juu yanakaribiana', ciTh: ['id', 'most_likely', 'P1', 'P2', 'CI'],
+      skipCi: k => `Mistari ${k} imerukwa (thamani zinazokosekana au hasi)`, sumCi: k => `Mistari ${k} haijumlishi 1 (au 100%); kagua kama ni uwezekano`,
+      ciHint: 'CI = 1 − (P1 − P2), ambapo P1 na P2 ni uwezekano wa madaraja mawili ya juu zaidi. 0 inamaanisha daraja moja linashinda waziwazi; 1 inamaanisha mawili ya juu yako sare.', copy: 'Nakili jedwali (CSV)',
+      wCont: 'RMSE = √(wastani wa (pred − obs)²); MAE = wastani wa |pred − obs|; R² = mraba wa uhusiano wa Pearson; NSE = 1 − Σ(pred − obs)² ÷ Σ(obs − wastani)²; CCC ya Lin inatumia tofauti za sampuli (n − 1).',
+      wPicp: 'PICP: kwa kila kiwango cha uhakika, sehemu ya maeneo ambayo thamani iliyopimwa iko ndani ya pred ± z × sd (vipindi vya kawaida), ikichorwa dhidi ya kiwango (Malone et al. 2011).',
+      wCat: 'Usahihi wa jumla = sahihi ÷ jumla; kappa = (makubaliano yaliyoonekana − makubaliano ya bahati) ÷ (1 − makubaliano ya bahati).'
+    },
+    es: {
+      mode: 'Qué evaluar', cont: 'Continuo', cat: 'Clases', ci: 'Índice de confusión', btn: 'Evaluar',
+      dCont: 'Valores observados y predichos (pegue CSV)', dCat: 'Clases observadas y predichas (pegue CSV)', dCi: 'Probabilidades de clase (pegue CSV)',
+      hCont: 'Columnas llamadas <b>obs</b> y <b>pred</b>. Añada <b>sd</b> (desviación estándar de la predicción) para una curva de cobertura, o <b>lower</b> y <b>upper</b> para la cobertura de sus propios intervalos. Copie las columnas directamente de una hoja de cálculo: tabuladores, comas o punto y coma sirven.',
+      hCat: 'Columnas llamadas <b>obs</b> y <b>pred</b>, un sitio por fila.', hCi: 'La primera columna es el id del sitio, y luego una columna de probabilidad por clase.',
+      lev: 'Nivel nominal de su intervalo (%)', paste: 'Pegue sus datos (con una fila de encabezado) y pulse Evaluar. El botón Ejemplo carga un conjunto de datos de muestra.',
+      needCols: 'Se necesitan columnas llamadas obs y pred.', need3: 'Se necesitan al menos tres filas completas.', need2: 'Se necesitan al menos dos filas completas.',
+      sdBad: 'Faltan algunos valores de sd o son negativos, así que se omitió la cobertura.', skipped: k => `${k} fila${k > 1 ? 's omitidas' : ' omitida'} por valores faltantes.`,
+      sites: 'Sitios', rmseU: 'raíz del error cuadrático medio', maeU: 'error absoluto medio', bias: 'Sesgo (ME)', biasU: 'media de pred − obs', r2U: 'r de Pearson al cuadrado', ccc: 'CCC de Lin', cccU: 'concordancia con 1:1', nseU: 'eficiencia del modelo',
+      cov: 'Cobertura de sus intervalos', nominal: l => `nominal ${l}%`,
+      scatter: 'Observado frente a predicho', sitesL: 'Sitios', one: 'Línea 1:1', obsAx: 'Observado', predAx: 'Predicho', tipS: (id, o, p) => `${id} · obs ${o} · pred ${p}`,
+      picp: 'Cobertura de los intervalos de predicción (PICP)', picpL: 'PICP', ideal: 'Ideal (1:1)', clAx: 'Nivel de confianza (%)', picpAx: 'PICP (%)', tipP: (cl, p) => `Intervalo del ${cl}% · ${p}% de los sitios dentro`,
+      picpHint: 'Los puntos por debajo de la línea indican intervalos demasiado estrechos (exceso de confianza); por encima, demasiado anchos.',
+      acc: 'Exactitud global', kappa: 'Kappa de Cohen', kappaU: 'concordancia más allá del azar', classes: 'Clases', cm: 'Matriz de confusión',
+      cmHint: 'Las filas son clases observadas y las columnas, predichas. Exactitud del productor: fracción de cada clase observada predicha correctamente. Exactitud del usuario: fracción de cada clase predicha que es correcta.',
+      corner: 'Obs ↓ Pred →', total: 'Total', prod: 'Productor', user: 'Usuario',
+      needCi: 'Se necesita una columna de id y al menos dos columnas de clase.', noRows: 'No hay filas utilizables.', tie: ' (empate)',
+      meanCi: 'CI medio', over: 'Sitios con CI > 0.5', overU: 'las dos clases principales están cerca', ciTh: ['id', 'most_likely', 'P1', 'P2', 'CI'],
+      skipCi: k => `${k} fila${k > 1 ? 's omitidas' : ' omitida'} (valores faltantes o negativos)`, sumCi: k => `${k} fila${k > 1 ? 's no suman' : ' no suma'} 1 (o 100%); compruebe que son probabilidades`,
+      ciHint: 'CI = 1 − (P1 − P2), donde P1 y P2 son las dos probabilidades de clase más altas. 0 significa que una clase gana claramente; 1 significa que las dos principales empatan.', copy: 'Copiar la tabla (CSV)',
+      wCont: 'RMSE = √(media de (pred − obs)²); MAE = media de |pred − obs|; R² = cuadrado de la correlación de Pearson; NSE = 1 − Σ(pred − obs)² ÷ Σ(obs − media)²; el CCC de Lin usa varianzas muestrales (n − 1).',
+      wPicp: 'PICP: para cada nivel de confianza, la fracción de sitios cuyo valor observado cae dentro de pred ± z × sd (intervalos normales), representada frente al nivel (Malone et al. 2011).',
+      wCat: 'Exactitud global = aciertos ÷ total; kappa = (concordancia observada − concordancia por azar) ÷ (1 − concordancia por azar).'
+    }
+  };
+  const S1 = '#2F6FDE', S2 = '#D9822B';
+  // static SVG chart (the add-in has no hover box; each point carries a tooltip instead)
+  function chart(W, H, m, X, Y, xl, yl, ticksX, ticksY, body) {
+    let g = '<g class="grid">', t = '';
+    ticksX.forEach(v => { g += `<line x1="${X(v)}" x2="${X(v)}" y1="${m.t}" y2="${H - m.b}"/>`; t += `<text x="${X(v)}" y="${H - m.b + 16}" text-anchor="middle">${v}</text>`; });
+    ticksY.forEach(v => { g += `<line x1="${m.l}" x2="${W - m.r}" y1="${Y(v)}" y2="${Y(v)}"/>`; t += `<text x="${m.l - 6}" y="${Y(v) + 4}" text-anchor="end">${v}</text>`; });
+    g += '</g>';
+    t += `<text x="${(m.l + W - m.r) / 2}" y="${H - 4}" text-anchor="middle">${esc(xl)}</text><text x="4" y="12">${esc(yl)}</text>`;
+    return `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(yl)} / ${esc(xl)}">${g}${t}${body}</svg>`;
+  }
+  const legend = items => `<div class="ev-legend">${items.map(([c, l, line]) => `<span><i style="background:${c};${line ? 'height:2px;width:14px;border-radius:0' : ''}"></i>${esc(l)}</span>`).join('')}</div>`;
+  function scatterSVG(S, id, obs, pred) {
+    const W = 340, H = 300, m = { l: 46, r: 14, t: 22, b: 40 };
+    const all = obs.concat(pred); let lo = Math.min(...all), hi = Math.max(...all); const pad = (hi - lo) * 0.06 || 1; lo -= pad; hi += pad;
+    const ticks = niceTicks(lo, hi, 5).filter(v => v >= lo && v <= hi);
+    const X = v => m.l + (v - lo) / (hi - lo) * (W - m.l - m.r), Y = v => H - m.b - (v - lo) / (hi - lo) * (H - m.t - m.b);
+    let b = `<line x1="${X(lo)}" y1="${Y(lo)}" x2="${X(hi)}" y2="${Y(hi)}" stroke="var(--ink-3)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+    obs.forEach((o, i) => { b += `<circle cx="${X(o).toFixed(1)}" cy="${Y(pred[i]).toFixed(1)}" r="4.5" fill="${S1}" stroke="var(--surface)" stroke-width="1.5" fill-opacity="0.85"><title>${esc(S.tipS(id[i], obs[i], pred[i]))}</title></circle>`; });
+    return chart(W, H, m, X, Y, S.obsAx, S.predAx, ticks, ticks, b);
+  }
+  function picpSVG(S, picp) {
+    const W = 340, H = 300, m = { l: 46, r: 14, t: 22, b: 40 };
+    const X = v => m.l + v / 100 * (W - m.l - m.r), Y = v => H - m.b - v / 100 * (H - m.t - m.b), t2 = [0, 20, 40, 60, 80, 100];
+    let b = `<line x1="${X(0)}" y1="${Y(0)}" x2="${X(100)}" y2="${Y(100)}" stroke="var(--ink-3)" stroke-width="1.5" stroke-dasharray="5 4"/>`;
+    const sp = picp.slice().sort((a, c) => a.cl - c.cl);
+    b += `<path d="${sp.map((q, i) => (i ? 'L' : 'M') + X(q.cl).toFixed(1) + ',' + Y(q.picp).toFixed(1)).join('')}" stroke="${S2}" stroke-width="2" fill="none"/>`;
+    sp.forEach(q => { b += `<circle cx="${X(q.cl).toFixed(1)}" cy="${Y(q.picp).toFixed(1)}" r="4.5" fill="${S2}" stroke="var(--surface)" stroke-width="2"><title>${esc(S.tipP(q.cl, fx(q.picp, 1)))}</title></circle>`; });
+    return chart(W, H, m, X, Y, S.clAx, S.picpAx, t2, t2, b);
+  }
+  const table = (header, rows, cls, tall) => `<div class="tt-wrap${tall ? ' tall' : ''}"><table class="tt"><thead><tr>${header.map((h, j) => `<th${j ? ' class="r"' : ''}>${esc(h)}</th>`).join('')}</tr></thead><tbody>` +
+    rows.map((r, i) => `<tr>${r.map((c, j) => { const k = [j ? 'r' : '', cls ? cls(i, j) : ''].filter(Boolean).join(' '); return `<td${k ? ` class="${k}"` : ''}>${esc(c)}</td>`; }).join('')}</tr>`).join('') + '</tbody></table></div>';
+  const evCols = P => { const h = P.header.map(x => x.trim().toLowerCase()); return n => h.indexOf(n); };
+  const hasLU = t => { const P = parseCSV(t), ix = evCols(P); return ix('lower') >= 0 && ix('upper') >= 0; };
+  const toCSV = (header, rows) => { const e = v => { const s = v == null ? '' : String(v); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }; return [header.map(e).join(',')].concat(rows.map(r => r.map(e).join(','))).join('\n'); };
+
+  function buildEV(L) {
+    const S = pick(EV, L);
+    return {
+      step: S.mode, button: S.btn, live: ['mode', 'lev'],
+      example: cur => Object.assign({}, cur, { ['d_' + (cur.mode || 'cont')]: EV_EX[cur.mode || 'cont'] }),
+      inputs: [
+        { k: 'mode', t: 'seg', d: 'cont', opts: [['cont', S.cont], ['cat', S.cat], ['ci', S.ci]] },
+        { k: 'd_cont', l: S.dCont, t: 'textarea', rows: 7, d: '', ph: 'id,obs,pred,sd', show: v => v.mode === 'cont' },
+        { k: 'd_cat', l: S.dCat, t: 'textarea', rows: 7, d: '', ph: 'id,obs,pred', show: v => v.mode === 'cat' },
+        { k: 'd_ci', l: S.dCi, t: 'textarea', rows: 7, d: '', ph: 'id,class A,class B,…', show: v => v.mode === 'ci' },
+        { k: 'hc', t: 'info', h: S.hCont, show: v => v.mode === 'cont' },
+        { k: 'hk', t: 'info', h: S.hCat, show: v => v.mode === 'cat' },
+        { k: 'hi', t: 'info', h: S.hCi, show: v => v.mode === 'ci' },
+        { k: 'lev', l: S.lev, t: 'num', d: 90, show: v => v.mode === 'cont' && hasLU(v.d_cont) }
+      ],
+      compute(v, U) {
+        const mode = v.mode || 'cont', text = v['d_' + mode];
+        if (!String(text || '').trim()) return U.empty(S.paste);
+        if (mode === 'cont') return evCont(v, text, S, U);
+        if (mode === 'cat') return evCat(text, S, U);
+        return evCI(text, S, U);
+      }
+    };
+  }
+  function evCont(v, text, S, U) {
+    const P = parseCSV(text), ix = evCols(P);
+    const io = ix('obs'), ip = ix('pred'), is = ix('sd'), il = ix('lower'), iu = ix('upper');
+    if (io < 0 || ip < 0) return U.note(S.needCols, 'bad');
+    const id = [], obs = [], pred = [], sd = [], lo = [], hi = []; let skipped = 0;
+    P.rows.forEach((r, k) => {
+      const o = num(r[io]), p = num(r[ip]);
+      if (!isFinite(o) || !isFinite(p)) { skipped++; return; }
+      id.push(io === 0 || ip === 0 ? String(k + 1) : r[0]); obs.push(o); pred.push(p);
+      sd.push(is >= 0 ? num(r[is]) : NaN); lo.push(il >= 0 ? num(r[il]) : NaN); hi.push(iu >= 0 ? num(r[iu]) : NaN);
+    });
+    if (obs.length < 3) return U.note(S.need3, 'bad');
+    const st = contStats(obs, pred), d = Math.max(...obs.map(Math.abs)) < 10 ? 3 : 2, msgs = [];
+    const rows = [[S.sites, st.n], ['RMSE', fx(st.rmse, d), S.rmseU], ['MAE', fx(st.mae, d), S.maeU], [S.bias, fx(st.me, d), S.biasU], ['R²', fx(st.r2, 3), S.r2U], [S.ccc, fx(st.ccc, 3), S.cccU], ['NSE', fx(st.nse, 3), S.nseU]];
+    let picp = null;
+    if (is >= 0 && sd.every(x => isFinite(x) && x >= 0)) picp = picpNormal(obs, pred, sd);
+    else if (is >= 0) msgs.push(S.sdBad);
+    if (il >= 0 && iu >= 0 && lo.every(isFinite) && hi.every(isFinite)) {
+      const lev = N(v.lev), cov = picpBounds(obs, lo, hi);
+      rows.push([S.cov, fx(cov, 1) + '%', isFinite(lev) ? S.nominal(lev) : '']);
+    }
+    if (skipped) msgs.push(S.skipped(skipped));
+    let h = (msgs.length ? U.note(msgs.join(' ')) : '') + U.stats(rows);
+    h += `<div class="step" style="margin-top:14px">${S.scatter}</div>` + legend([[S1, S.sitesL], ['var(--ink-3)', S.one, 1]]) + scatterSVG(S, id, obs, pred);
+    if (picp) h += `<div class="step" style="margin-top:14px">${S.picp}</div>` + legend([[S2, S.picpL, 1], ['var(--ink-3)', S.ideal, 1]]) + picpSVG(S, picp) + `<p class="hint">${S.picpHint}</p>`;
+    return { html: h, work: picp ? [S.wCont, S.wPicp] : [S.wCont] };
+  }
+  function evCat(text, S, U) {
+    const P = parseCSV(text), ix = evCols(P), io = ix('obs'), ip = ix('pred');
+    if (io < 0 || ip < 0) return U.note(S.needCols, 'bad');
+    const o = [], p = []; let skipped = 0;
+    P.rows.forEach(r => { const a = (r[io] || '').trim(), b = (r[ip] || '').trim(); if (!a || !b) { skipped++; return; } o.push(a); p.push(b); });
+    if (o.length < 2) return U.note(S.need2, 'bad');
+    const st = catStats(o, p);
+    const pct = x => isFinite(x) ? fx(100 * x, 0) + '%' : '–';
+    const header = [S.corner].concat(st.classes, [S.total, S.prod]);
+    const rows = st.classes.map((c, i) => [c].concat(st.M[i], [st.rowT[i], pct(st.producers[i])]));
+    rows.push([S.total].concat(st.colT, [st.n, '']));
+    rows.push([S.user].concat(st.users.map(pct), ['', '']));
+    let h = skipped ? U.note(S.skipped(skipped)) : '';
+    h += U.stats([[S.sites, st.n], [S.acc, fx(100 * st.accuracy, 1) + '%'], [S.kappa, fx(st.kappa, 3), S.kappaU], [S.classes, st.classes.length]]);
+    h += `<div class="step" style="margin-top:14px">${S.cm}</div><p class="hint" style="margin-top:0">${S.cmHint}</p>` + table(header, rows, (i, j) => (i < st.classes.length && j - 1 === i) ? 'diag' : '');
+    return { html: h, work: [S.wCat] };
+  }
+  function evCI(text, S, U) {
+    const P = parseCSV(text);
+    if (P.header.length < 3) return U.note(S.needCi, 'bad');
+    const classes = P.header.slice(1), out = []; let skipped = 0, badSum = 0;
+    P.rows.forEach(r => {
+      const pr = r.slice(1, classes.length + 1).map(num);
+      if (pr.length < 2 || pr.some(x => !isFinite(x) || x < 0)) { skipped++; return; }
+      const sum = pr.reduce((a, b) => a + b, 0); if (Math.abs(sum - 1) > 0.02 && Math.abs(sum - 100) > 2) badSum++;
+      const scale = Math.abs(sum - 100) <= 2 ? 100 : 1;
+      const q = pr.map(x => x / scale), res = confusionIndex(q);
+      const top = classes[q.indexOf(res.p1)], tied = q.filter(x => x === res.p1).length > 1;
+      out.push([r[0], tied ? top + S.tie : top, +res.p1.toFixed(4), +res.p2.toFixed(4), +res.ci.toFixed(4)]);
+    });
+    if (!out.length) return U.note(S.noRows, 'bad');
+    const cis = out.map(r => r[4]), mCI = cis.reduce((a, b) => a + b, 0) / cis.length, notes = [];
+    if (skipped) notes.push(S.skipCi(skipped));
+    if (badSum) notes.push(S.sumCi(badSum));
+    let h = notes.length ? U.note(notes.join('. ') + '.') : '';
+    h += U.stats([[S.sites, out.length], [S.meanCi, fx(mCI, 3)], [S.over, `${cis.filter(x => x > 0.5).length}`, S.overU]]);
+    h += table(S.ciTh, out.map(r => [r[0], r[1], fx(r[2], 3), fx(r[3], 3), fx(r[4], 3)]), (i, j) => j === 4 && out[i][4] > 0.5 ? 'part' : '', true);
+    h += `<p class="hint">${S.ciHint}</p><pre class="hm-say" hidden>${esc(toCSV(S.ciTh, out))}</pre><p style="margin:8px 0 0"><button type="button" class="linkbtn" data-act="say">${S.copy}</button></p>`;
+    return { html: h };
+  }
+
+  // ---------------------------------------------------------------- registry
+  Object.assign(C.items, {
+    krig: {
+      g: 'spat', build: buildKR,
+      t: { en: 'Kriging error vs. the variogram', sw: 'Kosa la kriging dhidi ya variogram', es: 'Error de kriging frente al variograma' },
+      d: { en: 'Is a reported kriging RMSE possible with the stated variogram and sampling?', sw: 'Je, RMSE ya kriging iliyoripotiwa inawezekana kwa variogram na sampuli zilizotajwa?', es: '¿Es posible el RMSE de kriging informado con el variograma y el muestreo indicados?' },
+      intro: {
+        en: 'Use it before you submit, or when reviewing. Kriging accuracy is set by the variogram and by how far apart the samples are, so a reported error can be checked without the data. This lays out samples at the stated density, works out the kriging variance at each one from the stated variogram, and gives the cross-validation RMSE you should expect if that variogram is right.',
+        sw: 'Itumie kabla ya kuwasilisha, au unapokagua kazi. Usahihi wa kriging unawekwa na variogram na umbali kati ya sampuli, kwa hiyo kosa lililoripotiwa linaweza kukaguliwa bila data. Hii inapanga sampuli kwa msongamano uliotajwa, inakokotoa tofauti ya kriging kwa kila moja kutoka variogram iliyotajwa, na inatoa RMSE ya uthibitishaji mtambuka (cross-validation) unayopaswa kutarajia kama variogram hiyo ni sahihi.',
+        es: 'Úselo antes de enviar, o al revisar. La exactitud del kriging la fijan el variograma y la distancia entre muestras, así que un error informado se puede comprobar sin los datos. Esto dispone las muestras con la densidad indicada, calcula la varianza de kriging en cada una a partir del variograma indicado y da el RMSE de validación cruzada que cabría esperar si ese variograma es correcto.'
+      },
+      refs: ['Burgess, T.M., Webster, R., McBratney, A.B. (1981). Optimal interpolation and isarithmic mapping of soil properties. IV. Sampling strategy. <i>J. Soil Sci.</i> 32, 643–659. doi:10.1111/j.1365-2389.1981.tb01737.x', 'Webster, R., Oliver, M.A. (2007). <i>Geostatistics for Environmental Scientists</i>, 2nd ed. Wiley.']
+    },
+    smap: {
+      g: 'spat', build: buildSV,
+      t: { en: 'Samples for a map (from the variogram)', sw: 'Sampuli kwa ramani (kutoka variogram)', es: 'Muestras para un mapa (a partir del variograma)' },
+      d: { en: 'How many samples on a grid give a chosen kriging error.', sw: 'Sampuli ngapi kwenye gridi zinatoa kosa la kriging lililochaguliwa.', es: 'Cuántas muestras en malla dan un error de kriging elegido.' },
+      intro: {
+        en: 'For a map, what matters is how far apart samples are compared with the variogram range. This finds how many samples on a regular grid give a chosen kriging error, from a variogram you already have (for example from a pilot survey or a nearby study).',
+        sw: 'Kwa ramani, kinachojalisha ni umbali kati ya sampuli ukilinganisha na masafa ya variogram. Hii inatafuta sampuli ngapi kwenye gridi ya kawaida zinatoa kosa la kriging lililochaguliwa, kutoka variogram uliyonayo tayari (kwa mfano kutoka utafiti wa awali au utafiti wa karibu).',
+        es: 'Para un mapa, lo que importa es la distancia entre muestras comparada con el rango del variograma. Esto calcula cuántas muestras en una malla regular dan un error de kriging elegido, a partir de un variograma que ya tenga (por ejemplo de un muestreo piloto o de un estudio cercano).'
+      },
+      refs: ['Burgess, T.M., Webster, R., McBratney, A.B. (1981). Optimal interpolation and isarithmic mapping of soil properties. IV. Sampling strategy. <i>J. Soil Sci.</i> 32, 643–659. doi:10.1111/j.1365-2389.1981.tb01737.x', 'McBratney, A.B., Webster, R. (1983). How many observations are needed for regional estimation of soil properties? <i>Soil Science</i> 135, 177–183.']
+    },
+    detect: {
+      g: 'spat', build: buildCM,
+      t: { en: 'Can the change be detected?', sw: 'Je, mabadiliko yanaweza kugunduliwa?', es: '¿Se puede detectar el cambio?' },
+      d: { en: 'Smallest change in soil carbon a sampling design can detect.', sw: 'Mabadiliko madogo kabisa ya kaboni ya udongo ambayo muundo wa sampuli unaweza kugundua.', es: 'El menor cambio de carbono del suelo que un diseño de muestreo puede detectar.' },
+      intro: {
+        en: 'Use it when planning a monitoring design, before claiming a change in your own results, or before trusting (or paying for) someone else\'s: check whether the sampling could detect a change that size. This gives the smallest change a design can reliably detect, and how many samples a claimed change would need.',
+        sw: 'Itumie unapopanga muundo wa ufuatiliaji, kabla ya kudai mabadiliko kwenye matokeo yako, au kabla ya kuamini (au kulipia) ya mtu mwingine: kagua kama uchukuaji wa sampuli ungeweza kugundua mabadiliko ya ukubwa huo. Hii inatoa mabadiliko madogo kabisa ambayo muundo unaweza kugundua kwa uhakika, na sampuli ngapi mabadiliko yanayodaiwa yangehitaji.',
+        es: 'Úselo al planificar un diseño de monitoreo, antes de afirmar un cambio en sus propios resultados, o antes de confiar en (o pagar por) los de otra persona: compruebe si el muestreo podría detectar un cambio de ese tamaño. Esto da el menor cambio que un diseño puede detectar con fiabilidad y cuántas muestras necesitaría un cambio declarado.'
+      },
+      refs: ['Garten, C.T., Wullschleger, S.D. (1999). Soil carbon inventories under a bioenergy crop (switchgrass): measurement limitations. <i>J. Environ. Qual.</i> 28, 1359–1365. doi:10.2134/jeq1999.00472425002800040041x']
+    },
+    evalm: {
+      g: 'acc', build: buildEV,
+      t: { en: 'Model evaluation and PICP', sw: 'Tathmini ya modeli na PICP', es: 'Evaluación del modelo y PICP' },
+      d: { en: 'Paste observed and predicted values: statistics, a 1:1 plot and a coverage curve.', sw: 'Bandika thamani zilizopimwa na zilizotabiriwa: takwimu, mchoro wa 1:1 na mkunjo wa ufunikaji.', es: 'Pegue valores observados y predichos: estadísticos, un gráfico 1:1 y una curva de cobertura.' },
+      intro: {
+        en: 'Paste validation data straight from a spreadsheet and press Evaluate. <b>Continuous</b> gives RMSE, MAE, bias, R², Lin\'s CCC and NSE with an observed-vs-predicted plot, and a prediction interval coverage (PICP) curve when the prediction SD is included. <b>Classes</b> gives the confusion matrix, overall accuracy and kappa. <b>Confusion index</b> shows where the two most likely classes are close.',
+        sw: 'Bandika data za uthibitishaji moja kwa moja kutoka lahajedwali na ubonyeze Tathmini. <b>Endelevu</b> inatoa RMSE, MAE, upendeleo, R², CCC ya Lin na NSE pamoja na mchoro wa zilizopimwa dhidi ya zilizotabiriwa, na mkunjo wa ufunikaji wa vipindi vya utabiri (PICP) SD ya utabiri ikijumuishwa. <b>Madaraja</b> inatoa jedwali la mkanganyiko, usahihi wa jumla na kappa. <b>Kielezo cha mkanganyiko</b> kinaonyesha pale madaraja mawili yanayowezekana zaidi yanapokaribiana.',
+        es: 'Pegue los datos de validación directamente desde una hoja de cálculo y pulse Evaluar. <b>Continuo</b> da RMSE, MAE, sesgo, R², CCC de Lin y NSE con un gráfico observado frente a predicho, y una curva de cobertura de los intervalos de predicción (PICP) cuando se incluye la SD de la predicción. <b>Clases</b> da la matriz de confusión, la exactitud global y kappa. <b>Índice de confusión</b> muestra dónde las dos clases más probables están cerca.'
+      },
+      refs: ['Lin, L.I. (1989). A concordance correlation coefficient to evaluate reproducibility. <i>Biometrics</i> 45, 255–268.', 'Malone, B.P., McBratney, A.B., Minasny, B. (2011). Empirical estimates of uncertainty for mapping continuous depth functions of soil attributes. <i>Geoderma</i> 160, 614–626.', 'Burrough, P.A., van Gaans, P.F.M., Hootsmans, R. (1997). Continuous classification in soil survey: spatial correlation, confusion and boundaries. <i>Geoderma</i> 77, 115–135.']
+    },
+    r2rmse: {
+      g: 'acc', build: buildEC,
+      t: { en: 'R², RMSE and SD', sw: 'R², RMSE na SD', es: 'R², RMSE y SD' },
+      d: { en: 'Can the reported R², RMSE and spread all be true?', sw: 'Je, R², RMSE na mtawanyiko vilivyoripotiwa vinaweza vyote kuwa kweli?', es: '¿Pueden ser ciertos a la vez el R², el RMSE y la dispersión informados?' },
+      intro: {
+        en: 'R² and RMSE constrain each other, and both are limited by how precisely the soil was measured. Enter your own figures before you submit, or the figures from a paper or report, to see whether the numbers can all be true.',
+        sw: 'R² na RMSE zinabanana, na zote mbili zinazuiliwa na usahihi ambao udongo ulipimwa. Weka takwimu zako kabla ya kuwasilisha, au takwimu kutoka makala au ripoti, kuona kama namba zote zinaweza kuwa kweli.',
+        es: 'El R² y el RMSE se limitan mutuamente, y ambos están limitados por la precisión con que se midió el suelo. Introduzca sus propias cifras antes de enviar, o las de un artículo o informe, para ver si todos los números pueden ser ciertos.'
+      },
+      refs: ['No paper needed: for the same validation data, RMSE ≥ SD × √(1 − R²) follows from the definitions of R² and RMSE, and no model can predict more precisely than the soil was measured.']
+    },
+    clsacc: {
+      g: 'acc', build: buildCC,
+      t: { en: 'Classification accuracy', sw: 'Usahihi wa uainishaji', es: 'Exactitud de la clasificación' },
+      d: { en: 'Confidence interval, chance baseline and comparison with another map.', sw: 'Kipindi cha uhakika, msingi wa bahati na ulinganisho na ramani nyingine.', es: 'Intervalo de confianza, referencia por azar y comparación con otro mapa.' },
+      intro: {
+        en: 'An accuracy from a small validation set is uncertain, and it only means something compared with what you would get by guessing. Enter your own figures or a paper\'s to see the confidence interval and whether the map beats chance or another map.',
+        sw: 'Usahihi kutoka seti ndogo ya uthibitishaji hauna uhakika, na una maana tu ukilinganishwa na kile ambacho ungepata kwa kubahatisha. Weka takwimu zako au za makala kuona kipindi cha uhakika na kama ramani inashinda bahati au ramani nyingine.',
+        es: 'Una exactitud obtenida de un conjunto de validación pequeño es incierta, y solo significa algo comparada con lo que se obtendría adivinando. Introduzca sus cifras o las de un artículo para ver el intervalo de confianza y si el mapa supera al azar o a otro mapa.'
+      },
+      refs: ['Wilson, E.B. (1927). Probable inference, the law of succession, and statistical inference. <i>J. Am. Stat. Assoc.</i> 22, 209–212. doi:10.1080/01621459.1927.10502953', 'Foody, G.M. (2009). Classification accuracy comparison: hypothesis tests and the use of confidence intervals in evaluations of difference, equivalence and non-inferiority. <i>Remote Sens. Environ.</i> 113, 1658–1663. doi:10.1016/j.rse.2009.03.014']
+    }
+  });
+  const o = C.order, at = (id, after) => { const i = o.indexOf(after); o.splice(i < 0 ? o.length - 1 : i + 1, 0, id); };
+  at('evalm', 'cv'); at('r2rmse', 'evalm'); at('clsacc', 'r2rmse');
+  at('krig', 'px'); at('smap', 'krig'); at('detect', 'smap');
+  // for tests: the same functions as on the website
+  C._tools = { krExpected, contStats, catStats, picpNormal, tinv, erf };
+})();
+</script>
 
 <script>
 // ---------------------------------------------------------------------------
@@ -3319,12 +4203,13 @@ window.HMEQ = (function () {
   function buildCheck(id) {
     const it = C.items[id], pane = document.querySelector('.ra-pane[data-pane="' + id + '"]');
     if (!pane || it.isEq) return;
-    const keep = apis[id] ? apis[id].values() : undefined;
+    const keep = apis[id] ? apis[id].values() : undefined, wasRun = apis[id] && apis[id].ran && apis[id].ran();
     pane.innerHTML = '<p class="ra-intro">' + tr(it.intro) + '</p><div class="hmc" id="ck-' + id + '"></div>' +
       (it.refs ? '<details class="ra-refs"><summary>' + esc(tr(C.refsLab)) + '</summary>' + it.refs.map(r => '<p>' + tr(r) + '</p>').join('') + '</details>' : '');
     const cfg = it.build(lang);
     cfg.id = 'ck-' + id;
     cfg.initial = keep;
+    cfg.initialRun = !!wasRun;
     apis[id] = HM.tool(cfg);
   }
   function renderBar() {
