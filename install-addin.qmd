@@ -1,0 +1,39 @@
+---
+title: "Check a result for Word (beta)"
+description: "Install the plausibility checks and the equation checker as a Word add-in."
+---
+
+The add-in puts the checks from [Check a result](checks.html) and the equation checker in a panel beside your document. It runs in Word; nothing you enter leaves your computer.
+
+While it waits for approval in Microsoft's add-in store, it is installed by hand from one small file.
+
+[Download the add-in file (manifest.xml)](addin/manifest.xml){download="check-a-result-manifest.xml" .btn .btn-primary}
+
+## Word on the web (easiest)
+
+1. Open a document in Word on the web.
+2. Go to **Home → Add-ins → More add-ins → My add-ins → Upload My Add-in**.
+3. Choose the file you downloaded and press **Upload**.
+
+## Word on a Mac
+
+1. In Finder, press **Cmd + Shift + G** and go to
+   `~/Library/Containers/com.microsoft.Word/Data/Documents/wef`
+   (create the `wef` folder if it isn't there).
+2. Copy the downloaded file into that folder.
+3. Restart Word, open a document, and go to **Home → Add-ins**.
+
+## Word on Windows
+
+1. Put the downloaded file in a folder and share it (right-click the folder → **Properties → Sharing → Share**). Note its network path, such as `\\MY-PC\addins`.
+2. In Word, go to **File → Options → Trust Center → Trust Center Settings → Trusted Add-in Catalogs**.
+3. Paste the network path into **Catalog Url**, press **Add catalog**, tick **Show in Menu**, and press **OK**.
+4. Restart Word, then go to **Home → Add-ins → More add-ins → Shared folder**.
+
+## For a whole organisation
+
+A Microsoft 365 administrator can give it to everyone at once: upload the same file in the Microsoft 365 admin center under **Settings → Integrated apps → Upload custom apps**.
+
+## Updates
+
+You only install it once. The add-in loads from this website, so new checks and fixes appear the next time you open it.
