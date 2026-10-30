@@ -150,6 +150,9 @@ body.quarto-light .ra-nav select, body.quarto-light .ra-links button { border: 1
 .ra-bar button.locked { opacity: .55; cursor: not-allowed; font-weight: 500; }
 .ra-lock { font-size: .85rem; border-left: 3px solid #e0a440; padding: 6px 10px; margin: 0 0 8px; border-radius: 0 8px 8px 0; background: rgba(224,164,64,.1); }
 .ra-lock a, .ra-refs a { color: inherit; font-weight: 600; }
+.hmc.ra-locked .ra-lock { margin: 12px 0 0; }
+.hmc.ra-locked .cx { opacity: .6; }
+.hmc.ra-locked input, .hmc.ra-locked select, .hmc.ra-locked textarea, .hmc.ra-locked button { cursor: not-allowed; }
 .ra-intro { font-size: .92rem; line-height: 1.45; margin: 4px 0 0; opacity: .9; }
 .ra-gh { font-size: 1rem; margin: 16px 0 2px; }
 .ra-gs { font-size: .85rem; margin: 0 0 8px; opacity: .75; }
@@ -776,7 +779,7 @@ window.RA_CHECKS = (function () {
       d: { en: 'Paste or select equations to catch unreadable or undefined expressions, rearrangements that don\'t follow, and worked examples that don\'t reproduce.', sw: 'Bandika au chagua milinganyo ili kugundua semi zisizosomeka au zisizo na maana, mipangilio upya isiyofuata, na mifano iliyokokotolewa isiyozalisha matokeo.', es: 'Pegue o seleccione ecuaciones para detectar expresiones ilegibles o indefinidas, reordenamientos que no se siguen y ejemplos resueltos que no se reproducen.' }
     }
   };
-  return { items, groups, refsLab, order: ['oa', 'cv', 'ess', 'px', 'sa', 'bt', 'lc', 'co', 'indep', 'assump', 'modelcmp', 'eq'] };
+  return { items, groups, refsLab, order: ['eq', 'oa', 'cv', 'ess', 'px', 'sa', 'bt', 'lc', 'co', 'indep', 'assump', 'modelcmp'] };
 })();
 
 </script>
@@ -2227,7 +2230,7 @@ window.CKSTAT = window.CKSTAT || (function () {
           else if (rep > hiLim) h += verdict('warn', S.high, S.highB);
           else h += verdict('good', S.ok, S.okB);
         } else if (spacing > r) h += U.note(S.far(fx(mid, d), fx(sd, d)));
-        return { html: h, work: [S.why(grid, reps)] };
+        return { html: h + exportBtn(), work: [S.why(grid, reps)] };
       }
     };
   }
@@ -2296,7 +2299,7 @@ window.CKSTAT = window.CKSTAT || (function () {
         ]);
         h += `<div class="tt-wrap"><table class="tt"><thead><tr>${S.th.map((t, i) => `<th${i ? ' class="r"' : ''}>${t}</th>`).join('')}</tr></thead><tbody>` +
           rows.map(r => `<tr>${r.map((c, i) => `<td${i ? ' class="r"' : ''}>${c}</td>`).join('')}</tr>`).join('') + '</tbody></table></div>';
-        return { html: h, work: [S.why] };
+        return { html: h + exportBtn(), work: [S.why] };
       }
     };
   }
@@ -2361,7 +2364,7 @@ window.CKSTAT = window.CKSTAT || (function () {
           rows.push([S.forX(claim), need ?? S.many, S.per]);
           vh = claim >= m ? verdict('good', S.yes, S.yesB(claim, fx(m, 1))) : verdict('bad', S.no, S.noB(claim, fx(m, 1), need, pair));
         }
-        return { html: U.stats(rows) + vh, work: [S.why(Math.round((1 - alpha) * 100), Math.round(pow * 100), pair, rho)] };
+        return { html: U.stats(rows) + vh + exportBtn(), work: [S.why(Math.round((1 - alpha) * 100), Math.round(pow * 100), pair, rho)] };
       }
     };
   }
@@ -2439,7 +2442,7 @@ window.CKSTAT = window.CKSTAT || (function () {
           st.push([S.r2i, `${fx(Math.max(0, lo) ** 2, 2)}–${fx(hi ** 2, 2)}`, S.from(n)], [S.rmsei, `${fx(rmse * Math.sqrt(n / (n + 1.96 * Math.sqrt(2 * n))), d)}–${fx(rmse * Math.sqrt(n / Math.max(1, n - 1.96 * Math.sqrt(2 * n))), d)}`, S.approx]);
           if (n < 30) vv.push(verdict('warn', S.small, S.smallB(n)));
         }
-        return { html: U.stats(st) + vv.join(''), work: [S.why] };
+        return { html: U.stats(st) + vv.join('') + exportBtn(), work: [S.why] };
       }
     };
   }
@@ -2507,7 +2510,7 @@ window.CKSTAT = window.CKSTAT || (function () {
           st.push([S.other, `${fx(l2 * 100, 0)}–${fx(h2 * 100, 0)}%`, S.from(n2)]);
           vv.push(p2 < 0.05 ? verdict('good', S.real, S.realB(fx(a * 100, 0), fx(a2 * 100, 0), fx(p2, 3))) : verdict('warn', S.may, S.mayB(fx(a * 100, 0), fx(a2 * 100, 0), fx(p2, 2))));
         }
-        return { html: U.stats(st) + vv.join('') };
+        return { html: U.stats(st) + vv.join('') + exportBtn() };
       }
     };
   }
@@ -2589,6 +2592,34 @@ window.CKSTAT = window.CKSTAT || (function () {
     }
   };
   const S1 = '#2F6FDE', S2 = '#D9822B';
+  // In this beta the numbers, verdicts and plots are free; exporting the results is locked (shown with 🔒).
+  // Set EXPORT to true to unlock it (PLOTS = false would lock the plots).
+  const PLOTS = true, EXPORT = false;
+  const LK = {
+    en: { plot: 'Plots are locked in this beta.', exp: 'Export the results', expLock: 'Exporting the results is locked in this beta.', more: 'Learn more', done: 'Copied. Paste into Word or a spreadsheet.', level: 'Confidence level (%)' },
+    sw: { plot: 'Michoro imefungwa katika toleo hili la majaribio (beta).', exp: 'Hamisha matokeo', expLock: 'Kuhamisha matokeo kumefungwa katika toleo hili la majaribio (beta).', more: 'Soma zaidi', done: 'Imenakiliwa. Bandika kwenye Word au lahajedwali.', level: 'Kiwango cha uhakika (%)' },
+    es: { plot: 'Los gráficos están bloqueados en esta beta.', exp: 'Exportar los resultados', expLock: 'La exportación de resultados está bloqueada en esta beta.', more: 'Más información', done: 'Copiado. Péguelo en Word o en una hoja de cálculo.', level: 'Nivel de confianza (%)' }
+  };
+  const LKt = () => LK[HM.lang] || LK.en;
+  const lockBox = t => `<div class="ra-lock" style="margin-top:8px">🔒 ${t} <a href="${window.RA_MORE || 'https://rafikiardhi.earth/'}" data-ext>${LKt().more}</a></div>`;
+  const plotOr = (svg) => PLOTS ? svg : lockBox(LKt().plot);
+  const exportBtn = () => `<p style="margin:10px 0 0"><button type="button" class="linkbtn" data-ra-export>${EXPORT ? '' : '🔒 '}${LKt().exp}</button></p>`;
+  // export: everything in the result (stats, verdicts, tables, including tables kept only for export) as tab-separated text
+  function exportText(res) {
+    const t = x => x.textContent.replace(/\s+/g, ' ').trim(), out = [];
+    res.querySelectorAll('ul.stats li').forEach(li => { const sp = li.querySelectorAll(':scope > span'), sm = sp[0].querySelector('small'); const lab = sm ? t(sp[0]).slice(0, -t(sm).length).trim() : t(sp[0]); out.push([lab, t(sp[1]), sm ? t(sm) : ''].join('\t')); });
+    res.querySelectorAll('.note:not(.stale-note)').forEach(n => out.push('', t(n)));
+    res.querySelectorAll('table').forEach(tb => { out.push(''); tb.querySelectorAll('tr').forEach(tr => out.push([...tr.children].map(t).join('\t'))); });
+    return out.join('\n');
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-ra-export]'); if (!b) return;
+    const p = b.parentElement;
+    if (!EXPORT) { if (!p.nextElementSibling || !p.nextElementSibling.classList.contains('ra-lock')) p.insertAdjacentHTML('afterend', lockBox(LKt().expLock)); return; }
+    const text = exportText(b.closest('.res')), ok = () => { b.textContent = LKt().done; setTimeout(() => { b.textContent = LKt().exp; }, 2000); };
+    const fb = () => { const ta = document.createElement('textarea'); ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); ok(); } catch (err) { } ta.remove(); };
+    if (navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(text).then(ok, fb); else fb();
+  });
   // static SVG chart (the add-in has no hover box; each point carries a tooltip instead)
   function chart(W, H, m, X, Y, xl, yl, ticksX, ticksY, body) {
     let g = '<g class="grid">', t = '';
@@ -2670,9 +2701,12 @@ window.CKSTAT = window.CKSTAT || (function () {
     }
     if (skipped) msgs.push(S.skipped(skipped));
     let h = (msgs.length ? U.note(msgs.join(' ')) : '') + U.stats(rows);
-    h += `<div class="step" style="margin-top:14px">${S.scatter}</div>` + legend([[S1, S.sitesL], ['var(--ink-3)', S.one, 1]]) + scatterSVG(S, id, obs, pred);
-    if (picp) h += `<div class="step" style="margin-top:14px">${S.picp}</div>` + legend([[S2, S.picpL, 1], ['var(--ink-3)', S.ideal, 1]]) + picpSVG(S, picp) + `<p class="hint">${S.picpHint}</p>`;
-    return { html: h, work: picp ? [S.wCont, S.wPicp] : [S.wCont] };
+    h += `<div class="step" style="margin-top:14px">${S.scatter}</div>` + (PLOTS ? legend([[S1, S.sitesL], ['var(--ink-3)', S.one, 1]]) + scatterSVG(S, id, obs, pred) : plotOr(''));
+    if (picp) {
+      h += `<div class="step" style="margin-top:14px">${S.picp}</div>` + (PLOTS ? legend([[S2, S.picpL, 1], ['var(--ink-3)', S.ideal, 1]]) + picpSVG(S, picp) + `<p class="hint">${S.picpHint}</p>` : plotOr(''));
+      h += `<table hidden><tr><th>${LKt().level}</th><th>PICP (%)</th></tr>${picp.slice().sort((a, c) => a.cl - c.cl).map(q => `<tr><td>${q.cl}</td><td>${fx(q.picp, 1)}</td></tr>`).join('')}</table>`;   // for the export
+    }
+    return { html: h + exportBtn(), work: picp ? [S.wCont, S.wPicp] : [S.wCont] };
   }
   function evCat(text, S, U) {
     const P = parseCSV(text), ix = evCols(P), io = ix('obs'), ip = ix('pred');
@@ -2689,7 +2723,7 @@ window.CKSTAT = window.CKSTAT || (function () {
     let h = skipped ? U.note(S.skipped(skipped)) : '';
     h += U.stats([[S.sites, st.n], [S.acc, fx(100 * st.accuracy, 1) + '%'], [S.kappa, fx(st.kappa, 3), S.kappaU], [S.classes, st.classes.length]]);
     h += `<div class="step" style="margin-top:14px">${S.cm}</div><p class="hint" style="margin-top:0">${S.cmHint}</p>` + table(header, rows, (i, j) => (i < st.classes.length && j - 1 === i) ? 'diag' : '');
-    return { html: h, work: [S.wCat] };
+    return { html: h + exportBtn(), work: [S.wCat] };
   }
   function evCI(text, S, U) {
     const P = parseCSV(text);
@@ -2712,7 +2746,7 @@ window.CKSTAT = window.CKSTAT || (function () {
     h += U.stats([[S.sites, out.length], [S.meanCi, fx(mCI, 3)], [S.over, `${cis.filter(x => x > 0.5).length}`, S.overU]]);
     h += table(S.ciTh, out.map(r => [r[0], r[1], fx(r[2], 3), fx(r[3], 3), fx(r[4], 3)]), (i, j) => j === 4 && out[i][4] > 0.5 ? 'part' : '', true);
     h += `<p class="hint">${S.ciHint}</p><pre class="hm-say" hidden>${esc(toCSV(S.ciTh, out))}</pre><p style="margin:8px 0 0"><button type="button" class="linkbtn" data-act="say">${S.copy}</button></p>`;
-    return { html: h };
+    return { html: h + exportBtn() };
   }
 
   // ---------------------------------------------------------------- registry
@@ -4124,7 +4158,7 @@ window.HMEQ = (function () {
 /* The add-in's frame: title, language, the list of checks, the action buttons (locked in this beta
    except on the equation checker), "All checks" and "Tools on the website". */
 (function () {
-  const MORE_URL = 'https://rafikiardhi.earth/';             // "Learn more" on a locked button: change when the page exists
+  const MORE_URL = window.RA_MORE = 'https://rafikiardhi.earth/';             // "Learn more" on a locked button: change when the page exists
   const TOOLS_URL = 'https://rafikiardhi.earth/tools.html';  // "Tools on the website"
   const C = window.RA_CHECKS;
   const UI = {
@@ -4134,9 +4168,9 @@ window.HMEQ = (function () {
       all: 'All checks', back: '← All checks', web: 'Tools on the website ↗', pick: 'Check',
       sel: 'Check the highlighted text', doc: 'Check the whole document', com: 'Add the findings as a comment',
       eqSel: 'Check the selected equations', eqDoc: 'Find all equations in the document', eqCom: 'Add the findings as a comment',
-      locked: 'Locked in this beta. This will read the numbers from your document for you; for now, type or paste them into the boxes below.', more: 'Learn more',
+      locked: 'Locked in this beta. This will read the numbers from your document for you; for now, type or paste them into the boxes below.', more: 'Learn more', ckLock: 'This check is locked in this beta. You can see what it asks for and the papers behind it.',
       auto: 'Check equations automatically when I select them', clr: 'Clear the colours', lg: ['Holds', 'Evaluates cleanly', 'Not checked or partly undefined', 'Does not hold'], go: 'Click a row to go to that equation in the document.',
-      citeEq: 'Equation checker: plausibility checks for soil and environmental results', citeCk: 'Check a result: plausibility checks for soil and environmental results', how: 'How to cite'
+      cite: 'Check a result for Word: plausibility checks and an equation checker for soil and environmental results', how: 'How to cite'
     },
     sw: {
       home: 'Kagua matokeo', sub: 'Bila AI. Inafanya kazi hapa tu; hakuna kinachotoka kwenye kompyuta yako.', lang: 'Lugha',
@@ -4144,9 +4178,9 @@ window.HMEQ = (function () {
       all: 'Ukaguzi wote', back: '← Ukaguzi wote', web: 'Zana kwenye tovuti ↗', pick: 'Ukaguzi',
       sel: 'Kagua maandishi yaliyochaguliwa', doc: 'Kagua waraka wote', com: 'Weka matokeo kama maoni (comment)',
       eqSel: 'Kagua milinganyo iliyochaguliwa', eqDoc: 'Tafuta milinganyo yote kwenye waraka', eqCom: 'Weka matokeo kama maoni (comment)',
-      locked: 'Imefungwa katika toleo hili la majaribio (beta). Kipengele hiki kitasoma namba kutoka kwenye waraka wako; kwa sasa, andika au bandika namba kwenye visanduku hapa chini.', more: 'Soma zaidi',
+      locked: 'Imefungwa katika toleo hili la majaribio (beta). Kipengele hiki kitasoma namba kutoka kwenye waraka wako; kwa sasa, andika au bandika namba kwenye visanduku hapa chini.', more: 'Soma zaidi', ckLock: 'Ukaguzi huu umefungwa katika toleo hili la majaribio (beta). Unaweza kuona unachohitaji na makala zinazouunga mkono.',
       auto: 'Kagua milinganyo moja kwa moja ninapoichagua', clr: 'Ondoa rangi', lg: ['Unashikilia', 'Unakokotoleka vizuri', 'Haukukaguliwa au haufafanuki mahali fulani', 'Haushikilii'], go: 'Bofya mstari ili kwenda kwenye mlinganyo huo katika waraka.',
-      citeEq: 'Equation checker: plausibility checks for soil and environmental results', citeCk: 'Check a result: plausibility checks for soil and environmental results', how: 'Jinsi ya kunukuu'
+      cite: 'Check a result for Word: plausibility checks and an equation checker for soil and environmental results', how: 'Jinsi ya kunukuu'
     },
     es: {
       home: 'Comprobar un resultado', sub: 'Sin IA. Se ejecuta en este panel; nada sale de su computadora.', lang: 'Idioma',
@@ -4154,9 +4188,9 @@ window.HMEQ = (function () {
       all: 'Todas las comprobaciones', back: '← Todas las comprobaciones', web: 'Herramientas en el sitio web ↗', pick: 'Comprobación',
       sel: 'Revisar el texto resaltado', doc: 'Revisar todo el documento', com: 'Agregar hallazgos como comentario',
       eqSel: 'Revisar las ecuaciones seleccionadas', eqDoc: 'Buscar todas las ecuaciones en el documento', eqCom: 'Agregar hallazgos como comentario',
-      locked: 'Bloqueado en esta beta. Esto leerá los números de su documento por usted; por ahora, escríbalos o péguelos en las casillas de abajo.', more: 'Más información',
+      locked: 'Bloqueado en esta beta. Esto leerá los números de su documento por usted; por ahora, escríbalos o péguelos en las casillas de abajo.', more: 'Más información', ckLock: 'Esta comprobación está bloqueada en esta beta. Puede ver qué datos pide y los artículos en que se basa.',
       auto: 'Revisar las ecuaciones automáticamente al seleccionarlas', clr: 'Quitar los colores', lg: ['Se cumple', 'Se evalúa sin problemas', 'No revisada o indefinida en partes', 'No se cumple'], go: 'Haga clic en una fila para ir a esa ecuación en el documento.',
-      citeEq: 'Equation checker: plausibility checks for soil and environmental results', citeCk: 'Check a result: plausibility checks for soil and environmental results', how: 'Cómo citar'
+      cite: 'Check a result for Word: plausibility checks and an equation checker for soil and environmental results', how: 'Cómo citar'
     }
   };
   const $ = id => document.getElementById(id);
@@ -4183,7 +4217,7 @@ window.HMEQ = (function () {
     C.order.forEach(id => { const g = C.items[id].g; (groups[g] = groups[g] || []).push(id); });
     $('ra-tool').innerHTML = '<option value="home"' + (view === 'home' ? ' selected' : '') + '>' + esc(L().all) + '</option>' +
       Object.keys(groups).map(g => '<optgroup label="' + esc(tr(C.groups[g])[0]) + '">' +
-        groups[g].map(id => '<option value="' + id + '"' + (id === view ? ' selected' : '') + '>' + esc(tr(C.items[id].t)) + '</option>').join('') + '</optgroup>').join('');
+        groups[g].map(id => '<option value="' + id + '"' + (id === view ? ' selected' : '') + '>' + (C.items[id].locked ? '🔒 ' : '') + esc(tr(C.items[id].t)) + '</option>').join('') + '</optgroup>').join('');
     $('ra-tool').setAttribute('aria-label', L().pick);
     $('ra-back').textContent = L().back;
     $('ra-web').textContent = L().web;
@@ -4195,7 +4229,7 @@ window.HMEQ = (function () {
       const [title, sub] = tr(C.groups[g]);
       return '<h2 class="ra-gh">' + esc(title) + '</h2><p class="ra-gs">' + esc(sub) + '</p>' + groups[g].map(id => {
         const it = C.items[id];
-        return '<button type="button" class="ra-card" data-open="' + id + '"><span class="ra-ct">' + esc(tr(it.t)) + (it.beta ? ' <span class="ra-beta">BETA</span>' : '') + '</span><span class="ra-cd">' + esc(tr(it.d)) + '</span></button>';
+        return '<button type="button" class="ra-card" data-open="' + id + '"><span class="ra-ct">' + (it.locked ? '🔒 ' : '') + esc(tr(it.t)) + (it.beta ? ' <span class="ra-beta">BETA</span>' : '') + '</span><span class="ra-cd">' + esc(tr(it.d)) + '</span></button>';
       }).join('');
     }).join('');
   }
@@ -4210,6 +4244,16 @@ window.HMEQ = (function () {
     cfg.id = 'ck-' + id;
     cfg.initial = keep;
     cfg.initialRun = !!wasRun;
+    if (it.locked) {   // shown so people can see what it does; the calculation is not run
+      cfg.compute = () => '';
+      apis[id] = HM.tool(cfg);
+      const root = $('ck-' + id);
+      root.classList.add('ra-locked');
+      root.querySelectorAll('.res, .hm-work, .actions, .smallprint').forEach(x => x.remove());
+      root.querySelectorAll('input, select, textarea, button').forEach(x => { x.disabled = true; });
+      root.insertAdjacentHTML('afterbegin', '<div class="ra-lock">🔒 ' + esc(L().ckLock) + ' <a href="' + MORE_URL + '" data-ext>' + esc(L().more) + '</a></div>');
+      return;
+    }
     apis[id] = HM.tool(cfg);
   }
   function renderBar() {
@@ -4229,9 +4273,8 @@ window.HMEQ = (function () {
     const it = C.items[view];
     $('lbl-title').textContent = view === 'home' ? L().home : tr(it.t);
     $('lbl-sub').textContent = L().sub;
-    const eqCite = view === 'eq';
-    $('ra-foot').innerHTML = esc(L().how) + ': Flynn, T. (2026). <i>' + esc(eqCite ? L().citeEq : L().citeCk) + '</i> [software]. ' +
-      (eqCite ? '<a href="https://doi.org/10.5281/zenodo.23787685" data-ext>https://doi.org/10.5281/zenodo.23787685</a>' : '<a href="https://doi.org/10.5281/zenodo.23736495" data-ext>https://doi.org/10.5281/zenodo.23736495</a>');
+    $('ra-foot').innerHTML = esc(L().how) + ': Flynn, T. (2026). <i>' + esc(L().cite) + '</i> [Word add-in]. RafikiArdhi. ' +
+      '<a href="https://doi.org/10.5281/zenodo.23813041" data-ext>https://doi.org/10.5281/zenodo.23813041</a>';
   }
   function show(id) {
     view = (id === 'home' || C.items[id]) ? id : 'home';
