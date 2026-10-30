@@ -20,6 +20,10 @@ website:
   navbar:
     logo: logo-small.png
     logo-alt: "RafikiArdhi logo"
+    right:
+      - text: "Word add-in"
+        icon: microsoft
+        href: install-addin.qmd
     left:
       - href: index.qmd
         text: Home
