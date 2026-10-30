@@ -34,6 +34,7 @@ body.quarto-light .hmc {
 .hmc .tag { display: inline-block; font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; border-radius: 999px; padding: 1px 9px; border: 1px solid currentColor; }
 .hmc .tag.good { color: var(--good); } .hmc .tag.warn { color: var(--warn); } .hmc .tag.bad { color: var(--bad); }
 .hmc .tag.off { color: var(--ink-3); }
+.hmc table.tt td .tag { word-break: normal; overflow-wrap: normal; white-space: normal; text-align: center; }
 .hmc button.st { all: unset; cursor: pointer; display: inline-flex; flex-wrap: wrap; gap: 4px; border-radius: 8px; padding: 2px; }
 .hmc button.st:hover .tag, .hmc button.st:focus-visible .tag { background: var(--accent-soft); }
 .hmc button.st:focus-visible { outline: 2px solid var(--accent); }
@@ -74,6 +75,13 @@ body.quarto-dark h1, body.quarto-dark .ra-sub, body.quarto-dark .ra-msg { color:
 body.quarto-light h1, body.quarto-light .ra-sub, body.quarto-light .ra-msg { color: #1f1c17; }
 
 .ra-foot { font-size: .75rem; color: #8a8379; } 
+.ra-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 0 10px; }
+.ra-top select.ra-lang { min-height: 32px; border-radius: 8px; font: inherit; font-size: .9rem; padding: 2px 8px; cursor: pointer; }
+body.quarto-dark .ra-top select.ra-lang { border: 1px solid #3a352f; background: #2a2622; color: #f0ece4; }
+body.quarto-light .ra-top select.ra-lang { border: 1px solid #ddd6ca; background: #efebe2; color: #1f1c17; }
+.ra-top label.auto { display: none; margin: 0; font-size: .85rem; }
+body.quarto-dark .ra-top label.auto { color: #c4bdb1; } body.quarto-light .ra-top label.auto { color: #57514a; }
+body.in-word .ra-top label.auto { display: inline-flex; align-items: center; gap: 6px; }
 body.quarto-dark .ra-foot a { color: #d98b56; }
 body.quarto-light .ra-foot a { color: #8a4b22; }
 </style></head>
@@ -81,6 +89,7 @@ body.quarto-light .ra-foot a { color: #8a4b22; }
 <body class="quarto-dark">
 <h1>RafikiArdhi · <span id="lbl-title">Equation checker</span> <span class="ck-beta" style="font-size:.6rem;border:1px solid #e0a440;color:#e0a440;border-radius:4px;padding:1px 5px">BETA</span></h1>
 <p class="ra-sub" id="lbl-sub">No AI. Runs in this panel; nothing leaves your computer.</p>
+<div class="ra-top" id="ra-top"></div>
 
 <div class="ra-bar">
   <button class="p" id="ra-sel">Check the selected equations</button>
@@ -350,11 +359,13 @@ window.HM = (function () {
       const t = I18N[lang];
       let auto = true; try { auto = localStorage.getItem('ra-auto') !== '0'; } catch (e) {}
       // the auto-check box only shows inside Word (body gets class "in-word")
-      let h = '<div class="topbar"><select class="ra-lang" data-lang-select aria-label="' + esc(t.lang) + '">' +
+      // language menu (and the auto-check box, shown only inside Word) sit under the title, in #ra-top
+      const top = '<select class="ra-lang" data-lang-select aria-label="' + esc(t.lang) + '">' +
         [['en', 'English'], ['sw', 'Kiswahili'], ['es', 'Español']].map(o => '<option value="' + o[0] + '"' + (o[0] === lang ? ' selected' : '') + '>' + o[1] + '</option>').join('') +
-        '</select><label class="auto"><input type="checkbox" data-auto' + (auto ? ' checked' : '') + '> ' + esc(t.auto) + '</label>' +
-      '</div><section class="cx"><div class="fg">';
-      
+        '</select><label class="auto"><input type="checkbox" data-auto' + (auto ? ' checked' : '') + '> ' + esc(t.auto) + '</label>';
+      const topEl = document.getElementById('ra-top');
+      if (topEl) topEl.innerHTML = top;
+      let h = (topEl ? '' : '<div class="topbar">' + top + '</div>') + '<section class="cx"><div class="fg">';
       inputs.forEach(i => { h += fieldHTML(i); });
       h += '</div></section><section class="cx res"></section><details class="cx hm-work"><summary>' + t.work + '</summary><div class="db"></div></details>';
       root.innerHTML = h;
@@ -386,10 +397,12 @@ window.HM = (function () {
       const ta = e.target.closest('textarea[data-k]');
       if (ta) { f[ta.dataset.k] = ta.value; run(); }
     });
-    root.addEventListener('change', e => {
+    const onChange = e => {
       if (e.target.matches('[data-lang-select]')) { updateUiLanguage(e.target.value); render(); return; }
       if (e.target.matches('[data-auto]')) { try { localStorage.setItem('ra-auto', e.target.checked ? '1' : '0'); } catch (err) {} }
-    });
+    };
+    root.addEventListener('change', onChange);
+    const topBox = document.getElementById('ra-top'); if (topBox) topBox.addEventListener('change', onChange);
     root.addEventListener('click', e => {
       const b = e.target.closest('button');
       if (!b) return;
@@ -432,8 +445,9 @@ window.HM = (function () {
   }
   const GREEK = { alpha: 'α', beta: 'β', gamma: 'γ', delta: 'δ', epsilon: 'ε', varepsilon: 'ε', zeta: 'ζ', eta: 'η', theta: 'θ', vartheta: 'θ', kappa: 'κ', lambda: 'λ', mu: 'μ', nu: 'ν', xi: 'ξ', rho: 'ρ', varrho: 'ρ', sigma: 'σ', tau: 'τ', phi: 'φ', varphi: 'φ', chi: 'χ', psi: 'ψ', omega: 'ω', Delta: 'Δ', Gamma: 'Γ', Theta: 'Θ', Lambda: 'Λ', Sigma: 'Σ', Phi: 'Φ', Psi: 'Ψ', Omega: 'Ω', Xi: 'Ξ', Pi: 'Π', Upsilon: 'Υ', upsilon: 'υ', iota: 'ι' };
   const OPS = ['integ', 'indef', 'sumn', 'prodn'];
-  let NOTES = [];   // things norm() noticed about the notation (unknown functions, limit clashes)
-  const FUN = ['sqrt', 'exp', 'log', 'log10', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'abs', 'nthRoot', 'erf', 'pi', 'max', 'min', 'det', 'inv', 'transpose', 'Infinity'].concat(OPS);
+  let NOTES = [];
+  let UPRIGHT = new Set();   // multi-letter names written upright in LaTeX (\mathrm{CN}): kept whole   // things norm() noticed about the notation (unknown functions, limit clashes)
+  const FUN = ['sqrt', 'exp', 'log', 'log10', 'sin', 'cos', 'tan', 'asin', 'acos', 'atan', 'sinh', 'cosh', 'tanh', 'sec', 'csc', 'cot', 'asinh', 'acosh', 'atanh', 'abs', 'nthRoot', 'erf', 'pi', 'max', 'min', 'det', 'inv', 'transpose', 'Infinity'].concat(OPS);
   const SUP = { '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4', '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9', '⁻': '-', '⁺': '+', '⁽': '(', '⁾': ')', 'ⁿ': 'n' };
   const SUB = { '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4', '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9', 'ₐ': 'a', 'ₑ': 'e', 'ᵢ': 'i', 'ⱼ': 'j', 'ₖ': 'k', 'ₗ': 'l', 'ₘ': 'm', 'ₙ': 'n', 'ₒ': 'o', 'ₚ': 'p', 'ᵣ': 'r', 'ₛ': 's', 'ₜ': 't', 'ᵤ': 'u', 'ᵥ': 'v', 'ₓ': 'x' };
   const NAME = '[A-Za-z\\u0370-\\u03FF][A-Za-z0-9_\\u0370-\\u03FF]*';
@@ -521,10 +535,13 @@ window.HM = (function () {
         const prod = latex ? s.startsWith('\\prod', i) : (s[i] === '∏' || s[i] === 'Π');
         const [lo, hi, j] = bounds(s, i + (sl ? (prod ? 5 : 4) : 1), latex);
         if (!latex && (s[i] === 'Σ' || s[i] === 'Π') && (!lo || !lo.includes('=') || hi == null)) { out += s[i]; i++; continue; }
-        if (!lo || !lo.includes('=') || hi == null) return null;
-        const [v, a] = lo.split('=').map(x => x.trim());
+        // a sum written with only its index, ∑_h or \sum_c, runs over all categories: 1 … N_h
+        const free = lo && !lo.includes('=') && hi == null && /^\s*\\?[A-Za-zͰ-Ͽ]\s*$/.test(lo) && !/^\s*\\/.test(lo);
+        if (!free && (!lo || !lo.includes('=') || hi == null)) return null;
+        const [v, a] = free ? [lo.trim(), '1'] : lo.split('=').map(x => x.trim());
+        if (free) NOTES.push({ kind: 'idx', v });
         const e = sumEnd(s, j); const f = structural(s.slice(j, e).replace(/^[\s▒]+/, ''), latex); if (f == null) return null;
-        out += `${prod ? 'prodn' : 'sumn'}(${L}${f}${R}, ${v}, ${L}${bnd(a, latex)}${R}, ${L}${bnd(hi, latex)}${R})`;
+        out += `${prod ? 'prodn' : 'sumn'}(${L}${f}${R}, ${v}, ${L}${bnd(a, latex)}${R}, ${L}${free ? 'N_' + v : bnd(hi, latex)}${R})`;
         i = e; continue; }
       if (latex && s.startsWith('\\infty', i)) { out += 'Infinity'; i += 6; continue; }
       if (!latex && s[i] === '∞') { out += 'Infinity'; i++; continue; }
@@ -534,9 +551,9 @@ window.HM = (function () {
   }
 
   function group(s, i) { let d = 0, j = i; for (; j < s.length; j++) { if (s[j] === '{') d++; else if (s[j] === '}') { d--; if (!d) break; } } return [s.slice(i + 1, j), j + 1]; }
-  const FNAMES = { ln: 'ln', log: 'log', exp: 'exp', sin: 'sin', cos: 'cos', tan: 'tan', sinh: 'sinh', cosh: 'cosh', tanh: 'tanh', arcsin: 'asin', arccos: 'acos', arctan: 'atan' };
+  const FNAMES = { ln: 'ln', log: 'log', exp: 'exp', sin: 'sin', cos: 'cos', tan: 'tan', sec: 'sec', csc: 'csc', cot: 'cot', sinh: 'sinh', cosh: 'cosh', tanh: 'tanh', arcsin: 'asin', arccos: 'acos', arctan: 'atan' };
   function fromLatex(s) {
-    s = s.replace(/\\(ln|log|exp|sin|cos|tan|sinh|cosh|tanh|arcsin|arccos|arctan)(?![A-Za-z])\s*(?![\s({\[]|\\left)((?:\\[A-Za-z]+|[A-Za-z0-9.]+)(?:_\{[^}]*\}|_[A-Za-z0-9])?)/g, (m, f, a) => `\\${f}(${a})`)
+    s = s.replace(/\\(ln|log|exp|sin|cos|tan|sec|csc|cot|sinh|cosh|tanh|arcsin|arccos|arctan)(?![A-Za-z])\s*(?![\s({\[]|\\left)((?:\\[A-Za-z]+|[A-Za-z0-9.]+)(?:_\{[^}]*\}|_[A-Za-z0-9])?)/g, (m, f, a) => `\\${f}(${a})`)
       .replace(/\\(arcsin|arccos|arctan)(?![A-Za-z])/g, (m, f) => FNAMES[f])
       .replace(/(?<![A-Za-z])\{\s*(\\(?:overline|bar|hat|tilde)\s*\{[^{}]*\}|[A-Za-z]+)\s*\}(?=\s*[_^])/g, '$1');
     s = s.replace(/\\left|\\right|\\bigg|\\Bigg|\\big|\\Big|\\,|\\;|\\:|\\!|\\qquad|\\quad|\\displaystyle/g, '')
@@ -566,12 +583,13 @@ window.HM = (function () {
       if (s.startsWith('\\sqrt', i)) { i += 5; let n = null; if (s[i] === '[') { const e = s.indexOf(']', i); n = s.slice(i + 1, e); i = e + 1; } if (s[i] !== '{') { out += 'sqrt'; continue; } const [a, j] = group(s, i); out += n ? `nthRoot(${fromLatex(a)},${n})` : `sqrt(${fromLatex(a)})`; i = j; continue; }
       if (s[i] === '^' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += `^(${fromLatex(a)})`; i = j; continue; }
       if (s[i] === '_' && s[i + 1] === '{') { const [a, j] = group(s, i + 1); out += '_' + a.replace(/\\([A-Za-z]+)/g, (m, w) => GREEK[w] || w).replace(/[^A-Za-z0-9Ͱ-Ͽ]/g, '') + ' '; i = j; continue; }
-      if (s[i] === '\\') { const m = s.slice(i + 1).match(/^[A-Za-z]+/); const w = m ? m[0] : ''; out += GREEK[w] ? GREEK[w] + ' ' : w === 'pi' ? ' pi ' : ' ' + ({ ln: 'log', log: 'log10' }[w] || w) + ' '; i += 1 + (w.length || 1); continue; }
+      if (s[i] === '\\') { const m = s.slice(i + 1).match(/^[A-Za-z]+/); const w = m ? m[0] : ''; out += GREEK[w] ? ' ' + GREEK[w] + ' ' : w === 'pi' ? ' pi ' : ' ' + ({ ln: 'log', log: 'log10' }[w] || w) + ' '; i += 1 + (w.length || 1); continue; }
       if (s[i] === '{') { out += '('; i++; continue; } if (s[i] === '}') { out += ')'; i++; continue; }
       out += s[i]; i++;
     }
     out = out.replace(/\s+_/g, '_');
-    return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z0-9_])(\s*\()?/g, (m, p, w, par) => FUN.includes(w) || (par && w in math && typeof math[w] === 'function') ? m : p + w.split('').join('*') + (par || ''));
+    // names written upright, \mathrm{CN} or \text{RMSE}, are one quantity, not C·N
+    return out.replace(/(^|[^A-Za-z_0-9])([A-Za-z]{2,})(?![A-Za-z0-9_])(\s*\()?/g, (m, p, w, par) => FUN.includes(w) || UPRIGHT.has(w) || (par && w in math && typeof math[w] === 'function') ? m : p + w.split('').join('*') + (par || ''));
   }
 
   // Word sometimes pastes equations in a flattened form where every structure
@@ -608,6 +626,27 @@ window.HM = (function () {
     return ok ? out : line;
   }
 
+  // A power written on a function name, as papers do: sin²t, \sin^2 t, \cos^{2}(x), sin^(2)(t) from Word
+  // → (sin(t))^2. A power of −1 is the inverse function: sin⁻¹ x → asin(x).
+  function funcPowers(s) {
+    const FN = 'sin|cos|tan|cot|sec|csc|sinh|cosh|tanh|ln|log|exp';
+    const INV = { sin: 'asin', cos: 'acos', tan: 'atan', sinh: 'asinh', cosh: 'acosh', tanh: 'atanh' };
+    const re = new RegExp(`(\\\\)?(?<![A-Za-z])(${FN})\\s*\\^\\s*(\\{[^{}]*\\}|\\([^()]*\\)|-?\\d+)`, 'g');
+    let out = '', last = 0, m;
+    while ((m = re.exec(s))) {
+      const [all, bs, f, p0] = m, p = p0.replace(/^[{(]\s*|\s*[})]$/g, '').replace(/[−–]/g, '-');
+      let i = m.index + all.length; while (s[i] === ' ') i++;
+      let arg = null, end = i;
+      if (s[i] === '(' || s[i] === '{') { end = close(s, i) + 1; arg = s.slice(i + 1, end - 1); }
+      else { const t = s.slice(i).match(/^(?:\\[A-Za-z]+|[A-Za-z0-9.Ͱ-Ͽ]+)(?:_\{[^{}]*\}|_[A-Za-z0-9]+)?/); if (t) { arg = t[0]; end = i + t[0].length; } }
+      if (arg == null || !/^-?[0-9.]+$/.test(p)) continue;          // no argument, or a symbolic power: leave it alone
+      const fn = (bs || '') + f;
+      out += s.slice(last, m.index) + (p === '-1' && INV[f] ? `${INV[f]}(${arg})` : bs ? `(${fn}(${arg}))^{${p}}` : `(${fn}(${arg}))^(${p})`);
+      last = end; re.lastIndex = end;
+    }
+    return out + s.slice(last);
+  }
+
   function norm(line) {
     line = wordLinear(line);
     // Strip equation labels like "(3)", "3.", "3:" — but not decimal coefficients
@@ -616,6 +655,7 @@ window.HM = (function () {
       .replace(/(?:\t|\s{2,})\(\s*\d+[a-z]?\s*\)\s*$/, '')
       .replace(/[\s.,;]+$/, '');
     NOTES = [];
+    UPRIGHT = new Set([...s.matchAll(/\\(?:mathrm|text|textrm|textit|operatorname|mathsf|mathit)\s*\{\s*([A-Za-z]{2,})\s*\}/g)].map(m => m[1]).filter(w => w !== 'const'));
     // Word's star (U+2217) and the increment sign ∆ (U+2206); ∇_{xy} and \Delta z in LaTeX
     s = s.replace(/[∗⋆]/g, '*').replace(/∆/g, 'Δ')
          .replace(/\\nabla\s*_\s*\{?\s*([A-Za-z]{1,3})\s*\}?/g, '∇_$1 ')
@@ -627,8 +667,12 @@ window.HM = (function () {
     // NOTE: \sqrt{...} is NOT converted here — the early regex breaks at the first
     // closing brace, which corrupts nested input like \sqrt{\frac{1}{4}}.
     // fromLatex() below parses \sqrt with proper brace matching.
-    s = s.replace(/\\left|\\right/g, '')
-         .replace(/\\Sigma/g, 'Sigma').replace(/Σ/g, 'Sigma');
+    // Σ is left as it is: structural() reads Σ_(i=1)^n as a sum and any other Σ as a
+    // name (covariance matrix). Renaming it "Sigma" made LaTeX split it into S·i·g·m·a.
+    s = s.replace(/\\left|\\right/g, '');
+    s = funcPowers(s);
+    // LaTeX transpose signs: A^{\top}, A^\intercal, A^{\mathsf{T}} -> A^{T}
+    s = s.replace(/\^\s*\{?\s*\\(?:top|intercal|mathsf\s*\{\s*T\s*\}|mathrm\s*\{\s*T\s*\})\s*\}?/g, '^{T}');
     // Keep braces on LaTeX-like lines (contains \ or {) — they carry grouping that
     // structural()/fromLatex() need (\frac{1}{2}, x^{2+1}, \sum_{...}). Only plain
     // text lines get stray braces removed.
@@ -641,8 +685,10 @@ window.HM = (function () {
       .replace(/[⁰¹²³⁴⁵⁶⁷⁸⁹⁻⁺⁽⁾ⁿ]+/g, m => '^(' + [...m].map(c => SUP[c]).join('') + ')')
       .replace(/[₀₁₂₃₄₅₆₇₈₉ₐₑᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ]+/g, m => '_' + [...m].map(c => SUB[c]).join(''))
       .replace(/(\S)[̅̄]/g, '$1_bar').replace(/(\S)̂/g, '$1_hat').replace(/(\S)̃/g, '$1_tilde').replace(/(\S)̇/g, '$1_dot');
+    s = funcPowers(s);   // again, now that sin² t has become sin^(2) t
 
-    s = s.replace(/[\u25A0\u25A1\u25FE\u200B-\u200D\uFEFF]/g, '')
+    // \u25A0 (U+25A0) is kept: it is Word's matrix sign, \u25A0(a&b@c&d)
+    s = s.replace(/[\u25A1\u25FE\u200B-\u200D\uFEFF]/g, '')
          .replace(/(?:^|[\s,])[\.,]*(?=[A-Za-z0-9_=+-])/g, ' ')
          .replace(/,([A-Za-z_])=/g, ' $1=')
          .replace(/[\u201C\u201D\u201E\u201F\u2033\u2036]/g, '"')
@@ -674,8 +720,11 @@ window.HM = (function () {
     s = st.replace(/▒/g, ' ');
     s = s.replace(/\\(?:text|mathrm)\s*\{\s*const\s*\}|\bconst\b/g, 'C');
     if (latex) s = fromLatex(s);
-    s = s.replace(new RegExp(`(${NAME})\\s*\\^\\s*\\(?\\s*[T⊤]\\s*\\)?(?![A-Za-z0-9_])`, 'gu'), 'transpose($1)');
-    s = s.replace(/(\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\))\s*\^\s*\(?\s*[T⊤]\s*\)?(?![A-Za-z0-9_])/g, 'transpose$1');
+    // fromLatex leaves "cos (x)"; join it to "cos(x)" so a fraction like sin x / cos x keeps cos with its argument
+    if (latex) s = s.replace(new RegExp(`(?<![A-Za-z0-9_])(${FUN.join('|')})\\s+\\(`, 'g'), '$1(');
+    // A^T and A^(T); a closing bracket is only taken when it belongs to the T, so (A^T)^T and det(A^T) keep theirs
+    s = s.replace(new RegExp(`(${NAME})\\s*\\^\\s*(?:\\(\\s*[T⊤]\\s*\\)|[T⊤])(?![A-Za-z0-9_])`, 'gu'), 'transpose($1)');
+    s = s.replace(/(\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\))\s*\^\s*(?:\(\s*[T⊤]\s*\)|[T⊤])(?![A-Za-z0-9_])/g, 'transpose$1');
     s = s.replace(/[×·⋅•∙∗]/g, '*').replace(/[÷∕]/g, '/')
       .replace(/√\(/g, 'sqrt(').replace(/√([A-Za-z0-9_.]+)/g, 'sqrt($1)').replace(/π/g, ' pi ')
       // ∇_xy F = horizontal gradient = the vector (∂F/∂x, ∂F/∂y)
@@ -683,12 +732,12 @@ window.HM = (function () {
       .replace(new RegExp('∇\\s*(' + NAME + ')', 'gu'), 'grad_$1').replace(/[∂𝜕]\s*/g, 'd_')
       .replace(/\bln\s*\(/g, 'log(');
     if (!latex) {
-      s = s.replace(/\b(ln|log|exp|sin|cos|tan|sinh|cosh|tanh)\s+([A-Za-z0-9.]+(?:_[A-Za-z0-9]+)?)(?![A-Za-z0-9_(])/g, '$1($2)').replace(/\bln\s*\(/g, 'log(');
+      s = s.replace(/\b(ln|log|exp|sin|cos|tan|sec|csc|cot|sinh|cosh|tanh)\s+([A-Za-z0-9.]+(?:_[A-Za-z0-9]+)?)(?![A-Za-z0-9_(])/g, '$1($2)').replace(/\bln\s*\(/g, 'log(');
       // split Greek letters from neighbours (αx = α·x), but keep increments Δz / δx as one name
       s = s.replace(/([Ͱ-Ͽ])(?=[A-Za-z0-9Ͱ-Ͽ])/g, (m, g, k, all) => /[Δδ]/.test(g) && /^[A-Za-z](?![A-Za-z0-9_Ͱ-Ͽ])/.test(all.slice(k + 1)) && !/[A-Za-z0-9_Ͱ-Ͽ]/.test(all[k - 1] || '') ? g : g + ' ')
            .replace(/([A-Za-z0-9])(?=[Ͱ-Ͽ])/g, '$1 ');
     }
-    let prev, guard = 0; do { prev = s; s = s.replace(/\b(max|min)?\s*\|([^|]+)\|/g, (m, f, a) => f ? `${f}(abs(${a}))` : `abs(${a})`); } while (s !== prev && ++guard < 10);
+    let prev, guard = 0; do { prev = s; s = s.replace(/(?:\b(max|min))?\s*\|([^|]+)\|/g, (m, f, a) => f ? `${f}(abs(${a}))` : `abs(${a})`); } while (s !== prev && ++guard < 10);
     s = s.replace(/\[/g, '⟨').replace(/\]/g, '⟩');
     for (let k = 0; k < 20 && s.includes('⟨'); k++) s = s.replace(/⟨([^⟨⟩]*)⟩/g, (m, a) => { let d = 0, top = false; for (const c of a) { if ('(⟦'.includes(c)) d++; else if (')⟧'.includes(c)) d--; else if (!d && (c === ',' || c === ';')) top = true; } return top ? `⟦${a}⟧` : `(${a})`; });
     s = s.replace(/([)A-Za-z0-9_\u0370-\u03FF])\s*⟦/g, '$1 * ⟦').replace(/⟧\s*(?=[(A-Za-z0-9\u0370-\u03FF])/g, '⟧ * ');
@@ -701,6 +750,17 @@ window.HM = (function () {
       return top ? ` [${p.slice(1, -1)}] ` : part;
     }).join('');
     s = s.replace(new RegExp(`^\\s*(${NAME})\\s*\\(\\s*${NAME}(?:\\s*,\\s*${NAME})*\\s*\\)\\s*=(?!=)`, 'u'), (m, f) => (f in math && typeof math[f] === 'function') || OPS.includes(f) ? m : `${f} =`);
+    // Inside sums written as ∑_h, ∑_c: P(h) is the h-th value of P (P_h), and CN_{h,c} is a
+    // table indexed by both sums (CN_hc[h, c]); a single index, w_c, is handled when the sum runs.
+    const IDX = [...new Set(NOTES.filter(n => n.kind === 'idx').map(n => n.v))];
+    if (IDX.length) {
+      const one = IDX.map(x => x.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
+      s = s.replace(new RegExp(`(?<![A-Za-z0-9_\\u0370-\\u03FF])(${NAME})\\s*\\(\\s*(${one})\\s*\\)`, 'gu'), (m, f, x) => FUN.includes(f) || (f in math && typeof math[f] === 'function') ? m : `${f}_${x}`);
+      s = s.replace(new RegExp(`(?<![A-Za-z0-9_\\u0370-\\u03FF])(${NAME})_((?:${one}){2,3})(?![A-Za-z0-9_\\u0370-\\u03FF])`, 'gu'), (m, f, ix) => {
+        const parts = []; let rest = ix; while (rest) { const p = IDX.find(x => rest.startsWith(x)); if (!p) return m; parts.push(p); rest = rest.slice(p.length); }
+        return new Set(parts).size === parts.length ? `${f}_${ix}[${parts.join(', ')}]` : m;
+      });
+    }
     const atom = `(?:${NAME}\\((?:[^()]|\\([^()]*\\))*\\)|${NAME}|[0-9.]+|\\((?:[^()]|\\([^()]*\\))*\\))`;
     s = s.replace(new RegExp(`(${atom})\\s*/\\s*(${atom}(?:\\^(?:[0-9.]+|\\([^()]*\\)))?)(?=\\s+[A-Za-z0-9(\\u0370-\\u03FF])`, 'gu'), (m, a, b) => OPS.includes(a) ? m : `((${a})/(${b}))`);
     s = s.replace(new RegExp(`(${NAME})(\\s*)\\(`, 'gu'), (m, f, sp) => (FUN.includes(f) || (f in math && typeof math[f] === 'function' && !sp)) ? m : `${f}*(`);
@@ -806,6 +866,8 @@ window.HM = (function () {
         for (const k of [2, 3]) if (n.args[k]) walk(n.args[k], bound, idx), (n.fn.name !== 'integ') && n.args[k].traverse(x => { if (x.isSymbolNode && kind[x.name] === 's') kind[x.name] = 'int'; });
         return;
       }
+      // CN_hc[h, c] inside sums over h and c: a table of values
+      if (n.isAccessorNode && n.object && n.object.isSymbolNode && n.index && n.index.dimensions.every(d => d.isSymbolNode && idx.has(d.name))) { kind[n.object.name] = 'tab' + n.index.dimensions.length; return; }
       if (n.isSymbolNode) {
         if (bound.has(n.name) || ['pi', 'e', 'i', 'E', 'Infinity'].includes(n.name)) return;
         const m = n.name.match(/^(.+)_([A-Za-zͰ-Ͽ])$/u);
@@ -832,16 +894,66 @@ window.HM = (function () {
   function draw(kind, pos, n) {
     if (kind === 'int') return 2 + Math.floor(Math.random() * 11);
     if (kind === 'vec') return Array.from({ length: VEC_LEN }, () => rnd(pos));
+    if (kind.startsWith('tab')) { const mk = d => d ? Array.from({ length: 13 }, () => mk(d - 1)) : rnd(pos); return mk(+kind.slice(3)); }  // up to 12 categories per index
     if (kind === 'm') return MJ.matrix(Array.from({ length: n }, (r, i) => Array.from({ length: n }, (c, j) => rnd(pos) + (i === j ? n : 0))));
     if (kind.startsWith('sz:')) { const d = kind.slice(3).split('x').map(Number); return d.length === 1 ? MJ.matrix(Array.from({ length: d[0] }, () => rnd(pos))) : MJ.matrix(Array.from({ length: d[0] }, (r, i) => Array.from({ length: d[1] }, (c, j) => rnd(pos) + (i === j ? d[0] : 0)))); }
     if (kind === 'v') return MJ.matrix(Array.from({ length: n }, () => [rnd(pos)]));
     return rnd(pos);
   }
   const scopeOf = (kinds, pos, fixed = {}) => { const o = {}; for (const [v, k] of Object.entries(kinds)) o[v] = v in fixed ? fixed[v] : draw(k, pos, 2); return o; };
+  // Before evaluating: weights in sums without limits (P(h), w_c) are scaled to sum to 1 over
+  // their N categories, and a quantity defined by an earlier equation (CN) is computed from it.
+  let LASTCX = false;   // the last sides() call failed only because a value was complex
+  function prep(E, sc) {
+    if (!(E.weights && E.weights.length) && !(E.useDeps && E.deps && E.deps.length)) return sc;
+    const o = { ...sc };
+    for (const w of E.weights || []) {
+      const a = o[w.name], N = o[w.N];
+      if (!Array.isArray(a) || !(N >= 1)) continue;
+      const tot = a.slice(0, N).reduce((x, y) => x + y, 0);
+      if (tot) o[w.name] = a.map((x, k) => k < N ? x / tot : x);
+    }
+    if (E.useDeps) for (const D of E.deps) {
+      const d = { ...o }; for (const [v, k] of Object.entries(D.kinds)) if (!(v in d)) d[v] = draw(k, true, 2);
+      try { const val = D.Rc.evaluate(prep(D, d)); if (isArr(val) || isFinite(real(val))) o[D.lhsSym] = val; } catch (e) { }
+    }
+    return o;
+  }
   function sides(E, sc) {
+    sc = prep(E, sc); LASTCX = false;
     let l, r; try { l = E.Lc.evaluate({ ...sc }); r = E.Rc.evaluate({ ...sc }); } catch (e) { return null; }
+    // a complex result (√ of a negative number, log of a negative) is outside the real domain: undefined here
+    const cx = y => isArr(y) ? MJ.flatten(MJ.matrix(y)).valueOf().some(cx) : !!(y && typeof y.im === 'number' && Math.abs(y.im) > 1e-9 * (1 + Math.abs(y.re)));
+    if (!E.complex && (cx(l) || cx(r))) { LASTCX = true; return null; }
     if (isArr(l) || isArr(r)) { if (JSON.stringify(sizeOf(l)) !== JSON.stringify(sizeOf(r))) return null; }
     return [l, r];
+  }
+  // Which part of an equation went complex: the first √, log, power, arcsin/arccos or root whose
+  // argument is outside the real domain for these values.
+  const prettyName = n => String(n).replace(/_star/g, '*').replace(/_prime/g, '′').replace(/_bar/g, '\u0304');
+  function cxReason(E, sc) {
+    const o = prep(E, sc || {}), short = n => { const t = String(n.toString()).replace(/_star/g, '*').replace(/ - /g, ' − ').replace(/^\((.*)\)$/, '$1'); return t.length > 40 || /sumn\(|prodn\(|integ\(|\[/.test(t) ? null : t; };
+    const val = n => { try { return n.compile().evaluate({ ...o }); } catch (e) { return undefined; } };
+    const at = n => { const xs = Object.keys(freeVars(n)).filter(v => typeof o[v] === 'number'); return xs.length ? ` for ${xs.slice(0, 4).map(v => `${prettyName(v)} = ${HM.fmt(o[v], 3)}`).join(', ')}` : ''; };
+    let hit = null;
+    [E.L, E.R].forEach(side => side.traverse(n => {
+      if (hit) return;
+      const f = n.isFunctionNode && n.fn ? n.fn.name : null;
+      if (['sqrt', 'log', 'log10', 'nthRoot', 'asin', 'acos'].includes(f) || (n.isOperatorNode && n.op === '^')) {
+        const a = n.isOperatorNode ? n.args[0] : n.args[0], v = val(a), x = typeof v === 'number' ? v : NaN;
+        if (!isFinite(x)) return;
+        if (n.isOperatorNode) { const p = val(n.args[1]); if (!(x < 0 && typeof p === 'number' && !Number.isInteger(p))) return; }
+        else if (f === 'asin' || f === 'acos') { if (Math.abs(x) <= 1) return; }
+        else if (!(x < 0)) return;
+        hit = { n, f, a, x };
+      }
+    }));
+    if (!hit) return 'A value is complex (not a real number) for some test values';
+    const arg = short(hit.a), v = HM.fmt(hit.x, 3).replace('-', '−'), where = at(hit.a);
+    const lab = { sqrt: '√', log: 'ln', log10: 'log', nthRoot: 'the root', asin: 'arcsin', acos: 'arccos' }[hit.f];
+    if (hit.n.isOperatorNode) return `The base of the power${arg ? `, ${arg},` : ''} is ${v}${where}; a negative number to a fractional power is complex (not real)`;
+    if (hit.f === 'asin' || hit.f === 'acos') return `The value inside ${lab}${arg ? `, ${arg},` : ''} is ${v}${where}; ${lab} of a value outside −1 … 1 is complex (not real)`;
+    return `The value ${hit.f === 'sqrt' || hit.f === 'nthRoot' ? 'under' : 'inside'} ${lab}${arg ? `, ${arg},` : ''} is ${v}${where}; ${lab} of a negative number is complex (not real)`;
   }
   function residual(E, sc) {
     const lr = sides(E, sc); if (!lr) return { res: NaN, scale: NaN };
@@ -852,11 +964,12 @@ window.HM = (function () {
     const kinds = { ...E.kinds };
     for (const [v, x] of Object.entries(known)) if (kinds[v] === 's' && isArr(x)) kinds[v] = 'sz:' + sizeOf(x).join('x');
     const free = Object.keys(kinds).filter(v => kinds[v] === 's' && !(v in known));
-    const mctx = E.mctx = /\[|inv\(|det\(|transpose\(|\^\s*\(\s*-\s*1\s*\)/.test(E.src) || Object.values(kinds).some(k => k.startsWith('sz:'));
+    // table look-ups like CN_hc[h, c] are not matrix algebra
+    const mctx = E.mctx = /\[|inv\(|det\(|transpose\(|\^\s*\(\s*-\s*1\s*\)/.test(E.src.replace(/(?<=[A-Za-z0-9_\u0370-\u03FF])\[[^\]]*\]/g, '')) || Object.values(kinds).some(k => k.startsWith('sz:'));
     if (!mctx || !free.length) return kinds;
     const forced = new Set(); [E.L, E.R].forEach(n => n.traverse(x => { if (x.isFunctionNode && x.fn && ['inv', 'det'].includes(x.fn.name) && x.args[0].isSymbolNode) forced.add(x.args[0].name); if (x.isOperatorNode && x.op === '^' && x.args[0].isSymbolNode && /^\(?\s*-\s*1\s*\)?$/.test(x.args[1].toString())) forced.add(x.args[0].name); }));
     // matrices written out element by element ([a, b] = [c, d]): the elements are numbers
-    if (/\[/.test(E.src) && !forced.size && !/inv\(|det\(|transpose\(/.test(E.src)) {
+    if (/\[/.test(E.src.replace(/(?<=[A-Za-z0-9_\u0370-\u03FF])\[[^\]]*\]/g, '')) && !forced.size && !/inv\(|det\(|transpose\(/.test(E.src)) {
       const k2 = { ...kinds }; free.forEach(v => { k2[v] = 's'; });
       if ([0, 1, 2].some(() => isFinite(residual(E, scopeOf(k2, true)).scale))) return k2;
     }
@@ -949,6 +1062,11 @@ window.HM = (function () {
           e.kinds = mergeKinds(freeVars(L), freeVars(R)); e.vs = Object.keys(e.kinds);
           e.heavy = /integ\(|sumn\(|prodn\(/.test(s);
           e.indef = /indef\(/.test(s);
+          // the imaginary unit i used outside a sum over i: a complex equation, complex values are expected
+          e.complex = (() => { let found = false; const walk = (n, bound) => {
+            if (n.isFunctionNode && n.fn && OPS.includes(n.fn.name)) { const b2 = new Set(bound).add(n.args[1] && n.args[1].name); walk(n.args[0], b2); n.args.slice(2).forEach(x => walk(x, bound)); return; }
+            if (n.isSymbolNode && n.name === 'i' && !bound.has('i')) found = true;
+            n.forEach(c => walk(c, bound)); }; [L, R].forEach(x => walk(x, new Set())); return found; })();
           const notes = nr.notes || [];
           e.grad = notes.find(n => n.kind === 'grad');
 
@@ -976,6 +1094,22 @@ window.HM = (function () {
             push([lab, readAs, tag, !r.tried ? 'The other side could not be evaluated.' : r.ok === r.tried ? `Differentiating the other side with respect to ${r.v} gives the integrand in all ${r.tried} tests.` : `Derivative gives ${HM.fmt(r.fail.d, 4)} at ${r.fail.v} = ${HM.fmt(r.fail.x, 3)}, but integrand is ${HM.fmt(r.fail.y, 4)}.`]);
             return;
           }
+          // weights in sums without limits: in ∑_h P(h) ∑_c w_c CN_{h,c}, P and w are the leading
+          // indexed factors multiplying something else indexed; they are scaled to sum to 1.
+          e.weights = [];
+          const flat = n => n.isParenthesisNode ? flat(n.content) : n.isOperatorNode && n.fn === 'multiply' ? n.args.flatMap(flat) : n.isFunctionNode && n.fn.name === 'sq' ? flat(n.args[0]) : [n];
+          [L, R].forEach(side => side.traverse(n => {
+            if (!(n.isFunctionNode && n.fn && n.fn.name === 'sumn')) return;
+            const v = n.args[1].name, up = n.args[3] && (n.args[3].isParenthesisNode ? n.args[3].content : n.args[3]);
+            if (!(up && up.isSymbolNode && up.name === 'N_' + v)) return;
+            const fs = flat(n.args[0]), wi = fs.findIndex(x => x.isSymbolNode && x.name.endsWith('_' + v));
+            // ∑_h P(h) = 1 on its own is the statement that P is a set of weights
+            const other = side === L ? R : L, unitSum = fs.length === 1 && side.toString() === n.toString() && other.isConstantNode && +other.value === 1;
+            if (unitSum && wi === 0) { e.weights.push({ name: fs[0].name.slice(0, -(v.length + 1)), N: 'N_' + v }); return; }
+            if (wi < 0 || fs.length < 2) return;
+            const restIdx = fs.some((x, k) => k !== wi && (x.isAccessorNode || /sumn\(|_/.test(x.toString())));
+            if (restIdx && !e.weights.some(w => w.name === fs[wi].name.slice(0, -(v.length + 1)))) e.weights.push({ name: fs[wi].name.slice(0, -(v.length + 1)), N: 'N_' + v });
+          }));
           e.kinds = shapes(e, known); e.vs = Object.keys(e.kinds); e.readAs = readAs; e.row = rows.length; rows.push(null); E.push(e);
         } catch (err) { push([lab, U.esc(ln), '<span class="tag bad">Cannot read</span>', U.esc(err.message) + (/,[^,]*-[^,]*\./.test(ln) && /[\u{1D400}-\u{1D7FF}\u2212]/u.test(ln) ? ' This is Word\'s flattened text, which loses fractions, subscripts and powers. Highlight the equation in Word and click "Check the selected equations", or copy it in Word and paste it straight into this box.' : '')]); }
       });
@@ -988,19 +1122,32 @@ window.HM = (function () {
         if (e.mctx) { e.kinds = k2; e.sharedSizes = true; }
         else if ([0, 1, 2].some(() => isFinite(residual(e, scopeOf(k2, true)).scale))) e.kinds = k2;
       });
+      // a quantity defined by another equation (CN = …) that this one uses (CN_sd = √(… − CN²))
+      const definesSym = D => D.lhsSym && !Object.keys(freeVars(D.R)).includes(D.lhsSym);
+      E.forEach(e => { if (!e.skip) e.deps = E.filter(D => D !== e && !D.skip && definesSym(D) && D.lhsSym !== e.lhsSym && e.vs.includes(D.lhsSym) && !(e.lhsSym && D.vs.includes(e.lhsSym))); });
       E.forEach(e => {
         if (e.skip) return;
-        const n = e.vs.length ? (e.heavy ? 30 : 200) : 1; let bad = 0, ex = null, mism = 0, held = 0, miss = null;
-        for (let k = 0; k < n; k++) {
-          const sc = scopeOf(e.kinds, pos); const r = residual(e, sc);
-          if (!isFinite(r.scale) || !isFinite(r.res)) { bad++; if (!ex) ex = sc; if (!sides(e, sc)) mism++; }
-          else if (r.res / r.scale < 1e-6) held++; else if (!miss) miss = { sc, val: r.val };
+        const n = e.vs.length ? (e.heavy ? 30 : 200) : 1;
+        const trial = () => { const o = { bad: 0, ex: null, mism: 0, held: 0, miss: null, cx: 0 };
+          for (let k = 0; k < n; k++) {
+            const sc = scopeOf(e.kinds, pos); const r = residual(e, sc);
+            if (!isFinite(r.scale) || !isFinite(r.res)) { o.bad++; if (!o.ex) o.ex = sc; if (!sides(e, sc)) { if (LASTCX) { o.cx++; if (!o.cxSc) o.cxSc = sc; } else o.mism++; } }
+            else if (r.res / r.scale < 1e-6) o.held++; else if (!o.miss) o.miss = { sc, val: r.val };
+          } return o; };
+        let T = trial();
+        // undefined in places on its own: try again with the other equations' definitions plugged in
+        if (T.bad && e.deps.length) {
+          // the paper's own definition (CN from equation 1) is the right one to test with; drop it
+          // only if it makes the equation unreadable for a reason other than a complex value
+          e.useDeps = true; const T2 = trial();
+          if (T2.bad < n || T2.cx || T.bad === n) T = T2; else e.useDeps = false;
         }
+        let { bad, ex, mism, held, miss, cx, cxSc } = T;
         const defines = e.lhsSym && !Object.keys(freeVars(e.R)).includes(e.lhsSym);
         const ok = n - bad;
         e.identity = ok > 0 && held === ok;
         let tag, txt = '';
-        const kindTxt = Object.entries(e.kinds).filter(([, k]) => k !== 's').map(([x, k]) => `${x} (${{ int: 'whole number', vec: 'list', m: '2×2 matrix', v: '2×1 vector' }[k] || k.replace('sz:', '').replace('x', '×')})`);
+        const kindTxt = Object.entries(e.kinds).filter(([, k]) => k !== 's').map(([x, k]) => `${x} (${{ int: 'whole number', vec: 'list', m: '2×2 matrix', v: '2×1 vector', tab1: 'list', tab2: 'table', tab3: 'table' }[k] || k.replace('sz:', '').replace('x', '×')})`);
         const scTxt = sc => Object.entries(sc).filter(([, x]) => !isArr(x)).map(([a, b]) => `${a} = ${HM.fmt(b, 3)}`).join(', ');
         if (bad === n) { tag = '<span class="tag bad">Never evaluates</span>'; txt = mism === n && e.vs.length ? (e.sharedSizes ? ' Variable dimensions mismatch across equations.' : ' Matrices or expressions cannot be evaluated.') : ' Expression does not produce real finite numbers.'; }
         else if (e.identity && !defines) { tag = '<span class="tag good">Holds</span>'; txt = e.vs.length ? ` Both sides agree for all ${ok} test values.` : ' Both sides agree.'; }
@@ -1008,6 +1155,13 @@ window.HM = (function () {
         else if (e.grad && miss) { tag = '<span class="tag bad">Does not hold</span>'; e.fails = true; txt = ` ∇_${e.grad.c} ${pretty(e.grad.name)} should be (${[...e.grad.c].map(c => `∂${pretty(e.grad.name)}/∂${c}`).join(', ')}), in that order; the right side differs.`; }
         else tag = bad === 0 ? '<span class="tag good">Evaluates cleanly</span>' : '<span class="tag warn">Undefined in places</span>';
         if (bad && bad < n) txt += ` Undefined for ${Math.round(100 * bad / n)}% of test values${scTxt(ex) ? `, e.g. ${scTxt(ex)}` : ''}.`;
+        if (bad && cx) {
+          if (cx === n) txt = txt.replace(' Expression does not produce real finite numbers.', '');
+          txt += ' ' + cxReason(e, cxSc) + (e.useDeps ? ` (with ${e.deps.map(D => `${pretty(D.lhsSym)} from equation ${D.i}`).join(', ')})` : '') + '.';
+        }
+        const N_ = Object.keys(e.kinds).filter(x => /^N_/.test(x));
+        if (N_.length) txt += ` Sums written without limits run over all categories (1 … ${N_.join(', ')}).` + (e.weights.length ? ` ${e.weights.map(w => w.name).join(' and ')} ${e.weights.length > 1 ? 'are' : 'is'} taken as weights that sum to 1.` : '');
+        if (e.useDeps) txt += ` ${e.deps.map(D => `${pretty(D.lhsSym)} is taken from equation ${D.i}`).join('; ')}.`;
         if (e.grad && e.identity) txt = ` The components are the partial derivatives of ${pretty(e.grad.name)} with respect to ${[...e.grad.c].join(' and ')}, in order.`;
         rows[e.row] = [e.i, e.readAs, tag, `Variables: ${e.vs.join(', ') || 'none'}${kindTxt.length ? `; sizes: ${kindTxt.join(', ')}` : ''}.${txt}`, e.li];
       });
