@@ -17,6 +17,10 @@ citation:
   doi: 10.5281/zenodo.23736495
 ---
 
+::: {.callout-tip}
+These checks also work inside Microsoft Word. [Get the Word add-in (beta)](install-addin.qmd)
+:::
+
 ```{=html}
 <style>
 #ck-hub .ck-intro { font-size: 1.05rem; max-width: 70ch; }
