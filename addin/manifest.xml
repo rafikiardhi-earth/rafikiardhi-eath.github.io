@@ -1,55 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Manifest for the "Check a result" Word add-in (beta).
+     Everything it loads is on rafikiardhi.earth/addin/. Keep the <Id> the same forever;
+     raise <Version> when you change this file. -->
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1"
            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0"
            xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides"
            xsi:type="TaskPaneApp">
-  <Id>98d88d18-090a-41b4-b324-bfd0c4fafc7b</Id>
+  <Id>fcc62722-926e-40ca-bcb9-00dfeb64bf22</Id>
   <Version>1.0.0.0</Version>
-  <ProviderName>RafikiArdhi LLC</ProviderName>
+  <ProviderName>RafikiArdhi</ProviderName>
   <DefaultLocale>en-US</DefaultLocale>
-  <DisplayName DefaultValue="RafikiArdhi Checks"/>
-  <Description DefaultValue="Check the equations in a manuscript: readability, domain, rearrangements and worked examples. No AI; runs in your browser."/>
-  <IconUrl DefaultValue="https://rafikiardhi.earth/addin/icon-32.png"/>
-  <HighResolutionIconUrl DefaultValue="https://rafikiardhi.earth/addin/icon-64.png"/>
-  <SupportUrl DefaultValue="https://rafikiardhi.earth/checks.html"/>
+  <DisplayName DefaultValue="Check a result" />
+  <Description DefaultValue="Plausibility checks for soil and environmental research, and an equation checker. No AI; nothing leaves your computer." />
+  <IconUrl DefaultValue="https://rafikiardhi.earth/addin/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://rafikiardhi.earth/addin/icon-64.png" />
+  <SupportUrl DefaultValue="https://rafikiardhi.earth/" />
   <AppDomains>
     <AppDomain>https://rafikiardhi.earth</AppDomain>
   </AppDomains>
   <Hosts>
-    <Host Name="Document"/>
+    <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://rafikiardhi.earth/addin/taskpane.html"/>
+    <SourceLocation DefaultValue="https://rafikiardhi.earth/addin/taskpane.html" />
   </DefaultSettings>
+  <!-- reads selected text and equations, and adds comments -->
   <Permissions>ReadWriteDocument</Permissions>
+
+  <!-- a "Check a result" button on Word's Home tab -->
   <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
     <Hosts>
       <Host xsi:type="Document">
         <DesktopFormFactor>
+          <FunctionFile resid="Taskpane.Url" />
           <ExtensionPoint xsi:type="PrimaryCommandSurface">
             <OfficeTab id="TabHome">
               <Group id="RA.Group">
-                <Label resid="RA.GroupLabel"/>
+                <Label resid="RA.GroupLabel" />
                 <Icon>
-                  <bt:Image size="16" resid="RA.Icon16"/>
-                  <bt:Image size="32" resid="RA.Icon32"/>
-                  <bt:Image size="80" resid="RA.Icon80"/>
+                  <bt:Image size="16" resid="Icon.16" />
+                  <bt:Image size="32" resid="Icon.32" />
+                  <bt:Image size="80" resid="Icon.80" />
                 </Icon>
-                <Control xsi:type="Button" id="RA.OpenButton">
-                  <Label resid="RA.ButtonLabel"/>
+                <Control xsi:type="Button" id="RA.Open">
+                  <Label resid="RA.ButtonLabel" />
                   <Supertip>
-                    <Title resid="RA.ButtonLabel"/>
-                    <Description resid="RA.ButtonTip"/>
+                    <Title resid="RA.ButtonLabel" />
+                    <Description resid="RA.ButtonTip" />
                   </Supertip>
                   <Icon>
-                    <bt:Image size="16" resid="RA.Icon16"/>
-                    <bt:Image size="32" resid="RA.Icon32"/>
-                    <bt:Image size="80" resid="RA.Icon80"/>
+                    <bt:Image size="16" resid="Icon.16" />
+                    <bt:Image size="32" resid="Icon.32" />
+                    <bt:Image size="80" resid="Icon.80" />
                   </Icon>
                   <Action xsi:type="ShowTaskpane">
-                    <TaskpaneId>RAChecks</TaskpaneId>
-                    <SourceLocation resid="RA.Taskpane"/>
+                    <TaskpaneId>RA.Pane</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url" />
                   </Action>
                 </Control>
               </Group>
@@ -60,19 +67,19 @@
     </Hosts>
     <Resources>
       <bt:Images>
-        <bt:Image id="RA.Icon16" DefaultValue="https://rafikiardhi.earth/addin/icon-16.png"/>
-        <bt:Image id="RA.Icon32" DefaultValue="https://rafikiardhi.earth/addin/icon-32.png"/>
-        <bt:Image id="RA.Icon80" DefaultValue="https://rafikiardhi.earth/addin/icon-80.png"/>
+        <bt:Image id="Icon.16" DefaultValue="https://rafikiardhi.earth/addin/icon-16.png" />
+        <bt:Image id="Icon.32" DefaultValue="https://rafikiardhi.earth/addin/icon-32.png" />
+        <bt:Image id="Icon.80" DefaultValue="https://rafikiardhi.earth/addin/icon-80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="RA.Taskpane" DefaultValue="https://rafikiardhi.earth/addin/taskpane.html"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://rafikiardhi.earth/addin/taskpane.html" />
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="RA.GroupLabel" DefaultValue="RafikiArdhi"/>
-        <bt:String id="RA.ButtonLabel" DefaultValue="Check equations"/>
+        <bt:String id="RA.GroupLabel" DefaultValue="RafikiArdhi" />
+        <bt:String id="RA.ButtonLabel" DefaultValue="Check a result" />
       </bt:ShortStrings>
       <bt:LongStrings>
-        <bt:String id="RA.ButtonTip" DefaultValue="Open the RafikiArdhi equation check for the selected text or the whole document."/>
+        <bt:String id="RA.ButtonTip" DefaultValue="Open the plausibility checks and the equation checker." />
       </bt:LongStrings>
     </Resources>
   </VersionOverrides>
