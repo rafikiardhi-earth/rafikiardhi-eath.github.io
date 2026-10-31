@@ -1,11 +1,13 @@
 ---
 title: "Privacy"
-description: "What RafikiArdhi collects when you visit this site (very little) and what our free tools and Office add-ins do with the numbers you enter (nothing: they never leave your computer)."
+description: "Privacy policy for RafikiArdhi's services: the Check a result add-in for Microsoft Word and the tools on rafikiardhi.earth. What you enter never leaves your computer."
 ---
 
 *Last updated: 31 October 2026*
 
-The short version: our tools and Office add-ins run entirely on your computer and store nothing; we use Google Analytics to count visits on this website; we don't sell anything about you, and we don't show ads.
+This policy covers RafikiArdhi's services: the **Check a result** add-in for Microsoft Word and the tools on rafikiardhi.earth.
+
+The short version: the add-in and our tools run entirely on your computer and store nothing; Google Analytics counts visits to the website only, never in the add-in; we don't sell anything about you, and we don't show ads.
 
 ## The tools
 
