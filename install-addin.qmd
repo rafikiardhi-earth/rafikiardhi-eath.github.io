@@ -37,3 +37,7 @@ A Microsoft 365 administrator can give it to everyone at once: upload the same f
 ## Updates
 
 You only install it once. The add-in loads from this website, so new checks and fixes appear the next time you open it.
+
+## Privacy and terms
+
+The add-in reads and checks everything on your computer; nothing you select, type or paste is sent anywhere. See the [privacy policy](privacy.qmd) and the [terms of use](terms.qmd).
