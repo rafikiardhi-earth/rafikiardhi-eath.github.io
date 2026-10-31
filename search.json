@@ -718,7 +718,7 @@
     "href": "privacy.html",
     "title": "Privacy",
     "section": "",
-    "text": "Last updated: October 2026\nThe short version: our tools run entirely in your browser and store nothing; we use Google Analytics to count visits; we don’t have accounts, don’t sell anything about you, and don’t show ads."
+    "text": "Last updated: 31 October 2026\nThe short version: our tools and Office add-ins run entirely on your computer and store nothing; we use Google Analytics to count visits on this website; we don’t sell anything about you, and we don’t show ads."
   },
   {
     "objectID": "privacy.html#the-tools",
@@ -726,6 +726,27 @@
     "title": "Privacy",
     "section": "The tools",
     "text": "The tools\nOur tools run entirely in your web browser. When you open a file, it is read and processed on your own computer, and results are saved directly back to it. No data is transmitted to RafikiArdhi or any third party, and nothing is stored on our servers. We don’t have a database. That makes the tools safe for confidential data, unpublished results and manuscripts under review.\n\nShare links. Some tools put your inputs into the page address so that “Copy link” can recreate your calculation. That address stays in your browser unless you choose to share it.\nYour units. If you switch between US and metric units, your browser remembers the choice on your device. We never see it.\nCheck it yourself. Once a tool page has loaded, disconnect from the internet. The tool still works, because nothing it does depends on our servers."
+  },
+  {
+    "objectID": "privacy.html#the-office-add-ins",
+    "href": "privacy.html#the-office-add-ins",
+    "title": "Privacy",
+    "section": "The Office add-ins",
+    "text": "The Office add-ins\nThe Check a result add-in for Microsoft Word, and our future add-ins, run inside Microsoft Office on your computer.\n\nYour documents stay on your computer. Text, equations and numbers the add-in reads from your document, or that you type or paste in, are processed locally. They are not sent to RafikiArdhi or to anyone else.\nNo AI, no tracking. The add-ins use no artificial intelligence, and contain no analytics, tracking or advertising. Google Analytics is used only on this website, not in the add-ins.\nSettings. The add-in remembers your language and similar settings on your own computer. You can clear them by clearing Office’s add-in cache.\nLoading. When Office opens the add-in, it downloads the add-in’s files from rafikiardhi.earth and three public code libraries: Office.js from Microsoft, math.js from cdnjs.cloudflare.com and MathJax from cdn.jsdelivr.net. As with any web request, these servers receive standard technical information such as your IP address. We don’t use it to identify you."
+  },
+  {
+    "objectID": "privacy.html#membership",
+    "href": "privacy.html#membership",
+    "title": "Privacy",
+    "section": "Membership",
+    "text": "Membership\nIf you join the RafikiArdhi Community, we keep the details you enter in the sign-up form (name, email, affiliation, Zenodo username) in Google Forms and Google Sheets, and add your email to our Google Group. We use them only to run the community and send member news. You can leave at any time by emailing us, and we will delete your details."
+  },
+  {
+    "objectID": "privacy.html#paid-versions",
+    "href": "privacy.html#paid-versions",
+    "title": "Privacy",
+    "section": "Paid versions",
+    "text": "Paid versions\nWhen paid versions of the add-ins become available, payments will be processed by Stripe. We receive your name, email address and what you bought, never your card details. To unlock a paid version, the add-in will check your purchase using your email address or licence key. Nothing from your documents is sent."
   },
   {
     "objectID": "privacy.html#visit-statistics",
